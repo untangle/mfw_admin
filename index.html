@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Untangle - MicroFW</title>
+
+        <script>
+            String.prototype.t = function() {
+                return this.valueOf();
+            };
+        </script>
+
+        <!-- Ext JS 6.5.2 -->
+        <script src="res/lib/ext-6.6.0/ext-modern-all-debug.js"></script>
+        <script src="res/lib/ext-6.6.0/theme-material/theme-material.js"></script>
+        <link href="res/lib/ext-6.6.0/theme-material/resources/theme-material-all.css" rel="stylesheet" type="text/css" />
+
+        <!-- Highchart lib, map -->
+        <script src="res/lib/highcharts-6.1.0/highstock.js"></script>
+        <script src="res/lib/highcharts-6.1.0/highcharts-3d.js"></script>
+        <script src="res/lib/highcharts-6.1.0/highcharts-more.js"></script>
+
+        <link href="res/mfw-all.css" rel="stylesheet" type="text/css" />
+        <script src="res/mfw-all.js"></script>
+
+        <!-- FontAwesome -->
+        <!-- <link href="/ext6.2/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="/ext6.2/fonts/source-sans-pro/css/fonts.css" rel="stylesheet" type="text/css" />
+        <link href="/ext6.2/fonts/roboto-condensed/css/fonts.css" rel="stylesheet" type="text/css" />
+        <link href="styles/ung-all.css" rel="stylesheet" type="text/css" /> -->
+
+
+        <script>
+            Ext.onReady(function () {
+                Ext.theme.Material.setColors({
+                    'darkMode': true,
+                    'base': '#333',
+                    // 'accent': accent || me._materialAccentColor
+                });
+                Ext.application({
+                    extend: 'Mfw.App',
+                    namespace: 'Mfw'
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+    </body>
+</html>
