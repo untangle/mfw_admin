@@ -40,7 +40,6 @@ Ext.define('Mfw.controller.MfwController', {
      * Transforms query string into parametrizied object applied in ViewModel
      * */
     processQuery: function (query) {
-        console.log(query);
         var gvm = Ext.Viewport.getViewModel(),
             conditions = {
                 fields: []
@@ -48,10 +47,7 @@ Ext.define('Mfw.controller.MfwController', {
             decodedPart, parts;
 
         if (!query) {
-            // Mfw.app.redirectTo('dashboard?since=1');
             return;
-            // gvm.set('dashboardConditions.since', 1 );
-            // return; // set default values
         }
 
         // A field conditions is represented in query string like "&filedName:operator:value:autoFormatValue&"

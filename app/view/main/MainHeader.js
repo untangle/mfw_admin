@@ -34,7 +34,8 @@ Ext.define('Mfw.view.main.MainHeader', {
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         items: [{
             text: 'Dashboard'.t(),
-            iconCls: 'x-fa fa-home',
+            // iconCls: 'x-fa fa-home',
+            iconCls: 'x-material x-dashboard',
             handler: function () { Mfw.app.redirectTo(''); },
             bind: {
                 pressed: '{currentView === "mfw-dashboard"}'
@@ -48,7 +49,8 @@ Ext.define('Mfw.view.main.MainHeader', {
             }
         }, {
             text: 'Settings'.t(),
-            iconCls: 'x-fa fa-cog',
+            // iconCls: 'x-fa fa-cog',
+            iconCls: 'x-material x-settings',
             handler: function () { Mfw.app.redirectTo('settings'); },
             bind: {
                 pressed: '{currentView === "mfw-settings"}'

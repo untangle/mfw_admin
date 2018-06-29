@@ -1,19 +1,17 @@
-Ext.define('Mfw.cmp.condition.FieldDialog', {
+Ext.define('Mfw.cmp.condition.ConditionDialog', {
     extend: 'Ext.Dialog',
-    alternateClassName: 'FieldDialog',
     alias: 'widget.field-dialog',
+    title: 'Condition',
 
-    title: 'Field Condition',
     closable: true,
     closeAction: 'hide',
     draggable: false,
-    // maskTapHandler: 'onCancel'
+    maskTapHandler: 'onDialogCancel',
     layout: 'fit',
-
-    alwaysOnTop: true,
+    alwaysOnTop: true, // important
 
     config: {
-        field: null
+        addAction: false // if condition is added or edited
     },
 
     viewModel: {
@@ -26,7 +24,6 @@ Ext.define('Mfw.cmp.condition.FieldDialog', {
             }
         }
     },
-
 
     items: [{
         xtype: 'formpanel',
@@ -62,6 +59,7 @@ Ext.define('Mfw.cmp.condition.FieldDialog', {
             xtype: 'textfield',
             name: 'value',
             label: 'Enter value'.t(),
+            autoComplete: false,
             // placeholder: 'Enter value'.t(),
             required: true,
             bind: '{record.value}'
@@ -73,46 +71,7 @@ Ext.define('Mfw.cmp.condition.FieldDialog', {
         }]
     }],
     buttons: {
-        ok: 'onOk',
-        cancel: 'onCancel'
-    },
-
-    listeners: {
-        show: 'onShow',
-        hide: 'onHide'
-    },
-
-    controller: {
-        onOk: function (btn) {
-            var me = this, dialog = me.getView(),
-                form = dialog.down('formpanel'),
-                gvm = Ext.Viewport.getViewModel();
-
-            if (!form.validate()) { return; }
-
-            console.log(dialog.getViewModel().get('record'));
-
-            if (!dialog.getViewModel().get('record')) {
-                var fields = gvm.get('dashboardConditions.fields');
-                fields.push(form.getValues());
-            }
-            Mfw.app.redirect('dashboard');
-            dialog.hide();
-        },
-
-        onCancel: function (btn) {
-            btn.up('dialog').hide();
-        },
-
-        onShow: function (dialog) {
-            dialog.down('formpanel').setValues(dialog.getField());
-            console.log(dialog.getField());
-        },
-
-        onHide: function (dialog) {
-            // reset form on hide
-            dialog.getViewModel().set('record', null);
-            dialog.down('formpanel').reset(true);
-        }
+        ok: 'onDialogOk',
+        cancel: 'onDialogCancel'
     }
 });
