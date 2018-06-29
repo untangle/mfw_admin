@@ -17,12 +17,7 @@ Ext.define('Mfw.controller.MfwController', {
             // '*': 'onRoute',
             '': { action: 'onHome', conditions: { ':query' : '(.*)' } },
             'dashboard:query': { action: 'onDashboard', conditions: { ':query' : '(.*)' } },
-            'reports:query': {
-                action: 'onReports',
-                conditions: {
-                    ':query' : '(.*)'
-                }
-            },
+            'reports:query': { action: 'onReports', conditions: { ':query' : '(.*)' } },
             'settings': { action: 'onSettings' }
         },
     },
@@ -46,6 +41,7 @@ Ext.define('Mfw.controller.MfwController', {
             },
             decodedPart, parts;
 
+        console.log(query);
         if (!query) {
             return;
         }
@@ -70,7 +66,15 @@ Ext.define('Mfw.controller.MfwController', {
                 conditions[parts[0]] = parts[1];
             }
         });
-        gvm.set('dashboardConditions', conditions);
+
+        if (gvm.get('currentView') === 'mfw-dashboard') {
+            gvm.set('dashboardConditions', conditions);
+        }
+
+        if (gvm.get('currentView') === 'mfw-reports') {
+            gvm.set('reportsConditions', conditions);
+        }
+
         // Ext.getStore('dashboardfields').loadData(conditions.fields);
     },
 

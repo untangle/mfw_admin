@@ -44,7 +44,7 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
             var me = this, gvm = Ext.Viewport.getViewModel();
             // watch since condition change and update button text
             gvm.bind('{dashboardConditions.fields}', function (fields) {
-                console.log('CHANGED', fields);
+                // console.log('DASHBOARD CHANGED', fields);
                 cmp.down('#fieldsBtns').removeAll();
                 var buttons = [], fieldName;
                 Ext.Array.each(fields, function (field, idx) {
@@ -75,6 +75,39 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
                 });
                 cmp.down('#fieldsBtns').add(buttons);
             });
+
+            // gvm.bind('{reportsConditions.fields}', function (fields) {
+            //     console.log('REPORTS CHANGED', fields);
+            //     cmp.down('#fieldsBtns').removeAll();
+            //     var buttons = [], fieldName;
+            //     Ext.Array.each(fields, function (field, idx) {
+            //         fieldName = Ext.Array.findBy(Util.tmpColumns, function (item) { return item.field === field.column; } ).name;
+            //         buttons.push({
+            //             xtype: 'segmentedbutton',
+            //             allowToggle: false,
+            //             // defaults: {
+            //             //     ui: 'default'
+            //             // },
+            //             items: [{
+            //                 text: fieldName + ' ' + field.operator + ' ' + field.value,
+            //                 // index: idx,
+            //                 // handler: 'showFieldDialog'
+            //                 handler: function (btn) {
+            //                     me.showFieldDialog(field);
+            //                 }
+            //             }, {
+            //                 // iconCls: 'x-fa fa-times',
+            //                 iconCls: 'x-tool-type-close',
+            //                 fieldIndex: idx,
+            //                 handler: function (btn) {
+            //                     Ext.Array.removeAt(fields, btn.fieldIndex);
+            //                     Mfw.app.redirect('reports');
+            //                 }
+            //             }]
+            //         });
+            //     });
+            //     cmp.down('#fieldsBtns').add(buttons);
+            // });
         },
 
         addCondition: function () {
@@ -106,17 +139,29 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
         },
 
         onDialogOk: function () {
-            var me = this,
+            var me = this, fields,
                 form = me.dialog.down('formpanel'),
                 gvm = Ext.Viewport.getViewModel();
 
             if (!form.validate()) { return; }
 
-            var fields = gvm.get('dashboardConditions.fields');
+            if (gvm.get('currentView') === 'mfw-dashboard') {
+                fields = gvm.get('dashboardConditions.fields');
+            }
+            if (gvm.get('currentView') === 'mfw-reports') {
+                fields = gvm.get('reportsConditions.fields');
+            }
+
             if (me.dialog.getAddAction()) {
                 fields.push(form.getValues());
             }
-            Mfw.app.redirect('dashboard');
+            if (gvm.get('currentView') === 'mfw-dashboard') {
+                Mfw.app.redirect('dashboard');
+            }
+            if (gvm.get('currentView') === 'mfw-reports') {
+                Mfw.app.redirect('reports');
+            }
+
             me.dialog.hide();
         },
         onDialogCancel: function () {

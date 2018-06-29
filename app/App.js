@@ -18,7 +18,11 @@ Ext.define('Mfw.App', {
                     since: 1,
                     fields: []
                 },
-                reportsConditions: {}
+                reportsConditions: {
+                    since: 100,
+                    until: null,
+                    fields: []
+                }
             }
         },
         bind: {
@@ -37,6 +41,7 @@ Ext.define('Mfw.App', {
      */
     redirect: function (view) {
         var conditions, newQuery = '';
+        console.log('redirect');
         if (view === 'dashboard') {
             conditions = Ext.Viewport.getViewModel().get('dashboardConditions');
             // if (view === 'DASHBOARD') {
@@ -48,9 +53,22 @@ Ext.define('Mfw.App', {
                 // newQuery += (idx === 0) ? '?' : '&';
                 newQuery += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
             });
-
             // var qs = Ext.Object.toQueryString(form.getValues());
         }
+        if (view === 'reports') {
+            conditions = Ext.Viewport.getViewModel().get('reportsConditions');
+            // if (view === 'DASHBOARD') {
+            //     conditions = Ext.Viewport.getViewModel().get('dashboardConditions');
+            // }
+            newQuery += '?since=' + (conditions.since || 1);
+
+            Ext.Array.each(conditions.fields, function(field, idx) {
+                // newQuery += (idx === 0) ? '?' : '&';
+                newQuery += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
+            });
+            // var qs = Ext.Object.toQueryString(form.getValues());
+        }
+
         Mfw.app.redirectTo(view + newQuery);
     },
 

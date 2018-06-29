@@ -13,16 +13,13 @@ Ext.define('Mfw.view.reports.Main', {
     items: [{
         xtype: 'toolbar',
         shadow: false,
+        padding: 8,
         // padding: 0, // to remove left spacing
         dock: 'top',
         items: [{
-            // xtype: 'timerange-btn',
-            usage: 'REPORTS',
-            reference: 'timerange'
-        }, {
-            xtype: 'button',
-            text: 'Conditions',
-            badgeText: '2'
+            xtype: 'fields-conditions'
+        }, '->', {
+            xtype: 'dashboard-timerange-btn'
         }]
     }, {
         xtype: 'component',
