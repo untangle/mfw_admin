@@ -24,14 +24,14 @@ Ext.define('Mfw.view.main.MainHeader', {
             html: '{currentViewTitle}'
         },
         plugins: 'responsive',
-        responsiveConfig: { 'width >= 1000': { hidden: true, }, 'width < 1000': { hidden: false } },
+        responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
     }, {
         xtype: 'container',
         flex: 1,
         layout: 'hbox',
         defaultType: 'button',
         plugins: 'responsive',
-        responsiveConfig: { 'width >= 1000': { hidden: false, }, 'width < 1000': { hidden: true } },
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         items: [{
             text: 'Dashboard'.t(),
             iconCls: 'x-fa fa-home',
@@ -77,11 +77,11 @@ Ext.define('Mfw.view.main.MainHeader', {
         // text: 'Account',
         iconCls: 'x-fa fa-user-circle fa-3x',
         plugins: 'responsive',
-        responsiveConfig: { 'width >= 1000': { hidden: false, }, 'width < 1000': { hidden: true } },
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }, {
         iconCls: 'x-fa fa-bars',
         plugins: 'responsive',
-        responsiveConfig: { 'width >= 1000': { hidden: true, }, 'width < 1000': { hidden: false } },
+        responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
         handler: function () {
             Mfw.app.mainMenu.show();
         }

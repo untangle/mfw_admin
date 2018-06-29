@@ -75,6 +75,7 @@ Ext.define('Mfw.controller.MfwController', {
             }
         });
         gvm.set('dashboardConditions', conditions);
+        // Ext.getStore('dashboardfields').loadData(conditions.fields);
     },
 
 

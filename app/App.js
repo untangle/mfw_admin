@@ -24,6 +24,12 @@ Ext.define('Mfw.App', {
         bind: {
             activeItem: '{currentView}'
         },
+
+        plugins: 'responsive',
+        responsiveFormulas: {
+            small: 'width < 1000',
+            large: 'width >= 1000'
+        }
     },
 
     /**

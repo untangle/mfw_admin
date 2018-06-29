@@ -1,8 +1,17 @@
 Ext.define('Mfw.cmp.condition.FieldsConditions', {
     extend: 'Ext.Container',
+    alternateClassName: 'FieldConditions',
     alias: 'widget.fields-conditions',
 
     layout: 'hbox',
+
+    viewModel: {
+        formulas: {
+            conditionsBtnTxt: function (get) {
+                return get('dashboardConditions.fields').length;
+            }
+        }
+    },
 
     defaults: {
         margin: '0 5',
@@ -15,7 +24,9 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
             ui: 'default',
         },
         items: [{
-            text: 'Conditions'.t(),
+            bind: {
+                text: 'Conditions'.t() + ' ({conditionsBtnTxt})',
+            },
             handler: 'showFieldsSheet',
         }, {
             iconCls: 'x-fa fa-plus-circle',
@@ -35,7 +46,9 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
         layout: 'hbox',
         defaults: {
             margin: '0 5'
-        }
+        },
+        plugins: 'responsive',
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }],
 
     listeners: {
@@ -60,7 +73,11 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
                         // },
                         items: [{
                             text: fieldName + ' ' + field.operator + ' ' + field.value,
-                            handler: me.showFieldDialog
+                            // field: field,
+                            index: idx,
+                            handler: function () {
+                                FieldConditions.show();
+                            }
                         }, {
                             iconCls: 'x-fa fa-times',
                             fieldIndex: idx,
@@ -84,12 +101,26 @@ Ext.define('Mfw.cmp.condition.FieldsConditions', {
             }
             Ext.Viewport.fieldsSheet.show();
         },
-        showFieldDialog: function () {
+        showFieldDialog: function (btn) {
+            var me = this, gvm = Ext.Viewport.getViewModel(), record = undefined;
+
+            record = gvm.get('dashboardConditions.fields')[btn.index];
+            console.log(record);
+            // Ext.Array.each(gvm.get('dashboardConditions.fields'), function (f) {
+            //     if (Ext.Object.equals(f, btn.field)) {
+            //         record = f;
+            //     }
+            // });
+
+
             if (!Ext.Viewport.fieldDialog) {
                 Ext.Viewport.fieldDialog = Ext.Viewport.add({
                     xtype: 'field-dialog'
                 });
             }
+            // console.log(btn.field);
+            // Ext.Viewport.fieldDialog.setField(btn.field);
+            Ext.Viewport.fieldDialog.getViewModel().set('record', record);
             Ext.Viewport.fieldDialog.show();
         },
 
