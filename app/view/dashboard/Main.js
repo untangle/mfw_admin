@@ -17,7 +17,7 @@ Ext.define('Mfw.view.dashboard.Main', {
         // padding: 0, // to remove left spacing
         dock: 'top',
         items: [{
-            xtype: 'fields-conditions'
+            xtype: 'dashboard-conditions'
         }, '->', {
             xtype: 'dashboard-timerange-btn'
         }]

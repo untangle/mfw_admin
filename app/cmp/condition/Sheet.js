@@ -22,9 +22,14 @@ Ext.define('Mfw.cmp.condition.FieldsSheet', {
     }],
 
     viewModel: {
+        formulas: {
+            data: function (get) {
+                return get('currentView') === 'mfw-dashboard' ? get('dashboardConditions.fields') : get('reportsConditions.fields');
+            }
+        },
         stores: {
             conds: {
-                data: '{dashboardConditions.fields}'
+                data: '{data}'
             }
         }
     },

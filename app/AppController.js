@@ -41,9 +41,13 @@ Ext.define('Mfw.controller.MfwController', {
             },
             decodedPart, parts;
 
-        console.log(query);
+        // console.log(query);
         if (!query) {
-            return;
+            // if (gvm.get('currentView') === 'mfw-reports') {
+            //     Mfw.app.redirectTo('reports?since=100');
+            // }
+            query = '';
+            // return;
         }
 
         // A field conditions is represented in query string like "&filedName:operator:value:autoFormatValue&"
@@ -80,7 +84,7 @@ Ext.define('Mfw.controller.MfwController', {
 
 
     onHome: function () {
-        Mfw.app.redirect('dashboard');
+        Mfw.app.redirectTo('dashboard');
     },
 
     onDashboard: function (query) {
@@ -88,7 +92,7 @@ Ext.define('Mfw.controller.MfwController', {
             currentView: 'mfw-dashboard',
             currentViewTitle: 'Dashboard'.t()
         });
-        this.processQuery(query);
+        Mfw.app.updateQuery(query);
     },
 
     onReports: function (query) {
@@ -96,8 +100,7 @@ Ext.define('Mfw.controller.MfwController', {
             currentView: 'mfw-reports',
             currentViewTitle: 'Reports'.t()
         });
-        this.processQuery(query);
-        // this.redirect(query);
+        Mfw.app.updateQuery(query);
     },
 
     onSettings: function () {

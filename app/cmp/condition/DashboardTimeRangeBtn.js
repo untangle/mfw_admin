@@ -42,7 +42,7 @@ Ext.define('Mfw.cmp.condition.DashboardTimeRangeBtn', {
                 // var since = gvm.get('dashboardConditions.since');
                 // since = item.value;
                 gvm.set('dashboardConditions.since', item.value);
-                Mfw.app.redirect('dashboard');
+                Mfw.app.updateQuery();
                 menu.hide();
             });
         }
