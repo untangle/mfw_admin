@@ -10,6 +10,8 @@ Ext.define('Mfw.view.reports.Main', {
     //     }
     // },
 
+    // viewModel: {},
+
     items: [{
         xtype: 'toolbar',
         shadow: false,
@@ -19,13 +21,17 @@ Ext.define('Mfw.view.reports.Main', {
         items: [{
             xtype: 'reports-conditions'
         }, '->', {
-            xtype: 'dashboard-timerange-btn'
+            xtype: 'reports-timerange-btn'
         }]
     }, {
         xtype: 'component',
         padding: 20,
+        userSelectable: {
+            element: true,       // optionally allow the element to be user selectable
+            bodyElement: true    // optionally allow the component's body element to be user selectable
+        },
         bind: {
-            html: 'Since: {timerange.range.since} <br/> Until: {timerange.range.until}'
+            html: 'PredefSince: {reportsConditions.predefinedSince} <br/> Since: {reportsConditions.since} <br/> Until: {reportsConditions.until || "none" }'
         }
     }]
 });

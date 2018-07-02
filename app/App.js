@@ -19,8 +19,9 @@ Ext.define('Mfw.App', {
                     fields: []
                 },
                 reportsConditions: {
-                    since: 100,
-                    until: null,
+                    predefinedSince: 'today',
+                    since: '',
+                    until: '',
                     fields: []
                 }
             }
@@ -67,7 +68,10 @@ Ext.define('Mfw.App', {
             }
             if (view === 'mfw-reports') {
                 conditions = gvm.get('reportsConditions');
-                newQuery += 'reports?since=' + (conditions.since || 1);
+                newQuery += 'reports?since=' + (conditions.predefinedSince || 'today');
+                if (conditions.until) {
+                    newQuery += '&until=' + conditions.until;
+                }
             }
             Ext.Array.each(conditions.fields, function(field, idx) {
                 newQuery += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
@@ -75,7 +79,7 @@ Ext.define('Mfw.App', {
             Mfw.app.redirectTo(newQuery);
         } else {
         // if route query is defined, then update the viewmodel based on this query params
-            var decodedPart, parts;
+            var decodedPart, parts, key, val;
             Ext.Array.each(query.replace('?', '').split('&'), function (part) {
                 decodedPart = decodeURIComponent(part);
 
@@ -91,7 +95,48 @@ Ext.define('Mfw.App', {
                 } else {
                 // if it's normal parameter like since, until
                     parts = decodedPart.split('=');
-                    conditions[parts[0]] = parts[1];
+                    key = parts[0];
+                    val = parts[1];
+
+                    // in reports case need to process the since/until params
+                    if (view === 'mfw-reports') {
+                        if (key === 'since') {
+                            var since, predefSince = val, sinceDate = new Date(parseInt(val, 10));
+                            switch (val) {
+                                case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                                case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                                case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                                case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                                case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                                case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                                case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                                default:
+                                    if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
+                                        since = sinceDate;
+                                        predefSince = since.getTime();
+                                    } else {
+                                        since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
+                                        predefSince = 'today';
+                                    }
+                                    break;
+
+                            }
+                            conditions.predefinedSince = predefSince;
+                            conditions.since = since.getTime();
+                        }
+
+                        if (key === 'until') {
+                            var until, untilDate = new Date(parseInt(val, 10));
+                            if (untilDate.getTime() > 0) {
+                                until = val;
+                            } else {
+                                until = null;
+                            }
+                            conditions.until = until;
+                        }
+                    } else {
+                        conditions[key] = val;
+                    }
                 }
             });
 
@@ -100,6 +145,9 @@ Ext.define('Mfw.App', {
             }
 
             if (view === 'mfw-reports') {
+                if (!conditions.until) {
+                    conditions.until = null;
+                }
                 gvm.set('reportsConditions', conditions);
             }
         }
