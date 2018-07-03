@@ -113,7 +113,7 @@ Ext.define('Mfw.App', {
                                 default:
                                     if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
                                         since = sinceDate;
-                                        predefSince = since.getTime();
+                                        predefSince = sinceDate.getTime();
                                     } else {
                                         since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
                                         predefSince = 'today';
@@ -126,13 +126,18 @@ Ext.define('Mfw.App', {
                         }
 
                         if (key === 'until') {
-                            var until, untilDate = new Date(parseInt(val, 10));
-                            if (untilDate.getTime() > 0) {
-                                until = val;
+                            // remove until in case of predefined since
+                            if (Ext.Array.contains(['1h', '6h', 'today', 'yesterday', 'thisweek', 'lastweek', 'month'], conditions.predefinedSince)) {
+                                conditions.until = null;
                             } else {
-                                until = null;
+                                var until, untilDate = new Date(parseInt(val, 10));
+                                if (untilDate.getTime() > 0) {
+                                    until = untilDate.getTime();
+                                } else {
+                                    until = null;
+                                }
+                                conditions.until = until;
                             }
-                            conditions.until = until;
                         }
                     } else {
                         conditions[key] = val;
@@ -145,9 +150,9 @@ Ext.define('Mfw.App', {
             }
 
             if (view === 'mfw-reports') {
-                if (!conditions.until) {
-                    conditions.until = null;
-                }
+                // if (!conditions.until) {
+                //     conditions.until = null;
+                // }
                 gvm.set('reportsConditions', conditions);
             }
         }

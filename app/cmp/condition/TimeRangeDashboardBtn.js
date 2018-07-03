@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.DashboardTimeRangeBtn', {
+Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
     extend: 'Ext.Button',
     alias: 'widget.dashboard-timerange-btn',
 

@@ -8,26 +8,29 @@ Ext.define('Mfw.cmp.condition.TimeRangeDialog', {
     draggable: false,
     maskTapHandler: 'onDialogCancel',
 
-    layout: 'vbox',
+    layout: {
+        type: 'vbox',
+        // align: 'stretch'
+    },
 
     since: '',
     until: '',
+    untilEnabled: false,
 
     items: [{
         xtype: 'formpanel',
         padding: 0,
         items: [{
+            xtype: 'component',
+            html: 'Since'.t()
+        }, {
             xtype: 'containerfield',
-            label: 'From'.t(),
+            // label: 'From'.t(),
             layout: {
                 type: 'hbox',
                 align: 'stretch'
             },
             items: [{
-                xtype: 'checkbox',
-                hidden: true,
-                hideMode: 'visibility'
-            }, {
                 xtype: 'datefield',
                 itemId: 'startDate',
                 // floatedPicker: {
@@ -57,65 +60,49 @@ Ext.define('Mfw.cmp.condition.TimeRangeDialog', {
                 }
             }]
         }, {
+            xtype: 'togglefield',
+            boxLabel: 'Until'.t(),
+            boxLabelAlign: 'before',
+            reference: 'untilTgl'
+        }, {
             xtype: 'containerfield',
-            label: 'To'.t(),
             layout: {
                 type: 'hbox',
                 align: 'stretch'
             },
+            hideMode: 'visibility',
+            hidden: true,
+            bind: {
+                hidden: '{!untilTgl.value}'
+            },
             items: [{
-                xtype: 'checkbox',
-                itemId: 'untilck',
-                reference: 'untilCk',
-                listeners: {
-                    change: function (el, newValue) {
-                        if (!newValue) {
-                            el.up('dialog').until = null;
-                        }
-                    }
-                }
-            }, {
                 xtype: 'datefield',
                 itemId: 'endDate',
                 flex: 1,
                 width: 120,
                 margin: '0 10',
-                disabled: true,
                 editable: false,
                 required: false,
                 bind: {
-                    disabled: '{!untilCk.checked}',
-                    required: '{untilCk.checked}'
+                    required: '{untilTgl.value}'
                 },
                 listeners: {
                     change: function (el, newDate) {
                         el.up('dialog').until.setFullYear(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
-                        // if (!el.getDisabled() && el.up('dialog').until) {
-                        //     el.up('dialog').until.setFullYear(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
-                        // } else {
-                        //     el.up('dialog').until = null;
-                        // }
                     }
                 }
             }, {
                 xtype: 'timefield',
                 itemId: 'endTime',
                 width: 120,
-                // disabled: true,
                 editable: false,
                 required: false,
                 bind: {
-                    // disabled: '{!untilCk.checked}',
                     required: '{untilCk.checked}'
                 },
                 listeners: {
                     change: function (el, newDate) {
                         el.up('dialog').until.setHours(newDate.getHours(), newDate.getMinutes(), 0, 0);
-                        // if (!el.getDisabled() && el.up('dialog').until) {
-                        //     // el.up('dialog').until.setHours(newDate.getHours(), newDate.getMinutes(), 0, 0);
-                        // } else {
-                        //     // el.up('dialog').until = null;
-                        // }
                     }
                 }
             }]
@@ -126,6 +113,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeDialog', {
         cancel: 'onDialogCancel'
     },
     listeners: {
-        show: 'onDialogShow'
+        show: 'onDialogShow',
+        hide: 'onDialogHide'
     }
 });

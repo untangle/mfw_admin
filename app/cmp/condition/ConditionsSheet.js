@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.FieldsSheet', {
+Ext.define('Mfw.cmp.condition.ConditionsSheet', {
     extend: 'Ext.Sheet',
     alias: 'widget.fields-sheet',
 
