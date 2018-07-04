@@ -10,10 +10,12 @@ Ext.define('Mfw.App', {
     //     hashbang: true
     // },
 
+    stores: ['Interfaces'],
+
     viewport: {
         viewModel: {
             data: {
-                currentView: 'mfw-dashboard',
+                currentView: '',
                 dashboardConditions: {
                     since: 1,
                     fields: []
@@ -37,21 +39,32 @@ Ext.define('Mfw.App', {
         }
     },
 
+    listen : {
+        global : {
+            unmatchedroute : 'onUnmatchedRoute'
+        }
+    },
+
     launch: function () {
         console.log('launched');
 
         // add main views to the viewport
         Ext.Viewport.add([
-            // heading
+            // header
             { xtype: 'mfw-header' },
-            // { xtype: 'mfw-mainmenu' },
             // views
+            { xtype: 'component', html: '' }, // empty component to avoid flicker from dashboard to the specified route
             { xtype: 'mfw-dashboard' },
             { xtype: 'mfw-reports' },
-            { xtype: 'mfw-settings' }
+            { xtype: 'mfw-settings' },
+            // 404 view
+            { xtype: 'mfw-404' }
         ]);
     },
 
+    onUnmatchedRoute: function () {
+        Mfw.app.redirectTo('404');
+    },
 
     /**
      * Global method to update route/query based on conditions for dashboard and reports

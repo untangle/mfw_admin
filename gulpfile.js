@@ -26,6 +26,7 @@ gulp.task('concat', function() {
             './app/model/**/*.js',
             './app/store/**/*.js',
             './app/view/**/*.js',
+            './app/settings/**/*.js',
             './app/AppController.js',
             './app/App.js'
         ])

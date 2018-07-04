@@ -42,7 +42,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             }
         }, {
             text: 'Reports'.t(),
-            iconCls: 'x-fa fa-area-chart',
+            // iconCls: 'x-fa fa-area-chart',
+            iconCls: 'x-material x-show_chart',
             handler: function () { Mfw.app.redirectTo('reports'); },
             bind: {
                 pressed: '{currentView === "mfw-reports"}'
@@ -57,7 +58,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             }
         }, {
             text: 'Monitor'.t(),
-            iconCls: 'x-fa fa-desktop',
+            // iconCls: 'x-fa fa-desktop',
+            iconCls: 'x-material x-computer',
             menu: [{
                 text: 'Sessions'.t(),
                 iconCls: 'icon-monitor sessions'

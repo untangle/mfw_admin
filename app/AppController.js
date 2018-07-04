@@ -18,7 +18,8 @@ Ext.define('Mfw.controller.MfwController', {
             '': { action: 'onHome', conditions: { ':query' : '(.*)' } },
             'dashboard:query': { action: 'onDashboard', conditions: { ':query' : '(.*)' } },
             'reports:query': { action: 'onReports', conditions: { ':query' : '(.*)' } },
-            'settings': { action: 'onSettings' }
+            'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } },
+            '404': { action: 'onUnmatchedRoute' }
         },
     },
 
@@ -30,58 +31,6 @@ Ext.define('Mfw.controller.MfwController', {
     //     // }
 
     // },
-
-    /**
-     * Transforms query string into parametrizied object applied in ViewModel
-     * */
-    processQuery: function (query) {
-        var gvm = Ext.Viewport.getViewModel(),
-            conditions = {
-                fields: []
-            },
-            decodedPart, parts;
-
-        // console.log(query);
-        if (!query) {
-            // if (gvm.get('currentView') === 'mfw-reports') {
-            //     Mfw.app.redirectTo('reports?since=100');
-            // }
-            query = '';
-            // return;
-        }
-
-        // A field conditions is represented in query string like "&filedName:operator:value:autoFormatValue&"
-
-        Ext.Array.each(query.replace('?', '').split('&'), function (part) {
-            decodedPart = decodeURIComponent(part);
-
-            // if it's a field condition
-            if (decodedPart.indexOf(':') > 0) {
-                parts = decodedPart.split(':');
-                conditions.fields.push({
-                    column: parts[0],
-                    operator: parts[1],
-                    value: parts[2],
-                    autoFormatValue: parseInt(parts[3], 10) === 1 ? true : false,
-                });
-            } else {
-            // if it's normal parameter like since, until
-                parts = decodedPart.split('=');
-                conditions[parts[0]] = parts[1];
-            }
-        });
-
-        if (gvm.get('currentView') === 'mfw-dashboard') {
-            gvm.set('dashboardConditions', conditions);
-        }
-
-        if (gvm.get('currentView') === 'mfw-reports') {
-            gvm.set('reportsConditions', conditions);
-        }
-
-        // Ext.getStore('dashboardfields').loadData(conditions.fields);
-    },
-
 
     onHome: function () {
         Mfw.app.redirectTo('dashboard');
@@ -103,10 +52,42 @@ Ext.define('Mfw.controller.MfwController', {
         Mfw.app.updateQuery(query);
     },
 
-    onSettings: function () {
+    onSettings: function (route) {
+        var mainSettingsView = Ext.Viewport.down('mfw-settings'), xtype;
         Ext.Viewport.getViewModel().set({
             currentView: 'mfw-settings',
             currentViewTitle: 'Settings'.t()
+        });
+        if (mainSettingsView.down('#currentSettings')) {
+            mainSettingsView.remove('currentSettings');
+        }
+
+        if (route) {
+            xtype = 'mfw-settings' + route.replace(/\//g, '-');
+
+            if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
+                Ext.Viewport.down('mfw-settings').add({
+                    xtype: xtype,
+                    itemId: 'currentSettings'
+                });
+            } else {
+                // console.log('not exists');
+            }
+        }
+
+        // console.log(route);
+        var tree = mainSettingsView.down('treelist');
+        var node = tree.getStore().findNode('href', 'settings' + route);
+        tree.setSelection(node);
+        // console.log(tree.getStore());
+        // console.log(node);
+
+    },
+
+    onUnmatchedRoute: function () {
+        Ext.Viewport.getViewModel().set({
+            currentView: 'mfw-404',
+            currentViewTitle: ''
         });
     }
 });

@@ -3,13 +3,14 @@ Ext.define('Mfw.store.Interfaces', {
     storeId: 'interfaces',
     alias: 'store.interfaces',
     model: 'Mfw.model.Interface',
+
     proxy: {
-        type: 'jsonp',
-        url: 'http://192.168.0.109:8080/settings/get_settings/network',
-        callbackKey: 'theCallbackFunction',
+        type: 'ajax',
+        // url: 'http://192.168.0.101:8080/settings/get_settings/network/interfaces',
         reader: {
             type: 'array',
-            rootProperty: 'interfaces'
-        }
-    }
+            // rootProperty: 'interfaces'
+        },
+    },
+    // autoLoad: true
 });

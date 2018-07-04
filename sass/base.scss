@@ -16,6 +16,8 @@ html, body {
 }
 .x-dashboard:before { content: 'dashboard' }
 .x-settings:before { content: 'settings' }
+.x-computer:before { content: 'computer' }
+.x-show_chart:before { content: 'show_chart' }
 
 
 .x-toolbar.nav {
@@ -222,35 +224,35 @@ html, body {
     color: #999;
 }
 
-.x-treelist-nav {
-    .x-treelist-row {
-        padding-left: 16px;
-        padding-right: 8px;
-    }
-    .x-treelist-item-text {
-        line-height: 28px;
-        margin-left: 30px;
-        font-size: 14px;
-        font-weight: 600;
-    }
-    .x-treelist-item-expander {
-        line-height: 28px;
-        &::after {
-            line-height: 28px !important;
-        }
-    }
-    .x-treelist-item-icon:before {
-        line-height: 28px !important;
-        font-size: 16px;
-    }
-    // .x-treelist-item-expanded > * > * > .x-treelist-item-expander::after {
-    //     line-height: 28px !important;
-    // }
-}
+// .x-treelist-nav {
+//     .x-treelist-row {
+//         padding-left: 16px;
+//         padding-right: 8px;
+//     }
+//     .x-treelist-item-text {
+//         line-height: 28px;
+//         margin-left: 30px;
+//         font-size: 14px;
+//         font-weight: 600;
+//     }
+//     .x-treelist-item-expander {
+//         line-height: 28px;
+//         &::after {
+//             line-height: 28px !important;
+//         }
+//     }
+//     .x-treelist-item-icon:before {
+//         line-height: 28px !important;
+//         font-size: 16px;
+//     }
+//     // .x-treelist-item-expanded > * > * > .x-treelist-item-expander::after {
+//     //     line-height: 28px !important;
+//     // }
+// }
 
-.x-treelist-item-selected {
-    background: #EEE;
-}
+// .x-treelist-item-selected {
+//     background: #EEE;
+// }
 
 // .x-gridcell-body-el {
 //     padding: 6px;
