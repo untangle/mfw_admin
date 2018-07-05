@@ -77,6 +77,9 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 // handler: function () { Ung.app.redirectTo('#apps'); }
             }]
         }]
+    }, {
+        xtype: 'component',
+        bind: { html: '{screen}' }
     }, '->', {
         // text: 'Account',
         iconCls: 'x-fa fa-user-circle fa-3x',

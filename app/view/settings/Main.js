@@ -1,18 +1,27 @@
 Ext.define('Mfw.view.settings.Main', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.Container',
     alias: 'widget.mfw-settings',
 
     viewModel: {
         data: {
-            params: null
+            currentView: false
         }
     },
 
     controller: 'settings',
+
     // viewModel: true,
     // defaultType: 'panel',
 
     layout: 'fit',
+    // plugins: 'responsive',
+    // responsiveFormulas: {
+    //     formula: function (context) {
+    //         // var me = this;
+    //         // console.log(me);
+    //         return (new Date()).getDay() === 2;
+    //     }
+    // },
 
     tbar: {
         padding: 8,
@@ -22,7 +31,7 @@ Ext.define('Mfw.view.settings.Main', {
         items: [{
             xtype: 'button',
             iconCls: 'x-fa fa-chevron-left',
-            handler: function () { Mfw.app.redirectTo('config'); },
+            handler: function () { Ext.util.History.back(); },
             // hidden: true,
             // bind: {
             //     hidden: '{ screen === "WIDE" }'
@@ -37,7 +46,13 @@ Ext.define('Mfw.view.settings.Main', {
     },
 
     listeners: {
-        deactivate: 'onDeactivate'
+        deactivate: 'onDeactivate',
+        add: function (cmp) {
+            cmp.getViewModel().set('currentView', true);
+        },
+        remove: function (cmp) {
+            cmp.getViewModel().set('currentView', false);
+        }
     },
 
     items: [{
@@ -45,19 +60,32 @@ Ext.define('Mfw.view.settings.Main', {
         xtype: 'panel',
         shadow: true,
         zIndex: 999,
-        // hidden: true,
-        docked: 'left',
-        width: 320,
+
         bind: {
-            // docked: '{ screen === "WIDE" ? "left" : null }',
-            width: '{ screen === "WIDE" ? 320 : null }',
-            // hidden: '{params && screen !== "WIDE" }',
-            // resizable: {
-            //     split: '{ screen === "WIDE" }',
-            //     direction: 'left',
-            //     edges: 'east'
-            // }
+            docked: '{(screen === "large" && currentView) ? "left" : null }',
+            width: '{(screen === "large" && currentView) ? 320 : null }',
+            hidden: '{ screen === "small" && currentView }',
         },
+
+        // hidden: true,
+
+        // plugins: 'responsive',
+        // responsiveConfig: {
+        //     large: { docked: 'left', width: 320 },
+        //     small: { docked: null }
+        //     // formula: { width: 500 }
+        // },
+
+        // bind: {
+        //     // docked: '{ screen === "WIDE" ? "left" : null }',
+        //     width: '{ screen === "WIDE" ? 320 : null }',
+        //     // hidden: '{params && screen !== "WIDE" }',
+        //     // resizable: {
+        //     //     split: '{ screen === "WIDE" }',
+        //     //     direction: 'left',
+        //     //     edges: 'east'
+        //     // }
+        // },
 
         tbar: {
             shadow: false,

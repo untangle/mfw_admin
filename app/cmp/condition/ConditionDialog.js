@@ -1,7 +1,7 @@
 Ext.define('Mfw.cmp.condition.ConditionDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.field-dialog',
-    title: 'Condition',
+    title: 'Condition'.t(),
 
     closable: true,
     closeAction: 'hide',
@@ -9,6 +9,8 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
     maskTapHandler: 'onDialogCancel',
     layout: 'fit',
     alwaysOnTop: true, // important
+
+    // bodyPadding: '0 16',
 
     config: {
         addAction: false // if condition is added or edited
@@ -34,8 +36,8 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
         items: [{
             xtype: 'combobox',
             name: 'column',
-            label: 'Choose field'.t(),
-            // placeholder: 'Choose field'.t(),
+            // label: 'Choose field'.t(),
+            placeholder: 'Choose field'.t(),
             queryMode: 'local',
             required: true,
             forceSelection: true,
@@ -46,8 +48,8 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
         }, {
             xtype: 'combobox',
             name: 'operator',
-            label: 'Choose operator'.t(),
-            // placeholder: 'Choose operator'.t(),
+            // label: 'Choose operator'.t(),
+            placeholder: 'Choose operator'.t(),
             queryMode: 'local',
             required: true,
             editable: false,
@@ -58,9 +60,9 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
         }, {
             xtype: 'textfield',
             name: 'value',
-            label: 'Enter value'.t(),
+            // label: 'Enter value'.t(),
+            placeholder: 'Enter value'.t(),
             autoComplete: false,
-            // placeholder: 'Enter value'.t(),
             required: true,
             bind: '{record.value}'
         }, {

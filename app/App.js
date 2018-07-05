@@ -15,6 +15,7 @@ Ext.define('Mfw.App', {
     viewport: {
         viewModel: {
             data: {
+                screen: 'small',
                 currentView: '',
                 dashboardConditions: {
                     since: 1,
@@ -36,6 +37,14 @@ Ext.define('Mfw.App', {
         responsiveFormulas: {
             small: 'width < 1000',
             large: 'width >= 1000'
+        },
+        listeners: {
+            resize: function (el, width) {
+                console.log('resize', width);
+                el.getViewModel().set({
+                    screen: width < 1000 ? 'small' : 'large'
+                });
+            }
         }
     },
 
@@ -47,7 +56,7 @@ Ext.define('Mfw.App', {
 
     launch: function () {
         console.log('launched');
-
+        // Ext.fireEvent('resize');
         // add main views to the viewport
         Ext.Viewport.add([
             // header

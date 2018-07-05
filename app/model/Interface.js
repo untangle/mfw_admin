@@ -3,6 +3,7 @@ Ext.define('Mfw.model.Interface', {
     alias: 'model.interface',
     fields: [
         { name: 'configType',        type: 'string' },
+        { name: 'device',            type: 'string', reference: { type: 'Device', unique: true } },
         { name: 'dhcpEnabled',       type: 'boolean' },
         { name: 'dhcpLeaseDuration', type: 'int' },
         { name: 'dhcpRangeEnd',      type: 'string' },
@@ -19,5 +20,14 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v4StaticPrefix',    type: 'int' },
         { name: 'v6ConfigType',      type: 'string' },
         { name: 'wan',               type: 'boolean' }
+    ]
+});
+
+Ext.define('Mfw.model.Device', {
+    extend: 'Ext.data.Model',
+    fields: [
+        { name: 'duplex', type: 'string' },
+        { name: 'mtu',    type: 'auto' },
+        { name: 'name',   type: 'string' }
     ]
 });
