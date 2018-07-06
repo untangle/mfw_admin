@@ -2,13 +2,13 @@ Ext.define('Mfw.view.dashboard.Main', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.mfw-dashboard',
     // controller: 'main',
-    viewModel: {
-        data: {
-            timeRange: {
-                since: 1
-            }
-        }
-    },
+    // viewModel: {
+    //     data: {
+    //         timeRange: {
+    //             since: 1
+    //         }
+    //     }
+    // },
 
     items: [{
         xtype: 'toolbar',
@@ -23,12 +23,21 @@ Ext.define('Mfw.view.dashboard.Main', {
         }]
     }, {
         xtype: 'container',
-        padding: 50,
+        padding: 20,
         items: [{
             xtype: 'component',
             bind: {
-                html: 'Dashboard View <br/> Timerange: {timeRange.since} hour(s)'
+                html: 'Dashboard View since <strong>{dashboardConditions.since} hour(s)</strong> <br/><br/>'
             }
+        }, {
+            xtype: 'dataview',
+            disableSelection: true,
+            bind: {
+                store: {
+                    data: '{dashboardConditions.fields}'
+                }
+            },
+            itemTpl: '<div>{column} {operator} {value} (autoformat: {autoFormatValue})</div>'
         }]
     }],
 

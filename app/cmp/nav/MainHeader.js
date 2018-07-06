@@ -3,17 +3,15 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     alias: 'widget.mfw-header',
     cls: 'nav',
     docked: 'top',
-    padding: '0 16 0 16', // remove top/bottom padding
     zIndex: 999,
-    defaults: {
-        // iconAlign: 'top',
-        // padding: 0
-    },
+    padding: '0 16 0 16',
+
     items: [{
         xtype: 'component',
         // padding: '0 10',
-        margin: '5 26 0 10',
-        html: '<img src="' + 'res/untangle-logo.png" style="height: 30px;"/>'
+        html: '<img src="' + 'res/untangle-logo.png" style="height: 30px;"/>',
+        plugins: 'responsive',
+        responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
     }, {
         xtype: 'component',
         margin: '5 0 0 0',
@@ -77,9 +75,6 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 // handler: function () { Ung.app.redirectTo('#apps'); }
             }]
         }]
-    }, {
-        xtype: 'component',
-        bind: { html: '{screen}' }
     }, '->', {
         // text: 'Account',
         iconCls: 'x-fa fa-user-circle fa-3x',

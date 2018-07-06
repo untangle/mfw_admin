@@ -10,6 +10,13 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
     layout: 'fit',
     alwaysOnTop: true, // important
 
+    maximized: false,
+    maximizeAnimation: null,
+
+    bind: {
+        maximized: '{smallScreen}'
+    },
+
     // bodyPadding: '0 16',
 
     config: {
@@ -31,7 +38,10 @@ Ext.define('Mfw.cmp.condition.ConditionDialog', {
         xtype: 'formpanel',
         padding: 0,
         defaults: {
-            errorTarget: 'side'
+            errorTarget: 'side',
+            margin: '20 0'
+            // plugins: 'responsive',
+            // responsiveConfig: { large: { margin: '20 0' }, small: { margin: 0 } }
         },
         items: [{
             xtype: 'combobox',

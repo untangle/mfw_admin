@@ -15,7 +15,7 @@ Ext.define('Mfw.App', {
     viewport: {
         viewModel: {
             data: {
-                screen: 'small',
+                smallScreen: true,
                 currentView: '',
                 dashboardConditions: {
                     since: 1,
@@ -40,9 +40,8 @@ Ext.define('Mfw.App', {
         },
         listeners: {
             resize: function (el, width) {
-                console.log('resize', width);
                 el.getViewModel().set({
-                    screen: width < 1000 ? 'small' : 'large'
+                    smallScreen: width < 1000
                 });
             }
         }
@@ -56,7 +55,6 @@ Ext.define('Mfw.App', {
 
     launch: function () {
         console.log('launched');
-        // Ext.fireEvent('resize');
         // add main views to the viewport
         Ext.Viewport.add([
             // header
@@ -69,6 +67,11 @@ Ext.define('Mfw.App', {
             // 404 view
             { xtype: 'mfw-404' }
         ]);
+
+        // this is necessary to determine initial viewport size after launch
+        Ext.Viewport.getViewModel().set({
+            smallScreen: Ext.Viewport.getSize().width < 1000
+        });
     },
 
     onUnmatchedRoute: function () {

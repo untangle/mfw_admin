@@ -40,3 +40,15 @@ Ext.define('Mfw.util.Util', {
     }
 
 });
+
+
+Ext.util.Format.dateFormatter = function (value, format) {
+    if (!value) {
+        return '';
+    }
+
+    if (!Ext.isDate(value)) {
+        value = new Date(value);
+    }
+    return Ext.Date.dateFormat(value, format || 'Y-m-d H:i A');
+};

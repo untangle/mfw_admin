@@ -4,6 +4,8 @@ Ext.define('Mfw.view.Error404', {
 
     padding: 20,
 
-    html: 'Errorrrrr 404! <br/> Wrong route!'
+    layout: 'center',
+
+    html: '<h1 style="font-weight: 100;">Errorrrrr 404! <br/> Wrong route!</h1>'
 
 });

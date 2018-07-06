@@ -1,5 +1,5 @@
 Ext.define('Mfw.view.settings.Main', {
-    extend: 'Ext.Container',
+    extend: 'Ext.Panel',
     alias: 'widget.mfw-settings',
 
     viewModel: {
@@ -10,48 +10,43 @@ Ext.define('Mfw.view.settings.Main', {
 
     controller: 'settings',
 
-    // viewModel: true,
-    // defaultType: 'panel',
-
     layout: 'fit',
-    // plugins: 'responsive',
-    // responsiveFormulas: {
-    //     formula: function (context) {
-    //         // var me = this;
-    //         // console.log(me);
-    //         return (new Date()).getDay() === 2;
-    //     }
-    // },
 
     tbar: {
         padding: 8,
-        // hidden: true,
-        // bind: { hidden: '{!params}' },
+        hidden: true,
+        bind: { hidden: '{!currentView}' },
         shadow: false,
         items: [{
             xtype: 'button',
-            iconCls: 'x-fa fa-chevron-left',
+            iconCls: 'x-fa fa-arrow-left',
             handler: function () { Ext.util.History.back(); },
-            // hidden: true,
-            // bind: {
-            //     hidden: '{ screen === "WIDE" }'
-            // }
+            margin: '0 8 0 0',
+            plugins: 'responsive',
+            responsiveConfig: { large: { hidden: true }, small: { hidden: false } },
         }, {
             xtype: 'component',
             margin: '0 0 0 8',
+            style: 'color: #777; font-size: 16px; font-weight: normal;',
             bind: {
-                html: 'Network / {ttl}',
+                html: 'Network / {title}',
             }
         }]
     },
 
     listeners: {
         deactivate: 'onDeactivate',
-        add: function (cmp) {
-            cmp.getViewModel().set('currentView', true);
+        add: function (cmp, view) {
+            cmp.getViewModel().set({
+                currentView: true,
+                title: view.viewTitle
+            });
         },
         remove: function (cmp) {
-            cmp.getViewModel().set('currentView', false);
+            cmp.getViewModel().set({
+                currentView: false,
+                title: null
+            });
         }
     },
 
@@ -62,9 +57,9 @@ Ext.define('Mfw.view.settings.Main', {
         zIndex: 999,
 
         bind: {
-            docked: '{(screen === "large" && currentView) ? "left" : null }',
-            width: '{(screen === "large" && currentView) ? 320 : null }',
-            hidden: '{ screen === "small" && currentView }',
+            docked: '{(!smallScreen) ? "left" : null }',
+            width: '{(!smallScreen) ? 320 : null }',
+            hidden: '{ smallScreen && currentView }',
         },
 
         // hidden: true,
@@ -126,20 +121,28 @@ Ext.define('Mfw.view.settings.Main', {
                 root: {
                     expanded: true,
                     children: [{
-                        text: 'Network'.t(),
-                        // icon: '/skins/modern-rack/images/admin/config/icon_config_network.png',
-                        // iconCls: 'tree network',
-                        // iconCls: 'x-fa fa-cog',
+                        text: '<strong>' + 'Network'.t() + '</strong>',
+                        iconCls: 'tree network',
                         href: 'settings/network',
                         children: [
-                            { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' }
+                            { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' },
+                            { text: 'Second Setting'.t(), leaf: true },
+                            { text: 'Third Setting'.t(), leaf: true }
                         ]
                     }, {
-                        text: 'System'.t(),
-                        // iconCls: 'x-fa fa-',
+                        text: '<strong>' + 'System'.t() + '</strong>',
+                        iconCls: 'tree system',
                         href: 'settings/system',
                         children: [
                             { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' }
+                        ]
+                    }, {
+                        text: '<strong>' + 'Administration'.t() + '</strong>',
+                        iconCls: 'tree administration',
+                        href: 'settings/administration',
+                        children: [
+                            { text: 'Some Setting title'.t(), leaf: true },
+                            { text: 'Other Setting title'.t(), leaf: true }
                         ]
                     }]
                 }
@@ -153,12 +156,12 @@ Ext.define('Mfw.view.settings.Main', {
             }
         }]
     },
-    //{
-    //    xtype: 'mfw-settings-select',
-        // hidden: true,
-        // bind: {
-        //     hidden: '{params || screen !== "WIDE"}'
-        // }
-    // }
+    {
+        xtype: 'mfw-settings-select',
+        hidden: true,
+        bind: {
+            hidden: '{smallScreen || currentView}'
+        }
+    }
     ]
 });

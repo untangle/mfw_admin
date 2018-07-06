@@ -24,14 +24,22 @@ Ext.define('Mfw.view.reports.Main', {
             xtype: 'reports-timerange-btn'
         }]
     }, {
-        xtype: 'component',
+        xtype: 'container',
         padding: 20,
-        userSelectable: {
-            element: true,       // optionally allow the element to be user selectable
-            bodyElement: true    // optionally allow the component's body element to be user selectable
-        },
-        bind: {
-            html: 'PredefSince: {reportsConditions.predefinedSince} <br/> Since: {reportsConditions.since} <br/> Until: {reportsConditions.until || "none" }'
-        }
+        items: [{
+            xtype: 'component',
+            bind: {
+                html: 'Since: <br/>{reportsConditions.since} / {reportsConditions.since:dateFormatter}<br/><br/> Until: {reportsConditions.until || "none" } / {reportsConditions.until:dateFormatter}<br/><br/>'
+            }
+        }, {
+            xtype: 'dataview',
+            disableSelection: true,
+            bind: {
+                store: {
+                    data: '{reportsConditions.fields}'
+                }
+            },
+            itemTpl: '<div>{column} {operator} {value} (autoformat: {autoFormatValue})</div>'
+        }]
     }]
 });
