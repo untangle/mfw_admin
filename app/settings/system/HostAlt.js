@@ -1,21 +1,14 @@
-Ext.define('Mfw.settings.system.Host', {
+Ext.define('Mfw.settings.system.HostAlt', {
     extend: 'Ext.form.Panel',
-    alias: 'widget.mfw-settings-system-host',
+    alias: 'widget.mfw-settings-system-host-alt',
 
-    viewTitle: 'Host/Domain'.t(),
+    viewTitle: 'Host/Domain Alt'.t(),
     header: false,
 
     padding: 16,
 
 
-    // layout: "form",
-    // bind: {
-    //     layout: '{!smallScreen ? "form" : "vbox"}',
-    // },
-
-    // defaults: {
-    //     labelAlign: 'right'
-    // },
+    layout: "form",
 
     items: [{
         xtype: 'textfield',

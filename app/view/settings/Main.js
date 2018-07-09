@@ -126,6 +126,7 @@ Ext.define('Mfw.view.settings.Main', {
                         href: 'settings/network',
                         children: [
                             { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' },
+                            { text: 'Interfaces Alt'.t(), leaf: true, href: 'settings/network/interfaces-alt' },
                             { text: 'Second Setting'.t(), leaf: true },
                             { text: 'Third Setting'.t(), leaf: true }
                         ]
@@ -134,7 +135,8 @@ Ext.define('Mfw.view.settings.Main', {
                         iconCls: 'tree system',
                         href: 'settings/system',
                         children: [
-                            { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' }
+                            { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' },
+                            { text: 'Host/Domain Alt'.t(), leaf: true, href: 'settings/system/host-alt' }
                         ]
                     }, {
                         text: '<strong>' + 'Administration'.t() + '</strong>',

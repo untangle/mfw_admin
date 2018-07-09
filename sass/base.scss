@@ -89,8 +89,17 @@ html, body {
     }
 }
 
+.x-layout-form {
+    border-spacing: 16px;
+}
 
+.x-big .x-layout-form {
+    border-spacing: 16px;
+}
 
+.x-big .x-textfield .x-body-wrap-el {
+    width: auto;
+}
 
 
 
