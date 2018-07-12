@@ -16,40 +16,72 @@ Ext.define('Mfw.settings.network.interface.Main', {
         // labelTextAlign: 'right'
     },
     items: [{
-        xtype: 'textfield',
-        margin: '0 16',
-        required: true,
-        label: 'Name'.t(),
-        // placeholder: 'Name'.t(),
-        bind: '{rec.name}'
-    }, {
-        xtype: 'combobox',
-        margin: '0 16',
-        label: 'Type'.t(),
-        queryMode: 'local',
-        displayField: 'name',
-        valueField: 'value',
-        editable: false,
-        store: [
-            { name: 'Addressed'.t(), value: 'ADDRESSED' },
-            { name: 'Bridged'.t(),   value: 'BRIDGED' },
-            { name: 'Disabled'.t(),  value: 'DISABLED' }
-        ],
-        bind: '{rec.configType}'
-    }, {
-        xtype: 'togglefield',
-        margin: '0 16',
-        label: 'Is WAN'.t(),
-        bind: '{rec.wan}'
-        // reference: 'override',
-        // margin: '8 16'
+        xtype: 'container',
+        padding: 16,
+        layout: {
+            type: 'vbox',
+            // itemSpacing: 8,
+        },
+        defaults: {
+            labelWidth: 80,
+            labelAlign: 'left'
+        },
+        items: [{
+            xtype: 'textfield',
+            label: 'Name'.t(),
+            required: true,
+            bind: '{rec.name}'
+        }, {
+            xtype: 'combobox',
+            label: 'Type'.t(),
+            queryMode: 'local',
+            displayField: 'name',
+            valueField: 'value',
+            editable: false,
+            required: true,
+            bind: '{rec.configType}',
+            store: [
+                { name: 'Addressed'.t(), value: 'ADDRESSED' },
+                { name: 'Bridged'.t(),   value: 'BRIDGED' },
+                { name: 'Disabled'.t(),  value: 'DISABLED' }
+            ]
+        }, {
+            xtype: 'combobox',
+            name: 'configType',
+            label: 'Bridged To'.t(),
+            queryMode: 'local',
+            displayField: 'name',
+            valueField: 'value',
+            editable: false,
+            required: true,
+            forceSelection: true,
+            hidden: true,
+            bind: {
+                hidden: '{rec.configType !== "BRIDGED"}'
+            },
+            store: [
+                { name: 'Addressed'.t(), value: 'ADDRESSED' },
+                { name: 'Bridged'.t(),   value: 'BRIDGED' },
+                { name: 'Disabled'.t(),  value: 'DISABLED' }
+            ]
+        }, {
+            xtype: 'togglefield',
+            // margin: '0 16',
+            label: 'Is WAN'.t(),
+            required: true,
+            hidden: true,
+            bind: {
+                value: '{rec.wan}',
+                hidden: '{rec.configType !== "ADDRESSED"}'
+            }
+        }]
     },
         {
         xtype: 'list',
         disableSelection: true,
         // userCls: 'config-menu',
         // ui: 'nav',
-        itemTpl: '<strong>{text}</strong> ({status})',
+        itemTpl: '<strong>{text}</strong> / {status}',
         onItemDisclosure: 'onDisclosureTap',
         bind: {
             store: {

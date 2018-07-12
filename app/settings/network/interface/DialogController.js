@@ -30,6 +30,14 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
     },
 
     onApply: function (btn) {
+        // var me = this, vm = me.getViewModel(), form = me.getView().down('formpanel');
+        // // console.log(vm.get('rec').isValid());
+        // // console.log(vm.get('rec').getValidation());
+        // console.log(form.validate());
+        // console.log(form.isValid());
+        // // console.log(vm.get('rec').isValid());
+        // // console.log(vm.get('rec').getValidation());
+        // // console.log(form.getValues());
         btn.up('dialog').hide();
     },
     onCancel: function (btn) {

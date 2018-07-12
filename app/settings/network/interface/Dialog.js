@@ -5,13 +5,8 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
     viewModel: 'settings-interface-viewmodel',
     // title: 'Edit Interface'.t(),
 
-    // header: [{
-    //     items: [{
-    //         xtype: 'button',
-    //         text: 'aaa',
-    //         iconCls: 'x-fa fa-arrow-left'
-    //     }]
-    // }],
+    showAnimation: null,
+    hideAnimation: null,
 
     scrollable: true,
     // closable: true,
@@ -19,7 +14,7 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
     draggable: false,
     // maskTapHandler: 'onCancel',
     layout: 'fit',
-    alwaysOnTop: true, // important
+    // alwaysOnTop: true, // important
     maximized: false,
     maximizeAnimation: null,
 
@@ -94,6 +89,7 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
     }, {
         xtype: 'formpanel',
         reference: 'form',
+        // modelValidation: true,
         layout: {
             type: 'card',
             animation: {

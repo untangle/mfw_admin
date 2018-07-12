@@ -15,17 +15,27 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
         bind: { hidden: '{rec.vrrpEnabled}' }
     }, {
         xtype: 'container',
-        padding: 8,
+        padding: 16,
         layout: {
-            type: 'form',
-            itemSpacing: 8
+            type: 'vbox',
+            // itemSpacing: 8
         },
-        defaults: {
-            labelTextAlign: 'right'
-        },
-        defaultType: 'numberfield',
         hidden: true,
         bind: { hidden: '{!rec.vrrpEnabled}' },
+        defaultType: 'numberfield',
+        defaults: {
+            margin: 0,
+            labelAlign: 'left',
+            labelWidth: 100,
+            // labelTextAlign: 'right',
+            inputType: 'number',
+            errorTarget: 'qtip',
+            // required: true,
+            // decimals: 0,
+            // minValue: 1,
+            // maxValue: 255,
+            // minValueText: 'Should be 1 - 255'
+        },
         items: [{
             label: 'VRRP ID'.t(),
             bind: '{rec.vrrpID}'
