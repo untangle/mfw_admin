@@ -1,14 +1,17 @@
 Ext.define('Mfw.App', {
     extend: 'Ext.app.Application',
     name: 'Mfw',
-    // namespace: 'Mfw',
-    controllers: ['Mfw.controller.MfwController'],
-    defaultToken: '',
-    // mainView: 'Mfw.view.main.Main',
 
-    // router: {
-    //     hashbang: true
-    // },
+    // profiles: [
+    //     'App.profile.Desktop',
+    //     'App.profile.Mobile'
+    // ],
+
+    controllers: ['Mfw.controller.MfwController'],
+
+    // // namespace: 'Mfw',
+    // controllers: ['Mfw.controller.MfwController'],
+    defaultToken: '',
 
     stores: ['Interfaces'],
 
@@ -98,7 +101,7 @@ Ext.define('Mfw.App', {
                     newQuery += '&until=' + conditions.until;
                 }
             }
-            Ext.Array.each(conditions.fields, function(field, idx) {
+            Ext.Array.each(conditions.fields, function(field) {
                 newQuery += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
             });
             Mfw.app.redirectTo(newQuery);

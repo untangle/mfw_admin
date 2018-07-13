@@ -3,7 +3,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
     alias: 'widget.interface-ipv4',
     itemId: 'ipv4',
 
-    headerTitle: 'IPv4 Settings'.t(),
+    headerTitle: 'IPv4'.t(),
 
     layout: 'vbox',
 
@@ -19,9 +19,10 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         valueField: 'value',
         editable: false,
         margin: '0 16',
+        disabled: true,
         bind: {
             value: '{rec.v4ConfigType}',
-            hidden: '{!rec.wan}'
+            disabled: '{!rec.wan}'
         },
         store: [
             { name: 'Auto (DHCP)'.t(), value: 'DHCP' },

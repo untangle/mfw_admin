@@ -3,7 +3,7 @@ Ext.define('Mfw.settings.network.interface.Dhcp', {
     alias: 'widget.interface-dhcp',
     itemId: 'dhcp',
 
-    headerTitle: 'DHCP Settings'.t(),
+    headerTitle: 'DHCP'.t(),
 
     layout: 'fit',
 

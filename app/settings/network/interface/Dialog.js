@@ -31,18 +31,19 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
     items: [{
         xtype: 'toolbar',
         docked: 'top',
+        // padding: '10 8',
         shadow: false,
         style: { background: 'transparent' },
         items: [{
             xtype: 'button',
             iconCls: 'x-fa fa-arrow-left',
-            margin: '0 16 0 0',
+            margin: '0 8 0 0',
             hidden: true,
             bind: { hidden: '{isMainCard}' },
             handler: 'onBack'
         }, {
             xtype: 'component',
-            bind: { html: '{title}' }
+            bind: { html: '{title} / <span style="font-size: smaller; font-weight: 100;">{rec.device}, {rec.wan ? "WAN" : "nonWAN"}</span>' }
             // html: 'Edit Interface'.t()
         }, '->',
         // {
@@ -56,6 +57,7 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
         {
             xtype: 'button',
             iconCls: 'x-fa fa-plus',
+            ui: 'action round',
             hidden: true,
             bind: { hidden: '{!addGridItemsBtn}' },
             handler: 'addGridItem'
@@ -93,12 +95,12 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
         layout: {
             type: 'card',
             animation: {
-                duration: 100,
+                duration: 150,
                 type: 'slide',
                 direction: 'horizontal'
             },
         },
-
+        scrollable: 'y',
         padding: 0,
         margin: 0,
 

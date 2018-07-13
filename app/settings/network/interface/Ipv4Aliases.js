@@ -25,7 +25,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4Aliases', {
 
     store: {
         data: [
-            { v4Address: '12345', v4Prefix: '10' }
+            { v4Address: '1.2.3.4', v4Prefix: '8' }
         ]
     },
 

@@ -3,6 +3,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
     alias: 'widget.interface-main',
 
     headerTitle: 'Edit Interface'.t(),
+
     itemId: 'main',
     scrollable: true,
     padding: '0',
@@ -17,14 +18,17 @@ Ext.define('Mfw.settings.network.interface.Main', {
     },
     items: [{
         xtype: 'container',
-        padding: 16,
+        padding: '0 16 16 16',
         layout: {
             type: 'vbox',
             // itemSpacing: 8,
         },
         defaults: {
             labelWidth: 80,
-            labelAlign: 'left'
+            padding: 0,
+            margin: 0,
+            labelAlign: 'left',
+            labelTextAlign: 'right'
         },
         items: [{
             xtype: 'textfield',
@@ -60,9 +64,8 @@ Ext.define('Mfw.settings.network.interface.Main', {
                 hidden: '{rec.configType !== "BRIDGED"}'
             },
             store: [
-                { name: 'Addressed'.t(), value: 'ADDRESSED' },
-                { name: 'Bridged'.t(),   value: 'BRIDGED' },
-                { name: 'Disabled'.t(),  value: 'DISABLED' }
+                { name: 'Intf 1'.t(), value: '1' },
+                { name: 'Intf 2'.t(),   value: '2' }
             ]
         }, {
             xtype: 'togglefield',
@@ -75,14 +78,20 @@ Ext.define('Mfw.settings.network.interface.Main', {
                 hidden: '{rec.configType !== "ADDRESSED"}'
             }
         }]
+    }, {
+        xtype: 'component',
+        height: 3,
+        style: 'background: #EEE',
+        html: '',
     },
         {
         xtype: 'list',
         disableSelection: true,
         // userCls: 'config-menu',
         // ui: 'nav',
+        margin: 4,
         itemTpl: '<strong>{text}</strong> / {status}',
-        onItemDisclosure: 'onDisclosureTap',
+        onItemDisclosure: Ext.emptyFn,
         bind: {
             store: {
                 data: '{availableSettings}'
@@ -90,7 +99,6 @@ Ext.define('Mfw.settings.network.interface.Main', {
         },
         listeners: {
             childtap: function (list, location) {
-                console.log(location.record.get('card'));
                 list.up('formpanel').setActiveItem('#' + location.record.get('card'));
             }
         }

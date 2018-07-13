@@ -3,7 +3,7 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
     alias: 'widget.interface-vrrp',
     itemId: 'vrrp',
 
-    headerTitle: 'VRRP Settings'.t(),
+    headerTitle: 'VRRP'.t(),
 
     layout: 'fit',
 

@@ -3,7 +3,7 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
     alias: 'widget.interface-ipv6',
     itemId: 'ipv6',
 
-    headerTitle: 'IPv6 Settings'.t(),
+    headerTitle: 'IPv6'.t(),
 
     layout: 'vbox',
 
@@ -19,10 +19,10 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         valueField: 'value',
         editable: false,
         margin: '0 16',
-        hidden: true,
+        disabled: true,
         bind: {
             value: '{rec.v6ConfigType}',
-            hidden: '{!rec.wan}'
+            disabled: '{!rec.wan}'
         },
         store: [
             { name: 'Auto (DHCP)'.t(), value: 'DHCP' },

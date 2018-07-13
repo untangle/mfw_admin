@@ -11,14 +11,31 @@ Ext.define('Mfw.settings.network.interface.DialogModel', {
     },
     formulas: {
         availableSettings: function (get) {
-            var settings = [];
+            var settings = [], v4ConfigType, v6ConfigType;
+
+            switch (get('rec.v4ConfigType')) {
+                case 'DHCP': v4ConfigType = 'DHCP'.t(); break;
+                case 'STATIC': v4ConfigType = 'Static'.t(); break;
+                case 'PPPOE': v4ConfigType = 'PPPoE'.t(); break;
+                default:
+            }
+
+            switch (get('rec.v6ConfigType')) {
+                case 'DHCP': v6ConfigType = 'DHCP'.t(); break;
+                case 'SLAAC': v6ConfigType = 'SLAAC'.t(); break;
+                case 'ASSIGN': v6ConfigType = 'Assign'.t(); break;
+                case 'STATIC': v6ConfigType = 'Static'.t(); break;
+                case 'DISABLED': v6ConfigType = 'Disabled'.t(); break;
+                default:
+            }
+
             if (get('rec.configType') === 'ADDRESSED') {
-                settings.push({ text: 'IPv4 Settings'.t(), status: get('rec.v4ConfigType'), card: 'ipv4' });
-                settings.push({ text: 'IPv6 Settings'.t(), status: get('rec.v6ConfigType'), card: 'ipv6' });
+                settings.push({ text: 'IPv4'.t(), status: v4ConfigType, card: 'ipv4' });
+                settings.push({ text: 'IPv6'.t(), status: v6ConfigType, card: 'ipv6' });
                 if (!get('rec.wan')) {
-                    settings.push({ text: 'DHCP Settings'.t(), status: get('rec.dhcpEnabled') ? 'Enabled'.t() : 'Disabled'.t(), card: 'dhcp' });
+                    settings.push({ text: 'DHCP'.t(), status: get('rec.dhcpEnabled') ? 'Enabled'.t() : 'Disabled'.t(), card: 'dhcp' });
                 }
-                settings.push({ text: 'VRRP Settings'.t(), status: get('rec.vrrpEnabled') ? 'Enabled'.t() : 'Disabled'.t(), card: 'vrrp' });
+                settings.push({ text: 'VRRP (Redundancy)'.t(), status: get('rec.vrrpEnabled') ? 'Enabled'.t() : 'Disabled'.t(), card: 'vrrp' });
             }
             return settings;
         },
