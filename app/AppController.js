@@ -19,6 +19,7 @@ Ext.define('Mfw.controller.MfwController', {
             'dashboard:query': { action: 'onDashboard', conditions: { ':query' : '(.*)' } },
             'reports:query': { action: 'onReports', conditions: { ':query' : '(.*)' } },
             'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } },
+            'monitor/:param': { action: 'onMonitor', conditions: { ':param' : '(.*)' } },
             '404': { action: 'onUnmatchedRoute' }
         },
     },
@@ -82,6 +83,23 @@ Ext.define('Mfw.controller.MfwController', {
         // console.log(tree.getStore());
         // console.log(node);
 
+    },
+
+    onMonitor: function (view) {
+        console.log(view);
+        if (!Ext.Array.contains(['sessions', 'hosts', 'devices', 'users'], view)) {
+            Mfw.app.redirectTo('404');
+            return;
+        }
+        if (!Ext.Viewport.down('mfw-monitor-' + view)) {
+            Ext.Viewport.add([
+                { xtype: 'mfw-monitor-' + view }
+            ]);
+        }
+        Ext.Viewport.getViewModel().set({
+            currentView: 'mfw-monitor-' + view,
+            // currentViewTitle: 'Dashboard'.t()
+        });
     },
 
     onUnmatchedRoute: function () {

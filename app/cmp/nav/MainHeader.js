@@ -60,19 +60,20 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             iconCls: 'x-material x-computer',
             menu: [{
                 text: 'Sessions'.t(),
-                iconCls: 'icon-monitor sessions'
+                iconCls: 'icon-monitor sessions',
+                handler: function (item) { Mfw.app.redirectTo('monitor/sessions'); item.up('menu').hide(); }
             }, {
                 text: 'Hosts'.t(),
                 iconCls: 'icon-monitor hosts',
-                // handler: function () { Ung.app.redirectTo('#apps'); }
+                handler: function (item) { Mfw.app.redirectTo('monitor/hosts'); item.up('menu').hide(); }
             }, {
                 text: 'Devices'.t(),
                 iconCls: 'icon-monitor devices',
-                // handler: function () { Ung.app.redirectTo('#apps'); }
+                handler: function (item) { Mfw.app.redirectTo('monitor/devices'); item.up('menu').hide(); }
             }, {
                 text: 'Users'.t(),
                 iconCls: 'icon-monitor users',
-                // handler: function () { Ung.app.redirectTo('#apps'); }
+                handler: function (item) { Mfw.app.redirectTo('monitor/users'); item.up('menu').hide(); }
             }]
         }]
     }, '->', {
