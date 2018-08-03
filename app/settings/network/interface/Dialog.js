@@ -80,13 +80,14 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
         xtype: 'toolbar',
         docked: 'bottom',
         defaultType: 'button',
-        // ui: 'footer',
+        ui: 'footer',
         hidden: true,
         bind: { hidden: '{!isMainCard}' },
         items: [
+            '->',
             { text: 'Cancel'.t(), handler: 'onCancel' },
-            { flex: 1 },
             { text: 'Apply'.t(), handler: 'onApply' }
+            // '->',
         ]
     }, {
         xtype: 'formpanel',
@@ -94,6 +95,7 @@ Ext.define('Mfw.settings.network.interface.Dialog', {
         // modelValidation: true,
         layout: {
             type: 'card',
+            deferRender: false, // important so the validation works if card not yet visible
             animation: {
                 duration: 150,
                 type: 'slide',

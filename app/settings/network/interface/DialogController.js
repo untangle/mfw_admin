@@ -30,15 +30,32 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
     },
 
     onApply: function (btn) {
-        // var me = this, vm = me.getViewModel(), form = me.getView().down('formpanel');
+        var me = this, vm = me.getViewModel(), form = me.getView().down('formpanel');
         // // console.log(vm.get('rec').isValid());
-        // // console.log(vm.get('rec').getValidation());
-        // console.log(form.validate());
-        // console.log(form.isValid());
-        // // console.log(vm.get('rec').isValid());
-        // // console.log(vm.get('rec').getValidation());
-        // // console.log(form.getValues());
+        var invalidFields = '';
+
+        Ext.Object.each(form.getFields(), function(key, field) {
+            if (field.validate()) { return; }
+            invalidFields += '<strong>' + (field.errorLabel || field.getLabel()) + '</strong>: <span style="color: red;">' + field.getErrorMessage() + '</span><br/>';
+        })
+
+        if (invalidFields.length > 0) {
+            Ext.Msg.alert('Invalid fields'.t(), 'Please correct the following: <br/>' + invalidFields);
+            return;
+        }
+
+        // Ext.Msg.confirm('<span class="x-fa fa-cogs"></span> Apply Changes?'.t(),
+        //     '<p><strong>It might take a while for the changes to take effect!</strong></p>' +
+        //     '<p>If you want to make additional changes, do them before saving!</p>',
+        //     function (answer) {
+        //         if (answer === 'no') {
+        //             return;
+        //         }
+        //         btn.up('dialog').hide();
+        //     });
+
         btn.up('dialog').hide();
+
     },
     onCancel: function (btn) {
         btn.up('dialog').hide();

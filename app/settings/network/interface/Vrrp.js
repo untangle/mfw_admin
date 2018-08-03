@@ -38,23 +38,33 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
         },
         items: [{
             label: 'VRRP ID'.t(),
-            bind: '{rec.vrrpID}'
+            name: 'vrrpID',
+            required: false,
+            bind: {
+                value: '{rec.vrrpID}',
+                required: '{rec.vrrpEnabled}'
+            }
         }, {
             label: 'VRRP Priority'.t(),
-            bind: '{rec.vrrpPriority}'
+            name: 'vrrpPriority',
+            required: false,
+            bind: {
+                value: '{rec.vrrpPriority}',
+                required: '{rec.vrrpEnabled}'
+            }
         }]
     }, {
         xtype: 'toolbar',
         docked: 'bottom',
         hidden: true,
         bind: { hidden: '{!rec.vrrpEnabled}' },
-        items: [{
+        items: ['->', {
             xtype: 'button',
             text: 'VRRP Aliases',
-            textAlign: 'right',
-            iconCls: 'x-fa fa-arrow-right',
-            iconAlign: 'right',
-            flex: 1,
+            // textAlign: 'right',
+            // iconCls: 'x-fa fa-arrow-right',
+            // iconAlign: 'right',
+            // flex: 1,
             handler: function(btn) {
                 btn.up('formpanel').setActiveItem('#vrrp-aliases');
             }

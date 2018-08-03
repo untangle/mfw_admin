@@ -11,6 +11,7 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
 
     items: [{
         xtype: 'combobox',
+        name: 'v6ConfigType',
         reference: 'v4Config',
         label: 'Config Type'.t(),
         labelAlign: 'left',
@@ -58,16 +59,29 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         },
         items: [{
             xtype: 'textfield',
+            name: 'v6AssignHint',
             label: 'Assign Hint'.t(),
-            bind: '{rec.v6AssignHint}'
+            errorLabel: 'IPv6 Assign Hint'.t(),
+            required: false,
+            bind: {
+                value: '{rec.v6AssignHint}',
+                required: '{rec.v6ConfigType === "ASSIGN"}'
+            }
         }, {
             xtype: 'numberfield',
+            name: 'v6AssignPrefix',
             label: 'Assign Prefix'.t(),
+            errorLabel: 'IPv6 Assign Prefix'.t(),
             placeholder: 'Integer between 1 and 128',
             decimals: 0,
             minValue: 1,
             maxValue: 128,
-            bind: '{rec.v6AssignPrefix}',
+            required: false,
+            allowBlank: true,
+            bind: {
+                value: '{rec.v6AssignPrefix}',
+                required: '{rec.v6ConfigType === "ASSIGN"}'
+            }
         }]
     }, {
         xtype: 'container',
@@ -85,13 +99,16 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         defaultType: 'textfield',
         items: [{
             label: 'Address'.t(),
+            name: 'v6StaticAddress',
             bind: '{rec.v6StaticAddress}'
         }, {
             xtype: 'numberfield',
+            name: 'v6StaticPrefix',
             label: 'Prefix Length'.t(),
             bind: '{rec.v6StaticPrefix}',
         }, {
             label: 'Gateway'.t(),
+            name: 'v6StaticGateway',
             hidden: true,
             bind: {
                 value: '{rec.v6StaticGateway}',
@@ -99,6 +116,7 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
             }
         }, {
             label: 'Primary DNS'.t(),
+            name: 'v6StaticDNS1',
             hidden: true,
             bind: {
                 value: '{rec.v6StaticDNS1}',
@@ -106,6 +124,7 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
             }
         }, {
             label: 'Secondary DNS'.t(),
+            name: 'v6StaticDNS2',
             hidden: true,
             bind: {
                 value: '{rec.v6StaticDNS2}',
@@ -117,13 +136,13 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         docked: 'bottom',
         hidden: true,
         bind: { hidden: '{rec.v6ConfigType === "DISABLED"}' },
-        items: [{
+        items: ['->', {
             xtype: 'button',
             text: 'IPv6 Aliases',
-            textAlign: 'right',
-            iconCls: 'x-fa fa-arrow-right',
-            iconAlign: 'right',
-            flex: 1,
+            // textAlign: 'right',
+            // iconCls: 'x-fa fa-arrow-right',
+            // iconAlign: 'right',
+            // flex: 1,
             handler: function(btn) {
                 btn.up('formpanel').setActiveItem('#ipv6-aliases');
             }

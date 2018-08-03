@@ -11,6 +11,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
 
     items: [{
         xtype: 'combobox',
+        name: 'v4ConfigType',
         reference: 'v4Config',
         label: 'Config Type'.t(),
         labelAlign: 'left',
@@ -31,6 +32,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         ],
     }, {
         xtype: 'togglefield',
+        name: 'overrideDefaults',
         boxLabel: 'Override defaults'.t(),
         reference: 'override',
         margin: '0 16',
@@ -59,6 +61,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
             },
             items: [{
                 xtype: 'textfield',
+                name: 'v4DhcpAddressOverride',
                 label: 'Address'.t(),
                 bind: {
                     value: '{rec.v4DhcpAddressOverride}',
@@ -66,6 +69,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 }
             }, {
                 xtype: 'combobox',
+                name: 'v4DhcpPrefixOverride',
                 label: 'Netmask'.t(),
                 queryMode: 'local',
                 displayField: 'text',
@@ -79,6 +83,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 store: ArrayStore.netmask
             }, {
                 xtype: 'textfield',
+                name: 'v4DhcpGatewayOverride',
                 label: 'Gateway'.t(),
                 bind: {
                     value: '{rec.v4DhcpGatewayOverride}',
@@ -86,6 +91,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 }
             }, {
                 xtype: 'textfield',
+                name: 'v4DhcpDNS1Override',
                 label: 'Primary DNS'.t(),
                 bind: {
                     value: '{rec.v4DhcpDNS1Override}',
@@ -93,6 +99,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 }
             }, {
                 xtype: 'textfield',
+                name: 'v4DhcpDNS2Override',
                 label: 'Secondary DNS'.t(),
                 bind: {
                     value: '{rec.v4DhcpDNS2Override}',
@@ -112,31 +119,50 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         defaults: {
             labelTextAlign: 'right',
             labelWidth: 100,
+            disabled: true
         },
         items: [{
             xtype: 'textfield',
-            label: 'Address'.t(),
-            bind: '{rec.v4StaticAddress}'
+            name: 'v4StaticAddress',
+            label: 'Addres'.t(),
+            errorLabel: 'IPv4 Static Address'.t(),
+            required: false,
+            bind: {
+                value: '{rec.v4StaticAddress}',
+                required: '{rec.v4ConfigType === "STATIC"}'
+            },
+            validators: ['ipaddress']
         }, {
             xtype: 'combobox',
+            name: 'v4StaticPrefix',
             label: 'Netmask'.t(),
             queryMode: 'local',
             displayField: 'text',
             valueField: 'value',
             editable: false,
             // clearable: true,
-            bind: '{rec.v4StaticPrefix}',
+            required: false,
+            bind: {
+                value: '{rec.v4StaticPrefix}',
+                required: '{rec.v4ConfigType === "STATIC"}'
+            },
             store: ArrayStore.netmask
         }, {
             xtype: 'textfield',
+            name: 'v4StaticGateway',
             label: 'Gateway'.t(),
+            errorLabel: 'IPv4 Static Gateway'.t(),
             hidden: true,
+            required: false,
             bind: {
                 value: '{rec.v4StaticGateway}',
-                hidden: '{!rec.wan}'
-            }
+                hidden: '{!rec.wan}',
+                required: '{rec.wan && rec.v4ConfigType === "STATIC"}'
+            },
+            validators: ['presence', 'ipaddress']
         }, {
             xtype: 'textfield',
+            name: 'v4StaticDNS1',
             label: 'Primary DNS'.t(),
             hidden: true,
             bind: {
@@ -145,6 +171,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
             }
         }, {
             xtype: 'textfield',
+            name: 'v4StaticDNS2',
             label: 'Secondary DNS'.t(),
             hidden: true,
             bind: {
@@ -168,28 +195,46 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         },
         items: [{
             label: 'Username'.t(),
-            required: true,
-            bind: '{rec.v4PPoEUsername}'
+            name: 'v4PPoEUsername',
+            required: false,
+            bind: {
+                value: '{rec.v4PPoEUsername}',
+                required: '{rec.v4ConfigType === "PPPOE"}'
+            }
         }, {
             inputType: 'password',
+            name: 'v4PPoEPassword',
             label: 'Password'.t(),
-            required: true,
-            bind: '{rec.v4PPoEPassword}'
+            required: false,
+            bind: {
+                value: '{rec.v4PPoEPassword}',
+                required: '{rec.v4ConfigType === "PPPOE"}'
+            }
         }, {
             xtype: 'checkbox',
+            name: 'v4PPPoEUsePeerDNS',
             label: 'Use Peer DNS'.t(),
             bind: '{rec.v4PPPoEUsePeerDNS}'
         }, {
             label: 'Primary DNS'.t(),
+            name: 'v4PPPoEOverrideDNS1',
             disabled: true,
-            bind: { disabled: '{rec.v4PPPoEUsePeerDNS}' }
+            bind: {
+                value: '{rec.v4PPPoEOverrideDNS1}',
+                disabled: '{rec.v4PPPoEUsePeerDNS}'
+            }
         }, {
             label: 'Secondary DNS'.t(),
+            name: 'v4PPPoEOverrideDNS2',
             disabled: true,
-            bind: { disabled: '{rec.v4PPPoEUsePeerDNS}' }
+            bind: {
+                value: '{rec.v4PPPoEOverrideDNS2}',
+                disabled: '{rec.v4PPPoEUsePeerDNS}'
+            }
         }]
     }, {
         xtype: 'togglefield',
+        name: 'natEgress',
         boxLabel: 'NAT traffic exiting this interface<br/>(and bridged peers)'.t(),
         margin: '0 16',
         hidden: true,
@@ -199,6 +244,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         }
     }, {
         xtype: 'togglefield',
+        name: 'natIngress',
         boxLabel: 'NAT traffic coming from this interface<br/>(and bridged peers)'.t(),
         margin: '0 16',
         hidden: true,
@@ -209,13 +255,13 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
     }, {
         xtype: 'toolbar',
         docked: 'bottom',
-        items: [{
+        items: ['->', {
             xtype: 'button',
             text: 'IPv4 Aliases',
-            textAlign: 'right',
-            iconCls: 'x-fa fa-arrow-right',
-            iconAlign: 'right',
-            flex: 1,
+            // textAlign: 'right',
+            // iconCls: 'x-fa fa-arrow-right',
+            // iconAlign: 'right',
+            // flex: 1,
             handler: function(btn) {
                 btn.up('formpanel').setActiveItem('#ipv4-aliases');
             }

@@ -94,6 +94,9 @@ Ext.define('Mfw.settings.network.Interfaces', {
                     // ownerCmp: grid
                 });
             }
+            // info.record.getValidation()
+
+
             me.dialog.getViewModel().set('rec', info.record);
             me.dialog.show();
         }

@@ -32,11 +32,14 @@ Ext.define('Mfw.settings.network.interface.Main', {
         },
         items: [{
             xtype: 'textfield',
+            name: 'name',
             label: 'Name'.t(),
+            errorLabel: 'Interface Name'.t(),
             required: true,
             bind: '{rec.name}'
         }, {
             xtype: 'combobox',
+            name: 'configType',
             label: 'Type'.t(),
             queryMode: 'local',
             displayField: 'name',
@@ -51,17 +54,18 @@ Ext.define('Mfw.settings.network.interface.Main', {
             ]
         }, {
             xtype: 'combobox',
-            name: 'configType',
+            name: 'bridgedTo',
             label: 'Bridged To'.t(),
             queryMode: 'local',
             displayField: 'name',
             valueField: 'value',
             editable: false,
-            required: true,
+            required: false,
             forceSelection: true,
             hidden: true,
             bind: {
-                hidden: '{rec.configType !== "BRIDGED"}'
+                hidden: '{rec.configType !== "BRIDGED"}',
+                required: '{rec.configType === "BRIDGED"}'
             },
             store: [
                 { name: 'Intf 1'.t(), value: '1' },
@@ -69,6 +73,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
             ]
         }, {
             xtype: 'togglefield',
+            name: 'wan',
             // margin: '0 16',
             label: 'Is WAN'.t(),
             required: true,

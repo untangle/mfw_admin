@@ -13,7 +13,7 @@ Ext.define('Mfw.App', {
     // controllers: ['Mfw.controller.MfwController'],
     defaultToken: '',
 
-    stores: ['Interfaces'],
+    stores: ['Interfaces', 'Sessions'],
 
     viewport: {
         viewModel: {
@@ -178,9 +178,6 @@ Ext.define('Mfw.App', {
             }
 
             if (view === 'mfw-reports') {
-                // if (!conditions.until) {
-                //     conditions.until = null;
-                // }
                 gvm.set('reportsConditions', conditions);
             }
         }

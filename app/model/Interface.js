@@ -16,7 +16,10 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v4ConfigType',    type: 'string' }, // ["STATIC","DHCP","DISABLED"]
         { name: 'v4StaticAddress', type: 'string' },
         { name: 'v4StaticPrefix',  type: 'integer' }, // 1 - 32
+        // { name: 'v4StaticGateway', type: 'string', allowBlank: true, validators: [{ type: 'fields', conditions: { wan: false }}, 'ipaddress'] },
+
         { name: 'v4StaticGateway', type: 'string' },
+
         { name: 'v4StaticDNS1',    type: 'string' },
         { name: 'v4StaticDNS2',    type: 'string' },
 
@@ -46,7 +49,7 @@ Ext.define('Mfw.model.Interface', {
 
         // IPv6 Assign
         { name: 'v6AssignHint',   type: 'string' },
-        { name: 'v6AssignPrefix', type: 'integer' }, // 1 -128
+        { name: 'v6AssignPrefix', type: 'integer', defaultValue: 128 }, // 1 -128
 
         { name: 'v6Aliases', type: 'auto' },
 
@@ -78,10 +81,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessMode', type: 'string' }, // ["AP", "CLIENT"]
         { name: 'wirelessPassword', type: 'string' },
         { name: 'wirelessChannel', type: 'integer' }
-    ],
-
-    validators: [
-        { type: 'presence',  field: 'name' }
     ]
 });
 
@@ -92,4 +91,43 @@ Ext.define('Mfw.model.Device', {
         { name: 'mtu',    type: 'auto' },
         { name: 'name',   type: 'string' }
     ]
+});
+
+
+/**
+ * A superclass for inclusion/exclusion validators.
+ * @abstract
+ */
+Ext.define('Ext.data.validator.fields', {
+    extend: 'Ext.data.validator.Validator',
+    alias: 'data.validator.fields',
+
+    type: 'fields',
+
+    config: {
+        // conditions which will skip field from validation, return true
+        conditions: null,
+        message: 'some test',
+    },
+
+
+    constructor: function() {
+        this.callParent(arguments);
+        if (!this.getConditions()) {
+            Ext.raise('validator.Fields requires an object with fields conditions');
+        }
+    },
+
+    validate: function(value, record) {
+        console.log(record);
+        var skip = false;
+        Ext.Object.each(this.getConditions(), function (field, value) {
+            if (record.get(field) === value) {
+                skip = true;
+            }
+        });
+
+        // if (!skip && value)
+        return skip || this.getMessage();
+    }
 });

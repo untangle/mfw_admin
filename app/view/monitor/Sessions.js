@@ -32,6 +32,8 @@ Ext.define('Mfw.view.monitor.Sessions', {
         }]
     }],
 
+    store: 'sessions',
+
     columns: [{
         text: 'Creation Time'.t(),
         dataIndex: 'creationTime',
