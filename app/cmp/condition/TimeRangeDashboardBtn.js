@@ -2,6 +2,8 @@ Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
     extend: 'Ext.Button',
     alias: 'widget.dashboard-timerange-btn',
 
+    arrow: false,
+
     menu: {
         indented: false,
         mouseLeaveDelay: 0,
