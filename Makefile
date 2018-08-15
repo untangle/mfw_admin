@@ -11,7 +11,14 @@ JS_VIEW := $(wildcard app/view/settings/*.js app/view/monitor/*.js app/view/repo
 JS_SETTINGS := $(wildcard app/settings/network/*.js app/settings/system/*.js)
 JS_APP := ./app/AppController.js ./app/App.js
 
-install: dir css js html
+RESOURCES_FILE := mfw-admin-resources.tar.xz
+RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE)
+
+install: dir css js html resources
+
+resources:
+	wget -O /tmp/$(RESOURCES_FILE) $(RESOURCES_URL)
+	tar -C $(DESTDIR) -xaf /tmp/$(RESOURCES_FILE)
 
 html: $(DESTDIR)/index.html
 $(DESTDIR)/index.html: index.html
@@ -34,4 +41,4 @@ $(DESTDIR)/res:
 clean:
 	rm -fr $(DESTDIR)
 
-.PHONY: css js dir
+.PHONY: css js dir html resources
