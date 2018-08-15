@@ -14,8 +14,10 @@ JS_APP := ./app/AppController.js ./app/App.js
 install: dir css js
 
 css: $(DESTDIR)/mfw-all.css
-$(DESTDIR)/mfw-all.css: $(SASS)
-	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
+# $(DESTDIR)/mfw-all.css: $(SASS)
+# 	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
+$(DESTDIR)/mfw-all.css: sass/mfw-all.css
+	cp $^ $@
 
 js: $(DESTDIR)/mfw-all.js
 $(DESTDIR)/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
