@@ -96,6 +96,7 @@ Ext.define('Mfw.view.dashboard.DashboardController', {
         Ext.Msg.show({
             title: 'Add more widgets',
             message: 'To add more custom widgets, go to <strong>Reports</strong> and add any specific report as a widget on Dashboard!',
+            width: 300,
             showAnimation: null,
             hideAnimation: null,
             // closeAction: 'destroy',

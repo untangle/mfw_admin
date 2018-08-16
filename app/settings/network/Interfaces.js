@@ -23,7 +23,9 @@ Ext.define('Mfw.settings.network.Interfaces', {
         hideHeaders: '{smallScreen}'
     },
 
-    selectable: false,
+    selectable: {
+        mode: 'multi'
+    },
 
     columns: [{
         dataIndex: 'name',

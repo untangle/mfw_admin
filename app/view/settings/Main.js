@@ -131,6 +131,13 @@ Ext.define('Mfw.view.settings.Main', {
                             { text: 'Third Setting'.t(), leaf: true }
                         ]
                     }, {
+                        text: '<strong>' + 'Firewall'.t() + '</strong>',
+                        iconCls: 'tree administration',
+                        href: 'settings/firewall',
+                        children: [
+                            { text: 'Port Forward Rules'.t(), leaf: true, href: 'settings/firewall/portforwardrules' },
+                        ]
+                    }, {
                         text: '<strong>' + 'System'.t() + '</strong>',
                         iconCls: 'tree system',
                         href: 'settings/system',
