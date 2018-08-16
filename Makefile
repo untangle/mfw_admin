@@ -25,10 +25,11 @@ $(DESTDIR)/index.html: index.html
 	cp $^ $@
 
 css: $(DESTDIR)/res/mfw-all.css
-# $(DESTDIR)/res/mfw-all.css: $(SASS)
-# 	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 $(DESTDIR)/res/mfw-all.css: sass/mfw-all.css
 	cp $^ $@
+
+sass/mfw-all.css: $(SASS)
+	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
 js: $(DESTDIR)/res/mfw-all.js
 $(DESTDIR)/res/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
