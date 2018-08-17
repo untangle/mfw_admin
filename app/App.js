@@ -13,7 +13,7 @@ Ext.define('Mfw.App', {
     // controllers: ['Mfw.controller.MfwController'],
     defaultToken: '',
 
-    stores: ['Interfaces', 'Sessions'],
+    stores: ['Interfaces', 'Sessions', 'RuleConditions'],
 
     viewport: {
         viewModel: {

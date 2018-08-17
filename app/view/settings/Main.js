@@ -12,27 +12,27 @@ Ext.define('Mfw.view.settings.Main', {
 
     layout: 'fit',
 
-    tbar: {
-        padding: 8,
-        hidden: true,
-        bind: { hidden: '{!currentView}' },
-        shadow: false,
-        items: [{
-            xtype: 'button',
-            iconCls: 'x-fa fa-arrow-left',
-            handler: function () { Ext.util.History.back(); },
-            margin: '0 8 0 0',
-            plugins: 'responsive',
-            responsiveConfig: { large: { hidden: true }, small: { hidden: false } },
-        }, {
-            xtype: 'component',
-            margin: '0 0 0 8',
-            style: 'color: #777; font-size: 16px; font-weight: normal;',
-            bind: {
-                html: 'Network / {title}',
-            }
-        }]
-    },
+    // tbar: {
+    //     padding: 8,
+    //     hidden: true,
+    //     bind: { hidden: '{!currentView}' },
+    //     shadow: false,
+    //     items: [{
+    //         xtype: 'button',
+    //         iconCls: 'x-fa fa-arrow-left',
+    //         handler: function () { Ext.util.History.back(); },
+    //         margin: '0 8 0 0',
+    //         plugins: 'responsive',
+    //         responsiveConfig: { large: { hidden: true }, small: { hidden: false } },
+    //     }, {
+    //         xtype: 'component',
+    //         margin: '0 0 0 8',
+    //         style: 'color: #777; font-size: 18px; font-weight: normal;',
+    //         bind: {
+    //             html: '{title}<br/><span style="font-size: 12px; color: #333; font-weight: bold;">Firewall</span>',
+    //         }
+    //     }]
+    // },
 
     listeners: {
         deactivate: 'onDeactivate',

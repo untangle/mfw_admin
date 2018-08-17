@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.MasterGrid', {
+Ext.define('Mfw.cmp.grid.MasterGrid', {
     extend: 'Ext.grid.Grid',
     alias: 'widget.mastergrid',
 
@@ -6,16 +6,31 @@ Ext.define('Mfw.cmp.MasterGrid', {
 
     items: [{
         xtype: 'toolbar',
-        padding: 0,
+        docked: 'top',
+        margin: 0,
+        shadow: false,
+        items: [{
+            xtype: 'component',
+            style: 'color: #777; font-size: 18px; font-weight: normal;',
+            html: 'Port Forward Rules'.t() + '<br/><span style="font-size: 12px;">Firewall</span>'
+        }, '->', {
+            text: 'Add',
+            iconCls: 'x-fa fa-plus-circle',
+            handler: 'addRecord'
+        }]
+        // margin: '0 0 0 8',
+    }, {
+        xtype: 'toolbar',
+        // padding: '0 8',
         itemId: 'operations',
         // ui: 'footer',
         docked: 'top',
+        shadow: false,
+        hidden: true,
+        bind: {
+            hidden: '{selcount === 0}'
+        },
         items: [{
-            text: 'Add',
-            iconCls: 'x-fa fa-plus',
-            handler: 'addRecord',
-            margin: '0 20 0 0'
-        }, {
             xtype: 'segmentedbutton',
             margin: '0 20 0 0',
             allowToggle: false,
@@ -44,15 +59,19 @@ Ext.define('Mfw.cmp.MasterGrid', {
                 tooltip: 'Move Last'.t(),
                 pos: 'last'
             }]
-        }, {
+        }, '->', {
             xtype: 'button',
+            ui: 'action round',
             iconCls: 'x-fa fa-pencil',
+            margin: '0 16 0 0',
             hidden: true,
             bind: {
                 hidden: '{selcount !== 1}'
-            }
+            },
+            handler: 'onEdit'
         }, {
             xtype: 'button',
+            ui: 'action round',
             iconCls: 'x-fa fa-trash',
             hidden: true,
             bind: {
@@ -112,7 +131,33 @@ Ext.define('Mfw.cmp.MasterGrid', {
 
         addRecord: function () {
 
-        }
+        },
+
+        onEdit: function () {
+            var store = this.getView().getStore(),
+            record = this.getView().getSelection();
+
+            var me = this;
+            if (!me.dialog) {
+                me.dialog = Ext.Viewport.add({
+                    xtype: 'rule-dialog',
+                    // ownerCmp: me.getView(),
+                    listeners: {
+                        hide: function () {
+                            console.log('hide');
+                            store.commitChanges();
+                        }
+                    }
+                });
+            }
+            // me.dialog.setAddAction(!condition);
+            me.dialog.getViewModel().set('record', record);
+            me.dialog.show();
+        },
+
+        // onDialogHide: function () {
+        //     console.log('hide');
+        // }
     }
 
 });

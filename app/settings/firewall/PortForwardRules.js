@@ -1,8 +1,20 @@
 Ext.define('Mfw.settings.firewall.PortForwardRules', {
-    extend: 'Mfw.cmp.MasterGrid',
+    extend: 'Mfw.cmp.grid.MasterGrid',
     alias: 'widget.mfw-settings-firewall-portforwardrules',
 
-    viewTitle: 'Port Forward Rules'.t(),
+    // viewTitle: 'Port Forward Rules'.t(),
+
+    // title: 'Port Forward Rules'.t() + '<br/><span style="font-size: 12px;">Firewall</span>',
+    // items: [{
+    //     xtype: 'toolbar',
+    //     docked: 'top',
+    //     items: [{
+    //         xtype: 'component',
+    //         style: 'color: #777; font-size: 18px; font-weight: normal;',
+    //         html: 'Port Forward Rules'.t() + '<br/><span style="font-size: 12px;">Firewall</span>'
+    //     }]
+    //     // margin: '0 0 0 8',
+    // }],
 
     scrollable: true,
     store: {
@@ -13,9 +25,11 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
                 description: 'Some desc',
                 conditions: [{
                     conditionType: 'DST_ADDR',
+                    invert: false,
                     value: '1.2.3.4'
                 }, {
-                    conditionType: 'PORT',
+                    conditionType: 'DST_PORT',
+                    invert: true,
                     value: '2345'
                 }],
                 newDestination: '1.2.3.4',
@@ -44,7 +58,55 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
                 conditions: [],
                 newDestination: '123.456.789.12',
                 newPort: 100
-            }
+            },
+            {
+                ruleId: 5,
+                enabled: true,
+                description: 'Some desc',
+                conditions: [{
+                    conditionType: 'DST_ADDR',
+                    invert: false,
+                    value: '1.2.3.4'
+                }, {
+                    conditionType: 'DST_PORT',
+                    invert: true,
+                    value: '2345'
+                }],
+                newDestination: '1.2.3.4',
+                newPort: 80
+            },
+            {
+                ruleId: 6,
+                enabled: true,
+                description: 'Some more text',
+                conditions: [{
+                    conditionType: 'DST_ADDR',
+                    invert: false,
+                    value: '1.2.3.4'
+                }, {
+                    conditionType: 'DST_PORT',
+                    invert: true,
+                    value: '2345'
+                }],
+                newDestination: '1.2.3.4',
+                newPort: 80
+            },
+            {
+                ruleId: 7,
+                enabled: false,
+                description: 'Description Long Text',
+                conditions: [{
+                    conditionType: 'DST_ADDR',
+                    invert: false,
+                    value: '1.2.3.4'
+                }, {
+                    conditionType: 'DST_PORT',
+                    invert: true,
+                    value: '2345'
+                }],
+                newDestination: '1.2.3.4',
+                newPort: 80
+            },
         ]
     },
 
@@ -52,9 +114,14 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
 
     itemConfig: {
         body: {
-            tpl: '<tpl if="conditions.length &gt; 0"><p><tpl for="conditions">' +
-                    '<span>{conditionType} => {value}</span>, ' +
-                 '</tpl></p></tpl>'
+            tpl: new Ext.XTemplate('<tpl if="conditions.length &gt; 0"><tpl for="conditions">' +
+                    '<span style="font-size: 12px; padding: 0 10px 0 0;"><strong>{[this.condName(values.conditionType)]}</strong> <span style="padding: 0 2px;"><tpl if="invert">IS NOT<tpl else>IS</tpl></span> <strong>{value}</strong></span><br/>' +
+                 '</tpl><tpl else>none</tpl>', {
+                 condName: function (conditionType) {
+                     var r = Ext.getStore('ruleconditions').findRecord('value', conditionType);
+                     return r.get('name');
+                 }
+                 })
         }
     },
 
@@ -63,11 +130,16 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     columns: [{
         text: 'Id'.t(),
         dataIndex: 'ruleId',
-        width: 40
+        width: 50,
+        align: 'right',
+        hidden: true,
+        renderer: function (v) {
+            return '#' + v;
+        }
     }, {
         text: 'Description',
         dataIndex: 'description',
-        minWidth: 200
+        minWidth: 300
         // flex: 1
     },
     // {

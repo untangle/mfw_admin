@@ -102,7 +102,9 @@ html, body {
 }
 
 
-
+.x-gridrow.x-selected .x-gridcell {
+    font-weight: bold;
+}
 
 
 /////////////////////////////////////////////
