@@ -130,16 +130,16 @@ html, body {
     width: 16px !important;
     height: 16px !important;
     &.sessions {
-        background: url('/res/icons/monitor/sessions-monitor-icon.svg') no-repeat 50% 50%;
+        background: url('icons/monitor/sessions-monitor-icon.svg') no-repeat 50% 50%;
     }
     &.hosts {
-        background: url('/res/icons/monitor/hosts-monitor-icon.svg') no-repeat 50% 50%;
+        background: url('icons/monitor/hosts-monitor-icon.svg') no-repeat 50% 50%;
     }
     &.devices {
-        background: url('/res/icons/monitor/devices-monitor-icon.svg') no-repeat 50% 50%;
+        background: url('icons/monitor/devices-monitor-icon.svg') no-repeat 50% 50%;
     }
     &.users {
-        background: url('/res/icons/monitor/users-monitor-icon.svg') no-repeat 50% 50%;
+        background: url('icons/monitor/users-monitor-icon.svg') no-repeat 50% 50%;
     }
 }
 
@@ -223,14 +223,14 @@ html, body {
     margin: 8px 0 8px 0;
     background-size: contain;
     background-repeat: no-repeat;
-    &.network { background-image: url('/res/icons/config/network.svg'); }
-    &.administration { background-image: url('/res/icons/config/administration.svg'); }
-    &.events { background-image: url('/res/icons/config/events.svg'); }
-    &.email { background-image: url('/res/icons/config/email.svg'); }
-    &.directory { background-image: url('/res/icons/config/local-directory.svg'); }
-    &.system { background-image: url('/res/icons/config/system.svg'); }
-    &.upgrade { background-image: url('/res/icons/config/upgrade.svg'); }
-    &.about { background-image: url('/res/icons/config/about.svg'); }
+    &.network { background-image: url('icons/config/network.svg'); }
+    &.administration { background-image: url('icons/config/administration.svg'); }
+    &.events { background-image: url('icons/config/events.svg'); }
+    &.email { background-image: url('icons/config/email.svg'); }
+    &.directory { background-image: url('icons/config/local-directory.svg'); }
+    &.system { background-image: url('icons/config/system.svg'); }
+    &.upgrade { background-image: url('icons/config/upgrade.svg'); }
+    &.about { background-image: url('icons/config/about.svg'); }
 }
 
 .x-gridcell-body-el em {
@@ -333,13 +333,13 @@ html, body {
         // margin: 4px 0 0 0;
         background-size: contain;
         background-repeat: no-repeat;
-        &.network { background-image: url('/res/icons/config/icon_config_network.png'); }
-        &.administration { background-image: url('/res/icons/config/icon_config_administration.png'); }
-        &.events { background-image: url('/res/icons/config/icon_config_events.png'); }
-        &.email { background-image: url('/res/icons/config/icon_config_email.png'); }
-        &.directory { background-image: url('/res/icons/config/icon_config_directory.png'); }
-        &.system { background-image: url('/res/icons/config/icon_config_system.png'); }
-        &.upgrade { background-image: url('/res/icons/config/icon_config_upgrade.png'); }
-        &.about { background-image: url('/res/icons/config/icon_config_about.png'); }
+        &.network { background-image: url('icons/config/icon_config_network.png'); }
+        &.administration { background-image: url('icons/config/icon_config_administration.png'); }
+        &.events { background-image: url('icons/config/icon_config_events.png'); }
+        &.email { background-image: url('icons/config/icon_config_email.png'); }
+        &.directory { background-image: url('icons/config/icon_config_directory.png'); }
+        &.system { background-image: url('icons/config/icon_config_system.png'); }
+        &.upgrade { background-image: url('icons/config/icon_config_upgrade.png'); }
+        &.about { background-image: url('icons/config/icon_config_about.png'); }
     }
 }

@@ -1,3 +1,4 @@
 node_modules/
-res/
+res/mfw-all.js
+res/mfw-all.css
 package-lock.json

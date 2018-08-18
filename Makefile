@@ -7,6 +7,7 @@ SASS := $(wildcard sass/*.scss)
 JS_UTIL := $(wildcard app/util/*.js)
 JS_CMP := $(wildcard app/cmp/nav/*.js app/cmp/condition/*.js  app/cmp/nav/*.js)
 JS_MODEL := $(wildcard app/model/*.js)
+JS_STORE := $(wildcard app/store/*.js)
 JS_VIEW := $(wildcard app/view/settings/*.js app/view/monitor/*.js app/view/reports/*.js app/view/dashboard/*.js app/view/*.js)
 JS_SETTINGS := $(wildcard app/settings/network/*.js app/settings/system/*.js)
 JS_APP := ./app/AppController.js ./app/App.js
