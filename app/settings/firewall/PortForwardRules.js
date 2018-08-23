@@ -2,6 +2,7 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     extend: 'Mfw.cmp.grid.MasterGrid',
     alias: 'widget.mfw-settings-firewall-portforwardrules',
 
+    title: 'Port Forward Rules'.t(),
     // viewTitle: 'Port Forward Rules'.t(),
     // title: 'Port Forward Rules'.t() + '<br/><span style="font-size: 12px;">Firewall</span>',
     // items: [{
@@ -16,8 +17,8 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     // }],
 
     config: {
-        gridActions: ['refresh'],
-        recordActions: ['edit']
+        editType: 'dialog',
+        editPlacement: 'row'
     },
 
     scrollable: true,
@@ -176,13 +177,10 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
             bodyStyle: {
                 padding: 0
             },
-            encodeHtml: false,
-            // style: 'border-left: 2px #EEE solid; border-right: 2px #EEE solid;',
-            tooltip: 'eeeee'
+            encodeHtml: false
         },
         renderer: function (conditions, meta) {
             var strArr = [];
-            meta.tdAttr = 'data-qtip=testtesttest';
             Ext.Array.each(conditions, function (c) {
                 strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('value', c.conditionType).get('name') + '</span>' +
                        (c.invert ? ' &ne; ' : ' = ') + '<strong>' + c.value + '</strong></div>');
