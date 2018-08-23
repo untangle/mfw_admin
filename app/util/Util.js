@@ -2,9 +2,6 @@ Ext.define('Mfw.util.Util', {
     alternateClassName: 'Util',
     singleton: true,
 
-    // tmp remote vm api
-    server: 'http://192.168.0.184:8080/settings/',
-
     tmpColumns: [
         { name: 'Protocol'.t(),    field: 'protocol' },
         { name: 'Username'.t(),    field: 'username' },

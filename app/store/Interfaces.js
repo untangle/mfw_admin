@@ -10,7 +10,7 @@ Ext.define('Mfw.store.Interfaces', {
         type: 'rest',
         appendId: false,
         idParam: 'interfaceId',
-        url: Util.server + 'get_settings/network/interfaces',
+        url: window.location.origin + '/settings/get_settings/network/interfaces',
         // format: 'array',
         // actionMethods: {
         //     read: 'GET',

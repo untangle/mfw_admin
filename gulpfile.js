@@ -5,6 +5,8 @@ var clean = require('gulp-clean');
 var exec = require('gulp-exec');
 var browserSync = require('browser-sync').create();
 
+var host = '172.20.10.8'; // the MFW machine host to scp res files
+
 gulp.task('serve', function() {
     browserSync.init({
         server: "./"
@@ -33,7 +35,7 @@ gulp.task('concat', function() {
         ])
         .pipe(concat('mfw-all.js'))
         .pipe(gulp.dest('./res/'))
-        .pipe(exec('scp res/mfw-all.js root@192.168.0.184:/www/res/')); // quick deploy on mfw vm
+        .pipe(exec('scp res/mfw-all.js root@' + host + ':/www/res/')); // quick deploy on mfw vm
         // .pipe(browserSync.reload()));
     });
 
@@ -42,7 +44,7 @@ gulp.task('sass', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(concat('mfw-all.css'))
         .pipe(gulp.dest('./res/'))
-        .pipe(exec('scp res/mfw-all.css root@192.168.0.184:/www/res/')) // quick deploy on mfw vm
+        .pipe(exec('scp res/mfw-all.css root@' + host + ':/www/res/')) // quick deploy on mfw vm
         .pipe(browserSync.stream());
     });
 
