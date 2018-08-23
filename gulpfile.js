@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var clean = require('gulp-clean');
+var exec = require('gulp-exec');
 var browserSync = require('browser-sync').create();
 
 gulp.task('serve', function() {
@@ -31,7 +32,8 @@ gulp.task('concat', function() {
             './app/App.js'
         ])
         .pipe(concat('mfw-all.js'))
-        .pipe(gulp.dest('./res/'));
+        .pipe(gulp.dest('./res/'))
+        .pipe(exec('scp res/mfw-all.js root@192.168.0.184:/www/res/')); // quick deploy on mfw vm
         // .pipe(browserSync.reload()));
     });
 
@@ -40,6 +42,7 @@ gulp.task('sass', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(concat('mfw-all.css'))
         .pipe(gulp.dest('./res/'))
+        .pipe(exec('scp res/mfw-all.css root@192.168.0.184:/www/res/')) // quick deploy on mfw vm
         .pipe(browserSync.stream());
     });
 

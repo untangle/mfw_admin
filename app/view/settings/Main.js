@@ -53,8 +53,11 @@ Ext.define('Mfw.view.settings.Main', {
     items: [{
         layout: 'fit',
         xtype: 'panel',
-        shadow: true,
+        shadow: false,
         zIndex: 999,
+        style: {
+            background: '#EEE'
+        },
 
         bind: {
             docked: '{(!smallScreen) ? "left" : null }',
@@ -100,6 +103,9 @@ Ext.define('Mfw.view.settings.Main', {
             scrollable: true,
             userCls: 'config-menu',
             ui: 'nav',
+            style: {
+                background: '#f5f5f5'
+            },
             // micro: true,
             // selectable: {
             //     mode: 'single'
@@ -126,9 +132,7 @@ Ext.define('Mfw.view.settings.Main', {
                         href: 'settings/network',
                         children: [
                             { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' },
-                            { text: 'Interfaces Alt'.t(), leaf: true, href: 'settings/network/interfaces-alt' },
-                            { text: 'Second Setting'.t(), leaf: true },
-                            { text: 'Third Setting'.t(), leaf: true }
+                            { text: 'Interfaces Alt'.t(), leaf: true, href: 'settings/network/interfaces-alt' }
                         ]
                     }, {
                         text: '<strong>' + 'Firewall'.t() + '</strong>',
@@ -142,16 +146,14 @@ Ext.define('Mfw.view.settings.Main', {
                         iconCls: 'tree system',
                         href: 'settings/system',
                         children: [
-                            { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' },
-                            { text: 'Host/Domain Alt'.t(), leaf: true, href: 'settings/system/host-alt' }
+                            { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' }
                         ]
                     }, {
                         text: '<strong>' + 'Administration'.t() + '</strong>',
                         iconCls: 'tree administration',
                         href: 'settings/administration',
                         children: [
-                            { text: 'Some Setting title'.t(), leaf: true },
-                            { text: 'Other Setting title'.t(), leaf: true }
+                            { text: 'Some Setting title'.t(), leaf: true }
                         ]
                     }]
                 }

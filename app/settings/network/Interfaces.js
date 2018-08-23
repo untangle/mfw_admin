@@ -74,7 +74,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
     }, {
-        text: 'Edit',
+        text: 'Edit'.t(),
         width: 'auto',
         menuDisabled: true,
         cell: {
@@ -84,8 +84,32 @@ Ext.define('Mfw.settings.network.Interfaces', {
                 handler: 'onEdit'
             }]
         }
+    }, {
+        text: 'Remove'.t(),
+        menuDisabled: true,
+        cell: {
+            tools: [{
+                type: 'edit',
+                iconCls: 'x-fa fa-trash',
+                handler: function (grid, info) {
+                    // console.log(info);
+                    info.record.drop();
+                }
+            }]
+        }
     }],
 
+    items: [{
+        xtype: 'toolbar',
+        docked: 'bottom',
+        items: [{
+            text: 'Save'.t(),
+            handler: 'onSave'
+        }, {
+            text: 'Add'.t(),
+            handler: 'onAdd',
+        }]
+    }],
 
     controller: {
         onEdit: function (grid, info) {
@@ -101,6 +125,40 @@ Ext.define('Mfw.settings.network.Interfaces', {
 
             me.dialog.getViewModel().set('rec', info.record);
             me.dialog.show();
+        },
+
+        onSave: function () {
+            var me = this,
+                data = Ext.Array.pluck(me.getView().getStore().getRange(), 'data');
+
+            // console.log(data);
+            // console.log(Ext.JSON.encode(data));
+
+            // var original = [{"configType":"ADDRESSED","device":"eth0","dhcpEnabled":true,"dhcpLeaseDuration":3600,"dhcpRangeEnd":"192.168.1.200","dhcpRangeStart":"192.168.1.100","interfaceId":1,"name":"internal","type":"NIC","v4ConfigType":"STATIC","v4StaticAddress":"192.168.1.1","v4StaticPrefix":24,"v6AssignHint":"1234","v6AssignPrefix":64,"v6ConfigType":"ASSIGN","wan":false},{"configType":"ADDRESSED","device":"eth1","interfaceId":2,"name":"external","natEgress":true,"type":"NIC","v4ConfigType":"DHCP","v6ConfigType":"DISABLED","wan":true}];
+            // Ext.Ajax.request({
+            //     url: Util.server + 'set_settings/network/interfaces',
+            //     method: 'POST',
+            //     params: Ext.JSON.encode(original),
+            //     success: function(response, opts) {
+            //         var obj = Ext.decode(response.responseText);
+            //         console.dir(obj);
+            //     },
+
+            //     failure: function(response, opts) {
+            //         console.log('server-side failure with status code ' + response.status);
+            //     }
+            // });
+
+            me.getView().getStore().sync();
+        },
+
+        onAdd: function () {
+            var me = this, store = me.getView().getStore();
+            var rec = Ext.create('Mfw.model.Interface', {
+                name: 'new interface',
+                // interfaceId: 0
+            });
+            store.add(rec);
         }
     }
 

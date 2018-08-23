@@ -1,6 +1,7 @@
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
+    idProperty: 'interfaceId',
     fields: [
         { name: 'interfaceId', type: 'integer' },
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },

@@ -4,8 +4,21 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
     viewModel: {},
 
+    config: {
+        // gridActions: ['add'],
+        recordActions: ['edit', 'delete']
+        // columns: [{
+        //     text: 'Actions'.t(),
+        //     align: 'center',
+        //     cell: {
+        //         tools: {}
+        //     }
+        // }]
+    },
+
     items: [{
         xtype: 'toolbar',
+        itemId: 'bar',
         docked: 'top',
         margin: 0,
         shadow: false,
@@ -84,7 +97,7 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
     selectable: {
         mode: 'multi',
-        checkbox: true,
+        // checkbox: true,
         deselectable: true,
         drag: true
     },
@@ -95,11 +108,95 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
 
     listeners: {
+        initialize: 'onInitialize',
         select: 'onSelect',
-        deselect: 'onSelect'
+        deselect: 'onSelect',
+        destroy: 'onDestroy'
+    },
+
+    columns: [{
+        text: 'testtest'
+    }],
+
+    constructor: function (config) {
+        var me = this,
+            cols = me.getInitialConfig('columns');
+        console.log(me.config.columns);
+        // config = Ext.applyIf(config, {
+        //     columns: cols
+        // });
+        // var me = this,
+        //     actionsColumn = {
+        //         text: 'Actions'.t(),
+        //         align: 'center',
+        //         cell: {
+        //             tools: {}
+        //         }
+        //     };
+
+        // var columns = Ext.clone(me.getInitialConfig('columns'));
+        // console.log();
+
+        // // var cols = me.config.columns;
+
+        // //
+        // if (me.config.recordActions.length > 0) {
+        //     Ext.Array.each(me.config.recordActions, function (action) {
+        //         switch (action) {
+        //             case 'edit': actionsColumn.cell.tools.gear = { iconCls: 'x-fa fa-pencil', handler: 'onEditRecord' }; break;
+        //             case 'delete': actionsColumn.cell.tools.minus = { iconCls: 'x-fa fa-trash', handler: 'onDeleteRecord' }; break;
+        //             default: Ext.emptyFn;
+        //         }
+        //     });
+        //     // Ext.merge(actionsColumn, columns);
+        //     columns.push(actionsColumn);
+        //     Ext.apply(me.config.columns, columns);
+        //     // console.log(me.config.columns);
+        // }
+        var me = this;
+        me.callParent([ config ]);
+        return me;
     },
 
     controller: {
+        onDestroy: function () {
+            this.getView().setRecordActions([]);
+        },
+        onInitialize: function (grid) {
+            // var gridActions = [],
+            //     actionsColumn = {
+            //         text: 'Actions'.t(),
+            //         align: 'center',
+            //         cell: {
+            //             tools: {}
+            //         }
+            //     };
+            // Ext.Array.each(grid.getGridActions(), function (action) {
+            //     switch (action) {
+            //         case 'add': gridActions.push({ text: 'Add'.t(), iconCls: 'x-fa fa-plus-circle fa-lg', handler: 'addRecord' }); break;
+            //         case 'refresh': gridActions.push({ text: 'Refresh'.t(), iconCls: 'x-fa fa-refresh fa-lg', handler: 'addRecord' }); break;
+            //         default: Ext.fn();
+            //     }
+            // });
+            // grid.down('#bar').add(gridActions);
+
+            // if (grid.getRecordActions().length > 0) {
+            //     Ext.Array.each(grid.getRecordActions(), function (action) {
+            //         switch (action) {
+            //             case 'edit': actionsColumn.cell.tools.gear = { iconCls: 'x-fa fa-pencil '}; break;
+            //             case 'delete': actionsColumn.cell.tools.minus = { iconCls: 'x-fa fa-trash '}; break;
+            //             default: Ext.fn();
+            //         }
+            //     });
+            // }
+
+            // var cols = grid.getColumns();
+            // // cols.push();
+            // // console.log(cols);
+            // grid.setColumns(cols);
+        },
+
+
         onSelect: function (grid) {
             var selcount = grid.getSelections().length;
             grid.getViewModel().set('selcount', selcount);
@@ -158,6 +255,10 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         // onDialogHide: function () {
         //     console.log('hide');
         // }
+        ////////////////////////////////
+        onDeleteRecord: function (grid, info) {
+            info.record.drop();
+        }
     }
 
 });
