@@ -23,15 +23,7 @@ Ext.define('Mfw.model.Network', {
             allDataOptions: {
                 associated: true,
                 persist: true
-            },
-            // transform: {
-            //     fn: function(data, request) {
-            //         // do some manipulation of the unserialized data object
-            //         console.log(data);
-            //         return data;
-            //     },
-            //     scope: this
-            // }
+            }
         }
     }
 });

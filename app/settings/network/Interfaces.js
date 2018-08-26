@@ -37,29 +37,15 @@ Ext.define('Mfw.settings.network.Interfaces', {
         hideHeaders: '{smallScreen}'
     },
 
-    // selectable: {
-    //     mode: 'multi'
-    // },
-
     columns: [{
-        dataIndex: 'name',
-        flex: 1,
-        renderer: function (val, rec) {
-            return rec.get('name') + ' / ' + rec.get('device') + ' / ' + rec.get('configType');
-        },
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: true }, small: { hidden: false } },
-    }, {
         text: 'Name'.t(),
         dataIndex: 'name',
         flex: 1,
-        menuDisabled: true,
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
         text: 'Type'.t(),
         dataIndex: 'type',
-        menuDisabled: true,
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {

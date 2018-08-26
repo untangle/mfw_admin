@@ -81,14 +81,11 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
     },
 
     itemConfig: {
-        viewModel: true
+        viewModel: true,
     },
 
     listeners: {
         initialize: 'onInitialize',
-        select: 'onSelect',
-        deselect: 'onSelect',
-        destroy: 'onDestroy',
-        blur: 'onBlur'
+        select: 'onSelect'
     }
 });

@@ -82,7 +82,24 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessMode', type: 'string' }, // ["AP", "CLIENT"]
         { name: 'wirelessPassword', type: 'string' },
         { name: 'wirelessChannel', type: 'integer' }
-    ]
+    ],
+
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: window.location.origin + '/settings/get_settings/network/interfaces',
+            update: window.location.origin + '/settings/set_settings/network/interfaces'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: true,
+            allDataOptions: {
+                serialize: true
+                // changes: false,
+                // persist: false
+            }
+        }
+    }
 });
 
 Ext.define('Mfw.model.Device', {

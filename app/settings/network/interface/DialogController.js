@@ -32,7 +32,7 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
     onApply: function (btn) {
         var me = this, vm = me.getViewModel(),
             dialog = me.getView(),
-            grid = dialog.up('grid');
+            grid = dialog.up('grid'),
             form = dialog.down('formpanel');
         // // console.log(vm.get('rec').isValid());
         var invalidFields = '';
@@ -67,7 +67,7 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
         btn.up('dialog').hide();
     },
 
-    onBack: function (button) {
+    onBack: function () {
         var me = this, formpanel = me.getView().down('formpanel');
         switch (formpanel.getActiveItem().getItemId()) {
             case 'ipv4-aliases': formpanel.setActiveItem('#ipv4'); break;
@@ -78,7 +78,7 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
         }
     },
 
-    addGridItem: function (btn) {
+    addGridItem: function () {
         var me = this, grid = me.getView().down('formpanel').getActiveItem();
 
         grid.getStore().add(

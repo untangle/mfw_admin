@@ -6,17 +6,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.mastergrid',
 
-
-    onDestroy: function () {
-        // this.getView().setRecordActions([]);
-    },
-
-    onBlur: function () {
-        console.log('blur');
-    },
-
     onInitialize: function (g) {
-        var me = this, titleBar = g.getTitleBar(),
+        var titleBar = g.getTitleBar(),
             toolbarActions = [],
             actionsColumn;
 
@@ -25,6 +16,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             width: 5,
             minWidth: 5,
             sortable: false,
+            hideable: false,
             menuDisabled: true,
             cell: {
                 userCls: 'x-statuscolumn'
@@ -45,7 +37,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableEdit() || g.getEnableDelete()) {
             actionsColumn = {
+                text: 'Actions'.t(),
                 align: 'center',
+                sortable: false,
+                hideable: false,
                 cell: {
                     xtype: 'widgetcell',
                     widget: {
@@ -93,7 +88,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     text: 'Undo'.t(),
                     iconCls: 'x-fa fa-trash',
                     iconAlign: 'right',
-                    handler: function (btn) { btn.up('container').getRecord().set('_deleteSchedule', false); btn.up('gridrow').setUserCls(''); },
+                    handler: function (btn) {
+                        btn.up('container').getRecord().set('_deleteSchedule', false);
+                        btn.up('gridrow').setUserCls('');
+                    },
                     hidden: true,
                     bind: { hidden: '{!record._deleteSchedule}' }
                 });
@@ -138,7 +136,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableAdd()) {
             toolbarActions.push({
-                // text: 'Add'.t(),
+                text: 'Add'.t(),
                 iconCls: 'x-fa fa-plus-circle',
                 align: 'right',
                 handler: 'onAddRecord'
@@ -147,7 +145,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableReload()) {
             toolbarActions.push({
-                // text: 'Reload'.t(),
+                text: 'Reload'.t(),
                 iconCls: 'x-fa fa-refresh',
                 align: 'right',
                 handler: 'onLoad'
@@ -169,17 +167,12 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onLoad: function () {
-        console.log('load');
         this.getView().getStore().load({
             success: function () {
                 console.log('success');
             },
             failure: function () {}
         });
-    },
-
-    onBeforeSync: function (opts) {
-
     },
 
     onSync: function () {
@@ -254,51 +247,5 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         this.getView().setSelection(record);
         this.getViewModel().set('pos', pos);
-    },
-
-    addRecord: function () {
-
-    },
-
-    onEdit: function () {
-        var store = this.getView().getStore(),
-        record = this.getView().getSelection();
-
-        var me = this;
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
-                xtype: 'rule-dialog',
-                // ownerCmp: me.getView(),
-                listeners: {
-                    hide: function () {
-                        console.log('hide');
-                        store.commitChanges();
-                    }
-                }
-            });
-        }
-        // me.dialog.setAddAction(!condition);
-        me.dialog.getViewModel().set('record', record);
-        me.dialog.show();
-    },
-
-    // onDialogHide: function () {
-    //     console.log('hide');
-    // }
-    ////////////////////////////////
-    // onDeleteRecord: function (grid, info) {
-    //     console.log(info);
-    //     info.record.set('_deleteSchedule', true);
-    //     console.log(info.record.getData());
-    //     // info.record.drop();
-    // }
-
-    onDeleteRecord: function (cmp, info) {
-
-        console.log(cmp.getRecord());
-    },
-
-    onUndoDeleteRecord: function (btn) {
-
     }
 });
