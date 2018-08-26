@@ -107,6 +107,28 @@ html, body {
     font-weight: bold;
 }
 
+.x-gridrow.x-removed .x-gridcell {
+    // text-decoration: line-through;
+    color: #999;
+    &.x-widgetcell, .x-togglefield {
+        text-decoration: none;
+    }
+    .x-button {
+        opacity: 0.6;
+    }
+}
+
+.x-statuscolumn {
+    .x-body-el {
+        padding: 0
+    };
+}
+
+.x-gridcell {
+    &.status-dirty { background: orange; }
+    &.status-delete { background: red };
+    &.status-phantom { background: green };
+}
 
 /////////////////////////////////////////////
 

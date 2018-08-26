@@ -17,8 +17,6 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     // }],
 
     config: {
-        editType: 'dialog',
-        editPlacement: 'row'
     },
 
     scrollable: true,
@@ -153,14 +151,18 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
         }
     }, {
         // text: 'Enabled',
+        align: 'center',
         width: 55,
         dataIndex: 'enabled',
         cell: {
             xtype: 'widgetcell',
             widget: {
                 xtype: 'togglefield',
-                margin: '0 10'
-                // bind: '{record.enabled}'
+                margin: '0 10',
+                disabled: true,
+                bind: {
+                    disabled: '{record._deleteSchedule}'
+                }
             }
         }
     }, {

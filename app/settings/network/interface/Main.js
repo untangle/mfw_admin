@@ -82,6 +82,12 @@ Ext.define('Mfw.settings.network.interface.Main', {
                 value: '{rec.wan}',
                 hidden: '{rec.configType !== "ADDRESSED"}'
             }
+        }, {
+            xtype: 'numberfield',
+            name: 'interfaceId',
+            label: 'Interface ID'.t(),
+            required: true,
+            bind: '{rec.interfaceId}'
         }]
     }, {
         xtype: 'component',

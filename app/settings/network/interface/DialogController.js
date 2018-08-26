@@ -30,7 +30,10 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
     },
 
     onApply: function (btn) {
-        var me = this, vm = me.getViewModel(), form = me.getView().down('formpanel');
+        var me = this, vm = me.getViewModel(),
+            dialog = me.getView(),
+            grid = dialog.up('grid');
+            form = dialog.down('formpanel');
         // // console.log(vm.get('rec').isValid());
         var invalidFields = '';
 
@@ -38,10 +41,13 @@ Ext.define('Mfw.settings.network.interface.DialogController', {
             if (field.validate()) { return; }
             invalidFields += '<strong>' + (field.errorLabel || field.getLabel()) + '</strong>: <span style="color: red;">' + field.getErrorMessage() + '</span><br/>';
         })
-
         if (invalidFields.length > 0) {
             Ext.Msg.alert('Invalid fields'.t(), 'Please correct the following: <br/>' + invalidFields);
             return;
+        }
+
+        if (dialog.isNewRecord) {
+            grid.getStore().add(vm.get('rec'));
         }
 
         // Ext.Msg.confirm('<span class="x-fa fa-cogs"></span> Apply Changes?'.t(),

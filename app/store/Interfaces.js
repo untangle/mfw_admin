@@ -4,6 +4,9 @@ Ext.define('Mfw.store.Interfaces', {
     alias: 'store.interfaces',
     model: 'Mfw.model.Interface',
 
+    trackRemoved: false, // important so no need to post dropped records
+    autoSort: false, // important so store is not sorted on record add
+
     proxy: {
         type: 'ajax',
         api: {
