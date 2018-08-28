@@ -35,7 +35,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             }
         });
 
-        if (g.getEnableEdit() || g.getEnableDelete()) {
+        if (g.getEnableCopy() || g.getEnableEdit() || g.getEnableDelete()) {
             actionsColumn = {
                 text: 'Actions'.t(),
                 align: 'center',
@@ -52,6 +52,17 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     },
                 }
             };
+
+            if (g.getEnableCopy()) {
+                actionsColumn.cell.widget.items.push({
+                    xtype: 'tool',
+                    margin: '0 5',
+                    iconCls: 'x-fa fa-files-o',
+                    handler: 'onCopyRecord',
+                    hidden: true,
+                    bind: { hidden: '{record._deleteSchedule}' }
+                })
+            }
 
             if (g.getEnableEdit()) {
                 actionsColumn.cell.widget.items.push({
@@ -136,16 +147,35 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableAdd()) {
             toolbarActions.push({
-                text: 'Add'.t(),
+                // text: 'Add'.t(),
                 iconCls: 'x-fa fa-plus-circle',
                 align: 'right',
+                tooltip: 'Some test',
                 handler: 'onAddRecord'
+            })
+        }
+
+        if (g.getEnableImport()) {
+            toolbarActions.push({
+                // text: 'Import'.t(),
+                iconCls: 'x-fa fa-download',
+                align: 'right',
+                handler: 'onImport'
+            })
+        }
+
+        if (g.getEnableExport()) {
+            toolbarActions.push({
+                // text: 'Export'.t(),
+                iconCls: 'x-fa fa-upload',
+                align: 'right',
+                handler: 'onExport'
             })
         }
 
         if (g.getEnableReload()) {
             toolbarActions.push({
-                text: 'Reload'.t(),
+                // text: 'Reload'.t(),
                 iconCls: 'x-fa fa-refresh',
                 align: 'right',
                 handler: 'onLoad'
@@ -211,6 +241,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (!me.dialog) {
             me.dialog = Ext.Viewport.add({
                 xtype: me.getView().getEditorDialog(),
+                // xtype: 'masterdialog',
                 isNewRecord: false,
                 ownerCmp: me.getView()
             });
@@ -219,6 +250,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         me.dialog.isNewRecord = false;
         me.dialog.getViewModel().set('rec', cmp.getRecord());
         me.dialog.show();
+    },
+
+    onCopyRecord: function () {
+        Ext.toast('copy action');
     },
 
     onSelect: function (grid, selected) {
@@ -247,5 +282,14 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         this.getView().setSelection(record);
         this.getViewModel().set('pos', pos);
+    },
+
+    onImport: function () {
+        Ext.toast('open import dialog');
+    },
+
+    onExport: function () {
+        Ext.toast('open export dialog');
     }
+
 });

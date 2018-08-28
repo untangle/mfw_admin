@@ -37,11 +37,30 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         enableDelete: true,
 
         /**
+         * @cfg {Boolean} enableCopy
+         * `true` to allow user to copy/duplicate a record
+         */
+        enableCopy: true,
+
+        /**
          * @cfg {Boolean} enableReload
          * `true` to allow user to reload/refetch data from server
          * any changes made to the grid will be lost/reset
          */
         enableReload: true,
+
+        /**
+         * @cfg {Boolean} enableImport
+         * `true` to allow user to import data from a file
+         */
+        enableImport: true,
+
+        /**
+         * @cfg {Boolean} enableExport
+         * `true` to allow user to export data to a file
+         */
+        enableExport: true,
+
 
         /**
          * @cfg {Boolean} enableManualSort

@@ -34,6 +34,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
             xtype: 'textfield',
             name: 'name',
             label: 'Name'.t(),
+            autoComplete: false,
             errorLabel: 'Interface Name'.t(),
             required: true,
             bind: '{rec.name}'
