@@ -21,17 +21,17 @@ Ext.define('Mfw.settings.network.Interfaces', {
         type: 'interfaces'
     },
 
-    plugins: ['rowexpander'],
+    // plugins: ['rowexpander'],
 
-    itemConfig: {
-        body: {
-            tpl: '<tpl if="dhcpEnabled === true">' +
-                    '<div><strong>DHCP</strong>: enabled, <strong>Range</strong>: {dhcpRangeStart} - {dhcpRangeEnd}, <strong>Lease Duration</strong>: {dhcpLeaseDuration/60}</div>' +
-                 '</tpl>' +
-                 '<div><strong>IPv4</strong>: {v4ConfigType}, {v4StaticAddress} / {v4StaticPrefix}</div>' +
-                 '<div><strong>IPv6</strong>: {v6ConfigType}</div>'
-        }
-    },
+    // itemConfig: {
+    //     body: {
+    //         tpl: '<tpl if="dhcpEnabled === true">' +
+    //                 '<div><strong>DHCP</strong>: enabled, <strong>Range</strong>: {dhcpRangeStart} - {dhcpRangeEnd}, <strong>Lease Duration</strong>: {dhcpLeaseDuration/60}</div>' +
+    //              '</tpl>' +
+    //              '<div><strong>IPv4</strong>: {v4ConfigType}, {v4StaticAddress} / {v4StaticPrefix}</div>' +
+    //              '<div><strong>IPv6</strong>: {v6ConfigType}</div>'
+    //     }
+    // },
 
     bind: {
         hideHeaders: '{smallScreen}'

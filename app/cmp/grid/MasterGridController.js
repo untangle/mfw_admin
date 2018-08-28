@@ -86,7 +86,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                             return;
                         }
                         cmp.getRecord().set('_deleteSchedule', true);
-                        cmp.up('gridrow').setUserCls('x-removed');
+                        // cmp.up('gridrow').setUserCls('x-removed');
                     },
                     hidden: true,
                     bind: {
@@ -101,7 +101,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     iconAlign: 'right',
                     handler: function (btn) {
                         btn.up('container').getRecord().set('_deleteSchedule', false);
-                        btn.up('gridrow').setUserCls('');
+                        // tn.up('gridrow').setUserCls('');
                     },
                     hidden: true,
                     bind: { hidden: '{!record._deleteSchedule}' }
@@ -252,8 +252,23 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         me.dialog.show();
     },
 
-    onCopyRecord: function () {
-        Ext.toast('copy action');
+    onCopyRecord: function (cmp) {
+        var me = this,
+            copiedRecord = cmp.getRecord().clone();
+
+        copiedRecord.phantom = true;
+        copiedRecord.dirty = false;
+        if (!me.dialog) {
+            me.dialog = Ext.Viewport.add({
+                xtype: me.getView().getEditorDialog(),
+                // xtype: 'masterdialog',
+                isNewRecord: true,
+                ownerCmp: me.getView()
+            });
+        }
+        me.dialog.isNewRecord = true;
+        me.dialog.getViewModel().set('rec', copiedRecord);
+        me.dialog.show();
     },
 
     onSelect: function (grid, selected) {
