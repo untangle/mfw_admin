@@ -15,17 +15,17 @@ JS_APP := ./app/AppController.js ./app/App.js
 RESOURCES_FILE := mfw-admin-resources.tar.xz
 RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE)
 
-install: css js html resources
+install: dir css js html resources
 
-resources:
-	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xaf -
+resources: dir
+	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xJf -
 
 html: $(DESTDIR)/index.html
 $(DESTDIR)/index.html: index.html
 	cp $^ $@
 
 css: $(DESTDIR)/mfw-all.css
-$(DESTDIR)/res/mfw-all.css: sass/mfw-all.css
+$(DESTDIR)/mfw-all.css: sass/mfw-all.css
 	cp $^ $@
 
 sass/mfw-all.css: $(SASS)
@@ -35,7 +35,11 @@ js: $(DESTDIR)/mfw-all.js
 $(DESTDIR)/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
 	cat $^ > $@
 
+dir: $(DESTDIR)
+$(DESTDIR):
+	mkdir -p $(DESTDIR)
+
 clean:
 	rm -fr $(DESTDIR)
 
-.PHONY: css js html resources
+.PHONY: css js dir html resources
