@@ -9,6 +9,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onInitialize: function (g) {
         var titleBar = g.getTitleBar(),
             toolbarActions = [],
+            toolbarMenu,
             actionsColumn;
 
         // add status column
@@ -17,6 +18,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             minWidth: 5,
             sortable: false,
             hideable: false,
+            resizable: false,
             menuDisabled: true,
             cell: {
                 userCls: 'x-statuscolumn'
@@ -147,7 +149,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableAdd()) {
             toolbarActions.push({
-                // text: 'Add'.t(),
+                text: 'Add'.t(),
                 iconCls: 'x-fa fa-plus-circle',
                 align: 'right',
                 tooltip: 'Some test',
@@ -155,39 +157,45 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             })
         }
 
-        if (g.getEnableImport()) {
+        if (g.getEnableSave()) {
             toolbarActions.push({
-                // text: 'Import'.t(),
-                iconCls: 'x-fa fa-download',
+                text: 'Save'.t(),
+                iconCls: 'x-fa fa-floppy-o',
                 align: 'right',
-                handler: 'onImport'
+                handler: 'onSync'
             })
         }
 
-        if (g.getEnableExport()) {
-            toolbarActions.push({
-                // text: 'Export'.t(),
-                iconCls: 'x-fa fa-upload',
+        if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
+            toolbarMenu = {
+                xtype: 'button',
+                iconCls: 'x-fa fa-ellipsis-v',
+                arrow: false,
+                ui: 'action',
                 align: 'right',
-                handler: 'onExport'
-            })
-        }
+                menu: {
+                    items: []
+                }
+            };
 
-        if (g.getEnableReload()) {
-            toolbarActions.push({
-                // text: 'Reload'.t(),
-                iconCls: 'x-fa fa-refresh',
-                align: 'right',
-                handler: 'onLoad'
-            })
-        }
+            if (g.getEnableReload()) {
+                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'x-fa fa-undo', handler: 'onLoad' } )
+            }
 
-        toolbarActions.push({
-            text: 'Save'.t(),
-            iconCls: 'x-fa fa-floppy-o',
-            align: 'right',
-            handler: 'onSync'
-        })
+            if (g.getEnableImport()) {
+                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'x-fa fa-download', handler: 'onImport' } )
+            }
+
+            if (g.getEnableExport()) {
+                toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'x-fa fa-upload', handler: 'onExport' } )
+            }
+
+            if (g.getEnableReset()) {
+                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } )
+            }
+
+            toolbarActions.push(toolbarMenu);
+        }
 
         if (toolbarActions.length > 0) {
             titleBar.add(toolbarActions);
@@ -305,6 +313,14 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
     onExport: function () {
         Ext.toast('open export dialog');
+    },
+
+    onReset: function () {
+        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            'All existing <strong>' + this.getView().getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
+            function (answer) {
+                console.log('Confirmation: ', answer);
+            });
     }
 
 });

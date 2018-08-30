@@ -37,6 +37,18 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         enableDelete: true,
 
         /**
+         * @cfg {Boolean} enableSave
+         * `true` to allow user push changes to server
+         */
+        enableSave: true,
+
+        /**
+         * @cfg {Boolean} enableReset
+         * `true` to allow user reset settings to stable defaults
+         */
+        enableReset: true,
+
+        /**
          * @cfg {Boolean} enableCopy
          * `true` to allow user to copy/duplicate a record
          */

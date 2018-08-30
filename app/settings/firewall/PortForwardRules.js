@@ -19,6 +19,8 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     config: {
     },
 
+    sortable: false,
+
     scrollable: true,
     store: {
         data: [
