@@ -2,6 +2,8 @@ Ext.define('Mfw.util.Util', {
     alternateClassName: 'Util',
     singleton: true,
 
+    api: window.location.origin + '/api',
+
     tmpColumns: [
         { name: 'Protocol'.t(),    field: 'protocol' },
         { name: 'Username'.t(),    field: 'username' },

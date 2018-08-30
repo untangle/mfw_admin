@@ -87,8 +87,8 @@ Ext.define('Mfw.model.Interface', {
     proxy: {
         type: 'ajax',
         api: {
-            read: window.location.origin + '/settings/get_settings/network/interfaces',
-            update: window.location.origin + '/settings/set_settings/network/interfaces'
+            read: Util.api + '/settings/network/interfaces',
+            update: Util.api + '/settings/network/interfaces'
         },
         writer: {
             type: 'json',

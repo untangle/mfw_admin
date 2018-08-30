@@ -11,8 +11,8 @@ Ext.define('Mfw.model.Network', {
     proxy: {
         type: 'ajax',
         api: {
-            read: window.location.origin + '/settings/get_settings/network',
-            update: window.location.origin + '/settings/set_settings/network'
+            read: Util.api + '/settings/network',
+            update: Util.api + '/settings/network'
         },
         reader: {
             type: 'json'

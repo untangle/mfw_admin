@@ -85,7 +85,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         handler: function () {
             var originalServerData = {"dhcp":{"dhcpAuthoritative":true,"staticDhcpEntries":[]},"dns":{"localServers":[],"staticEntries":[]},"firewall":{"variables":[{"key":"HTTP_PORT","value":"80"},{"key":"HTTPS_PORT","value":"443"}]},"network":{"devices":[{"duplex":"AUTO","mtu":null,"name":"eth0"},{"duplex":"AUTO","mtu":null,"name":"eth1"}],"interfaces":[{"configType":"ADDRESSED","device":"eth0","dhcpEnabled":true,"dhcpLeaseDuration":3600,"dhcpRangeEnd":"192.168.1.200","dhcpRangeStart":"192.168.1.100","interfaceId":1,"name":"internal","type":"NIC","v4ConfigType":"STATIC","v4StaticAddress":"192.168.1.1","v4StaticPrefix":24,"v6AssignHint":"1234","v6AssignPrefix":64,"v6ConfigType":"ASSIGN","wan":false},{"configType":"ADDRESSED","device":"eth1","interfaceId":2,"name":"external","natEgress":true,"type":"NIC","v4ConfigType":"DHCP","v6ConfigType":"DISABLED","wan":true}],"switches":[]},"system":{"domainName":"example.com","hostName":"mfw"},"version":1}
             Ext.Ajax.request({
-                url: window.location.origin + '/settings/set_settings',
+                url: Util.api + '/settings',
                 method: 'POST',
                 params: Ext.JSON.encode(originalServerData),
                 success: function() {
