@@ -131,8 +131,7 @@ Ext.define('Mfw.view.settings.Main', {
                         iconCls: 'tree network',
                         href: 'settings/network',
                         children: [
-                            { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' },
-                            { text: 'Interfaces Alt'.t(), leaf: true, href: 'settings/network/interfaces-alt' }
+                            { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' }
                         ]
                     }, {
                         text: '<strong>' + 'Firewall'.t() + '</strong>',

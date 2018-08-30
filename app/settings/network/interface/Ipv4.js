@@ -15,6 +15,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         reference: 'v4Config',
         label: 'Config Type'.t(),
         labelAlign: 'left',
+        labelTextAlign: 'right',
         queryMode: 'local',
         displayField: 'name',
         valueField: 'value',
@@ -119,7 +120,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         defaults: {
             labelTextAlign: 'right',
             labelWidth: 100,
-            disabled: true
+            // disabled: true
         },
         items: [{
             xtype: 'textfield',

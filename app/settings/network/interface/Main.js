@@ -102,7 +102,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
         // userCls: 'config-menu',
         // ui: 'nav',
         margin: 4,
-        itemTpl: '<strong>{text}</strong> / {status}',
+        itemTpl: '<strong>{text}</strong> [{status}]',
         onItemDisclosure: Ext.emptyFn,
         bind: {
             store: {

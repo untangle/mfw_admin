@@ -231,52 +231,86 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onAddRecord: function () {
         var me = this,
             newRecord = Ext.create(me.getView().getNewRecordModel());
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
-                xtype: me.getView().getEditorDialog(),
-                isNewRecord: true,
+        // if (!me.dialog) {
+        //     me.dialog = Ext.Viewport.add({
+        //         xtype: me.getView().getEditorDialog(),
+        //         isNewRecord: true,
+        //         ownerCmp: me.getView()
+        //     });
+        // }
+        // // info.record.getValidation()
+        // me.dialog.isNewRecord = true;
+        // me.dialog.getViewModel().set('rec', newRecord);
+        // me.dialog.show();
+
+        if (!me.sheet) {
+            me.sheet = Ext.Viewport.add({
+                xtype: 'interface-sheet',
                 ownerCmp: me.getView()
             });
         }
-        // info.record.getValidation()
-        me.dialog.isNewRecord = true;
-        me.dialog.getViewModel().set('rec', newRecord);
-        me.dialog.show();
+        me.sheet.getViewModel().set({ rec: newRecord, isNew: true });
+        me.sheet.show();
     },
 
     onEditRecord: function (cmp) {
+        // var me = this;
+        // if (!me.dialog) {
+        //     me.dialog = Ext.Viewport.add({
+        //         xtype: me.getView().getEditorDialog(),
+        //         // xtype: 'masterdialog',
+        //         isNewRecord: false,
+        //         ownerCmp: me.getView()
+        //     });
+        // }
+        // // info.record.getValidation()
+        // me.dialog.isNewRecord = false;
+        // me.dialog.getViewModel().set('rec', cmp.getRecord());
+        // me.dialog.show();
+
         var me = this;
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
-                xtype: me.getView().getEditorDialog(),
+        if (!me.sheet) {
+            me.sheet = Ext.Viewport.add({
+                xtype: 'interface-sheet',
                 // xtype: 'masterdialog',
-                isNewRecord: false,
                 ownerCmp: me.getView()
             });
         }
         // info.record.getValidation()
-        me.dialog.isNewRecord = false;
-        me.dialog.getViewModel().set('rec', cmp.getRecord());
-        me.dialog.show();
+        me.sheet.getViewModel().set({ rec: cmp.getRecord(), isNew: false });
+        me.sheet.show();
+
+
     },
 
     onCopyRecord: function (cmp) {
         var me = this,
             copiedRecord = cmp.getRecord().clone();
 
+        // copiedRecord.phantom = true;
+        // copiedRecord.dirty = false;
+        // if (!me.dialog) {
+        //     me.dialog = Ext.Viewport.add({
+        //         xtype: me.getView().getEditorDialog(),
+        //         // xtype: 'masterdialog',
+        //         isNewRecord: true,
+        //         ownerCmp: me.getView()
+        //     });
+        // }
+        // me.dialog.isNewRecord = true;
+        // me.dialog.getViewModel().set('rec', copiedRecord);
+        // me.dialog.show();
+
         copiedRecord.phantom = true;
         copiedRecord.dirty = false;
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
+        if (!me.sheet) {
+            me.sheet = Ext.Viewport.add({
                 xtype: me.getView().getEditorDialog(),
-                // xtype: 'masterdialog',
-                isNewRecord: true,
                 ownerCmp: me.getView()
             });
         }
-        me.dialog.isNewRecord = true;
-        me.dialog.getViewModel().set('rec', copiedRecord);
-        me.dialog.show();
+        me.sheet.getViewModel().set({ rec: copiedRecord, isNew: true });
+        me.sheet.show();
     },
 
     onSelect: function (grid, selected) {

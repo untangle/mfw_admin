@@ -10,7 +10,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
     config: {
         enableManualSort: false,
         enableDelete: '{record.wan}',
-        editorDialog: 'interface-dialog',
+        editorDialog: 'interface-sheet',
         newRecordModel: 'Mfw.model.Interface'
     },
 
