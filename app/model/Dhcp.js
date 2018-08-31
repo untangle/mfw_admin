@@ -3,9 +3,14 @@ Ext.define('Mfw.model.Dhcp', {
     alias: 'model.dhcp',
 
     fields: [
-        { name: 'dhcpAuthoritative', type: 'boolean' },
-        { name: 'staticDhcpEntries', type: 'auto' }
+        { name: 'dhcpAuthoritative', type: 'boolean' }
     ],
+
+    hasMany: {
+        model: 'Mfw.model.DhcpEntry',
+        name: 'staticDhcpEntries',
+        associationKey: 'staticDhcpEntries'
+    },
 
     proxy: {
         type: 'ajax',
@@ -19,6 +24,7 @@ Ext.define('Mfw.model.Dhcp', {
         writer: {
             type: 'json',
             writeAllFields: true,
+            writeRecordId: false,
             allDataOptions: {
                 associated: true,
                 persist: true

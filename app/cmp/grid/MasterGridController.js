@@ -152,7 +152,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 text: 'Add'.t(),
                 iconCls: 'x-fa fa-plus-circle',
                 align: 'right',
-                tooltip: 'Some test',
                 handler: 'onAddRecord'
             })
         }

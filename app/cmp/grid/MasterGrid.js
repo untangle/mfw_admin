@@ -96,6 +96,7 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         newRecordModel: null
     },
 
+    emptyText: 'No Data'.t(),
     scrollable: true,
 
     selectable: {
