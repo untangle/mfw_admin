@@ -5,7 +5,7 @@ DESTDIR ?= /tmp/mfw-admin
 SASS := $(wildcard sass/*.scss)
 
 JS_UTIL := $(wildcard app/util/*.js)
-JS_CMP := $(wildcard app/cmp/nav/*.js app/cmp/condition/*.js  app/cmp/nav/*.js)
+JS_CMP := $(wildcard app/cmp/nav/*.js app/cmp/condition/*.js  app/cmp/dialog/*.js app/cmp/grid/*.js)
 JS_MODEL := $(wildcard app/model/*.js)
 JS_STORE := $(wildcard app/store/*.js)
 JS_VIEW := $(wildcard app/view/settings/*.js app/view/monitor/*.js app/view/reports/*.js app/view/dashboard/*.js app/view/*.js)
