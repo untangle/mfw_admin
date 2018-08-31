@@ -61,6 +61,13 @@ Ext.define('Mfw.settings.network.Interfaces', {
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
+        text: 'Current Address'.t(),
+        width: 150,
+        dataIndex: 'v4StaticAddress',
+        menuDisabled: true,
+        plugins: 'responsive',
+        responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
+    }, {
         text: 'Is WAN',
         dataIndex: 'wan',
         align: 'center',

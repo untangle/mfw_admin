@@ -350,10 +350,23 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onReset: function () {
+        var me = this, store = me.getView().getStore(),
+            api = store.getProxy().getApi();
+
         Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
             'All existing <strong>' + this.getView().getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
             function (answer) {
-                console.log('Confirmation: ', answer);
+                if (answer === 'yes') {
+                    // update proxy api to support reset
+                    store.getProxy().setApi({ read: api.read.replace('/settings/', '/defaults/') });
+                    // revert api to it's default values
+                    store.load(function (records, operation, success) {
+                        store.getProxy().setApi(api);
+                        if (!success) {
+                            console.error('Unable to fetch defaults!')
+                        }
+                    })
+                }
             });
     }
 
