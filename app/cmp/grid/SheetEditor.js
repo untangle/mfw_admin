@@ -1,8 +1,8 @@
 Ext.define('Mfw.cmp.grid.SheetEditor', {
     extend: 'Ext.ActionSheet',
-    alias: 'widget.sheeteditor',
+    alias: 'widget.sheet-editor',
 
-    controller: 'sheeteditor',
+    controller: 'sheet-editor',
 
     title: 'Sheet title'.t(),
 
@@ -16,6 +16,7 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
 
     width: 350,
     hideOnMaskTap: false,
+
 
     // items: [{
     //     xtype: 'interface-main'
@@ -43,6 +44,10 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
             text: 'Cancel'.t(),
             handler: 'onCancel'
         }
+    },
+
+    listeners: {
+        initialize: 'onInitialize'
     }
 
 });

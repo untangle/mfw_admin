@@ -90,10 +90,10 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
         /**
          * @cfg {String} newRecordModel
-         * the dta model for the new record to be created
+         * the data model for the new record to be created
          * e.g. `interface`
          */
-        newRecordModel: null
+        recordModel: null
     },
 
     emptyText: 'No Data'.t(),
@@ -118,6 +118,12 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
     listeners: {
         initialize: 'onInitialize',
-        select: 'onSelect'
+        select: 'onSelect',
+        childdoubletap: function (listview, location) {
+            console.log(location);
+        },
+        customedit: function () {
+            console.log('here');
+        }
     }
 });

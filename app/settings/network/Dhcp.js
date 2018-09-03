@@ -50,29 +50,64 @@ Ext.define('Mfw.settings.network.Dhcp', {
         controller: 'dhcpstaticentries',
         title: 'Static Entries',
 
+        plugins: {
+            grideditable2: true
+            // grideditable: {
+            //     triggerEvent: 'theedit',
+            // }
+        },
+
+        // plugins: {
+        //     grideditable: {
+        //         triggerEvent: 'customedit',
+        //         enableDeleteButton: false,
+        //         defaultFormConfig: {
+        //             title: 'Edit'
+        //         },
+        //         toolbarConfig: {
+        //             xtype: 'toolbar',
+        //             docked: 'bottom',
+        //             items: ['->', {
+        //                 xtype: 'button',
+        //                 // ui: 'decline',
+        //                 text: 'Cancel',
+        //                 // align: 'left',
+        //                 action: 'cancel'
+        //             }, {
+        //                 xtype: 'button',
+        //                 // ui: 'confirm',
+        //                 text: 'Apply',
+        //                 // align: 'right',
+        //                 action: 'submit'
+        //             }]
+        //         },
+        //     }
+        // },
+
         enableSave: false,
-        enableReload: false,
+        enableReload: true,
         enableReset: false,
-        enableCopy: false,
+        // enableCopy: false,
 
         flex: 1,
 
-        bind: '{rec.staticDhcpEntries}',
-
-        // bind: {
-        //     store: {
-        //         data: '{rec.staticDhcpEntries}'
-        //     }
-        // },
+        bind: {
+            store: {
+                model: 'Mfw.network.model.DhcpEntry',
+                data: '{rec.staticDhcpEntries}'
+            }
+        },
 
         columns: [{
             text: 'Mac Address'.t(),
             dataIndex: 'macAddress',
-            flex: 1
+            flex: 1,
+            editable: true
         } , {
             text: 'Address'.t(),
             dataIndex: 'address',
-            flex: 1
+            flex: 1,
+            editable: true
         }]
     }],
 
@@ -87,7 +122,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
         onLoad: function () {
             var me = this;
-            me.dhcp = new Mfw.model.Dhcp();
+            me.dhcp = new Mfw.network.model.Dhcp();
             me.dhcp.load({
                 success: function (rec) {
                     me.getViewModel().set('rec', rec);

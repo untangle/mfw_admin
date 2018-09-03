@@ -59,8 +59,11 @@ Ext.define('Mfw.controller.MfwController', {
             currentView: 'mfw-settings',
             currentViewTitle: 'Settings'.t()
         });
-        if (mainSettingsView.down('#currentSettings')) {
-            mainSettingsView.remove('currentSettings');
+
+        var cmp = mainSettingsView.down('#currentSettings');
+
+        if (cmp) {
+            mainSettingsView.remove(cmp, false);
         }
 
         if (route) {

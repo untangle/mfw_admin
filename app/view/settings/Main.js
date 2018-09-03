@@ -120,45 +120,7 @@ Ext.define('Mfw.view.settings.Main', {
             expanderOnly: false,
             selectOnExpander: true,
             highlightPath: false,
-            store: {
-                type: 'tree',
-                rootVisible: false,
-                filterer: 'bottomup',
-                root: {
-                    expanded: true,
-                    children: [{
-                        text: '<strong>' + 'Network'.t() + '</strong>',
-                        iconCls: 'tree network',
-                        href: 'settings/network',
-                        children: [
-                            { text: 'Interfaces'.t(), leaf: true, href: 'settings/network/interfaces' },
-                            { text: 'DHCP'.t(), leaf: true, href: 'settings/network/dhcp' },
-                            { text: 'DNS'.t(), leaf: true, href: 'settings/network/dns' }
-                        ]
-                    }, {
-                        text: '<strong>' + 'Firewall'.t() + '</strong>',
-                        iconCls: 'tree administration',
-                        href: 'settings/firewall',
-                        children: [
-                            { text: 'Port Forward Rules'.t(), leaf: true, href: 'settings/firewall/portforwardrules' },
-                        ]
-                    }, {
-                        text: '<strong>' + 'System'.t() + '</strong>',
-                        iconCls: 'tree system',
-                        href: 'settings/system',
-                        children: [
-                            { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' }
-                        ]
-                    }, {
-                        text: '<strong>' + 'Administration'.t() + '</strong>',
-                        iconCls: 'tree administration',
-                        href: 'settings/administration',
-                        children: [
-                            { text: 'Some Setting title'.t(), leaf: true }
-                        ]
-                    }]
-                }
-            },
+            store: 'settings-nav',
             listeners: {
                 selectionchange: function (el, record) {
                     // console.log(record);

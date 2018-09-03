@@ -1,4 +1,4 @@
-Ext.define('Mfw.model.Dhcp', {
+Ext.define('Mfw.network.model.Dhcp', {
     extend: 'Ext.data.Model',
     alias: 'model.dhcp',
 

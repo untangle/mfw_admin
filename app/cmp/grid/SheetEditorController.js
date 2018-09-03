@@ -1,7 +1,14 @@
 Ext.define('Mfw.cmp.grid.SheetEditorController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.sheeteditor',
+    alias: 'controller.sheet-editor',
 
+    onInitialize: function (sheet) {
+        console.log('init');
+        sheet.getViewModel().bind('{rec}', function (rec) {
+            console.log(rec);
+            console.log(rec.getFields());
+        })
+    },
 
     onApply: function (btn) {
         var me = this, vm = me.getViewModel(),
