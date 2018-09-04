@@ -10,10 +10,11 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
     controller: 'mastergrid',
 
-    store: {
-    //     listeners: {
-    //         beforesync: 'onBeforeSync'
-    //     }
+    store: {},
+
+    plugins: {
+        // this is the plugin which enables generic grids data editing
+        mastergrideditable: true
     },
 
     config: {
@@ -119,11 +120,13 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
     listeners: {
         initialize: 'onInitialize',
         select: 'onSelect',
-        childdoubletap: function (listview, location) {
-            console.log(location);
-        },
-        customedit: function () {
-            console.log('here');
-        }
+        deselect: 'onDeselect',
+        beforesave: 'beforeSave', // custom event to prepare records
+        // childdoubletap: function (listview, location) {
+        //     console.log(location);
+        // },
+        // customedit: function () {
+        //     console.log('here');
+        // }
     }
 });

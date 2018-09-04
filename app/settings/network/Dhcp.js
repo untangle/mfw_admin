@@ -28,10 +28,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
         title: 'Static Entries',
 
         plugins: {
-            grideditable2: true
-            // grideditable: {
-            //     triggerEvent: 'theedit',
-            // }
+            mastergrideditable: true
         },
 
         enableSave: false,
@@ -42,13 +39,13 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
         flex: 1,
 
-        // bind: '{rec.staticDhcpEntries}',
-        bind: {
-            store: {
-                model: 'Mfw.network.model.DhcpEntry',
-                data: '{rec.staticDhcpEntries}'
-            }
-        },
+        bind: '{rec.staticDhcpEntries}',
+        // bind: {
+        //     store: {
+        //         model: 'Mfw.network.model.DhcpEntry',
+        //         data: '{rec.staticDhcpEntries}'
+        //     }
+        // },
 
         columns: [{
             text: 'Mac Address'.t(),

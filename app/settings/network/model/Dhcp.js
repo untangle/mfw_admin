@@ -24,12 +24,10 @@ Ext.define('Mfw.network.model.Dhcp', {
         writer: {
             type: 'json',
             writeAllFields: true,
-            writeRecordId: false,
-            // allDataOptions: {
-            //     // serialize: true
-            //     associated: true,
-            //     persist: true
-            // }
+            allDataOptions: {
+                associated: true,
+                persist: true
+            }
         }
     }
 });

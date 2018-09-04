@@ -14,6 +14,10 @@ Ext.define('Mfw.settings.network.Interfaces', {
         newRecordModel: 'Mfw.model.Interface'
     },
 
+    plugins: {
+        mastergrideditable: false
+    },
+
     sortable: false,
 
     scrollable: true,

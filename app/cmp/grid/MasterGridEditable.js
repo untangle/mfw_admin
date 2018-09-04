@@ -1,6 +1,6 @@
-Ext.define('Ext.grid.plugin.Editable2', {
+Ext.define('Mfw.cmp.grid.MasterGridEditable', {
     extend: 'Ext.plugin.Abstract',
-    alias: 'plugin.grideditable2',
+    alias: 'plugin.mastergrideditable',
 
 
     config: {
@@ -14,7 +14,7 @@ Ext.define('Ext.grid.plugin.Editable2', {
          * The event used to trigger the showing of the editor form. This event should
          * be an event that is fired by the grid.
          */
-        triggerEvent: 'theedit',
+        triggerEvent: 'masteredit',
 
         /**
          * @cfg {Object} formConfig
@@ -33,7 +33,10 @@ Ext.define('Ext.grid.plugin.Editable2', {
             xtype: 'formpanel',
             scrollable: true,
             items: [{
-                xtype: 'fieldset'
+                xtype: 'fieldset',
+                defaults: {
+                    autoComplete: false
+                }
             }]
         },
 
@@ -90,19 +93,26 @@ Ext.define('Ext.grid.plugin.Editable2', {
     },
 
     onSubmitTap: function() {
-        var me = this, record = this.form.getRecord();
+        var me = this, record = this.form.getRecord(),
+            data = this.form.getValues();
 
+        record.set(data);
+
+        var r = record.clone();
+
+        console.log(r);
         if (record.phantom) {
-            console.log(record);
-            me.getGrid().getStore().add(record);
-        } else {
-            record.set(this.form.getValues())
+
+            // console.log(record.getData());
+            // console.log(data);
+            // me.getGrid().getStore().add({macAddress: 'aaa', address: 'bbb'});
+            me.getGrid().getStore().add(r);
         }
-        this.sheet.hide();
+        me.sheet.hide();
     },
 
     onSheetHide: function() {
-        // this.cleanup();
+        this.cleanup();
     },
 
     getEditorFields: function(columns) {
@@ -208,6 +218,8 @@ Ext.define('Ext.grid.plugin.Editable2', {
         cleanup: function() {
             var me = this,
                 form = me.form;
+
+            form.setRecord(null);
 
             if (form && !form.destroyed && form.clearFields) {
                 form.removeAll(false);

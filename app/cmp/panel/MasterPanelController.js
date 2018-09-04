@@ -14,7 +14,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
             toolbarActions.push({
                 xtype: 'button',
                 text: 'Save'.t(),
-                iconCls: 'x-fa fa-floppy-o',
+                iconCls: 'md-icon-save',
                 ui: 'action',
                 align: 'right',
                 handler: 'onSave'
@@ -24,7 +24,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
         if (p.getEnableReload() || p.getEnableReset()) {
             toolbarMenu = {
                 xtype: 'button',
-                iconCls: 'x-fa fa-ellipsis-v',
+                iconCls: 'md-icon-more-vert',
                 arrow: false,
                 ui: 'action',
                 align: 'right',
@@ -44,8 +44,6 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
             toolbarActions.push(toolbarMenu);
         }
 
-        console.log(toolbarActions);
-
         if (toolbarActions.length > 0) {
             p.getHeader().add(toolbarActions);
         }
@@ -64,10 +62,10 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
     onSave: function () {
         var me = this, panel = me.getView();
         if (panel.down('mastergrid')) {
-            console.log(panel.down('mastergrid').getStore());
-            panel.down('mastergrid').getStore().sync();
+            panel.down('mastergrid').fireEvent('beforesave');
+            // commit changes so the records not dirty
+            panel.down('mastergrid').getStore().commitChanges();
         }
-        console.log(panel.getRecordModel().getData());
         panel.getRecordModel().save({
             success: function () {
                 Ext.toast('DHCP saved!');

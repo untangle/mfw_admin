@@ -13,6 +13,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             toolbarMenu,
             actionsColumn;
 
+        // g.getStore().on('beforesync', me.onBeforeSync);
+
         // add status column
         g.insertColumn(0, {
             width: 5,
@@ -52,7 +54,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableEdit()) {
                 tools.edit =  {
                     handler: 'onEditRecord',
-                    // iconCls: 'x-fa fa-pencil',
                     iconCls: 'md-icon-edit',
                     // use record binding for dynamic configuration
                     hidden: true,
@@ -65,7 +66,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableCopy()) {
                 tools.copy =  {
                     handler: 'onCopyRecord',
-                    // iconCls: 'x-fa fa-files-o',
                     iconCls: 'md-icon-library-add',
                     // use record binding for dynamic configuration
                     hidden: true,
@@ -78,7 +78,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableDelete()) {
                 tools.delete =  {
                     handler: 'onDeleteRecord',
-                    // iconCls: 'x-fa fa-trash',
                     iconCls: 'md-icon-delete',
                     // use record binding for dynamic configuration
                     hidden: true,
@@ -93,7 +92,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     // xtype: 'button',
                     // text: 'Undo'.t(),
                     handler: 'onUndoDeleteRecord',
-                    iconCls: 'x-fa fa-undo',
+                    iconCls: 'md-icon-undo',
                     hidden: true,
                     bind: {
                         hidden: '{!record._deleteSchedule}',
@@ -101,46 +100,12 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 }
             }
 
-
-            // if (g.getEnableDelete()) {
-            //     actionsColumn.cell.widget.items.push({
-            //         xtype: 'tool',
-            //         margin: '0 5',
-            //         iconCls: 'x-fa fa-trash',
-            //         handler: function (cmp) {
-            //             if (cmp.getRecord().phantom) {
-            //                 cmp.getRecord().drop();
-            //                 return;
-            //             }
-            //             cmp.getRecord().set('_deleteSchedule', true);
-            //             // cmp.up('gridrow').setUserCls('x-removed');
-            //         },
-            //         hidden: true,
-            //         bind: {
-            //             hidden: '{record._deleteSchedule}',
-            //             disabled: Ext.isString(g.getEnableDelete()) ? g.getEnableDelete() : false
-            //         }
-            //     });
-            //     actionsColumn.cell.widget.items.push({
-            //         xtype: 'button',
-            //         text: 'Undo'.t(),
-            //         iconCls: 'x-fa fa-trash',
-            //         iconAlign: 'right',
-            //         handler: function (btn) {
-            //             btn.up('container').getRecord().set('_deleteSchedule', false);
-            //             // tn.up('gridrow').setUserCls('');
-            //         },
-            //         hidden: true,
-            //         bind: { hidden: '{!record._deleteSchedule}' }
-            //     });
-            // }
             actionsColumn.cell.tools = tools;
             g.addColumn(actionsColumn);
         }
 
 
         if (g.getEnableManualSort()) {
-            // g.setSortable(false);
             toolbarActions.push({
                 xtype: 'segmentedbutton',
                 allowToggle: false,
@@ -176,7 +141,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (g.getEnableAdd()) {
             toolbarActions.push({
                 text: 'Add'.t(),
-                iconCls: 'md-icon-add-circle',
+                iconCls: 'md-icon-add',
                 align: 'right',
                 handler: 'onAddRecord'
             })
@@ -187,7 +152,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 text: 'Save'.t(),
                 iconCls: 'md-icon-save',
                 align: 'right',
-                handler: 'onSync'
+                handler: 'onSave'
             })
         }
 
@@ -204,19 +169,19 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             };
 
             if (g.getEnableReload()) {
-                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'x-fa fa-undo', handler: 'onLoad' } )
+                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'md-icon-refresh', handler: 'onLoad' } )
             }
 
             if (g.getEnableImport()) {
-                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'x-fa fa-download', handler: 'onImport' } )
+                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'md-icon-call-received', handler: 'onImport' } )
             }
 
             if (g.getEnableExport()) {
-                toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'x-fa fa-upload', handler: 'onExport' } )
+                toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'md-icon-call-made', handler: 'onExport' } )
             }
 
             if (g.getEnableReset()) {
-                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } )
+                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'md-icon-sync', handler: 'onReset' } )
             }
 
             toolbarActions.push(toolbarMenu);
@@ -230,17 +195,23 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onLoad: function () {
+        this.getView().getSelectable().deselectAll();
         this.getView().getStore().load({
-            success: function () {
-                console.log('success');
-            },
-            failure: function () {}
+            callback: function() {
+                // the operation object
+                // contains all of the details of the load operation
+                // console.log(records);
+            }
         });
     },
 
-    onBeforeSync: function (store) {
-        console.log('before');
-        store.each(function (record) {
+    /**
+     * Important, set record flags so it pushes (update) all the data regardless
+     * of the records is modified or not
+     */
+    beforeSave: function () {
+        console.log('beforesave');
+        this.getView().getStore().each(function (record) {
             if (record.get('_deleteSchedule')) {
                 record.drop();
             }
@@ -249,7 +220,9 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         });
     },
 
-    onSync: function () {
+    onSave: function () {
+        var me = this;
+        me.beforeSave();
         this.getView().getStore().sync({
             success: function () {
                 Ext.toast('Settings saved!');
@@ -260,68 +233,47 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onAddRecord: function () {
         var me = this, grid = me.getView(),
             newRecord = Ext.create(grid.getStore().getModel());
-        // if (!me.dialog) {
-        //     me.dialog = Ext.Viewport.add({
-        //         xtype: me.getView().getEditorDialog(),
-        //         isNewRecord: true,
-        //         ownerCmp: me.getView()
-        //     });
-        // }
-        // // info.record.getValidation()
-        // me.dialog.isNewRecord = true;
-        // me.dialog.getViewModel().set('rec', newRecord);
-        // me.dialog.show();
-        // console.log(cmp);
-        me.getView().fireEvent('theedit', me.getView(), newRecord);
-        // if (!me.sheet) {
-        //     me.sheet = Ext.Viewport.add({
-        //         xtype: 'interface-sheet',
-        //         ownerCmp: me.getView()
-        //     });
-        // }
-        // me.sheet.getViewModel().set({ rec: newRecord, isNew: true });
-        // me.sheet.show();
+        // if custom editor sheet
+        if (me.getView().getEditorDialog()) {
+            if (!me.sheet) {
+                me.sheet = Ext.Viewport.add({
+                    xtype: me.getView().getEditorDialog(),
+                    // xtype: 'masterdialog',
+                    isNewRecord: true,
+                    ownerCmp: me.getView()
+                });
+            }
+            me.sheet.isNewRecord = true;
+            me.sheet.getViewModel().set('rec', newRecord);
+            me.sheet.show();
+            return;
+        }
+
+        // otherwise use generic editor sheet
+        me.getView().fireEvent('masteredit', grid, newRecord);
     },
 
     onEditRecord: function (grid, info) {
-        // var me = this;
-        // if (!me.dialog) {
-        //     me.dialog = Ext.Viewport.add({
-        //         xtype: me.getView().getEditorDialog(),
-        //         // xtype: 'masterdialog',
-        //         isNewRecord: false,
-        //         ownerCmp: me.getView()
-        //     });
-        // }
-        // // info.record.getValidation()
-        // me.dialog.isNewRecord = false;
-        // me.dialog.getViewModel().set('rec', cmp.getRecord());
-        // me.dialog.show();
-        // console.log(cmp.getRecord());
-
-
-        console.log(arguments);
-
         var me = this;
-        // console.log(cmp);
-        me.getView().fireEvent('theedit', grid, info.record);
-        // if (!me.sheet) {
-        //     me.sheet = Ext.Viewport.add({
-        //         xtype: 'sheet-editor',
-        //         // xtype: 'masterdialog',
-        //         // ownerCmp: me.getView()
-        //     });
-        // }
-        // if (!me.sheet) {
-        //     me.sheet = Ext.Viewport.add({
-        //         xtype: 'interface-sheet',
-        //         // xtype: 'masterdialog',
-        //         ownerCmp: me.getView()
-        //     });
-        // }
-        // // info.record.getValidation()
-        // me.sheet.getViewModel().set({ rec: cmp.getRecord(), isNew: false });
-        // me.sheet.show();
+
+        // if custom editor sheet
+        if (me.getView().getEditorDialog()) {
+            if (!me.sheet) {
+                me.sheet = Ext.Viewport.add({
+                    xtype: me.getView().getEditorDialog(),
+                    // xtype: 'masterdialog',
+                    isNewRecord: false,
+                    ownerCmp: me.getView()
+                });
+            }
+            me.sheet.isNewRecord = false;
+            me.sheet.getViewModel().set('rec', info.record);
+            me.sheet.show();
+            return;
+        }
+
+        // otherwise use generic editor sheet
+        me.getView().fireEvent('masteredit', grid, info.record);
     },
 
     onCopyRecord: function (cmp) {
@@ -364,6 +316,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
     onSelect: function (grid, selected) {
         grid.getViewModel().set('selcount', selected.length);
+    },
+
+    onDeselect: function (grid) {
+        grid.getViewModel().set('selcount', 0);
     },
 
     onSort: function (btn) {
