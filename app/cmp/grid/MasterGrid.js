@@ -11,9 +11,9 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
     controller: 'mastergrid',
 
     store: {
-        // listeners: {
-        //     beforesync: 'onBeforeSync'
-        // }
+    //     listeners: {
+    //         beforesync: 'onBeforeSync'
+    //     }
     },
 
     config: {

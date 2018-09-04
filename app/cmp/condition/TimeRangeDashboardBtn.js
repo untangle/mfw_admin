@@ -3,7 +3,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
     alias: 'widget.dashboard-timerange-btn',
 
     arrow: false,
-
+    iconCls: 'md-icon-timelapse',
     menu: {
         indented: false,
         mouseLeaveDelay: 0,

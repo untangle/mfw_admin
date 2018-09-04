@@ -12,16 +12,6 @@ html, body {
 }
 
 
-.x-material {
-    &:before {
-        font-family: 'Material Icons';
-    }
-}
-.x-dashboard:before { content: 'dashboard' }
-.x-settings:before { content: 'settings' }
-.x-computer:before { content: 'computer' }
-.x-show_chart:before { content: 'show_chart' }
-
 
 .x-toolbar.nav {
     background: #fafafa; /* Old browsers */

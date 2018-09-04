@@ -52,7 +52,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableEdit()) {
                 tools.edit =  {
                     handler: 'onEditRecord',
-                    iconCls: 'x-fa fa-pencil',
+                    // iconCls: 'x-fa fa-pencil',
+                    iconCls: 'md-icon-edit',
                     // use record binding for dynamic configuration
                     hidden: true,
                     bind: {
@@ -64,7 +65,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableCopy()) {
                 tools.copy =  {
                     handler: 'onCopyRecord',
-                    iconCls: 'x-fa fa-files-o',
+                    // iconCls: 'x-fa fa-files-o',
+                    iconCls: 'md-icon-library-add',
                     // use record binding for dynamic configuration
                     hidden: true,
                     bind: {
@@ -76,7 +78,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (g.getEnableDelete()) {
                 tools.delete =  {
                     handler: 'onDeleteRecord',
-                    iconCls: 'x-fa fa-trash',
+                    // iconCls: 'x-fa fa-trash',
+                    iconCls: 'md-icon-delete',
                     // use record binding for dynamic configuration
                     hidden: true,
                     // disabled: true,
@@ -173,7 +176,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (g.getEnableAdd()) {
             toolbarActions.push({
                 text: 'Add'.t(),
-                iconCls: 'x-fa fa-plus-circle',
+                iconCls: 'md-icon-add-circle',
                 align: 'right',
                 handler: 'onAddRecord'
             })
@@ -182,7 +185,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (g.getEnableSave()) {
             toolbarActions.push({
                 text: 'Save'.t(),
-                iconCls: 'x-fa fa-floppy-o',
+                iconCls: 'md-icon-save',
                 align: 'right',
                 handler: 'onSync'
             })
@@ -191,7 +194,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
             toolbarMenu = {
                 xtype: 'button',
-                iconCls: 'x-fa fa-ellipsis-v',
+                iconCls: 'md-icon-more-vert',
                 arrow: false,
                 ui: 'action',
                 align: 'right',
@@ -235,14 +238,18 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         });
     },
 
-    onSync: function () {
-        this.getView().getStore().each(function (record) {
+    onBeforeSync: function (store) {
+        console.log('before');
+        store.each(function (record) {
             if (record.get('_deleteSchedule')) {
                 record.drop();
             }
             record.dirty = true; // to push all non-dropped records
             record.phantom = false; // to push new records
         });
+    },
+
+    onSync: function () {
         this.getView().getStore().sync({
             success: function () {
                 Ext.toast('Settings saved!');
@@ -251,8 +258,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onAddRecord: function () {
-        var me = this,
-            newRecord = Ext.create(me.getView().getNewRecordModel());
+        var me = this, grid = me.getView(),
+            newRecord = Ext.create(grid.getStore().getModel());
         // if (!me.dialog) {
         //     me.dialog = Ext.Viewport.add({
         //         xtype: me.getView().getEditorDialog(),
@@ -264,15 +271,16 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         // me.dialog.isNewRecord = true;
         // me.dialog.getViewModel().set('rec', newRecord);
         // me.dialog.show();
-
-        if (!me.sheet) {
-            me.sheet = Ext.Viewport.add({
-                xtype: 'interface-sheet',
-                ownerCmp: me.getView()
-            });
-        }
-        me.sheet.getViewModel().set({ rec: newRecord, isNew: true });
-        me.sheet.show();
+        // console.log(cmp);
+        me.getView().fireEvent('theedit', me.getView(), newRecord);
+        // if (!me.sheet) {
+        //     me.sheet = Ext.Viewport.add({
+        //         xtype: 'interface-sheet',
+        //         ownerCmp: me.getView()
+        //     });
+        // }
+        // me.sheet.getViewModel().set({ rec: newRecord, isNew: true });
+        // me.sheet.show();
     },
 
     onEditRecord: function (grid, info) {
@@ -296,7 +304,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         var me = this;
         // console.log(cmp);
-        me.getView().fireEvent('theedit', grid, info);
+        me.getView().fireEvent('theedit', grid, info.record);
         // if (!me.sheet) {
         //     me.sheet = Ext.Viewport.add({
         //         xtype: 'sheet-editor',

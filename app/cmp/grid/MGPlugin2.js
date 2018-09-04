@@ -1,115 +1,3 @@
-/**
- * The `editable` plugin enables form-based, grid row editing. Editing begins by double-tapping
- * a row. This can be set to any event, which we'll discuss below. The editor consists of a form
- * positioned on the right side of the viewport.
- *
- * There is a button to save or cancel all changes for the edit in the toolbar, and the
- * row is deletable by default.
- *
- * The default editable grid can be defined like so:
- *
- *     @example
- *     Ext.create({
- *         xtype: 'grid',
- *         fullscreen: true,
- *         plugins: {
- *             grideditable: true
- *         },
- *         store: {
- *             fields: [],
- *             data: [{
- *                 name: 'Jake'
- *             }, {
- *                 name: 'Finn'
- *             }]
- *         },
- *         columns: [{
- *             text: 'Name',
- *             dataIndex: 'name',
- *             flex: 1,
- *             editable: true
- *         }]
- *     });
- *
- * By opening up the plugins type as an object (or an array of objects), you can modify your
- * editor more significantly.  You can see the changeable bits below:
- *
- *     @example
- *     Ext.create({
- *         xtype: 'grid',
- *         fullscreen: true,
- *         plugins: {
- *             grideditable: {
- *                 triggerEvent: 'childdoubletap',
- *                 enableDeleteButton: true,
- *                 formConfig: null, // See more below
- *
- *                 defaultFormConfig: {
- *                     xtype: 'formpanel',
- *                     scrollable: true,
- *                     items: [{
- *                         xtype: 'fieldset'
- *                     }]
- *                 },
- *
- *                 toolbarConfig: {
- *                     xtype: 'titlebar',
- *                     docked: 'top',
- *                     items: [{
- *                         xtype: 'button',
- *                         ui: 'decline',
- *                         text: 'Cancel',
- *                         align: 'left',
- *                         action: 'cancel'
- *                     }, {
- *                         xtype: 'button',
- *                         ui: 'confirm',
- *                         text: 'Submit',
- *                         align: 'right',
- *                         action: 'submit'
- *                     }]
- *                 },
- *             }
- *         },
- *         store: {
- *             fields: [],
- *             data: [{
- *                 name: 'Jake'
- *             }, {
- *                 name: 'Finn'
- *             }]
- *         },
- *         columns: [{
- *             text: 'Name',
- *             dataIndex: 'name',
- *             flex: 1,
- *             editable: true
- *         }]
- *     });
- *
- *  As you can see, you can easily modify nearly every bit of the editor window.  As mentioned
- *  above, the toolbar and delete button are the only components included by default.  That's
- *  where formConfig comes into play.
- *
- *  By adding formConfig, you can hardcode the form that gets created when editing a row.
- *  There are no fields set on the form initially, so you will need to define them
- *  yourself.  For example, if you had a "name" column, and you wanted it to be editable,
- *  you would do something like this in your plugins object:
- *
- *     formConfig: {
- *        items: [{
- *           xtype: 'textfield',
- *           name: 'name',
- *           label: 'Name'
- *        }]
- *     }
- *
- *  Now, upon opening the editor, you would see a textfield populated with the editable value from
- *  its corresponding record.
- *
- *  If you want to alter certain form configurations, but still have the default editor fields applied, use
- *  the defaultFormConfig instead.
- */
 Ext.define('Ext.grid.plugin.Editable2', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.grideditable2',
@@ -169,13 +57,7 @@ Ext.define('Ext.grid.plugin.Editable2', {
                 align: 'right',
                 action: 'submit'
             }]
-        },
-
-        /**
-         * @cfg {Boolean} enableDeleteButton
-         * Creates a delete button, which allows the user to delete the selected row.
-         */
-        enableDeleteButton: true
+        }
     },
 
     init: function(grid) {
@@ -208,12 +90,19 @@ Ext.define('Ext.grid.plugin.Editable2', {
     },
 
     onSubmitTap: function() {
-        this.form.getRecord().set(this.form.getValues());
+        var me = this, record = this.form.getRecord();
+
+        if (record.phantom) {
+            console.log(record);
+            me.getGrid().getStore().add(record);
+        } else {
+            record.set(this.form.getValues())
+        }
         this.sheet.hide();
     },
 
     onSheetHide: function() {
-        this.cleanup();
+        // this.cleanup();
     },
 
     getEditorFields: function(columns) {
@@ -269,8 +158,6 @@ Ext.define('Ext.grid.plugin.Editable2', {
         //     return;
         // }
 
-        console.log(grid.getColumns());
-
         if (formConfig) {
             me.form = form = Ext.factory(formConfig, Ext.form.Panel);
         } else {
@@ -307,19 +194,6 @@ Ext.define('Ext.grid.plugin.Editable2', {
             stretchY: true,
             hidden: true
         });
-
-        if (me.getEnableDeleteButton()) {
-            form.add({
-                xtype: 'button',
-                text: 'Delete',
-                ui: 'decline',
-                margin: 10,
-                handler: function() {
-                    grid.getStore().remove(record);
-                    sheet.hide();
-                }
-            });
-        }
 
         sheet.on('hide', 'onSheetHide', me);
 

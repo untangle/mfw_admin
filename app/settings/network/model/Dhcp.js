@@ -7,7 +7,7 @@ Ext.define('Mfw.network.model.Dhcp', {
     ],
 
     hasMany: {
-        model: 'Mfw.model.DhcpEntry',
+        model: 'Mfw.network.model.DhcpEntry',
         name: 'staticDhcpEntries',
         associationKey: 'staticDhcpEntries'
     },
@@ -25,10 +25,11 @@ Ext.define('Mfw.network.model.Dhcp', {
             type: 'json',
             writeAllFields: true,
             writeRecordId: false,
-            allDataOptions: {
-                associated: true,
-                persist: true
-            }
+            // allDataOptions: {
+            //     // serialize: true
+            //     associated: true,
+            //     persist: true
+            // }
         }
     }
 });

@@ -9,15 +9,15 @@ Ext.define('Mfw.network.model.DhcpEntry', {
 
     proxy: {
         type: 'ajax',
-        api: {
-            read: Util.api + '/settings/dhcp/staticDhcpEntries',
-            update: Util.api + '/settings/dhcp/staticDhcpEntries'
-        },
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            writeRecordId: false
-        }
+        // api: {
+        //     read: Util.api + '/settings/dhcp/staticDhcpEntries',
+        //     update: Util.api + '/settings/dhcp/staticDhcpEntries'
+        // },
+        // reader: {
+        //     type: 'json'
+        // },
+        // writer: {
+        //     writeRecordId: false
+        // }
     }
 });

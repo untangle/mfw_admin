@@ -33,7 +33,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         items: [{
             text: 'Dashboard'.t(),
             // iconCls: 'x-fa fa-home',
-            iconCls: 'x-material x-dashboard',
+            iconCls: 'md-icon-dashboard',
             handler: function () { Mfw.app.redirectTo(''); },
             bind: {
                 pressed: '{currentView === "mfw-dashboard"}'
@@ -41,7 +41,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         }, {
             text: 'Reports'.t(),
             // iconCls: 'x-fa fa-area-chart',
-            iconCls: 'x-material x-show_chart',
+            iconCls: 'md-icon-show-chart',
             handler: function () { Mfw.app.redirectTo('reports'); },
             bind: {
                 pressed: '{currentView === "mfw-reports"}'
@@ -49,7 +49,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         }, {
             text: 'Settings'.t(),
             // iconCls: 'x-fa fa-cog',
-            iconCls: 'x-material x-settings',
+            iconCls: 'md-icon-settings',
             handler: function () { Mfw.app.redirectTo('settings'); },
             bind: {
                 pressed: '{currentView === "mfw-settings"}'
@@ -57,7 +57,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         }, {
             text: 'Monitor'.t(),
             // iconCls: 'x-fa fa-desktop',
-            iconCls: 'x-material x-computer',
+            iconCls: 'md-icon-computer',
             menu: [{
                 text: 'Sessions'.t(),
                 iconCls: 'icon-monitor sessions',

@@ -1,6 +1,6 @@
 Ext.define('Mfw.settings.network.Dhcp', {
     // extend: 'Ext.grid.Grid',
-    extend: 'Ext.Panel',
+    extend: 'Mfw.cmp.panel.MasterPanel',
     alias: 'widget.mfw-settings-network-dhcp',
 
     viewModel: {
@@ -11,34 +11,11 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
     title: 'DHCP'.t(),
 
-    // tools: [{
-    //     type: 'minimize',
-    //     text: 'aaa',
-    // }],
-    header: {
-        items: [{
-            xtype: 'button',
-            ui: 'action',
-            iconCls: 'x-fa fa-floppy-o',
-            text: 'Save',
-            handler: 'onSave'
-        }, {
-            xtype: 'button',
-            iconCls: 'x-fa fa-ellipsis-v',
-            arrow: false,
-            ui: 'action',
-            menu: {
-                items: [
-                    { text: 'Reload'.t(), iconCls: 'x-fa fa-undo', handler: 'onLoad' },
-                    { text: 'Reset'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' }
-                ]
-            }
-        }]
-    },
-
-    // bodyPadding: 16,
-
     layout: 'vbox',
+
+    config: {
+        recordModel: new Mfw.network.model.Dhcp()
+    },
 
     items: [{
         xtype: 'togglefield',
@@ -57,40 +34,15 @@ Ext.define('Mfw.settings.network.Dhcp', {
             // }
         },
 
-        // plugins: {
-        //     grideditable: {
-        //         triggerEvent: 'customedit',
-        //         enableDeleteButton: false,
-        //         defaultFormConfig: {
-        //             title: 'Edit'
-        //         },
-        //         toolbarConfig: {
-        //             xtype: 'toolbar',
-        //             docked: 'bottom',
-        //             items: ['->', {
-        //                 xtype: 'button',
-        //                 // ui: 'decline',
-        //                 text: 'Cancel',
-        //                 // align: 'left',
-        //                 action: 'cancel'
-        //             }, {
-        //                 xtype: 'button',
-        //                 // ui: 'confirm',
-        //                 text: 'Apply',
-        //                 // align: 'right',
-        //                 action: 'submit'
-        //             }]
-        //         },
-        //     }
-        // },
-
         enableSave: false,
         enableReload: true,
         enableReset: false,
+
         // enableCopy: false,
 
         flex: 1,
 
+        // bind: '{rec.staticDhcpEntries}',
         bind: {
             store: {
                 model: 'Mfw.network.model.DhcpEntry',
@@ -115,58 +67,58 @@ Ext.define('Mfw.settings.network.Dhcp', {
         initialize: 'onInitialize'
     },
 
-    controller: {
-        onInitialize: function (panel) {
-            this.onLoad();
-        },
+    // controller: {
+    //     onInitialize: function (panel) {
+    //         this.onLoad();
+    //     },
 
-        onLoad: function () {
-            var me = this;
-            me.dhcp = new Mfw.network.model.Dhcp();
-            me.dhcp.load({
-                success: function (rec) {
-                    me.getViewModel().set('rec', rec);
-                }
-            });
-        },
+    //     onLoad: function () {
+    //         var me = this;
+    //         me.dhcp = new Mfw.network.model.Dhcp();
+    //         me.dhcp.load({
+    //             success: function (rec) {
+    //                 me.getViewModel().set('rec', rec);
+    //             }
+    //         });
+    //     },
 
-        onSave: function () {
-            var me = this;
-            // var entry = Ext.create('Mfw.model.DhcpEntry', {
-            //     address: '1.2.3.4',
-            //     macAddress: 'somestring'
-            // })
+    //     onSave: function () {
+    //         var me = this;
+    //         // var entry = Ext.create('Mfw.model.DhcpEntry', {
+    //         //     address: '1.2.3.4',
+    //         //     macAddress: 'somestring'
+    //         // })
 
-            // me.dhcp.staticDhcpEntries().add(entry);
+    //         // me.dhcp.staticDhcpEntries().add(entry);
 
-            me.dhcp.save({
-                success: function () {
-                    Ext.toast('DHCP saved!');
-                }
-            })
-        },
+    //         me.dhcp.save({
+    //             success: function () {
+    //                 Ext.toast('DHCP saved!');
+    //             }
+    //         })
+    //     },
 
-        onReset: function () {
-            // Ext.toast('On Reset not implemented!');
-            var me = this,
-                api = me.dhcp.getProxy().getApi();
-            Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
-                'All existing <strong>' + this.getView().getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
-                function (answer) {
-                    if (answer === 'yes') {
-                        // update proxy api to support reset
-                        me.dhcp.getProxy().setApi({ read: api.read.replace('/settings/', '/defaults/') });
-                        // revert api to it's default values
-                        me.dhcp.load({
-                            callback: function () {
-                                me.dhcp.getProxy().setApi(api);
-                            }
-                        });
-                    }
-                });
-        }
+    //     onReset: function () {
+    //         // Ext.toast('On Reset not implemented!');
+    //         var me = this,
+    //             api = me.dhcp.getProxy().getApi();
+    //         Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
+    //             'All existing <strong>' + this.getView().getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
+    //             function (answer) {
+    //                 if (answer === 'yes') {
+    //                     // update proxy api to support reset
+    //                     me.dhcp.getProxy().setApi({ read: api.read.replace('/settings/', '/defaults/') });
+    //                     // revert api to it's default values
+    //                     me.dhcp.load({
+    //                         callback: function () {
+    //                             me.dhcp.getProxy().setApi(api);
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //     }
 
-    }
+    // }
 
 });
 
@@ -176,16 +128,16 @@ Ext.define('Mfw.settings.network.DhcpEntriesController', {
     alias: 'controller.dhcpstaticentries',
 
 
-    onAddRecord: function () {
-        var me = this;
+    // onAddRecord: function () {
+    //     var me = this;
 
-        var rec = Ext.create('Mfw.model.DhcpEntry', {
-            address: '1.2.3.4',
-            macAddress: 'somestring'
-        })
-        me.getView().getStore().add(rec);
-        console.log('on add');
-    }
+    //     var rec = Ext.create('Mfw.model.DhcpEntry', {
+    //         address: '1.2.3.4',
+    //         macAddress: 'somestring'
+    //     })
+    //     me.getView().getStore().add(rec);
+    //     console.log('on add');
+    // }
 
 });
 
