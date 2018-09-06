@@ -45,17 +45,17 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
          * Configures the toolbar appended to the editable panel.
          */
         toolbarConfig: {
-            xtype: 'titlebar',
-            docked: 'top',
+            xtype: 'toolbar',
+            docked: 'bottom',
             items: [{
                 xtype: 'button',
-                ui: 'alt',
+                // ui: 'alt',
                 text: 'Cancel',
                 align: 'left',
                 action: 'cancel'
             }, {
                 xtype: 'button',
-                ui: 'alt',
+                // ui: 'alt',
                 text: 'Submit',
                 align: 'right',
                 action: 'submit'
@@ -163,10 +163,18 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
             fields, form, sheet, toolbar;
 
         // Don't want to react to grid headers etc
-        console.log(record);
         // if (!record || !location.row) {
         //     return;
         // }
+
+        if (grid.getEditor()) {
+            if (!me.sheet) {
+                me.sheet = sheet = grid.add(grid.getEditor());
+                // sheet.on('hide', 'onSheetHide', me);
+            }
+            me.sheet.show();
+            return;
+        }
 
         if (formConfig) {
             me.form = form = Ext.factory(formConfig, Ext.form.Panel);
@@ -194,6 +202,7 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
 
         me.sheet = sheet = grid.add({
             xtype: 'sheet',
+            title: 'Test'.t(),
             items: [toolbar, form],
             hideOnMaskTap: true,
             enter: 'right',
@@ -219,11 +228,11 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
             var me = this,
                 form = me.form;
 
-            form.setRecord(null);
+            // form.setRecord(null);
 
-            if (form && !form.destroyed && form.clearFields) {
-                form.removeAll(false);
-            }
+            // if (form && !form.destroyed && form.clearFields) {
+            //     form.removeAll(false);
+            // }
 
             me.form = me.sheet = Ext.destroy(me.sheet);
         }

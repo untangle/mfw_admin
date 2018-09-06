@@ -52,14 +52,17 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             };
 
             if (g.getEnableEdit()) {
-                tools.edit =  {
+                tools.edit = {
                     handler: 'onEditRecord',
                     iconCls: 'md-icon-edit',
-                    // use record binding for dynamic configuration
                     hidden: true,
                     bind: {
                         hidden: '{record._deleteSchedule}',
                     }
+                }
+                if (g.getDisableEditCondition()) {
+                    tools.edit.disabled = true;
+                    tools.edit.bind.disabled = g.getDisableEditCondition();
                 }
             }
 
@@ -67,11 +70,15 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 tools.copy =  {
                     handler: 'onCopyRecord',
                     iconCls: 'md-icon-library-add',
-                    // use record binding for dynamic configuration
                     hidden: true,
                     bind: {
-                        hidden: '{record._deleteSchedule}',
+                        hidden: '{record._deleteSchedule}'
                     }
+                }
+
+                if (g.getDisableCopyCondition()) {
+                    tools.copy.disabled = true;
+                    tools.copy.bind.disabled = g.getDisableCopyCondition();
                 }
             }
 
@@ -79,18 +86,18 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 tools.delete =  {
                     handler: 'onDeleteRecord',
                     iconCls: 'md-icon-delete',
-                    // use record binding for dynamic configuration
                     hidden: true,
-                    // disabled: true,
                     bind: {
                         hidden: '{record._deleteSchedule}',
-                        disabled: Ext.isString(g.getEnableDelete()) ? g.getEnableDelete() : false
                     }
                 }
 
+                if (g.getDisableDeleteCondition()) {
+                    tools.delete.disabled = true;
+                    tools.delete.bind.disabled = g.getDisableDeleteCondition();
+                }
+
                 tools.undodelete = {
-                    // xtype: 'button',
-                    // text: 'Undo'.t(),
                     handler: 'onUndoDeleteRecord',
                     iconCls: 'md-icon-undo',
                     hidden: true,
@@ -257,17 +264,16 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         var me = this;
 
         // if custom editor sheet
-        if (me.getView().getEditorDialog()) {
+        if (grid.getEditor()) {
             if (!me.sheet) {
-                me.sheet = Ext.Viewport.add({
-                    xtype: me.getView().getEditorDialog(),
-                    // xtype: 'masterdialog',
-                    isNewRecord: false,
-                    ownerCmp: me.getView()
+                me.sheet = grid.add({
+                    xtype: grid.getEditor(),
+                    // record: info.record,
+                    isNewRecord: false
                 });
             }
             me.sheet.isNewRecord = false;
-            me.sheet.getViewModel().set('rec', info.record);
+            me.sheet.getViewModel().set('record', info.record);
             me.sheet.show();
             return;
         }
@@ -373,6 +379,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     })
                 }
             });
+    },
+
+    onDestroy: function () {
+        console.log('destroy');
     }
 
 });

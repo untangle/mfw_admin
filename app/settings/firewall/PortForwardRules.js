@@ -17,115 +17,13 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
     // }],
 
     config: {
+        editor: 'sheet-editor'
     },
 
     sortable: false,
 
     scrollable: true,
-    store: {
-        data: [
-            {
-                ruleId: 1,
-                enabled: true,
-                description: 'Some desc',
-                conditions: [{
-                    conditionType: 'DST_ADDR',
-                    invert: false,
-                    value: '1.2.3.4'
-                }, {
-                    conditionType: 'DST_PORT',
-                    invert: true,
-                    value: '2345'
-                }, {
-                    conditionType: 'PROTOCOL',
-                    invert: false,
-                    value: '80'
-                }, {
-                    conditionType: 'HTTP_URL',
-                    invert: false,
-                    value: 'someurl.com'
-                }, {
-                    conditionType: 'CLIENT_QUOTA_EXCEEDED',
-                    invert: false,
-                    value: true
-                }],
-                newDestination: '1.2.3.4',
-                newPort: 80
-            },
-            {
-                ruleId: 2,
-                enabled: true,
-                description: 'Some desc 2',
-                conditions: [],
-                newDestination: '1.2.3.5',
-                newPort: 90
-            },
-            {
-                ruleId: 3,
-                enabled: true,
-                description: 'Some desc 3',
-                conditions: [],
-                newDestination: '1.2.3.8',
-                newPort: 90
-            },
-            {
-                ruleId: 4,
-                enabled: false,
-                description: 'Some desc 4',
-                conditions: [],
-                newDestination: '123.456.789.12',
-                newPort: 100
-            },
-            {
-                ruleId: 5,
-                enabled: true,
-                description: 'Some desc',
-                conditions: [{
-                    conditionType: 'DST_ADDR',
-                    invert: false,
-                    value: '1.2.3.4'
-                }, {
-                    conditionType: 'DST_PORT',
-                    invert: true,
-                    value: '2345'
-                }],
-                newDestination: '1.2.3.4',
-                newPort: 80
-            },
-            {
-                ruleId: 6,
-                enabled: true,
-                description: 'Some more text',
-                conditions: [{
-                    conditionType: 'DST_ADDR',
-                    invert: false,
-                    value: '1.2.3.4'
-                }, {
-                    conditionType: 'DST_PORT',
-                    invert: true,
-                    value: '2345'
-                }],
-                newDestination: '1.2.3.4',
-                newPort: 80
-            },
-            {
-                ruleId: 7,
-                enabled: false,
-                description: 'Description Long Text',
-                conditions: [{
-                    conditionType: 'DST_ADDR',
-                    invert: false,
-                    value: '1.2.3.4'
-                }, {
-                    conditionType: 'DST_PORT',
-                    invert: true,
-                    value: '2345'
-                }],
-                newDestination: '1.2.3.4',
-                newPort: 80
-            },
-        ]
-    },
+    store: 'pfr',
 
     // plugins: ['rowexpander'],
 
@@ -152,7 +50,7 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
             return '#' + v;
         }
     }, {
-        // text: 'Enabled',
+        text: 'Enabled',
         align: 'center',
         width: 55,
         dataIndex: 'enabled',
@@ -166,11 +64,17 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
                     disabled: '{record._deleteSchedule}'
                 }
             }
+        },
+        editable: true,
+        editor: {
+            xtype: 'togglefield',
+            // boxLabel: 'Enabled'.t()
         }
     }, {
         text: 'Description',
         dataIndex: 'description',
-        minWidth: 300
+        minWidth: 300,
+        editable: true
         // flex: 1
     }, {
         text: 'Conditions'.t(),
@@ -191,15 +95,19 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
             });
             // console.log(value);
             return strArr.join(' <i class="x-fa fa-circle" style="font-size: 8px; color: #999; line-height: 12px;"></i> ');
-        }
+        },
+        editable: true,
+        editor: 'collection'
     }, {
         text: 'New Destination'.t(),
         dataIndex: 'newDestination',
-        width: 150
+        width: 150,
+        editable: true
     }, {
         text: 'New Port'.t(),
         dataIndex: 'newPort',
-        width: 100
+        width: 100,
+        editable: true
     }],
 
     // listeners: {

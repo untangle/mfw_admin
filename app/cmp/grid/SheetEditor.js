@@ -6,7 +6,13 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
 
     title: 'Sheet title'.t(),
 
-    viewModel: {},
+    viewModel: {
+        record: null
+    },
+
+    layout: 'fit',
+
+    scrollable: true,
 
     isViewportMenu: true,
 
@@ -16,24 +22,6 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
 
     width: 350,
     hideOnMaskTap: false,
-
-
-    // items: [{
-    //     xtype: 'interface-main'
-    // }],
-
-    // xtype: 'toolbar',
-    // docked: 'bottom',
-    // defaultType: 'button',
-    // ui: 'footer',
-    // hidden: true,
-    // bind: { hidden: '{!isMainCard}' },
-    // items: [
-    //     '->',
-    //     { text: 'Cancel'.t(), handler: 'onCancel' },
-    //     { text: 'Apply'.t(), handler: 'onApply' }
-    //     // '->',
-    // ]
 
     buttons: {
         ok: {
@@ -47,7 +35,17 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
     },
 
     listeners: {
+        // beforeshow: 'onBeforeShow',
         initialize: 'onInitialize'
+    },
+
+    init: function (sheet) {
+        console.log(sheet);
+        sheet.on('beforeshow', 'onBeforeShow', this);
+    },
+
+    onBeforeShow: function () {
+        console.log('beforeshow');
     }
 
 });

@@ -26,16 +26,42 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
         /**
          * @cfg {Boolean} enableEdit
-         * `true` to allow user to edit any record, `false` to disable record editing
+         * `true` to allow user to edit any record, `false` to disable editing
          */
         enableEdit: true,
 
         /**
-         * @cfg {Boolean/String} enableDelete
+         * @cfg {String} disableEditCondition
+         * a binding expression condition which disables edit for specific records (e.g. `{record.wan}`)
+         * it makes sense only when `enableEdit` is `true`
+         */
+        disableEditCondition: null,
+
+        /**
+         * @cfg {Boolean} enableDelete
          * `true` to allow user to remove any record, `false` to disable removal
-         * or a binding expression string to allow removal only for specific records (e.g. `{record.wan}`)
          */
         enableDelete: true,
+
+        /**
+         * @cfg {String} disableDeleteCondition
+         * a binding expression condition which disables deletion for specific records (e.g. `{record.wan}`)
+         * it makes sense only when `enableDelete` is `true`
+         */
+        disableDeleteCondition: null,
+
+        /**
+         * @cfg {Boolean} enableCopy
+         * `true` to allow user to copy/duplicate a record, `false` to disable copy
+         */
+        enableCopy: true,
+
+        /**
+         * @cfg {String} disableCopyCondition
+         * a binding expression condition which disables copy/duplicate for specific records (e.g. `{record.wan}`)
+         * it makes sense only when `enableCopy` is `true`
+         */
+        disableCopyCondition: null,
 
         /**
          * @cfg {Boolean} enableSave
@@ -48,12 +74,6 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
          * `true` to allow user reset settings to stable defaults
          */
         enableReset: true,
-
-        /**
-         * @cfg {Boolean} enableCopy
-         * `true` to allow user to copy/duplicate a record
-         */
-        enableCopy: true,
 
         /**
          * @cfg {Boolean} enableReload
@@ -83,11 +103,11 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         enableManualSort: true,
 
         /**
-         * @cfg {String} editorDialog
+         * @cfg {String} editor
          * the dialog component alias used for editing grid records
          * e.g. `interface-dialog`
          */
-        editorDialog: null,
+        editor: null,
 
         /**
          * @cfg {String} newRecordModel
@@ -122,6 +142,7 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         select: 'onSelect',
         deselect: 'onDeselect',
         beforesave: 'beforeSave', // custom event to prepare records
+        destroy: 'onDestroy'
         // childdoubletap: function (listview, location) {
         //     console.log(location);
         // },

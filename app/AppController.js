@@ -61,21 +61,18 @@ Ext.define('Mfw.controller.MfwController', {
         });
 
         var cmp = mainSettingsView.down('#currentSettings');
-
-        if (cmp) {
-            mainSettingsView.remove(cmp, false);
-        }
+        if (cmp) { cmp.destroy(); }
 
         if (route) {
             xtype = 'mfw-settings' + route.replace(/\//g, '-');
 
             if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
-                Ext.Viewport.down('mfw-settings').add({
+                mainSettingsView.add({
                     xtype: xtype,
                     itemId: 'currentSettings'
                 });
             } else {
-                // console.log('not exists');
+                console.log('view does not exists');
             }
         }
 

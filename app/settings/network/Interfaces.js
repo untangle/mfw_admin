@@ -9,13 +9,16 @@ Ext.define('Mfw.settings.network.Interfaces', {
 
     config: {
         enableManualSort: false,
-        enableDelete: '{record.wan}',
-        editorDialog: 'interface-sheet',
-        newRecordModel: 'Mfw.model.Interface'
+        disableDeleteCondition: '{record.wan}',
+        disableCopyCondition: '{record.wan}',
+        editor: {
+            xtype: 'interface-sheet'
+        },
+        recordModel: 'Mfw.model.Interface'
     },
 
     plugins: {
-        mastergrideditable: false
+        mastergrideditable: true
     },
 
     sortable: false,
