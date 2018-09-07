@@ -27,7 +27,8 @@ Ext.define('Mfw.store.SettingsNav', {
             iconCls: 'tree administration',
             href: 'settings/firewall',
             children: [
-                { text: 'Port Forward Rules'.t(), leaf: true, href: 'settings/firewall/portforwardrules' },
+                { text: 'Filter Rules'.t(), leaf: true, href: 'settings/firewall/filter-rules' },
+                // { text: 'Port Forward Rules'.t(), leaf: true, href: 'settings/firewall/portforwardrules' },
             ]
         }, {
             // System

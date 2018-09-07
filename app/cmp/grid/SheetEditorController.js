@@ -32,6 +32,7 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
         sheet.getViewModel().bind('{record}', function (record) {
             console.log(record);
             form.setRecord(record);
+            // form.down('grid').setBind('record.conditions');
             // form.down('grid').getStore().loadData(record.get('conditions'));
         })
     },

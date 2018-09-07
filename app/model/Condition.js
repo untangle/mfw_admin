@@ -3,8 +3,8 @@ Ext.define('Mfw.model.Condition', {
     alias: 'model.condition',
 
     fields: [
-        { name: 'conditionType', type: 'string' },
-        { name: 'invert', type: 'boolean' },
+        { name: 'type',  type: 'string' },
+        { name: 'op',    type: 'string' },
         { name: 'value', type: 'string' }
     ],
 

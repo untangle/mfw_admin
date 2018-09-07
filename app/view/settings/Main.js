@@ -53,10 +53,16 @@ Ext.define('Mfw.view.settings.Main', {
     items: [{
         layout: 'fit',
         xtype: 'panel',
-        shadow: false,
+        // shadow: false,
         zIndex: 999,
-        style: {
-            background: '#EEE'
+        // border: 1,
+        // style: {
+        //     background: '#EEE'
+        // },
+
+        resizable: {
+            split: true,
+            edges: 'east'
         },
 
         bind: {
@@ -85,8 +91,8 @@ Ext.define('Mfw.view.settings.Main', {
         //     // }
         // },
 
-        tbar: {
-            shadow: false,
+        bbar: {
+            shadow: true,
             items: [{
                 xtype: 'searchfield',
                 ui: 'faded',
@@ -101,7 +107,6 @@ Ext.define('Mfw.view.settings.Main', {
         items: [{
             xtype: 'treelist',
             scrollable: true,
-            userCls: 'config-menu',
             ui: 'nav',
             style: {
                 background: '#f5f5f5'

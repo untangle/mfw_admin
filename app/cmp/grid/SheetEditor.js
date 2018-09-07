@@ -7,7 +7,9 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
     title: 'Sheet title'.t(),
 
     viewModel: {
-        record: null
+        data: {
+            record: null
+        }
     },
 
     layout: 'fit',

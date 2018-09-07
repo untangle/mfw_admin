@@ -1,22 +1,18 @@
-Ext.define('Mfw.model.Rule', {
+Ext.define('Mfw.model.Table', {
     extend: 'Ext.data.Model',
-    alias: 'model.rule',
+    alias: 'model.table',
 
     fields: [
-        { name: 'ruleId', type: 'integer' },
-        { name: 'enabled', type: 'boolean' },
-        { name: 'description', type: 'string' }
+        { name: 'description', type: 'string' },
+        { name: 'family',      type: 'string' },
+        { name: 'name',        type: 'string' }
     ],
 
-    hasMany: [{
-        model: 'Mfw.model.Condition',
-        name: 'conditions',
-        associationKey: 'conditions'
-    }, {
-        model: 'Mfw.model.Action',
-        name: 'actions',
-        associationKey: 'actions'
-    }],
+    hasMany: {
+        model: 'Mfw.model.Chain',
+        name: 'chains',
+        associationKey: 'chains'
+    },
 
     proxy: {
         type: 'ajax',
