@@ -6,7 +6,7 @@ Ext.define('Mfw.model.Chain', {
         { name: 'base',        type: 'boolean' },
         { name: 'default',     type: 'boolean' },
         { name: 'description', type: 'string' },
-        { name: 'editable',    type: 'boolean' },
+        { name: 'editable',    type: 'boolean', defaultValue: true },
         { name: 'hook',        type: 'string' },
         { name: 'name',        type: 'string' },
         { name: 'priority',    type: 'integer' },

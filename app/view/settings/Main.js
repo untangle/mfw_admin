@@ -67,7 +67,7 @@ Ext.define('Mfw.view.settings.Main', {
 
         bind: {
             docked: '{(!smallScreen) ? "left" : null }',
-            width: '{(!smallScreen) ? 320 : null }',
+            width: '{(!smallScreen) ? 250 : null }',
             hidden: '{ smallScreen && currentView }',
         },
 
