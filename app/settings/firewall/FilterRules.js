@@ -76,6 +76,13 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
         },
         // editable: true,
         // editor: 'collection'
+    }, {
+        text: 'Action'.t(),
+        dataIndex: 'action',
+        width: 150,
+        renderer: function (action, record) {
+            return record.getAction().get('type');
+        }
     }],
 
 

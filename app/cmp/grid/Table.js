@@ -12,7 +12,6 @@ Ext.define('Mfw.cmp.grid.Table', {
                     mode: 'multi',
                     cells: false,
                     // checkbox: true,
-                    allowDeselect: true,
                     drag: true,
                     rows: get('selectedChain.editable')
                 }
@@ -83,7 +82,8 @@ Ext.define('Mfw.cmp.grid.Table', {
             text: 'New Rule',
             iconCls: 'md-icon-add',
             hidden: true,
-            bind: { hidden: '{!selectedChain.editable}' }
+            bind: { hidden: '{!selectedChain.editable}' },
+            handler: 'onNewRule'
         }, {
             xtype: 'toolbarseparator',
             hidden: true,
