@@ -10,10 +10,12 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
         }
     },
 
-    plugins: {
-        // this is the plugin which enables generic grids data editing
-        grideditable: true
-    },
+    // plugins: {
+    //     // this is the plugin which enables generic grids data editing
+    //     grideditable: true
+    // },
+
+    // variableHeights: true,
 
     columns: [{
         text: 'Id'.t(),
@@ -22,7 +24,7 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
         align: 'right',
         // hidden: true,
         renderer: function (v) {
-            return '#' + v;
+            return ( v === 0 ) ? 'new' : '#' + v;
         }
     }, {
         text: 'Enabled',
@@ -39,18 +41,11 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
                     disabled: '{!selectedChain.editable}'
                 }
             }
-        },
-        editable: true,
-        editor: {
-            xtype: 'togglefield',
-            // boxLabel: 'Enabled'.t()
         }
     }, {
         text: 'Description',
         dataIndex: 'description',
-        minWidth: 400,
-        editable: true
-        // flex: 1
+        minWidth: 400
     }, {
         text: 'Conditions'.t(),
         dataIndex: 'conditions()',
@@ -58,30 +53,38 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
         cell: {
             userCls: 'ctip',
             bodyStyle: {
-                padding: 0
+                // padding: 0
+                padding: '0 16px 0 0'
             },
             encodeHtml: false
         },
         renderer: function (conditions, record) {
-            var strArr = [];
+            var strArr = [], op;
+
             record.conditions().each(function (c) {
-                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span>' +
-                       (c.get('op') === "IS" ? ' = ' : ' &ne; ') + '<strong>' + c.get('value') + '</strong></div>');
+                if (c.get('op') === "IS") {
+                    op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
+                } else {
+                    op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
+                }
+                strArr.push('<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span>' +
+                       op + '<strong>' + c.get('value') + '</strong></div>');
             });
             if (strArr.length > 0) {
-                return strArr.join(' <i class="x-fa fa-circle fa-small" style="font-size: 10px; color: #999; line-height: 12px;"></i> ');
+                return strArr.join('');
             } else {
                 return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>'
             }
-        },
-        // editable: true,
-        // editor: 'collection'
+        }
     }, {
         text: 'Action'.t(),
         dataIndex: 'action',
         width: 150,
         renderer: function (action, record) {
-            return record.getAction().get('type');
+            if (record.getAction()) {
+                return record.getAction().get('type');
+            }
+            return 'No Action...'
         }
     }],
 

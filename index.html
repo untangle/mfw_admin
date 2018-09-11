@@ -27,6 +27,8 @@
 
         <script>
             Ext.onReady(function () {
+                Ext.data.Model.prototype.idProperty = '_id';
+                // Ext.data.Model.prototype.identifier = 'uuid';
                 Ext.theme.Material.setColors({
                     'darkMode': true,
                     'base': '#333',

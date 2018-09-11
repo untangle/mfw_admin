@@ -284,6 +284,7 @@ Ext.define('Mfw.cmp.grid.TableController', {
                 xtype: 'rulesheet'
             });
         }
+        // console.log(info.record);
         form = me.sheet.down('#ruleform');
         form.setRecord(info.record);
         form.down('grid').setStore(info.record.conditions());
@@ -293,17 +294,23 @@ Ext.define('Mfw.cmp.grid.TableController', {
     },
 
     onNewRule: function () {
-        var me = this, grid = me.getView(),
-            rule = new Ext.create('Mfw.model.Rule');
-            grid.getStore().add(rule);
-        // if (!me.sheet) {
-        //     me.sheet = grid.add({
-        //         xtype: 'rulesheet',
-        //         grid: grid
-        //     });
-        // }
-        // me.sheet.down('grid').setStore({ data: [] });
-        // me.sheet.show();
+        var me = this, form, grid = me.getView(),
+            rule = new Ext.create('Mfw.model.Rule', {
+                description: 'New Rule ...',
+                conditions: []
+            });
+            // grid.getStore().add(rule);
+        if (!me.sheet) {
+            me.sheet = grid.add({
+                xtype: 'rulesheet',
+            });
+        }
+        me.sheet.grid = grid;
+        form = me.sheet.down('#ruleform');
+        form.setRecord(rule);
+        form.down('grid').setStore(rule.conditions());
+        // form.down('grid').setStore({});
+        me.sheet.show();
         return;
     },
 
@@ -312,24 +319,26 @@ Ext.define('Mfw.cmp.grid.TableController', {
     //  * Important, set record flags so it pushes (update) all the data regardless
     //  * of the records is modified or not
     //  */
-    // beforeSave: function () {
-    //     console.log('beforesave');
-    //     this.getView().getStore().each(function (record) {
-    //         if (record.get('_deleteSchedule')) {
-    //             record.drop();
-    //         }
-    //         record.dirty = true; // to push all non-dropped records
-    //         record.phantom = false; // to push new records
-    //     });
-    // },
+    beforeSave: function () {
+        this.getView().getStore().each(function (record) {
+            if (record.get('_deleteSchedule')) {
+                record.drop();
+            }
+            if (record.get('_isNew')) {
+                record.set('_isNew', false);
+            }
+            record.dirty = true; // to push all non-dropped records
+            record.phantom = false; // to push new records
+        });
+    },
 
     onSave: function () {
         var me = this;
-        // me.beforeSave();
+        me.beforeSave();
         me.table.save({
             success: function () {
                 Ext.toast('Settings saved!', 3000);
-                me.onLoad();
+                // me.onLoad();
             },
             callback: function () {
                 // grid.unmask();

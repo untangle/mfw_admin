@@ -2,19 +2,6 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
     extend: 'Ext.ActionSheet',
     alias: 'widget.rulesheet',
 
-    // controller: 'sheet-editor',
-
-    // title: 'Edit Rule'.t(),
-
-    // viewModel: {
-    //     data: {
-    //         record: null
-    //     },
-    //     formulas: {
-
-    //     }
-    // },
-
     layout: {
         type: 'card',
         deferRender: false, // important so the validation works if card not yet visible
@@ -25,16 +12,11 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
         },
     },
     activeItem: 0,
-
-    // scrollable: 'y',
-    // isViewportMenu: true,
-
     side: 'right',
     exit: 'right',
 
-    width: 350,
+    width: 400,
     // hideOnMaskTap: false,
-
     padding: 0,
 
     items: [{
@@ -46,20 +28,20 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             margin: '8 16'
         },
         items: [{
-            xtype: 'togglefield',
-            name: 'enabled',
-            boxLabel: 'Enabled'.t()
-        }, {
             xtype: 'textareafield',
             name: 'description',
             label: 'Description'.t(),
             maxRows: 2,
             required: true
         }, {
+            xtype: 'togglefield',
+            name: 'enabled',
+            boxLabel: 'Enabled'.t()
+        }, {
             xtype: 'grid',
             userCls: 'c-noheaders',
             margin: '0 0 16 0',
-            minHeight: 90,
+            minHeight: 120,
             emptyText: 'No Conditions!'.t(),
             selectable: {
                 columns: false,
@@ -69,7 +51,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
                 xtype: 'toolbar',
                 docked: 'top',
                 padding: '0 8 0 16',
-                shadow: false,
+                // shadow: false,
                 items: [{
                     xtype: 'component',
                     html: 'Conditions'.t()
@@ -83,11 +65,20 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
                 dataIndex: 'type',
                 flex: 1,
                 cell: {
+                    bodyStyle: {
+                        padding: 0
+                    },
                     encodeHtml: false
                 },
                 renderer: function (value, record) {
-                    var typeName = Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name');
-                    return '<strong>' + typeName + '</strong> ' + (record.get('op') === 'IS' ? ' = ' : ' &ne; ') + ' ' + record.get('value');
+                    var op;
+                    if (record.get('op') === "IS") {
+                        op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
+                    } else {
+                        op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
+                    }
+                    return '<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span>' +
+                            op + '<strong>' + record.get('value') + '</strong></div>'
                 }
             }, {
                 width: 70,
@@ -116,7 +107,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
         }, {
             xtype: 'toolbar',
             margin: 0,
-            shadow: false,
+            // shadow: false,
             items: [{
                 xtype: 'component',
                 html: 'Action'.t()
@@ -171,24 +162,38 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             valueField: 'type',
             store: 'ruleconditions',
             required: true,
+            listeners: {
+                change: 'onConditionTypeChange'
+            }
         }, {
-            xtype: 'combobox',
-            name: 'op',
-            label: 'Operation'.t(),
-            editable: false,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
-            store: [
-                { name: 'IS', value: 'IS'},
-                { name: 'IS NOT', value: 'IS_NOT'}
-            ],
-            required: true
-        }, {
-            xtype: 'textfield',
-            name: 'value',
-            label: 'Value'.t(),
-            required: true
+            xtype: 'fieldcontainer',
+            margin: '16 0 0 0',
+            defaults: {
+                xtype: 'radiofield',
+                name: 'op'
+            },
+            items: [{
+                boxLabel: '<i class="x-fa fa-hand-o-right fa-lg"></i> ' + 'Is'.t(),
+                value: 'IS',
+                checked: true,
+                margin: '0 16 0 0'
+            }, {
+                boxLabel: '<i class="x-fa fa-hand-stop-o fa-lg" style="color: red;"></i> ' + 'Is Not'.t(),
+                value: 'IS_NOT'
+            }]
+            // xtype: 'combobox',
+            // name: 'op',
+            // label: 'Operation'.t(),
+            // editable: false,
+            // queryMode: 'local',
+            // displayField: 'name',
+            // valueField: 'value',
+            // value: 'IS',
+            // store: [
+            //     { name: 'IS', value: 'IS'},
+            //     { name: 'IS NOT', value: 'IS_NOT'}
+            // ],
+            // required: true
         }, {
             xtype: 'toolbar',
             docked: 'bottom',
@@ -209,7 +214,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
 
         }],
         listeners: {
-            show: 'onShowCondition',
+            // show: 'onShowCondition',
             hide: 'onHideCondition'
         }
     }],
@@ -234,13 +239,23 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             });
         },
 
-        onHide: function (sheet) {
+        /**
+         * resets forms and grids
+         */
+        onHide: function () {
             var me = this;
             if (me.ruleform.getRecord()) {
                 me.ruleform.setRecord(null);
             }
-            me.ruleform.down('grid').setStore(null);
+            me.ruleform.down('grid').getStore().rejectChanges();
+            me.ruleform.down('grid').setStore({});
             me.ruleform.reset(true);
+
+            if (me.conditionform.getRecord()) {
+                me.conditionform.setRecord(null);
+            }
+            me.conditionform.reset(true);
+            me.getView().setActiveItem(me.ruleform);
         },
 
         onCancel: function () {
@@ -252,27 +267,70 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             var me = this;
             if (info.columnIndex === 1) { return; }
             me.getView().setActiveItem(me.conditionform);
+            me.getViewModel().set('record', info.record); // ???
+            me.setValueField(info.record.get('type'));
+            // now set record on the form
             me.conditionform.setRecord(info.record);
-            me.getViewModel().set('record', info.record);
+        },
+
+        onConditionTypeChange: function (combo, newValue) {
+            var me = this,
+                existingField = me.conditionform.getFields('value', false);
+
+            if (!newValue) { return; } // in some cases is an empty string, just skip
+
+            // if existing field matches combo condition type it's fine
+            if (existingField) {
+                if (existingField.type === newValue) { // keep the field
+                    return;
+                } else { // remove the field
+                    me.conditionform.remove(existingField);
+                }
+            }
+            me.setValueField(newValue);
+        },
+
+        setValueField: function (conditionType) {
+            /**
+             * !!! before setting the record on the form it is needed to
+             * add the proper value field to the form based on condition type
+             */
+            var me = this, condition = Ext.getStore('ruleconditions').findRecord('type', conditionType),
+                valueField;
+            if (condition && condition.get('field')) {
+                // get the condition field
+                valueField = condition.get('field');
+            } else {
+                // use a textfield as fallback
+                valueField = { xtype: 'textfield' }
+                console.warn(conditionType + ' condition definition missing!')
+            }
+
+            // add exptra props to the value field
+            Ext.apply(valueField, {
+                type: conditionType, // use too identify the type of the value field
+                name: 'value',
+                label: 'Value'.t(),
+                placeholder: 'Choose Value'.t(),
+                required: true
+            });
+
+            // insert value field into the form as the third field
+            me.conditionform.insert(2, valueField);
         },
 
         onNewCondition: function () {
             var me = this;
             me.getView().setActiveItem(me.conditionform);
             me.getViewModel().set('record', null);
-            // me.conditionform.setRecord(info.record);
         },
 
         onApplyCondition: function () {
-            var me = this, data;
-            if (!me.conditionform.validate()) {
-                return;
-            }
+            var me = this;
+            if (!me.conditionform.validate()) { return; }
 
             if (!me.conditionform.getRecord()) {
-                data = me.conditionform.getValues();
-                console.log(data);
-                me.ruleform.down('grid').getStore().add(data);
+                me.ruleform.down('grid').getStore().add(me.conditionform.getValues());
             } else {
                 me.conditionform.getRecord().set(me.conditionform.getValues());
             }
@@ -281,11 +339,11 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
 
         onBackToRule: function () {
             var me = this;
+            if (me.conditionform.getRecord()) {
+                me.conditionform.setRecord(null);
+            }
+            me.conditionform.reset(true);
             me.getView().setActiveItem(me.ruleform);
-        },
-
-        onShowCondition: function () {
-
         },
 
         onHideCondition: function () {
@@ -293,24 +351,27 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             if (me.conditionform) {
                 me.conditionform.setRecord(null);
                 me.conditionform.reset(true);
+                me.conditionform.removeAt(2); // remove value field
             }
         },
 
-
         onApplyRule: function () {
-            var me = this, data, sheet = me.getView();
+            var me = this, sheet = me.getView(), record;
             if (!me.ruleform.validate()) {
                 return;
             }
+            record = me.ruleform.getRecord();
 
-            if (!me.ruleform.getRecord()) {
-                data = me.ruleform.getValues();
-                console.log(data);
-                sheet.grid.getStore().add(data);
-                // me.ruleform.down('grid').getStore().add(data);
+            if (record.phantom) {
+                console.log(me.ruleform.getRecord());
+                record.set(me.ruleform.getValues());
+                record.commit();
+                me.ruleform.down('grid').getStore().commitChanges();
+                sheet.grid.getStore().add(record);
             } else {
-                me.ruleform.getRecord().set(me.ruleform.getValues());
-                me.ruleform.getRecord().commit();
+                record.set(me.ruleform.getValues());
+                record.commit(); // commit record
+                me.ruleform.down('grid').getStore().commitChanges(); // commit store
             }
             me.getView().hide();
         }

@@ -2,11 +2,14 @@ Ext.define('Mfw.model.Rule', {
     extend: 'Ext.data.Model',
     alias: 'model.rule',
 
+    idProperty: '_id',
+    identifier: 'uuid',
     fields: [
         { name: 'ruleId', type: 'integer' },
         { name: 'enabled', type: 'boolean' },
         { name: 'description', type: 'string' },
-        { name: 'action', type: 'auto' }
+        { name: 'action', type: 'auto' },
+        { name: '_deleteSchedule', type: 'boolean', default: false }
     ],
 
     hasMany: [{

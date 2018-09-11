@@ -4,12 +4,48 @@ Ext.define('Mfw.store.RuleConditions', {
     alias: 'store.ruleconditions',
 
     // fields: ['name', 'displayName', 'type'],
-    data: [
-        { type:'IP_PROTOCOL', name: 'IP Protocol'.t() },
-        { type:'CLIENT_ADDRESS', name: 'Client Address'.t() },
-        { type:'SERVER_ADDRESS', name: 'Server Address'.t() },
-        { type:'CLIENT_PORT', name: 'Client Port'.t() },
-        { type:'SERVER_PORT', name: 'Server Port'.t() },
+    data: [{
+        type:'IP_PROTOCOL',
+        name: 'IP Protocol'.t(),
+        field: {
+            xtype: 'combobox',
+            forceSelection: true,
+            editable: true,
+            queryMode: 'local',
+            displayField: 'name',
+            valueField: 'name',
+            value: 'TCP', // a default value
+            store: Util.protocols
+        }
+    }, {
+        type:'CLIENT_ADDRESS',
+        name: 'Client Address'.t(),
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SERVER_ADDRESS',
+        name: 'Server Address'.t(),
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'CLIENT_PORT',
+        name: 'Client Port'.t(),
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'SERVER_PORT',
+        name: 'Server Port'.t(),
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    },
         { type:'CLIENT_INTERFACE_ZONE', name: 'Client Interface Zone'.t() },
         { type:'SERVER_INTERFACE_ZONE', name: 'Server Interface Zone'.t() },
         { type:'SOURCE_ADDRESS', name: 'Source Address'.t() },

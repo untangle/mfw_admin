@@ -90,7 +90,7 @@ Ext.define('Mfw.settings.firewall.PortForwardRules', {
         renderer: function (conditions, meta) {
             var strArr = [];
             Ext.Array.each(conditions, function (c) {
-                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('value', c.conditionType).get('name') + '</span>' +
+                strArr.push('<div class="condition"><strong>' + Ext.getStore('ruleconditions').findRecord('value', c.conditionType).get('name') + '</strong>' +
                        (c.invert ? ' &ne; ' : ' = ') + '<strong>' + c.value + '</strong></div>');
             });
             // console.log(value);

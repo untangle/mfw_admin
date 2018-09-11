@@ -2,6 +2,8 @@ Ext.define('Mfw.model.Condition', {
     extend: 'Ext.data.Model',
     alias: 'model.condition',
 
+    idProperty: '_id',
+    identifier: 'uuid',
     fields: [
         { name: 'type',  type: 'string' },
         { name: 'op',    type: 'string' },

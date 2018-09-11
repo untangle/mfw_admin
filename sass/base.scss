@@ -192,12 +192,21 @@ html, body {
 /////////////////////////////////////////////
 
 .x-toast {
-    bottom: 40px;
+    bottom: 100px;
 }
 
 .condition {
-    display: inline;
-    padding: 0 10px;
+    display: inline-block;
+    padding: 0 0 0 16px;
+    margin: 5px 0;
+    span {
+        font-weight: normal;
+        background: #519839;
+        padding: 2px 5px;
+        border-radius: 3px;
+        display: inline-block;
+        color: #FFF;
+    }
 }
 i {
     font-style: normal;
