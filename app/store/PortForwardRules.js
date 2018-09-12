@@ -2,7 +2,7 @@ Ext.define('Mfw.store.PortForwardRules', {
     extend: 'Ext.data.Store',
     storeId: 'pfr',
     alias: 'store.pfr',
-    model: 'Mfw.model.Rule',
+    // model: 'Mfw.model.table.Rule',
 
     trackRemoved: false, // important so no need to post dropped records
     autoSort: false, // important so store is not sorted on record add

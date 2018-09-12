@@ -1,22 +1,19 @@
-Ext.define('Mfw.model.Chain', {
+Ext.define('Mfw.model.table.Table', {
     extend: 'Ext.data.Model',
-    alias: 'model.chain',
+    alias: 'model.table',
 
+    idProperty: '_id',
+    identifier: 'uuid',
     fields: [
-        { name: 'base',        type: 'boolean' },
-        { name: 'default',     type: 'boolean' },
         { name: 'description', type: 'string' },
-        { name: 'editable',    type: 'boolean', defaultValue: true },
-        { name: 'hook',        type: 'string' },
-        { name: 'name',        type: 'string' },
-        { name: 'priority',    type: 'integer' },
-        { name: 'type',        type: 'string' }
+        { name: 'family',      type: 'string' },
+        { name: 'name',        type: 'string' }
     ],
 
     hasMany: {
-        model: 'Mfw.model.Rule',
-        name: 'rules',
-        associationKey: 'rules'
+        model: 'Mfw.model.table.Chain',
+        name: 'chains',
+        associationKey: 'chains'
     },
 
     proxy: {

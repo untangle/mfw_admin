@@ -1,18 +1,11 @@
-Ext.define('Mfw.model.Table', {
+Ext.define('Mfw.model.table.Action', {
     extend: 'Ext.data.Model',
-    alias: 'model.table',
+    alias: 'model.table-action',
 
     fields: [
-        { name: 'description', type: 'string' },
-        { name: 'family',      type: 'string' },
-        { name: 'name',        type: 'string' }
+        { name: 'type', type: 'string' },
+        { name: 'chain', type: 'string' },
     ],
-
-    hasMany: {
-        model: 'Mfw.model.Chain',
-        name: 'chains',
-        associationKey: 'chains'
-    },
 
     proxy: {
         type: 'ajax',

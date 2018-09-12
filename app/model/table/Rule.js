@@ -1,6 +1,6 @@
-Ext.define('Mfw.model.Rule', {
+Ext.define('Mfw.model.table.Rule', {
     extend: 'Ext.data.Model',
-    alias: 'model.rule',
+    alias: 'model.table-rule',
 
     idProperty: '_id',
     identifier: 'uuid',
@@ -13,13 +13,13 @@ Ext.define('Mfw.model.Rule', {
     ],
 
     hasMany: [{
-        model: 'Mfw.model.Condition',
+        model: 'Mfw.model.table.Condition',
         name: 'conditions',
         associationKey: 'conditions'
     }],
 
     hasOne: {
-        model: 'Mfw.model.Action',
+        model: 'Mfw.model.table.Action',
         name: 'action',
         associationKey: 'action'
     },

@@ -1,6 +1,6 @@
-Ext.define('Mfw.model.Condition', {
+Ext.define('Mfw.model.table.Condition', {
     extend: 'Ext.data.Model',
-    alias: 'model.condition',
+    alias: 'model.table-condition',
 
     idProperty: '_id',
     identifier: 'uuid',

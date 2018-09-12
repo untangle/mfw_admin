@@ -10,7 +10,7 @@ Ext.define('Mfw.store.RuleConditions', {
         field: {
             xtype: 'combobox',
             forceSelection: true,
-            editable: true,
+            editable: false,
             queryMode: 'local',
             displayField: 'name',
             valueField: 'name',

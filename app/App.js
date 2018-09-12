@@ -75,6 +75,9 @@ Ext.define('Mfw.App', {
         Ext.Viewport.getViewModel().set({
             smallScreen: Ext.Viewport.getSize().width < 1000
         });
+
+        Ext.Msg.defaultAllowedConfig.showAnimation = false;
+        Ext.Msg.defaultAllowedConfig.hideAnimation = false;
     },
 
     onUnmatchedRoute: function () {

@@ -14,7 +14,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
     layout: 'vbox',
 
     config: {
-        recordModel: new Mfw.network.model.Dhcp()
+        // recordModel: new Mfw.network.model.Dhcp()
     },
 
     items: [{

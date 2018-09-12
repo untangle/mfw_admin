@@ -1,6 +1,17 @@
-Ext.define('Mfw.cmp.grid.RuleSheet', {
+Ext.define('Mfw.cmp.grid.table.RuleSheet', {
     extend: 'Ext.ActionSheet',
     alias: 'widget.rulesheet',
+
+    viewModel: {
+        data: {
+            ruleOperation: null,
+            conditionOperation: null
+        }
+    },
+
+    config: {
+        rule: null
+    },
 
     layout: {
         type: 'card',
@@ -22,7 +33,9 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
     items: [{
         xtype: 'formpanel',
         itemId: 'ruleform',
-        title: 'Edit Rule'.t(),
+        bind: {
+            title: '{ruleOperation === "EDIT" ? "Edit Rule" : "New Rule"}'
+        },
         padding: 0,
         defaults: {
             margin: '8 16'
@@ -141,7 +154,9 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
                 margin: '0 8',
                 handler: 'onCancel'
             }, {
-                text: 'Update',
+                bind: {
+                    text: '{ruleOperation === "EDIT" ? "Update" : "Create"}'
+                },
                 ui: 'action',
                 handler: 'onApplyRule'
             }]
@@ -149,8 +164,12 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
     }, {
         xtype: 'formpanel',
         itemId: 'conditionform',
+        padding: 0,
         bind: {
-            title: '{record ? "Edit Condition" : "New Condition"}'
+            title: '{conditionOperation === "EDIT" ? "Edit Condition" : "New Condition"}'
+        },
+        defaults: {
+            margin: 16
         },
         items: [{
             xtype: 'combobox',
@@ -167,7 +186,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             }
         }, {
             xtype: 'fieldcontainer',
-            margin: '16 0 0 0',
+            // margin: '16 0 0 0',
             defaults: {
                 xtype: 'radiofield',
                 name: 'op'
@@ -178,7 +197,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
                 checked: true,
                 margin: '0 16 0 0'
             }, {
-                boxLabel: '<i class="x-fa fa-hand-stop-o fa-lg" style="color: red;"></i> ' + 'Is Not'.t(),
+                boxLabel: '<i class="x-fa fa-hand-stop-o fa-lg fa-inverse" style="color: red;"></i> ' + 'Is Not'.t(),
                 value: 'IS_NOT'
             }]
             // xtype: 'combobox',
@@ -196,17 +215,17 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             // required: true
         }, {
             xtype: 'toolbar',
-            docked: 'bottom',
+            // docked: 'bottom',
             shadow: false,
-            margin: 0,
+            margin: '16 0',
             padding: '0 8',
-            items: [{
-                text: 'Back to rule'.t(),
-                iconCls: 'md-icon-arrow-back',
-                handler: 'onBackToRule'
-            }, '->', {
+            items: ['->', {
+                text: 'Cancel'.t(),
+                margin: '0 8',
+                handler: 'onCancelCondition'
+            }, {
                 bind: {
-                    text: '{record ? "Update" : "Create"}'
+                    text: '{conditionOperation === "EDIT" ? "Update" : "Create"}'
                 },
                 ui: 'action',
                 handler: 'onApplyCondition'
@@ -221,6 +240,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
 
     listeners: {
         initialize: 'onInitialize',
+        show: 'onShow',
         hide: 'onHide'
     },
 
@@ -229,8 +249,10 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             var me = this;
             me.ruleform = sheet.down('#ruleform');
             me.conditionform = sheet.down('#conditionform');
+            me.conditionsgrid = me.ruleform.down('grid');
 
-            me.ruleform.down('grid').on('storechange', function (view, store) {
+            // calculate conditions grid height based on number of conditions
+            me.conditionsgrid.on('storechange', function (view, store) {
                 if (!store) { return; }
                 view.setHeight(store.count() * 42 + 48);
                 store.on('datachanged', function () {
@@ -240,22 +262,31 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
         },
 
         /**
-         * resets forms and grids
+         * Set the rule record on form
          */
-        onHide: function () {
+        onShow: function (sheet) {
+            var me = this, rule = sheet.getRule();
+            me.ruleform.setRecord(rule);
+            me.conditionsgrid.setStore(rule.conditions());
+        },
+
+        /**
+         * Clean up forms and grids
+         */
+        onHide: function (sheet) {
             var me = this;
-            if (me.ruleform.getRecord()) {
-                me.ruleform.setRecord(null);
-            }
-            me.ruleform.down('grid').getStore().rejectChanges();
-            me.ruleform.down('grid').setStore({});
+            sheet.setRule(null);
+
+            me.conditionsgrid.getStore().rejectChanges();
+            me.conditionsgrid.setStore({});
+
+            me.ruleform.setRecord(null);
             me.ruleform.reset(true);
 
-            if (me.conditionform.getRecord()) {
-                me.conditionform.setRecord(null);
-            }
+            me.conditionform.setRecord(null);
             me.conditionform.reset(true);
-            me.getView().setActiveItem(me.ruleform);
+
+            sheet.setActiveItem(me.ruleform);
         },
 
         onCancel: function () {
@@ -263,14 +294,24 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             me.getView().hide();
         },
 
+
         onEditCondition: function (grid, info) {
-            var me = this;
+            var me = this, record = info.record;
             if (info.columnIndex === 1) { return; }
             me.getView().setActiveItem(me.conditionform);
-            me.getViewModel().set('record', info.record); // ???
-            me.setValueField(info.record.get('type'));
+            me.getViewModel().set('conditionOperation', 'EDIT'); // ???
+            me.setValueField(record.get('type'));
             // now set record on the form
-            me.conditionform.setRecord(info.record);
+            me.conditionform.setRecord(record);
+        },
+
+        onNewCondition: function () {
+            var me = this,
+                newCondition = new Mfw.model.table.Condition();
+            me.getView().setActiveItem(me.conditionform);
+            me.getViewModel().set('conditionOperation', 'NEW'); // ???
+            me.conditionform.setRecord(newCondition);
+            // me.getViewModel().set('record', null);
         },
 
         onConditionTypeChange: function (combo, newValue) {
@@ -309,6 +350,7 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             // add exptra props to the value field
             Ext.apply(valueField, {
                 type: conditionType, // use too identify the type of the value field
+                itemId: 'valueField',
                 name: 'value',
                 label: 'Value'.t(),
                 placeholder: 'Choose Value'.t(),
@@ -319,61 +361,53 @@ Ext.define('Mfw.cmp.grid.RuleSheet', {
             me.conditionform.insert(2, valueField);
         },
 
-        onNewCondition: function () {
-            var me = this;
-            me.getView().setActiveItem(me.conditionform);
-            me.getViewModel().set('record', null);
-        },
 
         onApplyCondition: function () {
-            var me = this;
+            var me = this, operation = me.getViewModel().get('conditionOperation');
             if (!me.conditionform.validate()) { return; }
 
-            if (!me.conditionform.getRecord()) {
-                me.ruleform.down('grid').getStore().add(me.conditionform.getValues());
+            if (operation === 'NEW') {
+                me.conditionsgrid.getStore().add(me.conditionform.getValues());
             } else {
                 me.conditionform.getRecord().set(me.conditionform.getValues());
             }
             me.getView().setActiveItem(me.ruleform);
         },
 
-        onBackToRule: function () {
+        onCancelCondition: function () {
             var me = this;
-            if (me.conditionform.getRecord()) {
-                me.conditionform.setRecord(null);
-            }
-            me.conditionform.reset(true);
             me.getView().setActiveItem(me.ruleform);
         },
 
         onHideCondition: function () {
             var me = this;
-            if (me.conditionform) {
-                me.conditionform.setRecord(null);
-                me.conditionform.reset(true);
-                me.conditionform.removeAt(2); // remove value field
+            if (!me.conditionform) { return; }
+            me.conditionform.setRecord(null);
+            me.conditionform.reset(true);
+            if (me.conditionform.down('#valueField')) {
+                me.conditionform.remove('valueField');
             }
         },
 
         onApplyRule: function () {
-            var me = this, sheet = me.getView(), record;
+            var me = this, sheet = me.getView(), record,
+                operation = me.getViewModel().get('ruleOperation');
             if (!me.ruleform.validate()) {
                 return;
             }
             record = me.ruleform.getRecord();
 
-            if (record.phantom) {
-                console.log(me.ruleform.getRecord());
+            if (operation === 'NEW') {
                 record.set(me.ruleform.getValues());
                 record.commit();
-                me.ruleform.down('grid').getStore().commitChanges();
+                me.conditionsgrid.getStore().commitChanges();
                 sheet.grid.getStore().add(record);
             } else {
                 record.set(me.ruleform.getValues());
                 record.commit(); // commit record
-                me.ruleform.down('grid').getStore().commitChanges(); // commit store
+                me.conditionsgrid.getStore().commitChanges(); // commit store
             }
-            me.getView().hide();
+            sheet.hide();
         }
     }
 
