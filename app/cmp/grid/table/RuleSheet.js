@@ -31,92 +31,97 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
     padding: 0,
 
     items: [{
-        xtype: 'formpanel',
-        itemId: 'ruleform',
+        xtype: 'panel',
         bind: {
             title: '{ruleOperation === "EDIT" ? "Edit Rule" : "New Rule"}'
         },
-        padding: 0,
-        defaults: {
-            margin: '8 16'
-        },
+        scrollable: true,
         items: [{
-            xtype: 'textareafield',
-            name: 'description',
-            label: 'Description'.t(),
-            maxRows: 2,
-            required: true
-        }, {
-            xtype: 'togglefield',
-            name: 'enabled',
-            boxLabel: 'Enabled'.t()
-        }, {
-            xtype: 'grid',
-            userCls: 'c-noheaders',
-            margin: '0 0 16 0',
-            minHeight: 120,
-            emptyText: 'No Conditions!'.t(),
-            selectable: {
-                columns: false,
-                rows: false
+            xtype: 'formpanel',
+            itemId: 'ruleform',
+            padding: 0,
+            defaults: {
+                margin: '8 16'
             },
             items: [{
-                xtype: 'toolbar',
-                docked: 'top',
-                padding: '0 8 0 16',
-                // shadow: false,
-                items: [{
-                    xtype: 'component',
-                    html: 'Conditions'.t()
-                }, '->', {
-                    iconCls: 'md-icon-add',
-                    text: 'New'.t(),
-                    handler: 'onNewCondition'
-                }]
-            }],
-            columns: [{
-                dataIndex: 'type',
-                flex: 1,
-                cell: {
-                    bodyStyle: {
-                        padding: 0
-                    },
-                    encodeHtml: false
-                },
-                renderer: function (value, record) {
-                    var op;
-                    if (record.get('op') === "IS") {
-                        op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
-                    } else {
-                        op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
-                    }
-                    return '<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span>' +
-                            op + '<strong>' + record.get('value') + '</strong></div>'
-                }
+                xtype: 'textareafield',
+                name: 'description',
+                label: 'Description'.t(),
+                maxRows: 2,
+                required: true
             }, {
-                width: 70,
-                align: 'center',
-                sortable: false,
-                hideable: false,
-                menuDisabled: true,
-                cell: {
-                    tools: {
-                        edit: {
-                            iconCls: 'md-icon-edit',
-                            handler: 'onEditCondition'
+                xtype: 'togglefield',
+                name: 'enabled',
+                boxLabel: 'Enabled'.t()
+            }, {
+                xtype: 'grid',
+                userCls: 'c-noheaders',
+                margin: '0 0 16 0',
+                minHeight: 120,
+                scrollable: false,
+                emptyText: 'No Conditions!'.t(),
+                selectable: {
+                    columns: false,
+                    rows: false
+                },
+                items: [{
+                    xtype: 'toolbar',
+                    docked: 'top',
+                    padding: '0 8 0 16',
+                    // shadow: false,
+                    items: [{
+                        xtype: 'component',
+                        html: 'Conditions'.t()
+                    }, '->', {
+                        iconCls: 'md-icon-add',
+                        text: 'New'.t(),
+                        handler: 'onNewCondition'
+                    }]
+                }],
+                columns: [{
+                    dataIndex: 'type',
+                    flex: 1,
+                    cell: {
+                        bodyStyle: {
+                            padding: 0
                         },
-                        delete: {
-                            iconCls: 'md-icon-delete',
-                            handler: function (grid, info) {
-                                info.record.drop();
+                        encodeHtml: false
+                    },
+                    renderer: function (value, record) {
+                        var op;
+                        if (record.get('op') === "IS") {
+                            op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
+                        } else {
+                            op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
+                        }
+                        return '<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span>' +
+                                op + '<strong>' + record.get('value') + '</strong></div>'
+                    }
+                }, {
+                    width: 70,
+                    align: 'center',
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
+                    cell: {
+                        tools: {
+                            edit: {
+                                iconCls: 'md-icon-edit',
+                                handler: 'onEditCondition'
+                            },
+                            delete: {
+                                iconCls: 'md-icon-delete',
+                                handler: function (grid, info) {
+                                    info.record.drop();
+                                }
                             }
                         }
                     }
+                }],
+                listeners: {
+                    childtap: 'onEditCondition'
                 }
-            }],
-            listeners: {
-                childtap: 'onEditCondition'
-            }
+            }]
         }, {
             xtype: 'toolbar',
             margin: 0,
@@ -126,23 +131,9 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 html: 'Action'.t()
             }]
         }, {
-            xtype: 'combobox',
-            label: 'Choose Action'.t(),
-            labelAlign: 'left',
-            editable: false,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
-            store: [
-                { value: 'JUMP', name: 'Jump ...' },
-                { value: 'GOTO', name: 'Go To ...' },
-                { value: 'REJECT', name: 'Reject' },
-                { value: 'ACCEPT', name: 'Accept' }
-            ]
-        }, {
-            xtype: 'combobox',
-            label: 'Choose Chain'.t(),
-            labelAlign: 'left'
+            xtype: 'formpanel',
+            itemId: 'actionform',
+            margin: 0
         }, {
             xtype: 'toolbar',
             docked: 'bottom',
@@ -250,6 +241,10 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             me.ruleform = sheet.down('#ruleform');
             me.conditionform = sheet.down('#conditionform');
             me.conditionsgrid = me.ruleform.down('grid');
+            me.actionform = sheet.down('#actionform');
+
+            // add action fields
+            me.actionform.add(sheet.table.getActionFields());
 
             // calculate conditions grid height based on number of conditions
             me.conditionsgrid.on('storechange', function (view, store) {
@@ -266,8 +261,11 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
          */
         onShow: function (sheet) {
             var me = this, rule = sheet.getRule();
+
             me.ruleform.setRecord(rule);
             me.conditionsgrid.setStore(rule.conditions());
+
+            me.actionform.setValues(rule.get('action'));
         },
 
         /**
@@ -286,7 +284,9 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             me.conditionform.setRecord(null);
             me.conditionform.reset(true);
 
-            sheet.setActiveItem(me.ruleform);
+            me.actionform.reset(true);
+
+            sheet.setActiveItem(0);
         },
 
         onCancel: function () {
@@ -298,8 +298,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         onEditCondition: function (grid, info) {
             var me = this, record = info.record;
             if (info.columnIndex === 1) { return; }
-            me.getView().setActiveItem(me.conditionform);
-            me.getViewModel().set('conditionOperation', 'EDIT'); // ???
+            me.getView().setActiveItem(1);
+            me.getViewModel().set('conditionOperation', 'EDIT');
             me.setValueField(record.get('type'));
             // now set record on the form
             me.conditionform.setRecord(record);
@@ -308,8 +308,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         onNewCondition: function () {
             var me = this,
                 newCondition = new Mfw.model.table.Condition();
-            me.getView().setActiveItem(me.conditionform);
-            me.getViewModel().set('conditionOperation', 'NEW'); // ???
+            me.getView().setActiveItem(1);
+            me.getViewModel().set('conditionOperation', 'NEW');
             me.conditionform.setRecord(newCondition);
             // me.getViewModel().set('record', null);
         },
@@ -371,12 +371,12 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             } else {
                 me.conditionform.getRecord().set(me.conditionform.getValues());
             }
-            me.getView().setActiveItem(me.ruleform);
+            me.getView().setActiveItem(0);
         },
 
         onCancelCondition: function () {
             var me = this;
-            me.getView().setActiveItem(me.ruleform);
+            me.getView().setActiveItem(0);
         },
 
         onHideCondition: function () {
@@ -397,16 +397,15 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             }
             record = me.ruleform.getRecord();
 
+            record.set(me.ruleform.getValues());
+            record.set('action', me.actionform.getValues());
+            record.commit();
+            me.conditionsgrid.getStore().commitChanges();
+
             if (operation === 'NEW') {
-                record.set(me.ruleform.getValues());
-                record.commit();
-                me.conditionsgrid.getStore().commitChanges();
-                sheet.grid.getStore().add(record);
-            } else {
-                record.set(me.ruleform.getValues());
-                record.commit(); // commit record
-                me.conditionsgrid.getStore().commitChanges(); // commit store
+                sheet.table.getStore().add(record);
             }
+
             sheet.hide();
         }
     }

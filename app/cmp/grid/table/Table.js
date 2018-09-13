@@ -4,7 +4,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
 
     viewModel: {
         data: {
-            selectedChain: null
+            selectedChain: null,
+            chainNames: null
         },
         formulas: {
             selectionModel: function (get) {
@@ -78,6 +79,24 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             hidden: true,
             bind: {
                 hidden: '{selectedChain.editable}'
+            }
+        }, {
+            xtype: 'component',
+            style: 'font-size: 12px; font-weight: normal;',
+            margin: '0 0 0 16',
+            hidden: true,
+            bind: {
+                html: '<span style="color: #777;">Type:</span> <strong>{selectedChain.type}</strong>',
+                hidden: '{!selectedChain.type}'
+            }
+        }, {
+            xtype: 'component',
+            style: 'font-size: 12px; font-weight: normal;',
+            margin: '0 0 0 16',
+            hidden: true,
+            bind: {
+                html: '<span style="color: #777;">Hook:</span> <strong>{selectedChain.hook}</strong>',
+                hidden: '{!selectedChain.hook}'
             }
         }, '->', {
             xtype: 'component',
@@ -202,14 +221,21 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         text: 'Description',
         dataIndex: 'description',
         menuDisabled: true,
-        minWidth: 400
+        minWidth: 400,
+        cell: {
+            bind: {
+                userCls: '{!record.enabled ? "x-disabled" : ""}'
+            }
+        }
     }, {
         text: 'Conditions'.t(),
         dataIndex: 'conditions()',
         menuDisabled: true,
         flex: 1,
         cell: {
-            userCls: 'ctip',
+            bind: {
+                userCls: '{!record.enabled ? "x-disabled" : ""}'
+            },
             bodyStyle: {
                 // padding: 0
                 padding: '0 16px 0 0'
@@ -225,7 +251,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 } else {
                     op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
                 }
-                strArr.push('<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span>' +
+                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span>' +
                        op + '<strong>' + c.get('value') + '</strong></div>');
             });
             if (strArr.length > 0) {

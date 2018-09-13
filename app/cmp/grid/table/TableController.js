@@ -18,12 +18,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             add: function (store, records) {
                 var chain = records[0];
                 chain.rules().loadData([]); // important so the rules store is initialized
-                me.updateChainsMenu();
                 me.selectChain(chain.get('name'));
+                me.updateChainsMenu();
             },
             remove: function () {
-                me.updateChainsMenu();
                 me.selectChain();
+                me.updateChainsMenu();
             }
         });
 
@@ -50,8 +50,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     });
                 });
 
-                me.updateChainsMenu();
                 me.selectChain();
+                me.updateChainsMenu();
             },
             callback: function () {
                 grid.unmask();
@@ -72,8 +72,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         Ext.Msg.confirm(
             '<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            'All existing <strong>' + grid.getTitle() +
-            '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
+            '<p>All existing <strong>' + grid.getTitle() +
+            '</strong> settings will be replace with System defauts.</p><p style="font-weight: bold;">Do you want to continue?</p>',
             function (answer) {
                 if (answer === 'yes') {
                     // update proxy api to load defaults
@@ -138,14 +138,19 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             return;
         }
         vm.set('selectedChain', chain);
+        me.updateChainsMenu();
     },
 
     /**
      * Updates the chains menu
      */
     updateChainsMenu: function () {
-        var me = this, menuItems = [], tpl;
+        var me = this, menuItems = [], tpl, store = [];
         me.table.chains().each(function (chain) {
+            if (chain.get('name') !== me.selectedChain.get('name')) {
+                store.push({ name: chain.get('name') });
+            }
+
             tpl = '<p>' + chain.get('name') +
                    (chain.get('base') ? '<span class="base">BASE</span>' : '') +
                    (chain.get('default') ? '<span class="default">DEFAULT</span>' : '') +
@@ -159,6 +164,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 handler: function (item) { item.up('menu').hide(); me.selectChain(chain.get('name')) }
             });
         });
+        me.getViewModel().set('chainNames', store);
         me.chainsmenu.getMenu().setItems(menuItems);
     },
 
@@ -190,19 +196,38 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * Removes selected Chain
      */
     onDeleteChain: function () {
-        var me = this,
-            msg = '<p>By deleting <strong>' + me.selectedChain.get('name') + '</strong> chain, ' +
-            'all the Rules from this chain will be lost.</p>';
+        var me = this, grid = me.getView(), msg = '';
 
         if (me.selectedChain.get('default')) {
-            msg += '<p>This is a <strong>DEFAULT</strong> chain.You may consider selecting a new Default chain before deleting!</p>'
+            msg += '<p><strong>' + me.selectedChain.get('name') + '</strong> is a <strong>DEFAULT</strong> chain.You may consider selecting a new default chain before deleting!</p>'
         }
-        msg += '<p>Do you want to continue?</p>',
+
+        msg += '<p>By deleting <strong>' + me.selectedChain.get('name') + '</strong>, ' +
+               'all the rules defined by it will be lost.</p>';
+
+        msg += '<p><span style="color: red;">WARNING!</span> <br/>Any <strong>' + grid.getTitle() +
+                '</strong> rules having <strong>Go to</strong> or <strong>Jump to</strong> actions pointing to this chain will be removed!</p>'
+
+        msg += '<br/><p style="font-weight: bold;">Do you want to continue?</p>',
         Ext.Msg.confirm(
-            '<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            '<i class="x-fa fa-exclamation-triangle"></i> Delete Chain',
             msg,
             function (answer) {
                 if (answer === 'yes') {
+                    /**
+                     * Deletes all rules having action Jump or Goto pointing to the
+                     * chain to be deleted
+                     */
+                    me.table.chains().each(function (chain) {
+                        chain.rules().each(function (rule) {
+                            if (rule.get('action').type === "JUMP" || rule.get('action').type === "GOTO") {
+                                if (rule.get('action').chain === me.selectedChain.get('name')) {
+                                    rule.drop();
+                                }
+                            }
+                        })
+                    })
+                    // remove the chain
                     me.table.chains().remove(me.selectedChain);
                 }
             });
@@ -230,9 +255,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     onEditRule: function (grid, info) {
         var me = this;
         if (!me.rulesheet) {
-            me.rulesheet = grid.add({ xtype: 'rulesheet' });
+            me.rulesheet = grid.add({
+                xtype: 'rulesheet',
+                table: grid
+            });
         }
-
         me.rulesheet.getViewModel().set('ruleOperation', 'EDIT');
         me.rulesheet.setRule(info.record);
         me.rulesheet.show();
@@ -250,9 +277,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             });
 
         if (!me.rulesheet) {
-            me.rulesheet = grid.add({ xtype: 'rulesheet' });
+            me.rulesheet = grid.add({
+                xtype: 'rulesheet',
+                table: grid
+            });
         }
-        me.rulesheet.grid = grid;
+        me.rulesheet.table = grid;
         me.rulesheet.getViewModel().set('ruleOperation', 'NEW');
         me.rulesheet.setRule(newRule);
         me.rulesheet.show();
@@ -436,8 +466,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         // g.getStore().on('beforesync', me.onBeforeSync);
 
 
-        if (grid.getActionsColumn()) {
-            grid.insertColumn(4, grid.getActionsColumn());
+        if (grid.getActionColumn()) {
+            grid.insertColumn(4, grid.getActionColumn());
         }
 
 

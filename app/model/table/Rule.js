@@ -18,11 +18,11 @@ Ext.define('Mfw.model.table.Rule', {
         associationKey: 'conditions'
     }],
 
-    hasOne: {
-        model: 'Mfw.model.table.Action',
-        name: 'action',
-        associationKey: 'action'
-    },
+    // hasOne: {
+    //     model: 'Mfw.model.table.Action',
+    //     name: 'action',
+    //     associationKey: 'action'
+    // },
 
     proxy: {
         type: 'ajax',

@@ -76,6 +76,7 @@ Ext.define('Mfw.App', {
             smallScreen: Ext.Viewport.getSize().width < 1000
         });
 
+        Ext.Msg.defaultAllowedConfig.maxWidth = 350;
         Ext.Msg.defaultAllowedConfig.showAnimation = false;
         Ext.Msg.defaultAllowedConfig.hideAnimation = false;
     },
