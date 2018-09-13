@@ -31,6 +31,11 @@ Ext.define('Mfw.model.table.Table', {
             allDataOptions: {
                 associated: true,
                 persist: true
+            },
+            // sanitize data by removing extra UI generated keys
+            transform: {
+                fn: Util.sanitize,
+                scope: this
             }
         }
     }

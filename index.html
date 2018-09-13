@@ -27,17 +27,38 @@
 
         <script>
             Ext.onReady(function () {
-                Ext.data.Model.prototype.idProperty = '_id';
-                // Ext.data.Model.prototype.identifier = 'uuid';
-                Ext.theme.Material.setColors({
-                    'darkMode': true,
-                    'base': '#333',
-                    // 'accent': accent || me._materialAccentColor
-                });
                 Ext.application({
                     extend: 'Mfw.App',
                     namespace: 'Mfw'
                 });
+
+                // Ext.Ajax.request({
+                //     url: window.location.origin + '/admin/locale/default.json',
+                //     success: function(response) {
+                //         var translations = Ext.JSON.decode(response.responseText);
+                //         String.prototype.t = function() {
+                //             return translations[this.valueOf()] || this.valueOf();
+                //             // if (translations[this.valueOf()]) {
+                //             //     return '<cite class="ok">' + translations[this.valueOf()] + '</cite>';
+                //             // }
+                //             // return '<cite class="nok">' + this.valueOf() + '</cite>';
+                //         };
+                //         Ext.Loader.loadScript({
+                //             url: window.location.origin + '/admin/mfw-all.js',
+                //             onLoad: function () {
+                //                 Ext.application({
+                //                     extend: 'Mfw.App',
+                //                     namespace: 'Mfw'
+                //                 });
+                //             },
+                //             onError: function () {  }
+                //         });
+                //     },
+                //     failure: function(response, opts) {
+                //         console.warn('Locale file not found! Fallback to default locale!');
+                //     }
+                // });
+
             });
         </script>
     </head>

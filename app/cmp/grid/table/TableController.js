@@ -306,7 +306,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     onImport: function () {
-        var me = this, dialog = Ext.create({
+        var dialog = Ext.create({
             xtype: 'dialog',
             width: 400,
             title: 'Import Rules into Chain',

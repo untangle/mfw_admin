@@ -5,7 +5,7 @@ var clean = require('gulp-clean');
 var exec = require('gulp-exec');
 var browserSync = require('browser-sync').create();
 
-var host = '192.168.0.93'; // the MFW machine host to scp built files
+var host = '192.168.0.58'; // the MFW machine host to scp built files
 
 gulp.task('serve', function() {
     browserSync.init({
@@ -14,6 +14,8 @@ gulp.task('serve', function() {
 
     gulp.watch('./sass/*.scss', gulp.series('sass'));
     gulp.watch('./app/**/*.js', gulp.series('concat'));
+    gulp.watch('./locale/*.json', gulp.series('locale'));
+    gulp.watch('./index.html', gulp.series('index'));
     gulp.watch('./*.js').on('change', browserSync.reload);
 });
 
@@ -25,6 +27,7 @@ gulp.task('clean', function () {
 gulp.task('concat', function() {
     return gulp.src([
             './app/util/**/*.js',
+            './app/overrides/**/*.js',
             './app/cmp/**/*.js',
             './app/model/**/*.js',
             './app/store/**/*.js',
@@ -48,8 +51,14 @@ gulp.task('sass', function () {
         .pipe(browserSync.stream());
     });
 
-gulp.task('default', gulp.parallel('concat', 'sass'));
+gulp.task('locale', function () {
+    return gulp.src('./locale/*.*')
+        .pipe(exec('scp -r ./locale/ root@' + host + ':/www/admin/'))
+    });
 
-// const defaultTasks = gulp.parallel('concat', 'sass')
+gulp.task('index', function () {
+    return gulp.src('./index.html')
+        .pipe(exec('scp index.html root@' + host + ':/www/admin/'))
+    });
 
-// export default defaultTasks
+gulp.task('default', gulp.parallel('concat', 'sass', 'locale', 'index'));
