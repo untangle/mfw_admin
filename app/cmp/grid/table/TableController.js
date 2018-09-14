@@ -199,18 +199,18 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         var me = this, grid = me.getView(), msg = '';
 
         if (me.selectedChain.get('default')) {
-            msg += '<p><strong>' + me.selectedChain.get('name') + '</strong> is a <strong>DEFAULT</strong> chain.You may consider selecting a new default chain before deleting!</p>'
+            msg += Ext.String.format('<p><strong>{0}</strong> is a <strong>DEFAULT</strong> chain. You may consider selecting a new default chain before deleting!</p>'.t(), me.selectedChain.get('name'));
         }
 
-        msg += '<p>By deleting <strong>' + me.selectedChain.get('name') + '</strong>, ' +
-               'all the rules defined by it will be lost.</p>';
+        msg += Ext.String.format('<p>By deleting <strong>{0}</strong> all the rules defined by it will be lost!</p>'.t(), me.selectedChain.get('name'));
 
-        msg += '<p><span style="color: red;">WARNING!</span> <br/>Any <strong>' + grid.getTitle() +
-                '</strong> rules having <strong>Go to</strong> or <strong>Jump to</strong> actions pointing to this chain will be removed!</p>'
+        msg += '<p><span style="color: red;">' + 'WARNING'.t() + '!</span> <br/>' +
+                Ext.String.format('Any <strong>{0}</strong> rules having <strong>{1}</strong> or <strong>{2}</strong> actions pointing to this chain will be removed!'.t(), grid.getTitle(), 'Go to'.t(), 'Jump to'.t());
+        msg += '</p>';
 
-        msg += '<br/><p style="font-weight: bold;">Do you want to continue?</p>',
+        msg += '<br/><p style="font-weight: bold;">' + 'Do you want to continue?'.t() + '</p>',
         Ext.Msg.confirm(
-            '<i class="x-fa fa-exclamation-triangle"></i> Delete Chain',
+            '<i class="x-fa fa-exclamation-triangle"></i> ' + 'Delete Chain'.t(),
             msg,
             function (answer) {
                 if (answer === 'yes') {
@@ -272,7 +272,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     onNewRule: function () {
         var me = this, grid = me.getView(),
             newRule = new Ext.create('Mfw.model.table.Rule', {
-                description: 'New Rule ...',
+                description: 'New Rule'.t() + '...',
                 conditions: []
             });
 

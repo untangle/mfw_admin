@@ -33,7 +33,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
     items: [{
         xtype: 'panel',
         bind: {
-            title: '{ruleOperation === "EDIT" ? "Edit Rule" : "New Rule"}'
+            title: '{ruleOperation}' === 'EDIT' ? 'Edit Rule'.t() : 'New Rule'.t()
         },
         scrollable: true,
         items: [{
@@ -150,7 +150,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 handler: 'onCancel'
             }, {
                 bind: {
-                    text: '{ruleOperation === "EDIT" ? "Update" : "Create"}'
+                    text: '{ruleOperation}' === 'EDIT' ? 'Update'.t() : 'Create'.t()
+                    // text: '{ruleOperation === "EDIT" ? "Update" : "Create"}'
                 },
                 ui: 'action',
                 handler: 'onApplyRule'
@@ -161,7 +162,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         itemId: 'conditionform',
         padding: 0,
         bind: {
-            title: '{conditionOperation === "EDIT" ? "Edit Condition" : "New Condition"}'
+            title: '{conditionOperation}' === 'EDIT' ? 'Edit Condition'.t() : 'New Condition'.t()
+            // title: '{conditionOperation === "EDIT" ? "Edit Condition" : "New Condition"}'
         },
         defaults: {
             margin: 16
@@ -200,7 +202,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 handler: 'onCancelCondition'
             }, {
                 bind: {
-                    text: '{conditionOperation === "EDIT" ? "Update" : "Create"}'
+                    text: '{conditionOperation}' === 'EDIT' ? 'Update'.t() : 'Create'.t()
+                    // text: '{conditionOperation === "EDIT" ? "Update" : "Create"}'
                 },
                 ui: 'action',
                 handler: 'onApplyCondition'
