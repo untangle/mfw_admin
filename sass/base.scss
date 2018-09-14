@@ -9,21 +9,29 @@
 
 cite {
     font-style: normal;
-    &:after {
-        vertical-align: super;
-        font-size: 12px;
-        position: absolute;
-        font-weight: bold;
-        transform: translate(2px, -4px);
+    &.ok {
+        border-bottom: 1px blue dashed;
     }
-    &.ok:after {
-        content: '\221a';
-        color: green;
-    }
-    &.nok:after {
-        content: '!';
+    &.nok {
         color: red;
+        border-bottom: 1px red dashed;
     }
+    // &:before {
+    //     vertical-align: super;
+    //     font-size: 14px;
+    //     position: absolute;
+    //     font-weight: bold;
+    //     transform: translate(2px, -4px);
+    //     opacity: 0.5;
+    // }
+    // &.ok:before {
+    //     content: '\2713';
+    //     color: green;
+    // }
+    // &.nok:before {
+    //     content: '?';
+    //     color: red;
+    // }
 }
 
 .x-fa {

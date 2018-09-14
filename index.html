@@ -26,6 +26,7 @@
         <script src="mfw-all.js"></script>
 
         <script>
+            var translations, debug = false;
             Ext.onReady(function () {
                 Ext.application({
                     extend: 'Mfw.App',
@@ -33,15 +34,17 @@
                 });
 
                 // Ext.Ajax.request({
-                //     url: window.location.origin + '/admin/locale/default.json',
+                //     url: window.location.origin + '/admin/locale/json/fr.json',
                 //     success: function(response) {
-                //         var translations = Ext.JSON.decode(response.responseText);
+                //         translations = Ext.JSON.decode(response.responseText);
                 //         String.prototype.t = function() {
-                //             return translations[this.valueOf()] || this.valueOf();
-                //             // if (translations[this.valueOf()]) {
-                //             //     return '<cite class="ok">' + translations[this.valueOf()] + '</cite>';
-                //             // }
-                //             // return '<cite class="nok">' + this.valueOf() + '</cite>';
+                //             if (!debug) {
+                //                 return translations[this.valueOf()] || this.valueOf();
+                //             }
+                //             if (translations[this.valueOf()]) {
+                //                 return '<cite class="ok">' + translations[this.valueOf()] + '</cite>';
+                //             }
+                //             return '<cite class="nok">' + this.valueOf() + '</cite>';
                 //         };
                 //         Ext.Loader.loadScript({
                 //             url: window.location.origin + '/admin/mfw-all.js',

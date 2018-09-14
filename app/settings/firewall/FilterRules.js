@@ -11,19 +11,16 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
             update: Util.api + '/settings/firewall/tables/filter-rules'
         },
         actionFields: [{
-            xtype: 'combobox',
+            xtype: 'selectfield',
             name: 'type',
             label: 'Choose Action'.t(),
             editable: false,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
-            value: 'ACCEPT',
-            store: [
-                { value: 'REJECT', name: 'Reject' },
-                { value: 'ACCEPT', name: 'Accept' },
-                { value: 'JUMP', name: 'Jump ...' },
-                { value: 'GOTO', name: 'Go To ...' }
+            itemTpl: '<tpl>{text}</tpl>',
+            options: [
+                { value: 'REJECT', text: 'Reject'.t() },
+                { value: 'ACCEPT', text: 'Accept'.t() },
+                { value: 'JUMP', text: 'Jump to'.t() + '...' },
+                { value: 'GOTO', text: 'Go to'.t() + '...' }
             ]
         }, {
             xtype: 'combobox',

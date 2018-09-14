@@ -141,7 +141,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             margin: 0,
             padding: '0 8',
             items: ['->', {
-                text: 'Cancel',
+                text: 'Cancel'.t(),
                 margin: '0 8',
                 handler: 'onCancel'
             }, {

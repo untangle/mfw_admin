@@ -46,13 +46,11 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
             label: 'Choose Type'.t(),
             editable: false,
             clearable: true,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
-            store: [
-                { value: 'filter', name: 'Filter'.t() },
-                { value: 'route', name: 'Route'.t() },
-                { value: 'nat', name: 'NAT'.t() }
+            itemTpl: '<tpl>{text}</tpl>',
+            options: [
+                { value: 'filter', text: 'Filter'.t() },
+                { value: 'route', text: 'Route'.t() },
+                { value: 'nat', text: 'NAT'.t() }
             ]
         }, {
             xtype: 'combobox',
@@ -60,16 +58,14 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
             label: 'Choose Hook'.t(),
             editable: false,
             clearable: true,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
-            store: [
-                { value: 'prerouting', name: 'Prerouting'.t() },
-                { value: 'input', name: 'Input'.t() },
-                { value: 'forward', name: 'Forward'.t() },
-                { value: 'output', name: 'Output'.t() },
-                { value: 'postrouting', name: 'Postrouting'.t() },
-                { value: 'ingress', name: 'Ingress'.t() }
+            itemTpl: '<tpl>{text}</tpl>',
+            options: [
+                { value: 'prerouting', text: 'Prerouting'.t() },
+                { value: 'input', text: 'Input'.t() },
+                { value: 'forward', text: 'Forward'.t() },
+                { value: 'output', text: 'Output'.t() },
+                { value: 'postrouting', text: 'Postrouting'.t() },
+                { value: 'ingress', text: 'Ingress'.t() }
             ]
         }
         // {
@@ -120,13 +116,15 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
             var me = this, sheet = me.getView(),
                 form = sheet.down('formpanel'),
                 record = form.getRecord();
+
+            if (!form.validate()) { return; }
+
             record.set(form.getValues());
             record.commit();
 
             if (me.getViewModel().get('operation') === "NEW") {
                 sheet.table.chains().add(record);
             }
-            console.log(sheet.table.chains());
             // record.commit();
             sheet.hide();
         },

@@ -410,13 +410,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onNewRule'
                 }, {
-                    text: 'Import',
+                    text: 'Import'.t(),
                     iconCls: 'md-icon-call-received',
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onImport'
                 }, {
-                    text: 'Export',
+                    text: 'Export'.t(),
                     iconCls: 'md-icon-call-made',
                     // handler: 'onExport'
                 }, '-', {
@@ -452,11 +452,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     bind: { hidden: '{!selectedChain.editable || selectedChain.default}' },
                     handler: 'onSetDefaultChain'
                 }, '-', {
-                    text: 'Reload',
+                    text: 'Reload'.t(),
                     iconCls: 'md-icon-refresh',
                     handler: 'onLoad'
                 }, {
-                    text: 'Load Defaults',
+                    text: 'Load Defaults'.t(),
                     iconCls: 'md-icon-sync',
                     handler: 'onDefaults'
                 }]

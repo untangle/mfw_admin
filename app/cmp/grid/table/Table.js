@@ -86,7 +86,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             margin: '0 0 0 16',
             hidden: true,
             bind: {
-                html: '<span style="color: #777;">Type:</span> <strong>{selectedChain.type}</strong>',
+                html: '<span style="color: #777;">' + 'Type'.t() + ':</span> <strong>{selectedChain.type}</strong>',
                 hidden: '{!selectedChain.type}'
             }
         }, {
@@ -95,13 +95,13 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             margin: '0 0 0 16',
             hidden: true,
             bind: {
-                html: '<span style="color: #777;">Hook:</span> <strong>{selectedChain.hook}</strong>',
+                html: '<span style="color: #777;">' + 'Hook'.t() + ':</span> <strong>{selectedChain.hook}</strong>',
                 hidden: '{!selectedChain.hook}'
             }
         }, '->', {
             xtype: 'component',
             style: 'font-size: 12px;',
-            html: 'Move Rule',
+            html: 'Move Rule'.t(),
             hidden: true,
             bind: { hidden: '{selcount !== 1}' }
         }, {
@@ -140,7 +140,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             hidden: true,
             bind: { hidden: '{selcount !== 1}' }
         }, {
-            text: 'New Rule',
+            text: 'New Rule'.t(),
             iconCls: 'md-icon-add',
             hidden: true,
             bind: { hidden: '{!selectedChain.editable}' },
@@ -200,7 +200,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     }, {
         xtype: 'checkcolumn',
         dataIndex: 'enabled',
-        text: 'Enabled',
+        text: 'Enabled'.t(),
         width: 80,
         menuDisabled: true,
         resizable: false,
@@ -218,7 +218,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         //     }
         // }
     }, {
-        text: 'Description',
+        text: 'Description'.t(),
         dataIndex: 'description',
         menuDisabled: true,
         minWidth: 400,
