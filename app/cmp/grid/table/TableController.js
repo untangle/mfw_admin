@@ -336,22 +336,44 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     onImport: function () {
+        var me = this, json;
         var dialog = Ext.create({
             xtype: 'dialog',
             width: 400,
-            title: 'Import Rules into Chain',
-
+            title: 'Import Rules into Chain'.t(),
             items: [{
                 xtype: 'filefield',
-                label: 'Choose File'
+                label: 'Choose File'.t(),
+                listeners: {
+                    change: {
+                        element: 'element',
+                        fn: function (event) {
+                            var input = event.target;
+                            var reader = new FileReader();
+                            reader.onload = function() {
+                              var text = reader.result;
+                              json = Ext.JSON.decode(text);
+                              // dialog.setJson(text);
+                            };
+                            reader.readAsText(input.files[0]);
+                        }
+                    }
+                }
             }],
 
             buttons: {
-                ok: function () {  // standard button (see below)
-                    dialog.destroy();
+                ok: {
+                    text: 'OK'.t(),
+                    handler: function () {  // standard button (see below)
+                        me.selectedChain.rules().loadRawData(json);
+                        dialog.destroy();
+                    }
                 },
-                cancel: function () {  // standard button (see below)
-                    dialog.destroy();
+                cancel: {
+                    text: 'Cancel'.t(),
+                    handler: function () {  // standard button (see below)
+                        dialog.destroy();
+                    }
                 }
             }
         });
@@ -396,6 +418,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             arrow: false,
             menu: {
                 anchor: true,
+                minWidth: 150,
+                userCls: 'x-htmlmenu',
                 items: [{
                     xtype: 'component',
                     bind: {
@@ -403,20 +427,20 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     },
                     style: 'font-size: 14px; font-weight: bold;'
                 }, {
-                    text: 'New'.t(),
+                    html: 'New'.t(),
                     iconCls: 'md-icon-add',
                     menuHideDelay: 0,
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onNewRule'
                 }, {
-                    text: 'Import'.t(),
+                    html: 'Import'.t(),
                     iconCls: 'md-icon-call-received',
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onImport'
                 }, {
-                    text: 'Export'.t(),
+                    html: 'Export'.t(),
                     iconCls: 'md-icon-call-made',
                     // handler: 'onExport'
                 }, '-', {
@@ -424,13 +448,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     html: 'Chain',
                     style: 'font-size: 14px; font-weight: bold;'
                 }, {
-                    text: 'New'.t(),
+                    html: 'New'.t(),
                     iconCls: 'md-icon-add',
                     menuHideDelay: 0,
                     operation: 'NEW',
                     handler: 'onChainOperation'
                 }, {
-                    text: 'Edit'.t(),
+                    html: 'Edit'.t(),
                     iconCls: 'md-icon-edit',
                     menuHideDelay: 0,
                     hidden: true,
@@ -438,25 +462,25 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     operation: 'EDIT',
                     handler: 'onChainOperation'
                 }, {
-                    text: 'Delete'.t(),
+                    html: 'Delete'.t(),
                     iconCls: 'md-icon-delete',
                     menuHideDelay: 0,
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onDeleteChain'
                 }, {
-                    text: 'Set as Default'.t(),
+                    html: 'Set as Default'.t(),
                     iconCls: 'md-icon-star',
                     menuHideDelay: 0,
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable || selectedChain.default}' },
                     handler: 'onSetDefaultChain'
                 }, '-', {
-                    text: 'Reload'.t(),
+                    html: 'Reload'.t(),
                     iconCls: 'md-icon-refresh',
                     handler: 'onLoad'
                 }, {
-                    text: 'Load Defaults'.t(),
+                    html: 'Load Defaults'.t(),
                     iconCls: 'md-icon-sync',
                     handler: 'onDefaults'
                 }]

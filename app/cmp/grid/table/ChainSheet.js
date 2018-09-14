@@ -96,17 +96,11 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
     }],
 
     listeners: {
-        initialize: 'onInitialize',
         show: 'onShow',
         hide: 'onHide'
     },
 
     controller: {
-        onInitialize: function (sheet) {
-            console.log(sheet.getRefOwner());
-
-        },
-
         onShow: function (sheet) {
             var form = sheet.down('formpanel');
             form.setRecord(sheet.getChain());

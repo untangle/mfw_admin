@@ -12,6 +12,7 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
         },
         actionFields: [{
             xtype: 'selectfield',
+            reference: 'actiontype',
             name: 'type',
             label: 'Choose Action'.t(),
             editable: false,
@@ -30,10 +31,10 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
             queryMode: 'local',
             displayField: 'name',
             valueField: 'name',
-            // hidden: true,
+            hidden: true,
             bind: {
                 store: '{chainNames}',
-                // hidden: '{atype === "REJECT" || atype === "ACCEPT"}'
+                hidden: '{actiontype.value === "REJECT" || actiontype.value === "ACCEPT"}'
             }
         }],
         actionColumn: [{

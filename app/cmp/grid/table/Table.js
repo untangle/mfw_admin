@@ -52,8 +52,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 text: '{selectedChain.name}'
             },
             menu: {
-                userCls: 'x-htmlmenu',
-                defaults: 'menucheckitem'
+                userCls: 'x-htmlmenu chain-menu',
                 // anchor: true,
             }
         }, {

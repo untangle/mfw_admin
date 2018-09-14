@@ -43,27 +43,32 @@ cite {
 .x-htmlmenu {
     .x-menuitem {
         .x-text-el { display: none; }
-        .x-body-el { height: auto; }
-        .x-innerhtml {
-            p { border-left: 6px transparent solid; margin: 0; padding: 8px; line-height: 1; font-size: 16px; }
-            em { font-size: 11px; color: #777; font-weight: normal; font-style: normal; }
-            span {
-                font-size: 10px;
-                font-weight: bold;
-                color: #FFF;
-                padding: 1px 5px;
-                border-radius: 3px;
-                margin-left: 8px;
-                vertical-align: middle;
-                &.base { background: #4ca52c; }
-                &.default { background: #555555; }
-                &.readonly { background: #bb283b; }
-            }
-        }
-        &.selected {
-            background: #EEE;
+        .x-innerhtml { padding: 0 16px 0 0; }
+    }
+    &.chain-menu {
+        .x-menuitem {
+            .x-body-el { height: auto; }
             .x-innerhtml {
-                p { border-left: 6px var(--accent-color) solid; }
+                p { border-left: 6px transparent solid; margin: 0; padding: 8px; line-height: 1; font-size: 16px; }
+                em { font-size: 11px; color: #777; font-weight: normal; font-style: normal; }
+                span {
+                    font-size: 10px;
+                    font-weight: bold;
+                    color: #FFF;
+                    padding: 1px 5px;
+                    border-radius: 3px;
+                    margin-left: 8px;
+                    vertical-align: middle;
+                    &.base { background: #4ca52c; }
+                    &.default { background: #555555; }
+                    &.readonly { background: #bb283b; }
+                }
+            }
+            &.selected {
+                background: #EEE;
+                .x-innerhtml {
+                    p { border-left: 6px var(--accent-color) solid; }
+                }
             }
         }
     }
