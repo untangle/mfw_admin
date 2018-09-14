@@ -26,6 +26,15 @@ Ext.define('Mfw.util.Util', {
         return data;
     },
 
+    ops: {
+        eq: { value: '==', text: 'Equals'.t() },
+        ne: { value: '!=', text: 'Not Equals'.t() },
+        gt: { value: '>', text: 'Greater Than'.t(), disabled: true },
+        lt: { value: '<', text: 'Less Than'.t() },
+        ge: { value: '>=', text: 'Greater Than or Equal'.t() },
+        le: { value: '<=', text: 'Less Than or Equal'.t() }
+    },
+
     tmpColumns: [
         { name: 'Protocol'.t(),    field: 'protocol' },
         { name: 'Username'.t(),    field: 'username' },

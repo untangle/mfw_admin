@@ -89,13 +89,17 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                     },
                     renderer: function (value, record) {
                         var op;
-                        if (record.get('op') === "IS") {
-                            op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
-                        } else {
-                            op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
+                        switch (record.get('op')) {
+                            case '==': op = '='; break;
+                            case '!=': op = '&ne;'; break;
+                            case '>': op = '&gt;'; break;
+                            case '<': op = '&lt;'; break;
+                            case '>=': op = '&ge;'; break;
+                            case '<=': op = '&le;'; break;
+                            default: op = '?'; break;
                         }
-                        return '<div class="condition"><span class="eee">' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span>' +
-                                op + '<strong>' + record.get('value') + '</strong></div>'
+                        return '<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span> ' +
+                                '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>'
                     }
                 }, {
                     width: 70,
@@ -176,34 +180,21 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 change: 'onConditionTypeChange'
             }
         }, {
-            xtype: 'fieldcontainer',
-            // margin: '16 0 0 0',
-            defaults: {
-                xtype: 'radiofield',
-                name: 'op'
-            },
-            items: [{
-                boxLabel: '<i class="x-fa fa-hand-o-right fa-lg"></i> ' + 'Is'.t(),
-                value: 'IS',
-                checked: true,
-                margin: '0 16 0 0'
-            }, {
-                boxLabel: '<i class="x-fa fa-hand-stop-o fa-lg fa-inverse" style="color: red;"></i> ' + 'Is Not'.t(),
-                value: 'IS_NOT'
-            }]
-            // xtype: 'combobox',
-            // name: 'op',
-            // label: 'Operation'.t(),
-            // editable: false,
-            // queryMode: 'local',
-            // displayField: 'name',
-            // valueField: 'value',
-            // value: 'IS',
-            // store: [
-            //     { name: 'IS', value: 'IS'},
-            //     { name: 'IS NOT', value: 'IS_NOT'}
-            // ],
-            // required: true
+            xtype: 'selectfield',
+            itemId: 'operation',
+            name: 'op',
+            label: 'Operation'.t(),
+            editable: false,
+            required: true,
+            itemTpl: '<tpl>{text} [{value}]</tpl>',
+            options: [
+                { value: '==', text: 'Equals'.t() },
+                { value: '!=', text: 'Not Equals'.t() },
+                { value: '>', text: 'Greater Than'.t(), disabled: true },
+                { value: '<', text: 'Less Than'.t() },
+                { value: '>=', text: 'Greater Than or Equal'.t() },
+                { value: '<=', text: 'Less Than or Equal'.t() }
+            ]
         }, {
             xtype: 'toolbar',
             // docked: 'bottom',
@@ -337,7 +328,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
              * add the proper value field to the form based on condition type
              */
             var me = this, condition = Ext.getStore('ruleconditions').findRecord('type', conditionType),
-                valueField;
+                valueField, ops = [];
             if (condition && condition.get('field')) {
                 // get the condition field
                 valueField = condition.get('field');
@@ -346,6 +337,17 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 valueField = { xtype: 'textfield' }
                 console.warn(conditionType + ' condition definition missing!')
             }
+
+            if (condition && condition.get('operations')) {
+                Ext.Object.each(condition.get('operations'), function (key, op) {
+                    ops.push(Util.ops[op]);
+                });
+            } else {
+                Ext.Object.each(Util.ops, function (key, op) {
+                    ops.push(op);
+                });
+            }
+            me.conditionform.down('#operation').setOptions(ops);
 
             // add exptra props to the value field
             Ext.apply(valueField, {

@@ -245,13 +245,17 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             var strArr = [], op;
 
             record.conditions().each(function (c) {
-                if (c.get('op') === "IS") {
-                    op = ' &nbsp;<i class="x-fa fa-hand-o-right" style="font-weight: normal;"></i>&nbsp; '
-                } else {
-                    op = ' &nbsp;<i class="x-fa fa-hand-stop-o" style="color: red; font-weight: normal;"></i>&nbsp; '
+                switch (c.get('op')) {
+                    case '==': op = '='; break;
+                    case '!=': op = '&ne;'; break;
+                    case '>': op = '&gt;'; break;
+                    case '<': op = '&lt;'; break;
+                    case '>=': op = '&ge;'; break;
+                    case '<=': op = '&le;'; break;
+                    default: op = '?'; break;
                 }
-                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span>' +
-                       op + '<strong>' + c.get('value') + '</strong></div>');
+                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span> ' +
+                       '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + c.get('value') + '</strong></div>');
             });
             if (strArr.length > 0) {
                 return strArr.join('');
