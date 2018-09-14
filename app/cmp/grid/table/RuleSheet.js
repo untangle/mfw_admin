@@ -186,15 +186,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             label: 'Operation'.t(),
             editable: false,
             required: true,
-            itemTpl: '<tpl>{text} [{value}]</tpl>',
-            options: [
-                { value: '==', text: 'Equals'.t() },
-                { value: '!=', text: 'Not Equals'.t() },
-                { value: '>', text: 'Greater Than'.t(), disabled: true },
-                { value: '<', text: 'Less Than'.t() },
-                { value: '>=', text: 'Greater Than or Equal'.t() },
-                { value: '<=', text: 'Less Than or Equal'.t() }
-            ]
+            itemTpl: '<tpl>{text}{sign}</tpl>',
+            options: [] // defined in Util.ops
         }, {
             xtype: 'toolbar',
             // docked: 'bottom',

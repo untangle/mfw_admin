@@ -27,12 +27,12 @@ Ext.define('Mfw.util.Util', {
     },
 
     ops: {
-        eq: { value: '==', text: 'Equals'.t() },
-        ne: { value: '!=', text: 'Not Equals'.t() },
-        gt: { value: '>', text: 'Greater Than'.t(), disabled: true },
-        lt: { value: '<', text: 'Less Than'.t() },
-        ge: { value: '>=', text: 'Greater Than or Equal'.t() },
-        le: { value: '<=', text: 'Less Than or Equal'.t() }
+        eq: { value: '==', text: 'Equals'.t(), sign: ' [ == ]' },
+        ne: { value: '!=', text: 'Not Equals'.t(), sign: ' [ &ne; ]' },
+        gt: { value: '>', text: 'Greater Than'.t(), sign: ' [ &gt; ]' },
+        lt: { value: '<', text: 'Less Than'.t(), sign: ' [ &lt; ]' },
+        ge: { value: '>=', text: 'Greater Than or Equal'.t(), sign:' [ &ge; ]' },
+        le: { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
     },
 
     tmpColumns: [
