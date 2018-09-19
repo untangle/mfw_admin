@@ -34,7 +34,7 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
             hidden: true,
             bind: {
                 store: '{chainNames}',
-                hidden: '{actiontype.value === "REJECT" || actiontype.value === "ACCEPT"}'
+                hidden: '{!actiontype.value || actiontype.value === "REJECT" || actiontype.value === "ACCEPT"}'
             }
         }],
         actionColumn: [{

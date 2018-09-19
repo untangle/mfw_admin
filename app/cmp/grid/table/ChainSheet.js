@@ -13,8 +13,7 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
     },
 
     bind: {
-        title: '{operation}' === 'EDIT' ? 'Edit Chain'.t() : 'New Chain'.t()
-        // title: '{operation === "EDIT" ? "Edit Chain" : "New Chain"}',
+        title: '{operation === "EDIT" ? "Edit Chain" : "New Chain"}',
     },
     side: 'right',
     exit: 'right',
@@ -88,8 +87,7 @@ Ext.define('Mfw.cmp.grid.table.ChainSheet', {
             handler: 'onCancel'
         }, {
             bind: {
-                text: '{operation}' === 'EDIT' ? 'Update'.t() : 'Create'.t()
-                // text: '{operation === "EDIT" ? "Update" : "Create"}'
+                text: '{operation === "EDIT" ? "Update" : "Create"}'
             },
             ui: 'action',
             handler: 'onApply'

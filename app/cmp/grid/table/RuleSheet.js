@@ -33,7 +33,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
     items: [{
         xtype: 'panel',
         bind: {
-            title: '{ruleOperation}' === 'EDIT' ? 'Edit Rule'.t() : 'New Rule'.t()
+            title: '{ruleOperation === "EDIT" ? "Edit Rule" : "New Rule"}'
         },
         scrollable: true,
         items: [{
@@ -150,8 +150,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 handler: 'onCancel'
             }, {
                 bind: {
-                    text: '{ruleOperation}' === 'EDIT' ? 'Update'.t() : 'Create'.t()
-                    // text: '{ruleOperation === "EDIT" ? "Update" : "Create"}'
+                    text: '{ruleOperation === "EDIT" ? "Update" : "Create"}'
                 },
                 ui: 'action',
                 handler: 'onApplyRule'
@@ -162,8 +161,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         itemId: 'conditionform',
         padding: 0,
         bind: {
-            title: '{conditionOperation}' === 'EDIT' ? 'Edit Condition'.t() : 'New Condition'.t()
-            // title: '{conditionOperation === "EDIT" ? "Edit Condition" : "New Condition"}'
+            title: '{conditionOperation === "EDIT" ? "Edit Condition" : "New Condition"}'
         },
         defaults: {
             margin: 16
@@ -189,7 +187,15 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             editable: false,
             required: true,
             itemTpl: '<tpl>{text}{sign}</tpl>',
-            options: [] // defined in Util.ops
+            value: '==',
+            options: [
+                { value: '==', text: 'Equals'.t(), sign: ' [ = ]' },
+                { value: '!=', text: 'Not Equals'.t(), sign: ' [ &ne; ]' },
+                { value: '>', text: 'Greater Than'.t(), sign: ' [ &gt; ]' },
+                { value: '<', text: 'Less Than'.t(), sign: ' [ &lt; ]' },
+                { value: '>=', text: 'Greater Than or Equal'.t(), sign:' [ &ge; ]' },
+                { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
+            ] // defined in Util.ops
         }, {
             xtype: 'toolbar',
             // docked: 'bottom',
@@ -202,8 +208,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 handler: 'onCancelCondition'
             }, {
                 bind: {
-                    text: '{conditionOperation}' === 'EDIT' ? 'Update'.t() : 'Create'.t()
-                    // text: '{conditionOperation === "EDIT" ? "Update" : "Create"}'
+                    text: '{conditionOperation === "EDIT" ? "Update" : "Create"}'
                 },
                 ui: 'action',
                 handler: 'onApplyCondition'
@@ -294,7 +299,9 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
 
         onNewCondition: function () {
             var me = this,
-                newCondition = new Mfw.model.table.Condition();
+                newCondition = new Mfw.model.table.Condition({
+                    op: '=='
+                });
             me.getView().setActiveItem(1);
             me.getViewModel().set('conditionOperation', 'NEW');
             me.conditionform.setRecord(newCondition);
