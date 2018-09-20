@@ -16,8 +16,8 @@ Ext.define('Mfw.controller.MfwController', {
         routes: {
             // '*': 'onRoute',
             '': { action: 'onHome', conditions: { ':query' : '(.*)' } },
-            'dashboard:query': { action: 'onDashboard', conditions: { ':query' : '(.*)' } },
-            'reports:query': { action: 'onReports', conditions: { ':query' : '(.*)' } },
+            'dashboard:query': { before: 'onDashboardBefore', action: 'onDashboard', conditions: { ':query' : '(.*)' } },
+            'reports:query': { before: 'onReportsBefore', action: 'onReports', conditions: { ':query' : '(.*)' } },
             'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } },
             'monitor/:param': { action: 'onMonitor', conditions: { ':param' : '(.*)' } },
             '404': { action: 'onUnmatchedRoute' }
@@ -37,12 +37,68 @@ Ext.define('Mfw.controller.MfwController', {
         Mfw.app.redirectTo('dashboard');
     },
 
-    onDashboard: function (query) {
+    /**
+     * Updates route based on existance or not of predefined conditions in ViewModel
+     * arguments of the method are ([query], action) with query missing if not set
+     */
+    onDashboardBefore: function () {
+        var conds, action;
+        if (arguments.length === 1) {
+            action = arguments[0];
+        } else {
+            conds = arguments[0].replace('?', '');
+            action = arguments[1];
+        }
+
+
+        if (!conds) {
+            // if no condition parameters, load those condition params from view model and redirect
+            Mfw.app.redirectTo('dashboard?' + Util.modelToParams('dashboard', Ext.Viewport.getViewModel().get('dashboardConditions')));
+            action.stop();
+        } else {
+            // otherwise update View Model with the new condition params
+            Ext.Viewport.getViewModel().set('dashboardConditions', Util.paramsToModel('dashboard', conds));
+            action.resume();
+        }
+    },
+
+    onDashboard: function () {
         Ext.Viewport.getViewModel().set({
             currentView: 'mfw-dashboard',
             currentViewTitle: 'Dashboard'.t()
         });
-        Mfw.app.updateQuery(query);
+    },
+
+    /**
+     * Updates route based on existance or not of predefined conditions in ViewModel
+     * arguments of the method are ([query], action) with query missing if not set;
+     * `route` can be seen as the path to a specific report category/name
+     * A full query can look like
+     * #reports/category_name/report_name?since=today&username:>%3D:test:1
+     */
+    onReportsBefore: function () {
+        var route = '', conds, query = null, action;
+        if (arguments.length === 1) {
+            action = arguments[0];
+        } else {
+            query = arguments[0];
+            action = arguments[1];
+        }
+
+        if (query) {
+            route = query.split('?')[0];
+            conds = query.split('?')[1];
+        }
+
+        if (!conds) {
+            // if no condition parameters, load those condition params from view model and redirect
+            Mfw.app.redirectTo('reports' + route + '?' + Util.modelToParams('reports', Ext.Viewport.getViewModel().get('reportsConditions')));
+            action.stop();
+        } else {
+            // otherwise update View Model with the new condition params
+            Ext.Viewport.getViewModel().set('reportsConditions', Util.paramsToModel('reports', conds));
+            action.resume();
+        }
     },
 
     onReports: function (query) {
@@ -50,7 +106,6 @@ Ext.define('Mfw.controller.MfwController', {
             currentView: 'mfw-reports',
             currentViewTitle: 'Reports'.t()
         });
-        Mfw.app.updateQuery(query);
     },
 
     onSettings: function (route) {

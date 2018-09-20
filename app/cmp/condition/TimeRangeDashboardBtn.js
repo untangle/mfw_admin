@@ -30,7 +30,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
                 gvm.set('dashboardConditions.since', item.value);
-                Mfw.app.updateQuery();
+                Mfw.app.redirect();
                 menu.hide();
             });
         }

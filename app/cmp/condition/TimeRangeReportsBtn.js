@@ -58,7 +58,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
                 if (item.value !== 'range') {
                     gvm.set('reportsConditions.predefinedSince', item.value);
                     gvm.set('reportsConditions.until', null);
-                    Mfw.app.updateQuery();
+                    Mfw.app.redirect();
                 } else {
                     me.showTimeRangeDialog();
                 }
@@ -117,7 +117,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
                 gvm.set('reportsConditions.until', null);
             }
 
-            Mfw.app.updateQuery();
+            Mfw.app.redirect();
             me.dialog.hide();
         },
 

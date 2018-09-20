@@ -40,7 +40,7 @@ Ext.define('Mfw.cmp.condition.ConditionsController', {
                     fieldIndex: idx,
                     handler: function (btn) {
                         Ext.Array.removeAt(fields, btn.fieldIndex);
-                        Mfw.app.updateQuery();
+                        Mfw.app.redirect();
                     }
                 }]
             });
@@ -95,7 +95,7 @@ Ext.define('Mfw.cmp.condition.ConditionsController', {
             fields.push(form.getValues());
         }
 
-        Mfw.app.updateQuery();
+        Mfw.app.redirect();
         me.dialog.hide();
     },
     onDialogCancel: function () {
@@ -129,7 +129,7 @@ Ext.define('Mfw.cmp.condition.ConditionsController', {
         }
 
         Ext.Array.removeAt(fields, grid.getStore().indexOf(info.record));
-        Mfw.app.updateQuery();
+        Mfw.app.redirect();
     }
 
 });
