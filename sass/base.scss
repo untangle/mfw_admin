@@ -103,7 +103,7 @@ cite {
             }
         }
         // &.x-hovered { color: #FFF; .x-icon-el { color: #FFF; } }
-    .x-text-el { text-transform: none; margin-top: 1px; }
+    .x-text-el { text-transform: none; /* margin-top: 1px;*/ }
     &.x-pressed, &.x-pressing {
         color: var(--base-color);
         .x-icon-el, .x-arrow-el { color: var(--base-color) }
@@ -362,6 +362,10 @@ i {
     border-top: 2px #F95821 solid;
 }
 
+.x-treelist-nav .x-treelist-item-text {
+    font-size: 14px;
+}
+
 .x-treelist-item-icon.tree {
     width: 28px;
     height: 28px;
@@ -376,6 +380,9 @@ i {
     &.system { background-image: url('res/icons/config/system.svg'); }
     &.upgrade { background-image: url('res/icons/config/upgrade.svg'); }
     &.about { background-image: url('res/icons/config/about.svg'); }
+
+    &.hosts { background-image: url('res/icons/config/hosts.svg'); }
+    &.devices { background-image: url('res/icons/config/devices.svg'); }
 }
 
 .x-gridcell-body-el em {

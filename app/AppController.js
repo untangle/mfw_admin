@@ -102,6 +102,17 @@ Ext.define('Mfw.controller.MfwController', {
     },
 
     onReports: function (query) {
+        var route = query.split('?')[0],
+            list = Ext.Viewport.down('mfw-reports').down('treelist'), node;
+
+        if (!route) {
+            list.getStore().getRoot().collapse(true);
+            list.setSelection(null);
+        } else {
+            node = list.getStore().findNode('href', 'reports' + route);
+            list.setSelection(node);
+        }
+
         Ext.Viewport.getViewModel().set({
             currentView: 'mfw-reports',
             currentViewTitle: 'Reports'.t()

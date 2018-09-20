@@ -314,6 +314,10 @@ Ext.define('Mfw.util.Util', {
             } else {
                 params += 'since=' + conditions.since || 1;
             }
+
+            if (conditions.until) {
+                params += '&until=' + conditions.until;
+            }
         }
 
         Ext.Array.each(conditions.fields, function(field) {
@@ -321,6 +325,29 @@ Ext.define('Mfw.util.Util', {
         });
 
         return params;
+    },
+
+
+    generateTimeSeries: function () {
+        var scanned = [], bypassed = [], total = [], sc, bp,
+            start = Ext.Date.clearTime(Util.serverToClientDate(new Date())),
+            time = start,
+            end = new Date();
+
+        while (Ext.Date.between(time, start, end)) {
+            time = Ext.Date.add(time, Ext.Date.MINUTE, 10);
+            sc = Ext.Number.randomInt(0, 100);
+            bp = Ext.Number.randomInt(0, 100);
+            scanned.push([time.getTime(), sc]);
+            bypassed.push([time.getTime(), bp]);
+            total.push([time.getTime(), sc + bp]);
+        }
+
+        return [
+            { name: 'scanned', data: scanned },
+            { name: 'bypassed', data: bypassed },
+            { name: 'total', data: total }
+        ]
     }
 
 });
