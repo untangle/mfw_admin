@@ -3,20 +3,19 @@ Ext.define('Mfw.cmp.condition.ConditionsSheet', {
     alias: 'widget.fields-sheet',
 
     title: 'Conditions'.t(),
-    height: '50%',
-    closable: true,
-    closeAction: 'hide',
+    width: 300,
+    // closable: true,
+    // closeAction: 'hide',
     centered: true,
     cover: true,
-    side: 'bottom',
+    side: 'left',
     layout: 'fit',
 
     tools: [{
         xtype: 'button',
         ui: 'action',
-        text: 'Add',
-        iconCls: 'x-fa fa-plus',
-        margin: '0 16 0 0',
+        text: 'New',
+        iconCls: 'md-icon-add',
         handler: 'addCondition'
         // type: 'plus'
     }],

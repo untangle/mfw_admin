@@ -40,6 +40,28 @@ cite {
     &.fa-blue { color: blue; }
 }
 
+.x-toolbar.x-conditions { // toolbar
+    .x-button {
+        color: #333;
+        font-weight: 400;
+        font-size: 12px;
+        .x-arrow-el {
+            color: #333;
+        }
+    }
+    .x-button-segmented {
+        .x-inner-el {
+            background-color: #dfe6ea;
+            font-size: 12px;
+            font-weight: 600;
+            // padding: 8px;
+        }
+        .x-icon-el {
+            color: #333;
+        }
+    }
+}
+
 .x-htmlmenu {
     .x-menuitem {
         .x-text-el { display: none; }

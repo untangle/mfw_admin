@@ -70,6 +70,7 @@
     },
     "globals": {
         "Ext": true,
+        "Highcharts": true,
         "Mfw": true,
         "Util": true
     }

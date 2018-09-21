@@ -4,7 +4,10 @@ Ext.define('Mfw.cmp.condition.Reports', {
 
     controller: 'conditions',
 
-    layout: 'hbox',
+    layout: {
+        type: 'hbox',
+        align: 'center'
+    },
 
     viewModel: {
         formulas: {
@@ -17,7 +20,7 @@ Ext.define('Mfw.cmp.condition.Reports', {
     items: [{
         xtype: 'button',
         bind: { text: 'Conditions'.t() + ' ({conditionsBtnTxt})' },
-        handler: 'showFieldsSheet',
+        handler: 'showFieldsSheet'
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',

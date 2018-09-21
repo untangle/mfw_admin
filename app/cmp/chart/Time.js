@@ -6,58 +6,52 @@ Ext.define('Mfw.cmp.chart.Time', {
     extend: 'Ext.Container',
     alias: 'widget.chart-time',
 
-    html: 'time',
-
     listeners: {
         painted: 'onInitialize'
     },
 
     controller: {
-        onInitialize: function (chart) {
+        onInitialize: function (view) {
             var me = this;
-            me.chart = new Highcharts.stockChart(chart.innerElement.dom, {
+            view.chart = new Highcharts.stockChart(view.innerElement.dom, {
                 chart: {
-                    type: 'areaspline',
+                    type: 'spline',
                     // animation: false,
                     // marginRight: isWidget ? undefined : 20,
                     // spacing: isWidget ? [5, 5, 10, 5] : [30, 10, 15, 10],
-                    style: {
-                        fontFamily: 'Roboto',
-                        // fontSize: '10px'
-                    },
                     zoomType: 'x',
                     backgroundColor: 'transparent',
                     selectedrange: null,
                     events: {
-                        selection: function (event) {
-                            // if (isWidget) { return; } // applies only when viewing the report
-                            if (event.resetSelection) {
-                                me.chart.update({
-                                    exporting: {
-                                        buttons: {
-                                            timerangeButton: {
-                                                enabled: false
-                                            }
-                                        }
-                                    }
-                                });
-                                me.chart.selectedrange = null;
-                            } else {
-                                me.chart.update({
-                                    exporting: {
-                                        buttons: {
-                                            timerangeButton: {
-                                                enabled: true
-                                            }
-                                        }
-                                    }
-                                });
-                                me.chart.selectedrange = {
-                                    min: event.xAxis[0].min,
-                                    max: event.xAxis[0].max
-                                };
-                            }
-                        }
+                        // selection: function (event) {
+                        //     // if (isWidget) { return; } // applies only when viewing the report
+                        //     if (event.resetSelection) {
+                        //         me.chart.update({
+                        //             exporting: {
+                        //                 buttons: {
+                        //                     timerangeButton: {
+                        //                         enabled: false
+                        //                     }
+                        //                 }
+                        //             }
+                        //         });
+                        //         me.chart.selectedrange = null;
+                        //     } else {
+                        //         me.chart.update({
+                        //             exporting: {
+                        //                 buttons: {
+                        //                     timerangeButton: {
+                        //                         enabled: true
+                        //                     }
+                        //                 }
+                        //             }
+                        //         });
+                        //         me.chart.selectedrange = {
+                        //             min: event.xAxis[0].min,
+                        //             max: event.xAxis[0].max
+                        //         };
+                        //     }
+                        // }
                     }
                 },
                 exporting: {
@@ -83,11 +77,11 @@ Ext.define('Mfw.cmp.chart.Time', {
                 credits: { enabled: false },
                 title: {
                     align: 'left',
-                    // text: 'Hosts Additions',
-                    text: null,
+                    text: 'Hosts Additions',
+                    // text: null,
                     style: {
                         fontSize: '24px',
-                        fontWeight: 600
+                        fontWeight: 400
                     }
                     // useHtml: true
                 },
@@ -217,8 +211,8 @@ Ext.define('Mfw.cmp.chart.Time', {
                                 y2: 1
                             },
                             stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                [0, Highcharts.Color(Highcharts.getOptions().colors[Ext.Number.randomInt(0, 9)]).setOpacity(0.5).get('rgba')],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[Ext.Number.randomInt(0, 9)]).setOpacity(0.5).get('rgba')]
                             ]
                         }
                     },
