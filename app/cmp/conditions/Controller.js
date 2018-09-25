@@ -1,52 +1,42 @@
-Ext.define('Mfw.cmp.condition.ConditionsController', {
+Ext.define('Mfw.cmp.conditions.Controller', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.conditions',
 
-    onInitializeDashboard: function (cmp) {
-        var me = this, gvm = Ext.Viewport.getViewModel();
-        // watch since condition change and update button text
-        gvm.bind('{dashboardConditions.fields}', function (fields) {
-            cmp.down('#fieldsBtns').removeAll();
-            cmp.down('#fieldsBtns').add(me.generateConditionsButtons(fields));
-        });
-    },
-
-    onInitializeReports: function (cmp) {
-        var me = this, gvm = Ext.Viewport.getViewModel();
-        gvm.bind('{reportsConditions.fields}', function (fields) {
-            cmp.down('#fieldsBtns').removeAll();
-            cmp.down('#fieldsBtns').add(me.generateConditionsButtons(fields));
+    onInitialize: function (cmp) {
+        var me = this, mainView;
+        me.mainView = mainView = cmp.up('mfw-dashboard') || cmp.up('mfw-reports');
+        mainView.getViewModel().bind('{conditions.fields}', function (fields) {
+            me.generateConditionsButtons(fields)
         });
     },
 
     generateConditionsButtons: function (fields) {
-        var me = this, buttons = [], fieldName;
+        var me = this, buttons = [], fieldName,
+            buttonsCmp = me.mainView.down('#fieldsBtns');
+
         Ext.Array.each(fields, function (field, idx) {
             fieldName = Ext.Array.findBy(Util.tmpColumns, function (item) { return item.field === field.column; } ).name;
             buttons.push({
                 xtype: 'segmentedbutton',
                 margin: '0 5',
                 allowToggle: false,
-                // defaults: {
-                //     ui: 'default'
-                // },
                 items: [{
                     text: fieldName + ' ' + field.operator + ' ' + field.value,
-                    handler: function (btn) {
+                    handler: function () {
                         me.showFieldDialog(field);
                     }
                 }, {
-                    // iconCls: 'x-fa fa-times',
                     iconCls: 'x-tool-type-close',
                     fieldIndex: idx,
                     handler: function (btn) {
                         Ext.Array.removeAt(fields, btn.fieldIndex);
-                        Mfw.app.redirect();
+                        Mfw.app.redirect(me.mainView);
                     }
                 }]
             });
         });
-        return buttons;
+        buttonsCmp.removeAll();
+        buttonsCmp.add(buttons);
     },
 
 
@@ -81,22 +71,16 @@ Ext.define('Mfw.cmp.condition.ConditionsController', {
     onDialogOk: function () {
         var me = this, fields,
             form = me.dialog.down('formpanel'),
-            gvm = Ext.Viewport.getViewModel();
+            vm = me.mainView.getViewModel();
 
         if (!form.validate()) { return; }
 
-        if (gvm.get('currentView') === 'mfw-dashboard') {
-            fields = gvm.get('dashboardConditions.fields');
-        }
-        if (gvm.get('currentView') === 'mfw-reports') {
-            fields = gvm.get('reportsConditions.fields');
-        }
+        fields = vm.get('conditions.fields')
 
         if (me.dialog.getAddAction()) {
             fields.push(form.getValues());
         }
-
-        Mfw.app.redirect();
+        Mfw.app.redirect(me.mainView);
         me.dialog.hide();
     },
     onDialogCancel: function () {

@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.Dashboard', {
+Ext.define('Mfw.cmp.conditions.Dashboard', {
     extend: 'Ext.Container',
     alias: 'widget.dashboard-conditions',
 
@@ -9,14 +9,13 @@ Ext.define('Mfw.cmp.condition.Dashboard', {
     viewModel: {
         formulas: {
             conditionsBtnTxt: function (get) {
-                return get('dashboardConditions.fields').length;
+                return get('conditions.fields').length;
             }
         }
     },
 
     items: [{
         xtype: 'button',
-        iconCls: 'md-icon-filter-list',
         bind: { text: 'Conditions'.t() + ' ({conditionsBtnTxt})' },
         handler: 'showFieldsSheet',
     }, {
@@ -30,15 +29,13 @@ Ext.define('Mfw.cmp.condition.Dashboard', {
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }, {
         xtype: 'button',
-        // ui: 'action',
-        // text: 'Add'.t(),
-        iconCls: 'md-icon-add-circle',
+        iconCls: 'md-icon-add',
         handler: 'addCondition',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }],
 
     listeners: {
-        initialize: 'onInitializeDashboard'
+        initialize: 'onInitialize'
     }
 });

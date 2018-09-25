@@ -1,9 +1,8 @@
-Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
+Ext.define('Mfw.cmp.conditions.TimeDashboard', {
     extend: 'Ext.Button',
     alias: 'widget.dashboard-timerange-btn',
 
-    arrow: false,
-    iconCls: 'md-icon-timelapse',
+    // arrow: false,
     menu: {
         indented: false,
         mouseLeaveDelay: 0,
@@ -21,16 +20,17 @@ Ext.define('Mfw.cmp.condition.TimeRangeDashboardBtn', {
 
     listeners: {
         initialize: function (btn) {
-            var gvm = Ext.Viewport.getViewModel();
+            var view = btn.up('mfw-dashboard'),
+                vm = view.getViewModel();
             // watch since condition change and update button text
-            gvm.bind('{dashboardConditions.since}', function (since) {
+            vm.bind('{conditions.since}', function (since) {
                 btn.setText(since + ' hour(s)');
             });
 
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
-                gvm.set('dashboardConditions.since', item.value);
-                Mfw.app.redirect();
+                vm.set('conditions.since', item.value);
+                Mfw.app.redirect(view);
                 menu.hide();
             });
         }

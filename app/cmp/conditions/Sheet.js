@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.ConditionsSheet', {
+Ext.define('Mfw.cmp.conditions.Sheet', {
     extend: 'Ext.Sheet',
     alias: 'widget.fields-sheet',
 
@@ -23,7 +23,7 @@ Ext.define('Mfw.cmp.condition.ConditionsSheet', {
     viewModel: {
         formulas: {
             data: function (get) {
-                return get('currentView') === 'mfw-dashboard' ? get('dashboardConditions.fields') : get('reportsConditions.fields');
+                return get('conditions.fields');
             }
         },
         stores: {

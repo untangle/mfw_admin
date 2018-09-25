@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.ConditionDialog', {
+Ext.define('Mfw.cmp.conditions.Dialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.field-dialog',
     title: 'Condition'.t(),

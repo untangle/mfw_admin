@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.Reports', {
+Ext.define('Mfw.cmp.conditions.Reports', {
     extend: 'Ext.Container',
     alias: 'widget.reports-conditions',
 
@@ -12,7 +12,7 @@ Ext.define('Mfw.cmp.condition.Reports', {
     viewModel: {
         formulas: {
             conditionsBtnTxt: function (get) {
-                return get('reportsConditions.fields').length;
+                return get('conditions.fields').length;
             }
         }
     },
@@ -32,15 +32,14 @@ Ext.define('Mfw.cmp.condition.Reports', {
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }, {
         xtype: 'button',
-        // ui: 'action',
-        // text: 'Add'.t(),
-        iconCls: 'x-fa fa-plus',
+        iconCls: 'md-icon-add',
         handler: 'addCondition',
+        view: 'reports',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }],
 
     listeners: {
-        initialize: 'onInitializeReports'
+        initialize: 'onInitialize'
     }
 });

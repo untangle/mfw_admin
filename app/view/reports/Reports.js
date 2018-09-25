@@ -4,7 +4,16 @@ Ext.define('Mfw.view.Reports', {
 
     layout: 'fit',
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            conditions: {
+                predefinedSince: 'today',
+                since: '',
+                until: '',
+                fields: []
+            }
+        }
+    },
 
     items: [{
         xtype: 'toolbar',
@@ -129,9 +138,13 @@ Ext.define('Mfw.view.Reports', {
 
     controller: {
         onInitialize: function (view) {
-            // var vm = view.getViewModel();
+            var vm = view.getViewModel();
             // vm.bind('{reportsConditions}', function (conditions) {
             //     console.log('BINDING FIRED');
+            // });
+            // view.getViewModel().bind('{conditions.fields}', function (fields) {
+            //     console.log('aaa');
+            //     // me.generateConditionsButtons(reportsView, fields)
             // });
         },
 

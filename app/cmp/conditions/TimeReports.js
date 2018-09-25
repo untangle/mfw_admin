@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
+Ext.define('Mfw.cmp.conditions.TimeReports', {
     extend: 'Ext.Button',
     alias: 'widget.reports-timerange-btn',
 
@@ -27,10 +27,10 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
 
     controller: {
         onInitialize: function (btn) {
-            var me = this, gvm = Ext.Viewport.getViewModel(), btnText;
+            var me = this, vm = me.getView().up('mfw-reports').getViewModel(), btnText;
 
             // watch since condition change and update button text
-            gvm.bind('{reportsConditions}', function (conditions) {
+            vm.bind('{conditions}', function (conditions) {
                 var sinceDate = new Date(conditions.predefinedSince),
                     untilDate, btnText = '';
 
@@ -53,14 +53,20 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
                     }
                 }
                 btn.setText(btnText);
+            }, {
+                deep: true
             });
 
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
+                console.log(item.value);
                 if (item.value !== 'range') {
-                    gvm.set('reportsConditions.predefinedSince', item.value);
-                    gvm.set('reportsConditions.until', null);
-                    Mfw.app.redirect();
+                    vm.set('conditions.predefinedSince', item.value);
+                    vm.set('conditions.until', null);
+                    console.log(vm.get('conditions'));
+                    // Mfw.app.redirect();
+                    Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
+
                 } else {
                     me.showTimeRangeDialog();
                 }

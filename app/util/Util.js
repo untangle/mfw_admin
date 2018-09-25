@@ -305,14 +305,14 @@ Ext.define('Mfw.util.Util', {
         var params = '';
 
         if (view === 'dashboard') {
-            params += 'since=' + conditions.since || 1;
+            params += 'since=' + (conditions.since || 1);
         }
 
         if (view === 'reports') {
             if (conditions.predefinedSince) {
                 params += 'since=' + conditions.predefinedSince;
             } else {
-                params += 'since=' + conditions.since || 1;
+                params += 'since=' + (conditions.since || 1);
             }
 
             if (conditions.until) {

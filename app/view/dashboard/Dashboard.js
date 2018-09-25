@@ -2,22 +2,28 @@ Ext.define('Mfw.view.Dashboard', {
     extend: 'Ext.Panel',
     alias: 'widget.mfw-dashboard',
     controller: 'dashboard',
-    // viewModel: {
-    //     data: {
-    //         timeRange: {
-    //             since: 1
-    //         }
-    //     }
-    // },
+
+    viewModel: {
+        data: {
+            conditions: {
+                since: null,
+                fields: []
+            }
+        }
+    },
+
 
     items: [{
         xtype: 'toolbar',
+        userCls: 'x-conditions',
         shadow: false,
         padding: 8,
         // padding: 0, // to remove left spacing
         dock: 'top',
         items: [{
             xtype: 'dashboard-timerange-btn'
+        }, {
+            xtype: 'toolbarseparator',
         }, {
             xtype: 'dashboard-conditions'
         }, '->', {
@@ -63,14 +69,14 @@ Ext.define('Mfw.view.Dashboard', {
         items: [{
             xtype: 'component',
             bind: {
-                html: 'Dashboard View since <strong>{dashboardConditions.since} hour(s)</strong> <br/><br/>'
+                html: 'Dashboard View since <strong>{conditions.since} hour(s)</strong> <br/><br/>'
             }
         }, {
             xtype: 'dataview',
             disableSelection: true,
             bind: {
                 store: {
-                    data: '{dashboardConditions.fields}'
+                    data: '{conditions.fields}'
                 }
             },
             itemTpl: '<div>{column} {operator} {value} (autoformat: {autoFormatValue})</div>'

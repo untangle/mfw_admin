@@ -24,16 +24,6 @@ Ext.define('Mfw.App', {
             data: {
                 smallScreen: true,
                 currentView: '',
-                dashboardConditions: {
-                    since: 1,
-                    fields: []
-                },
-                reportsConditions: {
-                    predefinedSince: 'today',
-                    since: '',
-                    until: '',
-                    fields: []
-                }
             }
         },
         bind: {
@@ -110,15 +100,10 @@ Ext.define('Mfw.App', {
     },
 
 
-    redirect: function () {
-        console.log('REDIRECT');
-        var gvm = Ext.Viewport.getViewModel(), view = gvm.get('currentView'), conditions;
-        if (view === 'mfw-reports') {
-            conditions = Util.modelToParams('reports', gvm.get('reportsConditions'));
-        }
-        if (view === 'mfw-dashboard') {
-            conditions = Util.modelToParams('dashboard', gvm.get('dashboardConditions'));
-        }
-        Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + conditions);
+    redirect: function (view) {
+        var conditions = view.getViewModel().get('conditions'), _view;
+        if (view.isXType('mfw-dashboard')) { _view = 'dashboard'; }
+        if (view.isXType('mfw-reports')) { _view = 'reports'; }
+        Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams(_view, conditions));
     }
 });

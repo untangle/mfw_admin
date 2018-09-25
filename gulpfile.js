@@ -6,7 +6,7 @@ var exec = require('gulp-exec');
 var browserSync = require('browser-sync').create();
 var fs = require("fs");
 
-var host = '192.168.0.185'; // the MFW machine host to scp built files
+var host = '192.168.0.206'; // the MFW machine host to scp built files
 
 gulp.task('serve', function() {
     browserSync.init({

@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.condition.TimeRangeDialog', {
+Ext.define('Mfw.cmp.conditions.TimeDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.timerange-dialog',
 
