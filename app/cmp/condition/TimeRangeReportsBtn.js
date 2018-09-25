@@ -15,7 +15,7 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
             { text: 'Last Week'.t(), value: 'lastweek' },
             { text: 'This Month'.t(), value: 'month' },
             { xtype: 'menuseparator' },
-            { text: 'Time Range ...'.t(), value: 'range' }
+            { text: 'Custom Range ...'.t(), value: 'range' }
         ]
     },
 
@@ -35,7 +35,8 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
                     untilDate, btnText = '';
 
                 if (sinceDate.getTime() > 0) {
-                    btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
+                    // btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
+                    btnText += (!conditions.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';
                 } else {
                     btn.getMenu().getItems().each(function (item) {
                         if (item.value === conditions.predefinedSince) {
@@ -47,7 +48,8 @@ Ext.define('Mfw.cmp.condition.TimeRangeReportsBtn', {
                 if (conditions.until) {
                     untilDate = new Date(conditions.until);
                     if (untilDate.getTime() > 0) {
-                        btnText += ' <br/> ' + Ext.Date.format(untilDate, 'Y-m-d H:i A');
+                        // btnText += ' - ' + Ext.Date.format(untilDate, 'Y-m-d H:i A');
+                        btnText += ' - ' + Ext.Date.format(untilDate, 'M j') + ', <strong>' + Ext.Date.format(untilDate, 'H:i A') + '</strong>';
                     }
                 }
                 btn.setText(btnText);

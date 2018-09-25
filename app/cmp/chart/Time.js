@@ -13,6 +13,15 @@ Ext.define('Mfw.cmp.chart.Time', {
     controller: {
         onInitialize: function (view) {
             var me = this;
+
+            Highcharts.setOptions({
+                chart: {
+                    style: {
+                        fontFamily: 'Roboto, sans-serif'
+                    }
+                }
+            });
+
             view.chart = new Highcharts.stockChart(view.innerElement.dom, {
                 chart: {
                     type: 'spline',
@@ -20,7 +29,6 @@ Ext.define('Mfw.cmp.chart.Time', {
                     // marginRight: isWidget ? undefined : 20,
                     // spacing: isWidget ? [5, 5, 10, 5] : [30, 10, 15, 10],
                     zoomType: 'x',
-                    backgroundColor: 'transparent',
                     selectedrange: null,
                     events: {
                         // selection: function (event) {
@@ -60,10 +68,13 @@ Ext.define('Mfw.cmp.chart.Time', {
                         contextButton: {
                             enabled: true // disable default contextButton
                         },
+                        testButton: {
+                            text: 'Refresh'.t()
+                        },
                         timerangeButton: {
                             text: 'Apply this timerange'.t(),
                             align: 'center',
-                            enabled: false, // this updates based on zoom selection
+                            enabled: true, // this updates based on zoom selection
                             y: 10,
                             onclick: function() {
                                 Ext.fireEvent('timerangechange', me.chart.selectedrange);

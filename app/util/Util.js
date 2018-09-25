@@ -327,6 +327,31 @@ Ext.define('Mfw.util.Util', {
         return params;
     },
 
+    // compareConditions: function (conditions, newConditions) {
+    //     var equals = true;
+    //     Ext.Object.each(newConditions, function (key, val) {
+    //         if (key !== 'fields') {
+    //             if (!conditions[key] || conditions[key] !== val) {
+    //                 console.log('here');
+    //                 equals = false;
+    //             }
+    //         } else {
+    //             Ext.Array.each(val, function (field, idx) {
+    //                 Util.compareConditions(field, conditions.fields[idx]);
+
+    //                 // Ext.Object.each(field, function (key, val) {
+    //                 //     console.log(conditions['fields']);
+    //                 //     if (!conditions['fields'][idx][key] || conditions['fields'][idx][key] !== val) {
+    //                 //         console.log('here2');
+    //                 //         equals = false;
+    //                 //     }
+    //                 // })
+    //             })
+    //         }
+    //     });
+    //     return equals;
+    // },
+
 
     generateTimeSeries: function () {
         var scanned = [], bypassed = [], total = [], sc, bp,

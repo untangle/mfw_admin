@@ -1,8 +1,10 @@
-Ext.define('Mfw.view.reports.Main', {
+Ext.define('Mfw.view.Reports', {
     extend: 'Ext.Panel',
     alias: 'widget.mfw-reports',
 
     layout: 'fit',
+
+    viewModel: {},
 
     items: [{
         xtype: 'toolbar',
@@ -121,14 +123,29 @@ Ext.define('Mfw.view.reports.Main', {
         }]
     }],
 
+    listeners: {
+        initialize: 'onInitialize'
+    },
+
     controller: {
+        onInitialize: function (view) {
+            var vm = view.getViewModel();
+            console.log(vm);
+            vm.bind('{reportsConditions}', function (conditions) {
+                console.log('BINDING FIRED');
+            });
+        },
+
         onRefresh: function () {
             var me = this,
+                vm = me.getViewModel(),
                 chart = me.getView().down('chart-time');
 
             chart.chart.update({
                 series: Util.generateTimeSeries()
             }, true);
+
+
         }
     }
 

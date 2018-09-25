@@ -524,3 +524,11 @@ i {
         &.about { background-image: url('res/icons/config/icon_config_about.png'); }
     }
 }
+
+.highcharts-container {
+    font-family: 'Arial', sans-serif;
+}
+
+.highcharts-background {
+    fill: transparent;
+}

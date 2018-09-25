@@ -4,14 +4,14 @@ Ext.define('Mfw.controller.MfwController', {
     // stores: [
     //     'Interfaces'
     // ],
+
+    refs: [{
+        ref: 'reportsView',
+        selector: 'mfw-reports'
+    }],
+
     config: {
-        refs: {
-            // mainView: 'mfw-main',
-            // dashboardView: '#dashboard',
-            // appsView: '#apps',
-            // reportsView: '#reports',
-            // configView: '#config',
-        },
+        views: ['Reports'],
 
         routes: {
             // '*': 'onRoute',
