@@ -1,21 +1,19 @@
 Ext.define('Mfw.controller.MfwController', {
     extend: 'Ext.app.Controller',
     namespace: 'Mfw',
-    // stores: [
-    //     'Interfaces'
-    // ],
 
-    refs: [{
-        ref: 'reportsView',
-        selector: 'mfw-reports'
-    }],
+    refs: [
+        { ref: 'reportsView', selector: 'mfw-reports' },
+        { ref: 'loginView', selector: 'mfw-login' }
+    ],
 
     config: {
-        views: ['Reports'],
+        views: ['Dashboard', 'Reports', 'Login'],
 
         routes: {
-            // '*': 'onRoute',
+            '*': { before: 'onRouteBefore' },
             '': { action: 'onHome', conditions: { ':query' : '(.*)' } },
+            'login': { action: 'onLogin' },
             'dashboard:query': { before: 'onDashboardBefore', action: 'onDashboard', conditions: { ':query' : '(.*)' } },
             'reports:query': { before: 'onReportsBefore', action: 'onReports', conditions: { ':query' : '(.*)' } },
             'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } },
@@ -24,17 +22,44 @@ Ext.define('Mfw.controller.MfwController', {
         },
     },
 
-    // onRoute: function (params) {
-    //     console.log(params);
-    //     // var loadingCard = Mfw.app.getMainView().down('#loadingCard');
-    //     // if (loadingCard) {
-    //     //     Mfw.app.getMainView().remove(loadingCard, true);
-    //     // }
+    /**
+     * On before any route checks if account is set otherwise redirect to login
+     */
+    onRouteBefore: function (action) {
+        var me = this,
+            hash = window.location.hash;
+        if (window.location.hash === '#login') {
+            action.resume();
+            return;
+        }
 
-    // },
+        if (!Mfw.app.getAccount()) {
+            Ext.Ajax.request({
+                url: '/account/status',
+                success: function (response) {
+                    Mfw.app.setAccount(Ext.decode(response.responseText));
+                    action.resume();
+                },
+
+                failure: function() {
+                    me.getLoginView().setRedirectRoute(hash);
+                    Mfw.app.redirectTo('login');
+                    action.stop();
+                }
+            });
+        } else {
+            action.resume();
+        }
+    },
 
     onHome: function () {
         Mfw.app.redirectTo('dashboard');
+    },
+
+    onLogin: function () {
+        Ext.Viewport.getViewModel().set({
+            currentView: 'mfw-login'
+        });
     },
 
     /**

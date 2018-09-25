@@ -1,4 +1,4 @@
-Ext.define('Mfw.view.dashboard.DashboardController', {
+Ext.define('Mfw.view.DashboardController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.dashboard',

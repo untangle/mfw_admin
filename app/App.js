@@ -15,6 +15,10 @@ Ext.define('Mfw.App', {
 
     stores: ['Interfaces', 'Sessions', 'SettingsNav', 'ReportsNav', 'RuleConditions', 'PortForwardRules'],
 
+    config: {
+        account: null
+    },
+
     viewport: {
         viewModel: {
             data: {
@@ -58,7 +62,7 @@ Ext.define('Mfw.App', {
 
     launch: function () {
         console.log('launched');
-        // add main views to the viewport
+
         Ext.Viewport.add([
             // header
             { xtype: 'mfw-header' },
@@ -68,9 +72,29 @@ Ext.define('Mfw.App', {
             { xtype: 'mfw-reports' },
             { xtype: 'mfw-settings' },
             // 404 view
-            { xtype: 'mfw-404' }
+            { xtype: 'mfw-404' },
+            // login view
+            { xtype: 'mfw-login' }
         ]);
 
+
+        // Ext.util.History.on('change', function () {
+        //     Ext.Ajax.request({
+        //         url: 'ajax_demo/sample.json',
+
+        //         success: function(response, opts) {
+        //             var obj = Ext.decode(response.responseText);
+        //             console.dir(obj);
+        //         },
+
+        //         failure: function(response, opts) {
+        //             console.log('server-side failure with status code ' + response.status);
+        //         }
+        //     });
+        // })
+
+
+        // add main views to the viewport
         // this is necessary to determine initial viewport size after launch
         Ext.Viewport.getViewModel().set({
             smallScreen: Ext.Viewport.getSize().width < 1000
@@ -87,6 +111,7 @@ Ext.define('Mfw.App', {
 
 
     redirect: function () {
+        console.log('REDIRECT');
         var gvm = Ext.Viewport.getViewModel(), view = gvm.get('currentView'), conditions;
         if (view === 'mfw-reports') {
             conditions = Util.modelToParams('reports', gvm.get('reportsConditions'));

@@ -1,5 +1,5 @@
-Ext.define('Mfw.view.dashboard.Dashboard', {
-    extend: 'Ext.panel.Panel',
+Ext.define('Mfw.view.Dashboard', {
+    extend: 'Ext.Panel',
     alias: 'widget.mfw-dashboard',
     controller: 'dashboard',
     // viewModel: {

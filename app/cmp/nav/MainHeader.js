@@ -4,7 +4,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     cls: 'nav',
     docked: 'top',
     zIndex: 999,
-    padding: '0 16 0 16',
+    padding: '0 0 0 16',
+
+    hidden: true,
+    bind: { hidden: '{currentView === "mfw-login"}' },
 
     items: [{
         xtype: 'component',
@@ -105,6 +108,23 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         iconCls: 'x-fa fa-user-circle fa-3x',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        arrow: false,
+        menu: {
+            anchor: true,
+            items: [{
+                text: 'Logout',
+                iconCls: 'x-fa fa-sign-out',
+                handler: function () {
+                    Ext.Ajax.request({
+                        url: '/account/logout',
+                        callback: function () {
+                            Mfw.app.setAccount(null);
+                            Mfw.app.redirectTo('login');
+                        }
+                    });
+                }
+            }]
+        }
     }, {
         iconCls: 'x-fa fa-bars',
         plugins: 'responsive',

@@ -129,11 +129,10 @@ Ext.define('Mfw.view.Reports', {
 
     controller: {
         onInitialize: function (view) {
-            var vm = view.getViewModel();
-            console.log(vm);
-            vm.bind('{reportsConditions}', function (conditions) {
-                console.log('BINDING FIRED');
-            });
+            // var vm = view.getViewModel();
+            // vm.bind('{reportsConditions}', function (conditions) {
+            //     console.log('BINDING FIRED');
+            // });
         },
 
         onRefresh: function () {

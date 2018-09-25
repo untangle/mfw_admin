@@ -25,7 +25,7 @@ Ext.define('Mfw.cmp.condition.ConditionsController', {
             fieldName = Ext.Array.findBy(Util.tmpColumns, function (item) { return item.field === field.column; } ).name;
             buttons.push({
                 xtype: 'segmentedbutton',
-                margin: '2 5',
+                margin: '0 5',
                 allowToggle: false,
                 // defaults: {
                 //     ui: 'default'
