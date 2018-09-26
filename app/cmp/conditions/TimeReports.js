@@ -59,11 +59,9 @@ Ext.define('Mfw.cmp.conditions.TimeReports', {
 
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
-                console.log(item.value);
                 if (item.value !== 'range') {
                     vm.set('conditions.predefinedSince', item.value);
                     vm.set('conditions.until', null);
-                    console.log(vm.get('conditions'));
                     // Mfw.app.redirect();
                     Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
 

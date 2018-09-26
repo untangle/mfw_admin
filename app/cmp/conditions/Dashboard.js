@@ -17,7 +17,7 @@ Ext.define('Mfw.cmp.conditions.Dashboard', {
     items: [{
         xtype: 'button',
         bind: { text: 'Conditions'.t() + ' ({conditionsBtnTxt})' },
-        handler: 'showFieldsSheet',
+        handler: 'showSheetGrid',
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',
@@ -30,7 +30,7 @@ Ext.define('Mfw.cmp.conditions.Dashboard', {
     }, {
         xtype: 'button',
         iconCls: 'md-icon-add',
-        handler: 'addCondition',
+        handler: 'addConditionFromToolbar',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
     }],

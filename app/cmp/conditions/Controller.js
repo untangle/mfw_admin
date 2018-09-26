@@ -10,6 +10,25 @@ Ext.define('Mfw.cmp.conditions.Controller', {
         });
     },
 
+    onSheetInitialize: function (sheet) {
+        var titleBar = sheet.down('grid').getTitleBar();
+        titleBar.setPadding('0 8 0 16');
+        titleBar.add([{
+            xtype: 'button',
+            text: 'Add'.t(),
+            iconCls: 'md-icon-add',
+            align: 'right',
+            handler: 'addConditionFromGrid'
+        }, {
+            xtype: 'button',
+            iconCls: 'md-icon-close',
+            align: 'right',
+            handler: function () {
+                sheet.hide();
+            }
+        }]);
+    },
+
     generateConditionsButtons: function (fields) {
         var me = this, buttons = [], fieldName,
             buttonsCmp = me.mainView.down('#fieldsBtns');
@@ -23,7 +42,7 @@ Ext.define('Mfw.cmp.conditions.Controller', {
                 items: [{
                     text: fieldName + ' ' + field.operator + ' ' + field.value,
                     handler: function () {
-                        me.showFieldDialog(field);
+                        me.showSheet(1, idx);
                     }
                 }, {
                     iconCls: 'x-tool-type-close',
@@ -39,82 +58,97 @@ Ext.define('Mfw.cmp.conditions.Controller', {
         buttonsCmp.add(buttons);
     },
 
+    addConditionFromToolbar: function () { this.showSheet(1, null); },
 
-    addCondition: function () {
-        var me = this; me.showFieldDialog(null);
+    addConditionFromGrid: function () {
+        var me = this;
+        me.sheet.getViewModel().set('conditionIdx', null);
+        me.sheet.setActiveItem(1);
     },
 
-    showFieldDialog: function (condition) {
-        var me = this;
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
-                xtype: 'field-dialog',
-                ownerCmp: me.getView()
-            });
-        }
-        me.dialog.setAddAction(!condition);
-        me.dialog.getViewModel().set('record', condition);
-        me.dialog.show();
-    },
+    showSheetGrid: function () {this.showSheet(0); },
 
-    showFieldsSheet: function () {
+    showSheet: function (activeItem, conditionIdx) {
         var me = this;
+
         if (!me.sheet) {
             me.sheet = Ext.Viewport.add({
                 xtype: 'fields-sheet',
                 ownerCmp: me.getView()
             });
         }
+
+        if (activeItem === 0) {
+            me.sheet.setUseGrid(true);
+        } else {
+            if (conditionIdx !== null) {
+                me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('conditions.fields')[conditionIdx]);
+            }
+            me.sheet.getViewModel().set('conditionIdx', conditionIdx);
+        }
+        me.sheet.setActiveItem(activeItem);
         me.sheet.show();
     },
 
-    onDialogOk: function () {
+
+    onDoneCondition: function () {
         var me = this, fields,
-            form = me.dialog.down('formpanel'),
+            form = me.sheet.down('formpanel'),
+            idx = me.sheet.getViewModel().get('conditionIdx'),
             vm = me.mainView.getViewModel();
 
         if (!form.validate()) { return; }
 
-        fields = vm.get('conditions.fields')
+        fields = vm.get('conditions.fields');
 
-        if (me.dialog.getAddAction()) {
+        if (idx === null) {
             fields.push(form.getValues());
+        } else {
+            fields[idx] = form.getValues();
+        }
+
+        if (me.sheet.getUseGrid()) {
+            me.sheet.setActiveItem(0);
+        } else {
+            me.sheet.hide();
         }
         Mfw.app.redirect(me.mainView);
-        me.dialog.hide();
-    },
-    onDialogCancel: function () {
-        var me = this, rec = me.dialog.getViewModel().get('record');
-        if (rec && Ext.isFunction(rec.reject)) { rec.reject(); }
-        me.dialog.hide();
     },
 
-
-
-
-    onSheetShow: function () {
+    onCancelCondition: function () {
         var me = this;
-        me.sheet.down('grid').setHideHeaders(true);
-    },
-
-    onSheetEditCondition: function (grid, location) {
-        var me = this;
-        if (location.columnIndex === 0) {
-            me.showFieldDialog(location.record);
+        if (me.sheet.getUseGrid()) {
+            me.sheet.setActiveItem(0);
+        } else {
+            me.sheet.hide();
         }
     },
 
-    onSheetRemoveCondition: function (grid, info) {
-        var gvm = Ext.Viewport.getViewModel(), fields;
-        if (gvm.get('currentView') === 'mfw-dashboard') {
-            fields = gvm.get('dashboardConditions.fields');
-        }
-        if (gvm.get('currentView') === 'mfw-reports') {
-            fields = gvm.get('reportsConditions.fields');
-        }
 
-        Ext.Array.removeAt(fields, grid.getStore().indexOf(info.record));
-        Mfw.app.redirect();
+    onSheetHide: function (sheet) {
+        sheet.down('formpanel').reset(true);
+        sheet.setUseGrid(false);
+    },
+
+
+    onEditFromGrid: function (grid, location) {
+        var me = this, sheet = me.sheet,
+            idx = location.recordIndex,
+            fields = me.mainView.getViewModel().get('conditions.fields');
+        if (location.columnIndex !== 0) { return; }
+
+        sheet.getViewModel().set('conditionIdx', idx);
+        sheet.down('formpanel').setValues(fields[idx]);
+        sheet.setActiveItem(1);
+        sheet.setUseGrid(true);
+    },
+
+    onRemoveFromGrid: function (grid, location) {
+        var me = this,
+            idx = grid.getStore().indexOf(location.record),
+            fields = me.mainView.getViewModel().get('conditions.fields');
+        Ext.Array.removeAt(fields, idx);
+        Mfw.app.redirect(me.mainView);
     }
 
 });

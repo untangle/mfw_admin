@@ -20,7 +20,7 @@ Ext.define('Mfw.cmp.conditions.Reports', {
     items: [{
         xtype: 'button',
         bind: { text: 'Conditions'.t() + ' ({conditionsBtnTxt})' },
-        handler: 'showFieldsSheet'
+        handler: 'showSheetGrid'
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',
@@ -33,7 +33,7 @@ Ext.define('Mfw.cmp.conditions.Reports', {
     }, {
         xtype: 'button',
         iconCls: 'md-icon-add',
-        handler: 'addCondition',
+        handler: 'addConditionFromToolbar',
         view: 'reports',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
