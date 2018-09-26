@@ -373,6 +373,30 @@ Ext.define('Mfw.util.Util', {
             { name: 'bypassed', data: bypassed },
             { name: 'total', data: total }
         ]
+    },
+
+    generatePieData: function () {
+        var pienum = Ext.Number.randomInt(0, 25), data = [], arr = [], i;
+
+
+
+        for (i = 0; i <= pienum; i++) {
+            arr.push(Ext.Number.randomInt(1, 100));
+        }
+
+        Ext.Array.sort(arr, function (a, b) {
+            if (a > b) { return -1 }
+            if (a < b) { return 1 }
+            return 0;
+        });
+
+        Ext.Array.each(arr, function (v) {
+            data.push({ y: v });
+        });
+        return {
+            name: 'some name',
+            data: data
+        };
     }
 
 });

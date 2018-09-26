@@ -4,6 +4,10 @@ Ext.define('Mfw.view.Reports', {
 
     layout: 'fit',
 
+    config: {
+        chart: null
+    },
+
     viewModel: {
         data: {
             conditions: {
@@ -68,13 +72,7 @@ Ext.define('Mfw.view.Reports', {
                 highlightPath: false,
                 store: 'reports-nav',
                 listeners: {
-                    selectionchange: function (list, record) {
-                        if (!record || !record.get('href')) { return; }
-                        if (!record.isLeaf() && !record.isExpanded()) {
-                            Ext.defer(function () { record.expand(true); }, 100);
-                        }
-                        Mfw.app.redirectTo(record.get('href'));
-                    }
+                    selectionchange: 'onSelectionChange'
                 }
             }],
             bbar: {
@@ -106,27 +104,18 @@ Ext.define('Mfw.view.Reports', {
                 type: 'vbox',
                 align: 'stretch'
             },
-            items: [
-            //     {
-            //     xtype: 'toolbar',
-            //     docked: 'top',
-            //     shadow: false,
-            //     items: [{
-            //         text: 'Refresh'.t()
-            //     }]
-            // },
-            {
+            items: [{
                 xtype: 'chart-time',
                 flex: 1
                 // maxHeight: 400
             }, {
                 xtype: 'panel',
-                // docked: 'bottom',
+                docked: 'bottom',
                 minHeight: 400,
-                // resizable: {
-                //     split: true,
-                //     edges: 'north'
-                // },
+                resizable: {
+                    split: true,
+                    edges: 'north'
+                },
                 html: 'data'
             }]
         }]
@@ -138,14 +127,15 @@ Ext.define('Mfw.view.Reports', {
 
     controller: {
         onInitialize: function (view) {
-            var vm = view.getViewModel();
+            var me = this, vm = view.getViewModel();
+            // me.chart = view.down('chart-time');
             // vm.bind('{reportsConditions}', function (conditions) {
             //     console.log('BINDING FIRED');
             // });
-            // view.getViewModel().bind('{conditions.fields}', function (fields) {
-            //     console.log('aaa');
-            //     // me.generateConditionsButtons(reportsView, fields)
-            // });
+            vm.bind('{conditions}', function (fields) {
+                // console.log('BINDING');
+                // me.generateConditionsButtons(reportsView, fields)
+            });
         },
 
         onRefresh: function () {
@@ -158,6 +148,19 @@ Ext.define('Mfw.view.Reports', {
             }, true);
 
 
+        },
+
+        onSelectionChange: function (list, record) {
+            var me = this,
+                chart = me.getView().down('chart-time');
+            if (!record || !record.get('href')) { return; }
+            if (!record.isLeaf() && !record.isExpanded()) {
+                Ext.defer(function () { record.expand(true); }, 100);
+            }
+            if (record.isLeaf()) {
+                chart.getViewModel().set('record', record);
+            }
+            Mfw.app.redirectTo(record.get('href'));
         }
     }
 

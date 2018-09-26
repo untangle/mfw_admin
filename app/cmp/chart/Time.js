@@ -7,12 +7,21 @@ Ext.define('Mfw.cmp.chart.Time', {
     alias: 'widget.chart-time',
 
     listeners: {
-        painted: 'onInitialize'
+        initialize: 'onInitialize',
+        painted: 'onPainted',
+    },
+
+    viewModel: {
+        data: {
+            record: null
+        }
     },
 
     controller: {
-        onInitialize: function (view) {
+        onPainted: function (view) {
             var me = this;
+
+            if (view.chart) { return; }
 
             Highcharts.setOptions({
                 chart: {
@@ -298,10 +307,152 @@ Ext.define('Mfw.cmp.chart.Time', {
                     style: {
                         opacity: 1
                     }
-                },
-                series: Util.generateTimeSeries(),
+                }
+                // series: Util.generateTimeSeries(),
             });
 
+        },
+
+        onInitialize: function (view) {
+            var me = this;
+            view.getViewModel().bind('{record}', function (record) {
+                if (!record) { return; }
+                me.update(record);
+            });
+        },
+
+        update: function (record) {
+            var me = this, isDateTime = (record.get('type') === 'datetime'),
+                chart = me.getView().chart;
+
+            if (!chart) { return; }
+
+            var settings = {
+                chart: {
+                    type: record.get('graph'),
+                    animation: false,
+                    zoomType: isDateTime ? 'x' : undefined,
+                    panning: isDateTime,
+                    panKey: 'ctrl',
+                    options3d: {
+                        // enabled: is3d,
+                        // alpha: isPieColumn ? 30 : 50,
+                        // beta: isPieColumn ? 5 : 0
+                    }
+                },
+                title: {
+                    text: record.get('text')
+                },
+                subtitle: {
+                    text: null
+                },
+                tooltip: {
+                    split: false
+                },
+                // colors: colors,
+                // scrollbar: {
+                //     enabled: isTimeGraph
+                // },
+                legend: {
+                    enabled: isDateTime
+                },
+                plotOptions: {
+                    series: {
+                        animation: {
+                            duration: 300
+                        }
+                        // stacking: isColumnStacked ? 'normal' : undefined
+                    },
+                    // pie graphs
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                        // innerSize: isDonut ? '40%' : 0,
+                        // colors: colors
+                        //borderColor: '#666666'
+                    },
+                    // time graphs
+                    spline: {
+                        shadow: true,
+                        dataGrouping: {
+                            groupPixelWidth: 80,
+                            // approximation: entry.get('approximation') || 'sum',
+                            // dateTimeLabelFormats: timeLabelFormats.dataGrouping
+                        },
+                    },
+                    // time graphs
+                    areaspline: {
+                        // shadow: true,
+                        // fillOpacity: 0.3,
+                        dataGrouping: {
+                            groupPixelWidth: 80,
+                            // approximation: entry.get('approximation') || 'sum',
+                            // dateTimeLabelFormats: timeLabelFormats.dataGrouping
+                        },
+                    },
+                    column: {
+                        // borderWidth: isColumnOverlapped ? 1 : 0,
+                        // pointPlacement: isTimeGraph ? 'on' : null, // time
+                        // // pointPadding: 0.01,
+                        // colorByPoint: isPieColumn, // pie
+                        // grouping: !isColumnOverlapped,
+                        // groupPadding: isColumnOverlapped ? 0.1 : 0.15,
+                        // // shadow: !isColumnOverlapped,
+                        dataGrouping: {
+                            groupPixelWidth: 80,
+                        }
+                    }
+                },
+                xAxis: {
+                    visible: isDateTime,
+                    minRange: 10 * 60 * 1000, // minzoom = 10 minutes
+                    // tickPixelInterval: 50,
+                    type: isDateTime ? 'datetime' : 'category',
+                    // crosshair: isDateTime ? {
+                    //     width: 1,
+                    //     dashStyle: 'ShortDot'
+                    // } : false,
+                    // plotLines: plotLines,
+                    // dateTimeLabelFormats: timeLabelFormats.xAxis
+                },
+                yAxis: {
+                    // visible: !isPie,
+                    // minRange: entry.get('units') === 'percent' ? 100 : 1,
+                    // maxRange: entry.get('units') === 'percent' ? 100 : undefined,
+                },
+                series: []
+            };
+            Highcharts.merge(true, settings, {});
+            chart.update(settings, true);
+
+            while (chart.series.length > 0) {
+                chart.series[0].remove(false);
+            }
+
+            var data = isDateTime ? Util.generateTimeSeries() : Util.generatePieData();
+
+            if (isDateTime) {
+                Ext.Array.each(data, function (d) {
+                    chart.addSeries(d, true, true);
+                });
+            } else {
+                chart.addSeries(data, true, { duration: 150 });
+            }
+
+            // chart.addSeries({
+            //     data:
+            // });
+
+            // chart.update({
+            //     series: isDateTime ? Util.generateTimeSeries() : Util.generatePieData()
+            // }, true);
         }
     }
 
