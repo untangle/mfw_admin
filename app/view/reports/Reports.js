@@ -4,6 +4,8 @@ Ext.define('Mfw.view.Reports', {
 
     layout: 'fit',
 
+    controller: 'reports',
+
     config: {
         chart: null
     },
@@ -89,7 +91,7 @@ Ext.define('Mfw.view.Reports', {
             }
         }, {
             xtype: 'panel',
-            bodyPadding: 16,
+            // bodyPadding: 16,
             // title: 'Hosts Adittions',
             // tools: {
             //     refresh: {
@@ -105,17 +107,17 @@ Ext.define('Mfw.view.Reports', {
                 align: 'stretch'
             },
             items: [{
-                xtype: 'chart-time',
+                xtype: 'chart',
                 flex: 1
                 // maxHeight: 400
             }, {
                 xtype: 'panel',
                 docked: 'bottom',
                 minHeight: 400,
-                resizable: {
-                    split: true,
-                    edges: 'north'
-                },
+                // resizable: {
+                //     split: true,
+                //     edges: 'north'
+                // },
                 html: 'data'
             }]
         }]
@@ -124,45 +126,4 @@ Ext.define('Mfw.view.Reports', {
     listeners: {
         initialize: 'onInitialize'
     },
-
-    controller: {
-        onInitialize: function (view) {
-            var me = this, vm = view.getViewModel();
-            // me.chart = view.down('chart-time');
-            // vm.bind('{reportsConditions}', function (conditions) {
-            //     console.log('BINDING FIRED');
-            // });
-            vm.bind('{conditions}', function (fields) {
-                // console.log('BINDING');
-                // me.generateConditionsButtons(reportsView, fields)
-            });
-        },
-
-        onRefresh: function () {
-            var me = this,
-                vm = me.getViewModel(),
-                chart = me.getView().down('chart-time');
-
-            chart.chart.update({
-                series: Util.generateTimeSeries()
-            }, true);
-
-
-        },
-
-        onSelectionChange: function (list, record) {
-            var me = this,
-                chart = me.getView().down('chart-time');
-            if (!record || !record.get('href')) { return; }
-            if (!record.isLeaf() && !record.isExpanded()) {
-                Ext.defer(function () { record.expand(true); }, 100);
-            }
-            if (record.isLeaf()) {
-                chart.getViewModel().set('record', record);
-            }
-            Mfw.app.redirectTo(record.get('href'));
-        }
-    }
-
-
 });

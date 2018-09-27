@@ -397,6 +397,16 @@ Ext.define('Mfw.util.Util', {
             name: 'some name',
             data: data
         };
+    },
+
+    generateData: function (record) {
+        if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
+            return Util.generateTimeSeries(record);
+        }
+        if (record.get('type') === 'PIE_CHART') {
+            return Util.generatePieData(record);
+        }
+        return;
     }
 
 });

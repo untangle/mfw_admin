@@ -9,8 +9,12 @@ var fs = require("fs");
 var host = '192.168.0.206'; // the MFW machine host to scp built files
 
 gulp.task('serve', function() {
+    // browserSync.init({
+    //     server: "./"
+    // });
+
     browserSync.init({
-        server: "./"
+        proxy: 'http://' + host + ':8080/admin'
     });
 
     gulp.watch('./sass/*.scss', gulp.series('sass'));

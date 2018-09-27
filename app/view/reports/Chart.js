@@ -2,9 +2,9 @@
  * Note: adding columns in class constructor is not desirable because
  * of the prototypal inheritance causing adding more and more columns for each new instance
  */
-Ext.define('Mfw.cmp.chart.Time', {
+Ext.define('Mfw.reports.Chart', {
     extend: 'Ext.Container',
-    alias: 'widget.chart-time',
+    alias: 'widget.chart',
 
     listeners: {
         initialize: 'onInitialize',
@@ -16,6 +16,74 @@ Ext.define('Mfw.cmp.chart.Time', {
             record: null
         }
     },
+
+    layout: 'fit',
+    bodyPadding: 0,
+
+    items: [{
+        xtype: 'toolbar',
+        docked: 'bottom',
+        defaults: {
+            // labelAlign: 'left'
+            margin: '0 8'
+        },
+        items: [{
+            xtype: 'selectfield',
+            width: 150,
+            bind: {
+                value: '{record.rendering.timeStyle}',
+                hidden: '{record.type === "PIE_CHART"}'
+            },
+            label: 'Style'.t(),
+            options: [
+                { text: 'Line', value: 'LINE' },
+                { text: 'Area', value: 'AREA' },
+                { text: 'Area Stacked', value: 'AREA_STACKED' },
+                { text: 'Column', value: 'BAR' },
+                { text: 'Column Overlapped', value: 'BAR_OVERLAPPED' },
+                { text: 'Column Stacked', value: 'BAR_STACKED' }
+            ]
+
+        }, {
+            xtype: 'selectfield',
+            width: 150,
+            bind: {
+                value: '{record.rendering.pieStyle}',
+                hidden: '{record.type !== "PIE_CHART"}'
+            },
+            label: 'Style'.t(),
+            options: [
+                { text: 'Pie', value: 'PIE' },
+                { text: 'Pie 3D', value: 'PIE_3D' },
+                { text: 'Donut', value: 'DONUT' },
+                { text: 'Donut 3D', value: 'DONUT_3D' },
+                { text: 'Column', value: 'COLUMN' },
+                { text: 'Column 3D', value: 'COLUMN_3D' }
+            ]
+
+        }, {
+            xtype: 'selectfield',
+            width: 120,
+            bind: {
+                value: '{record.rendering.approximation}',
+                hidden: '{record.type === "PIE_CHART"}'
+            },
+            label: 'Approximation'.t(),
+            options: [
+                { text: 'Average', value: 'average' },
+                { text: 'Open', value: 'open' },
+                { text: 'High', value: 'high' },
+                { text: 'Low', value: 'low' },
+                { text: 'Close', value: 'close' },
+                { text: 'Sum', value: 'sum' }
+            ]
+
+        }]
+    }, {
+        xtype: 'container',
+        itemId: 'chart'
+    }],
+
 
     controller: {
         onPainted: function (view) {
@@ -31,7 +99,7 @@ Ext.define('Mfw.cmp.chart.Time', {
                 }
             });
 
-            view.chart = new Highcharts.stockChart(view.innerElement.dom, {
+            view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
                 chart: {
                     type: 'spline',
                     // animation: false,
@@ -78,7 +146,10 @@ Ext.define('Mfw.cmp.chart.Time', {
                             enabled: true // disable default contextButton
                         },
                         testButton: {
-                            text: 'Refresh'.t()
+                            text: 'Refresh'.t(),
+                            onclick: function() {
+                                me.setData()
+                            }
                         },
                         timerangeButton: {
                             text: 'Apply this timerange'.t(),
@@ -97,8 +168,7 @@ Ext.define('Mfw.cmp.chart.Time', {
                 credits: { enabled: false },
                 title: {
                     align: 'left',
-                    text: 'Hosts Additions',
-                    // text: null,
+                    text: null,
                     style: {
                         fontSize: '24px',
                         fontWeight: 400
@@ -108,7 +178,7 @@ Ext.define('Mfw.cmp.chart.Time', {
 
                 subtitle: {
                     align: 'left',
-                    text: 'The amount of total, scanned, and bypassed sessions created per minute3.',
+                    text: null,
                     style: {
                         fontSize: '14px',
                         color: '#777'
@@ -317,37 +387,77 @@ Ext.define('Mfw.cmp.chart.Time', {
             var me = this;
             view.getViewModel().bind('{record}', function (record) {
                 if (!record) { return; }
-                me.update(record);
+                me.setData();
+            });
+            view.getViewModel().bind('{record.rendering.timeStyle}', function () {
+                me.update();
+                // me.update(record);
+            });
+            view.getViewModel().bind('{record.rendering.pieStyle}', function () {
+                me.update();
+            });
+            view.getViewModel().bind('{record.rendering.approximation}', function () {
+                me.update();
             });
         },
 
-        update: function (record) {
-            var me = this, isDateTime = (record.get('type') === 'datetime'),
-                chart = me.getView().chart;
+        update: function () {
+            var me = this, isDateTime = false,
+                chart = me.getView().chart, type, xAxisType = 'category',
+                isDonut = false, is3d = false, isStacked = false, isOverlapped = false, colorByPoint = false;
+
+            var record = me.getViewModel().get('record');
 
             if (!chart) { return; }
 
+            if (record.get('type') === 'PIE_CHART') {
+                switch (record.getRendering().get('pieStyle')) {
+                    case 'PIE': type = 'pie'; break;
+                    case 'PIE_3D': is3d = true; type = 'pie'; break;
+                    case 'DONUT': isDonut = true; type = 'pie'; break;
+                    case 'DONUT_3D': is3d = true; isDonut = true; type = 'pie'; break;
+                    case 'COLUMN': colorByPoint = true; type = 'column'; break;
+                    case 'COLUMN_3D': colorByPoint = true; is3d = true; type = 'column'; break;
+                    default:
+                }
+            }
+
+            if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
+                isDateTime = true;
+                xAxisType = 'datetime';
+                switch (record.getRendering().get('timeStyle')) {
+                    case 'BAR': type = 'column'; break;
+                    case 'BAR_OVERLAPPED': isOverlapped = true; type = 'column'; break;
+                    case 'BAR_STACKED': isStacked = true; type = 'column'; break;
+                    case 'LINE': type = 'spline'; break;
+                    case 'AREA': type = 'areaspline'; break;
+                    case 'AREA_STACKED': isStacked = true; type = 'areaspline'; break;
+                    default:
+                }
+            }
+
             var settings = {
                 chart: {
-                    type: record.get('graph'),
+                    type: type,
                     animation: false,
                     zoomType: isDateTime ? 'x' : undefined,
                     panning: isDateTime,
                     panKey: 'ctrl',
                     options3d: {
-                        // enabled: is3d,
-                        // alpha: isPieColumn ? 30 : 50,
-                        // beta: isPieColumn ? 5 : 0
+                        enabled: is3d,
+                        alpha: 45,
+                        beta: colorByPoint ? 15 : 0,
+                        depth: colorByPoint ? 50 : 0,
                     }
                 },
                 title: {
-                    text: record.get('text')
+                    text: record.get('name')
                 },
                 subtitle: {
-                    text: null
+                    text: record.get('description')
                 },
                 tooltip: {
-                    split: false
+                    split: isDateTime
                 },
                 // colors: colors,
                 // scrollbar: {
@@ -360,15 +470,17 @@ Ext.define('Mfw.cmp.chart.Time', {
                     series: {
                         animation: {
                             duration: 300
-                        }
-                        // stacking: isColumnStacked ? 'normal' : undefined
+                        },
+                        stacking: isStacked ? 'normal' : undefined
                     },
                     // pie graphs
                     pie: {
                         allowPointSelect: true,
                         cursor: 'pointer',
+                        innerSize: isDonut ? 100 : undefined,
+                        depth: is3d ? 40 : undefined,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
@@ -382,8 +494,8 @@ Ext.define('Mfw.cmp.chart.Time', {
                     spline: {
                         shadow: true,
                         dataGrouping: {
-                            groupPixelWidth: 80,
-                            // approximation: entry.get('approximation') || 'sum',
+                            groupPixelWidth: 50,
+                            approximation: record.getRendering().get('approximation') || 'sum',
                             // dateTimeLabelFormats: timeLabelFormats.dataGrouping
                         },
                     },
@@ -391,19 +503,22 @@ Ext.define('Mfw.cmp.chart.Time', {
                     areaspline: {
                         // shadow: true,
                         // fillOpacity: 0.3,
+                        animation: {
+                            duration: 300
+                        },
                         dataGrouping: {
-                            groupPixelWidth: 80,
-                            // approximation: entry.get('approximation') || 'sum',
+                            groupPixelWidth: 50,
+                            approximation: record.getRendering().get('approximation') || 'sum',
                             // dateTimeLabelFormats: timeLabelFormats.dataGrouping
                         },
                     },
                     column: {
                         // borderWidth: isColumnOverlapped ? 1 : 0,
-                        // pointPlacement: isTimeGraph ? 'on' : null, // time
+                        pointPlacement: isDateTime ? 'on' : null, // time
                         // // pointPadding: 0.01,
-                        // colorByPoint: isPieColumn, // pie
-                        // grouping: !isColumnOverlapped,
-                        // groupPadding: isColumnOverlapped ? 0.1 : 0.15,
+                        colorByPoint: colorByPoint, // pie
+                        grouping: !isOverlapped,
+                        groupPadding: isOverlapped ? 0.1 : 0.15,
                         // // shadow: !isColumnOverlapped,
                         dataGrouping: {
                             groupPixelWidth: 80,
@@ -414,7 +529,7 @@ Ext.define('Mfw.cmp.chart.Time', {
                     visible: isDateTime,
                     minRange: 10 * 60 * 1000, // minzoom = 10 minutes
                     // tickPixelInterval: 50,
-                    type: isDateTime ? 'datetime' : 'category',
+                    type: xAxisType,
                     // crosshair: isDateTime ? {
                     //     width: 1,
                     //     dashStyle: 'ShortDot'
@@ -423,36 +538,51 @@ Ext.define('Mfw.cmp.chart.Time', {
                     // dateTimeLabelFormats: timeLabelFormats.xAxis
                 },
                 yAxis: {
-                    // visible: !isPie,
+                    visible: type !== 'pie',
                     // minRange: entry.get('units') === 'percent' ? 100 : 1,
                     // maxRange: entry.get('units') === 'percent' ? 100 : undefined,
-                },
-                series: []
+                }
             };
-            Highcharts.merge(true, settings, {});
+            Highcharts.merge(true, settings);
+
+            // if (chart.series) {
+            //     Ext.Array.each(chart.series, function (serie, idx) {
+            //         serie.update({
+            //             color: Highcharts.getOptions().colors[idx],
+            //             lineColor: Highcharts.getOptions().colors[idx],
+            //             fillColor: {
+            //                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+            //                 stops: [
+            //                     [0, Highcharts.Color(Highcharts.getOptions().colors[idx]).setOpacity(0.7).get('rgba')],
+            //                     [1, Highcharts.Color(Highcharts.getOptions().colors[idx]).setOpacity(0.1).get('rgba')]
+            //                 ]
+            //             },
+            //         }, false);
+            //     });
+            // }
+
             chart.update(settings, true);
+        },
+
+        setData: function () {
+            var me = this, chart = me.getView().chart,
+                record = me.getViewModel().get('record');
+            if (!chart) { return; }
 
             while (chart.series.length > 0) {
                 chart.series[0].remove(false);
             }
 
-            var data = isDateTime ? Util.generateTimeSeries() : Util.generatePieData();
+            var data = Util.generateData(record);
 
-            if (isDateTime) {
+            if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
                 Ext.Array.each(data, function (d) {
-                    chart.addSeries(d, true, true);
+                    chart.addSeries(d, false, { duration: 150 });
                 });
             } else {
                 chart.addSeries(data, true, { duration: 150 });
             }
-
-            // chart.addSeries({
-            //     data:
-            // });
-
-            // chart.update({
-            //     series: isDateTime ? Util.generateTimeSeries() : Util.generatePieData()
-            // }, true);
+            me.update();
         }
     }
 

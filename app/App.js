@@ -13,7 +13,7 @@ Ext.define('Mfw.App', {
     // controllers: ['Mfw.controller.MfwController'],
     defaultToken: '',
 
-    stores: ['Interfaces', 'Sessions', 'SettingsNav', 'ReportsNav', 'RuleConditions', 'PortForwardRules'],
+    stores: ['Interfaces', 'ReportsNav', 'Reports', 'Sessions', 'SettingsNav', 'ReportsNav', 'RuleConditions', 'PortForwardRules'],
 
     config: {
         account: null

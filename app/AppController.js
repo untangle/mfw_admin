@@ -104,6 +104,26 @@ Ext.define('Mfw.controller.MfwController', {
      * #reports/category_name/report_name?since=today&username:>%3D:test:1
      */
     onReportsBefore: function () {
+        var me = this,
+            args = arguments,
+            reportsStore = Ext.getStore('reports');
+
+        if (!reportsStore.isLoaded()) {
+            // fetch reports store
+            Ext.getStore('reports').load({
+                callback: function(records, operation, success) {
+                    if (success) {
+                        // create the reports tree
+                        me.onReportsResume(args);
+                    }
+                }
+            });
+        } else {
+            me.onReportsResume(args);
+        }
+    },
+
+    onReportsResume: function (arguments) {
         var me = this, route = '', conds, query = null, action,
             reportsVm = me.getReportsView().getViewModel();
 
@@ -131,7 +151,7 @@ Ext.define('Mfw.controller.MfwController', {
     },
 
     onReports: function (query) {
-        var route = query.split('?')[0],
+        var me = this, route = query.split('?')[0], record,
             list = Ext.Viewport.down('mfw-reports').down('treelist'), node;
 
         if (!route) {
@@ -141,6 +161,11 @@ Ext.define('Mfw.controller.MfwController', {
             node = list.getStore().findNode('href', 'reports' + route);
             list.setSelection(node);
         }
+
+        // if (node && node.isLeaf()) {
+        //     record = Ext.getStore('reports').findRecord('_href', node.get('href'));
+        //     me.getReportsView().chart.getViewModel().set('record', record);
+        // }
 
         Ext.Viewport.getViewModel().set({
             currentView: 'mfw-reports',
