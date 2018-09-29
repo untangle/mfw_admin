@@ -3,10 +3,80 @@ var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var clean = require('gulp-clean');
 var exec = require('gulp-exec');
+var rename = require('gulp-rename');
+var tap = require('gulp-tap');
 var browserSync = require('browser-sync').create();
 var fs = require("fs");
 
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+
 var host = '172.20.10.2'; // the MFW machine host to scp built files
+
+gulp.task('smap', function() {
+    gulp.src('app/**/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.write('./maps'))
+  });
+
+
+gulp.task('clean', function () {
+    return gulp.src('./dist/*.*', {read: false, allowEmpty: true})
+        .pipe(clean());
+    });
+
+gulp.task('concat', function() {
+    return gulp.src([
+            './app/util/*.js',
+            './app/cmp/**/*.js',
+            './app/model/**/*.js',
+            './app/store/**/*.js',
+            './app/view/**/*.js',
+            './app/settings/**/*.js',
+            './app/AppController.js',
+            './app/App.js'
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.mapSources(function(sourcePath, file) {
+            // need to map sources to keep the same structure
+            var sp = sourcePath;
+            if (file.path.includes('/app/util')) { sp =  'util/' + sourcePath; }
+            if (file.path.includes('/app/cmp')) { sp =  'cmp/' + sourcePath; }
+            if (file.path.includes('/app/model')) { sp =  'model/' + sourcePath; }
+            if (file.path.includes('/app/store')) { sp =  'store/' + sourcePath; }
+            if (file.path.includes('/app/view')) { sp =  'view/' + sourcePath; }
+            if (file.path.includes('/app/settings')) { sp =  'settings/' + sourcePath; }
+            return sp;
+          }))
+        .pipe(concat('./dist/mfw-all.js'))
+        .pipe(gulp.dest('.'))
+        .pipe(rename('./dist/mfw-all.min.js'))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.', { mapFile: function(mapFilePath) {
+            // source map files are named *.map instead of *.js.map
+                return mapFilePath.replace('.min.js.map', '.js.map');
+            }
+        }))
+        .pipe(gulp.dest('.'))
+        .pipe(exec('scp ./dist/mfw-all.js ./dist/mfw-all.js.map ./dist/mfw-all.min.js root@' + host + ':/www/admin/')); // quick deploy on mfw vm
+    });
+
+gulp.task('sass', function () {
+    return gulp.src('./sass/**/*.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('./dist/mfw-all.css'))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./'))
+        .pipe(exec('scp ./dist/mfw-all.css ./dist/mfw-all.css.map root@' + host + ':/www/admin')) // quick deploy on mfw vm
+        .pipe(browserSync.stream());
+    });
+
+gulp.task('index', function () {
+    return gulp.src('./index.html')
+        .pipe(exec('scp index.html root@' + host + ':/www/admin/'))
+    });
+
 
 gulp.task('serve', function() {
     // browserSync.init({
@@ -16,7 +86,9 @@ gulp.task('serve', function() {
     browserSync.init({
         proxy: 'http://' + host + ':8080/admin',
         browser: 'google chrome',
-        middleware: [{
+        middleware: [function (req, res, next) {
+            next();
+        }, {
             route: '/api',
             handle: function (req, res, next) {
                 if (req.url.startsWith('/settings/reports')) {
@@ -34,47 +106,14 @@ gulp.task('serve', function() {
     gulp.watch('./app/**/*.js', gulp.series('concat'));
     gulp.watch('./locale/*.json', gulp.series('locale'));
     gulp.watch('./index.html', gulp.series('index'));
-    gulp.watch('./*.js').on('change', browserSync.reload);
+    gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
 });
 
-gulp.task('clean', function () {
-    return gulp.src(['mfw-all.js', 'mfw-all.css'], {read: false, allowEmpty: true})
-        .pipe(clean());
-    });
-
-gulp.task('concat', function() {
-    return gulp.src([
-            './app/util/**/*.js',
-            './app/overrides/**/*.js',
-            './app/cmp/**/*.js',
-            './app/model/**/*.js',
-            './app/store/**/*.js',
-            './app/view/**/*.js',
-            './app/settings/**/*.js',
-            './app/AppController.js',
-            './app/App.js'
-        ])
-        .pipe(concat('mfw-all.js'))
-        .pipe(gulp.dest('.'))
-        .pipe(exec('scp mfw-all.js root@' + host + ':/www/admin/')); // quick deploy on mfw vm
-        // .pipe(browserSync.reload()));
-    });
-
-gulp.task('sass', function () {
-    return gulp.src('./sass/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(concat('mfw-all.css'))
-        .pipe(gulp.dest('./'))
-        .pipe(exec('scp mfw-all.css root@' + host + ':/www/admin')) // quick deploy on mfw vm
-        .pipe(browserSync.stream());
-    });
-
-gulp.task('index', function () {
-    return gulp.src('./index.html')
-        .pipe(exec('scp index.html root@' + host + ':/www/admin/'))
-    });
+gulp.task('default', gulp.series('concat', 'sass', 'index', 'serve'));
 
 
+
+// localization helpers
 gulp.task('translations', function () {
     return gulp.src('./locale/**/*.*')
         .pipe(exec('scp -r ./locale/ root@' + host + ':/www/admin/'))
@@ -127,4 +166,3 @@ gulp.task('locale', function (cb) {
     cb();
 })
 
-gulp.task('default', gulp.parallel('concat', 'sass', 'index'));

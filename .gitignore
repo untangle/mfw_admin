@@ -1,6 +1,5 @@
 node_modules/
 package-lock.json
-/mfw-all.js
-/mfw-all.css
-/locale
-/app/plugins
+.vscode
+dist
+locale
