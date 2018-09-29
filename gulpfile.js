@@ -6,7 +6,7 @@ var exec = require('gulp-exec');
 var browserSync = require('browser-sync').create();
 var fs = require("fs");
 
-var host = '192.168.0.206'; // the MFW machine host to scp built files
+var host = '172.20.10.2'; // the MFW machine host to scp built files
 
 gulp.task('serve', function() {
     // browserSync.init({
@@ -14,7 +14,20 @@ gulp.task('serve', function() {
     // });
 
     browserSync.init({
-        proxy: 'http://' + host + ':8080/admin'
+        proxy: 'http://' + host + ':8080/admin',
+        browser: 'google chrome',
+        middleware: [{
+            route: '/api',
+            handle: function (req, res, next) {
+                if (req.url.startsWith('/settings/reports')) {
+                    res.setHeader('Content-Type', 'application/json');
+                    res.write(fs.readFileSync('./reports.json', 'utf8'));
+                    res.end();
+                } else {
+                    next();
+                }
+            }
+        }]
     });
 
     gulp.watch('./sass/*.scss', gulp.series('sass'));
