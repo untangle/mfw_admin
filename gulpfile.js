@@ -4,14 +4,13 @@ var sass = require('gulp-sass');
 var clean = require('gulp-clean');
 var exec = require('gulp-exec');
 var rename = require('gulp-rename');
-var tap = require('gulp-tap');
 var browserSync = require('browser-sync').create();
 var fs = require("fs");
 
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
-var host = '172.20.10.2'; // the MFW machine host to scp built files
+var host = '192.168.101.60'; // the MFW machine host to scp built files
 
 gulp.task('smap', function() {
     gulp.src('app/**/*.js')
@@ -22,6 +21,7 @@ gulp.task('smap', function() {
 
 gulp.task('clean', function () {
     return gulp.src('./dist/*.*', {read: false, allowEmpty: true})
+        .pipe(exec('ssh root@' + host + ' "rm -f /www/admin/mfw-all.js /www/admin/mfw-all.min.js /www/admin/mfw-all.js.map /www/admin/mfw-all.css /www/admin/mfw-all.css.map"'))
         .pipe(clean());
     });
 
@@ -36,16 +36,35 @@ gulp.task('concat', function() {
             './app/AppController.js',
             './app/App.js'
         ])
+        .pipe(concat('./dist/mfw-all.js'))
+        .pipe(gulp.dest('.'))
+        .pipe(rename('./dist/mfw-all.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('.'))
+        .pipe(exec('scp ./dist/mfw-all.js ./dist/mfw-all.min.js root@' + host + ':/www/admin/')); // quick deploy on mfw vm
+    });
+
+gulp.task('concat-map', function() {
+    return gulp.src([
+            './app/util/*.js',
+            './app/cmp/**/*.js',
+            './app/model/**/*.js',
+            './app/store/**/*.js',
+            './app/view/**/*.js',
+            './app/settings/**/*.js',
+            './app/AppController.js',
+            './app/App.js'
+        ])
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.mapSources(function(sourcePath, file) {
             // need to map sources to keep the same structure
-            var sp = sourcePath;
-            if (file.path.includes('/app/util')) { sp =  'util/' + sourcePath; }
-            if (file.path.includes('/app/cmp')) { sp =  'cmp/' + sourcePath; }
-            if (file.path.includes('/app/model')) { sp =  'model/' + sourcePath; }
-            if (file.path.includes('/app/store')) { sp =  'store/' + sourcePath; }
-            if (file.path.includes('/app/view')) { sp =  'view/' + sourcePath; }
-            if (file.path.includes('/app/settings')) { sp =  'settings/' + sourcePath; }
+            var sp = sourcePath, path = file.path.replace(/\\/g, '/'); // needed for windows machines
+            if (path.includes('/app/util')) { sp =  'util/' + sourcePath; }
+            if (path.includes('/app/cmp')) { sp =  'cmp/' + sourcePath; }
+            if (path.includes('/app/model')) { sp =  'model/' + sourcePath; }
+            if (path.includes('/app/store')) { sp =  'store/' + sourcePath; }
+            if (path.includes('/app/view')) { sp =  'view/' + sourcePath; }
+            if (path.includes('/app/settings')) { sp =  'settings/' + sourcePath; }
             return sp;
           }))
         .pipe(concat('./dist/mfw-all.js'))
@@ -62,6 +81,15 @@ gulp.task('concat', function() {
     });
 
 gulp.task('sass', function () {
+    return gulp.src('./sass/**/*.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('./dist/mfw-all.css'))
+        .pipe(gulp.dest('./'))
+        .pipe(exec('scp ./dist/mfw-all.css root@' + host + ':/www/admin')) // quick deploy on mfw vm
+        .pipe(browserSync.stream());
+    });
+
+gulp.task('sass-map', function () {
     return gulp.src('./sass/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
@@ -85,10 +113,8 @@ gulp.task('serve', function() {
 
     browserSync.init({
         proxy: 'http://' + host + ':8080/admin',
-        browser: 'google chrome',
-        middleware: [function (req, res, next) {
-            next();
-        }, {
+        // browser: 'google chrome',
+        middleware: [{
             route: '/api',
             handle: function (req, res, next) {
                 if (req.url.startsWith('/settings/reports')) {
@@ -109,7 +135,8 @@ gulp.task('serve', function() {
     gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
 });
 
-gulp.task('default', gulp.series('concat', 'sass', 'index', 'serve'));
+gulp.task('default', gulp.series('clean', 'concat', 'sass', 'index', 'serve'));
+gulp.task('serve-map', gulp.series('clean', 'concat-map', 'sass-map', 'index', 'serve'));
 
 
 

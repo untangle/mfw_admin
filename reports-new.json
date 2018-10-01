@@ -1,0 +1,25 @@
+[
+    {
+        "uniqueId" : "network-oyzBpGMc",
+        "name": "Sessions",
+        "category": "Network",
+        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "displayOrder": 100,
+        "readOnly": true,
+        "type": "TIME_CHART",
+        "rendering": {
+            "type": "areaspline",
+            "groupPixelWidth": 10,
+            "lineWidth": 2,
+
+
+            "units": "sessions",
+            "colors": null,
+            "pieNumSlices": null,
+            "pieStyle": null,
+            "textString": null,
+            "timeStyle": "BAR",
+            "approximation": "sum"
+        }
+    }
+]
