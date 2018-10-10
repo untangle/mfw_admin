@@ -44,4 +44,5 @@ clean:
 
 # FIXME: provide an extra target to upload static resources to s3
 
+
 .PHONY: css js dir html resources
