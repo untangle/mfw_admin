@@ -12,8 +12,12 @@ JS_VIEW := $(shell find app/view -name '*.js')
 JS_SETTINGS := $(shell find app/settings -name '*.js')
 JS_APP := app/AppController.js app/App.js
 
-RESOURCES_FILE := mfw-admin-resources.tar.xz
-RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE)
+RESOURCES_VERSION := 0.1.0
+RESOURCES_DIRECTORY := /tmp/mfw-resources
+RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz
+RESOURCES_FILE := $(RESOURCES_DIRECTORY)/$(RESOURCES_FILE_NAME)
+RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE_NAME)
+RESOURCES_BUCKET := s3://download.untangle.com/mfw/
 
 install: dir css js html resources
 
@@ -42,7 +46,14 @@ $(DESTDIR):
 clean:
 	rm -fr $(DESTDIR)
 
-# FIXME: provide an extra target to upload static resources to s3
+create-resources-tarball:
+	@echo "Checking for $(RESOURCES_DIRECTORY)/res directory"
+	@if [ ! -d $(RESOURCES_DIRECTORY)/res ] ; then echo "... failed" ; exit 1 ; fi
+	@echo "Creating tarball from it"
+	tar -C $(RESOURCES_DIRECTORY) -caf $(RESOURCES_FILE) res
+	@echo "Your resources file is ready at $(RESOURCES_FILE)"
 
+upload-resources-tarball:
+	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
 
 .PHONY: css js dir html resources
