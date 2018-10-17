@@ -119,7 +119,7 @@ gulp.task('serve', function() {
             handle: function (req, res, next) {
                 if (req.url.startsWith('/settings/reports')) {
                     res.setHeader('Content-Type', 'application/json');
-                    res.write(fs.readFileSync('./reports.json', 'utf8'));
+                    res.write(fs.readFileSync('./reports-new.json', 'utf8'));
                     res.end();
                 } else {
                     next();

@@ -1,25 +1,54 @@
 [
     {
         "uniqueId" : "network-oyzBpGMc",
-        "name": "Sessions",
+        "name": "STATIC_SERIES (areaspline)",
         "category": "Network",
         "description": "The amount of total, scanned, and bypassed sessions over time.",
         "displayOrder": 100,
         "readOnly": true,
-        "type": "TIME_CHART",
+        "type": "STATIC_SERIES",
         "rendering": {
-            "type": "areaspline",
-            "groupPixelWidth": 10,
-            "lineWidth": 2,
+            "chartType": "areaspline",
+            "lineWidth": 0
+        }
+    },
 
+    {
+        "uniqueId" : "network-oyzBpGMc",
+        "name": "STATIC_SERIES (area)",
+        "category": "Network",
+        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "displayOrder": 100,
+        "readOnly": true,
+        "type": "STATIC_SERIES",
+        "rendering": {
+            "chartType": "area",
+            "colors": ["#999", "#AAA", "#BBB"]
+        }
+    },
 
-            "units": "sessions",
-            "colors": null,
-            "pieNumSlices": null,
-            "pieStyle": null,
-            "textString": null,
-            "timeStyle": "BAR",
-            "approximation": "sum"
+    {
+        "uniqueId" : "network-oyzBpGMc",
+        "name": "STATIC_SERIES (spline)",
+        "category": "Network",
+        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "displayOrder": 100,
+        "readOnly": true,
+        "type": "STATIC_SERIES",
+        "rendering": {
+            "chartType": "spline"
+        }
+    },
+    {
+        "uniqueId" : "network-oyzBpGMc",
+        "name": "STATIC_SERIES (line)",
+        "category": "Network",
+        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "displayOrder": 100,
+        "readOnly": true,
+        "type": "STATIC_SERIES",
+        "rendering": {
+            "chartType": "line"
         }
     }
 ]

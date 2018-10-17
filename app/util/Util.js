@@ -400,10 +400,10 @@ Ext.define('Mfw.util.Util', {
     },
 
     generateData: function (record) {
-        if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
+        if (record.get('type') === 'STATIC_SERIES' || record.get('type') === 'DYNAMIC_SERIES') {
             return Util.generateTimeSeries(record);
         }
-        if (record.get('type') === 'PIE_CHART') {
+        if (record.get('type') === 'CATEGORIES') {
             return Util.generatePieData(record);
         }
         return;

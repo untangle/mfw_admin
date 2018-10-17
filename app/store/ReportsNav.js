@@ -44,7 +44,7 @@ Ext.define('Mfw.store.ReportsNav', {
             Ext.Array.each(group.items, function (report) {
                 category.children.push({
                     text: report.get('name'),
-                    iconCls: 'x-fa ' + report.getRendering().get('_icon'),
+                    // iconCls: 'x-fa ' + report.getRendering().get('_icon'),
                     href: report.get('_href'),
                     leaf: true
                 });

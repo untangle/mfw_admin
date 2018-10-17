@@ -90,7 +90,8 @@ Ext.define('Mfw.view.Reports', {
                 }]
             }
         }, {
-            xtype: 'panel',
+            xtype: 'chart',
+            // layout: 'fit'
             // bodyPadding: 16,
             // title: 'Hosts Adittions',
             // tools: {
@@ -102,24 +103,26 @@ Ext.define('Mfw.view.Reports', {
             //         iconCls: 'md-icon-more-vert'
             //     }
             // },
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            items: [{
-                xtype: 'chart',
-                flex: 1
-                // maxHeight: 400
-            }, {
-                xtype: 'panel',
-                docked: 'bottom',
-                minHeight: 400,
-                // resizable: {
-                //     split: true,
-                //     edges: 'north'
-                // },
-                html: 'data'
-            }]
+            // layout: {
+            //     type: 'fit',
+            //     // align: 'stretch'
+            // },
+            // items: [{
+            //     xtype: 'chart',
+            //     flex: 1
+            //     // maxHeight: 400
+            // }
+            // {
+            //     xtype: 'panel',
+            //     docked: 'bottom',
+            //     minHeight: 400,
+            //     // resizable: {
+            //     //     split: true,
+            //     //     edges: 'north'
+            //     // },
+            //     html: 'data'
+            // }
+            // ]
         }]
     }],
 

@@ -3,7 +3,7 @@
  * of the prototypal inheritance causing adding more and more columns for each new instance
  */
 Ext.define('Mfw.reports.Chart', {
-    extend: 'Ext.Container',
+    extend: 'Ext.Panel',
     alias: 'widget.chart',
 
     listeners: {
@@ -17,41 +17,51 @@ Ext.define('Mfw.reports.Chart', {
         }
     },
 
-    layout: 'fit',
+    // layout: 'fit',
     bodyPadding: 0,
 
     items: [{
-        xtype: 'toolbar',
-        docked: 'bottom',
+        xtype: 'panel',
+        docked: 'right',
+        width: 250,
+        bodyPadding: 10,
+        resizable: {
+            split: true,
+            edges: 'west'
+        },
         defaults: {
-            // labelAlign: 'left'
-            margin: '0 8'
+            labelAlign: 'left'
         },
         items: [{
-            xtype: 'selectfield',
-            width: 150,
+            xtype: 'component',
             bind: {
-                value: '{record.rendering.timeStyle}',
-                hidden: '{record.type === "PIE_CHART"}'
+                html: '{record.rendering.chartType} | {record.rendering.lineWidth}'
+            }
+        }, {
+            xtype: 'selectfield',
+            bind: {
+                value: '{record.rendering.chartType}',
+                hidden: '{record.type === "CATEGORIES"}'
             },
-            label: 'Style'.t(),
+            // label: 'Style'.t(),
             options: [
-                { text: 'Line', value: 'LINE' },
-                { text: 'Area', value: 'AREA' },
-                { text: 'Area Stacked', value: 'AREA_STACKED' },
-                { text: 'Column', value: 'BAR' },
-                { text: 'Column Overlapped', value: 'BAR_OVERLAPPED' },
-                { text: 'Column Stacked', value: 'BAR_STACKED' }
+                { text: 'Spline', value: 'spline' },
+                { text: 'Line', value: 'line' },
+                { text: 'Areaspline', value: 'areaspline' },
+                { text: 'Area', value: 'area' },
+                { text: 'Area Stacked', value: 'area' },
+                // { text: 'Column', value: 'BAR' },
+                // { text: 'Column Overlapped', value: 'BAR_OVERLAPPED' },
+                // { text: 'Column Stacked', value: 'BAR_STACKED' }
             ]
 
         }, {
             xtype: 'selectfield',
-            width: 150,
             bind: {
                 value: '{record.rendering.pieStyle}',
-                hidden: '{record.type !== "PIE_CHART"}'
+                hidden: '{record.type !== "CATEGORIES"}'
             },
-            label: 'Style'.t(),
+            // label: 'Style'.t(),
             options: [
                 { text: 'Pie', value: 'PIE' },
                 { text: 'Pie 3D', value: 'PIE_3D' },
@@ -62,13 +72,20 @@ Ext.define('Mfw.reports.Chart', {
             ]
 
         }, {
+            xtype: 'sliderfield',
+            minValue: 0,
+            maxValue: 10,
+            bind: {
+                value: '{record.rendering.lineWidth}'
+            }
+        }, {
             xtype: 'selectfield',
             width: 120,
             bind: {
                 value: '{record.rendering.approximation}',
                 hidden: '{record.type === "PIE_CHART"}'
             },
-            label: 'Approximation'.t(),
+            // label: 'Approximation'.t(),
             options: [
                 { text: 'Average', value: 'average' },
                 { text: 'Open', value: 'open' },
@@ -101,7 +118,7 @@ Ext.define('Mfw.reports.Chart', {
 
             view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
                 chart: {
-                    type: 'spline',
+                    // type: 'spline',
                     // animation: false,
                     // marginRight: isWidget ? undefined : 20,
                     // spacing: isWidget ? [5, 5, 10, 5] : [30, 10, 15, 10],
@@ -291,23 +308,9 @@ Ext.define('Mfw.reports.Chart', {
                         edgeWidth: 1,
                         edgeColor: '#FFF'
                     },
-                    areaspline: {
-                        lineWidth: 1,
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.Color(Highcharts.getOptions().colors[Ext.Number.randomInt(0, 9)]).setOpacity(0.5).get('rgba')],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[Ext.Number.randomInt(0, 9)]).setOpacity(0.5).get('rgba')]
-                            ]
-                        }
-                    },
+
                     spline: {
-                        lineWidth: 2,
+                        // lineWidth: 2,
                         shadow: true
                     },
                     pie: {
@@ -389,178 +392,61 @@ Ext.define('Mfw.reports.Chart', {
                 if (!record) { return; }
                 me.setData();
             });
-            view.getViewModel().bind('{record.rendering.timeStyle}', function () {
+
+
+            view.getViewModel().bind('{record.rendering}', function (r) {
                 me.update();
                 // me.update(record);
-            });
-            view.getViewModel().bind('{record.rendering.pieStyle}', function () {
-                me.update();
-            });
-            view.getViewModel().bind('{record.rendering.approximation}', function () {
-                me.update();
-            });
+            }, me, {deep: true});
+            // view.getViewModel().bind('{record.rendering.pieStyle}', function () {
+            //     me.update();
+            // });
+            // view.getViewModel().bind('{record.rendering.approximation}', function () {
+            //     me.update();
+            // });
         },
 
         update: function () {
-            var me = this, isDateTime = false,
-                chart = me.getView().chart, type, xAxisType = 'category',
-                isDonut = false, is3d = false, isStacked = false, isOverlapped = false, colorByPoint = false;
-
-            var record = me.getViewModel().get('record');
+            var me = this,
+                record = me.getViewModel().get('record'),
+                chart = me.getView().chart, settings;
 
             if (!chart) { return; }
 
-            if (record.get('type') === 'PIE_CHART') {
-                switch (record.getRendering().get('pieStyle')) {
-                    case 'PIE': type = 'pie'; break;
-                    case 'PIE_3D': is3d = true; type = 'pie'; break;
-                    case 'DONUT': isDonut = true; type = 'pie'; break;
-                    case 'DONUT_3D': is3d = true; isDonut = true; type = 'pie'; break;
-                    case 'COLUMN': colorByPoint = true; type = 'column'; break;
-                    case 'COLUMN_3D': colorByPoint = true; is3d = true; type = 'column'; break;
-                    default:
-                }
-            }
+            var rendering = record.getRendering(),
+                colors = rendering.colors || Highcharts.getOptions().colors;
 
-            if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
-                isDateTime = true;
-                xAxisType = 'datetime';
-                switch (record.getRendering().get('timeStyle')) {
-                    case 'BAR': type = 'column'; break;
-                    case 'BAR_OVERLAPPED': isOverlapped = true; type = 'column'; break;
-                    case 'BAR_STACKED': isStacked = true; type = 'column'; break;
-                    case 'LINE': type = 'spline'; break;
-                    case 'AREA': type = 'areaspline'; break;
-                    case 'AREA_STACKED': isStacked = true; type = 'areaspline'; break;
-                    default:
-                }
-            }
-
-            var settings = {
+            settings = {
                 chart: {
-                    type: type,
-                    animation: false,
-                    zoomType: isDateTime ? 'x' : undefined,
-                    panning: isDateTime,
-                    panKey: 'ctrl',
-                    options3d: {
-                        enabled: is3d,
-                        alpha: 45,
-                        beta: colorByPoint ? 15 : 0,
-                        depth: colorByPoint ? 50 : 0,
-                    }
-                },
-                title: {
-                    text: record.get('name')
-                },
-                subtitle: {
-                    text: record.get('description')
-                },
-                tooltip: {
-                    split: isDateTime
-                },
-                // colors: colors,
-                // scrollbar: {
-                //     enabled: isTimeGraph
-                // },
-                legend: {
-                    enabled: isDateTime
+                    type: rendering.get('chartType')
                 },
                 plotOptions: {
                     series: {
-                        animation: {
-                            duration: 300
-                        },
-                        stacking: isStacked ? 'normal' : undefined
-                    },
-                    // pie graphs
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        innerSize: isDonut ? 100 : undefined,
-                        depth: is3d ? 40 : undefined,
-                        dataLabels: {
-                            enabled: false,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
-                        }
-                        // innerSize: isDonut ? '40%' : 0,
-                        // colors: colors
-                        //borderColor: '#666666'
-                    },
-                    // time graphs
-                    spline: {
-                        shadow: true,
-                        dataGrouping: {
-                            groupPixelWidth: 50,
-                            approximation: record.getRendering().get('approximation') || 'sum',
-                            // dateTimeLabelFormats: timeLabelFormats.dataGrouping
-                        },
-                    },
-                    // time graphs
-                    areaspline: {
-                        // shadow: true,
-                        // fillOpacity: 0.3,
-                        animation: {
-                            duration: 300
-                        },
-                        dataGrouping: {
-                            groupPixelWidth: 50,
-                            approximation: record.getRendering().get('approximation') || 'sum',
-                            // dateTimeLabelFormats: timeLabelFormats.dataGrouping
-                        },
-                    },
-                    column: {
-                        // borderWidth: isColumnOverlapped ? 1 : 0,
-                        pointPlacement: isDateTime ? 'on' : null, // time
-                        // // pointPadding: 0.01,
-                        colorByPoint: colorByPoint, // pie
-                        grouping: !isOverlapped,
-                        groupPadding: isOverlapped ? 0.1 : 0.15,
-                        // // shadow: !isColumnOverlapped,
-                        dataGrouping: {
-                            groupPixelWidth: 80,
-                        }
+                        lineWidth: rendering.get('lineWidth')
                     }
-                },
-                xAxis: {
-                    visible: isDateTime,
-                    minRange: 10 * 60 * 1000, // minzoom = 10 minutes
-                    // tickPixelInterval: 50,
-                    type: xAxisType,
-                    // crosshair: isDateTime ? {
-                    //     width: 1,
-                    //     dashStyle: 'ShortDot'
-                    // } : false,
-                    // plotLines: plotLines,
-                    // dateTimeLabelFormats: timeLabelFormats.xAxis
-                },
-                yAxis: {
-                    visible: type !== 'pie',
-                    // minRange: entry.get('units') === 'percent' ? 100 : 1,
-                    // maxRange: entry.get('units') === 'percent' ? 100 : undefined,
                 }
-            };
-            Highcharts.merge(true, settings);
+            }
 
-            // if (chart.series) {
-            //     Ext.Array.each(chart.series, function (serie, idx) {
-            //         serie.update({
-            //             color: Highcharts.getOptions().colors[idx],
-            //             lineColor: Highcharts.getOptions().colors[idx],
-            //             fillColor: {
-            //                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-            //                 stops: [
-            //                     [0, Highcharts.Color(Highcharts.getOptions().colors[idx]).setOpacity(0.7).get('rgba')],
-            //                     [1, Highcharts.Color(Highcharts.getOptions().colors[idx]).setOpacity(0.1).get('rgba')]
-            //                 ]
-            //             },
-            //         }, false);
-            //     });
-            // }
+            if (chart.series) {
+                Ext.Array.each(chart.series, function (serie, idx) {
+                    serie.update({
+                        color: colors[idx],
+                        lineColor: colors[idx],
+                        fillColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                            stops: [
+                                [0, Highcharts.Color(colors[idx]).setOpacity(0.7).get('rgba')],
+                                [1, Highcharts.Color(colors[idx]).setOpacity(0.1).get('rgba')]
+                            ]
+                        },
+                    }, false);
+                });
+            }
 
+
+            console.log(settings);
+
+            // Highcharts.merge(true, rendering);
             chart.update(settings, true);
         },
 
@@ -575,7 +461,7 @@ Ext.define('Mfw.reports.Chart', {
 
             var data = Util.generateData(record);
 
-            if (record.get('type') === 'TIME_CHART' || record.get('type') === 'TIME_DYNAMIC_CHART') {
+            if (record.get('type') === 'STATIC_SERIES' || record.get('type') === 'DYNAMIC_SERIES') {
                 Ext.Array.each(data, function (d) {
                     chart.addSeries(d, false, { duration: 150 });
                 });
