@@ -5,14 +5,24 @@ Ext.define('Mfw.model.ReportRender', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'chartType', type: 'string' },
+        { name: 'type', type: 'string' },
         { name: 'colors', type: 'auto' },
         { name: 'lineWidth', type: 'number', defaultValue: 2 },
+        { name: 'borderWidth', type: 'number', defaultValue: 1 },
         { name: 'areaOpacity', type: 'number', defaultValue: 0.7 },
         { name: 'stacking', type: 'string', defaultValue: 'none' }, // normal, percent
         { name: 'dashStyle', type: 'string', defaultValue: 'Solid' },
+
+        { name: 'dataGroupingEnabled', type: 'boolean', defaultValue: true }, // ["average", "open", "high", "low", "close", "sum"],
         { name: 'approximation', type: 'string', defaultValue: 'sum' }, // ["average", "open", "high", "low", "close", "sum"],
-        { name: 'groupPixelWidth', type: 'integer', defaultValue: 10 }
+        { name: 'groupPixelWidth', type: 'integer', defaultValue: 10 },
+
+        { name: 'donutInnerSize', type: 'number', defaultValue: 0 }, // percent
+        { name: '3dEnabled', type: 'boolean', defaultValue: false },
+        { name: '3dAlpha', type: 'integer', defaultValue: 45 },
+        { name: '3dBeta', type: 'integer', defaultValue: 0 },
+        { name: '3dDepth', type: 'integer', defaultValue: 40 }
+
         // { name: 'units', type: 'string' },
         // { name: 'colors', type: 'auto' },
         // { name: 'pieNumSlices', type: 'integer' },

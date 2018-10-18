@@ -34,54 +34,41 @@ Ext.define('Mfw.reports.Chart', {
             labelTextAlign: 'right'
         },
         items: [{
-            xtype: 'component',
-            bind: {
-                html: '{record.rendering.groupPixelWidth}'
-            }
-        }, {
             xtype: 'selectfield',
             bind: {
-                value: '{record.rendering.chartType}',
-                hidden: '{record.type === "CATEGORIES"}'
+                value: '{record.rendering.type}',
+                hidden: '{record.type !== "STATIC_SERIES" && record.type !== "DYNAMIC_SERIES"}'
             },
-            label: 'Style'.t(),
+            label: 'Type'.t(),
             options: [
                 { text: 'Spline', value: 'spline' },
                 { text: 'Line', value: 'line' },
                 { text: 'Areaspline', value: 'areaspline' },
                 { text: 'Area', value: 'area' },
-                { text: 'Column', value: 'column' },
-                // { text: 'Column', value: 'BAR' },
-                // { text: 'Column Overlapped', value: 'BAR_OVERLAPPED' },
-                // { text: 'Column Stacked', value: 'BAR_STACKED' }
+                { text: 'Column', value: 'column' }
             ]
-
         }, {
             xtype: 'selectfield',
             bind: {
-                value: '{record.rendering.pieStyle}',
+                value: '{record.rendering.type}',
                 hidden: '{record.type !== "CATEGORIES"}'
             },
-            // label: 'Style'.t(),
+            label: 'Type'.t(),
             options: [
-                { text: 'Pie', value: 'PIE' },
-                { text: 'Pie 3D', value: 'PIE_3D' },
-                { text: 'Donut', value: 'DONUT' },
-                { text: 'Donut 3D', value: 'DONUT_3D' },
-                { text: 'Column', value: 'COLUMN' },
-                { text: 'Column 3D', value: 'COLUMN_3D' }
+                { text: 'Pie', value: 'pie' },
+                { text: 'Column', value: 'column' },
             ]
-
         }, {
-            xtype: 'sliderfield',
-            label: 'Line Width'.t(),
-            // labelAlign: 'top',
-            minValue: 0,
-            maxValue: 8,
-            increment: 0.5,
+            xtype: 'selectfield',
             bind: {
-                value: '{record.rendering.lineWidth}'
-            }
+                value: '{record.rendering.stacking}'
+            },
+            label: 'Stacking'.t(),
+            options: [
+                { text: 'None', value: 'none' },
+                { text: 'Normal', value: 'normal' },
+                { text: 'Percent', value: 'percent' }
+            ]
         }, {
             xtype: 'selectfield',
             bind: {
@@ -100,50 +87,192 @@ Ext.define('Mfw.reports.Chart', {
                 { text: 'Long Dash Dot Dot', value: 'LongDashDotDot' }
             ]
         }, {
-            xtype: 'sliderfield',
+            xtype: 'containerfield',
+            label: 'Line Width'.t(),
+            items: [{
+                xtype: 'sliderfield',
+                flex: 1,
+                minValue: 0,
+                maxValue: 5,
+                increment: 0.5,
+                bind: {
+                    value: '{record.rendering.lineWidth}'
+                }
+            }, {
+                xtype: 'component',
+                width: 30,
+                padding: '7px 10px 0 7px',
+                bind: {
+                    html: '{record.rendering.lineWidth}'
+                }
+            }]
+        }, {
+            xtype: 'containerfield',
+            label: 'Border Width'.t(),
+            items: [{
+                xtype: 'sliderfield',
+                flex: 1,
+                minValue: 0,
+                maxValue: 5,
+                increment: 0.5,
+                bind: {
+                    value: '{record.rendering.borderWidth}'
+                }
+            }, {
+                xtype: 'component',
+                width: 30,
+                padding: '7px 10px 0 7px',
+                bind: {
+                    html: '{record.rendering.borderWidth}'
+                }
+            }]
+        }, {
+            xtype: 'containerfield',
             label: 'Area Opacity'.t(),
-            // labelAlign: 'top',
-            minValue: 0,
-            maxValue: 1,
-            increment: 0.1,
-            bind: {
-                value: '{record.rendering.areaOpacity}'
-            }
+            items: [{
+                xtype: 'sliderfield',
+                flex: 1,
+                minValue: 0,
+                maxValue: 1,
+                increment: 0.1,
+                // hidden: true,
+                bind: {
+                    value: '{record.rendering.areaOpacity}',
+                    // hidden: '{record.rendering.type !== "area" && record.rendering.type !== "areaspline"}'
+                }
+            }, {
+                xtype: 'component',
+                width: 30,
+                padding: '7px 10px 0 7px',
+                bind: {
+                    html: '{record.rendering.areaOpacity}'
+                }
+            }]
         }, {
-            xtype: 'selectfield',
-            bind: {
-                value: '{record.rendering.stacking}'
+            xtype: 'fieldset',
+            // title: 'Data Grouping',
+            margin: '16 0',
+            defaults: {
+                labelAlign: 'left',
+                labelTextAlign: 'right'
             },
-            label: 'Stacking'.t(),
-            options: [
-                { text: 'None', value: 'none' },
-                { text: 'Normal', value: 'normal' },
-                { text: 'Percent', value: 'percent' }
-            ]
-
+            // hidden: true,
+            // bind: {
+            //     hidden: '{record.type !== "STATIC_SERIES" && record.type !== "DYNAMIC_SERIES"}'
+            // },
+            items: [{
+                xtype: 'togglefield',
+                label: 'Data Grouping'.t(),
+                bind: '{record.rendering.dataGroupingEnabled}'
+            }, {
+                xtype: 'selectfield',
+                bind: {
+                    value: '{record.rendering.approximation}'
+                },
+                label: 'Approximation'.t(),
+                options: [
+                    { text: 'Average', value: 'average' },
+                    { text: 'High', value: 'high' },
+                    { text: 'Low', value: 'low' },
+                    { text: 'Sum', value: 'sum' }
+                ]
+            }, {
+                xtype: 'containerfield',
+                label: 'Group Factor'.t(),
+                items: [{
+                    xtype: 'sliderfield',
+                    flex: 1,
+                    minValue: 10,
+                    maxValue: 50,
+                    increment: 10,
+                    bind: {
+                        value: '{record.rendering.groupPixelWidth}'
+                    }
+                }, {
+                    xtype: 'component',
+                    width: 30,
+                    padding: '7px 10px 0 7px',
+                    bind: {
+                        html: '{record.rendering.groupPixelWidth}'
+                    }
+                }]
+            }]
         }, {
-            xtype: 'selectfield',
-            bind: {
-                value: '{record.rendering.approximation}'
+            xtype: 'fieldset',
+            // title: '3D',
+            margin: '16 0',
+            defaults: {
+                labelAlign: 'left',
+                labelTextAlign: 'right'
             },
-            label: 'Approximation'.t(),
-            options: [
-                { text: 'Average', value: 'average' },
-                { text: 'High', value: 'high' },
-                { text: 'Low', value: 'low' },
-                { text: 'Sum', value: 'sum' }
-            ]
-
-        }, {
-            xtype: 'sliderfield',
-            label: 'Group Pixel Width'.t(),
-            // labelAlign: 'top',
-            minValue: 10,
-            maxValue: 30,
-            increment: 10,
+            hidden: true,
             bind: {
-                value: '{record.rendering.groupPixelWidth}'
-            }
+                hidden: '{record.type !== "CATEGORIES"}'
+            },
+            items: [{
+                xtype: 'togglefield',
+                label: '3D Enabled'.t(),
+                bind: '{record.rendering.3dEnabled}'
+            }, {
+                xtype: 'containerfield',
+                label: 'Alpha'.t(),
+                items: [{
+                    xtype: 'sliderfield',
+                    flex: 1,
+                    minValue: 0,
+                    maxValue: 100,
+                    increment: 5,
+                    bind: {
+                        value: '{record.rendering.3dAlpha}'
+                    }
+                }, {
+                    xtype: 'component',
+                    width: 30,
+                    padding: '7px 10px 0 7px',
+                    bind: {
+                        html: '{record.rendering.3dAlpha}%'
+                    }
+                }]
+            }, {
+                xtype: 'containerfield',
+                label: 'Depth'.t(),
+                items: [{
+                    xtype: 'sliderfield',
+                    flex: 1,
+                    minValue: 10,
+                    maxValue: 50,
+                    increment: 1,
+                    bind: {
+                        value: '{record.rendering.3dDepth}'
+                    }
+                }, {
+                    xtype: 'component',
+                    width: 30,
+                    padding: '7px 10px 0 7px',
+                    bind: {
+                        html: '{record.rendering.3dDepth}'
+                    }
+                }]
+            }]
+        }, {
+            xtype: 'containerfield',
+            label: 'Donut Size'.t(),
+            items: [{
+                xtype: 'sliderfield',
+                flex: 1,
+                minValue: 0,
+                maxValue: 90,
+                increment: 5,
+                bind: {
+                    value: '{record.rendering.donutInnerSize}'
+                }
+            }, {
+                xtype: 'component',
+                padding: '7px 10px 0 7px',
+                bind: {
+                    html: '{record.rendering.donutInnerSize}%'
+                }
+            }]
         }]
     }, {
         xtype: 'container',
@@ -167,12 +296,7 @@ Ext.define('Mfw.reports.Chart', {
 
             view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
                 chart: {
-                    // type: 'spline',
-                    // animation: false,
-                    // marginRight: isWidget ? undefined : 20,
-                    // spacing: isWidget ? [5, 5, 10, 5] : [30, 10, 15, 10],
-                    zoomType: 'x',
-                    selectedrange: null,
+                    animation: false,
                     events: {
                         // selection: function (event) {
                         //     // if (isWidget) { return; } // applies only when viewing the report
@@ -217,15 +341,15 @@ Ext.define('Mfw.reports.Chart', {
                                 me.setData()
                             }
                         },
-                        timerangeButton: {
-                            text: 'Apply this timerange'.t(),
-                            align: 'center',
-                            enabled: true, // this updates based on zoom selection
-                            y: 10,
-                            onclick: function() {
-                                Ext.fireEvent('timerangechange', me.chart.selectedrange);
-                            }
-                        }
+                        // timerangeButton: {
+                        //     text: 'Apply this timerange'.t(),
+                        //     align: 'center',
+                        //     enabled: true, // this updates based on zoom selection
+                        //     y: 10,
+                        //     onclick: function() {
+                        //         Ext.fireEvent('timerangechange', me.chart.selectedrange);
+                        //     }
+                        // }
                     }
                 },
                 navigator: { enabled: false },
@@ -263,84 +387,12 @@ Ext.define('Mfw.reports.Chart', {
                     }
                 },
 
-                // colors: (me.entry.get('colors') !== null && me.entry.get('colors') > 0) ? me.entry.get('colors') : me.defaultColors,
-
-                xAxis: {
-                    // alternateGridColor: 'rgba(220, 220, 220, 0.1)',
-                    type: 'datetime',
-                    // lineWidth: 1,
-                    // tickLength: 5,
-                    // // gridLineWidth: 1,
-                    // // gridLineDashStyle: 'dash',
-                    // // gridLineColor: '#EEE',
-                    // // tickPixelInterval: isWidget ? 80 : 120,
-                    // labels: {
-                    //     style: {
-                    //         color: '#777',
-                    //         // fontSize: isWidget ? '11px' : '12px',
-                    //         fontWeight: 600
-                    //     },
-                    //     // y: isWidget ? 15 : 20,
-                    //     autoRotation: [-25]
-                    // },
-                    // maxPadding: 0,
-                    // minPadding: 0,
-                    // events: {
-                    //     // afterSetExtremes: function () {
-                    //     //     // filters the current data grid based on the zoom range
-                    //     //     if (me.getView().up('entry')) {
-                    //     //         me.getView().up('entry').getController().filterData(this.getExtremes().min, this.getExtremes().max);
-                    //     //     }
-                    //     // }
-                    // }
-                },
-                yAxis: {
-                    // allowDecimals: true,
-                    // min: 0,
-                    // lineWidth: 1,
-                    // // gridLineWidth: 1,
-                    // gridLineDashStyle: 'dash',
-                    // // gridLineColor: '#EEE',
-                    // //tickPixelInterval: 50,
-                    // tickLength: 5,
-                    // tickWidth: 1,
-                    // showFirstLabel: false,
-                    // showLastLabel: true,
-                    // endOnTick: true,
-                    // // tickInterval: entry.get('units') === 'percent' ? 20 : undefined,
-                    // maxPadding: 0,
-                    opposite: false,
-                    // labels: {
-                    //     align: 'right',
-                    //     useHTML: true,
-                    //     padding: 0,
-                    //     style: {
-                    //         color: '#777',
-                    //         // fontSize: isWidget ? '11px' : '12px',
-                    //         fontWeight: 600
-                    //     },
-                    //     x: -10,
-                    //     y: 4
-                    // },
-                    // title: {
-                    //     align: 'high',
-                    //     offset: -10,
-                    //     y: 3,
-                    //     rotation: 0,
-                    //     textAlign: 'left',
-                    //     style: {
-                    //         color: '#555',
-                    //         // fontSize: isWidget ? '12px' : '14px',
-                    //         fontWeight: 600
-                    //     }
-                    // }
-                },
                 tooltip: {
                     enabled: true,
                     animation: false,
                     shared: true,
                     followPointer: true,
-                    split: true,
+                    split: false,
                     // distance: 30,
                     padding: 10,
                     hideDelay: 0,
@@ -350,61 +402,6 @@ Ext.define('Mfw.reports.Chart', {
                         // fontSize: isWidget ? '12px' : '14px'
                     },
                     headerFormat: '<p style="margin: 0 0 5px 0; color: #555;">{point.key}</p>'
-                },
-                plotOptions: {
-                    column: {
-                        depth: 25,
-                        edgeWidth: 1,
-                        edgeColor: '#FFF'
-                    },
-
-                    spline: {
-                        // lineWidth: 2,
-                        // shadow: true
-                    },
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        center: ['50%', '50%'],
-                        showInLegend: true,
-                        colorByPoint: true,
-
-                        // depth: isWidget ? 25 : 35,
-                        minSize: 150,
-                        borderWidth: 1,
-                        edgeWidth: 1,
-                        dataLabels: {
-                            enabled: true,
-                            distance: 5,
-                            padding: 0,
-                            reserveSpace: false,
-                            formatter: function () {
-                                if (this.point.percentage < 2) {
-                                    return null;
-                                }
-                                if (this.point.name.length > 25) {
-                                    return this.point.name.substring(0, 25) + '...';
-                                }
-                                return this.point.name + ' (' + this.point.percentage.toFixed(2) + '%)';
-                            }
-                        }
-                    },
-                    // series: {
-                    //     dataLabels: {
-                    //         style: {
-                    //             // fontSize: isWidget ? '10px' : '12px'
-                    //         }
-                    //     },
-                    //     animation: true,
-                    //     states: {
-                    //         hover: {
-                    //             lineWidthPlus: 0
-                    //         }
-                    //     },
-                    //     marker: {
-                    //         radius: 2,
-                    //     }
-                    // }
                 },
                 legend: {
                     enabled: true,
@@ -425,12 +422,20 @@ Ext.define('Mfw.reports.Chart', {
                     // symbolWidth: 8,
                     // symbolRadius: 4
                 },
-                loading: {
-                    style: {
-                        opacity: 1
+                // loading: {
+                //     style: {
+                //         opacity: 1
+                //     }
+                // },
+                yAxis: {
+                    opposite: false
+                },
+                plotOptions: {
+                    series: {
+                        animation: false
                     }
                 }
-                // series: Util.generateTimeSeries(),
+                // series: Util.generatePieData(),
             });
 
         },
@@ -445,17 +450,13 @@ Ext.define('Mfw.reports.Chart', {
 
             view.getViewModel().bind('{record.rendering}', function (r) {
                 me.update();
-                // me.update(record);
-            }, me, {deep: true});
-            // view.getViewModel().bind('{record.rendering.pieStyle}', function () {
-            //     me.update();
-            // });
-            // view.getViewModel().bind('{record.rendering.approximation}', function () {
-            //     me.update();
-            // });
+            }, me, { deep: true });
         },
 
         update: function () {
+
+            console.log('UPDATE.....');
+
             var me = this,
                 record = me.getViewModel().get('record'),
                 chart = me.getView().chart, settings;
@@ -463,25 +464,97 @@ Ext.define('Mfw.reports.Chart', {
             if (!chart) { return; }
 
             var rendering = record.getRendering(),
-                colors = rendering.get('colors') || Highcharts.getOptions().colors;
+                colors = rendering.get('colors') || Highcharts.getOptions().colors, plotOptions = {};
 
-            settings = {
-                chart: {
-                    type: rendering.get('chartType')
-                },
-                colors: colors,
-                plotOptions: {
-                    series: {
+            if (record.get('type') === 'STATIC_SERIES' || record.get('type') === 'DYNAMIC_SERIES') {
+                Ext.Array.each(['line', 'spline', 'area', 'areaspline'], function (type) {
+                    plotOptions[type] = {
+                        // step: true,
                         lineWidth: rendering.get('lineWidth'),
                         stacking: rendering.get('stacking') === 'none' ? undefined : rendering.get('stacking'),
                         dashStyle: rendering.get('dashStyle'),
                         dataGrouping: {
+                            enabled: rendering.get('dataGroupingEnabled'),
                             approximation: rendering.get('approximation'),
                             groupPixelWidth: rendering.get('groupPixelWidth')
                         }
                     }
+                })
+
+                plotOptions.column = {
+                    stacking: rendering.get('stacking') === 'none' ? undefined : rendering.get('stacking'),
+                    dataGrouping: {
+                        enabled: rendering.get('dataGroupingEnabled'),
+                        approximation: rendering.get('approximation'),
+                        groupPixelWidth: rendering.get('groupPixelWidth')
+                    }
+                }
+
+                settings = {
+                    chart: {
+                        type: rendering.get('type'),
+                        zoomType: 'x',
+                        options3d: {
+                            enabled: false
+                        }
+                    },
+                    colors: colors,
+                    plotOptions: plotOptions,
+                    xAxis: {
+                        visible: true
+                    },
+                    yAxis: {
+                        visible: true
+                    }
+
                 }
             }
+
+
+            if (record.get('type') === 'CATEGORIES') {
+
+                console.log(rendering.get('type'));
+                // if (rendering.get('type') === 'column') {
+                //     var xAxisCategs =
+                // }
+
+                settings = {
+                    chart: {
+                        type: rendering.get('type'),
+                        zoomType: undefined,
+                        options3d: {
+                            enabled: rendering.get('3dEnabled'),
+                            alpha: rendering.get('3dAlpha'),
+                            beta: rendering.get('3dBeta')
+                        }
+                    },
+                    colors: colors,
+                    plotOptions: {
+                        pie: {
+                            innerSize: rendering.get('donutInnerSize') + '%',
+                            borderWidth: rendering.get('borderWidth'),
+                            edgeColor: '#FFF',
+                            edgeWidth: rendering.get('borderWidth'),
+                            depth: rendering.get('3dDepth')
+                        }
+                    },
+                    xAxis: {
+                        visible: false
+                    },
+                    yAxis: {
+                        visible: false
+                    }
+                }
+            }
+
+            settings.title = {
+                text: record.get('name')
+            }
+
+            settings.subtitle = {
+                text: record.get('description')
+            }
+
 
             if (chart.series) {
                 Ext.Array.each(chart.series, function (serie, idx) {
@@ -499,11 +572,9 @@ Ext.define('Mfw.reports.Chart', {
                 });
             }
 
-
-            console.log(settings);
-
-            // Highcharts.merge(true, rendering);
+            // console.log(chart.options);
             chart.update(settings, true);
+
         },
 
         setData: function () {

@@ -391,10 +391,16 @@ Ext.define('Mfw.util.Util', {
         });
 
         Ext.Array.each(arr, function (v) {
-            data.push({ y: v });
+            data.push(v);
+            // data.push({ y: v });
         });
+
+        console.log(data);
+
         return {
             name: 'some name',
+            type: 'pie',
+            colorByPoint: true,
             data: data
         };
     },

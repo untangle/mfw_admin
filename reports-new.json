@@ -1,14 +1,14 @@
 [
     {
         "uniqueId" : "network-oyzBpGMc",
-        "name": "STATIC_SERIES (areaspline)",
+        "name": "STATIC_SERIES",
         "category": "Network",
         "description": "The amount of total, scanned, and bypassed sessions over time.",
         "displayOrder": 100,
         "readOnly": true,
         "type": "STATIC_SERIES",
         "rendering": {
-            "chartType": "areaspline",
+            "type": "areaspline",
             "lineWidth": 2,
             "areaOpacity": 0.9
         }
@@ -16,40 +16,28 @@
 
     {
         "uniqueId" : "network-oyzBpGMc",
-        "name": "STATIC_SERIES (area)",
+        "name": "DYNAMIC_SERIES",
         "category": "Network",
         "description": "The amount of total, scanned, and bypassed sessions over time.",
         "displayOrder": 100,
         "readOnly": true,
-        "type": "STATIC_SERIES",
+        "type": "DYNAMIC_SERIES",
         "rendering": {
-            "chartType": "area",
+            "type": "area",
             "colors": ["#999", "#AAA", "#BBB"]
         }
     },
 
     {
         "uniqueId" : "network-oyzBpGMc",
-        "name": "STATIC_SERIES (spline)",
+        "name": "CATEGORIES",
         "category": "Network",
         "description": "The amount of total, scanned, and bypassed sessions over time.",
         "displayOrder": 100,
         "readOnly": true,
-        "type": "STATIC_SERIES",
+        "type": "CATEGORIES",
         "rendering": {
-            "chartType": "spline"
-        }
-    },
-    {
-        "uniqueId" : "network-oyzBpGMc",
-        "name": "STATIC_SERIES (line)",
-        "category": "Network",
-        "description": "The amount of total, scanned, and bypassed sessions over time.",
-        "displayOrder": 100,
-        "readOnly": true,
-        "type": "STATIC_SERIES",
-        "rendering": {
-            "chartType": "line"
+            "type": "pie"
         }
     }
 ]

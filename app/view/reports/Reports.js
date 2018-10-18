@@ -42,7 +42,7 @@ Ext.define('Mfw.view.Reports', {
             xtype: 'panel',
             bind: {
                 docked: '{(!smallScreen) ? "left" : null }',
-                width: '{(!smallScreen) ? 250 : null }',
+                width: '{(!smallScreen) ? 350 : null }',
                 hidden: '{ smallScreen && currentView }',
             },
 
