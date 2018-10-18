@@ -23,19 +23,20 @@ Ext.define('Mfw.reports.Chart', {
     items: [{
         xtype: 'panel',
         docked: 'right',
-        width: 250,
+        width: 300,
         bodyPadding: 10,
         resizable: {
             split: true,
             edges: 'west'
         },
         defaults: {
-            labelAlign: 'left'
+            labelAlign: 'left',
+            labelTextAlign: 'right'
         },
         items: [{
             xtype: 'component',
             bind: {
-                html: '{record.rendering.chartType} | {record.rendering.lineWidth}'
+                html: '{record.rendering.groupPixelWidth}'
             }
         }, {
             xtype: 'selectfield',
@@ -43,13 +44,13 @@ Ext.define('Mfw.reports.Chart', {
                 value: '{record.rendering.chartType}',
                 hidden: '{record.type === "CATEGORIES"}'
             },
-            // label: 'Style'.t(),
+            label: 'Style'.t(),
             options: [
                 { text: 'Spline', value: 'spline' },
                 { text: 'Line', value: 'line' },
                 { text: 'Areaspline', value: 'areaspline' },
                 { text: 'Area', value: 'area' },
-                { text: 'Area Stacked', value: 'area' },
+                { text: 'Column', value: 'column' },
                 // { text: 'Column', value: 'BAR' },
                 // { text: 'Column Overlapped', value: 'BAR_OVERLAPPED' },
                 // { text: 'Column Stacked', value: 'BAR_STACKED' }
@@ -73,28 +74,76 @@ Ext.define('Mfw.reports.Chart', {
 
         }, {
             xtype: 'sliderfield',
+            label: 'Line Width'.t(),
+            // labelAlign: 'top',
             minValue: 0,
-            maxValue: 10,
+            maxValue: 8,
+            increment: 0.5,
             bind: {
                 value: '{record.rendering.lineWidth}'
             }
         }, {
             xtype: 'selectfield',
-            width: 120,
             bind: {
-                value: '{record.rendering.approximation}',
-                hidden: '{record.type === "PIE_CHART"}'
+                value: '{record.rendering.dashStyle}',
             },
-            // label: 'Approximation'.t(),
+            label: 'Dash Style'.t(),
+            options: [
+                { text: 'Solid', value: 'Solid' },
+                { text: 'Short Dash', value: 'ShortDash' },
+                { text: 'Short Dash Dot', value: 'ShortDashDot' },
+                { text: 'Short Dash Dot Dot', value: 'ShortDashDotDot' },
+                { text: 'Dot', value: 'Dot' },
+                { text: 'Dash', value: 'Dash' },
+                { text: 'Long Dash', value: 'LongDash' },
+                { text: 'Long Dash Dot', value: 'LongDashDot' },
+                { text: 'Long Dash Dot Dot', value: 'LongDashDotDot' }
+            ]
+        }, {
+            xtype: 'sliderfield',
+            label: 'Area Opacity'.t(),
+            // labelAlign: 'top',
+            minValue: 0,
+            maxValue: 1,
+            increment: 0.1,
+            bind: {
+                value: '{record.rendering.areaOpacity}'
+            }
+        }, {
+            xtype: 'selectfield',
+            bind: {
+                value: '{record.rendering.stacking}'
+            },
+            label: 'Stacking'.t(),
+            options: [
+                { text: 'None', value: 'none' },
+                { text: 'Normal', value: 'normal' },
+                { text: 'Percent', value: 'percent' }
+            ]
+
+        }, {
+            xtype: 'selectfield',
+            bind: {
+                value: '{record.rendering.approximation}'
+            },
+            label: 'Approximation'.t(),
             options: [
                 { text: 'Average', value: 'average' },
-                { text: 'Open', value: 'open' },
                 { text: 'High', value: 'high' },
                 { text: 'Low', value: 'low' },
-                { text: 'Close', value: 'close' },
                 { text: 'Sum', value: 'sum' }
             ]
 
+        }, {
+            xtype: 'sliderfield',
+            label: 'Group Pixel Width'.t(),
+            // labelAlign: 'top',
+            minValue: 10,
+            maxValue: 30,
+            increment: 10,
+            bind: {
+                value: '{record.rendering.groupPixelWidth}'
+            }
         }]
     }, {
         xtype: 'container',
@@ -311,7 +360,7 @@ Ext.define('Mfw.reports.Chart', {
 
                     spline: {
                         // lineWidth: 2,
-                        shadow: true
+                        // shadow: true
                     },
                     pie: {
                         allowPointSelect: true,
@@ -414,15 +463,22 @@ Ext.define('Mfw.reports.Chart', {
             if (!chart) { return; }
 
             var rendering = record.getRendering(),
-                colors = rendering.colors || Highcharts.getOptions().colors;
+                colors = rendering.get('colors') || Highcharts.getOptions().colors;
 
             settings = {
                 chart: {
                     type: rendering.get('chartType')
                 },
+                colors: colors,
                 plotOptions: {
                     series: {
-                        lineWidth: rendering.get('lineWidth')
+                        lineWidth: rendering.get('lineWidth'),
+                        stacking: rendering.get('stacking') === 'none' ? undefined : rendering.get('stacking'),
+                        dashStyle: rendering.get('dashStyle'),
+                        dataGrouping: {
+                            approximation: rendering.get('approximation'),
+                            groupPixelWidth: rendering.get('groupPixelWidth')
+                        }
                     }
                 }
             }
@@ -435,7 +491,7 @@ Ext.define('Mfw.reports.Chart', {
                         fillColor: {
                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
                             stops: [
-                                [0, Highcharts.Color(colors[idx]).setOpacity(0.7).get('rgba')],
+                                [0, Highcharts.Color(colors[idx]).setOpacity(rendering.get('areaOpacity')).get('rgba')],
                                 [1, Highcharts.Color(colors[idx]).setOpacity(0.1).get('rgba')]
                             ]
                         },

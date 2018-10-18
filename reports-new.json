@@ -9,7 +9,8 @@
         "type": "STATIC_SERIES",
         "rendering": {
             "chartType": "areaspline",
-            "lineWidth": 0
+            "lineWidth": 2,
+            "areaOpacity": 0.9
         }
     },
 

@@ -6,14 +6,20 @@ Ext.define('Mfw.model.ReportRender', {
     identifier: 'uuid',
     fields: [
         { name: 'chartType', type: 'string' },
-        { name: 'lineWidth', type: 'integer', defaultValue: 2 },
+        { name: 'colors', type: 'auto' },
+        { name: 'lineWidth', type: 'number', defaultValue: 2 },
+        { name: 'areaOpacity', type: 'number', defaultValue: 0.7 },
+        { name: 'stacking', type: 'string', defaultValue: 'none' }, // normal, percent
+        { name: 'dashStyle', type: 'string', defaultValue: 'Solid' },
+        { name: 'approximation', type: 'string', defaultValue: 'sum' }, // ["average", "open", "high", "low", "close", "sum"],
+        { name: 'groupPixelWidth', type: 'integer', defaultValue: 10 }
         // { name: 'units', type: 'string' },
         // { name: 'colors', type: 'auto' },
         // { name: 'pieNumSlices', type: 'integer' },
         // { name: 'pieStyle', type: 'string' }, // ["PIE","PIE_3D","DONUT","DONUT_3D","COLUMN","COLUMN_3D"]
         // { name: 'textString', type: 'string' },
         // { name: 'timeStyle', type: 'string' }, // ["BAR","BAR_OVERLAPPED","BAR_STACKED","LINE","AREA","AREA_STACKED"]
-        // { name: 'approximation', type: 'string' }, // ["average", "open", "high", "low", "close", "sum"],
+
 
         // {
         //     name: '_icon',
