@@ -354,25 +354,23 @@ Ext.define('Mfw.util.Util', {
 
 
     generateTimeSeries: function () {
-        var scanned = [], bypassed = [], total = [], sc, bp,
+        var seriesNumber = Ext.Number.randomInt(2, 7),
             start = Ext.Date.clearTime(Util.serverToClientDate(new Date())),
             time = start,
+            series = [],
             end = new Date();
+
+        for (var i = 0; i < seriesNumber; i++) {
+            series[i] = { name: 'Series ' + i, data: [] }
+        }
 
         while (Ext.Date.between(time, start, end)) {
             time = Ext.Date.add(time, Ext.Date.MINUTE, 10);
-            sc = Ext.Number.randomInt(0, 100);
-            bp = Ext.Number.randomInt(0, 100);
-            scanned.push([time.getTime(), sc]);
-            bypassed.push([time.getTime(), bp]);
-            total.push([time.getTime(), sc + bp]);
+            Ext.Array.each(series, function (serie) {
+                serie.data.push([time.getTime(), Ext.Number.randomInt(0, 100)])
+            })
         }
-
-        return [
-            { name: 'scanned', data: scanned },
-            { name: 'bypassed', data: bypassed },
-            { name: 'total', data: total }
-        ]
+        return series;
     },
 
     generatePieData: function () {
@@ -381,12 +379,15 @@ Ext.define('Mfw.util.Util', {
 
 
         for (i = 0; i <= pienum; i++) {
-            arr.push(Ext.Number.randomInt(1, 100));
+            arr.push({
+                name: 'Slice ' + i,
+                y: Ext.Number.randomInt(1, 100)
+            });
         }
 
         Ext.Array.sort(arr, function (a, b) {
-            if (a > b) { return -1 }
-            if (a < b) { return 1 }
+            if (a.y > b.y) { return -1 }
+            if (a.y < b.y) { return 1 }
             return 0;
         });
 
@@ -399,8 +400,6 @@ Ext.define('Mfw.util.Util', {
 
         return {
             name: 'some name',
-            type: 'pie',
-            colorByPoint: true,
             data: data
         };
     },

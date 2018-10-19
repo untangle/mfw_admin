@@ -9,7 +9,6 @@
         "type": "STATIC_SERIES",
         "rendering": {
             "type": "areaspline",
-            "lineWidth": 2,
             "areaOpacity": 0.9
         }
     },
@@ -23,8 +22,9 @@
         "readOnly": true,
         "type": "DYNAMIC_SERIES",
         "rendering": {
-            "type": "area",
-            "colors": ["#999", "#AAA", "#BBB"]
+            "type": "areaspline",
+            "lineWidth": 1,
+            "colors": "#F47942, #FFD039, #45C48B, #06858C, #323741"
         }
     },
 
