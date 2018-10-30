@@ -354,7 +354,7 @@ Ext.define('Mfw.util.Util', {
 
 
     generateTimeSeries: function () {
-        var seriesNumber = Ext.Number.randomInt(2, 7),
+        var seriesNumber = Ext.Number.randomInt(3, 5),
             start = Ext.Date.clearTime(Util.serverToClientDate(new Date())),
             time = start,
             series = [],

@@ -23,9 +23,13 @@ Ext.define('Mfw.reports.Chart', {
     bodyPadding: 0,
 
     items: [{
+        xtype: 'container',
+        // flex: 1,
+        itemId: 'chart'
+    }, {
         xtype: 'panel',
         docked: 'right',
-        width: 300,
+        width: 350,
         bodyPadding: 10,
         resizable: {
             split: true,
@@ -346,9 +350,6 @@ Ext.define('Mfw.reports.Chart', {
             label: 'Colors'.t(),
             bind: '{record.rendering.colors}'
         }]
-    }, {
-        xtype: 'container',
-        itemId: 'chart'
     }]
 
 });

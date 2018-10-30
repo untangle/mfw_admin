@@ -1,38 +1,20 @@
 [
     {
         "uniqueId" : "network-oyzBpGMc",
-        "name": "STATIC_SERIES",
+        "name": "TIME SERIES",
         "category": "Network",
-        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "description": "Time Series description",
         "displayOrder": 100,
         "readOnly": true,
         "type": "STATIC_SERIES",
         "rendering": {
-            "type": "areaspline",
-            "areaOpacity": 0.9
+            "type": "areaspline"
         }
-    },
-
-    {
-        "uniqueId" : "network-oyzBpGMc",
-        "name": "DYNAMIC_SERIES",
-        "category": "Network",
-        "description": "The amount of total, scanned, and bypassed sessions over time.",
-        "displayOrder": 100,
-        "readOnly": true,
-        "type": "DYNAMIC_SERIES",
-        "rendering": {
-            "type": "areaspline",
-            "lineWidth": 1,
-            "colors": "#F47942, #FFD039, #45C48B, #06858C, #323741"
-        }
-    },
-
-    {
+    }, {
         "uniqueId" : "network-oyzBpGMc",
         "name": "CATEGORIES",
         "category": "Network",
-        "description": "The amount of total, scanned, and bypassed sessions over time.",
+        "description": "Categories description",
         "displayOrder": 100,
         "readOnly": true,
         "type": "CATEGORIES",

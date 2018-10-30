@@ -36,13 +36,14 @@ Ext.define('Mfw.view.Reports', {
             xtype: 'reports-conditions'
         }]
     }, {
-        xtype: 'container',
+        xtype: 'panel',
         style: 'border-top: 1px #e1e1e1 solid;',
+        layout: 'fit',
         items: [{
             xtype: 'panel',
             bind: {
                 docked: '{(!smallScreen) ? "left" : null }',
-                width: '{(!smallScreen) ? 350 : null }',
+                width: '{(!smallScreen) ? 250 : null }',
                 hidden: '{ smallScreen && currentView }',
             },
 
@@ -90,39 +91,7 @@ Ext.define('Mfw.view.Reports', {
                 }]
             }
         }, {
-            xtype: 'chart',
-            // layout: 'fit'
-            // bodyPadding: 16,
-            // title: 'Hosts Adittions',
-            // tools: {
-            //     refresh: {
-            //         iconCls: 'md-icon-refresh',
-            //         handler: 'onRefresh'
-            //     },
-            //     more: {
-            //         iconCls: 'md-icon-more-vert'
-            //     }
-            // },
-            // layout: {
-            //     type: 'fit',
-            //     // align: 'stretch'
-            // },
-            // items: [{
-            //     xtype: 'chart',
-            //     flex: 1
-            //     // maxHeight: 400
-            // }
-            // {
-            //     xtype: 'panel',
-            //     docked: 'bottom',
-            //     minHeight: 400,
-            //     // resizable: {
-            //     //     split: true,
-            //     //     edges: 'north'
-            //     // },
-            //     html: 'data'
-            // }
-            // ]
+            xtype: 'chart'
         }]
     }],
 

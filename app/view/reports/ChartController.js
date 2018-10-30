@@ -20,6 +20,7 @@ Ext.define('Mfw.view.ChartController', {
         view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
             chart: {
                 animation: false,
+                height: 500,
                 events: {
                     // selection: function (event) {
                     //     // if (isWidget) { return; } // applies only when viewing the report
@@ -156,6 +157,9 @@ Ext.define('Mfw.view.ChartController', {
             plotOptions: {
                 series: {
                     animation: false
+                },
+                pie: {
+                    borderColor: '#fafafa'
                 }
             }
             // series: Util.generatePieData(),
@@ -226,6 +230,7 @@ Ext.define('Mfw.view.ChartController', {
 
             plotOptions.column = {
                 stacking: rendering.get('stacking') === 'none' ? undefined : rendering.get('stacking'),
+                colorByPoint: false,
                 dataGrouping: {
                     enabled: rendering.get('dataGroupingEnabled'),
                     approximation: rendering.get('dataGroupingApproximation'),
@@ -238,6 +243,7 @@ Ext.define('Mfw.view.ChartController', {
                 chart: {
                     type: rendering.get('type'),
                     zoomType: 'x',
+                    marginBottom: undefined,
                     options3d: {
                         enabled: false
                     }
@@ -265,10 +271,11 @@ Ext.define('Mfw.view.ChartController', {
                 chart: {
                     type: rendering.get('type'),
                     zoomType: undefined,
+                    marginBottom: 100,
                     options3d: {
                         enabled: rendering.get('3dEnabled'),
                         alpha: rendering.get('3dAlpha'),
-                        beta: rendering.get('3dBeta')
+                        beta: 0
                     }
                 },
                 colors: colors,
@@ -276,7 +283,7 @@ Ext.define('Mfw.view.ChartController', {
                     pie: {
                         innerSize: rendering.get('donutInnerSize') + '%',
                         borderWidth: rendering.get('borderWidth'),
-                        edgeColor: '#FFF',
+                        edgeColor: '#fafafa',
                         edgeWidth: rendering.get('borderWidth'),
                         depth: rendering.get('3dDepth')
                     },
