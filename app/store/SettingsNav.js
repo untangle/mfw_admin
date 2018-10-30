@@ -28,7 +28,10 @@ Ext.define('Mfw.store.SettingsNav', {
             href: 'settings/firewall',
             children: [
                 { text: 'Filter Rules'.t(), leaf: true, href: 'settings/firewall/filter-rules' },
-                // { text: 'Port Forward Rules'.t(), leaf: true, href: 'settings/firewall/portforwardrules' },
+                { text: 'Access Rules'.t(), leaf: true, href: 'settings/firewall/access-rules' },
+                { text: 'NAT Rules'.t(), leaf: true, href: 'settings/firewall/nat-rules' },
+                { text: 'Shaping Rules'.t(), leaf: true, href: 'settings/firewall/shaping-rules' },
+                { text: 'Port Forward'.t(), leaf: true, href: 'settings/firewall/port-forward' },
             ]
         }, {
             // System

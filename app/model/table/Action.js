@@ -3,8 +3,12 @@ Ext.define('Mfw.model.table.Action', {
     alias: 'model.table-action',
 
     fields: [
-        { name: 'type', type: 'string' },
+        { name: 'type', type: 'string' }, // "JUMP","GOTO","ACCEPT","REJECT","DROP","DNAT","SNAT","MASQUERADE","SET_PRIORITY"
         { name: 'chain', type: 'string' },
+        { name: 'dnat_address', type: 'string' },
+        { name: 'dnat_port', type: 'integer' },
+        { name: 'snat_address', type: 'string' },
+        { name: 'priority', type: 'integer' }
     ],
 
     proxy: {

@@ -82,7 +82,25 @@ Ext.define('Mfw.store.RuleConditions', {
         type:'DESTINATION_INTERFACE_NAME',
         name: 'Destination Interface Name'.t(),
         operations: ['eq', 'ne']
-    },
+    }, {
+        type: 'CT_STATE',
+        name: 'What is CT State?',
+        operations: ['eq', 'ne'],
+        field: {
+            xtype: 'selectfield',
+            forceSelection: true,
+            editable: false,
+            // queryMode: 'local',
+            // displayField: 'name',
+            // valueField: 'name',
+            value: 'TCP', // a default value
+            options: [
+                { text: 'Established', value: 'established' },
+                { text: 'Related', value: 'related' },
+                { text: 'Invalid', value: 'invalid' }
+            ]
+        }
+    }
         // { value:'DST_ADDR', name: 'Destination Address'.t(), editorType: 'textfield', vtype:'ipall', visible: true },
         // { value:'DST_PORT', name: 'Destination Port'.t(), editorType: 'textfield', vtype:'port', visible: true },
         // { value:'DST_INTF', name: 'Destination Interface'.t(), editorType: 'checkboxgroup', /*values: Util.getInterfaceList(true, false),*/ visible: true},
