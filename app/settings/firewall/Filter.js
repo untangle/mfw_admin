@@ -1,14 +1,14 @@
-Ext.define('Mfw.settings.firewall.AccessRules', {
+Ext.define('Mfw.settings.firewall.Filter', {
     extend: 'Mfw.cmp.grid.table.Table',
     // extend: 'Ext.grid.Grid',
-    alias: 'widget.mfw-settings-firewall-access-rules',
-    title: 'Access Rules'.t(),
+    alias: 'widget.mfw-settings-firewall-filter',
+    title: 'Filter'.t(),
 
     viewModel: {},
     config: {
         api: {
-            read: Util.api + '/settings/firewall/tables/access-rules',
-            update: Util.api + '/settings/firewall/tables/access-rules'
+            read: Util.api + '/settings/firewall/tables/filter',
+            update: Util.api + '/settings/firewall/tables/filter'
         },
         actionFields: [{
             xtype: 'selectfield',

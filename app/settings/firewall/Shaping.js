@@ -1,14 +1,14 @@
-Ext.define('Mfw.settings.firewall.FilterRules', {
+Ext.define('Mfw.settings.firewall.Shaping', {
     extend: 'Mfw.cmp.grid.table.Table',
     // extend: 'Ext.grid.Grid',
-    alias: 'widget.mfw-settings-firewall-filter-rules',
-    title: 'Filter Rules'.t(),
+    alias: 'widget.mfw-settings-firewall-shaping',
+    title: 'Shaping'.t(),
 
     viewModel: {},
     config: {
         api: {
-            read: Util.api + '/settings/firewall/tables/filter-rules',
-            update: Util.api + '/settings/firewall/tables/filter-rules'
+            read: Util.api + '/settings/firewall/tables/shaping',
+            update: Util.api + '/settings/firewall/tables/shaping'
         },
         actionFields: [{
             xtype: 'selectfield',
@@ -21,7 +21,10 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
                 { value: 'REJECT', text: 'Reject'.t() },
                 { value: 'ACCEPT', text: 'Accept'.t() },
                 { value: 'JUMP', text: 'Jump to'.t() + '...' },
-                { value: 'GOTO', text: 'Go to'.t() + '...' }
+                { value: 'GOTO', text: 'Go to'.t() + '...' },
+                { value: 'SNAT', text: 'SNAT'.t() },
+                { value: 'MASQUERADE', text: 'Masquerade'.t() },
+                { value: 'SET_PRIORITY', text: 'Set Priority'.t() }
             ]
         }, {
             xtype: 'combobox',
@@ -34,7 +37,26 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
             hidden: true,
             bind: {
                 store: '{chainNames}',
-                hidden: '{!actiontype.value || actiontype.value === "REJECT" || actiontype.value === "ACCEPT"}'
+                hidden: '{!actiontype.value || actiontype.value !== "JUMP" || actiontype.value !== "GOTO"}'
+            }
+        }, {
+            xtype: 'textfield',
+            name: 'snat_address',
+            label: 'SNAT Address'.t(),
+            required: true,
+            validators: ['ipaddress'],
+            hidden: true,
+            bind: {
+                hidden: '{!actiontype.value || actiontype.value !== "SNAT"}'
+            }
+        }, {
+            xtype: 'numberfield',
+            name: 'priority',
+            label: 'Priority'.t(),
+            required: true,
+            hidden: true,
+            bind: {
+                hidden: '{!actiontype.value || actiontype.value !== "SET_PRIORITY"}'
             }
         }],
         actionColumn: [{
@@ -49,17 +71,27 @@ Ext.define('Mfw.settings.firewall.FilterRules', {
                 }
             },
             renderer: function (action) {
-                var actionStr = 'No Action...'.t();
+                // console.log (action);
+                var actionStr = 'Missing or No Action...'.t();
                 if (action && action.type) {
                     switch (action.type) {
                         case 'REJECT': actionStr = '<i class="x-fa fa-ban fa-red" style="width: 16px; display: inline-block;"></i> ' + 'Reject'.t(); break;
                         case 'ACCEPT': actionStr = '<i class="x-fa fa-check fa-green" style="width: 16px; display: inline-block;"></i> ' + 'Accept'.t(); break;
                         case 'JUMP':   actionStr = '<i class="x-fa fa-level-down fa-blue" style="width: 16px; display: inline-block;"></i> ' + 'Jump to'.t(); break;
                         case 'GOTO':   actionStr = '<i class="x-fa fa-level-down fa-blue" style="width: 16px; display: inline-block;"></i> ' + 'Go to'.t(); break;
-                        default: 'No Action...'.t(); break;
+                        case 'SNAT':   actionStr = 'SNAT'.t(); break;
+                        case 'MASQUERADE':   actionStr = 'MASQUERADE'.t(); break;
+                        case 'SET_PRIORITY':   actionStr = 'Set Priority'.t(); break;
+                        default: break;
                     }
                     if (action.chain && (action.type === 'JUMP' || action.type === 'GOTO')) {
                         actionStr += ' ' + '<span style="color: #519839; font-weight: bold;">' + action.chain + '</span>';
+                    }
+                    if (action.snat_address && action.type === 'SNAT') {
+                        actionStr += ' / address = ' + '<span style="font-weight: bold;">' + action.snat_address + '</span>';
+                    }
+                    if (action.priority && action.type === 'SET_PRIORITY') {
+                        actionStr += ' = ' + '<span style="font-weight: bold;">' + action.priority + '</span>';
                     }
                 }
                 return actionStr;

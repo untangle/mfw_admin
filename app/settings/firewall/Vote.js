@@ -1,14 +1,14 @@
-Ext.define('Mfw.settings.firewall.ShapingRules', {
+Ext.define('Mfw.settings.firewall.Vote', {
     extend: 'Mfw.cmp.grid.table.Table',
     // extend: 'Ext.grid.Grid',
-    alias: 'widget.mfw-settings-firewall-shaping-rules',
-    title: 'Shaping Rules'.t(),
+    alias: 'widget.mfw-settings-firewall-vote',
+    title: 'Vote'.t(),
 
     viewModel: {},
     config: {
         api: {
-            read: Util.api + '/settings/firewall/tables/shaping-rules',
-            update: Util.api + '/settings/firewall/tables/shaping-rules'
+            read: Util.api + '/settings/firewall/tables/vote',
+            update: Util.api + '/settings/firewall/tables/vote'
         },
         actionFields: [{
             xtype: 'selectfield',

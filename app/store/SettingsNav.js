@@ -27,11 +27,14 @@ Ext.define('Mfw.store.SettingsNav', {
             iconCls: 'tree administration',
             href: 'settings/firewall',
             children: [
-                { text: 'Filter Rules'.t(), leaf: true, href: 'settings/firewall/filter-rules' },
-                { text: 'Access Rules'.t(), leaf: true, href: 'settings/firewall/access-rules' },
-                { text: 'NAT Rules'.t(), leaf: true, href: 'settings/firewall/nat-rules' },
-                { text: 'Shaping Rules'.t(), leaf: true, href: 'settings/firewall/shaping-rules' },
+                { text: 'Filter'.t(), leaf: true, href: 'settings/firewall/filter' },
+                { text: 'Access'.t(), leaf: true, href: 'settings/firewall/access' },
+                { text: 'NAT'.t(), leaf: true, href: 'settings/firewall/nat' },
+                { text: 'Shaping'.t(), leaf: true, href: 'settings/firewall/shaping' },
                 { text: 'Port Forward'.t(), leaf: true, href: 'settings/firewall/port-forward' },
+                { text: 'Captive Portal'.t(), leaf: true, href: 'settings/firewall/captive-portal' },
+                { text: 'Vote'.t(), leaf: true, href: 'settings/firewall/vote' },
+                { text: 'Web Filter'.t(), leaf: true, href: 'settings/firewall/web-filter' }
             ]
         }, {
             // System

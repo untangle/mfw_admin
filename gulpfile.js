@@ -10,7 +10,11 @@ var fs = require("fs");
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
-var host = '192.168.101.60'; // the MFW machine host to scp built files
+/**
+ * to pass root password generate a key-pair using ssh-keygen then
+ * ssh root@host "tee -a /etc/dropbear/authorized_keys" < ~\.ssh\id_rsa.pub
+ */
+var host = '192.168.101.233'; // the MFW machine host to scp built files
 
 gulp.task('smap', function() {
     gulp.src('app/**/*.js')
@@ -130,9 +134,15 @@ gulp.task('serve', function() {
 
     gulp.watch('./sass/*.scss', gulp.series('sass'));
     gulp.watch('./app/**/*.js', gulp.series('concat'));
-    gulp.watch('./locale/*.json', gulp.series('locale'));
+    // gulp.watch('./locale/*.json', gulp.series('locale'));
     gulp.watch('./index.html', gulp.series('index'));
-    gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
+    // gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
+    gulp.watch('./dist/mfw-all.js').on('change', function () {
+        // timeout hack
+        setTimeout(function () {
+            browserSync.reload();
+        }, 3000);
+    });
 });
 
 gulp.task('default', gulp.series('clean', 'concat', 'sass', 'index', 'serve'));

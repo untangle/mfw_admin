@@ -1,14 +1,14 @@
-Ext.define('Mfw.settings.firewall.NatRules', {
+Ext.define('Mfw.settings.firewall.WebFilter', {
     extend: 'Mfw.cmp.grid.table.Table',
     // extend: 'Ext.grid.Grid',
-    alias: 'widget.mfw-settings-firewall-nat-rules',
-    title: 'Nat Rules'.t(),
+    alias: 'widget.mfw-settings-firewall-web-filter',
+    title: 'Web Filter'.t(),
 
     viewModel: {},
     config: {
         api: {
-            read: Util.api + '/settings/firewall/tables/nat-rules',
-            update: Util.api + '/settings/firewall/tables/nat-rules'
+            read: Util.api + '/settings/firewall/tables/web-filter',
+            update: Util.api + '/settings/firewall/tables/web-filter'
         },
         actionFields: [{
             xtype: 'selectfield',
@@ -23,7 +23,8 @@ Ext.define('Mfw.settings.firewall.NatRules', {
                 { value: 'JUMP', text: 'Jump to'.t() + '...' },
                 { value: 'GOTO', text: 'Go to'.t() + '...' },
                 { value: 'SNAT', text: 'SNAT'.t() },
-                { value: 'MASQUERADE', text: 'Masquerade'.t() }
+                { value: 'MASQUERADE', text: 'Masquerade'.t() },
+                { value: 'SET_PRIORITY', text: 'Set Priority'.t() }
             ]
         }, {
             xtype: 'combobox',
@@ -47,6 +48,15 @@ Ext.define('Mfw.settings.firewall.NatRules', {
             hidden: true,
             bind: {
                 hidden: '{!actiontype.value || actiontype.value !== "SNAT"}'
+            }
+        }, {
+            xtype: 'numberfield',
+            name: 'priority',
+            label: 'Priority'.t(),
+            required: true,
+            hidden: true,
+            bind: {
+                hidden: '{!actiontype.value || actiontype.value !== "SET_PRIORITY"}'
             }
         }],
         actionColumn: [{
@@ -79,6 +89,9 @@ Ext.define('Mfw.settings.firewall.NatRules', {
                     }
                     if (action.snat_address && action.type === 'SNAT') {
                         actionStr += ' / address = ' + '<span style="font-weight: bold;">' + action.snat_address + '</span>';
+                    }
+                    if (action.priority && action.type === 'SET_PRIORITY') {
+                        actionStr += ' = ' + '<span style="font-weight: bold;">' + action.priority + '</span>';
                     }
                 }
                 return actionStr;
