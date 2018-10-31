@@ -84,7 +84,7 @@ Ext.define('Mfw.store.RuleConditions', {
         operations: ['eq', 'ne']
     }, {
         type: 'CT_STATE',
-        name: 'What is CT State?',
+        name: 'Connection State',
         operations: ['eq', 'ne'],
         field: {
             xtype: 'selectfield',

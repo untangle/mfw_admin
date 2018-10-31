@@ -13,6 +13,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         me.decorate(); // adds menus, extra columns, buttons
 
+        me.rulesheet = grid.add({
+            xtype: 'rulesheet',
+            table: grid
+        });
+
         table.chains().on({
             // when adding a new chain, update chains menu and select the new chain
             add: function (store, records) {
@@ -254,12 +259,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     onEditRule: function (grid, info) {
         var me = this;
-        if (!me.rulesheet) {
-            me.rulesheet = grid.add({
-                xtype: 'rulesheet',
-                table: grid
-            });
-        }
+        // if (!me.rulesheet) {
+        //     me.rulesheet = grid.add({
+        //         xtype: 'rulesheet',
+        //         table: grid
+        //     });
+        // }
         me.rulesheet.getViewModel().set('ruleOperation', 'EDIT');
         me.rulesheet.setRule(info.record);
         me.rulesheet.show();
@@ -489,13 +494,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         // g.getStore().on('beforesync', me.onBeforeSync);
 
-
-        if (grid.getActionColumn()) {
-            grid.insertColumn(4, grid.getActionColumn());
-        }
-
-
-
         // add status column
         grid.insertColumn(0, {
             width: 5,
@@ -561,6 +559,64 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         // titleBar.add()
 
 
+    },
+
+
+    conditionRenderer: function (conditions, record) {
+        var strArr = [], op;
+
+        record.conditions().each(function (c) {
+            switch (c.get('op')) {
+                case '==': op = '='; break;
+                case '!=': op = '&ne;'; break;
+                case '>': op = '&gt;'; break;
+                case '<': op = '&lt;'; break;
+                case '>=': op = '&ge;'; break;
+                case '<=': op = '&le;'; break;
+                default: op = '?'; break;
+            }
+            strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span> ' +
+                   '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + c.get('value') + '</strong></div>');
+        });
+        if (strArr.length > 0) {
+            return strArr.join('');
+        } else {
+            return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>'
+        }
+    },
+
+    actionRenderer: function (action) {
+        // console.log (action);
+        var actionStr = 'Missing or No Action...'.t();
+        if (action && action.type) {
+            switch (action.type) {
+                case 'JUMP':            actionStr = 'Jump to'.t(); break;
+                case 'GOTO':            actionStr = 'Go to'.t(); break;
+                case 'ACCEPT':          actionStr = 'Accept'.t(); break;
+                case 'RETURN':          actionStr = 'Return'.t(); break;
+                case 'REJECT':          actionStr = 'Reject'.t(); break;
+                case 'DROP':            actionStr = 'Drop'.t(); break;
+                case 'DNAT':            actionStr = 'Destination Address'.t(); break;
+                case 'SNAT':            actionStr = 'Source Address'.t(); break;
+                case 'MASQUERADE':      actionStr = 'Masquerade'.t(); break;
+                case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
+                case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
+                default: break;
+            }
+            if (action.type === 'JUMP' || action.type === 'GOTO') {
+                actionStr += ' ' + action.chain;
+            }
+            if (action.type === 'SNAT') {
+                actionStr += ' ' + action.snat_address;
+            }
+            if (action.type === 'DNAT') {
+                actionStr += ' ' + action.dnat_address;
+            }
+            if (action.type === 'SET_PRIORITY') {
+                actionStr += ' ' + action.priority;
+            }
+        }
+        return actionStr;
     }
 
 

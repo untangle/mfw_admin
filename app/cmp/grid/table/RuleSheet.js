@@ -137,7 +137,17 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         }, {
             xtype: 'formpanel',
             itemId: 'actionform',
-            margin: 0
+            margin: 0,
+            items: [{
+                xtype: 'selectfield',
+                reference: 'actiontype',
+                itemId: 'actiontype',
+                name: 'type',
+                // value: 'ACCEPT',
+                label: 'Choose Action'.t(),
+                editable: false,
+                itemTpl: '<tpl>{text}</tpl>'
+            }]
         }, {
             xtype: 'toolbar',
             docked: 'bottom',
@@ -233,10 +243,12 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             me.ruleform = sheet.down('#ruleform');
             me.conditionform = sheet.down('#conditionform');
             me.conditionsgrid = me.ruleform.down('grid');
-            me.actionform = sheet.down('#actionform');
+            // me.actionform = sheet.down('#actionform');
 
             // add action fields
-            me.actionform.add(sheet.table.getActionFields());
+            // me.actionform.add(sheet.table.getActionFields());
+
+            me.setActions();
 
             // calculate conditions grid height based on number of conditions
             me.conditionsgrid.on('storechange', function (view, store) {
@@ -247,6 +259,82 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 });
             });
         },
+
+        setActions: function () {
+            var me = this,
+                sheet = me.getView(),
+                actions = sheet.table.getActions(),
+                options = [], fields = [];
+            me.actionform = sheet.down('#actionform');
+
+            if (actions) {
+                // if subset of actions defined
+                Ext.Array.each(actions, function (action) {
+                    options.push(sheet.table.actionsMap[action]);
+                });
+            }
+
+            if (Ext.Array.contains(actions, 'JUMP') || Ext.Array.contains(actions, 'GOTO')) {
+                fields.push({
+                    xtype: 'selectfield',
+                    name: 'chain',
+                    label: 'Choose Chain'.t(),
+                    editable: false,
+                    required: true,
+                    hidden: true,
+                    bind: {
+                        store: '{chainNames}',
+                        hidden: '{actiontype.value !== "JUMP" && actiontype.value !== "GOTO"}'
+                    }
+                })
+            }
+
+            if (Ext.Array.contains(actions, 'DNAT')) {
+                fields.push({
+                    xtype: 'textfield',
+                    name: 'dnat_address',
+                    label: 'Destination Address'.t(),
+                    required: true,
+                    validators: ['ipaddress'],
+                    hidden: true,
+                    bind: {
+                        hidden: '{actiontype.value !== "DNAT"}'
+                    }
+                })
+            }
+
+            if (Ext.Array.contains(actions, 'SNAT')) {
+                fields.push({
+                    xtype: 'textfield',
+                    name: 'snat_address',
+                    label: 'Source Address'.t(),
+                    required: true,
+                    validators: ['ipaddress'],
+                    hidden: true,
+                    bind: {
+                        hidden: '{actiontype.value !== "SNAT"}'
+                    }
+                })
+            }
+
+            if (Ext.Array.contains(actions, 'SET_PRIORITY')) {
+                fields.push({
+                    xtype: 'numberfield',
+                    name: 'priority',
+                    label: 'Priority'.t(),
+                    required: true,
+                    hidden: true,
+                    bind: {
+                        hidden: '{actiontype.value !== "SET_PRIORITY"}'
+                    }
+                })
+            }
+
+            me.actionform.down('#actiontype').setOptions(options);
+            me.actionform.add(fields);
+        },
+
+
 
         /**
          * Set the rule record on form

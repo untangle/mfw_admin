@@ -29,7 +29,22 @@ Ext.define('Mfw.cmp.grid.table.Table', {
 
     config: {
         api: null,
-        actionsColumn: null
+        // use all available actions unless a subset is specified in each Table
+        actions: ['JUMP', 'GOTO', 'ACCEPT', 'REJECT', 'DROP', 'DNAT', 'SNAT', 'MASQUERADE', 'SET_PRIORITY']
+    },
+
+    actionsMap: {
+        'JUMP': { value: 'JUMP', text: 'Jump to'.t() },
+        'GOTO': { value: 'GOTO', text: 'Go to'.t() },
+        'ACCEPT': { value: 'ACCEPT', text: 'Accept'.t() },
+        'RETURN': { value: 'RETURN', text: 'Return'.t() },
+        'REJECT': { value: 'REJECT', text: 'Reject'.t() },
+        'DROP': { value: 'DROP', text: 'Drop'.t() },
+        'DNAT': { value: 'DNAT', text: 'Destination Address'.t() },
+        'SNAT': { value: 'SNAT', text: 'Source Address'.t() },
+        'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade'.t() },
+        'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority'.t() },
+        'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() }
     },
 
     itemConfig: {
@@ -241,28 +256,19 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             },
             encodeHtml: false
         },
-        renderer: function (conditions, record) {
-            var strArr = [], op;
-
-            record.conditions().each(function (c) {
-                switch (c.get('op')) {
-                    case '==': op = '='; break;
-                    case '!=': op = '&ne;'; break;
-                    case '>': op = '&gt;'; break;
-                    case '<': op = '&lt;'; break;
-                    case '>=': op = '&ge;'; break;
-                    case '<=': op = '&le;'; break;
-                    default: op = '?'; break;
-                }
-                strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span> ' +
-                       '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + c.get('value') + '</strong></div>');
-            });
-            if (strArr.length > 0) {
-                return strArr.join('');
-            } else {
-                return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>'
+        renderer: 'conditionRenderer'
+    }, {
+        text: 'Action'.t(),
+        dataIndex: 'action',
+        menuDisabled: true,
+        width: 250,
+        cell: {
+            encodeHtml: false,
+            bind: {
+                userCls: '{!record.enabled ? "x-disabled" : ""}'
             }
-        }
+        },
+        renderer: 'actionRenderer'
     }],
 
     listeners: {
