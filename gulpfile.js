@@ -10,6 +10,98 @@ var fs = require("fs");
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
+
+gulp.task('build-mfw-app', function() {
+    return gulp.src([
+        './app/mfw/src/util/*.js',
+        './app/mfw/src/cmp/**/*.js',
+        './app/mfw/src/model/**/*.js',
+        './app/mfw/src/store/**/*.js',
+        './app/mfw/src/view/**/*.js',
+        './app/mfw/src/AppController.js',
+        './app/mfw/src/App.js'
+    ])
+    .pipe(concat('./dist/mfw-app.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('.'))
+    });
+
+gulp.task('build-settings-app', function() {
+    return gulp.src([
+        './app/settings/src/App.js'
+    ])
+    .pipe(concat('./dist/mfw-settings-app.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('.'))
+    });
+
+
+gulp.task('build-settings', function() {
+    return gulp.src([
+            './package/settings/store/*.js',
+            './package/settings/*.js',
+        ])
+        .pipe(concat('./dist/mfw-settings.js'))
+        // .pipe(uglify())
+        .pipe(gulp.dest('.'))
+    });
+
+
+gulp.task('serve', function() {
+    browserSync.init({
+        port: 3000,
+        server: {
+            baseDir: ['./', './app/mfw']
+        },
+        ghostMode: false
+    });
+    // browserSync.init({
+    //     port: 3005,
+    //     server: {
+    //         baseDir: ['./', './app/settings']
+    //     },
+    //     ghostMode: false
+    // });
+
+    // browserSync.init({
+    //     proxy: 'http://' + host + ':8080/admin',
+    //     // browser: 'google chrome',
+    //     middleware: [{
+    //         route: '/api',
+    //         handle: function (req, res, next) {
+    //             if (req.url.startsWith('/settings/reports')) {
+    //                 res.setHeader('Content-Type', 'application/json');
+    //                 res.write(fs.readFileSync('./reports-new.json', 'utf8'));
+    //                 res.end();
+    //             } else {
+    //                 next();
+    //             }
+    //         }
+    //     }]
+    // });
+
+    // gulp.watch('./sass/*.scss', gulp.series('sass'));
+    // gulp.watch('./package/settings/**/*.js', gulp.series('build-settings'));
+    // gulp.watch('./index.html', gulp.series('index'));
+    // // gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
+    // gulp.watch('./dist/mfw-all.js').on('change', function () {
+    //     // timeout hack
+    //     setTimeout(function () {
+    //         browserSync.reload();
+    //     }, 3000);
+    // });
+    // gulp.watch('./dist/settings/mfw-settings.js').on('change', function () {
+    //     // timeout hack
+    //     setTimeout(function () {
+    //         browserSync.reload();
+    //     }, 3000);
+    // });
+});
+
+
+
+
+
 /**
  * to pass root password generate a key-pair using ssh-keygen then
  * ssh root@host "tee -a /etc/dropbear/authorized_keys" < ~\.ssh\id_rsa.pub
@@ -109,97 +201,7 @@ gulp.task('index', function () {
         .pipe(exec('scp index.html root@' + host + ':/www/admin/'))
     });
 
+// gulp.task('default', gulp.series('clean', 'concat', 'sass', 'index', 'serve'));
+// gulp.task('serve-map', gulp.series('clean', 'concat-map', 'sass-map', 'index', 'serve'));
 
-gulp.task('serve', function() {
-    // browserSync.init({
-    //     server: "./"
-    // });
-
-    browserSync.init({
-        proxy: 'http://' + host + ':8080/admin',
-        // browser: 'google chrome',
-        middleware: [{
-            route: '/api',
-            handle: function (req, res, next) {
-                if (req.url.startsWith('/settings/reports')) {
-                    res.setHeader('Content-Type', 'application/json');
-                    res.write(fs.readFileSync('./reports-new.json', 'utf8'));
-                    res.end();
-                } else {
-                    next();
-                }
-            }
-        }]
-    });
-
-    gulp.watch('./sass/*.scss', gulp.series('sass'));
-    gulp.watch('./app/**/*.js', gulp.series('concat'));
-    // gulp.watch('./locale/*.json', gulp.series('locale'));
-    gulp.watch('./index.html', gulp.series('index'));
-    // gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
-    gulp.watch('./dist/mfw-all.js').on('change', function () {
-        // timeout hack
-        setTimeout(function () {
-            browserSync.reload();
-        }, 3000);
-    });
-});
-
-gulp.task('default', gulp.series('clean', 'concat', 'sass', 'index', 'serve'));
-gulp.task('serve-map', gulp.series('clean', 'concat-map', 'sass-map', 'index', 'serve'));
-
-
-
-// localization helpers
-gulp.task('translations', function () {
-    return gulp.src('./locale/**/*.*')
-        .pipe(exec('scp -r ./locale/ root@' + host + ':/www/admin/'))
-    });
-
-
-
-gulp.task('keys', function (cb) {
-    fs.readFile('mfw-all.js', "utf-8", function(err, data) {
-        // var arr = data.match(/'(.*?.*?)'+(.t\(\))/g);
-        var arr = data.match(/'([a-zA-Z0-9 ]*?)'+(.t\(\))/g), json = {}, keys = '';
-        // use json to generate unique keys
-        arr.forEach(function (string) {
-            string = string.replace('.t()', '').replace(/'/g, '');
-            if (string.length === 0) { return; }
-            if (!isNaN(string)) { return; }
-            json[string] = string;
-        });
-        for (var key in json) {
-            keys += key + '\n';
-        }
-
-        fs.writeFileSync('./locale/keys', keys);
-        cb();
-    })
-})
-
-gulp.task('locale', function (cb) {
-    var lang = process.argv[3].replace('--', ''),
-        json = {},
-        keys = fs.readFileSync('./locale/keys', 'utf8').split('\n'),
-        strings, str;
-
-    if (lang === 'default') {
-        keys.forEach(function (key) {
-            if (key) { json[key] = key }
-        });
-    } else {
-        strings = fs.readFileSync('./locale/strings/' + lang, 'utf8').split('\n');
-        keys.forEach(function (key, idx) {
-            str = strings[idx];
-            if (key.charAt(0) === key.charAt(0).toUpperCase()) {
-                // it's uppercase
-                str = str.charAt(0).toUpperCase() + str.substr(1);
-            }
-            if (key) { json[key] = str; }
-        });
-    }
-    fs.writeFileSync('./locale/json/' + lang + '.json', JSON.stringify(json, null, 4));
-    cb();
-})
-
+// gulp.task('default', gulp.series('build-main', 'build-settings', 'serve'));

@@ -2,7 +2,7 @@
  * This store holds the Settings tree navigation,
  * each setting view being contained in a Category
  */
-Ext.define('Mfw.store.SettingsNav', {
+Ext.define('Mfw.settings.Nav', {
     extend: 'Ext.data.TreeStore',
     storeId: 'settings-nav',
     alias: 'store.settings-nav',

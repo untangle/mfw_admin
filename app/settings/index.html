@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Untangle - MicroFW Settings</title>
+
+        <!-- <link rel="icon" type="image/png" href="favicon.ico"> -->
+
+        <script>
+            String.prototype.t = function() {
+                return this.valueOf();
+            };
+        </script>
+
+        <!-- Ext JS 6.6.0 -->
+        <script src="res/lib/ext-6.6.0/ext-modern-all-debug.js"></script>
+        <script src="res/lib/ext-6.6.0/theme-material/theme-material.js"></script>
+        <link href="res/lib/ext-6.6.0/theme-material/resources/theme-material-all.css" rel="stylesheet" type="text/css" />
+
+        <link href="dist/mfw-all.css" rel="stylesheet" type="text/css" />
+
+        <script src="dist/mfw-settings.js"></script>
+        <script src="dist/mfw-settings-app.js"></script>
+
+        <script>
+            var translations, debug = false;
+            Ext.onReady(function () {
+                Ext.application({
+                    extend: 'Mfw.SettingsApp',
+                    namespace: 'Mfw'
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+    </body>
+</html>

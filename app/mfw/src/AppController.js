@@ -5,14 +5,14 @@ Ext.define('Mfw.controller.MfwController', {
     refs: [
         { ref: 'dashboardView', selector: 'mfw-dashboard' },
         { ref: 'reportsView', selector: 'mfw-reports' },
-        { ref: 'loginView', selector: 'mfw-login' }
+        // { ref: 'loginView', selector: 'mfw-login' }
     ],
 
     config: {
         routes: {
-            '*': { before: 'onRouteBefore' },
+            // '*': { action: 'onHome' },
             '': { action: 'onHome', conditions: { ':query' : '(.*)' } },
-            'login': { action: 'onLogin' },
+            // 'login': { action: 'onLogin' },
             'dashboard:query': { before: 'onDashboardBefore', action: 'onDashboard', conditions: { ':query' : '(.*)' } },
             'reports:query': { before: 'onReportsBefore', action: 'onReports', conditions: { ':query' : '(.*)' } },
             'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } },
@@ -174,32 +174,32 @@ Ext.define('Mfw.controller.MfwController', {
     },
 
     onSettings: function (route) {
-        var mainSettingsView = Ext.Viewport.down('mfw-settings'), xtype;
+        var mainSettingsView = Ext.Viewport.down('settings'), xtype;
         Ext.Viewport.getViewModel().set({
-            currentView: 'mfw-settings',
+            currentView: 'settings',
             currentViewTitle: 'Settings'.t()
         });
 
-        var cmp = mainSettingsView.down('#currentSettings');
-        if (cmp) { cmp.destroy(); }
+        // var cmp = mainSettingsView.down('#currentSettings');
+        // if (cmp) { cmp.destroy(); }
 
-        if (route) {
-            xtype = 'mfw-settings' + route.replace(/\//g, '-');
+        // if (route) {
+        //     xtype = 'mfw-settings' + route.replace(/\//g, '-');
 
-            if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
-                mainSettingsView.add({
-                    xtype: xtype,
-                    itemId: 'currentSettings'
-                });
-            } else {
-                console.log('view does not exists');
-            }
-        }
+        //     if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
+        //         mainSettingsView.add({
+        //             xtype: xtype,
+        //             itemId: 'currentSettings'
+        //         });
+        //     } else {
+        //         console.log('view does not exists');
+        //     }
+        // }
 
-        // console.log(route);
-        var tree = mainSettingsView.down('treelist');
-        var node = tree.getStore().findNode('href', 'settings' + route);
-        tree.setSelection(node);
+        // // console.log(route);
+        // var tree = mainSettingsView.down('treelist');
+        // var node = tree.getStore().findNode('href', 'settings' + route);
+        // tree.setSelection(node);
         // console.log(tree.getStore());
         // console.log(node);
 

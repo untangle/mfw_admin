@@ -1,7 +1,7 @@
 Ext.define('Mfw.view.SettingsController', {
     extend: 'Ext.app.ViewController',
 
-    alias: 'controller.settings',
+    alias: 'controller.settings2',
 
     filterSettings: function (field, value) {
         var me = this, tree = me.getView().up('panel').down('treelist');

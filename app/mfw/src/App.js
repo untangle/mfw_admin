@@ -13,7 +13,9 @@ Ext.define('Mfw.App', {
     // controllers: ['Mfw.controller.MfwController'],
     defaultToken: '',
 
-    stores: ['Interfaces', 'ReportsNav', 'Reports', 'Sessions', 'SettingsNav', 'ReportsNav', 'RuleConditions', 'PortForwardRules'],
+    // stores: ['SettingsNav'],
+
+    // stores: ['Interfaces', 'ReportsNav', 'Reports', 'Sessions', 'SettingsNav', 'ReportsNav', 'RuleConditions', 'PortForwardRules'],
 
     config: {
         account: null
@@ -60,11 +62,11 @@ Ext.define('Mfw.App', {
             { xtype: 'component', html: '' }, // empty component to avoid flicker from dashboard to the specified route
             { xtype: 'mfw-dashboard' },
             { xtype: 'mfw-reports' },
-            { xtype: 'mfw-settings' },
+            { xtype: 'settings' },
             // 404 view
             { xtype: 'mfw-404' },
             // login view
-            { xtype: 'mfw-login' }
+            // { xtype: 'mfw-login' }
         ]);
 
 
