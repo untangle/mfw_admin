@@ -62,7 +62,7 @@ Ext.define('Mfw.App', {
             { xtype: 'component', html: '' }, // empty component to avoid flicker from dashboard to the specified route
             { xtype: 'mfw-dashboard' },
             { xtype: 'mfw-reports' },
-            { xtype: 'settings' },
+            { xtype: 'settings', type: 'api' },
             // 404 view
             { xtype: 'mfw-404' },
             // login view

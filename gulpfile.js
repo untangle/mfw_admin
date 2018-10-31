@@ -4,7 +4,8 @@ var sass = require('gulp-sass');
 var clean = require('gulp-clean');
 var exec = require('gulp-exec');
 var rename = require('gulp-rename');
-var browserSync = require('browser-sync').create();
+var mfwServer = require('browser-sync').create('mfw');
+var settingsServer = require('browser-sync').create('settings');
 var fs = require("fs");
 
 var uglify = require('gulp-uglify');
@@ -48,20 +49,26 @@ gulp.task('build-settings', function() {
 
 
 gulp.task('serve', function() {
-    browserSync.init({
-        port: 3000,
-        server: {
-            baseDir: ['./', './app/mfw']
-        },
-        ghostMode: false
-    });
-    // browserSync.init({
-    //     port: 3005,
+    // mfwServer.init({
+    //     port: 3000,
+    //     ui: {
+    //         port: 3001
+    //     },
     //     server: {
-    //         baseDir: ['./', './app/settings']
+    //         baseDir: ['./', './app/mfw']
     //     },
     //     ghostMode: false
     // });
+    settingsServer.init({
+        port: 3010,
+        ui: {
+            port: 3011
+        },
+        server: {
+            baseDir: ['./', './app/settings']
+        },
+        ghostMode: false
+    });
 
     // browserSync.init({
     //     proxy: 'http://' + host + ':8080/admin',
@@ -81,7 +88,8 @@ gulp.task('serve', function() {
     // });
 
     // gulp.watch('./sass/*.scss', gulp.series('sass'));
-    // gulp.watch('./package/settings/**/*.js', gulp.series('build-settings'));
+    gulp.watch('./app/settings/src/**/*.js', gulp.series('build-settings-app'));
+    gulp.watch('./package/settings/**/*.js', gulp.series('build-settings'));
     // gulp.watch('./index.html', gulp.series('index'));
     // // gulp.watch('./dist/mfw-all.js').on('change', browserSync.reload);
     // gulp.watch('./dist/mfw-all.js').on('change', function () {
@@ -90,12 +98,12 @@ gulp.task('serve', function() {
     //         browserSync.reload();
     //     }, 3000);
     // });
-    // gulp.watch('./dist/settings/mfw-settings.js').on('change', function () {
-    //     // timeout hack
-    //     setTimeout(function () {
-    //         browserSync.reload();
-    //     }, 3000);
-    // });
+    gulp.watch(['./dist/mfw-settings.js', './dist/mfw-settings-app.js']).on('change', function () {
+        // timeout hack
+        setTimeout(function () {
+            settingsServer.reload();
+        }, 3000);
+    });
 });
 
 

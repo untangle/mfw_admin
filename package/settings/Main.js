@@ -7,7 +7,7 @@ Ext.define('Mfw.settings.Main', {
     layout: 'fit',
 
     config: {
-        type: 'static' // api or static
+        type: 'api' // api or static
     },
 
     items: [{
@@ -60,11 +60,7 @@ Ext.define('Mfw.settings.Main', {
         }]
     }],
     listeners: {
-        initialize: function () {
-            Ext.create('Mfw.settings.Nav',{
-                autoLoad: true
-            });
-        }
+        initialize: 'onInitialize'
     }
 
 });

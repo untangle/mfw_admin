@@ -1,6 +1,6 @@
-Ext.define('Mfw.SettingsApp', {
+Ext.define('Mfw.App', {
     extend: 'Ext.app.Application',
-    name: 'MfwSettings',
+    name: 'Mfw',
 
     viewport: {
     },
@@ -9,7 +9,7 @@ Ext.define('Mfw.SettingsApp', {
         console.log('launched');
 
         Ext.Viewport.add([
-            { xtype: 'settings' },
+            { xtype: 'settings', type: 'api' },
         ]);
         Ext.Msg.defaultAllowedConfig.maxWidth = 350;
         Ext.Msg.defaultAllowedConfig.showAnimation = false;
