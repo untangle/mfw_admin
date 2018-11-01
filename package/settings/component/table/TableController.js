@@ -563,7 +563,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
 
     conditionRenderer: function (conditions, record) {
-        var strArr = [], op;
+        var strArr = [], op, name;
 
         record.conditions().each(function (c) {
             switch (c.get('op')) {
@@ -575,7 +575,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case '<=': op = '&le;'; break;
                 default: op = '?'; break;
             }
-            strArr.push('<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', c.get('type')).get('name') + '</span> ' +
+            name = Ext.Array.findBy(Util.conditions, function (condition) {
+                return condition.type === c.get('type');
+            }).name;
+
+            strArr.push('<div class="condition"><span>' + name + '</span> ' +
                    '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + c.get('value') + '</strong></div>');
         });
         if (strArr.length > 0) {

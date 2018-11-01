@@ -1,6 +1,6 @@
-Ext.define('Mfw.view.Login', {
+Ext.define('Mfw.auth.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.mfw-login',
+    alias: 'widget.mfw-pkg-auth',
 
     config: {
         redirectRoute: null
@@ -43,7 +43,7 @@ Ext.define('Mfw.view.Login', {
             xtype: 'component',
             style: 'text-align: center;',
             margin: '0 0 0 0',
-            html: '<img src="res/untangle-logo.png">'
+            html: '<img src="' + Mfw.app.resPath + '/untangle-logo.png">'
         }, {
             xtype: 'component',
             html: '<h2 style="color: #777; font-weight: normal; text-align: center;">Please sign in ...</h3>'
@@ -79,7 +79,7 @@ Ext.define('Mfw.view.Login', {
             var me = this,
                 form = me.getView().down('formpanel'),
                 btn = form.down('button'),
-                redirectRoute = me.getView().getRedirectRoute() || '';
+                redirectRoute = Mfw.app.setRouteAfterAuth() || '';
 
             if (!form.validate()) { return; }
 

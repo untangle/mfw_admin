@@ -3,104 +3,9 @@ Ext.define('Mfw.store.RuleConditions', {
     storeId: 'ruleconditions',
     alias: 'store.ruleconditions',
 
+    autoLoad: true,
     // fields: ['name', 'displayName', 'type'],
-    data: [{
-        type:'IP_PROTOCOL',
-        name: 'IP Protocol'.t(),
-        operations: ['eq', 'ne'],
-        field: {
-            xtype: 'combobox',
-            forceSelection: true,
-            editable: false,
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'name',
-            value: 'TCP', // a default value
-            store: Util.protocols
-        }
-    }, {
-        type:'CLIENT_ADDRESS',
-        name: 'Client Address'.t(),
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'SERVER_ADDRESS',
-        name: 'Server Address'.t(),
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'CLIENT_PORT',
-        name: 'Client Port'.t(),
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'SERVER_PORT',
-        name: 'Server Port'.t(),
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'CLIENT_INTERFACE_ZONE',
-        name: 'Client Interface Zone'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type:'SERVER_INTERFACE_ZONE',
-        name: 'Server Interface Zone'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type:'SOURCE_ADDRESS',
-        name: 'Source Address'.t()
-    }, {
-        type:'DESTINATION_ADDRESS',
-        name: 'Destination Address'.t()
-    }, {
-        type:'SOURCE_PORT',
-        name: 'Source Port'.t()
-    }, {
-        type:'DESTINATION_PORT',
-        name: 'Destination Port'.t()
-    }, {
-        type:'SOURCE_INTERFACE_ZONE',
-        name: 'Source Interface Zone'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type:'DESTINATION_INTERFACE_ZONE',
-        name: 'Destination Interface Zone'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type:'SOURCE_INTERFACE_NAME',
-        name: 'Source Interface Name'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type:'DESTINATION_INTERFACE_NAME',
-        name: 'Destination Interface Name'.t(),
-        operations: ['eq', 'ne']
-    }, {
-        type: 'CT_STATE',
-        name: 'Connection State',
-        operations: ['eq', 'ne'],
-        field: {
-            xtype: 'selectfield',
-            forceSelection: true,
-            editable: false,
-            // queryMode: 'local',
-            // displayField: 'name',
-            // valueField: 'name',
-            value: 'TCP', // a default value
-            options: [
-                { text: 'Established', value: 'established' },
-                { text: 'Related', value: 'related' },
-                { text: 'Invalid', value: 'invalid' }
-            ]
-        }
-    }
+    data: []
         // { value:'DST_ADDR', name: 'Destination Address'.t(), editorType: 'textfield', vtype:'ipall', visible: true },
         // { value:'DST_PORT', name: 'Destination Port'.t(), editorType: 'textfield', vtype:'port', visible: true },
         // { value:'DST_INTF', name: 'Destination Interface'.t(), editorType: 'checkboxgroup', /*values: Util.getInterfaceList(true, false),*/ visible: true},
@@ -141,7 +46,4 @@ Ext.define('Mfw.store.RuleConditions', {
         // { value:'HTTP_CONTENT_TYPE', name: 'HTTP: Content Type'.t(), editorType: 'textfield', visible: true},
         // { value:'HTTP_CONTENT_LENGTH', name: 'HTTP: Content Length'.t(), editorType: 'textfield', visible: true},
         // { value:"HTTP_REQUEST_METHOD", name: 'HTTP: Request Method'.t(), type: 'textfield', visible: true},
-    ]
-
-
 });

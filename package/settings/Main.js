@@ -1,6 +1,6 @@
 Ext.define('Mfw.settings.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.settings',
+    alias: 'widget.mfw-pkg-settings',
 
     controller: 'settings',
 

@@ -81,7 +81,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                     value: '{rec.v4DhcpPrefixOverride}',
                     placeholder: '{rec.v4StaticPrefix}'
                 },
-                store: ArrayStore.netmask
+                store: Data.netmask
             }, {
                 xtype: 'textfield',
                 name: 'v4DhcpGatewayOverride',
@@ -147,7 +147,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 value: '{rec.v4StaticPrefix}',
                 required: '{rec.v4ConfigType === "STATIC"}'
             },
-            store: ArrayStore.netmask
+            store: Data.netmask
         }, {
             xtype: 'textfield',
             name: 'v4StaticGateway',

@@ -3,6 +3,7 @@ Ext.define('Mfw.util.Util', {
     singleton: true,
 
     api: window.location.origin + '/api',
+    // api: 'http://192.168.101.233/api',
 
 
     /**
@@ -59,146 +60,105 @@ Ext.define('Mfw.util.Util', {
         { name: 'not in'.t(),                value: 'not in' }
     ],
 
-    protocols: [
-        { name: 'HOPOPT' },
-        { name: 'ICMP' },
-        { name: 'IGMP' },
-        { name: 'GGP' },
-        { name: 'IP-in-IP' },
-        { name: 'ST' },
-        { name: 'TCP' },
-        { name: 'CBT' },
-        { name: 'EGP' },
-        { name: 'IGP' },
-        { name: 'BBN-RCC-MON' },
-        { name: 'NVP-II' },
-        { name: 'PUP' },
-        { name: 'ARGUS' },
-        { name: 'EMCON' },
-        { name: 'XNET' },
-        { name: 'CHAOS' },
-        { name: 'UDP' },
-        { name: 'MUX' },
-        { name: 'DCN-MEAS' },
-        { name: 'HMP' },
-        { name: 'PRM' },
-        { name: 'XNS-IDP' },
-        { name: 'TRUNK-1' },
-        { name: 'TRUNK-2' },
-        { name: 'LEAF-1' },
-        { name: 'LEAF-2' },
-        { name: 'RDP' },
-        { name: 'IRTP' },
-        { name: 'ISO-TP4' },
-        { name: 'NETBLT' },
-        { name: 'MFE-NSP' },
-        { name: 'MERIT-INP' },
-        { name: 'DCCP' },
-        { name: '3PC' },
-        { name: 'IDPR' },
-        { name: 'XTP' },
-        { name: 'DDP' },
-        { name: 'IDPR-CMTP' },
-        { name: 'TP++' },
-        { name: 'IL' },
-        { name: 'IPv6' },
-        { name: 'SDRP' },
-        { name: 'IPv6-Route' },
-        { name: 'IPv6-Frag' },
-        { name: 'IDRP' },
-        { name: 'RSVP' },
-        { name: 'GRE' },
-        { name: 'MHRP' },
-        { name: 'BNA' },
-        { name: 'ESP' },
-        { name: 'AH' },
-        { name: 'I-NLSP' },
-        { name: 'SWIPE' },
-        { name: 'NARP' },
-        { name: 'MOBILE' },
-        { name: 'TLSP' },
-        { name: 'SKIP' },
-        { name: 'IPv6-ICMP' },
-        { name: 'IPv6-NoNxt' },
-        { name: 'IPv6-Opts' },
-        { name: 'CFTP' },
-        { name: 'SAT-EXPAK' },
-        { name: 'KRYPTOLAN' },
-        { name: 'RVD' },
-        { name: 'IPPC' },
-        { name: 'SAT-MON' },
-        { name: 'VISA' },
-        { name: 'IPCU' },
-        { name: 'CPNX' },
-        { name: 'CPHB' },
-        { name: 'WSN' },
-        { name: 'PVP' },
-        { name: 'BR-SAT-MON' },
-        { name: 'SUN-ND' },
-        { name: 'WB-MON' },
-        { name: 'WB-EXPAK' },
-        { name: 'ISO-IP' },
-        { name: 'VMTP' },
-        { name: 'SECURE-VMTP' },
-        { name: 'VINES' },
-        { name: 'TTP' },
-        { name: 'NSFNET-IGP' },
-        { name: 'DGP' },
-        { name: 'TCF' },
-        { name: 'EIGRP' },
-        { name: 'OSPF' },
-        { name: 'Sprite-RPC' },
-        { name: 'LARP' },
-        { name: 'MTP' },
-        { name: 'AX.25' },
-        { name: 'IPIP' },
-        { name: 'MICP' },
-        { name: 'SCC-SP' },
-        { name: 'ETHERIP' },
-        { name: 'ENCAP' },
-        { name: 'GMTP' },
-        { name: 'IFMP' },
-        { name: 'PNNI' },
-        { name: 'PIM' },
-        { name: 'ARIS' },
-        { name: 'SCPS' },
-        { name: 'QNX' },
-        { name: 'A/N' },
-        { name: 'IPComp' },
-        { name: 'SNP' },
-        { name: 'Compaq-Peer' },
-        { name: 'IPX-in-IP' },
-        { name: 'VRRP' },
-        { name: 'PGM' },
-        { name: 'L2TP' },
-        { name: 'DDX' },
-        { name: 'IATP' },
-        { name: 'STP' },
-        { name: 'SRP' },
-        { name: 'UTI' },
-        { name: 'SMP' },
-        { name: 'SM' },
-        { name: 'PTP' },
-        { name: 'IS-IS' },
-        { name: 'FIRE' },
-        { name: 'CRTP' },
-        { name: 'CRUDP' },
-        { name: 'SSCOPMCE' },
-        { name: 'IPLT' },
-        { name: 'SPS' },
-        { name: 'PIPE' },
-        { name: 'SCTP' },
-        { name: 'FC' },
-        { name: 'RSVP-E2E-IGNORE' },
-        { name: 'Mobility' },
-        { name: 'UDPLite' },
-        { name: 'MPLS-in-IP' },
-        { name: 'manet' },
-        { name: 'HIP' },
-        { name: 'Shim6' },
-        { name: 'WESP' },
-        { name: 'ROHC' }
-    ],
+
+
+    conditions: [{
+        type:'IP_PROTOCOL',
+        name: 'IP Protocol'.t(),
+        operations: ['eq', 'ne'],
+        field: {
+            xtype: 'combobox',
+            forceSelection: true,
+            editable: false,
+            queryMode: 'local',
+            displayField: 'name',
+            valueField: 'name',
+            value: 'TCP', // a default value
+            store: Data.protocols
+        }
+    }, {
+        type:'CLIENT_ADDRESS',
+        name: 'Client Address'.t(),
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SERVER_ADDRESS',
+        name: 'Server Address'.t(),
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'CLIENT_PORT',
+        name: 'Client Port'.t(),
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'SERVER_PORT',
+        name: 'Server Port'.t(),
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'CLIENT_INTERFACE_ZONE',
+        name: 'Client Interface Zone'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type:'SERVER_INTERFACE_ZONE',
+        name: 'Server Interface Zone'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type:'SOURCE_ADDRESS',
+        name: 'Source Address'.t()
+    }, {
+        type:'DESTINATION_ADDRESS',
+        name: 'Destination Address'.t()
+    }, {
+        type:'SOURCE_PORT',
+        name: 'Source Port'.t()
+    }, {
+        type:'DESTINATION_PORT',
+        name: 'Destination Port'.t()
+    }, {
+        type:'SOURCE_INTERFACE_ZONE',
+        name: 'Source Interface Zone'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type:'DESTINATION_INTERFACE_ZONE',
+        name: 'Destination Interface Zone'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type:'SOURCE_INTERFACE_NAME',
+        name: 'Source Interface Name'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type:'DESTINATION_INTERFACE_NAME',
+        name: 'Destination Interface Name'.t(),
+        operations: ['eq', 'ne']
+    }, {
+        type: 'CT_STATE',
+        name: 'Connection State',
+        operations: ['eq', 'ne'],
+        field: {
+            xtype: 'selectfield',
+            forceSelection: true,
+            editable: false,
+            // queryMode: 'local',
+            // displayField: 'name',
+            // valueField: 'name',
+            value: 'TCP', // a default value
+            options: [
+                { text: 'Established', value: 'established' },
+                { text: 'Related', value: 'related' },
+                { text: 'Invalid', value: 'invalid' }
+            ]
+        }
+    }],
 
     // adds timezone computation to ensure dates showing in UI are showing actual server date
     serverToClientDate: function (serverDate) {

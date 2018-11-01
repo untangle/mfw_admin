@@ -88,7 +88,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                         encodeHtml: false
                     },
                     renderer: function (value, record) {
-                        var op;
+                        var op, name;
                         switch (record.get('op')) {
                             case '==': op = '='; break;
                             case '!=': op = '&ne;'; break;
@@ -98,7 +98,10 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                             case '<=': op = '&le;'; break;
                             default: op = '?'; break;
                         }
-                        return '<div class="condition"><span>' + Ext.getStore('ruleconditions').findRecord('type', record.get('type')).get('name') + '</span> ' +
+                        name = Ext.Array.findBy(Util.conditions, function (c) {
+                            return c.type === record.get('type');
+                        }).get('name');
+                        return '<div class="condition"><span>' + name + '</span> ' +
                                 '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>'
                     }
                 }, {
@@ -418,7 +421,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
              * !!! before setting the record on the form it is needed to
              * add the proper value field to the form based on condition type
              */
-            var me = this, condition = Ext.getStore('ruleconditions').findRecord('type', conditionType),
+            var me = this, condition = '', // Ext.getStore('ruleconditions').findRecord('type', conditionType),
                 valueField, ops = [];
             if (condition && condition.get('field')) {
                 // get the condition field
