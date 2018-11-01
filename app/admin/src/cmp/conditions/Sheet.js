@@ -95,7 +95,7 @@ Ext.define('Mfw.cmp.conditions.Sheet', {
             forceSelection: true,
             displayField: 'name',
             valueField: 'field',
-            store: Util.tmpColumns
+            // store: Util.tmpColumns
         }, {
             xtype: 'combobox',
             name: 'operator',
@@ -106,7 +106,7 @@ Ext.define('Mfw.cmp.conditions.Sheet', {
             editable: false,
             displayField: 'name',
             valueField: 'value',
-            store: Util.fieldOperators
+            // store: Util.fieldOperators
         }, {
             xtype: 'textfield',
             name: 'value',

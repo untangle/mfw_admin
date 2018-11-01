@@ -19,33 +19,35 @@ var sourcemaps = require('gulp-sourcemaps');
  */
 var host = '192.168.101.233'; // the MFW machine host to scp built files
 
-gulp.task('build-mfw-app', function() {
-    return gulp.src([
-        './app/mfw/src/util/*.js',
-        './app/mfw/src/cmp/**/*.js',
-        './app/mfw/src/model/**/*.js',
-        './app/mfw/src/store/**/*.js',
-        './app/mfw/src/view/**/*.js',
-        './app/mfw/src/AppController.js',
-        './app/mfw/src/App.js'
-    ])
-    .pipe(concat('./dist/mfw-app.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('.'))
-    });
-
 gulp.task('build-package-settings', function() {
     return gulp.src([
-            './package/settings/util/**/*.js',
-            './package/settings/store/**/*.js',
-            './package/settings/model/**/*.js',
-            './package/settings/component/**/*.js',
-            './package/settings/view/**/*.js',
-            './package/settings/*.js',
+            './package/settings/src/util/**/*.js',
+            './package/settings/src/store/**/*.js',
+            './package/settings/src/model/**/*.js',
+            './package/settings/src/component/**/*.js',
+            './package/settings/src/view/**/*.js',
+            './package/settings/src/*.js',
         ])
         .pipe(concat('mfw-pkg-settings.js'))
         // .pipe(uglify())
         .pipe(gulp.dest('./dist/mfw/pkg'));
+    });
+
+gulp.task('build-sass-settings', function () {
+    return gulp.src('./package/settings/sass/**/*.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('mfw-settings.css'))
+        .pipe(gulp.dest('./dist/settings'));
+        // .pipe(exec('scp ./dist/mfw-all.css root@' + host + ':/www/admin')) // quick deploy on mfw vm
+        // .pipe(browserSync.stream());
+    });
+
+gulp.task('build-sass-all', function () {
+    return gulp.src('./sass/**/*.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('mfw-all.css'))
+        .pipe(gulp.dest('./dist'))
+        .pipe(appServer.stream());
     });
 
 gulp.task('build-package-auth', function() {
@@ -56,7 +58,6 @@ gulp.task('build-package-auth', function() {
         // .pipe(uglify())
         .pipe(gulp.dest('./dist/mfw/pkg'));
     });
-
 
 gulp.task('build-app-settings', function() {
     var js = gulp.src([
@@ -71,8 +72,24 @@ gulp.task('build-app-settings', function() {
     return merge(js, index);
     });
 
+// ADMIN
+gulp.task('build-app-admin', function() {
+    var js = gulp.src([
+        './app/admin/src/cmp/**/*.js',
+        './app/admin/src/view/**/*.js',
+        './app/admin/src/App.js'
+    ])
+    .pipe(concat('mfw-app-admin.js'))
+    // .pipe(uglify())
+    .pipe(gulp.dest('./dist/mfw/'))
+    var index = gulp.src('./app/admin/index.html')
+        .pipe(gulp.dest('./dist'));
+
+    return merge(js, index);
+    });
+
 gulp.task('clean', function () {
-    var command = 'ssh root@' + host + ' rm -rf /www/admin/mfw/; rm -rf /www/admin/settings/';
+    var command = 'ssh root@' + host + ' rm /www/admin/index.html; rm /www/admin/mfw-all.css; rm -rf /www/admin/mfw/; rm -rf /www/admin/settings/';
     del(['./dist/**', '!./dist']);
     return gulp.src('.')
         .pipe(exec(command));
@@ -80,10 +97,10 @@ gulp.task('clean', function () {
 
 gulp.task('deploy', function () {
     return gulp.src('./')
-        .pipe(exec('scp -r ./dist/mfw ./dist/settings root@' + host + ':/www/admin/')); // quick deploy on mfw vm
+        .pipe(exec('scp -r ./dist/index.html ./dist/mfw-all.css ./dist/mfw ./dist/settings root@' + host + ':/www/admin/')); // quick deploy on mfw vm
     });
 
-gulp.task('build-settings', gulp.series('clean', 'build-package-auth', 'build-package-settings', 'build-app-settings', 'deploy'));
+gulp.task('build', gulp.series('clean', 'build-package-auth', 'build-package-settings', 'build-sass-all', 'build-app-settings', 'build-app-admin', 'deploy'));
 
 
 

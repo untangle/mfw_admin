@@ -6,9 +6,6 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     zIndex: 999,
     padding: '0 0 0 16',
 
-    hidden: true,
-    bind: { hidden: '{currentView === "mfw-login"}' },
-
     items: [{
         xtype: 'component',
         // padding: '0 10',
@@ -37,7 +34,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             text: 'Dashboard'.t(),
             // iconCls: 'x-fa fa-home',
             iconCls: 'md-icon-dashboard',
-            handler: function () { Mfw.app.redirectTo(''); },
+            handler: function () { Mfw.app.redirectTo('#dashboard'); },
             bind: {
                 pressed: '{currentView === "mfw-dashboard"}'
             }

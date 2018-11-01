@@ -79,7 +79,9 @@ Ext.define('Mfw.auth.Main', {
             var me = this,
                 form = me.getView().down('formpanel'),
                 btn = form.down('button'),
-                redirectRoute = Mfw.app.setRouteAfterAuth() || '';
+                redirectRoute = Mfw.app.getRouteAfterAuth() || '';
+
+            console.log(redirectRoute);
 
             if (!form.validate()) { return; }
 

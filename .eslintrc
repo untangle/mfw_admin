@@ -72,6 +72,7 @@
         "Ext": true,
         "Highcharts": true,
         "Mfw": true,
-        "Util": true
+        "Util": true,
+        "Data": true
     }
 }
