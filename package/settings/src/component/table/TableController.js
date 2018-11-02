@@ -43,7 +43,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid = me.getView();
 
         grid.getSelectable().deselectAll(); // deselect any rule on load
-        grid.mask();
+        grid.mask({
+            xtype: 'loadmask',
+            message: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
+        });
 
         me.table.load({
             success: function (record) {

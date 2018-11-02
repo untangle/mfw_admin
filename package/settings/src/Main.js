@@ -51,8 +51,10 @@ Ext.define('Mfw.settings.Main', {
             expanderOnly: false,
             selectOnExpander: true,
             highlightPath: false,
+//            store: 'settings-nav',
             store: {
-                type: 'settings-nav'
+                type: 'settings-nav',
+                // autoLoad: true
             },
             listeners: {
                 selectionchange: 'onSelectionChange'
@@ -60,7 +62,8 @@ Ext.define('Mfw.settings.Main', {
         }]
     }],
     listeners: {
-        initialize: 'onInitialize'
+        initialize: 'onInitialize',
+        deactivate: 'onDeactivate'
     }
 
 });

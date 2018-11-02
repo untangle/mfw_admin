@@ -34,6 +34,12 @@ cite {
     // }
 }
 
+.x-mask {
+    background-color: #FFF;
+    .x-mask-inner { background: none; }
+    .x-loading-spinner-outer { display: none; }
+}
+
 .x-fa {
     &.fa-red { color: red; }
     &.fa-green { color: green; }

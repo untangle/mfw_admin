@@ -43,7 +43,7 @@ Ext.define('Mfw.auth.Main', {
             xtype: 'component',
             style: 'text-align: center;',
             margin: '0 0 0 0',
-            html: '<img src="' + Mfw.app.resPath + '/untangle-logo.png">'
+            html: '<img src="' + Mfw.app.getResourcesPath() + '/untangle-logo.png">'
         }, {
             xtype: 'component',
             html: '<h2 style="color: #777; font-weight: normal; text-align: center;">Please sign in ...</h3>'
@@ -91,8 +91,14 @@ Ext.define('Mfw.auth.Main', {
                 method: 'POST',
                 params: form.getValues(),
                 success: function () {
+                    // if (redirectRoute === '#auth') {
+                    //     Mfw.app.redirectTo('#');
+                    // } else {
+                    //     Mfw.app.redirectTo(redirectRoute);
+                    // }
                     Mfw.app.redirectTo(redirectRoute);
-                    btn.setDisabled(false);
+                    document.location.reload();
+                    // btn.setDisabled(false);
                 },
                 failure: function (response) {
                     var obj = Ext.decode(response.responseText);

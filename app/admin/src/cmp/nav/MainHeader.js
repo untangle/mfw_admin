@@ -116,7 +116,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                         url: '/account/logout',
                         callback: function () {
                             Mfw.app.setAccount(null);
-                            Mfw.app.redirectTo('login');
+                            Mfw.app.redirectTo('auth');
+                            document.location.reload();
                         }
                     });
                 }

@@ -61,6 +61,8 @@ gulp.task('build-package-auth', function() {
 
 gulp.task('build-app-settings', function() {
     var js = gulp.src([
+        './app/settings/src/cmp/**/*.js',
+        './app/AppBase.js',
         './app/settings/src/App.js'
     ])
     .pipe(concat('mfw-app-settings.js'))
@@ -77,6 +79,7 @@ gulp.task('build-app-admin', function() {
     var js = gulp.src([
         './app/admin/src/cmp/**/*.js',
         './app/admin/src/view/**/*.js',
+        './app/AppBase.js',
         './app/admin/src/App.js'
     ])
     .pipe(concat('mfw-app-admin.js'))
@@ -102,27 +105,52 @@ gulp.task('deploy', function () {
 
 gulp.task('build', gulp.series('clean', 'build-package-auth', 'build-package-settings', 'build-sass-all', 'build-app-settings', 'build-app-admin', 'deploy'));
 
+gulp.task('serve', function (cb) {
+    appServer.init({
+        proxy: 'http://' + host + ':8080/admin',
+        // browser: 'google chrome',
+        // middleware: [{
+        //     route: '/api',
+        //     handle: function (req, res, next) {
+        //         if (req.url.startsWith('/settings/reports')) {
+        //             res.setHeader('Content-Type', 'application/json');
+        //             res.write(fs.readFileSync('./reports-new.json', 'utf8'));
+        //             res.end();
+        //         } else {
+        //             next();
+        //         }
+        //     }
+        // }]
+    });
 
+
+    gulp.watch(['./app/**/*.*', './package/**/*.*'], gulp.series('build'));
+    // gulp.watch(['./dist/**/*.*']).on('change', function () {
+    //     setTimeout(function () {
+    //         appServer.reload();
+    //     }, 5000);
+    // });
+});
 
 /**
  * gulp serve --app [appname]
  */
 
-gulp.task('serve', function (cb) {
-    var app = process.argv[4];
-    if (!app || !['admin', 'settings'].includes(app)) {
-        console.warn('Please specify app! (gulp serve -app admin|settings)');
-        return cb();
-    }
+// gulp.task('serve', function (cb) {
+//     var app = process.argv[4];
+//     if (!app || !['admin', 'settings'].includes(app)) {
+//         console.warn('Please specify app! (gulp serve -app admin|settings)');
+//         return cb();
+//     }
 
-    if (app === 'settings') {
-        appServer.init({
-            proxy: 'http://' + host + ':8080/admin',
-            port: 3010,
-            ui: { port: 3011 }
-        });
-    }
-})
+//     if (app === 'settings') {
+//         appServer.init({
+//             proxy: 'http://' + host + ':8080/admin',
+//             port: 3010,
+//             ui: { port: 3011 }
+//         });
+//     }
+// })
 
 
 

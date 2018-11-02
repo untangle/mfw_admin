@@ -8,43 +8,55 @@ Ext.define('Mfw.settings.MainController', {
         // Ext.create('Mfw.settings.Nav',{
         //     autoLoad: true
         // });
-        // Mfw.app.setRoutes({
-        //     'settings:p1': { action: 'onSettings', conditions: { ':p1' : '(.*)' } }
-        // });
+
+        // Ext.defer(function () {
+        //     view.down('treelist').getStore().reload();
+        // }, 2000);
 
 
-        // Mfw.app.onSettings = function (route) {
-        //     console.log('on settings ...');
-        //     var cmp = view.down('#currentSettings'), xtype;
-        //     if (cmp) { cmp.destroy(); }
+        // console.log(view.down('treelist').getStore());
 
-        //     Mfw.app.viewport.setActiveItem('mfw-pkg-settings');
+        // add routing method
+        console.log(Ext.isFunction(Mfw.app.onSettings));
+        if (!Ext.isFunction(Mfw.app.onSettings)) {
+            // Mfw.app.onSettings = function (route) {
+            //     var cmp = view.down('#currentSettings'), xtype,
+            //         tree = view.down('treelist'),
+            //         node = tree.getStore().findNode('href', 'settings' + route);
 
-        //     if (route) {
-        //         xtype = 'mfw-settings' + route.replace(/\//g, '-');
+            //     if (cmp) { cmp.destroy(); }
 
-        //         console.log(xtype);
+            //     Mfw.app.viewport.setActiveItem('mfw-pkg-settings');
 
-        //         if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
-        //             view.add({
-        //                 xtype: xtype,
-        //                 itemId: 'currentSettings'
-        //             });
-        //         } else {
-        //             console.log('view does not exists');
-        //         }
-        //     }
+            //     if (route) {
+            //         xtype = 'mfw-settings' + route.replace(/\//g, '-');
 
+            //         if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
+            //             view.add({
+            //                 xtype: xtype,
+            //                 itemId: 'currentSettings'
+            //             });
+            //         } else {
+            //             console.log('view does not exists');
+            //         }
+            //     }
 
+            //     tree.setSelection(node);
+            // };
+        }
 
-        //     // console.log(route);
-        //     // var tree = mainSettingsView.down('treelist');
-        //     // var node = tree.getStore().findNode('href', 'settings' + route);
-        //     // tree.setSelection(node);
-        //     // console.log(tree.getStore());
-        //     // console.log(node);
-        // };
+    },
 
+    onDeactivate: function (view) {
+        var list = view.down('treelist'),
+            store = list.getStore();
+
+        store.each(function (node) {
+            if (!node.isLeaf()) {
+                list.getItem(node).collapse();
+            }
+        });
+        list.setSelection(null);
     },
 
     onSelectionChange: function (el, record) {
@@ -52,9 +64,9 @@ Ext.define('Mfw.settings.MainController', {
 
         if (!record || !record.get('href')) { return; }
 
-        if (view.getType() === 'api') {
-            Mfw.app.redirectTo(record.get('href'));
-        }
+        // if (view.getType() === 'api') {
+        Mfw.app.redirectTo(record.get('href'));
+        // }
 
     }
 
