@@ -58,16 +58,6 @@ Ext.define('Mfw.AppBase', {
         }
     },
 
-    // launch: function () {
-    //     var scripts = [];
-
-    //     if (window.location.hash === '') {
-    //         Ext.defer(function () {
-    //             Mfw.app.redirectTo('#settings');
-    //         }, 100);
-    //     }
-    // },
-
     init: function (app) {
         var scripts = [];
         Ext.route.Router.suspend();

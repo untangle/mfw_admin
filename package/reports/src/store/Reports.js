@@ -17,5 +17,4 @@ Ext.define('Mfw.store.Reports', {
             Ext.getStore('reports-nav').build();
         }
     }
-
 });

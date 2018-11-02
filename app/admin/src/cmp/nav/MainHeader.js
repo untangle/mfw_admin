@@ -9,9 +9,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     items: [{
         xtype: 'component',
         // padding: '0 10',
-        html: '<img src="' + 'res/untangle-logo.png" style="height: 30px;"/>',
-        plugins: 'responsive',
-        responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
+        margin: '0 16 0 0',
+        html: '<a href="#dashboard"><img src="' + 'res/untangle-logo.png" style="height: 30px;"/></a>',
+        // plugins: 'responsive',
+        // responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
     }, {
         xtype: 'component',
         margin: '5 0 0 0',
@@ -123,22 +124,24 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 }
             }]
         }
-    }, {
-        iconCls: 'x-fa fa-bars',
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
-        handler: function () {
-            // Mfw.app.mainMenu.show();
+    },
+    // {
+    //     iconCls: 'x-fa fa-bars',
+    //     plugins: 'responsive',
+    //     responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
+    //     handler: function () {
+    //         // Mfw.app.mainMenu.show();
 
-            var me = this;
-            if (!me.menu) {
-                me.menu = Ext.Viewport.add({
-                    xtype: 'menu-sheet',
-                    // ownerCmp: me.getView()
-                });
-            }
-            me.menu.show();
+    //         var me = this;
+    //         if (!me.menu) {
+    //             me.menu = Ext.Viewport.add({
+    //                 xtype: 'menu-sheet',
+    //                 // ownerCmp: me.getView()
+    //             });
+    //         }
+    //         me.menu.show();
 
-        }
-    }]
+    //     }
+    // }
+    ]
 });

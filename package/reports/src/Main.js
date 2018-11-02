@@ -1,4 +1,4 @@
-Ext.define('Mfw.view.Reports', {
+Ext.define('Mfw.reports.Main', {
     extend: 'Ext.Panel',
     alias: 'widget.mfw-reports',
 
@@ -41,11 +41,8 @@ Ext.define('Mfw.view.Reports', {
         layout: 'fit',
         items: [{
             xtype: 'panel',
-            bind: {
-                docked: '{(!smallScreen) ? "left" : null }',
-                width: '{(!smallScreen) ? 250 : null }',
-                hidden: '{ smallScreen && currentView }',
-            },
+            docked: 'left',
+            width: 250,
 
             resizable: {
                 split: true,
@@ -73,7 +70,9 @@ Ext.define('Mfw.view.Reports', {
                 expanderOnly: false,
                 selectOnExpander: true,
                 highlightPath: false,
-                store: 'reports-nav',
+                store: {
+                    type: 'reports-nav'
+                },
                 listeners: {
                     selectionchange: 'onSelectionChange'
                 }

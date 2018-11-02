@@ -1,4 +1,4 @@
-Ext.define('Mfw.view.ChartController', {
+Ext.define('Mfw.reports.ChartController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.chart',

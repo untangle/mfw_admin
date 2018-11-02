@@ -30,21 +30,21 @@ Ext.define('Mfw.model.Report', {
     }],
 
     proxy: {
-        type: 'ajax',
-        api: {
-            read: Util.api + '/settings/reports',
-            // update: Util.api + '/settings/network'
-        },
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json',
-            writeAllFields: true,
-            allDataOptions: {
-                associated: true,
-                persist: true
-            }
-        }
+        type: 'memory',
+        // api: {
+        //     read: Util.api + '/settings/reports',
+        //     // update: Util.api + '/settings/network'
+        // },
+        // reader: {
+        //     type: 'json'
+        // },
+        // writer: {
+        //     type: 'json',
+        //     writeAllFields: true,
+        //     allDataOptions: {
+        //         associated: true,
+        //         persist: true
+        //     }
+        // }
     }
 });

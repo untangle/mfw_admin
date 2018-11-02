@@ -22,13 +22,24 @@ var host = '192.168.101.233'; // the MFW machine host to scp built files
 gulp.task('build-package-settings', function() {
     return gulp.src([
             './package/settings/src/util/**/*.js',
-            './package/settings/src/store/**/*.js',
             './package/settings/src/model/**/*.js',
+            './package/settings/src/store/**/*.js',
             './package/settings/src/component/**/*.js',
             './package/settings/src/view/**/*.js',
             './package/settings/src/*.js',
         ])
         .pipe(concat('mfw-pkg-settings.js'))
+        // .pipe(uglify())
+        .pipe(gulp.dest('./dist/mfw/pkg'));
+    });
+
+gulp.task('build-package-reports', function() {
+    return gulp.src([
+            './package/reports/src/model/*.js',
+            './package/reports/src/store/*.js',
+            './package/reports/src/*.js',
+        ])
+        .pipe(concat('mfw-pkg-reports.js'))
         // .pipe(uglify())
         .pipe(gulp.dest('./dist/mfw/pkg'));
     });
@@ -103,7 +114,14 @@ gulp.task('deploy', function () {
         .pipe(exec('scp -r ./dist/index.html ./dist/mfw-all.css ./dist/mfw ./dist/settings root@' + host + ':/www/admin/')); // quick deploy on mfw vm
     });
 
-gulp.task('build', gulp.series('clean', 'build-package-auth', 'build-package-settings', 'build-sass-all', 'build-app-settings', 'build-app-admin', 'deploy'));
+gulp.task('build', gulp.series('clean',
+                               'build-package-auth',
+                               'build-package-settings',
+                               'build-package-reports',
+                               'build-sass-all',
+                               'build-app-settings',
+                               'build-app-admin',
+                               'deploy'));
 
 gulp.task('serve', function (cb) {
     appServer.init({

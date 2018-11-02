@@ -1,4 +1,4 @@
-Ext.define('Mfw.view.ReportsController', {
+Ext.define('Mfw.reports.MainController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.reports',
@@ -9,6 +9,33 @@ Ext.define('Mfw.view.ReportsController', {
         // vm.bind('{reportsConditions}', function (conditions) {
         //     console.log('BINDING FIRED');
         // });
+        var reps = Ext.create('Mfw.store.Reports');
+        reps.loadRawData([
+            {
+                "uniqueId" : "network-oyzBpGMc",
+                "name": "TIME SERIES",
+                "category": "Network",
+                "description": "Time Series description",
+                "displayOrder": 100,
+                "readOnly": true,
+                "type": "STATIC_SERIES",
+                "rendering": {
+                    "type": "areaspline"
+                }
+            }, {
+                "uniqueId" : "network-oyzBpGMc",
+                "name": "CATEGORIES",
+                "category": "Network",
+                "description": "Categories description",
+                "displayOrder": 100,
+                "readOnly": true,
+                "type": "CATEGORIES",
+                "rendering": {
+                    "type": "pie"
+                }
+            }
+        ]);
+        console.log(reps);
         vm.bind('{conditions}', function (fields) {
             // console.log('BINDING');
             // me.generateConditionsButtons(reportsView, fields)
