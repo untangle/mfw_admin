@@ -1,8 +1,13 @@
 #! /usr/bin/make -f
 
+# Currently everything is deployed in /www/admin
+# This file will change when building will be made just in /www, allowing multiple apps
+
 DESTDIR ?= dist
 ADMINDIR ?= $(DESTDIR)/admin
 SETTINGSDIR ?= $(ADMINDIR)/settings
+
+SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp view) app/admin/src
@@ -31,12 +36,11 @@ install: dir css js-admin html-admin js-settings html-settings
 resources: dir
 	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xJf -
 
+#  This target requires sassc package!!!
 css: $(ADMINDIR)/mfw-all.css
-$(ADMINDIR)/mfw-all.css: sass/mfw-all.css
-	cp $^ $@
+$(ADMINDIR)/mfw-all.css: $(SASS)
+	cat $^ | sassc --style expanded --stdin $@
 
-sass/mfw-all.css: $(SASS)
-	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
 js-admin: $(ADMINDIR)/mfw-admin-all.js
 $(ADMINDIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
@@ -84,4 +88,4 @@ copy:
 deploy: install copy
 
 
-.PHONY: dir js-admin html-admin
+.PHONY: dir css js-admin html-admin js-settings html-settings resources
