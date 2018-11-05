@@ -43,7 +43,7 @@ Ext.define('Mfw.auth.Main', {
             xtype: 'component',
             style: 'text-align: center;',
             margin: '0 0 0 0',
-            html: '<img src="' + Mfw.app.getResourcesPath() + '/untangle-logo.png">'
+            html: '<img src="res/untangle-logo.png">'
         }, {
             xtype: 'component',
             html: '<h2 style="color: #777; font-weight: normal; text-align: center;">Please sign in ...</h3>'

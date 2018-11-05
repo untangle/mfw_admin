@@ -1,17 +1,23 @@
 #! /usr/bin/make -f
 
-DESTDIR ?= /tmp/mfw-admin
+DESTDIR ?= dist
+ADMINDIR ?= $(DESTDIR)/admin
+SETTINGSDIR ?= $(ADMINDIR)/settings
 
-SASS := $(wildcard sass/*.scss)
+# APPS SOURCES
+APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp view) app/admin/src
+APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp) app/settings/src
 
-JS_UTIL := $(shell find app/util -name '*.js')
-JS_CMP := $(shell find app/cmp -name '*.js')
-JS_MODEL := $(shell find app/model -name '*.js')
-JS_STORE := $(shell find app/store -name '*.js')
-JS_VIEW := $(shell find app/view -name '*.js')
-JS_SETTINGS := $(shell find app/settings -name '*.js')
-JS_APP := app/AppController.js app/App.js
+# PACKAGES SOURCES
+PKG_SETTINGS_SRC := $(addprefix package/settings/src/, util model store component view) package/settings/src
+PKG_REPORTS_SRC := $(addprefix package/reports/src/, model store) package/reports/src
+PKG_AUTH_SRC := package/auth
 
+# APPS ALL SOURCES
+APP_ADMIN_ALL := app/AppBase.js $(shell find $(APP_ADMIN_SRC) $(PKG_AUTH_SRC) $(PKG_SETTINGS_SRC) $(PKG_REPORTS_SRC) -name '*.js')
+APP_SETTINGS_ALL := app/AppBase.js $(shell find $(APP_SETTINGS_SRC) $(PKG_AUTH_SRC) $(PKG_SETTINGS_SRC) -name '*.js')
+
+# RESOURCES
 RESOURCES_VERSION := 0.1.0
 RESOURCES_DIRECTORY := /tmp/mfw-resources
 RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz
@@ -19,29 +25,39 @@ RESOURCES_FILE := $(RESOURCES_DIRECTORY)/$(RESOURCES_FILE_NAME)
 RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE_NAME)
 RESOURCES_BUCKET := s3://download.untangle.com/mfw/
 
-install: dir css js html resources
+
+install: dir css js-admin html-admin js-settings html-settings
 
 resources: dir
 	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xJf -
 
-html: $(DESTDIR)/index.html
-$(DESTDIR)/index.html: index.html
-	cp $^ $@
-
-css: $(DESTDIR)/mfw-all.css
-$(DESTDIR)/mfw-all.css: sass/mfw-all.css
+css: $(ADMINDIR)/mfw-all.css
+$(ADMINDIR)/mfw-all.css: sass/mfw-all.css
 	cp $^ $@
 
 sass/mfw-all.css: $(SASS)
 	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
-js: $(DESTDIR)/mfw-all.js
-$(DESTDIR)/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
+js-admin: $(ADMINDIR)/mfw-admin-all.js
+$(ADMINDIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 	cat $^ > $@
+
+html-admin: $(ADMINDIR)/index.html
+$(ADMINDIR)/index.html: app/admin/index.html
+	cp $^ $@
+
+js-settings: $(SETTINGSDIR)/mfw-settings-all.js
+$(SETTINGSDIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
+	cat $^ > $@
+
+html-settings: $(SETTINGSDIR)/index.html
+$(SETTINGSDIR)/index.html: app/settings/index.html
+	cp $^ $@
+
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	mkdir -p $(DESTDIR)
+	mkdir -p $(DESTDIR) $(ADMINDIR) $(SETTINGSDIR)
 
 clean:
 	rm -fr $(DESTDIR)
@@ -57,3 +73,15 @@ upload-resources-tarball:
 	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
 
 .PHONY: css js dir html resources
+
+
+
+# used for local development
+LOCAT_DEPLOY_HOST := 192.168.101.233
+copy:
+	scp -r $(ADMINDIR)/* root@$(LOCAT_DEPLOY_HOST):/www/admin
+
+deploy: install copy
+
+
+.PHONY: dir js-admin html-admin

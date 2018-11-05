@@ -62,10 +62,10 @@ Ext.define('Mfw.AppBase', {
         var scripts = [];
         Ext.route.Router.suspend();
 
-        Ext.Array.each(Mfw.app.getPackages(), function(pkg) {
-            scripts.push('/admin/mfw/pkg/mfw-pkg-' + pkg + '.js')
-        });
-        Ext.Loader.loadScriptsSync(scripts);
+        // Ext.Array.each(Mfw.app.getPackages(), function(pkg) {
+        //     scripts.push('/admin/mfw/pkg/mfw-pkg-' + pkg + '.js')
+        // });
+        // Ext.Loader.loadScriptsSync(scripts);
 
         Ext.Ajax.request({
             url: '/account/status',

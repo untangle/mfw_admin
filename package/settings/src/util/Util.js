@@ -74,7 +74,7 @@ Ext.define('Mfw.util.Util', {
             displayField: 'name',
             valueField: 'name',
             value: 'TCP', // a default value
-            store: Data.protocols
+            // store: Data.protocols
         }
     }, {
         type:'CLIENT_ADDRESS',
