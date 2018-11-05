@@ -3,6 +3,11 @@
 # Currently everything is deployed in /www/admin
 # This file will change when building will be made just in /www, allowing multiple apps
 
+TIME = $(shell date +%T.%3N)
+YELLOW := "\033[1;33m"
+GREEN := "\033[1;32m"
+NC := "\033[0m" # No Color
+
 DESTDIR ?= dist
 ADMINDIR ?= $(DESTDIR)/admin
 SETTINGSDIR ?= $(ADMINDIR)/settings
@@ -10,7 +15,7 @@ SETTINGSDIR ?= $(ADMINDIR)/settings
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
-APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp view) app/admin/src
+APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp dashboard) app/admin/src/App.js
 APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp) app/settings/src
 
 # PACKAGES SOURCES
@@ -39,29 +44,35 @@ resources: dir
 #  This target requires sassc package!!!
 css: $(ADMINDIR)/mfw-all.css
 $(ADMINDIR)/mfw-all.css: $(SASS)
-	cat $^ | sassc --style expanded --stdin $@
+	@echo $(TIME) $(GREEN)"Building CSS"$(NC)
+	@cat $^ | sassc --style expanded --stdin $@
 
 
 js-admin: $(ADMINDIR)/mfw-admin-all.js
 $(ADMINDIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
-	cat $^ > $@
+	@echo $(TIME) $(GREEN)"Building the Admin App"$(NC)
+	@cat $^ > $@
 
 html-admin: $(ADMINDIR)/index.html
 $(ADMINDIR)/index.html: app/admin/index.html
-	cp $^ $@
+	@echo $(TIME) $(GREEN)"Copy Admin index file"$(NC)
+	@cp $^ $@
 
 js-settings: $(SETTINGSDIR)/mfw-settings-all.js
 $(SETTINGSDIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
-	cat $^ > $@
+	@echo $(TIME) $(GREEN)"Building the Settings App"$(NC)
+	@cat $^ > $@
 
 html-settings: $(SETTINGSDIR)/index.html
 $(SETTINGSDIR)/index.html: app/settings/index.html
-	cp $^ $@
+	@echo $(TIME) $(GREEN)"Copy Settings index file"$(NC)
+	@cp $^ $@
 
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	mkdir -p $(DESTDIR) $(ADMINDIR) $(SETTINGSDIR)
+	@echo $(TIME) $(GREEN)"Creating DIRs"$(NC)
+	@mkdir -p $(DESTDIR) $(ADMINDIR) $(SETTINGSDIR)
 
 clean:
 	rm -fr $(DESTDIR)
@@ -76,16 +87,28 @@ create-resources-tarball:
 upload-resources-tarball:
 	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
 
-.PHONY: css js dir html resources
+.PHONY: dir css js-admin html-admin js-settings html-settings resources \
+		deploy copy watch
+
 
 
 
 # used for local development
+
 LOCAT_DEPLOY_HOST := 192.168.101.233
 copy:
-	scp -r $(ADMINDIR)/* root@$(LOCAT_DEPLOY_HOST):/www/admin
+	@echo "****************************************"
+	@echo $(TIME) $(GREEN)"Deploying build on local OpenWrt"$(NC)
+	@scp -r $(ADMINDIR)/* root@$(LOCAT_DEPLOY_HOST):/www/admin
+	@echo "****************************************"
 
 deploy: install copy
 
+watch:
+	@echo $(TIME) $(YELLOW)"Waiting for changes..."$(NC)
+	@while true; do \
+		inotifywait -qr -e modify -e create -e delete -e move app package sass; \
+		make deploy; \
+	done
 
-.PHONY: dir css js-admin html-admin js-settings html-settings resources
+
