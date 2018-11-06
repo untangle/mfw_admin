@@ -2,7 +2,7 @@
 
 # Currently everything is deployed in /www/admin while it should be only under /www
 
-DESTDIR ?= dist
+DESTDIR ?= /tmp/mfw
 # mfw Admin app
 ADMIN_DIR ?= $(DESTDIR)/admin
 # mfw resources dir which contains JS libs and images
