@@ -20,7 +20,7 @@ Ext.define('Mfw.dashboard.TimeButton', {
 
     listeners: {
         initialize: function (btn) {
-            var view = btn.up('dashboard'),
+            var view = btn.up('mfw-dashboard'),
                 vm = view.getViewModel();
             // watch since condition change and update button text
             vm.bind('{conditions.since}', function (since) {

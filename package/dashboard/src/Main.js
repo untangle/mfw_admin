@@ -1,7 +1,7 @@
 Ext.define('Mfw.dashboard.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.dashboard',
-    controller: 'dashboard',
+    alias: 'widget.mfw-dashboard',
+    controller: 'dashboard', // test
 
     viewModel: {
         data: {

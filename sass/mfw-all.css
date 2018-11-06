@@ -318,19 +318,19 @@ i {
 }
 
 .icon-monitor.sessions {
-  background: url("res/icons/monitor/sessions-monitor-icon.svg") no-repeat 50% 50%;
+  background: url("../static/res/icons/monitor/sessions-monitor-icon.svg") no-repeat 50% 50%;
 }
 
 .icon-monitor.hosts {
-  background: url("res/icons/monitor/hosts-monitor-icon.svg") no-repeat 50% 50%;
+  background: url("../static/res/icons/monitor/hosts-monitor-icon.svg") no-repeat 50% 50%;
 }
 
 .icon-monitor.devices {
-  background: url("res/icons/monitor/devices-monitor-icon.svg") no-repeat 50% 50%;
+  background: url("../static/res/icons/monitor/devices-monitor-icon.svg") no-repeat 50% 50%;
 }
 
 .icon-monitor.users {
-  background: url("res/icons/monitor/users-monitor-icon.svg") no-repeat 50% 50%;
+  background: url("../static/res/icons/monitor/users-monitor-icon.svg") no-repeat 50% 50%;
 }
 
 .cond {
@@ -408,43 +408,43 @@ i {
 }
 
 .x-treelist-item-icon.tree.network {
-  background-image: url("res/icons/config/network.svg");
+  background-image: url("../static/res/icons/config/network.svg");
 }
 
 .x-treelist-item-icon.tree.administration {
-  background-image: url("res/icons/config/administration.svg");
+  background-image: url("../static/res/icons/config/administration.svg");
 }
 
 .x-treelist-item-icon.tree.events {
-  background-image: url("res/icons/config/events.svg");
+  background-image: url("../static/res/icons/config/events.svg");
 }
 
 .x-treelist-item-icon.tree.email {
-  background-image: url("res/icons/config/email.svg");
+  background-image: url("../static/res/icons/config/email.svg");
 }
 
 .x-treelist-item-icon.tree.directory {
-  background-image: url("res/icons/config/local-directory.svg");
+  background-image: url("../static/res/icons/config/local-directory.svg");
 }
 
 .x-treelist-item-icon.tree.system {
-  background-image: url("res/icons/config/system.svg");
+  background-image: url("../static/res/icons/config/system.svg");
 }
 
 .x-treelist-item-icon.tree.upgrade {
-  background-image: url("res/icons/config/upgrade.svg");
+  background-image: url("../static/res/icons/config/upgrade.svg");
 }
 
 .x-treelist-item-icon.tree.about {
-  background-image: url("res/icons/config/about.svg");
+  background-image: url("../static/res/icons/config/about.svg");
 }
 
 .x-treelist-item-icon.tree.hosts {
-  background-image: url("res/icons/config/hosts.svg");
+  background-image: url("../static/res/icons/config/hosts.svg");
 }
 
 .x-treelist-item-icon.tree.devices {
-  background-image: url("res/icons/config/devices.svg");
+  background-image: url("../static/res/icons/config/devices.svg");
 }
 
 .x-gridcell-body-el em {
@@ -508,35 +508,35 @@ i {
 }
 
 .x-nav .x-icon-el.network {
-  background-image: url("res/icons/config/icon_config_network.png");
+  background-image: url("../static/res/icons/config/icon_config_network.png");
 }
 
 .x-nav .x-icon-el.administration {
-  background-image: url("res/icons/config/icon_config_administration.png");
+  background-image: url("../static/res/icons/config/icon_config_administration.png");
 }
 
 .x-nav .x-icon-el.events {
-  background-image: url("res/icons/config/icon_config_events.png");
+  background-image: url("../static/res/icons/config/icon_config_events.png");
 }
 
 .x-nav .x-icon-el.email {
-  background-image: url("res/icons/config/icon_config_email.png");
+  background-image: url("../static/res/icons/config/icon_config_email.png");
 }
 
 .x-nav .x-icon-el.directory {
-  background-image: url("res/icons/config/icon_config_directory.png");
+  background-image: url("../static/res/icons/config/icon_config_directory.png");
 }
 
 .x-nav .x-icon-el.system {
-  background-image: url("res/icons/config/icon_config_system.png");
+  background-image: url("../static/res/icons/config/icon_config_system.png");
 }
 
 .x-nav .x-icon-el.upgrade {
-  background-image: url("res/icons/config/icon_config_upgrade.png");
+  background-image: url("../static/res/icons/config/icon_config_upgrade.png");
 }
 
 .x-nav .x-icon-el.about {
-  background-image: url("res/icons/config/icon_config_about.png");
+  background-image: url("../static/res/icons/config/icon_config_about.png");
 }
 
 .x-selectfield input {

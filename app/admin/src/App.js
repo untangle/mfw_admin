@@ -18,7 +18,7 @@ Ext.define('Mfw.App', {
     setViews: function () {
         Mfw.app.viewport.add([
             { xtype: 'mfw-header' },
-            { xtype: 'dashboard' },
+            { xtype: 'mfw-dashboard' },
             { xtype: 'mfw-reports' },
             { xtype: 'mfw-pkg-settings' }
         ]);
