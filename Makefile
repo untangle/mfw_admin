@@ -1,6 +1,8 @@
 #! /usr/bin/make -f
 
-DESTDIR ?= /tmp/mfw-admin
+DESTDIR ?= dist
+ADMINDIR ?= $(DESTDIR)/admin
+STATICDIR ?= $(DESTDIR)/static
 
 SASS := $(wildcard sass/*.scss)
 
@@ -22,26 +24,26 @@ RESOURCES_BUCKET := s3://download.untangle.com/mfw/
 install: dir css js html resources
 
 resources: dir
-	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xJf -
+	wget -O - $(RESOURCES_URL) | tar -C $(STATICDIR) -xJf -
 
-html: $(DESTDIR)/index.html
-$(DESTDIR)/index.html: index.html
+html: $(ADMINDIR)/index.html
+$(ADMINDIR)/index.html: index.html
 	cp $^ $@
 
-css: $(DESTDIR)/mfw-all.css
-$(DESTDIR)/mfw-all.css: sass/mfw-all.css
+css: $(ADMINDIR)/mfw-all.css
+$(ADMINDIR)/mfw-all.css: sass/mfw-all.css
 	cp $^ $@
 
 sass/mfw-all.css: $(SASS)
 	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
-js: $(DESTDIR)/mfw-all.js
-$(DESTDIR)/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
+js: $(ADMINDIR)/mfw-all.js
+$(ADMINDIR)/mfw-all.js: $(JS_UTIL) $(JS_CMP) $(JS_MODEL) $(JS_STORE) $(JS_VIEW) $(JS_SETTINGS) $(JS_APP)
 	cat $^ > $@
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	mkdir -p $(DESTDIR)
+	mkdir -p $(DESTDIR) $(ADMINDIR) $(STATICDIR)
 
 clean:
 	rm -fr $(DESTDIR)
