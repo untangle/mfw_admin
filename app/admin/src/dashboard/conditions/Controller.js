@@ -1,10 +1,10 @@
-Ext.define('Mfw.cmp.conditions.Controller', {
+Ext.define('Mfw.dashboard.ConditionsController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.conditions',
+    alias: 'controller.dashboard-conditions',
 
     onInitialize: function (cmp) {
         var me = this, mainView;
-        me.mainView = mainView = cmp.up('mfw-dashboard') || cmp.up('mfw-reports');
+        me.mainView = mainView = cmp.up('dashboard') || cmp.up('mfw-reports');
         mainView.getViewModel().bind('{conditions.fields}', function (fields) {
             me.generateConditionsButtons(fields)
         });

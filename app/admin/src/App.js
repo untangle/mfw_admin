@@ -1,8 +1,8 @@
 Ext.define('Mfw.App', {
     extend: 'Mfw.AppBase',
 
-    config: {
-        packages: ['auth', 'reports', 'settings'],
+    config: {//
+        packages: ['auth', 'reports', 'settings'], // test
         resourcesPath: 'res',
         account: null,
         routeAfterAuth: null
@@ -18,7 +18,7 @@ Ext.define('Mfw.App', {
     setViews: function () {
         Mfw.app.viewport.add([
             { xtype: 'mfw-header' },
-            { xtype: 'mfw-dashboard' },
+            { xtype: 'dashboard' },
             { xtype: 'mfw-reports' },
             { xtype: 'mfw-pkg-settings' }
         ]);

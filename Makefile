@@ -1,16 +1,19 @@
 #! /usr/bin/make -f
 
-# Currently everything is deployed in /www/admin
-# This file will change when building will be made just in /www, allowing multiple apps
-
-TIME = $(shell date +%T.%3N)
-YELLOW := "\033[1;33m"
-GREEN := "\033[1;32m"
-NC := "\033[0m" # No Color
+# Currently everything is deployed in /www/admin while it should be only under /www
 
 DESTDIR ?= dist
-ADMINDIR ?= $(DESTDIR)/admin
-SETTINGSDIR ?= $(ADMINDIR)/settings
+# mfw Admin app
+ADMIN_DIR ?= $(DESTDIR)/admin
+# mfw resources dir which contains JS libs and images
+STATIC_DIR ?= $(DESTDIR)/static
+# mfw Setup app
+SETUP_DIR ?= $(DESTDIR)/setup
+# mfw stand-alone Settings app
+SETTINGS_DIR ?= $(DESTDIR)/settings
+# mfw stand-alone Reports app
+REPORTS_DIR ?= $(DESTDIR)/reports
+
 
 SASS := $(wildcard sass/*.scss)
 
@@ -24,8 +27,16 @@ PKG_REPORTS_SRC := $(addprefix package/reports/src/, model store) package/report
 PKG_AUTH_SRC := package/auth
 
 # APPS ALL SOURCES
-APP_ADMIN_ALL := app/AppBase.js $(shell find $(APP_ADMIN_SRC) $(PKG_AUTH_SRC) $(PKG_SETTINGS_SRC) $(PKG_REPORTS_SRC) -name '*.js')
-APP_SETTINGS_ALL := app/AppBase.js $(shell find $(APP_SETTINGS_SRC) $(PKG_AUTH_SRC) $(PKG_SETTINGS_SRC) -name '*.js')
+APP_ADMIN_ALL := app/AppBase.js \
+	$(shell find $(APP_ADMIN_SRC) \
+				 $(PKG_AUTH_SRC) \
+				 $(PKG_SETTINGS_SRC) \
+				 $(PKG_REPORTS_SRC) -name '*.js')
+
+APP_SETTINGS_ALL := app/AppBase.js \
+	$(shell find $(APP_SETTINGS_SRC) \
+				 $(PKG_AUTH_SRC) \
+				 $(PKG_SETTINGS_SRC) -name '*.js')
 
 # RESOURCES
 RESOURCES_VERSION := 0.1.0
@@ -35,44 +46,55 @@ RESOURCES_FILE := $(RESOURCES_DIRECTORY)/$(RESOURCES_FILE_NAME)
 RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE_NAME)
 RESOURCES_BUCKET := s3://download.untangle.com/mfw/
 
-
-install: dir css js-admin html-admin js-settings html-settings
+install: \
+	dir \
+	css \
+	js-admin \
+	html-admin \
+	js-settings \
+	html-settings \
+	html-reports \
+	html-setup \
+	resources
 
 resources: dir
-	wget -O - $(RESOURCES_URL) | tar -C $(DESTDIR) -xJf -
+	wget -O - $(RESOURCES_URL) | tar -C $(STATIC_DIR) -xJf -
 
 #  This target requires sassc package!!!
-css: $(ADMINDIR)/mfw-all.css
-$(ADMINDIR)/mfw-all.css: $(SASS)
-	@echo $(TIME) $(GREEN)"Building CSS"$(NC)
-	@cat $^ | sassc --style expanded --stdin $@
+css: $(ADMIN_DIR)/mfw-all.css
+$(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
+	cp $^ $@
+
+js-admin: $(ADMIN_DIR)/mfw-admin-all.js
+$(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
+	cat $^ > $@
+
+html-admin: $(ADMIN_DIR)/index.html
+$(ADMIN_DIR)/index.html: app/admin/index.html
+	cp $^ $@
+
+js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
+$(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
+	cat $^ > $@
+
+html-settings: $(SETTINGS_DIR)/index.html
+$(SETTINGS_DIR)/index.html: app/settings/index.html
+	cp $^ $@
 
 
-js-admin: $(ADMINDIR)/mfw-admin-all.js
-$(ADMINDIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
-	@echo $(TIME) $(GREEN)"Building the Admin App"$(NC)
-	@cat $^ > $@
+html-setup: $(SETUP_DIR)/index.html
+$(SETUP_DIR)/index.html: app/setup/index.html
+	cp $^ $@
 
-html-admin: $(ADMINDIR)/index.html
-$(ADMINDIR)/index.html: app/admin/index.html
-	@echo $(TIME) $(GREEN)"Copy Admin index file"$(NC)
-	@cp $^ $@
+html-reports: $(REPORTS_DIR)/index.html
+$(REPORTS_DIR)/index.html: app/reports/index.html
+	cp $^ $@
 
-js-settings: $(SETTINGSDIR)/mfw-settings-all.js
-$(SETTINGSDIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
-	@echo $(TIME) $(GREEN)"Building the Settings App"$(NC)
-	@cat $^ > $@
-
-html-settings: $(SETTINGSDIR)/index.html
-$(SETTINGSDIR)/index.html: app/settings/index.html
-	@echo $(TIME) $(GREEN)"Copy Settings index file"$(NC)
-	@cp $^ $@
 
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	@echo $(TIME) $(GREEN)"Creating DIRs"$(NC)
-	@mkdir -p $(DESTDIR) $(ADMINDIR) $(SETTINGSDIR)
+	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR) $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
 
 clean:
 	rm -fr $(DESTDIR)
@@ -87,28 +109,15 @@ create-resources-tarball:
 upload-resources-tarball:
 	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
 
-.PHONY: dir css js-admin html-admin js-settings html-settings resources \
-		deploy copy watch
-
-
-
-
-# used for local development
-
-LOCAT_DEPLOY_HOST := 192.168.101.233
-copy:
-	@echo "****************************************"
-	@echo $(TIME) $(GREEN)"Deploying build on local OpenWrt"$(NC)
-	@scp -r $(ADMINDIR)/* root@$(LOCAT_DEPLOY_HOST):/www/admin
-	@echo "****************************************"
-
-deploy: install copy
-
-watch:
-	@echo $(TIME) $(YELLOW)"Waiting for changes..."$(NC)
-	@while true; do \
-		inotifywait -qr -e modify -e create -e delete -e move app package sass; \
-		make deploy; \
-	done
+.PHONY: \
+	dir \
+	css \
+	js-admin \
+	html-admin \
+	js-settings \
+	html-settings \
+	html-reports \
+	html-setup \
+	resources
 
 

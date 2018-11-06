@@ -1,4 +1,4 @@
-Ext.define('Mfw.cmp.conditions.TimeDashboard', {
+Ext.define('Mfw.dashboard.TimeButton', {
     extend: 'Ext.Button',
     alias: 'widget.dashboard-timerange-btn',
 
@@ -20,7 +20,7 @@ Ext.define('Mfw.cmp.conditions.TimeDashboard', {
 
     listeners: {
         initialize: function (btn) {
-            var view = btn.up('mfw-dashboard'),
+            var view = btn.up('dashboard'),
                 vm = view.getViewModel();
             // watch since condition change and update button text
             vm.bind('{conditions.since}', function (since) {

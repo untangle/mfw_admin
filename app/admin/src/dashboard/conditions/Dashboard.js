@@ -1,8 +1,8 @@
-Ext.define('Mfw.cmp.conditions.Dashboard', {
+Ext.define('Mfw.dashboard.Conditions', {
     extend: 'Ext.Container',
     alias: 'widget.dashboard-conditions',
 
-    controller: 'conditions',
+    controller: 'dashboard-conditions',
 
     layout: 'hbox',
 
