@@ -61,10 +61,12 @@ install: \
 resources: dir
 	wget -O - $(RESOURCES_URL) | tar -C $(STATIC_DIR) -xJf -
 
-#  This target requires sassc package!!!
 css: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
 	cp $^ $@
+
+sass/mfw-all.css: $(SASS)
+	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
 js-admin: $(ADMIN_DIR)/mfw-admin-all.js
 $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
