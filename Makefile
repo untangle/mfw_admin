@@ -15,6 +15,7 @@ SETTINGS_DIR ?= $(DESTDIR)/settings
 REPORTS_DIR ?= $(DESTDIR)/reports
 
 
+
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
