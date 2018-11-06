@@ -1,6 +1,6 @@
 #! /usr/bin/make -f
 
-DESTDIR ?= dist
+DESTDIR ?= /tmp/mfw
 ADMINDIR ?= $(DESTDIR)/admin
 STATICDIR ?= $(DESTDIR)/static
 
