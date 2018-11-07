@@ -1,8 +1,9 @@
-Ext.define('Mfw.dashboard.TimeButton', {
+Ext.define('Mfw.dashboard.Since', {
     extend: 'Ext.Button',
-    alias: 'widget.dashboard-timerange-btn',
+    alias: 'widget.dashboard-since',
 
-    // arrow: false,
+    viewModel: {},
+
     menu: {
         indented: false,
         mouseLeaveDelay: 0,
@@ -20,17 +21,17 @@ Ext.define('Mfw.dashboard.TimeButton', {
 
     listeners: {
         initialize: function (btn) {
-            var view = btn.up('mfw-dashboard'),
-                vm = view.getViewModel();
-            // watch since condition change and update button text
+            var vm = btn.getViewModel();
+
+            // watch since
             vm.bind('{conditions.since}', function (since) {
                 btn.setText(since + ' hour(s)');
             });
 
-            // when selecting a new since, redirect
+            // set since
             btn.getMenu().on('click', function (menu, item) {
                 vm.set('conditions.since', item.value);
-                Mfw.app.redirect(view);
+                Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
                 menu.hide();
             });
         }

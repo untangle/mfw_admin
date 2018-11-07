@@ -19,18 +19,6 @@ cite.nok {
   border-bottom: 1px red dashed;
 }
 
-.x-mask {
-  background-color: #FFF;
-}
-
-.x-mask .x-mask-inner {
-  background: none;
-}
-
-.x-mask .x-loading-spinner-outer {
-  display: none;
-}
-
 .x-fa.fa-red {
   color: red;
 }

@@ -1,7 +1,42 @@
-Ext.define('Mfw.reports.MainController', {
+Ext.define('Mfw.reports.Controller', {
     extend: 'Ext.app.ViewController',
-
     alias: 'controller.reports',
+
+    routes: {
+        'reports:query': {
+            before: 'onBefore',
+            action: 'onAction',
+            conditions: { ':query' : '(.*)' }
+        }
+    },
+
+    onBefore: function () {
+        console.log('onbeforereports');
+        var me = this, query, action,
+            vm = me.getViewModel();
+
+        if (arguments.length === 1) {
+            action = arguments[0];
+        } else {
+            query = arguments[0].replace('?', '');
+            action = arguments[1];
+        }
+
+        console.log(query);
+
+        if (!query) {
+            // if no condition parameters, load those condition params from view model and redirect
+            Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
+            action.stop();
+        } else {
+            vm.set('conditions', ReportsUtil.queryToConditions(query));
+            action.resume();
+        }
+    },
+
+    onAction: function () {
+        Mfw.app.viewport.setActiveItem('reports');
+    },
 
     onInitialize: function (view) {
         var me = this, vm = view.getViewModel();

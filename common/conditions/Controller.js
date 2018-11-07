@@ -1,11 +1,11 @@
-Ext.define('Mfw.dashboard.ConditionsController', {
+Ext.define('Mfw.common.conditions.Controller', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.dashboard-conditions',
+    alias: 'controller.fields',
 
     onInitialize: function (cmp) {
-        var me = this, mainView;
-        me.mainView = mainView = cmp.up('mfw-dashboard') || cmp.up('mfw-reports');
-        mainView.getViewModel().bind('{conditions.fields}', function (fields) {
+        var me = this;
+        me.mainView = mainView = cmp.up('dashboard') || cmp.up('reports');
+        me.getViewModel().bind('{conditions.fields}', function (fields) {
             me.generateConditionsButtons(fields)
         });
     },
@@ -30,11 +30,11 @@ Ext.define('Mfw.dashboard.ConditionsController', {
     },
 
     generateConditionsButtons: function (fields) {
-        var me = this, buttons = [], fieldName,
+        var me = this, buttons = [], fieldName, vm = me.getViewModel(),
             buttonsCmp = me.mainView.down('#fieldsBtns');
 
         Ext.Array.each(fields, function (field, idx) {
-            fieldName = Ext.Array.findBy(Util.tmpColumns, function (item) { return item.field === field.column; } ).name;
+            fieldName = Ext.Array.findBy(ConditionsUtil.fields, function (item) { return item.value === field.column; } ).text;
             buttons.push({
                 xtype: 'segmentedbutton',
                 margin: '0 5',
@@ -49,7 +49,7 @@ Ext.define('Mfw.dashboard.ConditionsController', {
                     fieldIndex: idx,
                     handler: function (btn) {
                         Ext.Array.removeAt(fields, btn.fieldIndex);
-                        Mfw.app.redirect(me.mainView);
+                        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
                     }
                 }]
             });
@@ -88,14 +88,15 @@ Ext.define('Mfw.dashboard.ConditionsController', {
         }
         me.sheet.setActiveItem(activeItem);
         me.sheet.show();
+        console.log(me.sheet.ownerCmp);
     },
 
 
     onDoneCondition: function () {
-        var me = this, fields,
+        var me = this, fields, vm = me.getViewModel();
             form = me.sheet.down('formpanel'),
             idx = me.sheet.getViewModel().get('conditionIdx'),
-            vm = me.mainView.getViewModel();
+            vm = me.getViewModel();
 
         if (!form.validate()) { return; }
 
@@ -112,7 +113,7 @@ Ext.define('Mfw.dashboard.ConditionsController', {
         } else {
             me.sheet.hide();
         }
-        Mfw.app.redirect(me.mainView);
+        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
     },
 
     onCancelCondition: function () {
@@ -134,7 +135,7 @@ Ext.define('Mfw.dashboard.ConditionsController', {
     onEditFromGrid: function (grid, location) {
         var me = this, sheet = me.sheet,
             idx = location.recordIndex,
-            fields = me.mainView.getViewModel().get('conditions.fields');
+            fields = me.getViewModel().get('conditions.fields');
         if (location.columnIndex !== 0) { return; }
 
         sheet.getViewModel().set('conditionIdx', idx);
@@ -144,11 +145,11 @@ Ext.define('Mfw.dashboard.ConditionsController', {
     },
 
     onRemoveFromGrid: function (grid, location) {
-        var me = this,
+        var me = this, vm = me.getViewModel(),
             idx = grid.getStore().indexOf(location.record),
-            fields = me.mainView.getViewModel().get('conditions.fields');
+            fields = vm.get('conditions.fields');
         Ext.Array.removeAt(fields, idx);
-        Mfw.app.redirect(me.mainView);
+        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
     }
 
 });

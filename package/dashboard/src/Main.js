@@ -1,7 +1,7 @@
 Ext.define('Mfw.dashboard.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.mfw-dashboard',
-    controller: 'dashboard', // test
+    alias: 'widget.dashboard',
+    controller: 'dashboard',
 
     viewModel: {
         data: {
@@ -12,7 +12,6 @@ Ext.define('Mfw.dashboard.Main', {
         }
     },
 
-
     items: [{
         xtype: 'toolbar',
         userCls: 'x-conditions',
@@ -21,11 +20,11 @@ Ext.define('Mfw.dashboard.Main', {
         // padding: 0, // to remove left spacing
         dock: 'top',
         items: [{
-            xtype: 'dashboard-timerange-btn'
+            xtype: 'dashboard-since'
         }, {
             xtype: 'toolbarseparator',
         }, {
-            xtype: 'dashboard-conditions'
+            xtype: 'conditions-fields'
         }, '->', {
             xtype: 'button',
             iconCls: 'x-fa fa-bars',
@@ -81,11 +80,5 @@ Ext.define('Mfw.dashboard.Main', {
             },
             itemTpl: '<div>{column} {operator} {value} (autoformat: {autoFormatValue})</div>'
         }]
-    }],
-
-    listeners: {
-        activate: function() {
-            // Mfw.app.redirect('dashboard');
-        }
-    }
+    }]
 });

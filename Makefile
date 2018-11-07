@@ -1,7 +1,5 @@
 #! /usr/bin/make -f
 
-# Currently everything is deployed in /www/admin while it should be only under /www
-
 DESTDIR ?= /tmp/mfw
 # mfw Admin app
 ADMIN_DIR ?= $(DESTDIR)/admin
@@ -19,22 +17,24 @@ REPORTS_DIR ?= $(DESTDIR)/reports
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
-APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp App.js)
-APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp) app/settings/src
+APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp *.js)
+APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp *.js)
+APP_COMMON_SRC := $(addprefix common/, conditions)
 
 # PACKAGES SOURCES
-PKG_DASHBOARD_SRC := $(addprefix package/dashboard/src/, conditions) package/dashboard/src
-PKG_SETTINGS_SRC := $(addprefix package/settings/src/, util model store component view) package/settings/src
-PKG_REPORTS_SRC := $(addprefix package/reports/src/, model store) package/reports/src
+PKG_DASHBOARD_SRC := $(addprefix package/dashboard/src/, conditions *.js)
+PKG_SETTINGS_SRC := $(addprefix package/settings/src/, util model store component view *.js)
+PKG_REPORTS_SRC := $(addprefix package/reports/src/, conditions model store *.js)
 PKG_AUTH_SRC := package/auth
 
 # APPS ALL SOURCES
 APP_ADMIN_ALL := app/AppBase.js \
-	$(shell find $(APP_ADMIN_SRC) \
-				 $(PKG_DASHBOARD_SRC) \
+	$(shell find $(APP_COMMON_SRC) \
 				 $(PKG_AUTH_SRC) \
+				 $(PKG_DASHBOARD_SRC) \
 				 $(PKG_SETTINGS_SRC) \
-				 $(PKG_REPORTS_SRC) -name '*.js')
+				 $(PKG_REPORTS_SRC) \
+				 $(APP_ADMIN_SRC) -name '*.js')
 
 APP_SETTINGS_ALL := app/AppBase.js \
 	$(shell find $(APP_SETTINGS_SRC) \

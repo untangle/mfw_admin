@@ -1,6 +1,6 @@
 Ext.define('Mfw.reports.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.mfw-reports',
+    alias: 'widget.reports',
 
     layout: 'fit',
 
@@ -28,13 +28,13 @@ Ext.define('Mfw.reports.Main', {
         padding: 8,
         // padding: 0, // to remove left spacing
         docked: 'top',
-        // items: [{
-        //     xtype: 'reports-timerange-btn'
-        // }, {
-        //     xtype: 'toolbarseparator',
-        // }, {
-        //     xtype: 'reports-conditions'
-        // }]
+        items: [{
+            xtype: 'time-range'
+        }, {
+            xtype: 'toolbarseparator',
+        }, {
+            xtype: 'conditions-fields'
+        }]
     }, {
         xtype: 'panel',
         style: 'border-top: 1px #e1e1e1 solid;',

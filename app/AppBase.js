@@ -3,7 +3,6 @@ Ext.define('Mfw.AppBase', {
     name: 'Mfw',
 
     config: {
-        packages: [],
         account: null,
         routeAfterAuth: null
     },
@@ -15,7 +14,7 @@ Ext.define('Mfw.AppBase', {
 
     checkAuth: function (action) {
         var hash = window.location.hash;
-
+        console.log('check auth');
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
                 Mfw.app.setRouteAfterAuth(hash);
@@ -66,9 +65,11 @@ Ext.define('Mfw.AppBase', {
         // });
         // Ext.Loader.loadScriptsSync(scripts);
 
+
         Ext.Ajax.request({
             url: '/account/status',
             success: function (response) {
+                console.log('auth success');
                 Mfw.app.setAccount(Ext.decode(response.responseText));
                 app.setViews();
                 Ext.route.Router.resume();

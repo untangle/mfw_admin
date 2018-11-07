@@ -2,28 +2,38 @@ Ext.define('Mfw.App', {
     extend: 'Mfw.AppBase',
 
     config: {//
-        packages: ['auth', 'reports', 'settings'], // test
-        resourcesPath: 'res',
         account: null,
         routeAfterAuth: null
     },
 
+    // namespaces: ['Mfw.pkg.Dashboard'],
+
+    // views: ['Mfw.pkg.dashboard.Main'],
+
     routes: {
         '*': { before: 'checkAuth' },
-        'dashboard:query': { before: 'onDashboardBefore', action: 'onDashboard', conditions: { ':query' : '(.*)' } },
-        'reports:query': { before: 'onReportsBefore', action: 'onReports', conditions: { ':query' : '(.*)' } },
-        'settings:route': { action: 'onSettings', conditions: { ':route' : '(.*)' } }
+        // 'dashboard:query': { before: 'onDashboardBefore', action: 'onDashboard', conditions: { ':query' : '(.*)' } },
+        // 'reports:query': { before: 'onReportsBefore', action: 'onReports', conditions: { ':query' : '(.*)' } },
+        // 'reports:query': { action: function () { console.log('on reports')} },
+        // 'settings:route': { action: 'onSettings', conditions: { ':route' : '(.*)' } }
     },
 
     setViews: function () {
         Mfw.app.viewport.add([
             { xtype: 'mfw-header' },
-            { xtype: 'mfw-dashboard' },
-            { xtype: 'mfw-reports' },
-            { xtype: 'mfw-pkg-settings' }
+            { xtype: 'dashboard' },
+            { xtype: 'reports' },
+            { xtype: 'settings' }
         ]);
     },
 
+
+    // controller: {
+    //     refs: [{
+    //         ref: 'dashboard',
+    //         selector: 'pkg-dashboard'
+    //     }]
+    // },
 
     onDashboardBefore: function (action) {
         // var me = this, conds, action,
@@ -50,7 +60,7 @@ Ext.define('Mfw.App', {
     },
 
     onDashboard: function () {
-        Mfw.app.viewport.setActiveItem('mfw-dashboard');
+        // Mfw.app.viewport.setActiveItem('mfw-dashboard');
     },
 
     /**

@@ -1,7 +1,39 @@
 Ext.define('Mfw.dashboard.Controller', {
     extend: 'Ext.app.ViewController',
-
     alias: 'controller.dashboard',
+
+    routes: {
+        'dashboard:query': {
+            before: 'onBefore',
+            action: 'onAction',
+            conditions: { ':query' : '(.*)' }
+        }
+    },
+
+    onBefore: function () {
+        var me = this, query, action,
+            vm = me.getViewModel();
+
+        if (arguments.length === 1) {
+            action = arguments[0];
+        } else {
+            query = arguments[0].replace('?', '');
+            action = arguments[1];
+        }
+
+        if (!query) {
+            // if no condition parameters, load those condition params from view model and redirect
+            Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+            action.stop();
+        } else {
+            vm.set('conditions', DashboardUtil.queryToConditions(query));
+            action.resume();
+        }
+    },
+
+    onAction: function () {
+        Mfw.app.viewport.setActiveItem('dashboard');
+    },
 
     sortContextMenu: {
         xtype: 'menu',
@@ -42,6 +74,24 @@ Ext.define('Mfw.dashboard.Controller', {
             bind: { disabled: '{pos === "last"}' }
         }]
     },
+
+
+    onBeforeRoute: function () {
+        console.log('on dashboard');
+    },
+
+    // onInitialize: function () {
+    //     console.log('on init');
+    //     Mfw.app.onDashboard = function () {
+    //         console.log('dashboard route');
+    //     }
+    // },
+
+
+
+
+
+
 
     showSettings: function () {
         var me = this;

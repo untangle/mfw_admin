@@ -1,8 +1,8 @@
-Ext.define('Mfw.dashboard.Conditions', {
+Ext.define('Mfw.common.conditions.Fields', {
     extend: 'Ext.Container',
-    alias: 'widget.dashboard-conditions',
+    alias: 'widget.conditions-fields',
 
-    controller: 'dashboard-conditions',
+    controller: 'fields',
 
     layout: 'hbox',
 
@@ -24,15 +24,11 @@ Ext.define('Mfw.dashboard.Conditions', {
         layout: 'hbox',
         defaults: {
             margin: '0 5'
-        },
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        }
     }, {
         xtype: 'button',
         iconCls: 'md-icon-add',
-        handler: 'addConditionFromToolbar',
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        handler: 'addConditionFromToolbar'
     }],
 
     listeners: {
