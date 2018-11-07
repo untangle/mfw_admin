@@ -14,7 +14,7 @@ Ext.define('Mfw.settings.Nav', {
     items: [{
         xtype: 'component',
         margin: '0 16 0 0',
-        html: '<a href="#settings"><img src="' + '../res/untangle-logo.png" style="height: 30px;"/></a>',
+        html: '<a href="#settings"><img src="/static/res/untangle-logo.png" style="height: 30px;"/></a>',
     }, {
         xtype: 'component',
         style: { color: '#777' },

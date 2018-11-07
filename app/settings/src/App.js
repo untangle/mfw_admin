@@ -2,8 +2,6 @@ Ext.define('Mfw.App', {
     extend: 'Mfw.AppBase',
 
     config: {
-        packages: ['auth', 'settings'],
-        resourcesPath: '../res',
         account: null,
         routeAfterAuth: null
     },
