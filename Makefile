@@ -73,18 +73,17 @@ $(HIGHSTOCK_FILE):
 
 downloads: extjs-download highstock-download
 
-extjs-stage: extjs extjs-list.txt
+extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),staging)
 
-highstock-stage: $(HIGHSTOCK_FILES_LIST) highstock
+highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),staging)
 
-RESOURCES_VERSION := 0.1.0
-RESOURCES_DIRECTORY := /tmp/mfw-resources
-RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz
-RESOURCES_FILE := $(RESOURCES_DIRECTORY)/$(RESOURCES_FILE_NAME)
-RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE_NAME)
-RESOURCES_BUCKET := s3://download.untangle.com/mfw/
+extjs-install: extjs-stage dir
+	cp -r staging/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
+
+highstock-install: highstock-stage dir
+	cp -r staging/code $(STATIC_DIR)/res/lib/highstock
 
 install: \
 	dir \
@@ -136,7 +135,7 @@ $(REPORTS_DIR)/index.html: app/reports/index.html
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR) $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
+	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR)/res/lib $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
 
 clean:
 	rm -fr $(DESTDIR)
