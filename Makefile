@@ -1,19 +1,19 @@
 #! /usr/bin/make -f
 
 DESTDIR ?= /tmp/mfw
+
 # mfw Admin app
-ADMIN_DIR ?= $(DESTDIR)/admin
+ADMIN_DIR := $(DESTDIR)/admin
 # mfw resources dir which contains JS libs and images
-STATIC_DIR ?= $(DESTDIR)/static
+STATIC_DIR := $(DESTDIR)/static
 # mfw Setup app
-SETUP_DIR ?= $(DESTDIR)/setup
+SETUP_DIR := $(DESTDIR)/setup
 # mfw stand-alone Settings app
-SETTINGS_DIR ?= $(DESTDIR)/settings
+SETTINGS_DIR := $(DESTDIR)/settings
 # mfw stand-alone Reports app
-REPORTS_DIR ?= $(DESTDIR)/reports
+REPORTS_DIR := $(DESTDIR)/reports
 
-
-
+# SASS
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
@@ -41,7 +41,7 @@ APP_SETTINGS_ALL := app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
-# RESOURCES
+# External resources
 EXTJS_VERSION := 6.6.0
 EXTJS_FILES_LIST := extjs-list.txt
 
@@ -60,34 +60,12 @@ RESOURCES_BASE_URL := http://download.untangle.com/mfw
 EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
 
+STAGING_DIR := staging
+
 LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
-extjs-download: $(EXTJS_FILE)
-$(EXTJS_FILE):
-	wget -O $@ $(EXTJS_URL)
-
-highstock-download: $(HIGHSTOCK_FILE)
-$(HIGHSTOCK_FILE):
-	wget -O $@ $(HIGHSTOCK_URL)
-
-downloads: extjs-download highstock-download
-
-extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
-	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),staging)
-
-highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
-	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),staging)
-
-extjs-install: extjs-stage dir
-	cp -r staging/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
-
-highstock-install: highstock-stage dir
-	cp -r staging/code $(STATIC_DIR)/res/lib/highstock
-
-icons-install: icons dir
-	cp -r icons/* $(STATIC_DIR)/res/
-
+# main targets
 install: \
 	dir \
 	css \
@@ -101,8 +79,30 @@ install: \
 	highstock-install \
 	icons-install
 
-resources: dir
-	wget -O - $(RESOURCES_URL) | tar -C $(STATIC_DIR) -xJf -
+extjs-download: $(EXTJS_FILE)
+$(EXTJS_FILE):
+	wget -O $@ $(EXTJS_URL)
+
+highstock-download: $(HIGHSTOCK_FILE)
+$(HIGHSTOCK_FILE):
+	wget -O $@ $(HIGHSTOCK_URL)
+
+downloads: extjs-download highstock-download
+
+extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
+	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),$(STAGING_DIR))
+
+highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
+	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
+
+extjs-install: extjs-stage dir
+	cp -r $(STAGING_DIR)/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
+
+highstock-install: highstock-stage dir
+	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
+
+icons-install: icons dir
+	cp -r icons/* $(STATIC_DIR)/res/
 
 css: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
@@ -143,20 +143,9 @@ $(DESTDIR):
 	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR)/res/lib $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
 
 clean:
-	rm -fr $(DESTDIR)
+	rm -fr $(DESTDIR) $(STAGING_DIR)
 
-create-resources-tarball:
-	@echo "Checking for $(RESOURCES_DIRECTORY)/res directory"
-	@if [ ! -d $(RESOURCES_DIRECTORY)/res ] ; then echo "... failed" ; exit 1 ; fi
-	@echo "Creating tarball from it"
-	tar -C $(RESOURCES_DIRECTORY) -caf $(RESOURCES_FILE) res
-	@echo "Your resources file is ready at $(RESOURCES_FILE)"
-
-upload-resources-tarball:
-	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
-
-.PHONY: \
-	dir \
+.PHONY: dir \
 	css \
 	js-admin \
 	html-admin \
@@ -165,6 +154,10 @@ upload-resources-tarball:
 	html-reports \
 	html-setup \
 	resources \
-	extjs \
-	highstock \
-	downloads
+	extjs-download \
+	highstock-download \
+	downloads \
+	extjs-stage \
+	highstock-stage \
+	extjs-install \
+	highstock-install
