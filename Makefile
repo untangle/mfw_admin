@@ -60,7 +60,8 @@ RESOURCES_BASE_URL := http://download.untangle.com/mfw
 EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
 
-FILES_SUBSET_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
+LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
+UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
 extjs: $(EXTJS_FILE)
 $(EXTJS_FILE):
@@ -73,10 +74,10 @@ $(HIGHSTOCK_FILE):
 downloads: extjs highstock
 
 extjs-stage: extjs extjs-list.txt
-	@unzip -o $(EXTJS_FILE) $(call FILES_SUBSET_FUNCTION,$(EXTJS_FILES_LIST)) -d staging
+	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),staging)
 
 highstock-stage: $(HIGHSTOCK_FILES_LIST) highstock
-	@unzip -o $(HIGHSTOCK_FILE) $(call FILES_SUBSET_FUNCTION,$(HIGHSTOCK_FILES_LIST)) -d staging
+	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),staging)
 
 RESOURCES_VERSION := 0.1.0
 RESOURCES_DIRECTORY := /tmp/mfw-resources
