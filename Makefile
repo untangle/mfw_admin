@@ -42,6 +42,34 @@ APP_SETTINGS_ALL := app/AppBase.js \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
 # RESOURCES
+EXTJS_VERSION := 6.6.0
+EXTJS_FILES_LIST := extjs-list.txt
+
+HIGHSTOCK_VERSION := 6.1.4
+HIGHSTOCK_FILES_LIST := highstock-list.txt
+
+EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
+HIGHSTOCK_ARCHIVE := Highstock-$(HIGHSTOCK_VERSION).zip
+
+DOWNLOADS_DIR := downloads
+EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
+HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
+
+RESOURCES_BASE_URL := http://download.untangle.com/mfw
+
+EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
+HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
+
+extjs: $(EXTJS_FILE)
+$(EXTJS_FILE):
+	wget -O $@ $(EXTJS_URL)
+
+highstock: $(HIGHSTOCK_FILE)
+$(HIGHSTOCK_FILE):
+	wget -O $@ $(HIGHSTOCK_URL)
+
+downloads: extjs highstock
+
 RESOURCES_VERSION := 0.1.0
 RESOURCES_DIRECTORY := /tmp/mfw-resources
 RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz
@@ -123,6 +151,7 @@ upload-resources-tarball:
 	html-settings \
 	html-reports \
 	html-setup \
-	resources
-
-
+	resources \
+	extjs \
+	highstock \
+	downloads
