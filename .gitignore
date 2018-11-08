@@ -1,7 +1,6 @@
 node_modules/
 package-lock.json
 .vscode
-res
 dist
 downloads/*zip
 downloads/*xz

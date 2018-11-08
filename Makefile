@@ -85,6 +85,9 @@ extjs-install: extjs-stage dir
 highstock-install: highstock-stage dir
 	cp -r staging/code $(STATIC_DIR)/res/lib/highstock
 
+icons-install: icons dir
+	cp -r icons/* $(STATIC_DIR)/res/
+
 install: \
 	dir \
 	css \
