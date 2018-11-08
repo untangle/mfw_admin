@@ -70,6 +70,12 @@ $(HIGHSTOCK_FILE):
 
 downloads: extjs highstock
 
+extjs-stage: extjs extjs-list.txt
+	@unzip -o $(EXTJS_FILE) $(shell grep -vE '^#' $(EXTJS_FILES_LIST) | while read line ; do echo -n "*/$$line " ; done) -d staging
+
+highstock-stage: $(HIGHSTOCK_FILES_LIST) highstock
+	@unzip -o $(HIGHSTOCK_FILE) $(shell grep -vE '^#' $(HIGHSTOCK_FILES_LIST) | while read line ; do echo -n "*/$$line " ; done) -d staging
+
 RESOURCES_VERSION := 0.1.0
 RESOURCES_DIRECTORY := /tmp/mfw-resources
 RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz

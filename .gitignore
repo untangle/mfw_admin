@@ -5,3 +5,4 @@ res
 dist
 downloads/*zip
 downloads/*xz
+staging/
