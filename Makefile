@@ -97,7 +97,9 @@ install: \
 	html-settings \
 	html-reports \
 	html-setup \
-	resources
+	extjs-install \
+	highstock-install \
+	icons-install
 
 resources: dir
 	wget -O - $(RESOURCES_URL) | tar -C $(STATIC_DIR) -xJf -
