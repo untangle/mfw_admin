@@ -63,15 +63,15 @@ HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
 LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
-extjs: $(EXTJS_FILE)
+extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
 	wget -O $@ $(EXTJS_URL)
 
-highstock: $(HIGHSTOCK_FILE)
+highstock-download: $(HIGHSTOCK_FILE)
 $(HIGHSTOCK_FILE):
 	wget -O $@ $(HIGHSTOCK_URL)
 
-downloads: extjs highstock
+downloads: extjs-download highstock-download
 
 extjs-stage: extjs extjs-list.txt
 	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),staging)
