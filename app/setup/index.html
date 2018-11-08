@@ -1,23 +1,68 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>Untangle - MicroFW Settings</title>
+        <title>Untangle - Setup</title>
 
         <link rel="shortcut icon" href="/static/res/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/static/res/favicon.ico" type="image/x-icon">
+
+        <script>
+            String.prototype.t = function() {
+                return this.valueOf();
+            };
+        </script>
 
         <!-- Ext JS 6.6.0 -->
         <script src="/static/res/lib/ext-6.6.0/ext-modern-all-debug.js"></script>
         <script src="/static/res/lib/ext-6.6.0/theme-material/theme-material.js"></script>
         <link href="/static/res/lib/ext-6.6.0/theme-material/resources/theme-material-all.css" rel="stylesheet" type="text/css" />
 
+        <script src="mfw-setup-all.js"></script>
+
+        <script>
+            var translations, debug = false;
+            Ext.onReady(function () {
+                Ext.application({
+                    extend: 'Mfw.App',
+                    namespace: 'Mfw'
+                });
+            });
+        </script>
+
+        <style>
+            :root {
+                --highlight-color: #333;
+                --base-color: #519839;
+                --base-dark-color: #64b549;
+            }
+            h1 {
+                font-weight: 100; font-size: 24px; color: #333;
+            }
+            p {
+                font-size: 16px; color: #777;
+            }
+            i {
+                font-style: normal;
+            }
+            hr {
+                border: 0;
+                height: 1px;
+                background: #EEE;
+                background-image: linear-gradient(to right, #EEE, green, #EEE);
+            }
+            .x-button .x-text-el { text-transform: none; font-weight: 500; }
+            .x-button .x-icon-el:before { position: relative; top: -1px; }
+            .x-box-label-el { font-size: 14px !important; }
+        </style>
+
     </head>
 
     <body>
 
-        Setup Placeholder2
+
 
     </body>
 </html>

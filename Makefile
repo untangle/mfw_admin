@@ -19,6 +19,7 @@ SASS := $(wildcard sass/*.scss)
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp *.js)
+APP_SETUP_SRC := $(addprefix app/setup/src/, step view *.js)
 APP_COMMON_SRC := $(addprefix common/, conditions)
 
 # PACKAGES SOURCES
@@ -41,6 +42,9 @@ APP_SETTINGS_ALL := app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
+APP_SETUP_ALL := $(shell find $(APP_SETUP_SRC) -name '*.js')
+
+
 # RESOURCES
 RESOURCES_VERSION := 0.1.0
 RESOURCES_DIRECTORY := /tmp/mfw-resources
@@ -57,6 +61,7 @@ install: \
 	js-settings \
 	html-settings \
 	html-reports \
+	js-setup \
 	html-setup \
 	resources
 
@@ -86,6 +91,9 @@ html-settings: $(SETTINGS_DIR)/index.html
 $(SETTINGS_DIR)/index.html: app/settings/index.html
 	cp $^ $@
 
+js-setup: $(SETUP_DIR)/mfw-setup-all.js
+$(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
+	cat $^ > $@
 
 html-setup: $(SETUP_DIR)/index.html
 $(SETUP_DIR)/index.html: app/setup/index.html
@@ -122,6 +130,7 @@ upload-resources-tarball:
 	js-settings \
 	html-settings \
 	html-reports \
+	js-setup \
 	html-setup \
 	resources
 
