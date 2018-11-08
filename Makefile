@@ -41,29 +41,30 @@ APP_SETTINGS_ALL := app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
-# External resources
-EXTJS_VERSION := 6.6.0
-EXTJS_FILES_LIST := extjs-list.txt
+## External resources (ExtJS & Highstock)
 
-HIGHSTOCK_VERSION := 6.1.4
-HIGHSTOCK_FILES_LIST := highstock-list.txt
-
-EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
-HIGHSTOCK_ARCHIVE := Highstock-$(HIGHSTOCK_VERSION).zip
-
+# common variables
 DOWNLOADS_DIR := downloads
-EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
-HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
-
+STAGING_DIR := staging
 RESOURCES_BASE_URL := http://download.untangle.com/mfw
 
-EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
-HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
-
-STAGING_DIR := staging
-
+# common functions
 LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
+
+# ExtJS
+EXTJS_VERSION := 6.6.0
+EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
+EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
+EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
+EXTJS_FILES_LIST := $(DOWNLOADS_DIR)/extjs-list.txt
+
+# Highstock
+HIGHSTOCK_VERSION := 6.1.4
+HIGHSTOCK_ARCHIVE := Highstock-$(HIGHSTOCK_VERSION).zip
+HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
+HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
+HIGHSTOCK_FILES_LIST := $(DOWNLOADS_DIR)/highstock-list.txt
 
 # main targets
 install: \
