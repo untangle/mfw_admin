@@ -19,7 +19,7 @@ SASS := $(wildcard sass/*.scss)
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp *.js)
-APP_SETUP_SRC := $(addprefix app/setup/src/, step view *.js)
+APP_SETUP_SRC := $(addprefix app/setup/src/, model store step view *.js)
 APP_COMMON_SRC := $(addprefix common/, conditions)
 
 # PACKAGES SOURCES

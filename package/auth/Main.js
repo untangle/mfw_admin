@@ -85,6 +85,8 @@ Ext.define('Mfw.auth.Main', {
 
             if (!form.validate()) { return; }
 
+            console.log(form.getValues());
+
             btn.setDisabled(true);
             Ext.Ajax.request({
                 url: '/account/login',
@@ -96,13 +98,14 @@ Ext.define('Mfw.auth.Main', {
                     // } else {
                     //     Mfw.app.redirectTo(redirectRoute);
                     // }
-                    Mfw.app.redirectTo(redirectRoute);
-                    document.location.reload();
+                    // Mfw.app.redirectTo(redirectRoute);
+                    // document.location.reload();
                     // btn.setDisabled(false);
                 },
                 failure: function (response) {
-                    var obj = Ext.decode(response.responseText);
-                    form.down('#error').setHtml(obj.error);
+                    console.log(response);
+                    // var obj = Ext.decode(response.responseText);
+                    // form.down('#error').setHtml(obj.error);
                     btn.setDisabled(false);
                 }
             });

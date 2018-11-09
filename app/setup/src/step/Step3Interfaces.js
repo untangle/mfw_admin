@@ -4,13 +4,33 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     viewModel: {
     	formulas: {
-    		info: function (get) {
-    			var intf = get('interfaces.selection');
+    		infoInterface: function (get) {
+    			var intf = get('interfaces.selection'), str = [], v4 = '';
     			if (!intf) {
     				return '<i class="x-fa fa-info-circle" style="color: #777;"></i>&nbsp; Select an Interface to see more information!'
     			}
-    			return intf.get('duplex') + ' | ' + intf.get('mbit') + ' | ' +  intf.get('vendor');
-    		}
+
+                str.push(intf.get('type'));
+                str.push(intf.get('configType'));
+
+                v4 = intf.get('v4ConfigType');
+                if (intf.get('v4StaticAddress')) {
+                    v4 += ', ' + intf.get('v4StaticAddress') + '/' + intf.get('v4StaticPrefix')
+                }
+                str.push(v4);
+    			return str.join(' &nbsp;|&nbsp; ');
+    		},
+            infoDevice: function (get) {
+                var intf = get('interfaces.selection'), device;
+                if (!intf) {
+                    return;
+                }
+                device = Mfw.app.getStore('devices').findRecord('name', intf.get('device'));
+                if (!device) {
+                    return;
+                }
+                return 'duplex: ' + device.get('duplex') + ' | mtu: ' + (device.get('mtu') || '-');
+            }
     	}
     },
 
@@ -38,129 +58,90 @@ Ext.define('Mfw.setup.step.Interfaces', {
 		    }]
 	    }]
     }, {
-        xtype: 'panel',
+        xtype: 'grid',
+        reference: 'interfaces',
         flex: 1,
-        layout: 'hbox',
-        items: [{
-            xtype: 'grid',
-            reference: 'interfaces',
+        store: 'interfaces',
+        columns: [
+        // {
+        //     dataIndex: 'status',
+        //     width: 40,
+        //     cell: {
+        //         encodeHtml: false,
+        //     },
+        //     renderer: function (v) {
+        //         if (v === 'CONNECTED') {
+        //             return '<i class="x-fa fa-circle" style="color: green;"></i>'
+        //         }
+        //         if (v === 'DISCONNECTED') {
+        //             return '<i class="x-fa fa-circle" style="color: #999;"></i>'
+        //         }
+        //         return '<i class="x-fa fa-exclamation-circle" style="color: orange;"></i>'
+        //     }
+        // },
+        {
+            text: 'Name',
+            dataIndex: 'name',
             flex: 1,
-            store: {
-                // fields: ['name', 'device', 'mac'],
-                data: [{
-                    name: 'External Network',
-                    device: 'eth0',
-                    mac: '08:00:27:E2:54:B0',
-                    status: 'CONNECTED',
-                    duplex: 'FULL-DUPLEX',
-                    mbit: '100Mb',
-                    vendor: 'Broadcom Corporation NetXtreme BCM5761e Gigabit Ethernet PCIe (rev 10)'
-                }, {
-                    name: 'Intrnal',
-                    device: 'eth1',
-                    mac: '10:00:27:E2:54:B0',
-                    status: 'DISCONNECTED',
-                    duplex: 'HALF-DUPLEX',
-                    mbit: '100Mb',
-                    vendor: 'Intel Corporation Ultimate N WiFi Link 5300'
-                }, {
-                    name: 'Interface 3',
-                    device: 'eth2',
-                    mac: '10:00:27:99:54:B0',
-                    status: 'MISSING',
-                    duplex: 'unknown',
-                    mbit: '1000Mb',
-                    vendor: 'Intel Corporation Ultimate N WiFi Link 5300'
-                }]
+            cell: {
+                style: 'font-weight: bold'
             },
-            columns: [{
-                dataIndex: 'status',
-                width: 40,
-                cell: {
-                    encodeHtml: false,
-                },
-                renderer: function (v) {
-                    if (v === 'CONNECTED') {
-                        return '<i class="x-fa fa-circle" style="color: green;"></i>'
-                    }
-                    if (v === 'DISCONNECTED') {
-                        return '<i class="x-fa fa-circle" style="color: #999;"></i>'
-                    }
-                    return '<i class="x-fa fa-exclamation-circle" style="color: orange;"></i>'
-                }
-            }, {
-                text: 'Name',
-                dataIndex: 'name',
-                cell: {
-                    style: 'font-weight: bold'
-                },
-                flex: 1
-            }, {
-                text: 'MAC',
-                dataIndex: 'mac',
-                width: 150
-            }, {
-                text: 'Device',
-                align: 'right',
-                dataIndex: 'device'
-            }, {
-                width: 120,
-                align: 'center',
-                cell: {
-                    encodeHtml: false,
-                    style: 'background: #EEE;'
-                },
-                renderer: function() {
-                    return '<i class="x-fa fa-long-arrow-left"></i> map to <i class="x-fa fa-long-arrow-right"></i>'
-                }
-            }]
+            renderer: function (value, record) {
+                return value + (record.get('wan') ? ' [WAN]' : '');
+            }
         }, {
-            xtype: 'grid',
-            // docked: 'right',
-            width: 180,
-            // columnLines: true,
-            store: {
-                data: [
-                    { name: 'eth0' },
-                    { name: 'eth1' },
-                    { name: 'eth2' }
-                ]
+            text: 'MAC',
+            dataIndex: 'mac',
+            width: 150
+        }, {
+            text: 'Device',
+            align: 'right',
+            width: 100,
+            dataIndex: 'device'
+        }, {
+            width: 120,
+            align: 'center',
+            cell: {
+                encodeHtml: false,
+                style: 'background: #EEE;'
             },
-            columns: [{
-                text: 'Devices',
-                dataIndex: 'name',
-                flex: 1,
-                cell: {
-                    style: 'font-weight: bold;'
-                }
-            }, {
-                // align: 'center',
-                width: 80,
-                cell: {
-                    tools: {
-                        up: {
-                            iconCls: 'x-fa fa-arrow-circle-up',
-                            tooltip: 'Move Up',
-                            handler: function (grid, info) {
-                                var store = grid.getStore(), rec = info.record;
-                                var oldIdx = store.indexOf(rec);
-                                store.removeAt(oldIdx);
-                                store.insert(oldIdx - 1 , rec);
-                            }
-                        },
-                        down: {
-                            iconCls: 'x-fa fa-arrow-circle-down',
-                            tooltip: 'Move Down',
-                            handler: function (grid, info) {
-                                var store = grid.getStore(), rec = info.record;
-                                var oldIdx = store.indexOf(rec);
-                                store.removeAt(oldIdx);
-                                store.insert(oldIdx + 1 , rec);
-                            }
+            renderer: function() {
+                return '<i class="x-fa fa-long-arrow-left"></i> map to <i class="x-fa fa-long-arrow-right"></i>'
+            }
+        }, {
+            text: 'Devices',
+            dataIndex: 'device',
+            width: 100,
+            cell: {
+                style: 'font-weight: bold;'
+            }
+        }, {
+            // align: 'center',
+            width: 80,
+            cell: {
+                tools: {
+                    up: {
+                        iconCls: 'x-fa fa-arrow-circle-up',
+                        tooltip: 'Move Up',
+                        handler: function (grid, info) {
+                            var store = grid.getStore(), rec = info.record;
+                            var oldIdx = store.indexOf(rec);
+                            store.removeAt(oldIdx);
+                            store.insert(oldIdx - 1 , rec);
+                        }
+                    },
+                    down: {
+                        iconCls: 'x-fa fa-arrow-circle-down',
+                        tooltip: 'Move Down',
+                        handler: function (grid, info) {
+                            var store = grid.getStore(), rec = info.record;
+                            var oldIdx = store.indexOf(rec);
+                            store.removeAt(oldIdx);
+                            store.insert(oldIdx + 1 , rec);
                         }
                     }
                 }
-            }]
+            }
         }]
     }, {
         xtype: 'toolbar',
@@ -174,9 +155,35 @@ Ext.define('Mfw.setup.step.Interfaces', {
         items: [{
         	xtype: 'component',
 	        bind: {
-	        	html: '{info}'
+	        	html: '{infoInterface}'
 	        }
+        }, '->', {
+            xtype: 'component',
+            bind: {
+                html: '{infoDevice}'
+            }
         }]
-    }]
+    }],
+    listeners: {
+        activate: 'onActivate'
+    },
+
+    controller: {
+        init: function () {
+            console.log('init');
+        },
+
+        onActivate: function (view) {
+            // console.log();
+            // var store = view.lookup('interfaces').getStore();
+            // store.load();
+
+            Mfw.app.getStore('devices').load();
+
+            // console.log(store.getData());
+            // view.lookup('interfaces').getStore().load();
+            // console.log('activate');
+        }
+    }
 
 });

@@ -34,9 +34,11 @@
 
         <style>
             :root {
-                --highlight-color: #333;
                 --base-color: #519839;
                 --base-dark-color: #64b549;
+                --base-focused-color: #568047;
+                --base-highlight-color: #8ce850;
+                --highlight-color: #333;
             }
             h1 {
                 font-weight: 100; font-size: 24px; color: #333;
@@ -55,7 +57,10 @@
             }
             .x-button .x-text-el { text-transform: none; font-weight: 500; }
             .x-button .x-icon-el:before { position: relative; top: -1px; }
-            .x-box-label-el { font-size: 14px !important; }
+            /*.x-box-label-el, .x-label-el { font-size: 14px !important; }*/
+            .x-box-label-el, .x-label-el { font-weight: 600 !important; color: var(--base-color) !important;}
+            .x-indicator span.x-indicator-active { background-color: var(--base-color); }
+            /* .x-tabbar { background: transparent !important; } */
         </style>
 
     </head>

@@ -21,7 +21,7 @@ SASS := $(wildcard sass/*.scss)
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp *.js)
-APP_SETUP_SRC := $(addprefix app/setup/src/, step view *.js)
+APP_SETUP_SRC := $(addprefix app/setup/src/, model store step view *.js)
 APP_COMMON_SRC := $(addprefix common/, conditions)
 
 # PACKAGES SOURCES
@@ -151,9 +151,9 @@ upload-resources-tarball:
 
 # used for local development
 # ssh-keygen -b 4096
-# ssh root@192.168.101.143 "tee -a /etc/dropbear/authorized_keys" < ~/.ssh/id_rsa.pub
+# ssh root@192.168.101.212 "tee -a /etc/dropbear/authorized_keys" < ~/.ssh/id_rsa.pub
 
-LOCAL_DEPLOY_HOST := 192.168.101.143
+LOCAL_DEPLOY_HOST := 192.168.101.212
 copy:
 	@echo "****************************************"
 	@echo $(TIME) $(GREEN)"Deploying on local OpenWrt"$(NC)
