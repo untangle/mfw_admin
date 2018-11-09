@@ -98,9 +98,9 @@ Ext.define('Mfw.auth.Main', {
                     // } else {
                     //     Mfw.app.redirectTo(redirectRoute);
                     // }
-                    // Mfw.app.redirectTo(redirectRoute);
-                    // document.location.reload();
-                    // btn.setDisabled(false);
+                    Mfw.app.redirectTo(redirectRoute);
+                    document.location.reload();
+                    btn.setDisabled(false);
                 },
                 failure: function (response) {
                     console.log(response);
