@@ -1,0 +1,9 @@
+# leading code/ is implied here (see corresponding Makefile macro)
+css/highcharts.css
+css/themes/dark-unica.css
+css/themes/grid-light.css
+css/themes/sand-signika.css
+highcharts-3d.js
+highcharts-more.js
+highstock.js
+modules/exporting.js

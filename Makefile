@@ -1,19 +1,19 @@
 #! /usr/bin/make -f
 
 DESTDIR ?= /tmp/mfw
+
 # mfw Admin app
-ADMIN_DIR ?= $(DESTDIR)/admin
+ADMIN_DIR := $(DESTDIR)/admin
 # mfw resources dir which contains JS libs and images
-STATIC_DIR ?= $(DESTDIR)/static
+STATIC_DIR := $(DESTDIR)/static
 # mfw Setup app
-SETUP_DIR ?= $(DESTDIR)/setup
+SETUP_DIR := $(DESTDIR)/setup
 # mfw stand-alone Settings app
-SETTINGS_DIR ?= $(DESTDIR)/settings
+SETTINGS_DIR := $(DESTDIR)/settings
 # mfw stand-alone Reports app
-REPORTS_DIR ?= $(DESTDIR)/reports
+REPORTS_DIR := $(DESTDIR)/reports
 
-
-
+# SASS
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
@@ -44,15 +44,32 @@ APP_SETTINGS_ALL := app/AppBase.js \
 
 APP_SETUP_ALL := $(shell find $(APP_SETUP_SRC) -name '*.js')
 
+## External resources (ExtJS & Highstock)
 
-# RESOURCES
-RESOURCES_VERSION := 0.1.0
-RESOURCES_DIRECTORY := /tmp/mfw-resources
-RESOURCES_FILE_NAME := mfw-admin-resources-$(RESOURCES_VERSION).tar.xz
-RESOURCES_FILE := $(RESOURCES_DIRECTORY)/$(RESOURCES_FILE_NAME)
-RESOURCES_URL := http://download.untangle.com/mfw/$(RESOURCES_FILE_NAME)
-RESOURCES_BUCKET := s3://download.untangle.com/mfw/
+# common variables
+DOWNLOADS_DIR := downloads
+STAGING_DIR := staging
+RESOURCES_BASE_URL := http://download.untangle.com/mfw
 
+# common functions
+LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n " */$$line" ; done)
+UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
+
+# ExtJS
+EXTJS_VERSION := 6.6.0
+EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
+EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
+EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
+EXTJS_FILES_LIST := $(DOWNLOADS_DIR)/extjs-list.txt
+
+# Highstock
+HIGHSTOCK_VERSION := 6.1.4
+HIGHSTOCK_ARCHIVE := Highstock-$(HIGHSTOCK_VERSION).zip
+HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
+HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
+HIGHSTOCK_FILES_LIST := $(DOWNLOADS_DIR)/highstock-list.txt
+
+# main targets
 install: \
 	dir \
 	css \
@@ -63,10 +80,34 @@ install: \
 	html-reports \
 	js-setup \
 	html-setup \
-	resources
+	extjs-install \
+	highstock-install \
+	icons-install
 
-resources: dir
-	wget -O - $(RESOURCES_URL) | tar -C $(STATIC_DIR) -xJf -
+extjs-download: $(EXTJS_FILE)
+$(EXTJS_FILE):
+	wget -O $@ $(EXTJS_URL)
+
+highstock-download: $(HIGHSTOCK_FILE)
+$(HIGHSTOCK_FILE):
+	wget -O $@ $(HIGHSTOCK_URL)
+
+downloads: extjs-download highstock-download
+
+extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
+	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),$(STAGING_DIR))
+
+highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
+	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
+
+extjs-install: extjs-stage dir
+	cp -r $(STAGING_DIR)/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
+
+highstock-install: highstock-stage dir
+	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
+
+icons-install: icons dir
+	cp -r icons/* $(STATIC_DIR)/res/
 
 css: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
@@ -107,23 +148,12 @@ $(REPORTS_DIR)/index.html: app/reports/index.html
 
 dir: $(DESTDIR)
 $(DESTDIR):
-	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR) $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
+	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR)/res/lib $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
 
 clean:
-	rm -fr $(DESTDIR)
+	rm -fr $(DESTDIR) $(STAGING_DIR)
 
-create-resources-tarball:
-	@echo "Checking for $(RESOURCES_DIRECTORY)/res directory"
-	@if [ ! -d $(RESOURCES_DIRECTORY)/res ] ; then echo "... failed" ; exit 1 ; fi
-	@echo "Creating tarball from it"
-	tar -C $(RESOURCES_DIRECTORY) -caf $(RESOURCES_FILE) res
-	@echo "Your resources file is ready at $(RESOURCES_FILE)"
-
-upload-resources-tarball:
-	s3cmd put $(RESOURCES_FILE) $(RESOURCES_BUCKET)
-
-.PHONY: \
-	dir \
+.PHONY: dir \
 	css \
 	js-admin \
 	html-admin \
@@ -132,6 +162,11 @@ upload-resources-tarball:
 	html-reports \
 	js-setup \
 	html-setup \
-	resources
-
-
+	resources \
+	extjs-download \
+	highstock-download \
+	downloads \
+	extjs-stage \
+	highstock-stage \
+	extjs-install \
+	highstock-install
