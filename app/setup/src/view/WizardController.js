@@ -14,7 +14,6 @@ Ext.define('Mfw.setup.WizardController', {
         // })
 
         bbar.insert(2, indicator);
-        // wizard.setActiveItem(5);
 
         // get network settings
         this.setSteps();
@@ -49,6 +48,7 @@ Ext.define('Mfw.setup.WizardController', {
 
             view.add(steps);
             view.unmask();
+            view.setActiveItem(3);
         })
 
         interfaces.load();

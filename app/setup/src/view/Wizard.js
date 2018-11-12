@@ -45,6 +45,7 @@ Ext.define('Mfw.setup.Wizard', {
     }],
     bbar: {
         reference: 'bbar',
+        zIndex: 998,
         padding: 16,
         defaults: {
             width: 100

@@ -8,6 +8,21 @@ GREEN := "\033[1;32m"
 NC := "\033[0m" # No Color
 
 
+# main targets
+install: \
+	dir \
+	# css \
+	js-admin \
+	html-admin \
+	js-settings \
+	html-settings \
+	html-reports \
+	js-setup \
+	html-setup \
+	# extjs-install \
+	# highstock-install \
+	# icons-install
+
 #  This target requires sassc package!!!
 css: $(ADMIN_DIR)/mfw-all.css $(SETTINGS_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css $(SETTINGS_DIR)/mfw-all.css: $(SASS)

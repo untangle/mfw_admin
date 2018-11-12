@@ -11,12 +11,21 @@ Ext.define('Mfw.setup.step.Interface', {
     //     layout: 'stretch'
     // },
 
+    // viewModel: {
+    //     formulas: {
+    //         isStatic: function (get) {
+    //             return get('intf.v4ConfigType')
+    //         }
+    //     }
+    // }
+
     items: [{
         xtype: 'toolbar',
-        width: 250,
+        width: '250',
         docked: 'left',
-        shadow: false,
+        // shadow: false,
         style: 'background: #f5f5f5',
+        zIndex: 888,
         layout: {
             type: 'vbox',
             align: 'stretch'
@@ -25,7 +34,7 @@ Ext.define('Mfw.setup.step.Interface', {
             xtype: 'component',
             // padding: '0',
             bind: {
-                html: '<h1 style="line-height: 1.2;">Interface #{intf.interfaceId}<br/> <strong>{intf.name}</strong> ({intf.device})</h1>'
+                html: '<h1 style="line-height: 1;"><strong>{intf.name}</strong> <br/><span style="font-size: 14px;">Interface #{intf.interfaceId} ({intf.device})</span></h1>'
             }
         }, {
             xtype: 'textfield',
@@ -37,7 +46,8 @@ Ext.define('Mfw.setup.step.Interface', {
         }, {
             xtype: 'selectfield',
             name: 'configType',
-            label: 'Type',
+            label: 'Configuration Type',
+            required: true,
             bind: '{intf.configType}',
             options: [
                 { text: 'Addressed'.t(), value: 'ADDRESSED' },
@@ -45,16 +55,40 @@ Ext.define('Mfw.setup.step.Interface', {
                 { text: 'Disabled'.t(),  value: 'DISABLED' }
             ]
         }, {
-            xtype: 'togglefield',
-            name: 'wan',
-            // margin: '0 16',
-            boxLabel: 'Is WAN'.t(),
-            // labelAlign: 'left',
-            required: true,
-            hidden: true,
+            xtype: 'checkbox',
+            boxLabel: 'is WAN interface'.t(),
+            bodyAlign: 'start',
+            // publishes: 'value',
             bind: {
-                value: '{intf.wan}',
+                checked: '{intf.wan}',
                 hidden: '{intf.configType !== "ADDRESSED"}'
+            }
+
+            // xtype: 'togglefield',
+            // name: 'wan',
+            // // margin: '0 16',
+            // boxLabel: 'Is WAN'.t(),
+            // // labelAlign: 'left',
+            // required: true,
+            // hidden: true,
+            // bind: {
+            //     value: '{intf.wan}',
+            //     hidden: '{intf.configType !== "ADDRESSED"}'
+            // }
+        }, {
+            xtype: 'component',
+            html: '<hr/>'
+        }, {
+            xtype: 'displayfield',
+            label: 'Type',
+            bind: {
+                value: '{intf.type}'
+            }
+        }, {
+            xtype: 'displayfield',
+            label: 'Mac',
+            bind: {
+                value: '{intf.macaddr}'
             }
         }]
     }, {
@@ -71,9 +105,9 @@ Ext.define('Mfw.setup.step.Interface', {
                 direction: 'horizontal'
             }
         },
-        defaults: {
-            bodyPadding: 24
-        },
+        // defaults: {
+        //     bodyPadding: 16
+        // },
         items: [{
                 title: 'IPv4',
                 xtype: 'interface-ipv4'

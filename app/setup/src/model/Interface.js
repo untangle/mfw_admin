@@ -7,20 +7,18 @@ Ext.define('Mfw.model.Interface', {
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string' },
         { name: 'wan',         type: 'boolean' },
-        { name: 'type',        type: 'string' },
-        { name: 'configType',  type: 'string' },
+        { name: 'hidden',      type: 'boolean', defaultValue: false },
+        { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
+        { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
 
         { name: 'natEgress',  type: 'boolean' },
         { name: 'natIngress', type: 'boolean' },
 
         // IPv4
-        { name: 'v4ConfigType',    type: 'string' }, // ["STATIC","DHCP","DISABLED"]
+        { name: 'v4ConfigType',    type: 'string' }, // ["STATIC","DHCP","PPPOE","DISABLED"]
         { name: 'v4StaticAddress', type: 'string' },
         { name: 'v4StaticPrefix',  type: 'integer' }, // 1 - 32
-        // { name: 'v4StaticGateway', type: 'string', allowBlank: true, validators: [{ type: 'fields', conditions: { wan: false }}, 'ipaddress'] },
-
         { name: 'v4StaticGateway', type: 'string' },
-
         { name: 'v4StaticDNS1',    type: 'string' },
         { name: 'v4StaticDNS2',    type: 'string' },
 
@@ -57,6 +55,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'routerAdvertisements', type: 'boolean' },
         { name: 'downloadKbps',         type: 'integer' },
         { name: 'uploadKbps',           type: 'integer' },
+        { name: 'macaddr',              type: 'string' },
 
         // DHCP serving
         { name: 'dhcpEnabled',         type: 'boolean' },
