@@ -37,6 +37,9 @@ Ext.define('Mfw.setup.step.Interface', {
                 html: '<h1 style="line-height: 1;"><strong>{intf.name}</strong> <br/><span style="font-size: 14px;">Interface #{intf.interfaceId} ({intf.device})</span></h1>'
             }
         }, {
+            xtype: 'component',
+            html: '<hr/>'
+        }, {
             xtype: 'textfield',
             name: 'name',
             label: 'Name',
@@ -55,13 +58,27 @@ Ext.define('Mfw.setup.step.Interface', {
                 { text: 'Disabled'.t(),  value: 'DISABLED' }
             ]
         }, {
-            xtype: 'checkbox',
+            xtype: 'checkboxfield',
+            name: 'wan',
             boxLabel: 'is WAN interface'.t(),
             bodyAlign: 'start',
-            // publishes: 'value',
+            // checked: true,
             bind: {
                 checked: '{intf.wan}',
+                // checked: '{intf.wan}',
                 hidden: '{intf.configType !== "ADDRESSED"}'
+            },
+            listeners: {
+                initialize: function (ck) {
+                    console.log('ck init');
+                    ck.setValue(false);
+                    console.log(ck.up('formpanel').getValues());
+                },
+                uncheck: function (ck) {
+                    console.log('uncheck')
+                    ck.up('formpanel').down('[name=v4ConfigType]').setValue('STATIC')
+                    // console.log(val);
+                }
             }
 
             // xtype: 'togglefield',
@@ -75,9 +92,6 @@ Ext.define('Mfw.setup.step.Interface', {
             //     value: '{intf.wan}',
             //     hidden: '{intf.configType !== "ADDRESSED"}'
             // }
-        }, {
-            xtype: 'component',
-            html: '<hr/>'
         }, {
             xtype: 'displayfield',
             label: 'Type',
@@ -122,7 +136,29 @@ Ext.define('Mfw.setup.step.Interface', {
                 html: 'vrrp'
             }
         ]
-    }]
+    }],
+
+    controller: {
+        next: function (cb) {
+            var me = this, form = me.getView();
+
+            // Ext.Object.each(form.getValues(), function (key, val) {
+            //     console.log(key, val);
+            // });
+
+            // console.log(form.getFields());
+            // console.log(form.getViewModel().get('intf'));
+
+            if (!form.validate()) { return; }
+
+            // console.log(form.getViewModel().get('intf'));
+
+            // form.getViewModel().get('intf').save();
+
+            // to do update password and relogin
+            cb();
+        },
+    }
 
 
 

@@ -62,7 +62,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             // WAN DHCP
             {
                 xtype: 'checkbox',
-                name: 'overrideDefaults',
+                // name: 'overrideDefaults',
                 bodyAlign: 'start',
                 label: 'Override defaults'.t(),
                 hidden: true,
@@ -249,12 +249,24 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                     disabled: '{intf.v4PPPoEUsePeerDNS}',
                     hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
                 }
+            }, {
+                xtype: 'component',
+                margin: 24,
+                hidden: true,
+                bind: {
+                    hidden: '{intf.v4ConfigType !== "DISABLED"}'
+                },
+                html: '<h1 style="text-align: center; color: #777;"><i class="x-fa fa-exclamation-triangle"></i><br/><br/>IPv4 is disabled</h1>'
             }
         ]
     }, {
         xtype: 'component',
         width: 5,
-        style: 'background: #EEE'
+        style: 'background: #EEE',
+        hidden: true,
+        bind: {
+            hidden: '{intf.v4ConfigType === "DISABLED"}'
+        }
     }, {
         xtype: 'panel',
         width: '50%',
@@ -267,6 +279,9 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 xtype: 'displayfield',
                 labelAlign: 'left',
                 label: 'IPv4 Aliases'
+            }, '->', {
+                iconCls: 'md-icon-add',
+                handler: 'addV4Alias'
             }]
         },
         hidden: true,
@@ -278,12 +293,15 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             plugins: {
                 gridcellediting: true
             },
-            store: {
-                fields: ['v4Address', 'v4Prefix'],
-                data: [
-                    { v4Address: '222.222.222.222', v4Prefix: '255.255.255.255/32' }
-                ]
+            bind: {
+                store: '{intf.v4Aliases}'
             },
+            // store: {
+            //     fields: ['v4Address', 'v4Prefix'],
+            //     data: [
+            //         { v4Address: '222.222.222.222', v4Prefix: '255.255.255.255/32' }
+            //     ]
+            // },
             columns: [{
                 text: 'Address',
                 dataIndex: 'v4Address',
@@ -308,6 +326,10 @@ Ext.define('Mfw.setup.interface.Ipv4', {
     bbar: {
         // style: 'background: transparent',
         shadow: false,
+        hidden: true,
+        bind: {
+            hidden: '{intf.v4ConfigType === "DISABLED"}'
+        },
         items: [{
             xtype: 'checkbox',
             name: 'natEgress',
@@ -331,269 +353,17 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 hidden: '{intf.wan}'
             }
         }]
+    },
+
+    controller: {
+        addV4Alias: function (btn) {
+            var grid = btn.up('panel').down('grid');
+            grid.getStore().add({
+                v4Address: '1.2.3.4',
+                v4Prefix: 24
+            })
+        }
+
     }
 
-
-    // items: [{
-    //     xtype: 'selectfield',
-    //     name: 'v4ConfigType',
-    //     // reference: 'v4Config',
-    //     label: 'Config Type'.t(),
-    //     editable: false,
-    //     // margin: '0 16',
-    //     disabled: true,
-    //     bind: {
-    //         value: '{intf.v4ConfigType}',
-    //         disabled: '{!intf.wan}'
-    //     },
-    //     options: [
-    //         { text: 'Auto (DHCP)'.t(), value: 'DHCP' },
-    //         { text: 'Static'.t(),   value: 'STATIC' },
-    //         { text: 'PPPoE'.t(),  value: 'PPPOE' },
-    //         { text: 'Disabled'.t(),  value: 'DISABLED' }
-    //     ]
-    // },
-
-    // // WAN DHCP
-    // {
-    //     xtype: 'checkbox',
-    //     name: 'overrideDefaults',
-    //     bodyAlign: 'start',
-    //     label: 'Override defaults'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         checked: '{overrideDefaults}',
-    //         hidden: '{intf.v4ConfigType !== "DHCP"}'
-    //     }
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4DhcpAddressOverride',
-    //     label: 'Address'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4DhcpAddressOverride}',
-    //         placeholder: '{intf.v4StaticAddress} (default)',
-    //         hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
-    //     }
-    // }, {
-    //     xtype: 'combobox',
-    //     name: 'v4DhcpPrefixOverride',
-    //     label: 'Netmask'.t(),
-    //     queryMode: 'local',
-    //     displayField: 'text',
-    //     valueField: 'value',
-    //     editable: false,
-    //     clearable: true,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4DhcpPrefixOverride}',
-    //         placeholder: '{intf.v4StaticPrefix}',
-    //         hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
-    //     },
-    //     // store: Data.netmask
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4DhcpGatewayOverride',
-    //     label: 'Gateway'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4DhcpGatewayOverride}',
-    //         placeholder: '{intf.v4StaticGateway}',
-    //         hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
-    //     }
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4DhcpDNS1Override',
-    //     label: 'Primary DNS'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4DhcpDNS1Override}',
-    //         placeholder: '{intf.v4StaticDNS1}',
-    //         hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
-    //     }
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4DhcpDNS2Override',
-    //     label: 'Secondary DNS'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4DhcpDNS2Override}',
-    //         placeholder: '{intf.v4StaticDNS2}',
-    //         hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
-    //     }
-    // },
-
-    // // WAN STATIC
-    // {
-    //     xtype: 'textfield',
-    //     name: 'v4StaticAddress',
-    //     label: 'Addres'.t(),
-    //     errorLabel: 'IPv4 Static Address'.t(),
-    //     required: false,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4StaticAddress}',
-    //         required: '{intf.v4ConfigType === "STATIC"}',
-    //         hidden: '{intf.v4ConfigType !== "STATIC"}'
-
-    //     },
-    //     validators: ['ipaddress']
-    // }, {
-    //     xtype: 'combobox',
-    //     name: 'v4StaticPrefix',
-    //     label: 'Netmask'.t(),
-    //     queryMode: 'local',
-    //     displayField: 'text',
-    //     valueField: 'value',
-    //     editable: false,
-    //     // clearable: true,
-    //     required: false,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4StaticPrefix}',
-    //         required: '{intf.v4ConfigType === "STATIC"}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
-    //     },
-    //     // store: Data.netmask
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4StaticGateway',
-    //     label: 'Gateway'.t(),
-    //     errorLabel: 'IPv4 Static Gateway'.t(),
-    //     hidden: true,
-    //     required: false,
-    //     bind: {
-    //         value: '{intf.v4StaticGateway}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }',
-    //         required: '{intf.wan && intf.v4ConfigType === "STATIC"}'
-    //     },
-    //     validators: ['presence', 'ipaddress']
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4StaticDNS1',
-    //     label: 'Primary DNS'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4StaticDNS1}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }',
-    //     }
-    // }, {
-    //     xtype: 'textfield',
-    //     name: 'v4StaticDNS2',
-    //     label: 'Secondary DNS'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4StaticDNS2}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }',
-    //     }
-    // },
-
-
-    // // WAN PPPoE
-    // {
-    //     xtype: 'textfield',
-    //     label: 'Username'.t(),
-    //     name: 'v4PPoEUsername',
-    //     required: false,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4PPoEUsername}',
-    //         required: '{intf.wan && intf.v4ConfigType === "PPPOE"}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
-    //     }
-    // }, {
-    //     xtype: 'passwordfield',
-    //     name: 'v4PPoEPassword',
-    //     label: 'Password'.t(),
-    //     required: false,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4PPoEPassword}',
-    //         required: '{intf.wan && intf.v4ConfigType === "PPPOE"}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
-    //     }
-    // }, {
-    //     xtype: 'checkbox',
-    //     name: 'v4PPPoEUsePeerDNS',
-    //     bodyAlign: 'start',
-    //     label: 'Use Peer DNS'.t(),
-    //     hidden: true,
-    //     bind: {
-    //         checked: '{intf.v4PPPoEUsePeerDNS}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
-    //     },
-    // }, {
-    //     xtype: 'textfield',
-    //     label: 'Primary DNS'.t(),
-    //     name: 'v4PPPoEOverrideDNS1',
-    //     disabled: true,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4PPPoEOverrideDNS1}',
-    //         disabled: '{intf.v4PPPoEUsePeerDNS}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
-    //     }
-    // }, {
-    //     xtype: 'textfield',
-    //     label: 'Secondary DNS'.t(),
-    //     name: 'v4PPPoEOverrideDNS2',
-    //     disabled: true,
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.v4PPPoEOverrideDNS2}',
-    //         disabled: '{intf.v4PPPoEUsePeerDNS}',
-    //         hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
-    //     }
-    // }, {
-    //     xtype: 'checkbox',
-    //     docked: 'bottom',
-    //     name: 'natEgress',
-    //     bodyAlign: 'start',
-    //     boxLabel: 'NAT traffic exiting this interface (and bridged peers)'.t(),
-    //     padding: 16,
-    //     // margin: '0 16',
-    //     hidden: true,
-    //     bind: {
-    //         checked: '{intf.natEgress}',
-    //         hidden: '{!intf.wan}'
-    //     }
-    // }, {
-    //     xtype: 'togglefield',
-    //     name: 'natIngress',
-    //     boxLabel: 'NAT traffic coming from this interface<br/>(and bridged peers)'.t(),
-    //     margin: '0 16',
-    //     hidden: true,
-    //     bind: {
-    //         value: '{intf.natIngress}',
-    //         hidden: '{intf.wan}'
-    //     }
-    // }, {
-    //     xtype: 'panel',
-    //     docked: 'right',
-
-    //     width: '50%',
-
-    //     resizable: {
-    //         split: true,
-    //         edges: 'west'
-    //     },
-
-    //     items: [{
-    //         xtype: 'toolbar',
-    //         docked: 'top',
-    //         html: 'IPv4 Aliases'
-    //     }]
-
-    //     // items: ['->', {
-    //     //     xtype: 'button',
-    //     //     text: 'IPv4 Aliases',
-    //     //     // textAlign: 'right',
-    //     //     // iconCls: 'x-fa fa-arrow-right',
-    //     //     // iconAlign: 'right',
-    //     //     // flex: 1,
-    //     //     handler: function(btn) {
-    //     //         btn.up('formpanel').setActiveItem('#ipv4-aliases');
-    //     //     }
-    //     // }]
-    // }]
 });

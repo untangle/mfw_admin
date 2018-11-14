@@ -7,7 +7,8 @@ Ext.define('Mfw.setup.Wizard', {
     viewModel: {},
 
 
-    width: '50%',
+    width: '55%',
+    minWidth: 980,
     height: '70%',
     style: 'border-radius: 8px;',
     shadow: true,

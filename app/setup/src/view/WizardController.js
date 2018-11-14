@@ -33,7 +33,9 @@ Ext.define('Mfw.setup.WizardController', {
         view.mask();
 
         interfaces.on('load', function (store, records) {
+            console.log(records);
             store.each(function (interface) {
+                console.log(interface.v4Aliases());
                 steps.push({
                     xtype: 'step-interface',
                     viewModel: {

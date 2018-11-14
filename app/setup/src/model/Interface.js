@@ -1,12 +1,27 @@
+Ext.define('Mfw.model.v4Alias', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'v4Address', type: 'string' },
+        { name: 'v4Prefix', type: 'integer' }
+    ]
+});
+
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
     idProperty: 'interfaceId',
+    // identifier: {
+    //     type: 'sequential',
+    //     seed: 0
+    // },
     fields: [
         { name: 'interfaceId', type: 'integer' },
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string' },
         { name: 'wan',         type: 'boolean' },
+        { name: 'wanWeight',   type: 'integer' },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
@@ -83,8 +98,35 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessChannel', type: 'integer' }
     ],
 
+    hasMany: [{
+        model: 'Mfw.model.v4Alias',
+        name: 'v4Aliases',
+        associationKey: 'v4Aliases'
+    }],
+
+    // proxy: {
+    //     type: 'ajax',
+    //     api: {
+    //         read: window.location.origin + '/api/settings/network/interfaces',
+    //         update: window.location.origin + '/api/settings/network/interfaces'
+    //     },
+    //     writer: {
+    //         type: 'json',
+    //         writeAllFields: true,
+    //         allDataOptions: {
+    //             serialize: true
+    //             // changes: false,
+    //             // persist: false
+    //         }
+    //     }
+    // }
+
     proxy: {
-        type: 'ajax',
+        type: 'rest',
+        actionMethods: {
+            read: 'GET',
+            update: 'POST'
+        },
         api: {
             read: window.location.origin + '/api/settings/network/interfaces',
             update: window.location.origin + '/api/settings/network/interfaces'
@@ -93,10 +135,14 @@ Ext.define('Mfw.model.Interface', {
             type: 'json',
             writeAllFields: true,
             allDataOptions: {
-                serialize: true
-                // changes: false,
-                // persist: false
+                associated: true,
+                persist: true
+            },
+            transform: {
+                fn: Util.sanitize,
+                scope: this
             }
         }
     }
 });
+
