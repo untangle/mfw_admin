@@ -31,19 +31,19 @@ REPORTS_DIR := $(DESTDIR)/reports
 SASS := $(wildcard sass/*.scss)
 
 # APPS SOURCES
-APP_ADMIN_SRC := $(addprefix app/admin/src/, cmp *.js)
-APP_SETTINGS_SRC := $(addprefix app/settings/src/, cmp *.js)
-APP_SETUP_SRC := $(addprefix app/setup/src/, model store step view *.js)
-APP_COMMON_SRC := $(addprefix common/, conditions util)
+APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
+APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
+APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
+APP_COMMON_SRC := $(addprefix src/common/, conditions util)
 
 # PACKAGES SOURCES
-PKG_DASHBOARD_SRC := $(addprefix package/dashboard/src/, conditions *.js)
-PKG_SETTINGS_SRC := $(addprefix package/settings/src/, model store component view *.js)
-PKG_REPORTS_SRC := $(addprefix package/reports/src/, conditions model store *.js)
-PKG_AUTH_SRC := package/auth
+PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions *.js)
+PKG_SETTINGS_SRC := $(addprefix src/package/settings/, model store component view *.js)
+PKG_REPORTS_SRC := $(addprefix src/package/reports/, conditions model store *.js)
+PKG_AUTH_SRC := src/package/auth
 
 # APPS ALL SOURCES
-APP_ADMIN_ALL := app/AppBase.js \
+APP_ADMIN_ALL := src/app/AppBase.js \
 	$(shell find $(APP_COMMON_SRC) \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_DASHBOARD_SRC) \
@@ -51,7 +51,7 @@ APP_ADMIN_ALL := app/AppBase.js \
 				 $(PKG_REPORTS_SRC) \
 				 $(APP_ADMIN_SRC) -name '*.js')
 
-APP_SETTINGS_ALL := app/AppBase.js \
+APP_SETTINGS_ALL := src/app/AppBase.js \
 	$(shell find $(APP_COMMON_SRC) \
 				 $(APP_SETTINGS_SRC) \
 				 $(PKG_AUTH_SRC) \
@@ -125,7 +125,7 @@ icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
 
 css: $(ADMIN_DIR)/mfw-all.css
-$(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
+$(ADMIN_DIR)/mfw-all.css: src/sass/mfw-all.css
 	$(call LOG_FUNCTION,"Building CSS")
 	@cp $^ $@
 
@@ -138,7 +138,7 @@ $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 	@cat $^ > $@
 
 html-admin: $(ADMIN_DIR)/index.html
-$(ADMIN_DIR)/index.html: app/admin/index.html
+$(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
 	@cp $^ $@
 
@@ -148,7 +148,7 @@ $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
 	@cat $^ > $@
 
 html-settings: $(SETTINGS_DIR)/index.html
-$(SETTINGS_DIR)/index.html: app/settings/index.html
+$(SETTINGS_DIR)/index.html: src/app/settings/index.html
 	$(call LOG_FUNCTION,"Building Settings HTML")
 	@cp $^ $@
 
@@ -158,12 +158,12 @@ $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
 	@cat $^ > $@
 
 html-setup: $(SETUP_DIR)/index.html
-$(SETUP_DIR)/index.html: app/setup/index.html
+$(SETUP_DIR)/index.html: src/app/setup/index.html
 	$(call LOG_FUNCTION,"Building Setup HTML")
 	@cp $^ $@
 
 html-reports: $(REPORTS_DIR)/index.html
-$(REPORTS_DIR)/index.html: app/reports/index.html
+$(REPORTS_DIR)/index.html: src/app/reports/index.html
 	$(call LOG_FUNCTION,"Building Reports HTML")
 	@cp $^ $@
 
@@ -181,17 +181,13 @@ dev-deploy: dev-install dev-copy
 
 dev-install: \
 	dir \
-	# css \
 	js-admin \
 	html-admin \
 	js-settings \
 	html-settings \
 	html-reports \
 	js-setup \
-	html-setup \
-	# extjs-install \
-	# highstock-install \
-	# icons-install
+	html-setup
 
 dev-copy:
 	@echo "****************************************"
@@ -201,7 +197,7 @@ dev-copy:
 
 dev-watch:
 	$(call WARN_FUNCTION,"Waiting for changes...")
-	@while inotifywait -qr -e modify -e create -e delete -e move app package common sass; do \
+	@while inotifywait -qr -e modify -e create -e delete -e move src sass; do \
 	  $(MAKE) DEV=$(DEV) dev-deploy; \
 	done
 
