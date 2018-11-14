@@ -1,6 +1,20 @@
 #! /usr/bin/make -f
 
 DESTDIR ?= /tmp/mfw
+DEV ?= false
+DEV_HOST ?= 192.168.101.212
+DEV_DIR ?= /www
+
+# logging
+NC := "\033[0m" # no color
+YELLOW := "\033[1;33m"
+ifneq ($(DEV),false)
+  GREEN := "\033[1;32m"
+else
+  GREEN :=
+endif
+LOG_FUNCTION = @echo -e $(shell date +%T.%3N) $(GREEN)$(1)$(NC)
+WARN_FUNCTION = @echo -e $(shell date +%T.%3N) $(YELLOW)$(1)$(NC)
 
 # mfw Admin app
 ADMIN_DIR := $(DESTDIR)/admin
@@ -112,48 +126,86 @@ icons-install: icons dir
 
 css: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: sass/mfw-all.css
-	cp $^ $@
+	$(call LOG_FUNCTION,"Building CSS")
+	@cp $^ $@
 
 sass/mfw-all.css: $(SASS)
 	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
 js-admin: $(ADMIN_DIR)/mfw-admin-all.js
 $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
-	cat $^ > $@
+	$(call LOG_FUNCTION,"Building Admin app")
+	@cat $^ > $@
 
 html-admin: $(ADMIN_DIR)/index.html
 $(ADMIN_DIR)/index.html: app/admin/index.html
-	cp $^ $@
+	$(call LOG_FUNCTION,"Building Admin HTML")
+	@cp $^ $@
 
 js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
 $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
-	cat $^ > $@
+	$(call LOG_FUNCTION,"Building Settings app")
+	@cat $^ > $@
 
 html-settings: $(SETTINGS_DIR)/index.html
 $(SETTINGS_DIR)/index.html: app/settings/index.html
-	cp $^ $@
+	$(call LOG_FUNCTION,"Building Settings HTML")
+	@cp $^ $@
 
 js-setup: $(SETUP_DIR)/mfw-setup-all.js
 $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
-	cat $^ > $@
+	$(call LOG_FUNCTION,"Building Setup app")
+	@cat $^ > $@
 
 html-setup: $(SETUP_DIR)/index.html
 $(SETUP_DIR)/index.html: app/setup/index.html
-	cp $^ $@
+	$(call LOG_FUNCTION,"Building Setup HTML")
+	@cp $^ $@
 
 html-reports: $(REPORTS_DIR)/index.html
 $(REPORTS_DIR)/index.html: app/reports/index.html
-	cp $^ $@
-
-
+	$(call LOG_FUNCTION,"Building Reports HTML")
+	@cp $^ $@
 
 dir: $(DESTDIR)
 $(DESTDIR):
+	$(call LOG_FUNCTION,"Creating directories")
 	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR)/res/lib $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
 
 clean:
 	rm -fr $(DESTDIR) $(STAGING_DIR)
 
+## development targets
+
+dev-deploy: dev-install dev-copy
+
+dev-install: \
+	dir \
+	# css \
+	js-admin \
+	html-admin \
+	js-settings \
+	html-settings \
+	html-reports \
+	js-setup \
+	html-setup \
+	# extjs-install \
+	# highstock-install \
+	# icons-install
+
+dev-copy:
+	@echo "****************************************"
+	$(call LOG_FUNCTION,"Deploying to $(DEV_HOST)"$(NC))
+	@scp -r $(DESTDIR)/* root@$(DEV_HOST):$(DEV_DIR)
+	@echo "****************************************"
+
+dev-watch:
+	$(call WARN_FUNCTION,"Waiting for changes...")
+	@while inotifywait -qr -e modify -e create -e delete -e move app package common sass; do \
+	  $(MAKE) DEV=$(DEV) dev-deploy; \
+	done
+
+# phony targets
 .PHONY: dir \
 	css \
 	js-admin \
@@ -170,4 +222,8 @@ clean:
 	extjs-stage \
 	highstock-stage \
 	extjs-install \
-	highstock-install
+	highstock-install \
+	dev-deploy \
+	dev-install \
+	dev-copy \
+	watch
