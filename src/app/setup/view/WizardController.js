@@ -14,28 +14,26 @@ Ext.define('Mfw.setup.WizardController', {
         // })
 
         bbar.insert(2, indicator);
-
-        // get network settings
         this.setSteps();
-
     },
 
 
-    // to know all the steps it is required to fetch network interfaces
+    /**
+     * Fetches the interfaces and creates the steps for each
+     */
     setSteps: function () {
-        var me = this, view = me.getView(),
+        var view = this.getView(),
             steps = [
                 { xtype: 'step-welcome' },
                 { xtype: 'step-account' },
                 { xtype: 'step-interfaces' }
-            ], interfaces = Ext.getStore('interfaces');
+            ],
+            interfaces = Ext.getStore('interfaces');
 
         view.mask();
 
         interfaces.on('load', function (store, records) {
-            console.log(records);
             store.each(function (interface) {
-                console.log(interface.v4Aliases());
                 steps.push({
                     xtype: 'step-interface',
                     viewModel: {
@@ -56,25 +54,45 @@ Ext.define('Mfw.setup.WizardController', {
         interfaces.load();
     },
 
-    onNext: function () {
-        var currentStep = this.getView().getActiveItem(),
-            layout = this.getView().getLayout();
+    /**
+     * Handler method when continuing to next step
+     */
+    onContinue: function (btn) {
+        var view = this.getView();
+            navbar = btn.up('toolbar'),
+            currentStep = view.getActiveItem(),
+            layout = view.getLayout();
             controller = currentStep.getController();
 
-        if (controller && Ext.isFunction(controller.next)) {
-            controller.next(function () {
+        /**
+         * If current step has a continue method used for posting data
+         * wait for a callback from that action before moving to next step
+         */
+        if (controller && Ext.isFunction(controller.continue)) {
+            view.mask(); navbar.mask(); // mask components
+            controller.continue(function () {
                 layout.next();
+                view.unmask(); navbar.unmask(); // unmask components
             });
-        } else {
-            layout.next();
+            return;
         }
-
+        /**
+         * Otherwise just move to next step
+         */
+        layout.next();
     },
 
-    onPrevious: function () {
+
+    /**
+     * Handler method when moving to previous step
+     */
+    onBack: function () {
         this.getView().getLayout().previous();
     },
 
+    /**
+     * Handler method when canceling the Setup Wizard
+     */
     onCancel: function () {
         var dialog = Ext.create({
             xtype: 'dialog',

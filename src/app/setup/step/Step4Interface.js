@@ -25,7 +25,7 @@ Ext.define('Mfw.setup.step.Interface', {
         docked: 'left',
         // shadow: false,
         style: 'background: #f5f5f5',
-        zIndex: 888,
+        zIndex: 10,
         layout: {
             type: 'vbox',
             align: 'stretch'
@@ -62,36 +62,15 @@ Ext.define('Mfw.setup.step.Interface', {
             name: 'wan',
             boxLabel: 'is WAN interface'.t(),
             bodyAlign: 'start',
-            // checked: true,
             bind: {
                 checked: '{intf.wan}',
-                // checked: '{intf.wan}',
                 hidden: '{intf.configType !== "ADDRESSED"}'
             },
             listeners: {
-                initialize: function (ck) {
-                    console.log('ck init');
-                    ck.setValue(false);
-                    console.log(ck.up('formpanel').getValues());
-                },
                 uncheck: function (ck) {
-                    console.log('uncheck')
                     ck.up('formpanel').down('[name=v4ConfigType]').setValue('STATIC')
-                    // console.log(val);
                 }
             }
-
-            // xtype: 'togglefield',
-            // name: 'wan',
-            // // margin: '0 16',
-            // boxLabel: 'Is WAN'.t(),
-            // // labelAlign: 'left',
-            // required: true,
-            // hidden: true,
-            // bind: {
-            //     value: '{intf.wan}',
-            //     hidden: '{intf.configType !== "ADDRESSED"}'
-            // }
         }, {
             xtype: 'displayfield',
             label: 'Type',
@@ -123,7 +102,6 @@ Ext.define('Mfw.setup.step.Interface', {
         //     bodyPadding: 16
         // },
         items: [{
-                title: 'IPv4',
                 xtype: 'interface-ipv4'
             }, {
                 title: 'IPv6',
@@ -139,24 +117,31 @@ Ext.define('Mfw.setup.step.Interface', {
     }],
 
     controller: {
-        next: function (cb) {
-            var me = this, form = me.getView();
-
-            // Ext.Object.each(form.getValues(), function (key, val) {
-            //     console.log(key, val);
-            // });
-
-            // console.log(form.getFields());
-            // console.log(form.getViewModel().get('intf'));
+        continue: function (cb) {
+            var me = this,
+                store = Mfw.app.getStore('interfaces'),
+                form = me.getView();
 
             if (!form.validate()) { return; }
 
-            // console.log(form.getViewModel().get('intf'));
+            // Important! Mark all records as dirty so whole array is pushed back to server
+            store.each(function (record) {
+                record.dirty = true;
+            });
 
-            // form.getViewModel().get('intf').save();
-
-            // to do update password and relogin
-            cb();
+            // me.getView().mask();
+            store.sync({
+                success: function () {
+                    cb(); // move to the next step
+                },
+                failure: function () {
+                    console.log('failure');
+                },
+                callback: function () {
+                    // me.getView().unmask();
+                }
+            });
+            // cb();
         },
     }
 

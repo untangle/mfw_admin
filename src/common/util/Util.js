@@ -15,6 +15,12 @@ Ext.define('Mfw.util.Util', {
             if (Ext.String.startsWith(key, '_') || key === 'id') {
                 delete data[key];
             }
+
+            // remove null or empty string keys
+            if (value === '' || value === null) {
+                delete data[key];
+            }
+
             if (Ext.isArray(value)) {
                 Ext.Array.each(value, function (v) {
                     Util.sanitize(v);
@@ -24,6 +30,7 @@ Ext.define('Mfw.util.Util', {
                 Util.sanitize(value);
             }
         });
+        // console.log(data);
         return data;
     },
 

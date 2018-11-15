@@ -143,7 +143,7 @@ Ext.define('Mfw.util.Data', {
         { name: 'ROHC' }
     ],
 
-    netmask: [
+    prefix: [
         { value: 32, text: '/32 - 255.255.255.255' },
         { value: 31, text: '/31 - 255.255.255.254' },
         { value: 30, text: '/30 - 255.255.255.252' },

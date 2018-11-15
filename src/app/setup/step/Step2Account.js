@@ -90,7 +90,7 @@ Ext.define('Mfw.setup.step.Account', {
             view.down('formpanel').reset(true);
         },
 
-        next: function (cb) {
+        continue: function (cb) {
             var me = this, skip = me.lookup('skip'),
                 form = me.getView().down('formpanel');
 

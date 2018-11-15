@@ -1,9 +1,8 @@
 Ext.define('Mfw.setup.interface.Ipv4', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-ipv4',
-    itemId: 'ipv4',
 
-    headerTitle: 'IPv4'.t(),
+    title: 'IPv4'.t(),
 
     layout: {
         type: 'hbox',
@@ -11,13 +10,6 @@ Ext.define('Mfw.setup.interface.Ipv4', {
     },
 
     scrollable: 'y',
-
-
-    defaults: {
-        labelAlign: 'left',
-        labelTextAlign: 'right',
-        // labelWidth: 120
-    },
 
 
     items: [{
@@ -42,7 +34,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 labelWidth: 130,
                 flex: 1,
                 // reference: 'v4Config',
-                label: 'IPv4 Config Type'.t(),
+                label: '<span style="font-size: 14px;">IPv4 Config Type</span>'.t(),
                 editable: false,
                 // margin: '0 16',
                 disabled: true,
@@ -60,40 +52,48 @@ Ext.define('Mfw.setup.interface.Ipv4', {
         },
         items: [
             // WAN DHCP
+            // {
+            //     xtype: 'checkbox',
+            //     // name: 'overrideDefaults',
+            //     bodyAlign: 'start',
+            //     label: 'Override defaults'.t(),
+            //     hidden: true,
+            //     bind: {
+            //         checked: '{overrideDefaults}',
+            //         hidden: '{intf.v4ConfigType !== "DHCP"}'
+            //     }
+            // },
             {
-                xtype: 'checkbox',
-                // name: 'overrideDefaults',
-                bodyAlign: 'start',
-                label: 'Override defaults'.t(),
+                xtype: 'component',
+                style: 'font-size: 14px; color: #777; padding: 16px 0;',
+                html: '<strong>Override DHCP defaults</strong> (optional)',
                 hidden: true,
                 bind: {
-                    checked: '{overrideDefaults}',
                     hidden: '{intf.v4ConfigType !== "DHCP"}'
                 }
-            }, {
+            },
+            {
                 xtype: 'textfield',
                 name: 'v4DhcpAddressOverride',
                 label: 'Address'.t(),
                 hidden: true,
                 bind: {
                     value: '{intf.v4DhcpAddressOverride}',
-                    placeholder: '{intf.v4StaticAddress} (default)',
-                    hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
+                    placeholder: '{intf.v4StaticAddress}',
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
                 }
             }, {
-                xtype: 'combobox',
+                xtype: 'selectfield',
                 name: 'v4DhcpPrefixOverride',
                 label: 'Netmask'.t(),
-                queryMode: 'local',
-                displayField: 'text',
-                valueField: 'value',
                 editable: false,
-                clearable: true,
+                clearable: false,
                 hidden: true,
+                options: Data.prefix,
                 bind: {
                     value: '{intf.v4DhcpPrefixOverride}',
                     placeholder: '{intf.v4StaticPrefix}',
-                    hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
                 },
                 // store: Data.netmask
             }, {
@@ -104,7 +104,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 bind: {
                     value: '{intf.v4DhcpGatewayOverride}',
                     placeholder: '{intf.v4StaticGateway}',
-                    hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
                 }
             }, {
                 xtype: 'textfield',
@@ -114,7 +114,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 bind: {
                     value: '{intf.v4DhcpDNS1Override}',
                     placeholder: '{intf.v4StaticDNS1}',
-                    hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
                 }
             }, {
                 xtype: 'textfield',
@@ -124,7 +124,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 bind: {
                     value: '{intf.v4DhcpDNS2Override}',
                     placeholder: '{intf.v4StaticDNS2}',
-                    hidden: '{intf.v4ConfigType !== "DHCP" || !overrideDefaults}'
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
                 }
             },
 
@@ -144,22 +144,19 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 },
                 validators: ['ipaddress']
             }, {
-                xtype: 'combobox',
+                xtype: 'selectfield',
                 name: 'v4StaticPrefix',
                 label: 'Netmask'.t(),
-                queryMode: 'local',
-                displayField: 'text',
-                valueField: 'value',
                 editable: false,
-                // clearable: true,
-                required: false,
+                clearable: false,
                 hidden: true,
+                required: true,
+                options: Data.prefix,
                 bind: {
                     value: '{intf.v4StaticPrefix}',
                     required: '{intf.v4ConfigType === "STATIC"}',
                     hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
-                },
-                // store: Data.netmask
+                }
             }, {
                 xtype: 'textfield',
                 name: 'v4StaticGateway',
@@ -275,12 +272,15 @@ Ext.define('Mfw.setup.interface.Ipv4', {
         // bodyBorder: false,
         tbar: {
             shadow: false,
+            padding: '0 8 0 16',
             items: [{
                 xtype: 'displayfield',
                 labelAlign: 'left',
-                label: 'IPv4 Aliases'
+                label: '<span style="font-size: 14px;">IPv4 Aliases</span>'
             }, '->', {
                 iconCls: 'md-icon-add',
+                ui: 'round action',
+                tooltip: 'Add new Alias',
                 handler: 'addV4Alias'
             }]
         },
@@ -290,35 +290,72 @@ Ext.define('Mfw.setup.interface.Ipv4', {
         },
         items: [{
             xtype: 'grid',
+            selectable: false,
+            emptyText: 'No Aliases!',
             plugins: {
-                gridcellediting: true
+                gridcellediting: {
+                    triggerEvent: 'tap'
+                }
             },
             bind: {
                 store: '{intf.v4Aliases}'
             },
-            // store: {
-            //     fields: ['v4Address', 'v4Prefix'],
-            //     data: [
-            //         { v4Address: '222.222.222.222', v4Prefix: '255.255.255.255/32' }
-            //     ]
-            // },
             columns: [{
                 text: 'Address',
                 dataIndex: 'v4Address',
                 flex: 1,
-                editable: true
+                menuDisabled: true,
+                hideable: false,
+                sortable: true,
+                editable: true,
+                editor: {
+                    xtype: 'textfield',
+                    required: true,
+                    clearable: false
+                }
             }, {
                 text: 'Prefix',
                 dataIndex: 'v4Prefix',
-                width: 150,
+                width: 180,
+                menuDisabled: true,
+                hideable: false,
+                sortable: true,
+                resizable: false,
+                renderer: function (value) {
+                    var prefix = Ext.Array.findBy(Data.prefix, function (item) {
+                        return item.value === value;
+                    });
+                    if (prefix) {
+                        return prefix.text;
+                    }
+                    return 'not set';
+                },
+                editable: true,
+                editor: {
+                    xtype: 'selectfield',
+                    editable: false,
+                    required: true,
+                    options: Data.prefix
+                    // clearable: false
+                }
+            }, {
+                width: 44,
+                menuDisabled: true,
+                hideable: false,
+                sortable: false,
+                resizable: false,
                 cell: {
-                    actions: {
+                    // toolDefaults: {}
+                    tools: {
                         remove: {
-                            iconCls: 'x-fa fa-times'
+                            iconCls: 'md-icon-close',
+                            tooltip: 'Remove Alias',
+                            handler: function (grid, info) {
+                                info.record.drop();
+                            }
                         }
                     }
-                },
-                editable: true
+                }
             }]
         }]
     }],
@@ -359,7 +396,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
         addV4Alias: function (btn) {
             var grid = btn.up('panel').down('grid');
             grid.getStore().add({
-                v4Address: '1.2.3.4',
+                v4Address: '192.168.0.1',
                 v4Prefix: 24
             })
         }

@@ -104,32 +104,14 @@ Ext.define('Mfw.model.Interface', {
         associationKey: 'v4Aliases'
     }],
 
-    // proxy: {
-    //     type: 'ajax',
-    //     api: {
-    //         read: window.location.origin + '/api/settings/network/interfaces',
-    //         update: window.location.origin + '/api/settings/network/interfaces'
-    //     },
-    //     writer: {
-    //         type: 'json',
-    //         writeAllFields: true,
-    //         allDataOptions: {
-    //             serialize: true
-    //             // changes: false,
-    //             // persist: false
-    //         }
-    //     }
-    // }
-
     proxy: {
-        type: 'rest',
-        actionMethods: {
-            read: 'GET',
-            update: 'POST'
-        },
+        type: 'ajax',
         api: {
             read: window.location.origin + '/api/settings/network/interfaces',
             update: window.location.origin + '/api/settings/network/interfaces'
+        },
+        reader: {
+            type: 'json'
         },
         writer: {
             type: 'json',

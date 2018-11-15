@@ -197,7 +197,7 @@ dev-copy:
 
 dev-watch:
 	$(call WARN_FUNCTION,"Waiting for changes...")
-	@while inotifywait -qr -e modify -e create -e delete -e move src sass; do \
+	@while inotifywait -qr -e modify -e create -e delete -e move src; do \
 	  $(MAKE) DEV=$(DEV) dev-deploy; \
 	done
 

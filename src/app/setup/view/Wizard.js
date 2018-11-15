@@ -15,11 +15,12 @@ Ext.define('Mfw.setup.Wizard', {
     // bodyPadding: 24,
     layout: {
         type: 'card',
-        animation: {
-            type: 'slide',
-            duration: 150,
-            direction: 'horizontal'
-        }, // slide
+        animation: null,
+        // animation: {
+        //     type: 'fade', // slide
+        //     duration: 150,
+        //     direction: 'horizontal'
+        // },
         indicator: {
             reference: 'indicator',
             tapMode: 'item',
@@ -42,6 +43,14 @@ Ext.define('Mfw.setup.Wizard', {
         }, {
             xtype: 'component',
             html: 'Setup'
+        }, '->', {
+            xtype: 'component',
+            hidden: true,
+            bind: {
+                html: 'Step {indicator.activeIndex + 1} of {indicator.count}',
+                hidden: '{indicator.count === 0}'
+            }
+
         }]
     }],
     bbar: {
@@ -56,7 +65,7 @@ Ext.define('Mfw.setup.Wizard', {
             ui: 'action',
 
             // iconCls: 'x-fa fa-angle-double-left',
-            handler: 'onPrevious',
+            handler: 'onBack',
             hidden: true,
             hideMode: 'visibility',
             bind: {
@@ -85,7 +94,7 @@ Ext.define('Mfw.setup.Wizard', {
             ui: 'action',
             // iconCls: 'x-fa fa-angle-double-right',
             iconAlign: 'right',
-            handler: 'onNext',
+            handler: 'onContinue',
             hidden: true,
             hideMode: 'visibility',
             bind: {

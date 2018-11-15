@@ -169,10 +169,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
-        init: function () {
-            console.log('init');
-        },
-
         onActivate: function (view) {
             // console.log();
             // var store = view.lookup('interfaces').getStore();
