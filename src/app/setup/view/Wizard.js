@@ -13,6 +13,9 @@ Ext.define('Mfw.setup.Wizard', {
     style: 'border-radius: 8px;',
     shadow: true,
     // bodyPadding: 24,
+
+    masked: { xtype: 'loadmask' },
+
     layout: {
         type: 'card',
         animation: null,

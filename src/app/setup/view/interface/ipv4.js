@@ -29,7 +29,6 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             shadow: false,
             items: [{
                 xtype: 'selectfield',
-                name: 'v4ConfigType',
                 labelAlign: 'left',
                 labelWidth: 130,
                 flex: 1,
@@ -56,7 +55,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             //     xtype: 'checkbox',
             //     // name: 'overrideDefaults',
             //     bodyAlign: 'start',
-            //     label: 'Override defaults'.t(),
+            //     boxLabel: 'Override DHCP defaults'.t(),
             //     hidden: true,
             //     bind: {
             //         checked: '{overrideDefaults}',
@@ -81,35 +80,38 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                     value: '{intf.v4DhcpAddressOverride}',
                     placeholder: '{intf.v4StaticAddress}',
                     hidden: '{intf.v4ConfigType !== "DHCP"}'
-                }
+                },
+                validators: ['ipaddress']
             }, {
                 xtype: 'selectfield',
                 name: 'v4DhcpPrefixOverride',
-                label: 'Netmask'.t(),
+                label: 'Netmask/Prefix'.t(),
+                required: false,
                 editable: false,
                 clearable: false,
-                hidden: true,
                 options: Data.prefix,
+                hidden: true,
                 bind: {
                     value: '{intf.v4DhcpPrefixOverride}',
                     placeholder: '{intf.v4StaticPrefix}',
                     hidden: '{intf.v4ConfigType !== "DHCP"}'
-                },
-                // store: Data.netmask
+                }
             }, {
                 xtype: 'textfield',
                 name: 'v4DhcpGatewayOverride',
                 label: 'Gateway'.t(),
+                required: false,
                 hidden: true,
                 bind: {
                     value: '{intf.v4DhcpGatewayOverride}',
                     placeholder: '{intf.v4StaticGateway}',
-                    hidden: '{intf.v4ConfigType !== "DHCP"}'
+                    hidden: '{intf.v4ConfigType !== "DHCP"}',
                 }
             }, {
                 xtype: 'textfield',
                 name: 'v4DhcpDNS1Override',
                 label: 'Primary DNS'.t(),
+                required: false,
                 hidden: true,
                 bind: {
                     value: '{intf.v4DhcpDNS1Override}',
@@ -120,6 +122,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 xtype: 'textfield',
                 name: 'v4DhcpDNS2Override',
                 label: 'Secondary DNS'.t(),
+                required: false,
                 hidden: true,
                 bind: {
                     value: '{intf.v4DhcpDNS2Override}',
@@ -141,8 +144,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                     required: '{intf.v4ConfigType === "STATIC"}',
                     hidden: '{intf.v4ConfigType !== "STATIC"}'
 
-                },
-                validators: ['ipaddress']
+                }
             }, {
                 xtype: 'selectfield',
                 name: 'v4StaticPrefix',

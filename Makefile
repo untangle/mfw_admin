@@ -34,7 +34,7 @@ SASS := $(wildcard sass/*.scss)
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
 APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
-APP_COMMON_SRC := $(addprefix src/common/, conditions util)
+APP_COMMON_SRC := $(addprefix src/common/, overrides conditions util)
 
 # PACKAGES SOURCES
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions *.js)

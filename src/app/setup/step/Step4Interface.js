@@ -6,18 +6,6 @@ Ext.define('Mfw.setup.step.Interface', {
 
     bodyPadding: 0,
     layout: 'fit',
-    // layout: {
-    //     type: 'hbox',
-    //     layout: 'stretch'
-    // },
-
-    // viewModel: {
-    //     formulas: {
-    //         isStatic: function (get) {
-    //             return get('intf.v4ConfigType')
-    //         }
-    //     }
-    // }
 
     items: [{
         xtype: 'toolbar',
@@ -101,18 +89,11 @@ Ext.define('Mfw.setup.step.Interface', {
         // defaults: {
         //     bodyPadding: 16
         // },
-        items: [{
-                xtype: 'interface-ipv4'
-            }, {
-                title: 'IPv6',
-                html: 'ipv6'
-            }, {
-                title: 'DHCP',
-                html: 'dhcp'
-            }, {
-                title: 'VRRP',
-                html: 'vrrp'
-            }
+        items: [
+            { xtype: 'interface-ipv4' },
+            { xtype: 'interface-ipv6' },
+            { xtype: 'interface-dhcp' },
+            { xtype: 'interface-vrrp' }
         ]
     }],
 
@@ -120,9 +101,15 @@ Ext.define('Mfw.setup.step.Interface', {
         continue: function (cb) {
             var me = this,
                 store = Mfw.app.getStore('interfaces'),
-                form = me.getView();
+                form = me.getView()
+                wizard = form.up('setup-wizard');
 
-            if (!form.validate()) { return; }
+            if (!form.validate()) {
+                Ext.toast('Please check and correct invalid fields!', 3000);
+                return;
+            }
+
+            wizard.mask(); wizard.lookup('bbar').mask();
 
             // Important! Mark all records as dirty so whole array is pushed back to server
             store.each(function (record) {
@@ -138,6 +125,7 @@ Ext.define('Mfw.setup.step.Interface', {
                     console.log('failure');
                 },
                 callback: function () {
+                    wizard.unmask(); wizard.lookup('bbar').unmask();
                     // me.getView().unmask();
                 }
             });

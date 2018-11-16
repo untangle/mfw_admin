@@ -8,6 +8,39 @@ Ext.define('Mfw.model.v4Alias', {
     ]
 });
 
+Ext.define('Mfw.model.v6Alias', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'v6Address', type: 'string' },
+        { name: 'v6Prefix', type: 'integer' }
+    ]
+});
+
+Ext.define('Mfw.model.DhcpOptions', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'enabled', type: 'boolean' },
+        { name: 'description', type: 'string' },
+        { name: 'value', type: 'string' }
+    ]
+});
+
+
+// Ext.define('Mfw.model.VrrpV4Alias', {
+//     extend: 'Ext.data.Model',
+//     idProperty: '_id',
+//     identifier: 'uuid',
+//     fields: [
+//         { name: 'enabled', type: 'boolean' },
+//         { name: 'description', type: 'string' },
+//         { name: 'value', type: 'string' }
+//     ]
+// });
+
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
@@ -39,7 +72,7 @@ Ext.define('Mfw.model.Interface', {
 
         // IPv4 DHCP overrides
         { name: 'v4DhcpAddressOverride', type: 'string' },
-        { name: 'v4DhcpPrefixOverride',  type: 'integer' }, // 1 - 32
+        { name: 'v4DhcpPrefixOverride',  type: 'integer', defaultValue: 24 }, // 1 - 32
         { name: 'v4DhcpGatewayOverride', type: 'string' },
         { name: 'v4DhcpDNS1Override',    type: 'string' },
         { name: 'v4DhcpDNS2Override',    type: 'string' },
@@ -81,14 +114,14 @@ Ext.define('Mfw.model.Interface', {
         { name: 'dhcpPrefixOverride',  type: 'integer' }, // 1 - 32
         { name: 'dhcpDNSOverride',     type: 'string' },
 
-        { name: 'dhcpOptions', type: 'auto' },
+        // { name: 'dhcpOptions', type: 'auto' },
 
         // VRRP
         { name: 'vrrpEnabled',  type: 'boolean' },
         { name: 'vrrpID',       type: 'integer' }, // 1 - 255
         { name: 'vrrpPriority', type: 'integer' }, // 1 - 255
 
-        { name: 'vrrpV4Aliases', type: 'auto' },
+        // { name: 'vrrpV4Aliases', type: 'auto' },
 
         // Wireless
         { name: 'wirelessSsid',  type: 'string' },
@@ -102,6 +135,18 @@ Ext.define('Mfw.model.Interface', {
         model: 'Mfw.model.v4Alias',
         name: 'v4Aliases',
         associationKey: 'v4Aliases'
+    }, {
+        model: 'Mfw.model.v6Alias',
+        name: 'v6Aliases',
+        associationKey: 'v6Aliases'
+    }, {
+        model: 'Mfw.model.DhcpOptions',
+        name: 'dhcpOptions',
+        associationKey: 'dhcpOptions'
+    }, {
+        model: 'Mfw.model.v4Alias',
+        name: 'vrrpV4Aliases',
+        associationKey: 'vrrpV4Aliases'
     }],
 
     proxy: {

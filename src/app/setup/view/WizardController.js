@@ -69,10 +69,10 @@ Ext.define('Mfw.setup.WizardController', {
          * wait for a callback from that action before moving to next step
          */
         if (controller && Ext.isFunction(controller.continue)) {
-            view.mask(); navbar.mask(); // mask components
+            // view.mask(); navbar.mask(); // mask components
             controller.continue(function () {
                 layout.next();
-                view.unmask(); navbar.unmask(); // unmask components
+                // view.unmask(); navbar.unmask(); // unmask components
             });
             return;
         }
