@@ -263,6 +263,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onEditRecord: function (grid, info) {
         var me = this;
 
+
+        console.log(grid.getEditor());
         // if custom editor sheet
         if (grid.getEditor()) {
             if (!me.sheet) {

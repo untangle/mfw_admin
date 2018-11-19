@@ -14,7 +14,6 @@ Ext.define('Mfw.AppBase', {
 
     checkAuth: function (action) {
         var hash = window.location.hash;
-        console.log('check auth');
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
                 Mfw.app.setRouteAfterAuth(hash);

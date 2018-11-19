@@ -11,9 +11,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         enableManualSort: false,
         disableDeleteCondition: '{record.wan}',
         disableCopyCondition: '{record.wan}',
-        editor: {
-            xtype: 'interface-sheet'
-        },
+        editor: 'interface-sheet',
         recordModel: 'Mfw.model.Interface'
     },
 

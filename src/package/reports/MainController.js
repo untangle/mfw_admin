@@ -70,7 +70,6 @@ Ext.define('Mfw.reports.Controller', {
                 }
             }
         ]);
-        console.log(reps);
         vm.bind('{conditions}', function (fields) {
             // console.log('BINDING');
             // me.generateConditionsButtons(reportsView, fields)

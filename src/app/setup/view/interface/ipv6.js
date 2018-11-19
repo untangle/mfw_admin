@@ -36,10 +36,8 @@ Ext.define('Mfw.setup.interface.Ipv6', {
                 label: '<span style="font-size: 14px;">IPv6 Config Type</span>'.t(),
                 editable: false,
                 // margin: '0 16',
-                disabled: true,
                 bind: {
-                    value: '{intf.v6ConfigType}',
-                    disabled: '{!intf.wan}'
+                    value: '{intf.v6ConfigType}'
                 },
                 options: [
                     { text: 'Auto (DHCP)'.t(), value: 'DHCP' },
