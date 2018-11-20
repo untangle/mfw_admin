@@ -13,6 +13,7 @@ Ext.define('Mfw.AppBase', {
     },
 
     checkAuth: function (action) {
+        console.log('check auth');
         var hash = window.location.hash;
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
@@ -79,6 +80,7 @@ Ext.define('Mfw.AppBase', {
                     xtype: 'mfw-pkg-auth'
                 });
                 Ext.route.Router.resume();
+                Mfw.app.redirectTo('auth');
             }
         });
 

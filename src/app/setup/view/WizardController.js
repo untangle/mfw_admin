@@ -3,10 +3,10 @@ Ext.define('Mfw.setup.WizardController', {
     alias: 'controller.wizard',
 
     init: function () {
-        var wizard = this.getView(),
+        var wizard = this.lookup('wizard'),
         	layout = wizard.getLayout(),
         	indicator = layout.getIndicator(),
-        	bbar = wizard.lookup('bbar');
+        	bbar = this.lookup('bbar');
 
         // indicator.on('indicatortap', function (cmp, idx, item) {
         //     console.log(arguments);
@@ -22,7 +22,7 @@ Ext.define('Mfw.setup.WizardController', {
      * Fetches the interfaces and creates the steps for each
      */
     setSteps: function () {
-        var view = this.getView(),
+        var wizard = this.lookup('wizard'),
             steps = [
                 { xtype: 'step-welcome' },
                 { xtype: 'step-account' },
@@ -30,7 +30,7 @@ Ext.define('Mfw.setup.WizardController', {
             ],
             interfaces = Ext.getStore('interfaces');
 
-        view.mask();
+        wizard.mask();
 
         interfaces.on('load', function (store, records) {
             store.each(function (interface) {
@@ -46,9 +46,9 @@ Ext.define('Mfw.setup.WizardController', {
             steps.push({ xtype: 'step-upgrades' });
             steps.push({ xtype: 'step-complete' });
 
-            view.add(steps);
-            view.unmask();
-            view.setActiveItem(3);
+            wizard.add(steps);
+            wizard.unmask();
+            wizard.setActiveItem(3);
         })
 
         interfaces.load();
@@ -58,10 +58,10 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when continuing to next step
      */
     onContinue: function (btn) {
-        var view = this.getView();
+        var wizard = this.lookup('wizard');
             navbar = btn.up('toolbar'),
-            currentStep = view.getActiveItem(),
-            layout = view.getLayout();
+            currentStep = wizard.getActiveItem(),
+            layout = wizard.getLayout();
             controller = currentStep.getController();
 
         /**
@@ -69,7 +69,7 @@ Ext.define('Mfw.setup.WizardController', {
          * wait for a callback from that action before moving to next step
          */
         if (controller && Ext.isFunction(controller.continue)) {
-            // view.mask(); navbar.mask(); // mask components
+            // wizard.mask(); navbar.mask(); // mask components
             controller.continue(function () {
                 layout.next();
                 // view.unmask(); navbar.unmask(); // unmask components
@@ -87,7 +87,7 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when moving to previous step
      */
     onBack: function () {
-        this.getView().getLayout().previous();
+        this.lookup('wizard').getLayout().previous();
     },
 
     /**

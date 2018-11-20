@@ -57,7 +57,7 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
-APP_SETUP_ALL := $(shell find $(APP_COMMON_SRC) $(APP_SETUP_SRC) -name '*.js')
+APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(PKG_AUTH_SRC) $(APP_SETUP_SRC) -name '*.js')
 
 ## External resources (ExtJS & Highstock)
 

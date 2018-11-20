@@ -1,22 +1,24 @@
 Ext.define('Mfw.auth.Main', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.Container',
     alias: 'widget.mfw-pkg-auth',
+
+    style: 'background: #999',
 
     config: {
         redirectRoute: null
     },
 
-    layout: {
-        type: 'vbox',
-        pack: 'center',
-        align: 'middle'
-    },
-
-    style: 'background: rgba(0, 0, 0, 0.2)',
+    layout: 'center',
 
     padding: '0 0 200 0',
+
     items: [{
-        xtype: 'formpanel',
+        xtype: 'panel',
+        shadow: true,
+        width: 280,
+        height: 'auto',
+        bodyPadding: 16,
+
         keyMapEnabled: true,
         keyMap: {
             enter: {
@@ -24,50 +26,63 @@ Ext.define('Mfw.auth.Main', {
                 handler: 'onLogin'
             }
         },
-        padding: 16,
-        width: 250,
-        // title: 'Log in...',
-        // border: true,
-        // margin: '0 0 100 0',
-        layout: {
-            type: 'vbox',
-            align: 'stretch'
-        },
-        defaults: {
-            autoComplete: false,
-            // labelAlign: 'left',
-            // labelTextAlign: 'right',
-            // margin: '16 0'
-        },
+
+        style: 'border-radius: 8px;',
+
         items: [{
-            xtype: 'component',
-            style: 'text-align: center;',
-            margin: '0 0 0 0',
-            html: '<img src="/static/res/untangle-logo.png">'
+            xtype: 'toolbar',
+            docked: 'top',
+            style: 'background: none; font-size: 24px; font-weight: 100; color: #777;',
+            shadow: false,
+            padding: '16 16 0 16',
+            items: [{
+                xtype: 'component',
+                html: '<img src="/static/res/untangle-logo.png" width=90 style="vertical-align: middle; margin-right: 16px;"/>'
+            }, '->', {
+                xtype: 'component',
+                html: 'Login'
+            }]
         }, {
-            xtype: 'component',
-            html: '<h2 style="color: #777; font-weight: normal; text-align: center;">Please sign in ...</h3>'
-        }, {
-            xtype: 'component',
-            style: 'color: red; text-align: center;',
-            itemId: 'error'
-        }, {
-            xtype: 'textfield',
-            name: 'username',
-            label: 'Username'.t(),
-            required: true
-        }, {
-            xtype: 'passwordfield',
-            name: 'password',
-            label: 'Password'.t(),
-            required: true
-        }, {
-            xtype: 'button',
-            ui: 'action',
-            text: 'Log in',
-            margin: '32 0 0 0',
-            handler: 'onLogin'
-        }],
+            xtype: 'formpanel',
+            bodyPadding: 0,
+            layout: 'vbox',
+            keyMapEnabled: true,
+            keyMap: {
+                enter: {
+                    key: Ext.event.Event.ENTER,
+                    handler: 'onLogin'
+                }
+            },
+            defaults: {
+                autoComplete: false
+            },
+            items: [{
+                xtype: 'component',
+                itemId: 'error',
+                hidden: true,
+                html: '<p style="color: red; font-size: 12px;"><i class="x-fa fa-exclamation-triangle"></i> Invalid username or password!</p>'
+            }, {
+                xtype: 'textfield',
+                name: 'username',
+                label: 'Username',
+                errorTarget: 'side',
+                clearable: false,
+                required: true
+            }, {
+                xtype: 'passwordfield',
+                name: 'password',
+                label: 'Password',
+                errorTarget: 'side',
+                clearable: false,
+                required: true
+            }, {
+                xtype: 'button',
+                text: 'Log In',
+                ui: 'action',
+                margin: '48 0 0 0',
+                handler: 'onLogin'
+            }]
+        }]
     }],
 
     listeners: {
@@ -81,11 +96,7 @@ Ext.define('Mfw.auth.Main', {
                 btn = form.down('button'),
                 redirectRoute = Mfw.app.getRouteAfterAuth() || '';
 
-            console.log(redirectRoute);
-
             if (!form.validate()) { return; }
-
-            console.log(form.getValues());
 
             btn.setDisabled(true);
             Ext.Ajax.request({
@@ -103,9 +114,7 @@ Ext.define('Mfw.auth.Main', {
                     btn.setDisabled(false);
                 },
                 failure: function (response) {
-                    console.log(response);
-                    // var obj = Ext.decode(response.responseText);
-                    // form.down('#error').setHtml(obj.error);
+                    form.down('#error').show();
                     btn.setDisabled(false);
                 }
             });
@@ -114,7 +123,7 @@ Ext.define('Mfw.auth.Main', {
         onHide: function (view) {
             var form = view.down('formpanel');
             form.reset(true);
-            form.down('#error').setHtml('');
+            form.down('#error').hide();
         }
     }
 });
