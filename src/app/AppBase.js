@@ -12,47 +12,26 @@ Ext.define('Mfw.AppBase', {
         viewModel: {}
     },
 
+    listen : {
+        global : {
+            unmatchedroute : 'onUnmatchedRoute'
+        }
+    },
+
     checkAuth: function (action) {
-        console.log('check auth');
         var hash = window.location.hash;
+        // if (hash === '') {
+        //     Mfw.app.redirectTo('');
+        //     // action.stop();
+        // }
+        // console.log(action, hash);
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
                 Mfw.app.setRouteAfterAuth(hash);
             }
+            Mfw.app.redirectTo('auth');
         } else {
             action.resume();
-        }
-    },
-
-    onSettings: function (route) {
-        var view = Mfw.app.viewport.down('mfw-pkg-settings'),
-            cmp = view.down('#currentSettings'), xtype,
-            tree = view.down('treelist'),
-            node = tree.getStore().findNode('href', 'settings' + route);
-
-        if (cmp) { cmp.destroy(); }
-
-        Mfw.app.viewport.setActiveItem('mfw-pkg-settings');
-
-        if (route) {
-            xtype = 'mfw-settings' + route.replace(/\//g, '-');
-
-            if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
-                view.add({
-                    xtype: xtype,
-                    itemId: 'currentSettings'
-                });
-            } else {
-                console.log('view does not exists');
-            }
-        }
-        tree.setSelection(node);
-        if (!node) {
-            tree.getStore().each(function (node) {
-                if (!node.isLeaf()) { node.collapse(); }
-            });
-        } else {
-            if (!node.isLeaf()) { node.expand(); }
         }
     },
 
@@ -60,16 +39,9 @@ Ext.define('Mfw.AppBase', {
         var scripts = [];
         Ext.route.Router.suspend();
 
-        // Ext.Array.each(Mfw.app.getPackages(), function(pkg) {
-        //     scripts.push('/admin/mfw/pkg/mfw-pkg-' + pkg + '.js')
-        // });
-        // Ext.Loader.loadScriptsSync(scripts);
-
-
         Ext.Ajax.request({
             url: '/account/status',
             success: function (response) {
-                console.log('auth success');
                 Mfw.app.setAccount(Ext.decode(response.responseText));
                 app.setViews();
                 Ext.route.Router.resume();
@@ -77,12 +49,16 @@ Ext.define('Mfw.AppBase', {
 
             failure: function() {
                 Mfw.app.viewport.add({
-                    xtype: 'mfw-pkg-auth'
+                    xtype: 'auth'
                 });
                 Ext.route.Router.resume();
                 Mfw.app.redirectTo('auth');
             }
         });
 
+    },
+
+    onUnmatchedRoute: function (hash) {
+        Mfw.app.redirectTo('');
     }
 });

@@ -3,6 +3,7 @@ Ext.define('Mfw.dashboard.Controller', {
     alias: 'controller.dashboard',
 
     routes: {
+        '': function () {console.log('eeeeeeeeee'); },
         'dashboard:query': {
             before: 'onBefore',
             action: 'onAction',

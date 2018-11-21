@@ -25,11 +25,23 @@
         <script src="mfw-settings-all.js"></script>
 
         <script>
-            var translations, debug = false;
             Ext.onReady(function () {
                 Ext.application({
-                    extend: 'Mfw.App',
-                    namespace: 'Mfw'
+                    extend: 'Mfw.AppBase',
+                    namespace: 'Mfw',
+
+                    config: {
+                        account: null,
+                        routeAfterAuth: null
+                    },
+
+                    setViews: function () {
+                        Mfw.app.viewport.add([
+                            { xtype: 'mfw-nav' },
+                            { xtype: 'settings' }
+                        ]);
+                    }
+
                 });
             });
         </script>

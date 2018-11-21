@@ -34,18 +34,16 @@ SASS := $(wildcard sass/*.scss)
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
 APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
-APP_COMMON_SRC := $(addprefix src/common/, overrides conditions util)
+APP_COMMON_SRC := $(addprefix src/common/, auth overrides conditions util)
 
 # PACKAGES SOURCES
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions *.js)
 PKG_SETTINGS_SRC := $(addprefix src/package/settings/, model store component view *.js)
 PKG_REPORTS_SRC := $(addprefix src/package/reports/, conditions model store *.js)
-PKG_AUTH_SRC := src/package/auth
 
 # APPS ALL SOURCES
 APP_ADMIN_ALL := src/app/AppBase.js \
 	$(shell find $(APP_COMMON_SRC) \
-				 $(PKG_AUTH_SRC) \
 				 $(PKG_DASHBOARD_SRC) \
 				 $(PKG_SETTINGS_SRC) \
 				 $(PKG_REPORTS_SRC) \
@@ -57,7 +55,7 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js')
 
-APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(PKG_AUTH_SRC) $(APP_SETUP_SRC) -name '*.js')
+APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(APP_SETUP_SRC) -name '*.js')
 
 ## External resources (ExtJS & Highstock)
 

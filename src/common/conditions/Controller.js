@@ -70,7 +70,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
     showSheet: function (activeItem, conditionIdx) {
         var me = this;
-
+        console.log(me.getView());
         if (!me.sheet) {
             me.sheet = Ext.Viewport.add({
                 xtype: 'fields-sheet',
@@ -108,11 +108,16 @@ Ext.define('Mfw.common.conditions.Controller', {
             fields[idx] = form.getValues();
         }
 
+        console.log(me.sheet.ownerCmp);
+
         if (me.sheet.getUseGrid()) {
             me.sheet.setActiveItem(0);
         } else {
             me.sheet.hide();
         }
+
+
+
         Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
     },
 

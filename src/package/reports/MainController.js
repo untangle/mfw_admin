@@ -11,7 +11,6 @@ Ext.define('Mfw.reports.Controller', {
     },
 
     onBefore: function () {
-        console.log('onbeforereports');
         var me = this, query, action,
             vm = me.getViewModel();
 
@@ -21,8 +20,6 @@ Ext.define('Mfw.reports.Controller', {
             query = arguments[0].replace('?', '');
             action = arguments[1];
         }
-
-        console.log(query);
 
         if (!query) {
             // if no condition parameters, load those condition params from view model and redirect

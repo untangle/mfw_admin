@@ -34,8 +34,6 @@ Ext.define('Mfw.reports.TimeRange', {
                 var sinceDate = new Date(conditions.predefinedSince),
                     untilDate, btnText = '';
 
-                console.log(vm);
-
                 if (sinceDate.getTime() > 0) {
                     // btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
                     btnText += (!conditions.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';

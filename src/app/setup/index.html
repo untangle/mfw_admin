@@ -23,11 +23,23 @@
         <script src="mfw-setup-all.js"></script>
 
         <script>
-            var translations, debug = false;
             Ext.onReady(function () {
                 Ext.application({
-                    extend: 'Mfw.App',
-                    namespace: 'Mfw'
+                    extend: 'Mfw.AppBase',
+                    namespace: 'Mfw',
+
+                    stores: ['Interfaces', 'Devices'],
+
+                    config: {
+                        account: null,
+                        routeAfterAuth: null
+                    },
+
+                    setViews: function () {
+                        Mfw.app.viewport.add([
+                            { xtype: 'setup-wizard' }
+                        ]);
+                    }
                 });
             });
         </script>

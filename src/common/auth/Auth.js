@@ -1,6 +1,6 @@
-Ext.define('Mfw.auth.Main', {
+Ext.define('Mfw.Auth', {
     extend: 'Ext.Container',
-    alias: 'widget.mfw-pkg-auth',
+    alias: 'widget.auth',
 
     style: 'background: #999',
 
