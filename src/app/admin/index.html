@@ -45,6 +45,20 @@
                         '*': { before: 'checkAuth' },
                     },
 
+                    viewport: {
+                        // reference: 'viewport',
+                        viewModel: {
+                            data: {
+                                currentView: null
+                            }
+                        },
+                        listeners: {
+                            activeItemchange: function (vp, item) {
+                                vp.getViewModel().set('currentView', item.xtype);
+                            }
+                        }
+                    },
+
                     setViews: function () {
                         Mfw.app.viewport.add([
                             { xtype: 'mfw-header' },

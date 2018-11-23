@@ -2,7 +2,7 @@ Ext.define('Mfw.common.conditions.Controller', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.fields',
 
-    onInitialize: function (cmp) {
+    init: function (cmp) {
         var me = this;
         me.mainView = mainView = cmp.up('dashboard') || cmp.up('reports');
         me.getViewModel().bind('{conditions.fields}', function (fields) {
@@ -70,7 +70,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
     showSheet: function (activeItem, conditionIdx) {
         var me = this;
-        console.log(me.getView());
+
         if (!me.sheet) {
             me.sheet = Ext.Viewport.add({
                 xtype: 'fields-sheet',
@@ -88,7 +88,6 @@ Ext.define('Mfw.common.conditions.Controller', {
         }
         me.sheet.setActiveItem(activeItem);
         me.sheet.show();
-        console.log(me.sheet.ownerCmp);
     },
 
 
@@ -102,13 +101,12 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         fields = vm.get('conditions.fields');
 
+
         if (idx === null) {
             fields.push(form.getValues());
         } else {
             fields[idx] = form.getValues();
         }
-
-        console.log(me.sheet.ownerCmp);
 
         if (me.sheet.getUseGrid()) {
             me.sheet.setActiveItem(0);
@@ -117,8 +115,13 @@ Ext.define('Mfw.common.conditions.Controller', {
         }
 
 
+        if (me.mainView.isXType('dashboard')) {
+            Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+        }
+        if (me.mainView.isXType('reports')) {
+            Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
+        }
 
-        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
     },
 
     onCancelCondition: function () {

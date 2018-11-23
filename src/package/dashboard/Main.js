@@ -5,6 +5,7 @@ Ext.define('Mfw.dashboard.Main', {
 
     viewModel: {
         data: {
+            currentView: 'dashboard',
             conditions: {
                 since: null,
                 fields: []

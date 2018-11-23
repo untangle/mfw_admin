@@ -20,8 +20,6 @@ Ext.define('Mfw.dashboard.Util', {
                 since: 1,
             }, key, val;
 
-        console.log(query);
-
         Ext.Array.each(query.split('&'), function (paramCond) {
 
             decodedParam = decodeURIComponent(paramCond);

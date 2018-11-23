@@ -37,7 +37,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             iconCls: 'md-icon-dashboard',
             handler: function () { Mfw.app.redirectTo('#dashboard'); },
             bind: {
-                pressed: '{currentView === "mfw-dashboard"}'
+                pressed: '{currentView === "dashboard"}'
             }
         }, {
             text: 'Reports'.t(),
@@ -45,7 +45,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             iconCls: 'md-icon-show-chart',
             handler: function () { Mfw.app.redirectTo('reports'); },
             bind: {
-                pressed: '{currentView === "mfw-reports"}'
+                pressed: '{currentView === "reports"}'
             }
         }, {
             text: 'Settings'.t(),
@@ -53,7 +53,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             iconCls: 'md-icon-settings',
             handler: function () { Mfw.app.redirectTo('settings'); },
             bind: {
-                pressed: '{currentView === "mfw-settings"}'
+                pressed: '{currentView === "settings"}'
             }
         }, {
             text: 'Monitor'.t(),

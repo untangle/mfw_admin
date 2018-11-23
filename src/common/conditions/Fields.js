@@ -29,9 +29,9 @@ Ext.define('Mfw.common.conditions.Fields', {
         xtype: 'button',
         iconCls: 'md-icon-add',
         handler: 'addConditionFromToolbar'
-    }],
+    }]
 
-    listeners: {
-        initialize: 'onInitialize'
-    }
+    // listeners: {
+    //     initialize: 'onInitialize'
+    // }
 });

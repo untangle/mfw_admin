@@ -38,7 +38,6 @@ Ext.define('Mfw.reports.TimeRange', {
                     // btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
                     btnText += (!conditions.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';
                 } else {
-                    console.log(conditions.predefinedSince);
                     btn.getMenu().getItems().each(function (item) {
                         if (item.value === conditions.predefinedSince && item.isXType('menuitem')) {
                             btnText += item.getText();
