@@ -89,7 +89,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 required: false,
                 editable: false,
                 clearable: false,
-                options: Data.prefix,
+                options: Globals.prefixes,
                 hidden: true,
                 bind: {
                     value: '{intf.v4DhcpPrefixOverride}',
@@ -153,7 +153,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 clearable: false,
                 hidden: true,
                 required: true,
-                options: Data.prefix,
+                options: Globals.prefixes,
                 bind: {
                     value: '{intf.v4StaticPrefix}',
                     required: '{intf.v4ConfigType === "STATIC"}',
@@ -324,20 +324,14 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 sortable: true,
                 resizable: false,
                 renderer: function (value) {
-                    var prefix = Ext.Array.findBy(Data.prefix, function (item) {
-                        return item.value === value;
-                    });
-                    if (prefix) {
-                        return prefix.text;
-                    }
-                    return 'not set';
+                    return Globals.prefixesMap()[value].text || 'not set';
                 },
                 editable: true,
                 editor: {
                     xtype: 'selectfield',
                     editable: false,
                     required: true,
-                    options: Data.prefix
+                    options: Globals.prefixes
                     // clearable: false
                 }
             }, {

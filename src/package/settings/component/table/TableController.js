@@ -578,6 +578,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case '<=': op = '&le;'; break;
                 default: op = '?'; break;
             }
+
             name = Ext.Array.findBy(Util.conditions, function (condition) {
                 return condition.type === c.get('type');
             }).name;

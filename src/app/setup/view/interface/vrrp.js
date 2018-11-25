@@ -117,20 +117,14 @@ Ext.define('Mfw.setup.interface.Vrrp', {
                 sortable: true,
                 resizable: false,
                 renderer: function (value) {
-                    var prefix = Ext.Array.findBy(Data.prefix, function (item) {
-                        return item.value === value;
-                    });
-                    if (prefix) {
-                        return prefix.text;
-                    }
-                    return 'not set';
+                    return Globals.prefixesMap()[value].text || 'not set';
                 },
                 editable: true,
                 editor: {
                     xtype: 'selectfield',
                     editable: false,
                     required: true,
-                    options: Data.prefix
+                    options: Globals.prefixes
                     // clearable: false
                 }
             }, {

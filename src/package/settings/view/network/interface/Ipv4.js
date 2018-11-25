@@ -69,19 +69,16 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                     placeholder: '{rec.v4StaticAddress}'
                 }
             }, {
-                xtype: 'combobox',
+                xtype: 'selectfield',
                 name: 'v4DhcpPrefixOverride',
                 label: 'Netmask'.t(),
-                queryMode: 'local',
-                displayField: 'text',
-                valueField: 'value',
                 editable: false,
                 clearable: true,
                 bind: {
                     value: '{rec.v4DhcpPrefixOverride}',
                     placeholder: '{rec.v4StaticPrefix}'
                 },
-                store: Data.netmask
+                options: Globals.prefixes
             }, {
                 xtype: 'textfield',
                 name: 'v4DhcpGatewayOverride',
@@ -137,9 +134,6 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
             xtype: 'combobox',
             name: 'v4StaticPrefix',
             label: 'Netmask'.t(),
-            queryMode: 'local',
-            displayField: 'text',
-            valueField: 'value',
             editable: false,
             // clearable: true,
             required: false,
@@ -147,7 +141,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
                 value: '{rec.v4StaticPrefix}',
                 required: '{rec.v4ConfigType === "STATIC"}'
             },
-            store: Data.netmask
+            options: Globals.prefixes
         }, {
             xtype: 'textfield',
             name: 'v4StaticGateway',

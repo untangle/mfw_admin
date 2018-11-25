@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.101.212
+DEV_HOST ?= 192.168.1.103
 DEV_DIR ?= /www
 
 # logging
@@ -34,7 +34,7 @@ SASS := $(wildcard sass/*.scss)
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
 APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
-APP_COMMON_SRC := $(addprefix src/common/, auth overrides conditions util)
+APP_COMMON_SRC := src/common/Globals.js $(addprefix src/common/, auth overrides conditions util)
 
 # PACKAGES SOURCES
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions *.js)
@@ -193,10 +193,13 @@ dev-copy:
 	@scp -r $(DESTDIR)/* root@$(DEV_HOST):$(DEV_DIR)
 	@echo "****************************************"
 
+dev-reload:
+	@bash reload.sh
+
 dev-watch:
 	$(call WARN_FUNCTION,"Waiting for changes...")
 	@while inotifywait -qr -e modify -e create -e delete -e move src; do \
-	  $(MAKE) DEV=$(DEV) dev-deploy; \
+	  $(MAKE) DEV=$(DEV) dev-deploy dev-reload; \
 	done
 
 # phony targets
@@ -220,4 +223,5 @@ dev-watch:
 	dev-deploy \
 	dev-install \
 	dev-copy \
-	watch
+	dev-reload \
+	dev-watch

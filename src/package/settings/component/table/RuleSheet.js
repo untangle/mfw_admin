@@ -100,7 +100,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                         }
                         name = Ext.Array.findBy(Util.conditions, function (c) {
                             return c.type === record.get('type');
-                        }).get('name');
+                        }).name;
                         return '<div class="condition"><span>' + name + '</span> ' +
                                 '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>'
                     }
@@ -180,14 +180,13 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             margin: 16
         },
         items: [{
-            xtype: 'combobox',
+            xtype: 'selectfield',
             name: 'type',
             label: 'Type'.t(),
             editable: false,
-            queryMode: 'local',
             displayField: 'name',
             valueField: 'type',
-            store: 'ruleconditions',
+            options: Util.conditions,
             required: true,
             listeners: {
                 change: 'onConditionTypeChange'
@@ -208,7 +207,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 { value: '<', text: 'Less Than'.t(), sign: ' [ &lt; ]' },
                 { value: '>=', text: 'Greater Than or Equal'.t(), sign:' [ &ge; ]' },
                 { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
-            ] // defined in Util.ops
+            ]
         }, {
             xtype: 'toolbar',
             // docked: 'bottom',
@@ -421,25 +420,23 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
              * !!! before setting the record on the form it is needed to
              * add the proper value field to the form based on condition type
              */
-            var me = this, condition = '', // Ext.getStore('ruleconditions').findRecord('type', conditionType),
+            var me = this, condition = Ext.Array.findBy(Util.conditions, function (c) { return c.type === conditionType; }),
                 valueField, ops = [];
-            if (condition && condition.get('field')) {
+            if (condition && condition.field) {
                 // get the condition field
-                valueField = condition.get('field');
+                valueField = condition.field;
             } else {
                 // use a textfield as fallback
                 valueField = { xtype: 'textfield' }
                 console.warn(conditionType + ' condition definition missing!')
             }
 
-            if (condition && condition.get('operations')) {
-                Ext.Object.each(condition.get('operations'), function (key, op) {
-                    ops.push(Util.ops[op]);
+            if (condition && condition.operators) {
+                Ext.Object.each(condition.operators, function (key, op) {
+                    ops.push(Globals.operatorsMap()[op]);
                 });
             } else {
-                Ext.Object.each(Util.ops, function (key, op) {
-                    ops.push(op);
-                });
+                ops = Globals.operators;
             }
             me.conditionform.down('#operation').setOptions(ops);
 

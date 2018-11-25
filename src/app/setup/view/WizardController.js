@@ -4,9 +4,9 @@ Ext.define('Mfw.setup.WizardController', {
 
     init: function () {
         var wizard = this.lookup('wizard'),
-        	layout = wizard.getLayout(),
-        	indicator = layout.getIndicator(),
-        	bbar = this.lookup('bbar');
+            layout = wizard.getLayout(),
+            indicator = layout.getIndicator(),
+            bbar = this.lookup('bbar');
 
         // indicator.on('indicatortap', function (cmp, idx, item) {
         //     console.log(arguments);
@@ -58,10 +58,10 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when continuing to next step
      */
     onContinue: function (btn) {
-        var wizard = this.lookup('wizard');
+        var wizard = this.lookup('wizard'),
             navbar = btn.up('toolbar'),
             currentStep = wizard.getActiveItem(),
-            layout = wizard.getLayout();
+            layout = wizard.getLayout(),
             controller = currentStep.getController();
 
         /**

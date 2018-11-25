@@ -43,45 +43,19 @@ Ext.define('Mfw.util.Util', {
         le: { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
     },
 
-    tmpColumns: [
-        { name: 'Protocol'.t(),    field: 'protocol' },
-        { name: 'Username'.t(),    field: 'username' },
-        { name: 'Hostname'.t(),    field: 'hostname' },
-        { name: 'Client'.t(),      field: 'c_client_addr' },
-        { name: 'Server'.t(),      field: 's_server_addr' },
-        { name: 'Server Port'.t(), field: 's_server_port' },
-    ],
-
-    fieldOperators: [
-        { name: 'equals [=]'.t(),            value: '=' },
-        { name: 'not equals [!=]'.t(),       value: '!=' },
-        { name: 'greater than [>]'.t(),      value: '>' },
-        { name: 'less than [<]'.t(),         value: '<' },
-        { name: 'greater or equal [>=]'.t(), value: '>=' },
-        { name: 'less or equal [<=]'.t(),    value: '<='},
-        { name: 'like'.t(),                  value: 'like' },
-        { name: 'not like'.t(),              value: 'not like' },
-        { name: 'is'.t(),                    value: 'is' },
-        { name: 'is not'.t(),                value: 'is not' },
-        { name: 'in'.t(),                    value: 'in' },
-        { name: 'not in'.t(),                value: 'not in' }
-    ],
-
-
-
     conditions: [{
         type:'IP_PROTOCOL',
         name: 'IP Protocol'.t(),
-        operations: ['eq', 'ne'],
+        operators: ['eq', 'ne'],
         field: {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             forceSelection: true,
             editable: false,
             queryMode: 'local',
             displayField: 'name',
             valueField: 'name',
             value: 'TCP', // a default value
-            // store: Data.protocols
+            options: Globals.protocols
         }
     }, {
         type:'CLIENT_ADDRESS',
@@ -114,11 +88,11 @@ Ext.define('Mfw.util.Util', {
     }, {
         type:'CLIENT_INTERFACE_ZONE',
         name: 'Client Interface Zone'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type:'SERVER_INTERFACE_ZONE',
         name: 'Server Interface Zone'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type:'SOURCE_ADDRESS',
         name: 'Source Address'.t()
@@ -134,23 +108,23 @@ Ext.define('Mfw.util.Util', {
     }, {
         type:'SOURCE_INTERFACE_ZONE',
         name: 'Source Interface Zone'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type:'DESTINATION_INTERFACE_ZONE',
         name: 'Destination Interface Zone'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type:'SOURCE_INTERFACE_NAME',
         name: 'Source Interface Name'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type:'DESTINATION_INTERFACE_NAME',
         name: 'Destination Interface Name'.t(),
-        operations: ['eq', 'ne']
+        operators: ['eq', 'ne']
     }, {
         type: 'CT_STATE',
         name: 'Connection State',
-        operations: ['eq', 'ne'],
+        operators: ['eq', 'ne'],
         field: {
             xtype: 'selectfield',
             forceSelection: true,

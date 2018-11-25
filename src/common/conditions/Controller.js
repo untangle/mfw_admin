@@ -4,7 +4,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
     init: function (cmp) {
         var me = this;
-        me.mainView = mainView = cmp.up('dashboard') || cmp.up('reports');
+        me.mainView = cmp.up('dashboard') || cmp.up('reports');
         me.getViewModel().bind('{conditions.fields}', function (fields) {
             me.generateConditionsButtons(fields)
         });
@@ -34,7 +34,7 @@ Ext.define('Mfw.common.conditions.Controller', {
             buttonsCmp = me.mainView.down('#fieldsBtns');
 
         Ext.Array.each(fields, function (field, idx) {
-            fieldName = Ext.Array.findBy(ConditionsUtil.fields, function (item) { return item.value === field.column; } ).text;
+            fieldName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === field.column; } ).text;
             buttons.push({
                 xtype: 'segmentedbutton',
                 margin: '0 5',
@@ -92,15 +92,14 @@ Ext.define('Mfw.common.conditions.Controller', {
 
 
     onDoneCondition: function () {
-        var me = this, fields, vm = me.getViewModel();
+        var me = this, fields,
+            vm = me.getViewModel(),
             form = me.sheet.down('formpanel'),
-            idx = me.sheet.getViewModel().get('conditionIdx'),
-            vm = me.getViewModel();
+            idx = me.sheet.getViewModel().get('conditionIdx');
 
         if (!form.validate()) { return; }
 
         fields = vm.get('conditions.fields');
-
 
         if (idx === null) {
             fields.push(form.getValues());

@@ -55,7 +55,7 @@ Ext.define('Mfw.common.conditions.Sheet', {
             },
             flex: 1,
             renderer: function (value, record) {
-                var fieldName = Ext.Array.findBy(Util.tmpColumns, function (item) { return item.field === value; } ).name;
+                var fieldName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === value; } ).name;
                 return '<strong>' + fieldName + ' ' + record.get('operator') + ' ' + record.get('value') + '</strong>';
             }
         }, {
@@ -92,7 +92,7 @@ Ext.define('Mfw.common.conditions.Sheet', {
             required: true,
             editable: false,
             forceSelection: true,
-            options: ConditionsUtil.fields
+            options: Globals.conditionFields
         }, {
             xtype: 'selectfield',
             name: 'operator',
@@ -100,7 +100,7 @@ Ext.define('Mfw.common.conditions.Sheet', {
             placeholder: 'Choose operator'.t(),
             required: true,
             editable: false,
-            options: ConditionsUtil.operators
+            options: Globals.operators
         }, {
             xtype: 'textfield',
             name: 'value',

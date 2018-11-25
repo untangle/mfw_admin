@@ -1,5 +1,5 @@
-Ext.define('Mfw.util.Data', {
-    alternateClassName: 'Data',
+Ext.define('Mfw.Globals', {
+    alternateClassName: 'Globals',
     singleton: true,
 
     protocols: [
@@ -143,7 +143,7 @@ Ext.define('Mfw.util.Data', {
         { name: 'ROHC' }
     ],
 
-    prefix: [
+    prefixes: [
         { value: 32, text: '/32 - 255.255.255.255' },
         { value: 31, text: '/31 - 255.255.255.254' },
         { value: 30, text: '/30 - 255.255.255.252' },
@@ -177,5 +177,45 @@ Ext.define('Mfw.util.Data', {
         { value: 2, text: '/2 - 192.0.0.0' },
         { value: 1, text: '/1 - 128.0.0.0' },
         { value: 0, text: '/0 - 0.0.0.0' }
-    ]
+    ],
+
+    conditionFields: [
+        { text: 'Username'.t(),    value: 'username' },
+        { text: 'Protocol'.t(),    value: 'protocol' },
+        { text: 'Hostname'.t(),    value: 'hostname' },
+        { text: 'Client'.t(),      value: 'c_client_addr' },
+        { text: 'Server'.t(),      value: 's_server_addr' },
+        { text: 'Server Port'.t(), value: 's_server_port' },
+    ],
+
+    operators: [
+        { text: 'equals [=]'.t(),            value: '=',        id: 'eq' },
+        { text: 'not equals [!=]'.t(),       value: '!=',       id: 'ne' },
+        { text: 'greater than [>]'.t(),      value: '>',        id: 'gt' },
+        { text: 'less than [<]'.t(),         value: '<',        id: 'lt' },
+        { text: 'greater or equal [>=]'.t(), value: '>=',       id: 'ge' },
+        { text: 'less or equal [<=]'.t(),    value: '<=',       id: 'le'},
+        { text: 'like'.t(),                  value: 'like',     id: 'like' },
+        { text: 'not like'.t(),              value: 'not like', id: 'not_like' },
+        { text: 'is'.t(),                    value: 'is',       id: 'is' },
+        { text: 'is not'.t(),                value: 'is not',   id: 'is_not' },
+        { text: 'in'.t(),                    value: 'in',       id: 'in' },
+        { text: 'not in'.t(),                value: 'not in',   id: 'not_in' }
+    ],
+
+    prefixesMap: function () {
+        if (!this._prefixesMap) {
+            this._prefixesMap = Ext.Array.toValueMap(this.prefixes, 'value');
+        }
+        return this._prefixesMap;
+    },
+
+    operatorsMap: function () {
+        if (!this._operatorsMap) {
+            this._operatorsMap = Ext.Array.toValueMap(this.operators, 'id');
+        }
+        return this._operatorsMap;
+    }
+
+
 });
