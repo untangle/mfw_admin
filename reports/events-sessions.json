@@ -1,0 +1,11 @@
+{
+    "name": "Sessions",
+    "category": "Traffic",
+    "description": "All processed sessions",
+    "displayOrder": 100,
+    "type": "EVENTS",
+    "table": "sessions",
+    "rendering": {
+        "FIXME": True
+    }
+}

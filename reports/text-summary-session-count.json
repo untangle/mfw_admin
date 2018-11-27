@@ -1,0 +1,14 @@
+{
+    "name": "Session Count Summary",
+    "category": "Traffic",
+    "description": "The number of sessions processed",
+    "displayOrder": 1,
+    "type": "TEXT",
+    "table": "sessions",
+    "queryText": {
+        "columns": ["count(*) as session_count"]
+    },
+    "rendering": {
+        "textString": "The server processed {0} network sessions."
+    }
+}

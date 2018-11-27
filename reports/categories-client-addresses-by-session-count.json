@@ -1,0 +1,16 @@
+{
+    "name": "Top Client Addresses by Session Count",
+    "category": "Traffic",
+    "description": "The top client addresses sorted by session count",
+    "displayOrder": 10,
+    "type": "CATEGORIES",
+    "table": "sessions",
+    "queryCategories": {
+        "groupColumn": "client_address",
+        "aggregationFunction": "count",
+        "aggregationValue": "*"
+    }
+    "rendering": {
+        "FIXME": True
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "Sessions by Time",
+    "category": "Traffic",
+    "description": "The session count over time",
+    "displayOrder": 10,
+    "type": "SERIES",
+    "table": "sessions",
+    "querySeries": {
+        "columns": ["count(*) as sessions"]
+    },
+    "rendering": {
+        "FIXME": True
+    }
+}

@@ -47,15 +47,15 @@ APP_ADMIN_ALL := src/app/AppBase.js \
 				 $(PKG_DASHBOARD_SRC) \
 				 $(PKG_SETTINGS_SRC) \
 				 $(PKG_REPORTS_SRC) \
-				 $(APP_ADMIN_SRC) -name '*.js')
+				 $(APP_ADMIN_SRC) -name '*.js' 2>/dev/null)
 
 APP_SETTINGS_ALL := src/app/AppBase.js \
 	$(shell find $(APP_COMMON_SRC) \
 				 $(APP_SETTINGS_SRC) \
 				 $(PKG_AUTH_SRC) \
-				 $(PKG_SETTINGS_SRC) -name '*.js')
+				 $(PKG_SETTINGS_SRC) -name '*.js' 2>/dev/null)
 
-APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(APP_SETUP_SRC) -name '*.js')
+APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(APP_SETUP_SRC) -name '*.js' 2>/dev/null)
 
 ## External resources (ExtJS & Highstock)
 
@@ -95,7 +95,8 @@ install: \
 	html-setup \
 	extjs-install \
 	highstock-install \
-	icons-install
+	icons-install \
+	reports-install
 
 extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
@@ -121,6 +122,20 @@ highstock-install: highstock-stage dir
 
 icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
+
+${REPORTS_DIR}/entries.json: reports/*
+	@echo "Building entries.json..."
+	@echo "" > ${REPORTS_DIR}/entries.json
+	@echo "[" >> ${REPORTS_DIR}/entries.json
+	@pre=""
+	@for file in reports/* ; do \
+		echo $${pre} >> ${REPORTS_DIR}/entries.json ; \
+		cat $${file} >> ${REPORTS_DIR}/entries.json ; \
+		pre="," ; \
+	done
+	@echo "\n]" >> ${REPORTS_DIR}/entries.json
+
+reports-install: dir ${REPORTS_DIR}/entries.json
 
 css: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: src/sass/mfw-all.css

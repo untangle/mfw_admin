@@ -1,0 +1,21 @@
+{
+    "name": "Top Client Addresses by Session Count",
+    "category": "Traffic",
+    "description": "The top client addresses sorted by UDP session count",
+    "displayOrder": 10,
+    "type": "CATEGORIES",
+    "table": "sessions",
+    "queryCategories": {
+        "groupColumn": "client_address",
+        "aggregationFunction": "count",
+        "aggregationValue": "*"
+    },
+    "conditions": [{
+        "column": "ip_protocol",
+        "operator": "EQUALS",
+        "value": "17"
+    }],
+    "rendering": {
+        "FIXME": True
+    }
+}
