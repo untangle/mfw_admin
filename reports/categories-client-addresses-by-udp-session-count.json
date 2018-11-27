@@ -1,5 +1,5 @@
 {
-    "name": "Top Client Addresses by Session Count",
+    "name": "Top Client Addresses by UDP Session Count",
     "category": "Traffic",
     "description": "The top client addresses sorted by UDP session count",
     "displayOrder": 10,
@@ -16,6 +16,6 @@
         "value": "17"
     }],
     "rendering": {
-        "FIXME": True
+        "FIXME": true
     }
 }

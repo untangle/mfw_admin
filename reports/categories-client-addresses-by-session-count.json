@@ -9,8 +9,8 @@
         "groupColumn": "client_address",
         "aggregationFunction": "count",
         "aggregationValue": "*"
-    }
+    },
     "rendering": {
-        "FIXME": True
+        "FIXME": true
     }
 }

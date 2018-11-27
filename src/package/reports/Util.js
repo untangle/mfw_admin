@@ -3,23 +3,31 @@ Ext.define('Mfw.reports.Util', {
     singleton: true,
 
     conditionsToQuery: function (conditions) {
-        var query = '';
+        var hash = Ext.Object.fromQueryString(window.location.hash.replace('#reports?', '')), route = 'reports?';
+
+        if (hash.cat) {
+            route += 'cat=' + hash.cat;
+        }
+        if (hash.rep) {
+            route += '&rep=' + hash.rep;
+        }
 
         if (conditions.predefinedSince) {
-            query += 'since=' + conditions.predefinedSince;
+            route += '&since=' + conditions.predefinedSince;
         } else {
-            query += 'since=' + (conditions.since || 1);
+            route += '&since=' + (conditions.since || 1);
         }
 
         if (conditions.until) {
-            query += '&until=' + conditions.until;
+            route += '&until=' + conditions.until;
         }
 
 
         Ext.Array.each(conditions.fields, function(field) {
-            query += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
+            route += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
         });
-        return query;
+
+        return route;
     },
 
     queryToConditions: function (query) {

@@ -12,6 +12,6 @@
         "limit": 5
     },
     "rendering": {
-        "FIXME": True
+        "FIXME": true
     }
 }

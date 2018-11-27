@@ -13,8 +13,18 @@ Ext.define('Mfw.store.Reports', {
 
     listeners: {
         load: function () {
-            // console.log(Ext.getStore('ReportsNav'));
             Ext.getStore('reports-nav').build();
+            // if (Ext.getStore('reports-nav')) {
+            //    //  Ext.getStore('reports-nav').build();
+            // }
+        }
+    },
+
+    proxy: {
+        type: 'ajax',
+        url: '/reports/entries.json',
+        reader: {
+            type: 'json',
         }
     }
 });

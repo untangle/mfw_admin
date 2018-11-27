@@ -9,6 +9,6 @@
         "columns": ["count(*) as sessions"]
     },
     "rendering": {
-        "FIXME": True
+        "FIXME": true
     }
 }

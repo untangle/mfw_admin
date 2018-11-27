@@ -42,7 +42,7 @@ Ext.define('Mfw.reports.Main', {
         items: [{
             xtype: 'panel',
             docked: 'left',
-            width: 250,
+            width: 400,
 
             resizable: {
                 split: true,
@@ -92,9 +92,5 @@ Ext.define('Mfw.reports.Main', {
         }, {
             xtype: 'chart'
         }]
-    }],
-
-    listeners: {
-        initialize: 'onInitialize'
-    },
+    }]
 });

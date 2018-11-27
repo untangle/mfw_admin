@@ -21,12 +21,8 @@ Ext.define('Mfw.reports.TimeRange', {
 
     // iconCls: 'x-fa fa-clock-o',
 
-    listeners: {
-        initialize: 'onInitialize'
-    },
-
     controller: {
-        onInitialize: function (btn) {
+        init: function (btn) {
             var me = this, vm = me.getViewModel(), btnText;
 
             // watch since condition change and update button text
@@ -60,10 +56,13 @@ Ext.define('Mfw.reports.TimeRange', {
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
                 if (item.value !== 'range') {
+                    console.log(vm);
+                    // conditions.predefinedSince = item.value;
+                    // conditions.until = null;
                     vm.set('conditions.predefinedSince', item.value);
                     vm.set('conditions.until', null);
-                    // Mfw.app.redirect();
-                    Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
+                    // // Mfw.app.redirect();
+                    // Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
 
                 } else {
                     me.showTimeRangeDialog();

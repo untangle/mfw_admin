@@ -15,10 +15,10 @@ Ext.define('Mfw.model.Report', {
 
         // helper fields
         {
-            name: '_href',
-            calculate: function (report) {
-                var categorySlug = report.category.toLowerCase().replace(/ /g, '-');
-                return 'reports/' + categorySlug + '/' + report.name.toLowerCase().replace(/ /g, '-');
+            name: '_route',
+            calculate: function (data) {
+                var categorySlug = data.category.toLowerCase().replace(/ /g, '-');
+                return 'cat=' + categorySlug + '&rep=' + data.name.toLowerCase().replace(/ /g, '-');
             }
         }
     ],
@@ -27,24 +27,5 @@ Ext.define('Mfw.model.Report', {
         model: 'Mfw.model.ReportRender',
         name: 'rendering',
         associationKey: 'rendering'
-    }],
-
-    proxy: {
-        type: 'memory',
-        // api: {
-        //     read: Util.api + '/settings/reports',
-        //     // update: Util.api + '/settings/network'
-        // },
-        // reader: {
-        //     type: 'json'
-        // },
-        // writer: {
-        //     type: 'json',
-        //     writeAllFields: true,
-        //     allDataOptions: {
-        //         associated: true,
-        //         persist: true
-        //     }
-        // }
-    }
+    }]
 });

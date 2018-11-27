@@ -10,7 +10,7 @@ Ext.define('Mfw.settings.Controller', {
     },
 
     onAction: function (route) {
-        var me = this, view = me.getView(),
+        var me = this, view = me.getView(), xtype,
             cmp = view.down('#currentSettings'),
             tree = view.down('treelist'),
             node = tree.getStore().findNode('href', 'settings' + route);

@@ -6,6 +6,6 @@
     "type": "EVENTS",
     "table": "sessions",
     "rendering": {
-        "FIXME": True
+        "FIXME": true
     }
 }

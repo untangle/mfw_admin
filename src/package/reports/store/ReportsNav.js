@@ -20,6 +20,7 @@ Ext.define('Mfw.store.ReportsNav', {
 
     build: function () {
         var me = this, nodes = [], storeCat, category, categoryName, categorySlug;
+        console.log('build');
         Ext.Array.each(Ext.getStore('reports').getGroups().items, function (group) {
             categoryName = group._groupKey;
             categorySlug = categoryName.toLowerCase().replace(/ /g, '-');
@@ -29,7 +30,7 @@ Ext.define('Mfw.store.ReportsNav', {
             category = {
                 text: '<strong>' + categoryName + '</strong>',
                 iconCls: 'tree ' + categorySlug,
-                href: 'reports/' + categorySlug,
+                route: 'reports?cat=' + categorySlug,
                 // slug: storeCat.get('slug'),
                 // type: storeCat.get('type'), // app or system
                 // icon: storeCat.get('icon'),
@@ -45,7 +46,7 @@ Ext.define('Mfw.store.ReportsNav', {
                 category.children.push({
                     text: report.get('name'),
                     iconCls: 'x-fa ' + report.getRendering().get('_icon'),
-                    href: report.get('_href'),
+                    route: 'reports?' + report.get('_route'),
                     leaf: true
                 });
             });
