@@ -12,7 +12,7 @@
     },
     "conditions": [{
         "column": "ip_protocol",
-        "operator": "EQUALS",
+        "operator": "EQ",
         "value": "17"
     }],
     "rendering": {
