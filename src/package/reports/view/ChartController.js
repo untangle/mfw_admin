@@ -54,10 +54,10 @@ Ext.define('Mfw.reports.ChartController', {
                 }
             },
             exporting: {
-                enabled: true,
+                enabled: false,
                 buttons: {
                     contextButton: {
-                        enabled: true // disable default contextButton
+                        enabled: false // disable default contextButton
                     },
                     testButton: {
                         text: 'Refresh'.t(),
@@ -318,13 +318,13 @@ Ext.define('Mfw.reports.ChartController', {
             };
         }
 
-        settings.title = {
-            text: record.get('name')
-        };
+        // settings.title = {
+        //     text: record.get('name')
+        // };
 
-        settings.subtitle = {
-            text: record.get('description')
-        };
+        // settings.subtitle = {
+        //     text: record.get('description')
+        // };
 
         // console.log(chart.options);
         chart.update(settings, true);
@@ -383,10 +383,21 @@ Ext.define('Mfw.reports.ChartController', {
                 chart.addSeries({ name: record.get('table'), data: newData }, true, { duration: 150 });
             } else {
                 console.log('DATA', normalizedData);
-                chart.addSeries(normalizedData, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table'), data: normalizedData }, true, { duration: 150 });
             }
         }
         me.update();
+    },
+
+    onSettings: function () {
+        var me = this;
+        if (!me.setingsSheet) {
+            me.setingsSheet = me.getView().add({
+                xtype: 'settings-sheet',
+                owner: me.getView()
+            });
+        }
+        me.setingsSheet.show();
     }
 
 });
