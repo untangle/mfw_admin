@@ -9,9 +9,10 @@
         "groupColumn": "client_address",
         "aggregationFunction": "count",
         "aggregationValue": "1",
-        "limit": 5
+        "limit": 5,
+        "orderAsc": true
     },
     "rendering": {
-        "FIXME": true
+        "type": "spline"
     }
 }

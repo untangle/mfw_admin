@@ -26,23 +26,23 @@ Ext.define('Mfw.reports.TimeRange', {
             var me = this, vm = me.getViewModel(), btnText;
 
             // watch since condition change and update button text
-            vm.bind('{conditions}', function (conditions) {
-                var sinceDate = new Date(conditions.predefinedSince),
+            vm.bind('{route}', function (route) {
+                var sinceDate = new Date(route.predefinedSince),
                     untilDate, btnText = '';
 
                 if (sinceDate.getTime() > 0) {
                     // btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
-                    btnText += (!conditions.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';
+                    btnText += (!route.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';
                 } else {
                     btn.getMenu().getItems().each(function (item) {
-                        if (item.value === conditions.predefinedSince && item.isXType('menuitem')) {
+                        if (item.value === route.predefinedSince && item.isXType('menuitem')) {
                             btnText += item.getText();
                         }
                     });
                 }
 
-                if (conditions.until) {
-                    untilDate = new Date(conditions.until);
+                if (route.until) {
+                    untilDate = new Date(route.until);
                     if (untilDate.getTime() > 0) {
                         // btnText += ' - ' + Ext.Date.format(untilDate, 'Y-m-d H:i A');
                         btnText += ' - ' + Ext.Date.format(untilDate, 'M j') + ', <strong>' + Ext.Date.format(untilDate, 'H:i A') + '</strong>';
@@ -56,11 +56,10 @@ Ext.define('Mfw.reports.TimeRange', {
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
                 if (item.value !== 'range') {
-                    console.log(vm);
                     // conditions.predefinedSince = item.value;
                     // conditions.until = null;
-                    vm.set('conditions.predefinedSince', item.value);
-                    vm.set('conditions.until', null);
+                    vm.set('route.predefinedSince', item.value);
+                    vm.set('route.until', null);
                     // // Mfw.app.redirect();
                     // Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
 

@@ -2,55 +2,59 @@ Ext.define('Mfw.reports.Util', {
     alternateClassName: 'ReportsUtil',
     singleton: true,
 
-    conditionsToQuery: function (conditions) {
-        var hash = Ext.Object.fromQueryString(window.location.hash.replace('#reports?', '')), route = 'reports?';
+    routeToQuery: function (route) {
+        var query = 'reports?';
+        // var hash = Ext.Object.fromQueryString(window.location.hash.replace('#reports?', '')), route = 'reports?';
 
-        if (hash.cat) {
-            route += 'cat=' + hash.cat;
-        }
-        if (hash.rep) {
-            route += '&rep=' + hash.rep;
-        }
+        if (route.cat) { query += 'cat=' + route.cat; }
+        if (route.rep) { query += '&rep=' + route.rep; }
 
-        if (conditions.predefinedSince) {
-            route += '&since=' + conditions.predefinedSince;
+        if (route.predefinedSince) {
+            query += '&since=' + route.predefinedSince;
         } else {
-            route += '&since=' + (conditions.since || 1);
+            query += '&since=' + (route.since || 1);
         }
 
-        if (conditions.until) {
-            route += '&until=' + conditions.until;
+        if (route.until) {
+            query += '&until=' + route.until;
         }
 
-
-        Ext.Array.each(conditions.fields, function(field) {
-            route += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
+        Ext.Array.each(route.columns, function(column) {
+            query += '&' + column.column + ':' + encodeURIComponent(column.operator) + ':' + encodeURIComponent(column.value) + ':' + (column.autoFormatValue === true ? 1 : 0);
         });
 
-        return route;
+        return query;
     },
 
-    queryToConditions: function (query) {
+    queryToRoute: function (query) {
         var decodedParam,
             decodedParamParts,
-            conditions = {
-                fields: [],
-                since: 1,
-                predefinedSince: 1
-            }, key, val;
+            key, val,
+            route= {
+                cat: null,
+                rep: null,
+                predefinedSince: 'today',
+                since: null,
+                until: null,
+                columns: []
+            };
+
+        if (query[0] === '?') {
+            query = query.substr(1);
+        }
+
 
         Ext.Array.each(query.split('&'), function (paramCond) {
             decodedParam = decodeURIComponent(paramCond);
             if (decodedParam.indexOf(':') > 0) {
                 decodedParamParts = decodedParam.split(':');
-                conditions.fields.push({
+                route.columns.push({
                     column: decodedParamParts[0],
                     operator: decodedParamParts[1],
                     value: decodedParamParts[2],
                     autoFormatValue: parseInt(decodedParamParts[3], 10) === 1 ? true : false,
                 });
             } else {
-                // if it's normal parameter like since, until
                 decodedParamParts = decodedParam.split('=');
                 key = decodedParamParts[0];
                 val = decodedParamParts[1];
@@ -77,15 +81,15 @@ Ext.define('Mfw.reports.Util', {
                             break;
 
                     }
-                    conditions.predefinedSince = predefSince;
-                    conditions.since = since.getTime();
-
+                    route.predefinedSince = predefSince;
+                    route.since = since.getTime();
+                    return;
                 }
 
                 if (key === 'until') {
                     // remove until in case of predefined since
-                    if (Ext.Array.contains(['1h', '6h', 'today', 'yesterday', 'thisweek', 'lastweek', 'month'], conditions.predefinedSince)) {
-                        conditions.until = null;
+                    if (Ext.Array.contains(['1h', '6h', 'today', 'yesterday', 'thisweek', 'lastweek', 'month'], route.predefinedSince)) {
+                        route.until = null;
                     } else {
                         var until, untilDate = new Date(parseInt(val, 10));
                         if (untilDate.getTime() > 0) {
@@ -93,12 +97,56 @@ Ext.define('Mfw.reports.Util', {
                         } else {
                             until = null;
                         }
-                        conditions.until = until;
+                        route.until = until;
                     }
+                    return;
+                }
+
+                if (key === 'cat') {
+                    route.cat = val;
+                }
+                if (key === 'rep') {
+                    route.rep = val;
                 }
             }
         });
-        return conditions;
+        return route;
+    },
+
+    fetchReportData: function (report, cb) {
+        // create query
+        Ext.Ajax.request({
+            url: '/api/reports/create_query',
+            params: Ext.JSON.encode(report.getData(true)),
+            success: function(response) {
+                // get data
+                var queryId = Ext.decode(response.responseText);
+                Ext.Ajax.request({
+                    url: '/api/reports/get_data/' + queryId,
+                    success: function (response) {
+                        var data = Ext.decode(response.responseText);
+                        cb(data);
+                        // close query
+                        // Ext.Ajax.request({
+                        //     url: '/api/reports/close_query/' + queryId,
+                        //     success: function (response) {
+                        //         var data = Ext.decode(response.responseText);
+                        //         console.log(data);
+                        //     },
+                        //     failure: function () {
+                        //         console.error('Unable to to close query ' + queryId);
+                        //     }
+                        // });
+                    },
+                    failure: function (response) {
+                        console.error('Unable to fetch data for query ' + queryId);
+                    }
+                });
+            },
+            failure: function (response, opts) {
+                console.error('Unable to create query!');
+            }
+        });
     }
 
 });

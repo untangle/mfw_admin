@@ -12,7 +12,8 @@ Ext.define('Mfw.store.Reports', {
     }],
 
     listeners: {
-        load: function () {
+        load: function (el, records) {
+            console.log(records);
             Ext.getStore('reports-nav').build();
             // if (Ext.getStore('reports-nav')) {
             //    //  Ext.getStore('reports-nav').build();

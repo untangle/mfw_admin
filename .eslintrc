@@ -16,6 +16,7 @@
         "constructor-super": 2,
         "curly": 2,
         "default-case": 2,
+        "semi": 2,
         // "for-direction": 2,
         // "getter-return": 2,
         "no-case-declarations": 2,
@@ -74,6 +75,7 @@
         "Mfw": true,
         "Globals": true,
         "Util": true,
-        "Data": true
+        "Data": true,
+        "ReportsUtil": true
     }
 }

@@ -9,6 +9,6 @@
         "columns": ["count(*) as sessions"]
     },
     "rendering": {
-        "FIXME": true
+        "type": "areaspline"
     }
 }

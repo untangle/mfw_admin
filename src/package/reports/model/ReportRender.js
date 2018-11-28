@@ -5,7 +5,7 @@ Ext.define('Mfw.model.ReportRender', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'type', type: 'string' },
+        { name: 'type', type: 'string' }, // ["spline","line","areaspline","area","pie","column"]
         { name: 'stacking', type: 'string', defaultValue: 'none' }, // normal, percent
         { name: 'colors', type: 'string' },
 

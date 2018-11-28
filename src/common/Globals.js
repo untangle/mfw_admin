@@ -189,32 +189,26 @@ Ext.define('Mfw.Globals', {
     ],
 
     operators: [
-        { text: 'equals [=]'.t(),            value: '=',        id: 'eq' },
-        { text: 'not equals [!=]'.t(),       value: '!=',       id: 'ne' },
-        { text: 'greater than [>]'.t(),      value: '>',        id: 'gt' },
-        { text: 'less than [<]'.t(),         value: '<',        id: 'lt' },
-        { text: 'greater or equal [>=]'.t(), value: '>=',       id: 'ge' },
-        { text: 'less or equal [<=]'.t(),    value: '<=',       id: 'le'},
-        { text: 'like'.t(),                  value: 'like',     id: 'like' },
-        { text: 'not like'.t(),              value: 'not like', id: 'not_like' },
-        { text: 'is'.t(),                    value: 'is',       id: 'is' },
-        { text: 'is not'.t(),                value: 'is not',   id: 'is_not' },
-        { text: 'in'.t(),                    value: 'in',       id: 'in' },
-        { text: 'not in'.t(),                value: 'not in',   id: 'not_in' }
+        { text: 'equals [=]'.t(),            value: '=',        id: 'EQ' },
+        { text: 'not equals [!=]'.t(),       value: '!=',       id: 'NE' },
+        { text: 'greater than [>]'.t(),      value: '>',        id: 'GT' },
+        { text: 'less than [<]'.t(),         value: '<',        id: 'LT' },
+        { text: 'greater or equal [>=]'.t(), value: '>=',       id: 'GE' },
+        { text: 'less or equal [<=]'.t(),    value: '<=',       id: 'LE'},
+        { text: 'like'.t(),                  value: 'like',     id: 'LIKE' },
+        { text: 'not like'.t(),              value: 'not like', id: 'NOT_LIKE' },
+        { text: 'is'.t(),                    value: 'is',       id: 'IS' },
+        { text: 'is not'.t(),                value: 'is not',   id: 'IS_NOT' },
+        { text: 'in'.t(),                    value: 'in',       id: 'IN' },
+        { text: 'not in'.t(),                value: 'not in',   id: 'NOT_IN' }
     ],
 
-    prefixesMap: function () {
-        if (!this._prefixesMap) {
-            this._prefixesMap = Ext.Array.toValueMap(this.prefixes, 'value');
-        }
-        return this._prefixesMap;
-    },
-
-    operatorsMap: function () {
-        if (!this._operatorsMap) {
-            this._operatorsMap = Ext.Array.toValueMap(this.operators, 'id');
-        }
-        return this._operatorsMap;
+    constructor: function() {
+        this.initConfig({
+            operatorsMap: Ext.Array.toValueMap(this.operators, 'id'),
+            prefixesMap: Ext.Array.toValueMap(this.prefixes, 'value')
+            // columns: columns
+        });
     }
 
 

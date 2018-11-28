@@ -324,7 +324,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 sortable: true,
                 resizable: false,
                 renderer: function (value) {
-                    return Globals.prefixesMap()[value].text || 'not set';
+                    return Globals.prefixesMap[value].text || 'not set';
                 },
                 editable: true,
                 editor: {
@@ -394,7 +394,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             grid.getStore().add({
                 v4Address: '192.168.0.1',
                 v4Prefix: 24
-            })
+            });
         }
 
     }

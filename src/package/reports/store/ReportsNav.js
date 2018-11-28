@@ -30,7 +30,8 @@ Ext.define('Mfw.store.ReportsNav', {
             category = {
                 text: '<strong>' + categoryName + '</strong>',
                 iconCls: 'tree ' + categorySlug,
-                route: 'reports?cat=' + categorySlug,
+                route: 'cat=' + categorySlug,
+                cat: categorySlug,
                 // slug: storeCat.get('slug'),
                 // type: storeCat.get('type'), // app or system
                 // icon: storeCat.get('icon'),
@@ -46,7 +47,9 @@ Ext.define('Mfw.store.ReportsNav', {
                 category.children.push({
                     text: report.get('name'),
                     iconCls: 'x-fa ' + report.getRendering().get('_icon'),
-                    route: 'reports?' + report.get('_route'),
+                    route: report.get('_route'),
+                    cat: categorySlug,
+                    rep: report.get('name').toLowerCase().replace(/ /g, '-'),
                     leaf: true
                 });
             });

@@ -11,7 +11,9 @@ Ext.define('Mfw.model.Report', {
         { name: 'description', type: 'string' },
         { name: 'displayOrder', type: 'integer' },
         { name: 'readOnly', type: 'boolean' },
-        { name: 'type', type: 'string' }, // ["TEXT","PIE_CHART","TIME_CHART","TIME_DYNAMIC_CHART","EVENT_LIST"],
+        { name: 'type', type: 'string' }, // ["TEXT","EVENTS","CATEGORIES","SERIES","CATEGORIES_SERIES"],
+        { name: 'table', type: 'string' },
+        // { name: '', type: 'string' },
 
         // helper fields
         {
@@ -23,7 +25,25 @@ Ext.define('Mfw.model.Report', {
         }
     ],
 
+    hasMany: [{
+        model: 'Mfw.model.ReportCondition',
+        name: 'conditions',
+        associationKey: 'conditions'
+    }],
+
     hasOne: [{
+        model: 'Mfw.model.ReportQueryCategory',
+        name: 'queryCategories',
+        associationKey: 'queryCategories'
+    }, {
+        model: 'Mfw.model.ReportQueryText',
+        name: 'queryText',
+        associationKey: 'queryText'
+    }, {
+        model: 'Mfw.model.ReportQuerySeries',
+        name: 'querySeries',
+        associationKey: 'querySeries'
+    }, {
         model: 'Mfw.model.ReportRender',
         name: 'rendering',
         associationKey: 'rendering'

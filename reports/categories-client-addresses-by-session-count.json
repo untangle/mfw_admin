@@ -11,6 +11,8 @@
         "aggregationValue": "*"
     },
     "rendering": {
-        "FIXME": true
+        "type": "pie",
+        "donutInnerSize": 50,
+        "3dEnabled": true
     }
 }

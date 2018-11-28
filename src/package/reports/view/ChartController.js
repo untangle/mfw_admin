@@ -62,7 +62,7 @@ Ext.define('Mfw.reports.ChartController', {
                     testButton: {
                         text: 'Refresh'.t(),
                         onclick: function() {
-                            me.setData()
+                            me.loadData();
                         }
                     },
                     // timerangeButton: {
@@ -171,7 +171,7 @@ Ext.define('Mfw.reports.ChartController', {
         var me = this;
         view.getViewModel().bind('{record}', function (record) {
             if (!record) { return; }
-            me.setData();
+            me.loadData();
         });
 
 
@@ -179,6 +179,23 @@ Ext.define('Mfw.reports.ChartController', {
             me.update();
         }, me, { deep: true });
     },
+
+    loadData: function () {
+        var me = this, record = me.getViewModel().get('record'),
+            chart = me.getView().chart;
+
+        if (!chart || !record) { return; }
+
+        while (chart.series.length > 0) {
+            chart.series[0].remove(true);
+        }
+
+        ReportsUtil.fetchReportData(record, function (data) {
+            console.log(data);
+            me.setData(data);
+        });
+    },
+
 
     update: function () {
 
@@ -193,7 +210,7 @@ Ext.define('Mfw.reports.ChartController', {
 
         if (!chart) { return; }
 
-        if (record.get('type') === 'STATIC_SERIES' || record.get('type') === 'DYNAMIC_SERIES') {
+        if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
 
             if (chart.series) {
                 Ext.Array.each(chart.series, function (serie, idx) {
@@ -225,8 +242,8 @@ Ext.define('Mfw.reports.ChartController', {
                         approximation: rendering.get('dataGroupingApproximation'),
                         groupPixelWidth: rendering.get('dataGroupingFactor')
                     }
-                }
-            })
+                };
+            });
 
             plotOptions.column = {
                 stacking: rendering.get('stacking') === 'none' ? undefined : rendering.get('stacking'),
@@ -237,7 +254,7 @@ Ext.define('Mfw.reports.ChartController', {
                     pointPadding: 0.2,
                     groupPixelWidth: rendering.get('dataGroupingFactor') * chart.series.length
                 }
-            }
+            };
 
             settings = {
                 chart: {
@@ -258,7 +275,7 @@ Ext.define('Mfw.reports.ChartController', {
                     visible: true
                 }
 
-            }
+            };
         }
 
 
@@ -298,42 +315,64 @@ Ext.define('Mfw.reports.ChartController', {
                 yAxis: {
                     visible: rendering.get('type') === 'column'
                 }
-            }
+            };
         }
 
         settings.title = {
             text: record.get('name')
-        }
+        };
 
         settings.subtitle = {
             text: record.get('description')
-        }
+        };
 
         // console.log(chart.options);
         chart.update(settings, true);
 
     },
 
-    setData: function () {
-        var me = this, chart = me.getView().chart,
+    setData: function (data) {
+        var me = this, chart = me.getView().chart, normalizedData = [],
             record = me.getViewModel().get('record');
         if (!chart) { return; }
 
         while (chart.series.length > 0) {
-            chart.series[0].remove(false);
+            chart.series[0].remove(true);
         }
 
-        var data = Util.generateData(record);
+        if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
+            var series = {};
 
-        if (record.get('type') === 'STATIC_SERIES' || record.get('type') === 'DYNAMIC_SERIES') {
+            Ext.Array.sort(data, function (a, b) {
+                if (a.time_trunc < b.time_trunc) { return -1; }
+                if (a.time_trunc > b.time_trunc) { return 1; }
+                return 0;
+            });
+
             Ext.Array.each(data, function (d) {
-                chart.addSeries(d, false, { duration: 150 });
+                Ext.Object.each(d, function (key, val) {
+                    if (key !== 'time_trunc') {
+                        if (!series[key]) {
+                            series[key] = { name: key, data: [] };
+                        } else {
+                            series[key].data.push([d.time_trunc, val || 0]);
+                        }
+                    }
+                });
+            });
+            Ext.Object.each(series, function (serie, val) {
+                chart.addSeries(val, false, { duration: 150 });
             });
         } else {
-
-            if (data.data.length > record.getRendering().get('slicesNumber')) {
+            Ext.Array.each(data, function (point) {
+                normalizedData.push({
+                    name: point[record.getQueryCategories().get('groupColumn')],
+                    y: point.value
+                });
+            });
+            if (normalizedData.length > record.getRendering().get('slicesNumber')) {
                 var others = { name: 'Others', y: 0, color: '#CCC' }, newData = [];
-                Ext.Array.each(data.data, function (point, idx) {
+                Ext.Array.each(normalizedData, function (point, idx) {
                     if (idx >= record.getRendering().get('slicesNumber')) {
                         others.y += point.y;
                     } else {
@@ -341,9 +380,10 @@ Ext.define('Mfw.reports.ChartController', {
                     }
                 });
                 newData.push(others);
-                chart.addSeries({ name: 'test', data: newData }, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table'), data: newData }, true, { duration: 150 });
             } else {
-                chart.addSeries(data, true, { duration: 150 });
+                console.log('DATA', normalizedData);
+                chart.addSeries(normalizedData, true, { duration: 150 });
             }
         }
         me.update();

@@ -9,7 +9,7 @@ Ext.define('Mfw.common.conditions.Fields', {
     viewModel: {
         formulas: {
             conditionsBtnTxt: function (get) {
-                return get('conditions.fields').length;
+                return get('route.columns').length;
             }
         }
     },

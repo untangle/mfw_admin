@@ -117,7 +117,7 @@ Ext.define('Mfw.setup.interface.Vrrp', {
                 sortable: true,
                 resizable: false,
                 renderer: function (value) {
-                    return Globals.prefixesMap()[value].text || 'not set';
+                    return Globals.prefixesMap[value].text || 'not set';
                 },
                 editable: true,
                 editor: {

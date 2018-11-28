@@ -12,11 +12,13 @@ Ext.define('Mfw.reports.Main', {
 
     viewModel: {
         data: {
-            conditions: {
+            route: {
+                cat: null,
+                rep: null,
                 predefinedSince: 'today',
-                since: '',
-                until: '',
-                fields: []
+                since: null,
+                until: null,
+                columns: []
             }
         }
     },
@@ -92,5 +94,9 @@ Ext.define('Mfw.reports.Main', {
         }, {
             xtype: 'chart'
         }]
-    }]
+    }],
+
+    listeners: {
+        deactivate: 'onDeactivate'
+    }
 });

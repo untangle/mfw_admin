@@ -5,8 +5,8 @@ Ext.define('Mfw.common.conditions.Controller', {
     init: function (cmp) {
         var me = this;
         me.mainView = cmp.up('dashboard') || cmp.up('reports');
-        me.getViewModel().bind('{conditions.fields}', function (fields) {
-            me.generateConditionsButtons(fields)
+        me.getViewModel().bind('{route.columns}', function (columns) {
+            me.generateColumnsButtons(columns);
         });
     },
 
@@ -29,18 +29,19 @@ Ext.define('Mfw.common.conditions.Controller', {
         }]);
     },
 
-    generateConditionsButtons: function (fields) {
-        var me = this, buttons = [], fieldName, vm = me.getViewModel(),
+    generateColumnsButtons: function (columns) {
+        var me = this, buttons = [], columnName, vm = me.getViewModel(),
+            route = vm.get('route'),
             buttonsCmp = me.mainView.down('#fieldsBtns');
 
-        Ext.Array.each(fields, function (field, idx) {
-            fieldName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === field.column; } ).text;
+        Ext.Array.each(columns, function (column, idx) {
+            columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === column.column; } ).text;
             buttons.push({
                 xtype: 'segmentedbutton',
                 margin: '0 5',
                 allowToggle: false,
                 items: [{
-                    text: fieldName + ' ' + field.operator + ' ' + field.value,
+                    text: columnName + ' ' + column.operator + ' ' + column.value,
                     handler: function () {
                         me.showSheet(1, idx);
                     }
@@ -48,8 +49,9 @@ Ext.define('Mfw.common.conditions.Controller', {
                     iconCls: 'x-tool-type-close',
                     fieldIndex: idx,
                     handler: function (btn) {
-                        Ext.Array.removeAt(fields, btn.fieldIndex);
-                        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+                        Ext.Array.removeAt(columns, btn.fieldIndex);
+                        route.columns = columns;
+                        vm.set('route', route);
                     }
                 }]
             });
@@ -92,19 +94,20 @@ Ext.define('Mfw.common.conditions.Controller', {
 
 
     onDoneCondition: function () {
-        var me = this, fields,
+        var me = this, columns,
             vm = me.getViewModel(),
             form = me.sheet.down('formpanel'),
+            route = vm.get('route'),
             idx = me.sheet.getViewModel().get('conditionIdx');
 
         if (!form.validate()) { return; }
 
-        fields = vm.get('conditions.fields');
+        columns = vm.get('route.columns');
 
         if (idx === null) {
-            fields.push(form.getValues());
+            columns.push(form.getValues());
         } else {
-            fields[idx] = form.getValues();
+            columns[idx] = form.getValues();
         }
 
         if (me.sheet.getUseGrid()) {
@@ -113,13 +116,16 @@ Ext.define('Mfw.common.conditions.Controller', {
             me.sheet.hide();
         }
 
+        route.columns = columns;
 
-        if (me.mainView.isXType('dashboard')) {
-            Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
-        }
-        if (me.mainView.isXType('reports')) {
-            Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
-        }
+        // need to set full conditions not just the fields so the binding to fire
+        vm.set('route', route);
+        // if (me.mainView.isXType('dashboard')) {
+        //     Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+        // }
+        // if (me.mainView.isXType('reports')) {
+        //     Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
+        // }
 
     },
 

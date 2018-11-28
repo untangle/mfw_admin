@@ -198,7 +198,7 @@ Ext.define('Mfw.setup.interface.Ipv6', {
                 sortable: true,
                 resizable: false,
                 renderer: function (value) {
-                    return Globals.prefixesMap()[value].text || 'not set';
+                    return Globals.prefixesMap[value].text || 'not set';
                 },
                 editable: true,
                 editor: {
@@ -236,7 +236,7 @@ Ext.define('Mfw.setup.interface.Ipv6', {
             grid.getStore().add({
                 v6Address: '192.168.0.1',
                 v6Prefix: 24
-            })
+            });
         }
 
     }

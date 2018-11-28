@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.101.193
+DEV_HOST ?= 192.168.101.212
 DEV_DIR ?= /www
 
 # logging
@@ -213,8 +213,8 @@ dev-reload:
 
 dev-watch:
 	$(call WARN_FUNCTION,"Waiting for changes...")
-	@while inotifywait -qr -e modify -e create -e delete -e move src; do \
-	  $(MAKE) DEV=$(DEV) dev-deploy dev-reload; \
+	@while inotifywait -qr -e modify -e create -e delete -e move src reports; do \
+	  $(MAKE) DEV=$(DEV) reports-install dev-deploy dev-reload; \
 	done
 
 # phony targets
