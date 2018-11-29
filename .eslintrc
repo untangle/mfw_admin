@@ -76,6 +76,8 @@
         "Globals": true,
         "Util": true,
         "Data": true,
-        "ReportsUtil": true
+        "ReportsUtil": true,
+        "Table": true,
+        "Renderer": true
     }
 }

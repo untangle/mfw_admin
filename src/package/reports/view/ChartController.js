@@ -20,8 +20,12 @@ Ext.define('Mfw.reports.ChartController', {
         view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
             chart: {
                 animation: false,
-                height: 500,
+                // height: '100%',
                 events: {
+                    render: function () {
+                        Ext.fireEvent('renderedchart');
+                        // console.log('rendered');
+                    }
                     // selection: function (event) {
                     //     // if (isWidget) { return; } // applies only when viewing the report
                     //     if (event.resetSelection) {
@@ -167,21 +171,27 @@ Ext.define('Mfw.reports.ChartController', {
 
     },
 
-    onInitialize: function (view) {
+    init: function (view) {
         var me = this;
+
+        view.on('painted', me.onPainted);
+
         view.getViewModel().bind('{record}', function (record) {
-            if (!record) { return; }
+            if (!record ||
+                record.get('type') === 'TEXT' ||
+                record.get('type') === 'EVENTS') {
+                    return;
+            }
             me.loadData();
         });
-
-
-        view.getViewModel().bind('{record.rendering}', function (r) {
-            me.update();
-        }, me, { deep: true });
+        // view.getViewModel().bind('{record.rendering}', function (r) {
+        //     me.update();
+        // }, me, { deep: true });
     },
 
     loadData: function () {
-        var me = this, record = me.getViewModel().get('record'),
+        var me = this,
+            record = me.getViewModel().get('record'),
             chart = me.getView().chart;
 
         if (!chart || !record) { return; }
@@ -190,9 +200,11 @@ Ext.define('Mfw.reports.ChartController', {
             chart.series[0].remove(true);
         }
 
+        me.getView().up('report').mask();
+
         ReportsUtil.fetchReportData(record, function (data) {
-            console.log(data);
             me.setData(data);
+            me.getView().up('report').unmask();
         });
     },
 

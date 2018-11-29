@@ -23,6 +23,17 @@ Ext.define('Mfw.reports.Settings', {
     layout: 'fit',
     items: [{
         xtype: 'tabpanel',
+
+        layout: {
+            type: 'card',
+            deferRender: false, // important so the validation works if card not yet visible
+            animation: null
+        },
+
+        tabBar: {
+            animateIndicator: false
+        },
+
         items: [{
             title: '<i class="x-fa fa-sliders"></i>'
         }, {

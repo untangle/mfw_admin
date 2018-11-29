@@ -4,8 +4,5 @@
     "description": "All processed sessions",
     "displayOrder": 100,
     "type": "EVENTS",
-    "table": "sessions",
-    "rendering": {
-        "FIXME": true
-    }
+    "table": "sessions"
 }

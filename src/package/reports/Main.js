@@ -92,7 +92,7 @@ Ext.define('Mfw.reports.Main', {
                 }]
             }
         }, {
-            xtype: 'chart'
+            xtype: 'report'
         }]
     }],
 
