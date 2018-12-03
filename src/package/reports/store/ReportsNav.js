@@ -44,8 +44,8 @@ Ext.define('Mfw.store.ReportsNav', {
             // add reports to each category
             Ext.Array.each(group.items, function (report) {
                 switch (report.get('type')) {
-                    case 'TEXT': icon = 'x-font-icon md-icon-subject'; break;
-                    case 'EVENTS': icon = 'x-font-icon md-icon-view-list'; break;
+                    case 'TEXT': icon = 'x-fa fa-align-left'; break;
+                    case 'EVENTS': icon = 'x-fa fa-columns'; break;
                     default: icon = 'x-fa ' + report.getRendering().get('_icon');
                 }
 

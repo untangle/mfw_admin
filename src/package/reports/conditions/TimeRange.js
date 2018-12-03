@@ -23,7 +23,7 @@ Ext.define('Mfw.reports.TimeRange', {
 
     controller: {
         init: function (btn) {
-            var me = this, vm = me.getViewModel(), btnText;
+            var me = this, vm = me.getViewModel(), route;
 
             // watch since condition change and update button text
             vm.bind('{route}', function (route) {
@@ -49,25 +49,21 @@ Ext.define('Mfw.reports.TimeRange', {
                     }
                 }
                 btn.setText(btnText);
-            }, {
-                deep: true
-            });
+            }, me, { deep: true });
 
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
+                route = vm.get('route');
+                console.log(route);
                 if (item.value !== 'range') {
-                    // conditions.predefinedSince = item.value;
-                    // conditions.until = null;
-                    vm.set('route.predefinedSince', item.value);
-                    vm.set('route.until', null);
-                    // // Mfw.app.redirect();
-                    // Mfw.app.redirectTo(window.location.hash.split('?')[0] + '?' + Util.modelToParams('reports', vm.get('conditions')));
+                    route.predefinedSince = item.value;
+                    route.until = null;
 
+                    vm.set('route', route);
                 } else {
                     me.showTimeRangeDialog();
                 }
                 menu.hide();
-
             });
         },
 

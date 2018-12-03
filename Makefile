@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.101.212
+DEV_HOST ?= 192.168.101.76
 DEV_DIR ?= /www
 
 # logging
@@ -28,7 +28,7 @@ SETTINGS_DIR := $(DESTDIR)/settings
 REPORTS_DIR := $(DESTDIR)/reports
 
 # SASS
-SASS := $(wildcard sass/*.scss)
+SASS := $(wildcard src/sass/*.scss)
 
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
@@ -138,12 +138,9 @@ ${REPORTS_DIR}/entries.json: reports/*
 reports-install: dir ${REPORTS_DIR}/entries.json
 
 css: $(ADMIN_DIR)/mfw-all.css
-$(ADMIN_DIR)/mfw-all.css: src/sass/mfw-all.css
+$(ADMIN_DIR)/mfw-all.css: src/css/mfw-all.css
 	$(call LOG_FUNCTION,"Building CSS")
 	@cp $^ $@
-
-sass/mfw-all.css: $(SASS)
-	cat $^ | sass --sourcemap=none --no-cache --scss --style normal --stdin $@
 
 js-admin: $(ADMIN_DIR)/mfw-admin-all.js
 $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
@@ -190,7 +187,7 @@ clean:
 
 ## development targets
 
-dev-deploy: dev-install dev-copy
+dev-deploy: dev-install dev-sass css dev-copy
 
 dev-install: \
 	dir \
@@ -200,7 +197,15 @@ dev-install: \
 	html-settings \
 	html-reports \
 	js-setup \
-	html-setup
+	html-setup \
+	dev-sass \
+	css
+
+# generates the mfw-all.css
+dev-sass: src/css/mfw-all.css
+src/css/mfw-all.css: $(SASS)
+	$(call LOG_FUNCTION,"Building Dev CSS")
+	cat $^ | sass --scss --style compact --sourcemap=none -s $@
 
 dev-copy:
 	@echo "****************************************"
@@ -237,6 +242,7 @@ dev-watch:
 	highstock-install \
 	dev-deploy \
 	dev-install \
+	dev-sass \
 	dev-copy \
 	dev-reload \
 	dev-watch

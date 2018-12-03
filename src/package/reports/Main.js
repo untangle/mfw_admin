@@ -45,7 +45,7 @@ Ext.define('Mfw.reports.Main', {
         items: [{
             xtype: 'panel',
             docked: 'left',
-            width: 400,
+            width: 380,
 
             resizable: {
                 split: true,
@@ -54,6 +54,7 @@ Ext.define('Mfw.reports.Main', {
 
             items: [{
                 xtype: 'treelist',
+                cls: 'reports-tree',
                 scrollable: true,
                 ui: 'nav',
                 style: {
