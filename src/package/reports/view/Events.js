@@ -26,15 +26,19 @@ Ext.define('Mfw.reports.Events', {
     controller: {
         init: function (view) {
             var me = this,
+                viewModel = me.getViewModel(),
                 grid = view.down('grid');
 
             view.getViewModel().bind('{record}', function (record) {
-                if (!record || record.get('type') !== 'EVENTS') {
+                if (!record) {
+                    // clear data when deactivating reports
+                    viewModel.set('data', []);
                     return;
                 }
-
+                if (record.get('type') !== 'EVENTS') {
+                    return;
+                }
                 grid.setColumns(Table.sessions.columns);
-
                 me.loadData();
             });
         },
@@ -52,9 +56,12 @@ Ext.define('Mfw.reports.Events', {
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
+            viewModel.set('data', []);
+            me.getView().up('report').mask();
             ReportsUtil.fetchReportData(record, function (data) {
                 viewModel.set('data', data);
                 console.log(viewModel.get('data'));
+                me.getView().up('report').unmask();
             });
         }
     }

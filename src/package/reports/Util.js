@@ -125,18 +125,17 @@ Ext.define('Mfw.reports.Util', {
                     url: '/api/reports/get_data/' + queryId,
                     success: function (response) {
                         var data = Ext.decode(response.responseText);
-                        cb(data);
                         // close query
-                        // Ext.Ajax.request({
-                        //     url: '/api/reports/close_query/' + queryId,
-                        //     success: function (response) {
-                        //         var data = Ext.decode(response.responseText);
-                        //         console.log(data);
-                        //     },
-                        //     failure: function () {
-                        //         console.error('Unable to to close query ' + queryId);
-                        //     }
-                        // });
+                        Ext.Ajax.request({
+                            url: '/api/reports/close_query/' + queryId,
+                            method: 'POST',
+                            success: function (response) {
+                                cb(data);
+                            },
+                            failure: function () {
+                                console.error('Unable to to close query ' + queryId);
+                            }
+                        });
                     },
                     failure: function (response) {
                         console.error('Unable to fetch data for query ' + queryId);

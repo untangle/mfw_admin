@@ -41,8 +41,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             }
         }, {
             text: 'Reports'.t(),
-            // iconCls: 'x-fa fa-area-chart',
-            iconCls: 'md-icon-show-chart',
+            iconCls: 'x-fa fa-area-chart',
+            // iconCls: 'md-icon-show-chart',
             handler: function () { Mfw.app.redirectTo('reports'); },
             bind: {
                 pressed: '{currentView === "reports"}'

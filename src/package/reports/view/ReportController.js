@@ -4,44 +4,46 @@ Ext.define('Mfw.reports.ReportController', {
     alias: 'controller.report',
 
     init: function (view) {
-        var me = this, vm = me.getViewModel(),
-            chartView = view.down('chart-report');
+        var me = this, vm = me.getViewModel();
 
-        // chartView.on('painted', function () {
-        //     console.log('painted');
-        //     // vm.set('record', vm.get('record'));
-
-
-        //     view.getViewModel().bind('{record}', function (record) {
-        //         console.log(chartView.chart, record);
-        //         // if (!record) { return; }
-        //         me.loadData();
-        //     });
-
-
-        //     // Mfw.app.redirectTo(window.location.hash, { force: true });
-        // });
+        // vm.bind('{route}', function (route) {
+        //     console.log(route);
+        // }, me, { deep: true });
 
 
         vm.bind('{record}', function (record) {
-            var type = record.get('type'), activeItem;
-            console.log(type);
+            var type, activeItem;
+
+            if (!record) {
+                view.setActiveItem('noselection-report');
+                return;
+            }
+
+            type = record.get('type');
             switch (type) {
                 case 'TEXT': activeItem = 'text-report'; break;
                 case 'EVENTS': activeItem = 'events-report'; break;
                 default: activeItem = 'chart-report';
             }
             view.setActiveItem(activeItem);
-
-           // if (!record) { return; }
-            // me.loadData();
         });
-
-
-        // view.getViewModel().bind('{record.rendering}', function (r) {
-        //     me.update();
-        // }, me, { deep: true });
     },
+
+    loadData: function () {
+        var me = this, view = me.getView(), viewModel = me.getViewModel(),
+            record = viewModel.get('record'), controller;
+
+        if (!record) { return; }
+
+        switch (record.get('type')) {
+            case 'TEXT': controller = view.down('text-report').getController(); break;
+            case 'EVENTS': controller = view.down('events-report').getController(); break;
+            default: controller = view.down('chart-report').getController();
+        }
+
+        controller.loadData();
+    },
+
 
     onSettings: function () {
         var me = this;

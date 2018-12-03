@@ -4,6 +4,8 @@ Ext.define('Mfw.reports.Report', {
 
     controller: 'report',
 
+    // viewModel: {},
+
     layout: {
         type: 'card',
         deferRender: false
@@ -16,6 +18,10 @@ Ext.define('Mfw.reports.Report', {
         shadow: false,
         style: {
             background: 'transparent'
+        },
+        hidden: true,
+        bind: {
+            hidden: '{!record}'
         },
         items: [{
             xtype: 'component',
@@ -40,9 +46,9 @@ Ext.define('Mfw.reports.Report', {
             tooltip: 'Settings'
         }]
     }, {
-        xtype: 'chart-report',
-        // flex: 1,
-        // itemId: 'chart'
+        xtype: 'noselection-report'
+    }, {
+        xtype: 'chart-report'
     }, {
         xtype: 'text-report'
     }, {

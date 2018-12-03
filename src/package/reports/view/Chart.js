@@ -6,12 +6,6 @@ Ext.define('Mfw.reports.Chart', {
 
     viewModel: {},
 
-    listeners: {
-        // painted: 'onPainted',
-    },
-
-    // viewModel: {},
-
     layout: 'fit',
     bodyPadding: 0,
 

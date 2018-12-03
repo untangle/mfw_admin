@@ -22,10 +22,6 @@ Ext.define('Mfw.reports.ChartController', {
                 animation: false,
                 // height: '100%',
                 events: {
-                    render: function () {
-                        Ext.fireEvent('renderedchart');
-                        // console.log('rendered');
-                    }
                     // selection: function (event) {
                     //     // if (isWidget) { return; } // applies only when viewing the report
                     //     if (event.resetSelection) {
@@ -177,16 +173,21 @@ Ext.define('Mfw.reports.ChartController', {
         view.on('painted', me.onPainted);
 
         view.getViewModel().bind('{record}', function (record) {
-            if (!record ||
-                record.get('type') === 'TEXT' ||
+            if (!record) {
+                // remove the chart when deactivating reports
+                if (view.chart && view.chart.series) {
+                    while (view.chart.series.length > 0) {
+                        view.chart.series[0].remove(true);
+                    }
+                }
+                return;
+            }
+            if (record.get('type') === 'TEXT' ||
                 record.get('type') === 'EVENTS') {
                     return;
             }
             me.loadData();
         });
-        // view.getViewModel().bind('{record.rendering}', function (r) {
-        //     me.update();
-        // }, me, { deep: true });
     },
 
     loadData: function () {
@@ -194,7 +195,16 @@ Ext.define('Mfw.reports.ChartController', {
             record = me.getViewModel().get('record'),
             chart = me.getView().chart;
 
-        if (!chart || !record) { return; }
+        if (!record) { return; }
+
+        /**
+         * because initially the base chart may not be rendered
+         * defer the loading till the chart is available
+         */
+        if (!chart) {
+            Ext.defer(me.loadData, 200, me);
+            return;
+        }
 
         while (chart.series.length > 0) {
             chart.series[0].remove(true);
@@ -355,11 +365,11 @@ Ext.define('Mfw.reports.ChartController', {
         if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
             var series = {};
 
-            Ext.Array.sort(data, function (a, b) {
-                if (a.time_trunc < b.time_trunc) { return -1; }
-                if (a.time_trunc > b.time_trunc) { return 1; }
-                return 0;
-            });
+            // Ext.Array.sort(data, function (a, b) {
+            //     if (a.time_trunc < b.time_trunc) { return -1; }
+            //     if (a.time_trunc > b.time_trunc) { return 1; }
+            //     return 0;
+            // });
 
             Ext.Array.each(data, function (d) {
                 Ext.Object.each(d, function (key, val) {
@@ -394,7 +404,6 @@ Ext.define('Mfw.reports.ChartController', {
                 newData.push(others);
                 chart.addSeries({ name: record.get('table'), data: newData }, true, { duration: 150 });
             } else {
-                console.log('DATA', normalizedData);
                 chart.addSeries({ name: record.get('table'), data: normalizedData }, true, { duration: 150 });
             }
         }

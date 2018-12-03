@@ -83,6 +83,8 @@ Ext.define('Mfw.reports.Controller', {
             if (route.cat && route.rep) {
                 var rep = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
                 viewModel.set('record', rep);
+            } else {
+                viewModel.set('record', null);
             }
             Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
         }, this, {
@@ -111,7 +113,10 @@ Ext.define('Mfw.reports.Controller', {
         route.rep = null;
         route.cat = null;
 
-        viewModel.set('route', route);
+        viewModel.set({
+            route: route,
+            record: null
+        });
     },
 
     onSelectionChange: function (list, node) {
@@ -124,6 +129,7 @@ Ext.define('Mfw.reports.Controller', {
         var route = viewModel.get('route');
         route.rep = node.get('rep');
         route.cat = node.get('cat');
+
         viewModel.set('route', route);
     }
 

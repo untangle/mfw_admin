@@ -12,6 +12,7 @@ Ext.define('Mfw.reports.Main', {
 
     viewModel: {
         data: {
+            record: null,
             route: {
                 cat: null,
                 rep: null,
