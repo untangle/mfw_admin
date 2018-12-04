@@ -3,9 +3,6 @@ Ext.define('Mfw.reports.Events', {
     alias: 'widget.events-report',
 
     viewModel: {
-        data: {
-            data: []
-        },
         stores: {
             events: {
                 data: '{data}'
@@ -60,7 +57,6 @@ Ext.define('Mfw.reports.Events', {
             me.getView().up('report').mask();
             ReportsUtil.fetchReportData(record, function (data) {
                 viewModel.set('data', data);
-                console.log(viewModel.get('data'));
                 me.getView().up('report').unmask();
             });
         }

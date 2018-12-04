@@ -214,6 +214,7 @@ Ext.define('Mfw.reports.ChartController', {
 
         ReportsUtil.fetchReportData(record, function (data) {
             me.setData(data);
+            me.getViewModel().set('data', data);
             me.getView().up('report').unmask();
         });
     },

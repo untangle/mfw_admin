@@ -37,8 +37,12 @@ Ext.define('Mfw.reports.Report', {
         }, {
             // iconCls: 'x-fa fa-th-list fa-gray',
             iconCls: 'md-icon-view-list',
-            handler: 'onSettings',
-            tooltip: 'View Data'
+            handler: 'onData',
+            tooltip: 'View Data',
+            hidden: true,
+            bind: {
+                hidden: '{record.type === "EVENTS"}'
+            }
         }, {
             // iconCls: 'x-fa fa-sliders fa-gray',
             iconCls: 'md-icon-settings',
@@ -53,6 +57,8 @@ Ext.define('Mfw.reports.Report', {
         xtype: 'text-report'
     }, {
         xtype: 'events-report'
+    }, {
+        xtype: 'data-sheet'
     }]
 
 });

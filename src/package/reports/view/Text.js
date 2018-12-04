@@ -56,6 +56,7 @@ Ext.define('Mfw.reports.Text', {
                         args.push(val);
                     });
                 });
+                viewModel.set('data', data);
                 viewModel.set('text', Ext.String.format.apply(this, args));
             });
         }

@@ -54,6 +54,14 @@ Ext.define('Mfw.reports.ReportController', {
             });
         }
         me.setingsSheet.show();
+    },
+
+    onData: function () {
+        var me = this;
+        if (!me.dataSheet) {
+            me.dataSheet = me.getView().down('data-sheet');
+        }
+        me.dataSheet.show();
     }
 
 });
