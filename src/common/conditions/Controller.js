@@ -5,8 +5,8 @@ Ext.define('Mfw.common.conditions.Controller', {
     init: function (cmp) {
         var me = this;
         me.mainView = cmp.up('dashboard') || cmp.up('reports');
-        me.getViewModel().bind('{route.columns}', function (columns) {
-            me.generateColumnsButtons(columns);
+        me.getViewModel().bind('{route.conditions}', function (conditions) {
+            me.generateColumnsButtons(conditions);
         });
     },
 
@@ -29,19 +29,20 @@ Ext.define('Mfw.common.conditions.Controller', {
         }]);
     },
 
-    generateColumnsButtons: function (columns) {
-        var me = this, buttons = [], columnName, vm = me.getViewModel(),
+    generateColumnsButtons: function (conditions) {
+        var me = this, buttons = [], columnName, operatorSymbol, vm = me.getViewModel(),
             route = vm.get('route'),
             buttonsCmp = me.mainView.down('#fieldsBtns');
 
-        Ext.Array.each(columns, function (column, idx) {
-            columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === column.column; } ).text;
+        Ext.Array.each(conditions, function (condition, idx) {
+            columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === condition.column; } ).text;
+            operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === condition.operator; } ).symbol;
             buttons.push({
                 xtype: 'segmentedbutton',
                 margin: '0 5',
                 allowToggle: false,
                 items: [{
-                    text: columnName + ' ' + column.operator + ' ' + column.value,
+                    text: columnName + ' ' + operatorSymbol + ' ' + condition.value,
                     handler: function () {
                         me.showSheet(1, idx);
                     }
@@ -49,8 +50,8 @@ Ext.define('Mfw.common.conditions.Controller', {
                     iconCls: 'x-tool-type-close',
                     fieldIndex: idx,
                     handler: function (btn) {
-                        Ext.Array.removeAt(columns, btn.fieldIndex);
-                        route.columns = columns;
+                        Ext.Array.removeAt(conditions, btn.fieldIndex);
+                        route.conditions = conditions;
                         vm.set('route', route);
                     }
                 }]
@@ -94,7 +95,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
 
     onDoneCondition: function () {
-        var me = this, columns,
+        var me = this, conditions,
             vm = me.getViewModel(),
             form = me.sheet.down('formpanel'),
             route = vm.get('route'),
@@ -102,12 +103,12 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         if (!form.validate()) { return; }
 
-        columns = vm.get('route.columns');
+        conditions = vm.get('route.conditions');
 
         if (idx === null) {
-            columns.push(form.getValues());
+            conditions.push(form.getValues());
         } else {
-            columns[idx] = form.getValues();
+            conditions[idx] = form.getValues();
         }
 
         if (me.sheet.getUseGrid()) {
@@ -116,7 +117,7 @@ Ext.define('Mfw.common.conditions.Controller', {
             me.sheet.hide();
         }
 
-        route.columns = columns;
+        route.conditions = conditions;
 
         // need to set full conditions not just the fields so the binding to fire
         vm.set('route', route);

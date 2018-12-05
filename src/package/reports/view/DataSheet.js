@@ -63,7 +63,7 @@ Ext.define('Mfw.reports.Data', {
 
         setTextData: function (grid, record, data) {
             // todo
-            console.log(data);
+            // console.log(data);
         },
 
         setCategoriesData: function (grid, record, data) {

@@ -28,13 +28,15 @@ Ext.define('Mfw.reports.Controller', {
         if (!reportsStore.isLoaded()) {
             reportsStore.load(function (records, operation, success) {
                 if (success) {
-                    action.resume();
                     me.setBinding();
+                    action.resume();
                 } else {
                     console.warn('Unable to load reports');
                     action.stop();
                 }
             });
+        } else {
+            action.resume();
         }
     },
 
@@ -46,17 +48,17 @@ Ext.define('Mfw.reports.Controller', {
             nodeRoute, // the route used for finding the node in the tree
             node;
 
-        if (!query) {
-            Mfw.app.viewport.setActiveItem('reports');
-            Mfw.app.redirectTo(ReportsUtil.routeToQuery(vm.get('route')));
-            return;
-        }
-        // set Reports view active in case is not already
         if (Mfw.app.viewport.getActiveItem().xtype !== 'reports' ) {
             Mfw.app.viewport.setActiveItem('reports');
         }
 
+        if (!query) {
+            Mfw.app.redirectTo(ReportsUtil.routeToQuery(vm.get('route')));
+            return;
+        }
+
         queryObject = Ext.Object.fromQueryString(query);
+
         if (queryObject.cat) {
             nodeRoute = 'cat=' + queryObject.cat;
         }
@@ -73,23 +75,22 @@ Ext.define('Mfw.reports.Controller', {
         }
 
         vm.set('route', ReportsUtil.queryToRoute(query));
-        // console.log(vm.get('route'));
     },
 
     setBinding: function () {
-        var viewModel = this.getViewModel();
-        viewModel.bind('{route}', function (route) {
-            // console.log('BINDING FIRED', route);
-            if (route.cat && route.rep) {
-                var rep = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
-                viewModel.set('record', rep);
-            } else {
-                viewModel.set('record', null);
-            }
-            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-        }, this, {
-            deep: true
-        });
+        // var me = this, viewModel = this.getViewModel();
+        // viewModel.bind('{route}', function (route) {
+        //     console.log('BINDING FIRED');
+        //     if (route.cat && route.rep) {
+        //         var rep = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
+        //         viewModel.set('record', rep);
+        //     } else {
+        //         viewModel.set('record', null);
+        //     }
+        //     // Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        // }, me, {
+        //     deep: true
+        // });
     },
 
     onRefresh: function () {
@@ -114,7 +115,7 @@ Ext.define('Mfw.reports.Controller', {
         route.cat = null;
 
         viewModel.set({
-            route: route,
+            // route: route,
             record: null
         });
     },
@@ -130,7 +131,8 @@ Ext.define('Mfw.reports.Controller', {
         route.rep = node.get('rep');
         route.cat = node.get('cat');
 
-        viewModel.set('route', route);
+        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        // viewModel.set('route', route);
     }
 
 });

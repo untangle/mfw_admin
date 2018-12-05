@@ -29,6 +29,10 @@ Ext.define('Mfw.model.Report', {
         model: 'Mfw.model.ReportCondition',
         name: 'conditions',
         associationKey: 'conditions'
+    }, {
+        model: 'Mfw.model.ReportCondition',
+        name: 'userConditions',
+        associationKey: 'userConditions'
     }],
 
     hasOne: [{

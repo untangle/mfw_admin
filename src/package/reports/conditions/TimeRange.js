@@ -54,12 +54,32 @@ Ext.define('Mfw.reports.TimeRange', {
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
                 route = vm.get('route');
-                console.log(route);
                 if (item.value !== 'range') {
-                    route.predefinedSince = item.value;
-                    route.until = null;
+                    var since, predefSince = item.value, sinceDate = new Date(parseInt(item.value, 10));
 
-                    vm.set('route', route);
+                    switch (item.value) {
+                        case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                        case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                        case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                        case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                        case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                        case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                        case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                        default:
+                            if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
+                                since = sinceDate;
+                                predefSince = sinceDate.getTime();
+                            } else {
+                                since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
+                                predefSince = 'today';
+                            }
+                            break;
+
+                    }
+                    route.predefinedSince = predefSince;
+                    route.since = since.getTime();
+                    Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+                    // vm.set('route', route);
                 } else {
                     me.showTimeRangeDialog();
                 }
@@ -103,8 +123,6 @@ Ext.define('Mfw.reports.TimeRange', {
 
         onDialogOk: function () {
             var me = this, vm = me.getViewModel();
-
-            console.log(vm);
 
             if (!me.dialog.down('formpanel').validate()) {
                 return;

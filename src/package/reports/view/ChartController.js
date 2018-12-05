@@ -172,25 +172,44 @@ Ext.define('Mfw.reports.ChartController', {
 
         view.on('painted', me.onPainted);
 
-        view.getViewModel().bind('{record}', function (record) {
-            if (!record) {
-                // remove the chart when deactivating reports
-                if (view.chart && view.chart.series) {
-                    while (view.chart.series.length > 0) {
-                        view.chart.series[0].remove(true);
-                    }
-                }
-                return;
-            }
-            if (record.get('type') === 'TEXT' ||
-                record.get('type') === 'EVENTS') {
-                    return;
-            }
-            me.loadData();
-        });
+        // view.getViewModel().bind('{record}', function (record) {
+        //     if (!record) {
+        //         // remove the chart when deactivating reports
+        //         if (view.chart && view.chart.series) {
+        //             while (view.chart.series.length > 0) {
+        //                 view.chart.series[0].remove(true);
+        //             }
+        //         }
+        //         return;
+        //     }
+        //     if (record.get('type') === 'TEXT' ||
+        //         record.get('type') === 'EVENTS') {
+        //             return;
+        //     }
+        //     me.loadData();
+        // });
+        // view.getViewModel().bind('{route}', function (route) {
+        //     var record = me.getViewModel().get('record');
+        //     console.log(record);
+        //     if (!record) {
+        //         // remove the chart when deactivating reports
+        //         if (view.chart && view.chart.series) {
+        //             while (view.chart.series.length > 0) {
+        //                 view.chart.series[0].remove(true);
+        //             }
+        //         }
+        //         return;
+        //     }
+        //     if (record.get('type') === 'TEXT' ||
+        //         record.get('type') === 'EVENTS') {
+        //             return;
+        //     }
+        //     me.loadData();
+        // }, me, { deep: true });
     },
 
     loadData: function () {
+        console.log('LOAD DATA');
         var me = this,
             record = me.getViewModel().get('record'),
             chart = me.getView().chart;
@@ -221,9 +240,6 @@ Ext.define('Mfw.reports.ChartController', {
 
 
     update: function () {
-
-        console.log('UPDATE.....');
-
         var me = this,
             record = me.getViewModel().get('record'),
             rendering = record.getRendering(),

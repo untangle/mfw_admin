@@ -4,29 +4,68 @@ Ext.define('Mfw.reports.ReportController', {
     alias: 'controller.report',
 
     init: function (view) {
-        var me = this, vm = me.getViewModel();
+        var me = this, viewModel = me.getViewModel();
+
+        viewModel.bind('{route}', function (route) {
+            var record, activeItem = 'noselection-report', userConditions = [];
+
+            if (route.cat && route.rep) {
+                record = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
+            }
+
+            if (!record) {
+                viewModel.set('record', null);
+                return;
+            }
+
+            switch (record.get('type')) {
+                case 'TEXT': activeItem = 'text-report'; break;
+                case 'EVENTS': activeItem = 'events-report'; break;
+                default: activeItem = 'chart-report';
+            }
+            view.setActiveItem(activeItem);
+
+            userConditions.push({
+                column: 'time_stamp',
+                operator: 'GE',
+                value: route.since
+            });
+
+            Ext.Array.each(route.conditions, function (cond) {
+                userConditions.push(cond);
+            });
+
+            record.userConditions().loadData(userConditions);
+
+
+            viewModel.set('record', record);
+            me.loadData();
+            // Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        }, me, {
+            deep: true
+        });
 
         // vm.bind('{route}', function (route) {
         //     console.log(route);
         // }, me, { deep: true });
 
 
-        vm.bind('{record}', function (record) {
-            var type, activeItem;
+        // vm.bind('{record}', function (record) {
+        //     var type, activeItem;
 
-            if (!record) {
-                view.setActiveItem('noselection-report');
-                return;
-            }
+        //     if (!record) {
+        //         view.setActiveItem('noselection-report');
+        //         return;
+        //     }
 
-            type = record.get('type');
-            switch (type) {
-                case 'TEXT': activeItem = 'text-report'; break;
-                case 'EVENTS': activeItem = 'events-report'; break;
-                default: activeItem = 'chart-report';
-            }
-            view.setActiveItem(activeItem);
-        });
+        //     type = record.get('type');
+        //     switch (type) {
+        //         case 'TEXT': activeItem = 'text-report'; break;
+        //         case 'EVENTS': activeItem = 'events-report'; break;
+        //         default: activeItem = 'chart-report';
+        //     }
+        //     view.setActiveItem(activeItem);
+        // });
     },
 
     loadData: function () {

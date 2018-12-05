@@ -109,10 +109,6 @@ Ext.define('Mfw.common.conditions.Sheet', {
             autoComplete: false,
             required: true
         }, {
-            xtype: 'checkbox',
-            name: 'autoFormatValue',
-            boxLabel: 'Auto Format Value'
-        }, {
             xtype: 'container',
             defaults: {
                 xtype: 'button'

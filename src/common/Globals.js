@@ -189,18 +189,18 @@ Ext.define('Mfw.Globals', {
     ],
 
     operators: [
-        { text: 'equals [=]'.t(),            value: '=',        id: 'EQ' },
-        { text: 'not equals [!=]'.t(),       value: '!=',       id: 'NE' },
-        { text: 'greater than [>]'.t(),      value: '>',        id: 'GT' },
-        { text: 'less than [<]'.t(),         value: '<',        id: 'LT' },
-        { text: 'greater or equal [>=]'.t(), value: '>=',       id: 'GE' },
-        { text: 'less or equal [<=]'.t(),    value: '<=',       id: 'LE'},
-        { text: 'like'.t(),                  value: 'like',     id: 'LIKE' },
-        { text: 'not like'.t(),              value: 'not like', id: 'NOT_LIKE' },
-        { text: 'is'.t(),                    value: 'is',       id: 'IS' },
-        { text: 'is not'.t(),                value: 'is not',   id: 'IS_NOT' },
-        { text: 'in'.t(),                    value: 'in',       id: 'IN' },
-        { text: 'not in'.t(),                value: 'not in',   id: 'NOT_IN' }
+        { text: 'not equals [!=]'.t(),       value: 'NE',       symbol: '!='       },
+        { text: 'equals [=]'.t(),            value: 'EQ',       symbol: '='        },
+        { text: 'greater than [>]'.t(),      value: 'GT',       symbol: '>'        },
+        { text: 'less than [<]'.t(),         value: 'LT',       symbol: '<'        },
+        { text: 'greater or equal [>=]'.t(), value: 'GE',       symbol: '>='       },
+        { text: 'less or equal [<=]'.t(),    value: 'LE',       symbol: '<='       },
+        { text: 'like'.t(),                  value: 'LIKE',     symbol: 'like'     },
+        { text: 'not like'.t(),              value: 'NOT_LIKE', symbol: 'not like' },
+        { text: 'is'.t(),                    value: 'IS',       symbol: 'is'       },
+        { text: 'is not'.t(),                value: 'IS_NOT',   symbol: 'is not'   },
+        { text: 'in'.t(),                    value: 'IN',       symbol: 'in'       },
+        { text: 'not in'.t(),                value: 'NOT_IN',   symbol: 'not in'   }
     ],
 
     constructor: function() {
