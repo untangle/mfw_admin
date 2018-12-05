@@ -57,6 +57,10 @@ Ext.define('Mfw.reports.Controller', {
             return;
         }
 
+
+        // important to set route before treeSelectoin below
+        vm.set('route', ReportsUtil.queryToRoute(query));
+
         queryObject = Ext.Object.fromQueryString(query);
 
         if (queryObject.cat) {
@@ -73,8 +77,6 @@ Ext.define('Mfw.reports.Controller', {
                 tree.setSelection(node);
             }
         }
-
-        vm.set('route', ReportsUtil.queryToRoute(query));
     },
 
     setBinding: function () {
@@ -115,7 +117,7 @@ Ext.define('Mfw.reports.Controller', {
         route.cat = null;
 
         viewModel.set({
-            // route: route,
+            route: route,
             record: null
         });
     },

@@ -209,7 +209,6 @@ Ext.define('Mfw.reports.ChartController', {
     },
 
     loadData: function () {
-        console.log('LOAD DATA');
         var me = this,
             record = me.getViewModel().get('record'),
             chart = me.getView().chart;
@@ -224,6 +223,8 @@ Ext.define('Mfw.reports.ChartController', {
             Ext.defer(me.loadData, 200, me);
             return;
         }
+
+        console.log('LOAD DATA');
 
         while (chart.series.length > 0) {
             chart.series[0].remove(true);

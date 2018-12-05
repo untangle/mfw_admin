@@ -27,7 +27,7 @@ Ext.define('Mfw.reports.Main', {
 
     items: [{
         xtype: 'toolbar',
-        userCls: 'x-conditions',
+        userCls: 'x-subbar',
         shadow: false,
         padding: 8,
         // padding: 0, // to remove left spacing

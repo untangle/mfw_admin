@@ -15,6 +15,7 @@ Ext.define('Mfw.reports.ReportController', {
 
             if (!record) {
                 viewModel.set('record', null);
+                view.setActiveItem(activeItem);
                 return;
             }
 

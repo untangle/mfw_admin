@@ -189,18 +189,18 @@ Ext.define('Mfw.Globals', {
     ],
 
     operators: [
-        { text: 'not equals [!=]'.t(),       value: 'NE',       symbol: '!='       },
-        { text: 'equals [=]'.t(),            value: 'EQ',       symbol: '='        },
-        { text: 'greater than [>]'.t(),      value: 'GT',       symbol: '>'        },
-        { text: 'less than [<]'.t(),         value: 'LT',       symbol: '<'        },
-        { text: 'greater or equal [>=]'.t(), value: 'GE',       symbol: '>='       },
-        { text: 'less or equal [<=]'.t(),    value: 'LE',       symbol: '<='       },
-        { text: 'like'.t(),                  value: 'LIKE',     symbol: 'like'     },
-        { text: 'not like'.t(),              value: 'NOT_LIKE', symbol: 'not like' },
-        { text: 'is'.t(),                    value: 'IS',       symbol: 'is'       },
-        { text: 'is not'.t(),                value: 'IS_NOT',   symbol: 'is not'   },
-        { text: 'in'.t(),                    value: 'IN',       symbol: 'in'       },
-        { text: 'not in'.t(),                value: 'NOT_IN',   symbol: 'not in'   }
+        { text: 'Not Equals [ NE ]'.t(),       value: 'NE',       symbol: '!='       },
+        { text: 'Equals [ EQ ]'.t(),           value: 'EQ',       symbol: '='        },
+        { text: 'Greater Than [ GT ]'.t(),     value: 'GT',       symbol: '>'        },
+        { text: 'Less Than [ LT ]'.t(),        value: 'LT',       symbol: '<'        },
+        { text: 'Greater or Equal [ GE ]'.t(), value: 'GE',       symbol: '>='       },
+        { text: 'Less or Equal [ LE ]'.t(),    value: 'LE',       symbol: '<='       },
+        { text: 'Like [ LIKE ]'.t(),           value: 'LIKE',     symbol: 'like'     },
+        { text: 'Not Like [ NOT_LIKE ]'.t(),   value: 'NOT_LIKE', symbol: 'not like' },
+        { text: 'Is [ IS ]'.t(),               value: 'IS',       symbol: 'is'       },
+        { text: 'Is Not [ IS_NOT ]'.t(),       value: 'IS_NOT',   symbol: 'is not'   },
+        { text: 'In [ IN ]'.t(),               value: 'IN',       symbol: 'in'       },
+        { text: 'Not In [ NOT_IN ]'.t(),       value: 'NOT_IN',   symbol: 'not in'   }
     ],
 
     constructor: function() {

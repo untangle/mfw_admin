@@ -90,13 +90,26 @@ Ext.define('Mfw.reports.Util', {
                 return;
             }
 
-            // otherwise any kei reprsents a condition column
-            route.conditions.push({
-                column: key,
-                operator: val.split(':')[0].toUpperCase(),
-                value: val.split(':')[1]
-            });
+            // otherwise any key reprsents a condition column
 
+            /**
+             * if same column in multiple conditions
+             */
+            if (Ext.isArray(val)) {
+                Ext.Array.each(val, function (v) {
+                    route.conditions.push({
+                        column: key,
+                        operator: v.split(':')[0].toUpperCase(),
+                        value: v.split(':')[1]
+                    });
+                });
+            } else {
+                route.conditions.push({
+                    column: key,
+                    operator: val.split(':')[0].toUpperCase(),
+                    value: val.split(':')[1]
+                });
+            }
         });
 
         return route;

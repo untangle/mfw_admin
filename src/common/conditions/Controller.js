@@ -6,30 +6,25 @@ Ext.define('Mfw.common.conditions.Controller', {
         var me = this;
         me.mainView = cmp.up('dashboard') || cmp.up('reports');
         me.getViewModel().bind('{route.conditions}', function (conditions) {
-            me.generateColumnsButtons(conditions);
+            me.generateConditionsButtons(conditions);
         });
     },
 
     onSheetInitialize: function (sheet) {
         var titleBar = sheet.down('grid').getTitleBar();
-        titleBar.setPadding('0 8 0 16');
+        titleBar.setPadding('0 16');
         titleBar.add([{
             xtype: 'button',
-            text: 'Add'.t(),
-            iconCls: 'md-icon-add',
+            ui: 'round action',
+            // text: 'Add'.t(),
+            // ui: 'action',
+            iconCls: 'x-fa fa-plus',
             align: 'right',
             handler: 'addConditionFromGrid'
-        }, {
-            xtype: 'button',
-            iconCls: 'md-icon-close',
-            align: 'right',
-            handler: function () {
-                sheet.hide();
-            }
         }]);
     },
 
-    generateColumnsButtons: function (conditions) {
+    generateConditionsButtons: function (conditions) {
         var me = this, buttons = [], columnName, operatorSymbol, vm = me.getViewModel(),
             route = vm.get('route'),
             buttonsCmp = me.mainView.down('#fieldsBtns');
@@ -52,7 +47,7 @@ Ext.define('Mfw.common.conditions.Controller', {
                     handler: function (btn) {
                         Ext.Array.removeAt(conditions, btn.fieldIndex);
                         route.conditions = conditions;
-                        vm.set('route', route);
+                        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
                     }
                 }]
             });
@@ -85,7 +80,7 @@ Ext.define('Mfw.common.conditions.Controller', {
             me.sheet.setUseGrid(true);
         } else {
             if (conditionIdx !== null) {
-                me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('conditions.fields')[conditionIdx]);
+                me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[conditionIdx]);
             }
             me.sheet.getViewModel().set('conditionIdx', conditionIdx);
         }
@@ -105,6 +100,8 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         conditions = vm.get('route.conditions');
 
+        console.log(idx);
+
         if (idx === null) {
             conditions.push(form.getValues());
         } else {
@@ -119,8 +116,10 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         route.conditions = conditions;
 
+        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+
         // need to set full conditions not just the fields so the binding to fire
-        vm.set('route', route);
+        // vm.set('route', route);
         // if (me.mainView.isXType('dashboard')) {
         //     Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
         // }
@@ -149,11 +148,11 @@ Ext.define('Mfw.common.conditions.Controller', {
     onEditFromGrid: function (grid, location) {
         var me = this, sheet = me.sheet,
             idx = location.recordIndex,
-            fields = me.getViewModel().get('conditions.fields');
+            conditions = me.getViewModel().get('route.conditions');
         if (location.columnIndex !== 0) { return; }
 
         sheet.getViewModel().set('conditionIdx', idx);
-        sheet.down('formpanel').setValues(fields[idx]);
+        sheet.down('formpanel').setValues(conditions[idx]);
         sheet.setActiveItem(1);
         sheet.setUseGrid(true);
     },
@@ -161,9 +160,12 @@ Ext.define('Mfw.common.conditions.Controller', {
     onRemoveFromGrid: function (grid, location) {
         var me = this, vm = me.getViewModel(),
             idx = grid.getStore().indexOf(location.record),
-            fields = vm.get('conditions.fields');
-        Ext.Array.removeAt(fields, idx);
-        Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+            route = vm.get('route'),
+            conditions = vm.get('route.conditions');
+        Ext.Array.removeAt(conditions, idx);
+
+        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        // Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
     }
 
 });

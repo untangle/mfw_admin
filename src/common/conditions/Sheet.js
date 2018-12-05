@@ -24,24 +24,18 @@ Ext.define('Mfw.common.conditions.Sheet', {
         useGrid: false
     },
 
-    viewModel: {
-        formulas: {
-            fields: function (get) {
-                return get('conditions.fields');
-            }
-        },
-        stores: {
-            conds: {
-                data: '{fields}'
-            }
-        }
-    },
+    viewModel: {},
 
     items: [{
         xtype: 'grid',
         userCls: 'c-noheaders',
         title: 'Conditions'.t(),
-        bind: '{conds}',
+        // bind: '{conds}',
+        bind: {
+            store: {
+                data: '{route.conditions}'
+            }
+        },
         emptyText: 'No conditions'.t(),
         // hideHeaders: true,
         selectable: false,
@@ -55,8 +49,9 @@ Ext.define('Mfw.common.conditions.Sheet', {
             },
             flex: 1,
             renderer: function (value, record) {
-                var fieldName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === value; } ).name;
-                return '<strong>' + fieldName + ' ' + record.get('operator') + ' ' + record.get('value') + '</strong>';
+                var columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === value; } ).text,
+                    operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === record.get('operator'); } ).symbol;
+                return '<strong>' + columnName + ' ' + operatorSymbol + ' ' + record.get('value') + '</strong>';
             }
         }, {
             menuDisabled: true,

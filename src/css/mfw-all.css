@@ -1,4 +1,4 @@
-:root { --base-color: #519839; --highlight-color: #dfe6ea; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
+:root { --base-color: #519839; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
 
 cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
@@ -8,10 +8,11 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-fa.fa-green { color: green; }
 .x-fa.fa-blue { color: blue; }
 
-.x-toolbar.x-conditions .x-button { color: #333; font-weight: 400; font-size: 12px; }
-.x-toolbar.x-conditions .x-button .x-arrow-el { color: #333; }
-.x-toolbar.x-conditions .x-button-segmented .x-inner-el { background-color: #dfe6ea; font-size: 12px; font-weight: 600; }
-.x-toolbar.x-conditions .x-button-segmented .x-icon-el { color: #333; }
+.x-subbar { background: #555; }
+.x-subbar .x-button { color: #FFF; font-weight: 400; }
+.x-subbar .x-button .x-arrow-el { color: #FFF; }
+.x-subbar .x-button-segmented .x-inner-el { background-color: #222; font-weight: 400; }
+.x-subbar .x-button-segmented .x-icon-el { color: #FFF; }
 
 .x-htmlmenu .x-menuitem .x-text-el { display: none; }
 .x-htmlmenu .x-menuitem .x-innerhtml { padding: 0 16px 0 0; }
@@ -25,9 +26,13 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-htmlmenu.chain-menu .x-menuitem.selected { background: #EEE; }
 .x-htmlmenu.chain-menu .x-menuitem.selected .x-innerhtml p { border-left: 6px var(--accent-color) solid; }
 
-.x-toolbar.nav { background: #fafafa; /* Old browsers */ }
+.x-toolbar.nav { background: #333; }
 .x-toolbar.nav .x-button { min-height: 48px; min-width: 48px; }
-.x-toolbar.nav .x-button .x-inner-el { border-radius: 0; }
+.x-toolbar.nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
+.x-toolbar.nav .x-button .x-text-el { text-transform: uppercase; color: #CCC; }
+.x-toolbar.nav .x-button .x-icon-el, .x-toolbar.nav .x-button .x-arrow-el { color: #FFF; }
+.x-toolbar.nav .x-button.x-pressed .x-icon-el, .x-toolbar.nav .x-button.x-pressed .x-arrow-el, .x-toolbar.nav .x-button.x-pressed .x-text-el, .x-toolbar.nav .x-button.x-pressing .x-icon-el, .x-toolbar.nav .x-button.x-pressing .x-arrow-el, .x-toolbar.nav .x-button.x-pressing .x-text-el { color: #FFF; }
+.x-toolbar.nav .x-button.x-pressed .x-inner-el, .x-toolbar.nav .x-button.x-pressing .x-inner-el { background-color: #222; }
 
 .x-button .x-icon-el { width: 16px !important; height: 16px !important; }
 .x-button .x-icon-el::before { font-size: 16px !important; }

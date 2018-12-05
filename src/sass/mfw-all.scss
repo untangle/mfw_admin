@@ -1,7 +1,7 @@
 :root {
     --base-color: #519839; //  #555; // #5eb141
     // --base-highlight-color: #91e971;
-    --highlight-color: #dfe6ea; // rgba(17, 17, 17, 0.7);
+    // --highlight-color: #dfe6ea; // rgba(17, 17, 17, 0.7);
     --base-pressed-color: #dfe6ea; // #c3cfd6; // #5eb141; // 709e70;
     --accent-color: #55c32d;
     --accent-light-color: #cef1c1;
@@ -46,24 +46,25 @@ cite {
     &.fa-blue { color: blue; }
 }
 
-.x-toolbar.x-conditions { // toolbar
+.x-subbar { // second toolbar
+    background: #555;
     .x-button {
-        color: #333;
+        color: #FFF;
         font-weight: 400;
-        font-size: 12px;
+        // font-size: 12px;
         .x-arrow-el {
-            color: #333;
+            color: #FFF;
         }
     }
     .x-button-segmented {
         .x-inner-el {
-            background-color: #dfe6ea;
-            font-size: 12px;
-            font-weight: 600;
+            background-color: #222;
+            // font-size: 12px;
+            font-weight: 400;
             // padding: 8px;
         }
         .x-icon-el {
-            color: #333;
+            color: #FFF;
         }
     }
 }
@@ -103,7 +104,8 @@ cite {
 }
 
 .x-toolbar.nav {
-    background: #fafafa; /* Old browsers */
+    // background: #fafafa; /* Old browsers */
+    background: #333;
     // background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%); /* FF3.6-15 */
     // background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
     // background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
@@ -112,7 +114,13 @@ cite {
         // margin: 0 5px;
         min-height: 48px;
         min-width: 48px; // for bars menu
-        .x-inner-el { border-radius: 0; }
+        .x-inner-el { border-radius: 0; padding: 8px 24px; }
+        .x-text-el { text-transform: uppercase; color: #CCC; }
+        .x-icon-el, .x-arrow-el { color: #FFF; }
+        &.x-pressed, &.x-pressing {
+            .x-icon-el, .x-arrow-el, .x-text-el { color: #FFF; }
+            .x-inner-el { background-color: #222; }
+        }
     }
 }
 

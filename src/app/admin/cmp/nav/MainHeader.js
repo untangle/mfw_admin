@@ -31,17 +31,23 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         defaultType: 'button',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        defaults: {
+            ripple: false,
+            margin: '0 3'
+        },
         items: [{
             text: 'Dashboard'.t(),
+            ripple: false,
             // iconCls: 'x-fa fa-home',
-            iconCls: 'md-icon-dashboard',
+            // iconCls: 'md-icon-dashboard',
             handler: function () { Mfw.app.redirectTo('#dashboard'); },
             bind: {
                 pressed: '{currentView === "dashboard"}'
             }
         }, {
             text: 'Reports'.t(),
-            iconCls: 'x-fa fa-area-chart',
+            ripple: false,
+            // iconCls: 'x-fa fa-area-chart',
             // iconCls: 'md-icon-show-chart',
             handler: function () { Mfw.app.redirectTo('reports'); },
             bind: {
@@ -49,16 +55,18 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             }
         }, {
             text: 'Settings'.t(),
+            ripple: false,
             // iconCls: 'x-fa fa-cog',
-            iconCls: 'md-icon-settings',
+            // iconCls: 'md-icon-settings',
             handler: function () { Mfw.app.redirectTo('settings'); },
             bind: {
                 pressed: '{currentView === "settings"}'
             }
         }, {
             text: 'Monitor'.t(),
+            ripple: false,
             // iconCls: 'x-fa fa-desktop',
-            iconCls: 'md-icon-computer',
+            // iconCls: 'md-icon-computer',
             menu: [{
                 text: 'Sessions'.t(),
                 iconCls: 'icon-monitor sessions',
