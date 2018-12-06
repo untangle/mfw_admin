@@ -9,7 +9,8 @@ Ext.define('Mfw.reports.ReportController', {
         viewModel.bind('{route}', function (route) {
             var record,
                 activeItem = 'noselection-report',
-                userConditions = [];
+                userConditions = [],
+                conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); // today
 
             // check if report route
             if (route.cat && route.rep) {
@@ -29,19 +30,48 @@ Ext.define('Mfw.reports.ReportController', {
             }
             view.setActiveItem(activeItem);
 
-            // add user conditions to the report
+            if (!route.psince && !route.since) {
+                conditionSince = parseInt(conditionSince.getTime(), 10);
+            }
+
+            // set time conditions
+            if (route.psince && !route.since) {
+                switch (route.psince) {
+                    case '1h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                    case '6h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                    // case 'today': conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                    case 'yesterday': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                    case 'thisweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                    case 'lastweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                    case 'month': conditionSince = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                    default: conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); // today
+                }
+                conditionSince = conditionSince.getTime();
+            }
+
+            if (route.since) {
+                conditionSince = route.since;
+            }
+
             userConditions.push({
                 column: 'time_stamp',
                 operator: 'GE',
-                value: route.since
+                value: conditionSince
             });
+
+            if (route.until) {
+                userConditions.push({
+                    column: 'time_stamp',
+                    operator: 'LE',
+                    value: route.until
+                });
+            }
 
             Ext.Array.each(route.conditions, function (cond) {
                 userConditions.push(cond);
             });
 
             record.userConditions().loadData(userConditions);
-
             viewModel.set('record', record);
             me.loadData();
         }, me, { deep: true });

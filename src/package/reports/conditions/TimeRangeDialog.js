@@ -4,9 +4,15 @@ Ext.define('Mfw.reports.TimeRangeDialog', {
 
     title: 'Select Date/Time Range'.t(),
 
+    viewModel: {},
+
     closable: true,
     draggable: false,
-    maskTapHandler: 'onDialogCancel',
+
+    showAnimation: false,
+    hideAnimation: false,
+
+    // maskTapHandler: 'onDialogCancel',
 
     layout: {
         type: 'vbox',
@@ -107,13 +113,9 @@ Ext.define('Mfw.reports.TimeRangeDialog', {
                 }
             }]
         }],
-    }],
-    buttons: {
-        ok: 'onDialogOk',
-        cancel: 'onDialogCancel'
-    },
-    listeners: {
-        show: 'onDialogShow',
-        hide: 'onDialogHide'
-    }
+    }]
+    // listeners: {
+    //     show: 'onDialogShow',
+    //     hide: 'onDialogHide'
+    // }
 });

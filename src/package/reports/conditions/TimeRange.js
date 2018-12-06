@@ -23,30 +23,29 @@ Ext.define('Mfw.reports.TimeRange', {
 
     controller: {
         init: function (btn) {
-            var me = this, vm = me.getViewModel(), route;
+            var me = this, vm = me.getViewModel(), btnText, route, startTime, endTime;
 
             // watch since condition change and update button text
             vm.bind('{route}', function (route) {
-                var sinceDate = new Date(route.predefinedSince),
-                    untilDate, btnText = '';
-
-                if (sinceDate.getTime() > 0) {
-                    // btnText += Ext.Date.format(sinceDate, 'Y-m-d H:i A');
-                    btnText += (!route.until ? 'Since'.t() : '') + ' ' + Ext.Date.format(sinceDate, 'M j') + ', <strong>' + Ext.Date.format(sinceDate, 'H:i A') + '</strong>';
-                } else {
+                if (!route.psince && !route.since) {
+                    btnText = 'Today';
+                }
+                if (route.psince) {
                     btn.getMenu().getItems().each(function (item) {
-                        if (item.value === route.predefinedSince && item.isXType('menuitem')) {
-                            btnText += item.getText();
+                        if (item.value === route.psince && item.isXType('menuitem')) {
+                            btnText = item.getText();
                         }
                     });
                 }
 
+                if (route.since) {
+                    startTime = new Date(route.since);
+                    btnText = (!route.until ? 'Since ' : '') + Ext.Date.format(startTime, 'Y-m-d H:i A');
+                }
+
                 if (route.until) {
-                    untilDate = new Date(route.until);
-                    if (untilDate.getTime() > 0) {
-                        // btnText += ' - ' + Ext.Date.format(untilDate, 'Y-m-d H:i A');
-                        btnText += ' - ' + Ext.Date.format(untilDate, 'M j') + ', <strong>' + Ext.Date.format(untilDate, 'H:i A') + '</strong>';
-                    }
+                    endTime = new Date(route.until);
+                    btnText += ' &nbsp;<i class="x-fa fa-arrow-right"></i>&nbsp; ' + Ext.Date.format(endTime, 'Y-m-d H:i A');
                 }
                 btn.setText(btnText);
             }, me, { deep: true });
@@ -54,60 +53,80 @@ Ext.define('Mfw.reports.TimeRange', {
             // when selecting a new since, redirect
             btn.getMenu().on('click', function (menu, item) {
                 route = vm.get('route');
-                if (item.value !== 'range') {
-                    var since, predefSince = item.value, sinceDate = new Date(parseInt(item.value, 10));
 
-                    switch (item.value) {
-                        case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
-                        case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
-                        case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
-                        case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
-                        case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
-                        case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
-                        case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
-                        default:
-                            if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
-                                since = sinceDate;
-                                predefSince = sinceDate.getTime();
-                            } else {
-                                since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
-                                predefSince = 'today';
-                            }
-                            break;
-
-                    }
-                    route.predefinedSince = predefSince;
-                    route.since = since.getTime();
-                    Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-                    // vm.set('route', route);
-                } else {
-                    me.showTimeRangeDialog();
-                }
                 menu.hide();
+
+                if (item.value === 'range') {
+                    me.showTimeRangeDialog();
+                    return;
+                }
+
+                if (item.value === 'today') {
+                    route.psince = null;
+                } else {
+                    route.psince = item.value;
+                }
+                route.since = null;
+                route.until = null;
+                Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
             });
         },
 
         showTimeRangeDialog: function () {
-            var me = this;
-            if (!me.dialog) {
-                me.dialog = Ext.Viewport.add({
+            var me = this, reportsView = me.getView().up('reports');
+            if (!me.timeRangeDialog) {
+                me.timeRangeDialog = Ext.create({
                     xtype: 'timerange-dialog',
-                    ownerCmp: me.getView()
+                    buttons: {
+                        ok: {
+                            handler: me.onDialogOk,
+                            scope: me
+                        },
+                        cancel: {
+                            handler: function () {
+                                me.timeRangeDialog.hide();
+                            }
+                        }
+                    },
+                    ownerCmp: reportsView
+                });
+                me.timeRangeDialog.on({
+                    show: me.onDialogShow,
+                    scope: me
                 });
             }
+            // reportsView.timeRangeDialog.on('show', me.onDialogShow);
             // me.dialog.getViewModel().set('record', condition);
-            me.dialog.show();
+            me.timeRangeDialog.show();
         },
 
         onDialogShow: function (dialog) {
             var me = this,
+                conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())), // today
                 viewModel = me.getViewModel(),
+                route = viewModel.get('route'),
                 currentDate = Util.serverToClientDate(new Date());
 
-            dialog.since = new Date(viewModel.get('route.since'));
+            if (route.psince && !route.since) {
+                switch (route.psince) {
+                    case '1h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                    case '6h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                    // case 'today': conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                    case 'yesterday': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                    case 'thisweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                    case 'lastweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                    case 'month': conditionSince = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                    default: conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); // today
+                    }
+            }
+            if (route.since) {
+                conditionSince = route.since;
+            }
 
-            if (viewModel.get('route.until')) {
-                dialog.until = new Date(viewModel.get('route.until'));
+            dialog.since = new Date(conditionSince);
+
+            if (route.until) {
+                dialog.until = new Date(route.until);
                 dialog.down('togglefield').setValue(true);
             } else {
                 dialog.down('togglefield').setValue(false);
@@ -126,23 +145,21 @@ Ext.define('Mfw.reports.TimeRange', {
             var me = this, viewModel = me.getViewModel(),
                 route = viewModel.get('route');
 
-            if (!me.dialog.down('formpanel').validate()) {
+            if (!me.timeRangeDialog.down('formpanel').validate()) {
                 return;
             }
 
-            route.predefSince = me.dialog.since.getTime();
-            route.since = me.dialog.since.getTime();
+            route.psince = null;
+            route.since = me.timeRangeDialog.since.getTime();
 
-            if (me.dialog.down('togglefield').getValue()) {
-                route.until =  me.dialog.until.getTime();
+            if (me.timeRangeDialog.down('togglefield').getValue()) {
+                route.until =  me.timeRangeDialog.until.getTime();
             } else {
                 route.until = null;
             }
 
-            console.log(route);
-
             Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-            me.dialog.hide();
+            me.timeRangeDialog.hide();
         },
 
         onDialogCancel: function () {

@@ -9,11 +9,17 @@ Ext.define('Mfw.reports.Util', {
         if (route.cat) { query += 'cat=' + route.cat; }
         if (route.rep) { query += '&rep=' + route.rep; }
 
-        if (route.predefinedSince) {
-            query += '&since=' + route.predefinedSince;
-        } else {
-            query += '&since=' + (route.since || 1);
+        if (route.psince && route.psince !== 'today') {
+            query += '&psince=' + route.psince;
         }
+
+        if (route.since) {
+            query += '&since=' + route.since;
+        }
+
+        // else {
+        //     query += '&since=' + (route.since || 1);
+        // }
 
         if (route.until) {
             query += '&until=' + route.until;
@@ -30,7 +36,7 @@ Ext.define('Mfw.reports.Util', {
         var route = {
             cat: null,
             rep: null,
-            predefinedSince: 'today',
+            psince: null,
             since: null,
             until: null,
             conditions: []
@@ -47,50 +53,44 @@ Ext.define('Mfw.reports.Util', {
                 route[key] = val;
                 return;
             }
+            if (key === 'psince') {
+                route.psince = val;
+                return;
+                // var since, predefSince = val, sinceDate = new Date(parseInt(val, 10));
+
+                // switch (val) {
+                //     case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                //     case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                //     case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                //     case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                //     case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                //     case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                //     case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                //     default:
+                //         if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
+                //             since = sinceDate;
+                //             predefSince = sinceDate.getTime();
+                //         } else {
+                //             since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
+                //             predefSince = 'today';
+                //         }
+                //         break;
+
+                // }
+                // route.psince = predefSince;
+                // route.since = since.getTime();
+                // return;
+            }
+
             if (key === 'since') {
-                var since, predefSince = val, sinceDate = new Date(parseInt(val, 10));
-
-                switch (val) {
-                    case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
-                    case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
-                    case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
-                    case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
-                    case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
-                    case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
-                    case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
-                    default:
-                        if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
-                            since = sinceDate;
-                            predefSince = sinceDate.getTime();
-                        } else {
-                            since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
-                            predefSince = 'today';
-                        }
-                        break;
-
-                }
-                route.predefinedSince = predefSince;
-                route.since = since.getTime();
+                route.since = parseInt(val, 10);
                 return;
             }
 
             if (key === 'until') {
-                // remove until in case of predefined since
-                if (Ext.Array.contains(['1h', '6h', 'today', 'yesterday', 'thisweek', 'lastweek', 'month'], route.predefinedSince)) {
-                    route.until = null;
-                } else {
-                    var until, untilDate = new Date(parseInt(val, 10));
-                    if (untilDate.getTime() > 0) {
-                        until = untilDate.getTime();
-                    } else {
-                        until = null;
-                    }
-                    route.until = until;
-                }
+                route.until = parseInt(val, 10);
                 return;
             }
-
-            // otherwise any key reprsents a condition column
 
             /**
              * if same column in multiple conditions
@@ -111,80 +111,7 @@ Ext.define('Mfw.reports.Util', {
                 });
             }
         });
-
         return route;
-
-
-        // Ext.Array.each(query.split('&'), function (paramCond) {}
-
-
-        // Ext.Array.each(query.split('&'), function (paramCond) {
-        //     decodedParam = decodeURIComponent(paramCond);
-        //     if (decodedParam.indexOf(':') > 0) {
-        //         decodedParamParts = decodedParam.split(':');
-        //         route.columns.push({
-        //             column: decodedParamParts[0],
-        //             operator: decodedParamParts[1],
-        //             value: decodedParamParts[2],
-        //             autoFormatValue: parseInt(decodedParamParts[3], 10) === 1 ? true : false,
-        //         });
-        //     } else {
-        //         decodedParamParts = decodedParam.split('=');
-        //         key = decodedParamParts[0];
-        //         val = decodedParamParts[1];
-
-        //         if (key === 'since') {
-        //             var since, predefSince = val, sinceDate = new Date(parseInt(val, 10));
-
-        //             switch (val) {
-        //                 case '1h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
-        //                 case '6h': since = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
-        //                 case 'today': since = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
-        //                 case 'yesterday': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
-        //                 case 'thisweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
-        //                 case 'lastweek': since = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
-        //                 case 'month': since = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
-        //                 default:
-        //                     if (sinceDate.getTime() > 0 && Ext.Date.diff(sinceDate, new Date(), Ext.Date.YEAR) < 1) {
-        //                         since = sinceDate;
-        //                         predefSince = sinceDate.getTime();
-        //                     } else {
-        //                         since = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
-        //                         predefSince = 'today';
-        //                     }
-        //                     break;
-
-        //             }
-        //             route.predefinedSince = predefSince;
-        //             route.since = since.getTime();
-        //             return;
-        //         }
-
-        //         if (key === 'until') {
-        //             // remove until in case of predefined since
-        //             if (Ext.Array.contains(['1h', '6h', 'today', 'yesterday', 'thisweek', 'lastweek', 'month'], route.predefinedSince)) {
-        //                 route.until = null;
-        //             } else {
-        //                 var until, untilDate = new Date(parseInt(val, 10));
-        //                 if (untilDate.getTime() > 0) {
-        //                     until = untilDate.getTime();
-        //                 } else {
-        //                     until = null;
-        //                 }
-        //                 route.until = until;
-        //             }
-        //             return;
-        //         }
-
-        //         if (key === 'cat') {
-        //             route.cat = val;
-        //         }
-        //         if (key === 'rep') {
-        //             route.rep = val;
-        //         }
-        //     }
-        // });
-        // return route;
     },
 
     fetchReportData: function (report, cb) {

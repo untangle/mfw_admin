@@ -5,6 +5,6 @@ Ext.define('Mfw.model.ReportCondition', {
     fields: [
         { name: 'column', type: 'string' },
         { name: 'operator', type: 'string' },
-        { name: 'value', type: 'string' }
+        { name: 'value', type: 'auto' }
     ]
 });

@@ -15,12 +15,12 @@ Ext.define('Mfw.reports.Main', {
             record: null,
             data: null,
             route: {
-                cat: null,
-                rep: null,
-                predefinedSince: 'today',
-                since: null,
-                until: null,
-                columns: []
+                cat: null, // report category
+                rep: null, // report name
+                psince: null, // predefined since, e.g. today, thisweek etc...
+                since: null, // timestamp
+                until: null, // timestamp
+                conditions: [] // user conditions
             }
         }
     },
@@ -38,13 +38,15 @@ Ext.define('Mfw.reports.Main', {
             xtype: 'toolbarseparator',
         }, {
             xtype: 'conditions-fields'
-        }, '->', {
-            text: 'Toast 1',
-            handler: function () {
-                // Notification.toast('normal', 'some message' + (new Date().getTime()));
-                Ext.toast('some message' + (new Date().getTime()), 3000);
-            }
-        }]
+        }
+        // , '->', {
+        //     text: 'Toast 1',
+        //     handler: function () {
+        //         // Notification.toast('normal', 'some message' + (new Date().getTime()));
+        //         Ext.toast('some message' + (new Date().getTime()), 3000);
+        //     }
+        // }
+    ]
     }, {
         xtype: 'panel',
         style: 'border-top: 1px #e1e1e1 solid;',

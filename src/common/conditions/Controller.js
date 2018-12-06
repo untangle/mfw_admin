@@ -30,6 +30,7 @@ Ext.define('Mfw.common.conditions.Controller', {
             buttonsCmp = me.mainView.down('#fieldsBtns');
 
         Ext.Array.each(conditions, function (condition, idx) {
+            if (condition === 'time_stamp') { return; }
             columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === condition.column; } ).text;
             operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === condition.operator; } ).symbol;
             buttons.push({
@@ -100,8 +101,6 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         conditions = vm.get('route.conditions');
 
-        console.log(idx);
-
         if (idx === null) {
             conditions.push(form.getValues());
         } else {
@@ -117,16 +116,6 @@ Ext.define('Mfw.common.conditions.Controller', {
         route.conditions = conditions;
 
         Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-
-        // need to set full conditions not just the fields so the binding to fire
-        // vm.set('route', route);
-        // if (me.mainView.isXType('dashboard')) {
-        //     Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
-        // }
-        // if (me.mainView.isXType('reports')) {
-        //     Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
-        // }
-
     },
 
     onCancelCondition: function () {
