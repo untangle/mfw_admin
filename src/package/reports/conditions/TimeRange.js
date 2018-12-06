@@ -100,13 +100,14 @@ Ext.define('Mfw.reports.TimeRange', {
         },
 
         onDialogShow: function (dialog) {
-            var gvm = Ext.Viewport.getViewModel(),
+            var me = this,
+                viewModel = me.getViewModel(),
                 currentDate = Util.serverToClientDate(new Date());
 
-            dialog.since = new Date(gvm.get('reportsConditions.since'));
+            dialog.since = new Date(viewModel.get('route.since'));
 
-            if (gvm.get('reportsConditions.until')) {
-                dialog.until = new Date(gvm.get('reportsConditions.until'));
+            if (viewModel.get('route.until')) {
+                dialog.until = new Date(viewModel.get('route.until'));
                 dialog.down('togglefield').setValue(true);
             } else {
                 dialog.down('togglefield').setValue(false);
@@ -122,22 +123,25 @@ Ext.define('Mfw.reports.TimeRange', {
         },
 
         onDialogOk: function () {
-            var me = this, vm = me.getViewModel();
+            var me = this, viewModel = me.getViewModel(),
+                route = viewModel.get('route');
 
             if (!me.dialog.down('formpanel').validate()) {
                 return;
             }
 
-            vm.set('conditions.predefinedSince', me.dialog.since.getTime());
-            vm.set('conditions.since', me.dialog.since.getTime());
+            route.predefSince = me.dialog.since.getTime();
+            route.since = me.dialog.since.getTime();
 
             if (me.dialog.down('togglefield').getValue()) {
-                vm.set('conditions.until', me.dialog.until.getTime());
+                route.until =  me.dialog.until.getTime();
             } else {
-                vm.set('conditions.until', null);
+                route.until = null;
             }
 
-            Mfw.app.redirectTo('reports?' + ReportsUtil.conditionsToQuery(vm.get('conditions')));
+            console.log(route);
+
+            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
             me.dialog.hide();
         },
 

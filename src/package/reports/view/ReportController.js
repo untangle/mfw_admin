@@ -7,8 +7,11 @@ Ext.define('Mfw.reports.ReportController', {
         var me = this, viewModel = me.getViewModel();
 
         viewModel.bind('{route}', function (route) {
-            var record, activeItem = 'noselection-report', userConditions = [];
+            var record,
+                activeItem = 'noselection-report',
+                userConditions = [];
 
+            // check if report route
             if (route.cat && route.rep) {
                 record = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
             }
@@ -26,6 +29,7 @@ Ext.define('Mfw.reports.ReportController', {
             }
             view.setActiveItem(activeItem);
 
+            // add user conditions to the report
             userConditions.push({
                 column: 'time_stamp',
                 operator: 'GE',
@@ -38,35 +42,9 @@ Ext.define('Mfw.reports.ReportController', {
 
             record.userConditions().loadData(userConditions);
 
-
             viewModel.set('record', record);
             me.loadData();
-            // Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-        }, me, {
-            deep: true
-        });
-
-        // vm.bind('{route}', function (route) {
-        //     console.log(route);
-        // }, me, { deep: true });
-
-
-        // vm.bind('{record}', function (record) {
-        //     var type, activeItem;
-
-        //     if (!record) {
-        //         view.setActiveItem('noselection-report');
-        //         return;
-        //     }
-
-        //     type = record.get('type');
-        //     switch (type) {
-        //         case 'TEXT': activeItem = 'text-report'; break;
-        //         case 'EVENTS': activeItem = 'events-report'; break;
-        //         default: activeItem = 'chart-report';
-        //     }
-        //     view.setActiveItem(activeItem);
-        // });
+        }, me, { deep: true });
     },
 
     loadData: function () {

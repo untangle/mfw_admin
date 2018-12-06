@@ -51,15 +51,18 @@ cite {
     .x-button {
         color: #FFF;
         font-weight: 400;
-        // font-size: 12px;
+        font-size: 12px;
         .x-arrow-el {
+            color: #FFF;
+        }
+        .x-icon-el {
             color: #FFF;
         }
     }
     .x-button-segmented {
         .x-inner-el {
             background-color: #222;
-            // font-size: 12px;
+            font-size: 12px;
             font-weight: 400;
             // padding: 8px;
         }

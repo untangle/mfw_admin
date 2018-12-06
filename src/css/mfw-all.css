@@ -9,9 +9,10 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-fa.fa-blue { color: blue; }
 
 .x-subbar { background: #555; }
-.x-subbar .x-button { color: #FFF; font-weight: 400; }
+.x-subbar .x-button { color: #FFF; font-weight: 400; font-size: 12px; }
 .x-subbar .x-button .x-arrow-el { color: #FFF; }
-.x-subbar .x-button-segmented .x-inner-el { background-color: #222; font-weight: 400; }
+.x-subbar .x-button .x-icon-el { color: #FFF; }
+.x-subbar .x-button-segmented .x-inner-el { background-color: #222; font-size: 12px; font-weight: 400; }
 .x-subbar .x-button-segmented .x-icon-el { color: #FFF; }
 
 .x-htmlmenu .x-menuitem .x-text-el { display: none; }
