@@ -26,7 +26,7 @@ Ext.define('Mfw.model.ReportRender', {
         // { name: '3dBeta', type: 'integer', defaultValue: 0 },
         { name: '3dDepth', type: 'integer', defaultValue: 40 },
 
-        { name: 'slicesNumber', type: 'integer', defaultValue: 10 },
+        { name: 'slicesNumber', type: 'integer', defaultValue: 15 },
 
         {
             name: '_icon',

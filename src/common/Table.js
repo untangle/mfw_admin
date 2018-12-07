@@ -23,7 +23,22 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'IP Protocol',
             dataIndex: 'ip_protocol',
-            renderer: Renderer.ip_protocol
+            width: 150,
+            renderer: Renderer.ip_protocol,
+            cell: {
+                encodeHtml: false
+            },
+            editor: {
+                xtype: 'selectfield',
+                name: 'value',
+                // label: 'Choose operator'.t(),
+                placeholder: 'Choose protocol'.t(),
+                required: true,
+                editable: false,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                options: Globals.protocols
+            }
         }, {
             text: 'Host Name',
             dataIndex: 'hostname',
@@ -83,7 +98,17 @@ Ext.define('Mfw.Table', {
 
 
     constructor: function() {
+        var allColumns = [];
+
+        Ext.Array.each(this.sessions.columns, function (column) {
+            allColumns.push({
+                text: column.text,
+                value: column.dataIndex
+            })
+        });
+
         this.initConfig({
+            allColumns: allColumns
             // operatorsMap: Ext.Array.toValueMap(this.operators, 'id'),
             // prefixesMap: Ext.Array.toValueMap(this.prefixes, 'value')
             // columns: columns

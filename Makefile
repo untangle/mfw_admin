@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.101.76
+DEV_HOST ?= 192.168.5.133
 DEV_DIR ?= /www
 
 # logging
@@ -34,7 +34,7 @@ SASS := $(wildcard src/sass/*.scss)
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
 APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
-APP_COMMON_SRC := src/common/Globals.js $(addprefix src/common/, auth overrides conditions util)
+APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util)
 
 # PACKAGES SOURCES
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions *.js)

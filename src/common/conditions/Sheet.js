@@ -3,7 +3,7 @@ Ext.define('Mfw.common.conditions.Sheet', {
     alias: 'widget.fields-sheet',
 
     // title: 'Conditions'.t(),
-    width: 300,
+    width: 350,
     // closable: true,
     // closeAction: 'hide',
     // centered: true,
@@ -49,7 +49,7 @@ Ext.define('Mfw.common.conditions.Sheet', {
             },
             flex: 1,
             renderer: function (value, record) {
-                var columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === value; } ).text,
+                var columnName = Ext.Array.findBy(Table.allColumns, function (item) { return item.value === value; } ).text,
                     operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === record.get('operator'); } ).symbol;
                 return '<strong>' + columnName + ' ' + operatorSymbol + ' ' + record.get('value') + '</strong>';
             }
@@ -86,8 +86,13 @@ Ext.define('Mfw.common.conditions.Sheet', {
             placeholder: 'Choose field'.t(),
             required: true,
             editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             forceSelection: true,
-            options: Globals.conditionFields
+            options: Table.allColumns,
+            listeners: {
+                change: 'onColumnChange'
+            }
         }, {
             xtype: 'selectfield',
             name: 'operator',
@@ -95,16 +100,13 @@ Ext.define('Mfw.common.conditions.Sheet', {
             placeholder: 'Choose operator'.t(),
             required: true,
             editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            value: 'EQ',
             options: Globals.operators
         }, {
-            xtype: 'textfield',
-            name: 'value',
-            // label: 'Enter value'.t(),
-            placeholder: 'Enter value'.t(),
-            autoComplete: false,
-            required: true
-        }, {
             xtype: 'container',
+            itemId: 'sheetActions',
             defaults: {
                 xtype: 'button'
             },

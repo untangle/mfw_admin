@@ -55,14 +55,14 @@ Ext.define('Mfw.reports.ReportController', {
 
             userConditions.push({
                 column: 'time_stamp',
-                operator: 'GE',
+                operator: 'GT',
                 value: conditionSince
             });
 
             if (route.until) {
                 userConditions.push({
                     column: 'time_stamp',
-                    operator: 'LE',
+                    operator: 'LT',
                     value: route.until
                 });
             }

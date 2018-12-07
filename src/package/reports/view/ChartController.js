@@ -172,6 +172,11 @@ Ext.define('Mfw.reports.ChartController', {
 
         view.on('painted', me.onPainted);
 
+        // view.getViewModel().bind('{record.rendering}', function (rendering) {
+        //     if (!rendering) { return; }
+        //     me.update();
+        // }, me, { deep: true });
+
         // view.getViewModel().bind('{record}', function (record) {
         //     if (!record) {
         //         // remove the chart when deactivating reports

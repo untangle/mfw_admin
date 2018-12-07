@@ -28,7 +28,6 @@ Ext.define('Mfw.reports.Controller', {
         if (!reportsStore.isLoaded()) {
             reportsStore.load(function (records, operation, success) {
                 if (success) {
-                    me.setBinding();
                     action.resume();
                 } else {
                     console.warn('Unable to load reports');
@@ -77,32 +76,6 @@ Ext.define('Mfw.reports.Controller', {
                 tree.setSelection(node);
             }
         }
-    },
-
-    setBinding: function () {
-        // var me = this, viewModel = this.getViewModel();
-        // viewModel.bind('{route}', function (route) {
-        //     console.log('BINDING FIRED');
-        //     if (route.cat && route.rep) {
-        //         var rep = Ext.getStore('reports').findRecord('_route', 'cat=' + route.cat + '&rep=' + route.rep, 0, false, false, true);
-        //         viewModel.set('record', rep);
-        //     } else {
-        //         viewModel.set('record', null);
-        //     }
-        //     // Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-        // }, me, {
-        //     deep: true
-        // });
-    },
-
-    onRefresh: function () {
-        var me = this,
-            vm = me.getViewModel(),
-            chart = me.getView().down('chart');
-
-        chart.chart.update({
-            series: Util.generateTimeSeries()
-        }, true);
     },
 
     onDeactivate: function (view) {

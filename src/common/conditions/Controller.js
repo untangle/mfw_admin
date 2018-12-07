@@ -31,7 +31,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         Ext.Array.each(conditions, function (condition, idx) {
             if (condition === 'time_stamp') { return; }
-            columnName = Ext.Array.findBy(Globals.conditionFields, function (item) { return item.value === condition.column; } ).text;
+            columnName = Ext.Array.findBy(Table.allColumns, function (item) { return item.value === condition.column; } ).text;
             operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === condition.operator; } ).symbol;
             buttons.push({
                 xtype: 'segmentedbutton',
@@ -76,6 +76,8 @@ Ext.define('Mfw.common.conditions.Controller', {
                 ownerCmp: me.getView()
             });
         }
+        me.sheet.setActiveItem(activeItem);
+        me.sheet.show();
 
         if (activeItem === 0) {
             me.sheet.setUseGrid(true);
@@ -85,8 +87,7 @@ Ext.define('Mfw.common.conditions.Controller', {
             }
             me.sheet.getViewModel().set('conditionIdx', conditionIdx);
         }
-        me.sheet.setActiveItem(activeItem);
-        me.sheet.show();
+
     },
 
 
@@ -155,6 +156,40 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
         // Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+    },
+
+    onColumnChange: function (field, value, oldValue) {
+        var me = this, form = me.sheet.down('formpanel'),
+            // fixme for when multiple tables are defined
+            column = Ext.Array.findBy(Table.sessions.columns, function (item) {
+                return item.dataIndex === value;
+            });
+
+        console.log(column);
+
+        if (!column) {
+            // console.warn('Column ' + value + ' not defined!');
+            return;
+        }
+
+        if (form.getAt(2).getItemId() !== 'sheetActions') {
+            form.removeAt(2);
+        }
+
+        if (column.editor) {
+            form.insert(2, column.editor);
+        } else {
+            form.insert(2, {
+                xtype: 'textfield',
+                name: 'value',
+                // label: 'Enter value'.t(),
+                placeholder: 'Enter value'.t(),
+                autoComplete: false,
+                required: true
+            });
+        }
+        // me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[0]);
+        console.log(column);
     }
 
 });
