@@ -128,6 +128,9 @@ Ext.define('Mfw.common.conditions.Sheet', {
         }],
         listeners: {
             hide: function (form) {
+                if (form.getAt(2).getItemId() !== 'sheetActions') {
+                    form.removeAt(2);
+                }
                 form.reset(true);
             }
         }

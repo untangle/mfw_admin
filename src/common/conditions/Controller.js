@@ -38,7 +38,7 @@ Ext.define('Mfw.common.conditions.Controller', {
                 margin: '0 5',
                 allowToggle: false,
                 items: [{
-                    text: columnName + ' ' + operatorSymbol + ' ' + condition.value,
+                    text: columnName + ' <span style="color: #999;">[ ' + condition.column + ' ]</span> ' + operatorSymbol + ' ' + condition.value,
                     handler: function () {
                         me.showSheet(1, idx);
                     }
@@ -76,6 +76,8 @@ Ext.define('Mfw.common.conditions.Controller', {
                 ownerCmp: me.getView()
             });
         }
+
+        me.sheet.getViewModel().set('conditionIdx', conditionIdx);
         me.sheet.setActiveItem(activeItem);
         me.sheet.show();
 
@@ -83,9 +85,10 @@ Ext.define('Mfw.common.conditions.Controller', {
             me.sheet.setUseGrid(true);
         } else {
             if (conditionIdx !== null) {
-                me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[conditionIdx]);
+                // first set the column combo to trigger editor field creation before setting all form values
+                me.sheet.down('[name=column]').setValue(me.mainView.getViewModel().get('route.conditions')[conditionIdx].column);
             }
-            me.sheet.getViewModel().set('conditionIdx', conditionIdx);
+
         }
 
     },
@@ -130,19 +133,24 @@ Ext.define('Mfw.common.conditions.Controller', {
 
 
     onSheetHide: function (sheet) {
-        sheet.down('formpanel').reset(true);
-        sheet.setUseGrid(false);
+        var me = this, form = me.sheet.down('formpanel');
+        if (form.getAt(2).getItemId() !== 'sheetActions') {
+            form.removeAt(2);
+        }
+        form.reset(true);
+        me.sheet.setUseGrid(false);
     },
 
 
     onEditFromGrid: function (grid, location) {
         var me = this, sheet = me.sheet,
             idx = location.recordIndex,
-            conditions = me.getViewModel().get('route.conditions');
+            conditions = me.mainView.getViewModel().get('route.conditions');
         if (location.columnIndex !== 0) { return; }
 
         sheet.getViewModel().set('conditionIdx', idx);
-        sheet.down('formpanel').setValues(conditions[idx]);
+        // sheet.down('formpanel').setValues(conditions[idx]);
+        sheet.down('[name=column]').setValue(conditions[idx].column);
         sheet.setActiveItem(1);
         sheet.setUseGrid(true);
     },
@@ -160,20 +168,15 @@ Ext.define('Mfw.common.conditions.Controller', {
 
     onColumnChange: function (field, value, oldValue) {
         var me = this, form = me.sheet.down('formpanel'),
+            conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
             // fixme for when multiple tables are defined
             column = Ext.Array.findBy(Table.sessions.columns, function (item) {
                 return item.dataIndex === value;
             });
 
-        console.log(column);
-
         if (!column) {
             // console.warn('Column ' + value + ' not defined!');
             return;
-        }
-
-        if (form.getAt(2).getItemId() !== 'sheetActions') {
-            form.removeAt(2);
         }
 
         if (column.editor) {
@@ -188,8 +191,10 @@ Ext.define('Mfw.common.conditions.Controller', {
                 required: true
             });
         }
-        // me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[0]);
-        console.log(column);
+
+        if (conditionIdx !== null) {
+            me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[conditionIdx]);
+        }
     }
 
 });
