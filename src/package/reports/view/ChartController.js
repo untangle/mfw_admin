@@ -168,49 +168,20 @@ Ext.define('Mfw.reports.ChartController', {
     },
 
     init: function (view) {
-        var me = this;
+        var me = this, record,
+            viewModel = me.getViewModel();
 
         view.on('painted', me.onPainted);
 
-        // view.getViewModel().bind('{record.rendering}', function (rendering) {
-        //     if (!rendering) { return; }
-        //     me.update();
-        // }, me, { deep: true });
-
-        // view.getViewModel().bind('{record}', function (record) {
-        //     if (!record) {
-        //         // remove the chart when deactivating reports
-        //         if (view.chart && view.chart.series) {
-        //             while (view.chart.series.length > 0) {
-        //                 view.chart.series[0].remove(true);
-        //             }
-        //         }
-        //         return;
-        //     }
-        //     if (record.get('type') === 'TEXT' ||
-        //         record.get('type') === 'EVENTS') {
-        //             return;
-        //     }
-        //     me.loadData();
-        // });
-        // view.getViewModel().bind('{route}', function (route) {
-        //     var record = me.getViewModel().get('record');
-        //     console.log(record);
-        //     if (!record) {
-        //         // remove the chart when deactivating reports
-        //         if (view.chart && view.chart.series) {
-        //             while (view.chart.series.length > 0) {
-        //                 view.chart.series[0].remove(true);
-        //             }
-        //         }
-        //         return;
-        //     }
-        //     if (record.get('type') === 'TEXT' ||
-        //         record.get('type') === 'EVENTS') {
-        //             return;
-        //     }
-        //     me.loadData();
-        // }, me, { deep: true });
+        viewModel.bind('{record.rendering}', function (rendering) {
+            record = viewModel.get('record');
+            if (!record) { return; }
+            if (record.get('type') === 'TEXT' ||
+                record.get('type') === 'EVENTS') {
+                    return;
+            }
+            me.update();
+        }, me, { deep: true });
     },
 
     loadData: function () {

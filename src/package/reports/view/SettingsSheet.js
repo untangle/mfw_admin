@@ -3,7 +3,7 @@ Ext.define('Mfw.reports.Settings', {
     alias: 'widget.settings-sheet',
 
     // title: 'Conditions'.t(),
-    width: 300,
+    width: 350,
     // closable: true,
     // closeAction: 'hide',
     // centered: true,
@@ -35,9 +35,8 @@ Ext.define('Mfw.reports.Settings', {
         },
 
         items: [{
-            title: '<i class="x-fa fa-sliders"></i>'
-        }, {
             title: '<i class="x-fa fa-paint-brush"></i>',
+            padding: 10,
             defaults: {
                 labelAlign: 'left',
                 labelTextAlign: 'right'
@@ -353,6 +352,8 @@ Ext.define('Mfw.reports.Settings', {
                 label: 'Colors'.t(),
                 bind: '{record.rendering.colors}'
             }]
+        }, {
+            title: '<i class="x-fa fa-sliders"></i>'
         }]
     }]
 
