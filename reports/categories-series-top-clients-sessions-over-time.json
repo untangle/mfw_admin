@@ -8,9 +8,8 @@
     "queryCategories": {
         "groupColumn": "client_address",
         "aggregationFunction": "count",
-        "aggregationValue": "*",
-        "limit": 5,
-        "orderAsc": true
+        "aggregationValue": "1",
+        "limit": 10
     },
     "rendering": {
         "type": "spline"
