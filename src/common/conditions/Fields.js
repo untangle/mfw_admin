@@ -8,7 +8,7 @@ Ext.define('Mfw.common.conditions.Fields', {
 
     viewModel: {
         formulas: {
-            conditionsBtnTxt: function (get) {
+            conditionsCount: function (get) {
                 return get('route.conditions').length;
             }
         }
@@ -16,7 +16,7 @@ Ext.define('Mfw.common.conditions.Fields', {
 
     items: [{
         xtype: 'button',
-        bind: { text: 'Conditions'.t() + ' ({conditionsBtnTxt})' },
+        bind: { text: 'Conditions'.t() + ' ({conditionsCount})' },
         handler: 'showSheetGrid',
     }, {
         xtype: 'container',

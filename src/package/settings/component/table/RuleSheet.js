@@ -102,7 +102,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                             return c.type === record.get('type');
                         }).name;
                         return '<div class="condition"><span>' + name + '</span> ' +
-                                '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>'
+                                '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>';
                     }
                 }, {
                     width: 70,
@@ -288,7 +288,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                         store: '{chainNames}',
                         hidden: '{actiontype.value !== "JUMP" && actiontype.value !== "GOTO"}'
                     }
-                })
+                });
             }
 
             if (Ext.Array.contains(actions, 'DNAT')) {
@@ -302,7 +302,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                     bind: {
                         hidden: '{actiontype.value !== "DNAT"}'
                     }
-                })
+                });
             }
 
             if (Ext.Array.contains(actions, 'SNAT')) {
@@ -316,7 +316,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                     bind: {
                         hidden: '{actiontype.value !== "SNAT"}'
                     }
-                })
+                });
             }
 
             if (Ext.Array.contains(actions, 'SET_PRIORITY')) {
@@ -329,7 +329,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                     bind: {
                         hidden: '{actiontype.value !== "SET_PRIORITY"}'
                     }
-                })
+                });
             }
 
             me.actionform.down('#actiontype').setOptions(options);
@@ -357,8 +357,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             var me = this;
             sheet.setRule(null);
 
-            me.conditionsgrid.getStore().rejectChanges();
-            me.conditionsgrid.setStore({});
+            // me.conditionsgrid.getStore().rejectChanges();
+            // me.conditionsgrid.setStore({});
 
             me.ruleform.setRecord(null);
             me.ruleform.reset(true);
@@ -380,6 +380,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
         onEditCondition: function (grid, info) {
             var me = this, record = info.record;
             if (info.columnIndex === 1) { return; }
+
             me.getView().setActiveItem(1);
             me.getViewModel().set('conditionOperation', 'EDIT');
             me.setValueField(record.get('type'));
@@ -427,16 +428,16 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 valueField = condition.field;
             } else {
                 // use a textfield as fallback
-                valueField = { xtype: 'textfield' }
-                console.warn(conditionType + ' condition definition missing!')
+                valueField = { xtype: 'textfield' };
+                console.warn(conditionType + ' condition definition missing!');
             }
 
             if (condition && condition.operators) {
                 Ext.Object.each(condition.operators, function (key, op) {
-                    ops.push(Globals.operatorsMap()[op]);
+                    ops.push(Util.ruleOperatorsMap[op]);
                 });
             } else {
-                ops = Globals.operators;
+                ops = Util.ruleOperators;
             }
             me.conditionform.down('#operation').setOptions(ops);
 

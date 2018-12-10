@@ -179,15 +179,6 @@ Ext.define('Mfw.Globals', {
         { value: 0, text: '/0 - 0.0.0.0' }
     ],
 
-    conditionFields: [
-        { text: 'Username'.t(),    value: 'username' },
-        { text: 'Protocol'.t(),    value: 'protocol' },
-        { text: 'Hostname'.t(),    value: 'hostname' },
-        { text: 'Client'.t(),      value: 'c_client_addr' },
-        { text: 'Server'.t(),      value: 's_server_addr' },
-        { text: 'Server Port'.t(), value: 's_server_port' },
-    ],
-
     operators: [
         { text: 'Equals'.t(),           value: 'EQ',       symbol: '='        },
         { text: 'Not Equals'.t(),       value: 'NE',       symbol: '!='       },

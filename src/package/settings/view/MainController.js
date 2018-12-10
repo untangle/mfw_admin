@@ -1,4 +1,4 @@
-Ext.define('Mfw.settings.Controller', {
+Ext.define('Mfw.settings.view.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.settings',
 

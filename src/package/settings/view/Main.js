@@ -1,4 +1,4 @@
-Ext.define('Mfw.settings.Main', {
+Ext.define('Mfw.settings.view.Main', {
     extend: 'Ext.Panel',
     alias: 'widget.settings',
 
