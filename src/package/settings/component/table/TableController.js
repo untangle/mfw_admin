@@ -583,7 +583,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             valueRender = c.get('value');
             // todo different value render based on condition type
             if (ruleCondition.type === 'IP_PROTOCOL') {
-                valueRender = Globals.protocolsMap[c.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+                if (Globals.protocolsMap[c.get('value')]) {
+                    valueRender = Globals.protocolsMap[c.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+                }
             }
 
 
