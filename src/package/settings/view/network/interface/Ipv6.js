@@ -22,8 +22,8 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         margin: '0 16',
         disabled: true,
         bind: {
-            value: '{rec.v6ConfigType}',
-            disabled: '{!rec.wan}'
+            value: '{record.v6ConfigType}',
+            disabled: '{!record.wan}'
         },
         store: [
             { name: 'Auto (DHCP)'.t(), value: 'DHCP' },
@@ -36,19 +36,19 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         xtype: 'container',
         padding: 16,
         hidden: true,
-        bind: { hidden: '{rec.v6ConfigType !== "DHCP"}' },
+        bind: { hidden: '{record.v6ConfigType !== "DHCP"}' },
         html: 'DHCP conf'
     }, {
         xtype: 'container',
         padding: 16,
         hidden: true,
-        bind: { hidden: '{rec.v6ConfigType !== "SLAAC"}' },
+        bind: { hidden: '{record.v6ConfigType !== "SLAAC"}' },
         html: 'SLAAC conf'
     }, {
         xtype: 'container',
         padding: 8,
         hidden: true,
-        bind: { hidden: '{rec.v6ConfigType !== "ASSIGN"}' },
+        bind: { hidden: '{record.v6ConfigType !== "ASSIGN"}' },
         layout: {
             type: 'form',
             itemSpacing: 8
@@ -64,8 +64,8 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
             errorLabel: 'IPv6 Assign Hint'.t(),
             required: false,
             bind: {
-                value: '{rec.v6AssignHint}',
-                required: '{rec.v6ConfigType === "ASSIGN"}'
+                value: '{record.v6AssignHint}',
+                required: '{record.v6ConfigType === "ASSIGN"}'
             }
         }, {
             xtype: 'numberfield',
@@ -79,15 +79,15 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
             required: false,
             allowBlank: true,
             bind: {
-                value: '{rec.v6AssignPrefix}',
-                required: '{rec.v6ConfigType === "ASSIGN"}'
+                value: '{record.v6AssignPrefix}',
+                required: '{record.v6ConfigType === "ASSIGN"}'
             }
         }]
     }, {
         xtype: 'container',
         padding: 8,
         hidden: true,
-        bind: { hidden: '{rec.v6ConfigType !== "STATIC"}' },
+        bind: { hidden: '{record.v6ConfigType !== "STATIC"}' },
         layout: {
             type: 'form',
             itemSpacing: 8
@@ -100,42 +100,42 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
         items: [{
             label: 'Address'.t(),
             name: 'v6StaticAddress',
-            bind: '{rec.v6StaticAddress}'
+            bind: '{record.v6StaticAddress}'
         }, {
             xtype: 'numberfield',
             name: 'v6StaticPrefix',
             label: 'Prefix Length'.t(),
-            bind: '{rec.v6StaticPrefix}',
+            bind: '{record.v6StaticPrefix}',
         }, {
             label: 'Gateway'.t(),
             name: 'v6StaticGateway',
             hidden: true,
             bind: {
-                value: '{rec.v6StaticGateway}',
-                hidden: '{!rec.wan}'
+                value: '{record.v6StaticGateway}',
+                hidden: '{!record.wan}'
             }
         }, {
             label: 'Primary DNS'.t(),
             name: 'v6StaticDNS1',
             hidden: true,
             bind: {
-                value: '{rec.v6StaticDNS1}',
-                hidden: '{!rec.wan}'
+                value: '{record.v6StaticDNS1}',
+                hidden: '{!record.wan}'
             }
         }, {
             label: 'Secondary DNS'.t(),
             name: 'v6StaticDNS2',
             hidden: true,
             bind: {
-                value: '{rec.v6StaticDNS2}',
-                hidden: '{!rec.wan}'
+                value: '{record.v6StaticDNS2}',
+                hidden: '{!record.wan}'
             }
         }]
     }, {
         xtype: 'toolbar',
         docked: 'bottom',
         hidden: true,
-        bind: { hidden: '{rec.v6ConfigType === "DISABLED"}' },
+        bind: { hidden: '{record.v6ConfigType === "DISABLED"}' },
         items: ['->', {
             xtype: 'button',
             text: 'IPv6 Aliases',

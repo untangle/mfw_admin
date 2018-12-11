@@ -12,7 +12,7 @@ Ext.define('Mfw.settings.network.interface.Dhcp', {
         layout: 'center',
         html: 'DHCP Serving is Disabled'.t(),
         hidden: true,
-        bind: { hidden: '{rec.dhcpEnabled}' }
+        bind: { hidden: '{record.dhcpEnabled}' }
     }, {
         xtype: 'container',
         padding: 8,
@@ -25,39 +25,39 @@ Ext.define('Mfw.settings.network.interface.Dhcp', {
         },
         defaultType: 'textfield',
         hidden: true,
-        bind: { hidden: '{!rec.dhcpEnabled}' },
+        bind: { hidden: '{!record.dhcpEnabled}' },
         items: [{
             label: 'Range Start'.t(),
             name: 'dhcpRangeStart',
-            bind: '{rec.dhcpRangeStart}'
+            bind: '{record.dhcpRangeStart}'
         }, {
             label: 'Range End'.t(),
             name: 'dhcpRangeEnd',
-            bind: '{rec.dhcpRangeEnd}'
+            bind: '{record.dhcpRangeEnd}'
         }, {
             xtype: 'numberfield',
             name: 'dhcpLeaseDuration',
             label: 'Lease Duration'.t(),
-            bind: '{rec.dhcpLeaseDuration}'
+            bind: '{record.dhcpLeaseDuration}'
         }, {
             label: 'Gateway Override'.t(),
             name: 'dhcpGatewayOverride',
-            bind: '{rec.dhcpGatewayOverride}'
+            bind: '{record.dhcpGatewayOverride}'
         }, {
             xtype: 'combobox',
             name: 'dhcpPrefixOverride',
             label: 'Netmask Override'.t(),
-            bind: '{rec.dhcpPrefixOverride}'
+            bind: '{record.dhcpPrefixOverride}'
         }, {
             label: 'DNS Override'.t(),
             name: 'dhcpDNSOverride',
-            bind: '{rec.dhcpDNSOverride}'
+            bind: '{record.dhcpDNSOverride}'
         }]
     }, {
         xtype: 'toolbar',
         docked: 'bottom',
         hidden: true,
-        bind: { hidden: '{!rec.dhcpEnabled}' },
+        bind: { hidden: '{!record.dhcpEnabled}' },
         items: ['->', {
             xtype: 'button',
             text: 'DHCP Options'.t(),

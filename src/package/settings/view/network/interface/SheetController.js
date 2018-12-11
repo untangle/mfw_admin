@@ -4,10 +4,10 @@ Ext.define('Mfw.settings.network.interface.SheetController', {
 
     onInitialize: function () {
         var me = this, vm = me.getViewModel();
-        vm.bind('{rec.wan}', function (wan) {
+        vm.bind('{record.wan}', function (wan) {
             if (!wan) {
-                vm.set('rec.v4ConfigType', 'STATIC');
-                vm.set('rec.v6ConfigType', 'STATIC');
+                vm.set('record.v4ConfigType', 'STATIC');
+                vm.set('record.v6ConfigType', 'STATIC');
             }
         });
     },

@@ -207,7 +207,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             callback: function(records) {
                 // the operation object
                 // contains all of the details of the load operation
-                console.log(records);
             }
         });
     },
@@ -227,16 +226,15 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         });
     },
 
-    // onSave: function () {
-    //     var me = this;
-    //     me.beforeSave();
-    //     console.log('saving');
-    //     this.getView().getStore().sync({
-    //         success: function () {
-    //             Ext.toast('Settings saved!');
-    //         }
-    //     });
-    // },
+    onSave: function () {
+        var me = this;
+        me.beforeSave();
+        this.getView().getStore().sync({
+            success: function () {
+                Ext.toast('Settings saved!');
+            }
+        });
+    },
 
     onAddRecord: function () {
         var me = this, grid = me.getView(),
@@ -265,6 +263,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onEditRecord: function (grid, info) {
         var me = this;
 
+        console.log(grid.getEditor());
+
         // if custom editor sheet
         if (grid.getEditor()) {
             if (!me.sheet) {
@@ -275,6 +275,9 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 });
             }
             me.sheet.isNewRecord = false;
+
+            console.log(info.record);
+
             me.sheet.getViewModel().set('record', info.record);
             me.sheet.show();
             return;

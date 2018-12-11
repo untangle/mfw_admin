@@ -37,7 +37,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
             autoComplete: false,
             errorLabel: 'Interface Name'.t(),
             required: true,
-            bind: '{rec.name}'
+            bind: '{record.name}'
         }, {
             xtype: 'combobox',
             name: 'configType',
@@ -47,7 +47,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
             valueField: 'value',
             editable: false,
             required: true,
-            bind: '{rec.configType}',
+            bind: '{record.configType}',
             store: [
                 { name: 'Addressed'.t(), value: 'ADDRESSED' },
                 { name: 'Bridged'.t(),   value: 'BRIDGED' },
@@ -65,8 +65,8 @@ Ext.define('Mfw.settings.network.interface.Main', {
             forceSelection: true,
             hidden: true,
             bind: {
-                hidden: '{rec.configType !== "BRIDGED"}',
-                required: '{rec.configType === "BRIDGED"}'
+                hidden: '{record.configType !== "BRIDGED"}',
+                required: '{record.configType === "BRIDGED"}'
             },
             store: [
                 { name: 'Intf 1'.t(), value: '1' },
@@ -80,15 +80,15 @@ Ext.define('Mfw.settings.network.interface.Main', {
             required: true,
             hidden: true,
             bind: {
-                value: '{rec.wan}',
-                hidden: '{rec.configType !== "ADDRESSED"}'
+                value: '{record.wan}',
+                hidden: '{record.configType !== "ADDRESSED"}'
             }
         }, {
             xtype: 'numberfield',
             name: 'interfaceId',
             label: 'Interface ID'.t(),
             required: true,
-            bind: '{rec.interfaceId}'
+            bind: '{record.interfaceId}'
         }]
     }, {
         xtype: 'component',

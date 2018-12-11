@@ -35,7 +35,7 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
             handler: 'onBack'
         }, {
             xtype: 'component',
-            bind: { html: '{rec.name} / <span style="font-size: smaller; font-weight: 100;">{rec.device}, {rec.wan ? "WAN" : "nonWAN"}</span>' }
+            bind: { html: '{record.name} / <span style="font-size: smaller; font-weight: 100;">{record.device}, {record.wan ? "WAN" : "nonWAN"}</span>' }
             // html: 'Edit Interface'.t()
         }, '->',
         // {
@@ -43,7 +43,7 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
         //     hidden: true,
         //     bind: {
         //         hidden: '{!enableIpv6Toggle}',
-        //         value: '{rec.v6ConfigType !== "DISABLED"}'
+        //         value: '{record.v6ConfigType !== "DISABLED"}'
         //     }
         // },
         {
@@ -58,14 +58,14 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
             hidden: true,
             bind: {
                 hidden: '{!enableDhcpToggle}',
-                value: '{rec.dhcpEnabled}'
+                value: '{record.dhcpEnabled}'
             }
         }, {
             xtype: 'togglefield',
             hidden: true,
             bind: {
                 hidden: '{!enableVrrpToggle}',
-                value: '{rec.vrrpEnabled}'
+                value: '{record.vrrpEnabled}'
             }
         }]
     },

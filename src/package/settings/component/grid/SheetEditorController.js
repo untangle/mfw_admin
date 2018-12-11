@@ -74,7 +74,7 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
             grid = sheet.up('grid'),
             form = sheet.down('formpanel');
 
-        vm.get('record').set(me.form.getValues());
+        vm.get('record').set(form.getValues());
 
         // // console.log(vm.get('rec').isValid());
         // var invalidFields = '';

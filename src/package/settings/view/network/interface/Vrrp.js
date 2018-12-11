@@ -12,7 +12,7 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
         layout: 'center',
         html: 'Redundancy (VRRP) is Disabled'.t(),
         hidden: true,
-        bind: { hidden: '{rec.vrrpEnabled}' }
+        bind: { hidden: '{record.vrrpEnabled}' }
     }, {
         xtype: 'container',
         padding: 16,
@@ -21,7 +21,7 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
             // itemSpacing: 8
         },
         hidden: true,
-        bind: { hidden: '{!rec.vrrpEnabled}' },
+        bind: { hidden: '{!record.vrrpEnabled}' },
         defaultType: 'numberfield',
         defaults: {
             margin: 0,
@@ -41,23 +41,23 @@ Ext.define('Mfw.settings.network.interface.Vrrp', {
             name: 'vrrpID',
             required: false,
             bind: {
-                value: '{rec.vrrpID}',
-                required: '{rec.vrrpEnabled}'
+                value: '{record.vrrpID}',
+                required: '{record.vrrpEnabled}'
             }
         }, {
             label: 'VRRP Priority'.t(),
             name: 'vrrpPriority',
             required: false,
             bind: {
-                value: '{rec.vrrpPriority}',
-                required: '{rec.vrrpEnabled}'
+                value: '{record.vrrpPriority}',
+                required: '{record.vrrpEnabled}'
             }
         }]
     }, {
         xtype: 'toolbar',
         docked: 'bottom',
         hidden: true,
-        bind: { hidden: '{!rec.vrrpEnabled}' },
+        bind: { hidden: '{!record.vrrpEnabled}' },
         items: ['->', {
             xtype: 'button',
             text: 'VRRP Aliases',
