@@ -156,3 +156,10 @@ i { font-style: normal; }
 .highcharts-container { font-family: 'Arial', sans-serif; }
 
 .highcharts-background { fill: transparent; }
+
+.x-tabbar-light { background-color: #EEE; }
+.x-tabbar-light .x-text-el { color: #333; }
+.x-tabbar-light .x-inner-el { background-color: #EEE; }
+.x-tabbar-light .x-active .x-inner-el { background-color: #FFF; }
+.x-tabbar-light .x-active-indicator-el { background-color: var(--base-color) !important; }
+.x-tabbar-light .x-hovered .x-inner-el { background: #CCC; }

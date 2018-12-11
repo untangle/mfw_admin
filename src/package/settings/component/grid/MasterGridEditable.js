@@ -234,7 +234,7 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
             //     form.removeAll(false);
             // }
 
-            me.form = me.sheet = Ext.destroy(me.sheet);
+            // me.form = me.sheet = Ext.destroy(me.sheet);
         }
     }
 });

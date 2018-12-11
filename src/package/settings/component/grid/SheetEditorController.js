@@ -21,7 +21,6 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
             items: fields
         }, Ext.form.Panel);
         // me.form = form = sheet.down('formpanel');
-        console.log(sheet.down('form'));
         // form.setLayout('vbox');
         // form.setItems(fields);
         sheet.add(form);
@@ -34,7 +33,7 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
             form.setRecord(record);
             // form.down('grid').setBind('record.conditions');
             // form.down('grid').getStore().loadData(record.get('conditions'));
-        })
+        });
     },
 
     getEditorFields: function(columns) {

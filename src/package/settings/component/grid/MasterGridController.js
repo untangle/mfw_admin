@@ -59,7 +59,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     bind: {
                         hidden: '{record._deleteSchedule}',
                     }
-                }
+                };
                 if (g.getDisableEditCondition()) {
                     tools.edit.disabled = true;
                     tools.edit.bind.disabled = g.getDisableEditCondition();
@@ -74,7 +74,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     bind: {
                         hidden: '{record._deleteSchedule}'
                     }
-                }
+                };
 
                 if (g.getDisableCopyCondition()) {
                     tools.copy.disabled = true;
@@ -90,7 +90,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     bind: {
                         hidden: '{record._deleteSchedule}',
                     }
-                }
+                };
 
                 if (g.getDisableDeleteCondition()) {
                     tools.delete.disabled = true;
@@ -104,7 +104,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     bind: {
                         hidden: '{!record._deleteSchedule}',
                     }
-                }
+                };
             }
 
             actionsColumn.cell.tools = tools;
@@ -142,7 +142,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     tooltip: 'Move Last'.t(),
                     pos: 'last'
                 }]
-            })
+            });
         }
 
         if (g.getEnableAdd()) {
@@ -151,7 +151,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 iconCls: 'md-icon-add',
                 align: 'right',
                 handler: 'onAddRecord'
-            })
+            });
         }
 
         if (g.getEnableSave()) {
@@ -160,7 +160,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 iconCls: 'md-icon-save',
                 align: 'right',
                 handler: 'onSave'
-            })
+            });
         }
 
         if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
@@ -176,19 +176,19 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             };
 
             if (g.getEnableReload()) {
-                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'md-icon-refresh', handler: 'onLoad' } )
+                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'md-icon-refresh', handler: 'onLoad' } );
             }
 
             if (g.getEnableImport()) {
-                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'md-icon-call-received', handler: 'onImport' } )
+                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'md-icon-call-received', handler: 'onImport' } );
             }
 
             if (g.getEnableExport()) {
-                toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'md-icon-call-made', handler: 'onExport' } )
+                toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'md-icon-call-made', handler: 'onExport' } );
             }
 
             if (g.getEnableReset()) {
-                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'md-icon-sync', handler: 'onReset' } )
+                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'md-icon-sync', handler: 'onReset' } );
             }
 
             toolbarActions.push(toolbarMenu);
@@ -204,10 +204,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onLoad: function () {
         this.getView().getSelectable().deselectAll();
         this.getView().getStore().load({
-            callback: function() {
+            callback: function(records) {
                 // the operation object
                 // contains all of the details of the load operation
-                // console.log(records);
+                console.log(records);
             }
         });
     },
@@ -227,27 +227,29 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         });
     },
 
-    onSave: function () {
-        var me = this;
-        me.beforeSave();
-        this.getView().getStore().sync({
-            success: function () {
-                Ext.toast('Settings saved!');
-            }
-        });
-    },
+    // onSave: function () {
+    //     var me = this;
+    //     me.beforeSave();
+    //     console.log('saving');
+    //     this.getView().getStore().sync({
+    //         success: function () {
+    //             Ext.toast('Settings saved!');
+    //         }
+    //     });
+    // },
 
     onAddRecord: function () {
         var me = this, grid = me.getView(),
             newRecord = Ext.create(grid.getStore().getModel());
         // if custom editor sheet
-        if (me.getView().getEditorDialog()) {
+        console.log(grid.getEditor());
+        if (grid.getEditor()) {
             if (!me.sheet) {
                 me.sheet = Ext.Viewport.add({
-                    xtype: me.getView().getEditorDialog(),
+                    xtype: grid.getEditor(),
                     // xtype: 'masterdialog',
                     isNewRecord: true,
-                    ownerCmp: me.getView()
+                    ownerCmp: grid
                 });
             }
             me.sheet.isNewRecord = true;
@@ -263,8 +265,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onEditRecord: function (grid, info) {
         var me = this;
 
-
-        console.log(grid.getEditor());
         // if custom editor sheet
         if (grid.getEditor()) {
             if (!me.sheet) {
@@ -376,9 +376,9 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     store.load(function (records, operation, success) {
                         store.getProxy().setApi(api);
                         if (!success) {
-                            console.error('Unable to fetch defaults!')
+                            console.error('Unable to fetch defaults!');
                         }
-                    })
+                    });
                 }
             });
     },

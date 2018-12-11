@@ -9,79 +9,94 @@ Ext.define('Mfw.settings.network.Dns', {
         recordModel: new Mfw.model.Dns()
     },
 
-    layout: 'hbox',
+    layout: 'fit',
 
     items: [{
-        xtype: 'mastergrid',
-        // controller: 'dhcpstaticentries',
-        title: 'Static Entries',
-
-        plugins: {
-            gridcellediting: {
-                triggerEvent: 'tap'
-            }
+        xtype: 'tabpanel',
+        layout: {
+            type: 'card',
+            animation: false
         },
-
-        enableSave: false,
-        enableReload: true,
-        enableReset: false,
-
-        // enableCopy: false,
-
-        flex: 1,
-
-        bind: '{rec.staticEntries}',
-
-        columns: [{
-            text: 'Name'.t(),
-            dataIndex: 'name',
-            flex: 1,
-            editable: true
-        } , {
-            text: 'Address'.t(),
-            dataIndex: 'address',
-            flex: 1,
-            editable: true
-        }]
-    }, {
-        xtype: 'mastergrid',
-        // docked: 'right',
-        // width: '40%',
-        // resizable: {
-        //     split: true,
-        //     edges: 'west'
-        // },
-
-        // controller: 'dhcpstaticentries',
-        title: 'Local Servers',
-
-        plugins: {
-            gridcellediting: {
-                triggerEvent: 'tap'
-            }
+        tabBar: {
+            ui: 'light',
+            animateIndicator: false,
+            layout: {
+                type: 'hbox',
+                pack: 'start'
+            },
         },
+        items: [{
+            xtype: 'panel',
+            title: 'Static Entries',
+            layout: 'fit',
+            items: [{
+                xtype: 'mastergrid',
+                // controller: 'dhcpstaticentries',
 
-        enableSave: false,
-        enableReload: true,
-        enableReset: false,
+                title: '&nbsp;',
 
-        // enableCopy: false,
+                plugins: {
+                    gridcellediting: {
+                        triggerEvent: 'tap'
+                    }
+                },
 
-        flex: 1,
+                enableSave: false,
+                enableReload: true,
+                enableReset: false,
+                enableCopy: false,
 
-        bind: '{rec.localServers}',
+                flex: 1,
 
-        columns: [{
-            text: 'Name'.t(),
-            dataIndex: 'name',
-            flex: 1,
-            editable: true
-        } , {
-            text: 'Address'.t(),
-            dataIndex: 'address',
-            flex: 1,
-            editable: true
+                bind: '{rec.staticEntries}',
+
+                columns: [{
+                    text: 'Name'.t(),
+                    dataIndex: 'name',
+                    flex: 1,
+                    editable: true
+                } , {
+                    text: 'Address'.t(),
+                    dataIndex: 'address',
+                    flex: 1,
+                    editable: true
+                }]
+            }]
+        }, {
+            xtype: 'panel',
+            title: 'Local Servers',
+            layout: 'fit',
+            items: [{
+                xtype: 'mastergrid',
+                title: '&nbsp;',
+
+                plugins: {
+                    gridcellediting: {
+                        triggerEvent: 'tap'
+                    }
+                },
+
+                enableSave: false,
+                enableReload: true,
+                enableReset: false,
+                enableCopy: false,
+
+                flex: 1,
+
+                bind: '{rec.localServers}',
+
+                columns: [{
+                    text: 'Name'.t(),
+                    dataIndex: 'name',
+                    flex: 1,
+                    editable: true
+                } , {
+                    text: 'Address'.t(),
+                    dataIndex: 'address',
+                    flex: 1,
+                    editable: true
+                }]
+            }]
         }]
-    }]
-
+    }],
 });

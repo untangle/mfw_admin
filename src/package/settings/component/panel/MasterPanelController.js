@@ -54,6 +54,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
         var me = this;
         me.getView().getRecordModel().load({
             success: function (rec) {
+                console.log(rec);
                 me.getViewModel().set('rec', rec);
             }
         });
@@ -68,7 +69,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
         }
         panel.getRecordModel().save({
             success: function () {
-                Ext.toast('DHCP saved!');
+                Ext.toast('Settings saved!');
             }
         });
     },

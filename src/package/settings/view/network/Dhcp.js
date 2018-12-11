@@ -63,9 +63,8 @@ Ext.define('Mfw.settings.network.DhcpEntriesController', {
         var rec = Ext.create('Mfw.model.DhcpStaticEntry', {
             address: '1.2.3.4',
             macAddress: 'somestring'
-        })
+        });
         me.getView().getStore().add(rec);
-        console.log('on add');
     }
 
 });

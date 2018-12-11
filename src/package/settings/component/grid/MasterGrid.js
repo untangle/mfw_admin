@@ -100,7 +100,7 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
          * `true` to allow user to sort records manually only
          * any other type of sorting shoul be disabled
          */
-        enableManualSort: true,
+        enableManualSort: false,
 
         /**
          * @cfg {String} editor

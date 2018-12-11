@@ -571,3 +571,24 @@ i {
 .highcharts-background {
     fill: transparent;
 }
+
+
+
+.x-tabbar-light {
+    background-color: #EEE;
+    .x-text-el {
+        color: #333;
+    }
+    .x-inner-el {
+        background-color: #EEE;
+    }
+    .x-active .x-inner-el {
+        background-color: #FFF;
+    }
+    .x-active-indicator-el {
+        background-color: var(--base-color) !important;
+    }
+    .x-hovered .x-inner-el {
+        background: #CCC;
+    }
+}
