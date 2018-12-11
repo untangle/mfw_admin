@@ -87,23 +87,7 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                         },
                         encodeHtml: false
                     },
-                    renderer: function (value, record) {
-                        var op, name;
-                        switch (record.get('op')) {
-                            case '==': op = '='; break;
-                            case '!=': op = '&ne;'; break;
-                            case '>': op = '&gt;'; break;
-                            case '<': op = '&lt;'; break;
-                            case '>=': op = '&ge;'; break;
-                            case '<=': op = '&le;'; break;
-                            default: op = '?'; break;
-                        }
-                        name = Ext.Array.findBy(Util.conditions, function (c) {
-                            return c.type === record.get('type');
-                        }).name;
-                        return '<div class="condition"><span>' + name + '</span> ' +
-                                '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + record.get('value') + '</strong></div>';
-                    }
+                    renderer: 'conditionRenderer'
                 }, {
                     width: 70,
                     align: 'center',
@@ -198,15 +182,15 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             label: 'Operation'.t(),
             editable: false,
             required: true,
-            itemTpl: '<tpl>{text}{sign}</tpl>',
+            itemTpl: '<tpl>{text} {sign}</tpl>',
             value: '==',
             options: [
-                { value: '==', text: 'Equals'.t(), sign: ' [ = ]' },
-                { value: '!=', text: 'Not Equals'.t(), sign: ' [ &ne; ]' },
-                { value: '>', text: 'Greater Than'.t(), sign: ' [ &gt; ]' },
-                { value: '<', text: 'Less Than'.t(), sign: ' [ &lt; ]' },
-                { value: '>=', text: 'Greater Than or Equal'.t(), sign:' [ &ge; ]' },
-                { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
+                { value: '==', text: 'Equals'.t(), sign: '[ = ]' },
+                { value: '!=', text: 'Not Equals'.t(), sign: '[ &ne; ]' },
+                { value: '>', text: 'Greater Than'.t(), sign: '[ &gt; ]' },
+                { value: '<', text: 'Less Than'.t(), sign: '[ &lt; ]' },
+                { value: '>=', text: 'Greater Than or Equal'.t(), sign:'[ &ge; ]' },
+                { value: '<=', text: 'Less Than or Equal'.t(), sign: '[ &le; ]' }
             ]
         }, {
             xtype: 'toolbar',
@@ -501,6 +485,29 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             }
 
             sheet.hide();
+        },
+
+        conditionRenderer: function (value, record) {
+            var op, ruleCondition, valueRender;
+            switch (record.get('op')) {
+                case '==': op = '='; break;
+                case '!=': op = '&ne;'; break;
+                case '>': op = '&gt;'; break;
+                case '<': op = '&lt;'; break;
+                case '>=': op = '&ge;'; break;
+                case '<=': op = '&le;'; break;
+                default: op = '?'; break;
+            }
+
+            ruleCondition = Util.ruleConditionsMap[record.get('type')];
+            valueRender = record.get('value');
+            // todo different value render based on condition type
+            if (ruleCondition.type === 'IP_PROTOCOL') {
+                valueRender = Globals.protocolsMap[record.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+            }
+
+            return '<div class="condition"><span>' + ruleCondition.name + '</span> ' +
+                    '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>';
         }
     }
 

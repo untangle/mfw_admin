@@ -169,7 +169,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     userCls: '{selectedChain.name === "' + chain.get('name') + '" ? "selected" : ""}'
                 },
                 html: tpl,
-                handler: function (item) { item.up('menu').hide(); me.selectChain(chain.get('name')) }
+                handler: function (item) { item.up('menu').hide(); me.selectChain(chain.get('name')); }
             });
         });
         me.getViewModel().set('chainNames', store);
@@ -233,8 +233,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                                     rule.drop();
                                 }
                             }
-                        })
-                    })
+                        });
+                    });
                     // remove the chain
                     me.table.chains().remove(me.selectedChain);
                 }
@@ -566,7 +566,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
 
     conditionRenderer: function (conditions, record) {
-        var strArr = [], op, name;
+        var strArr = [], op, ruleCondition, valueRender;
 
         record.conditions().each(function (c) {
             switch (c.get('op')) {
@@ -579,17 +579,21 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 default: op = '?'; break;
             }
 
-            name = Ext.Array.findBy(Util.conditions, function (condition) {
-                return condition.type === c.get('type');
-            }).name;
+            ruleCondition = Util.ruleConditionsMap[c.get('type')];
+            valueRender = c.get('value');
+            // todo different value render based on condition type
+            if (ruleCondition.type === 'IP_PROTOCOL') {
+                valueRender = Globals.protocolsMap[c.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+            }
 
-            strArr.push('<div class="condition"><span>' + name + '</span> ' +
-                   '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + c.get('value') + '</strong></div>');
+
+            strArr.push('<div class="condition"><span>' + ruleCondition.name + '</span> ' +
+                   '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>');
         });
         if (strArr.length > 0) {
             return strArr.join('');
         } else {
-            return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>'
+            return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>';
         }
     },
 

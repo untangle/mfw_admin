@@ -15,7 +15,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                     // checkbox: true,
                     drag: true,
                     rows: get('selectedChain.editable')
-                }
+                };
             }
         }
     },

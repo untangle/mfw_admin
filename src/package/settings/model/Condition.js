@@ -7,7 +7,7 @@ Ext.define('Mfw.model.table.Condition', {
     fields: [
         { name: 'type',  type: 'string' },
         { name: 'op',    type: 'string' },
-        { name: 'value', type: 'string' }
+        { name: 'value', type: 'auto' }
     ],
 
     // proxy: {
