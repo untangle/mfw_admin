@@ -51,14 +51,19 @@ Ext.define('Mfw.settings.network.Dns', {
                 bind: '{rec.staticEntries}',
 
                 columns: [{
+                    text: 'Description'.t(),
+                    dataIndex: 'description',
+                    flex: 1,
+                    editable: true
+                }, {
                     text: 'Name'.t(),
                     dataIndex: 'name',
-                    flex: 1,
+                    width: 250,
                     editable: true
                 } , {
                     text: 'Address'.t(),
                     dataIndex: 'address',
-                    flex: 1,
+                    width: 250,
                     editable: true
                 }]
             }]

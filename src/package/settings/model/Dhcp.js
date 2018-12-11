@@ -2,6 +2,7 @@ Ext.define('Mfw.model.DhcpStaticEntry', {
     extend: 'Ext.data.Model',
 
     fields: [
+        { name: 'description', type: 'string' },
         { name: 'address', type: 'string' },
         { name: 'macAddress', type: 'string', allowNull: true }
     ],

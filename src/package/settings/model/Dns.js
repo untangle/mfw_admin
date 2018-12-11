@@ -2,6 +2,7 @@ Ext.define('Mfw.model.DnsStaticEntry', {
     extend: 'Ext.data.Model',
 
     fields: [
+        { name: 'description', type: 'string' },
         { name: 'name', type: 'string' },
         { name: 'address', type: 'string', allowNull: true }
     ],

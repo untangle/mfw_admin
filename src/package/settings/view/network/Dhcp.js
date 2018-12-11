@@ -30,7 +30,6 @@ Ext.define('Mfw.settings.network.Dhcp', {
         enableSave: false,
         enableReload: true,
         enableReset: false,
-
         // enableCopy: false,
 
         flex: 1,
@@ -38,14 +37,19 @@ Ext.define('Mfw.settings.network.Dhcp', {
         bind: '{rec.staticDhcpEntries}',
 
         columns: [{
+            text: 'Description'.t(),
+            dataIndex: 'description',
+            flex: 1,
+            editable: true
+        }, {
             text: 'Mac Address'.t(),
             dataIndex: 'macAddress',
-            flex: 1,
+            width: 250,
             editable: true
         } , {
             text: 'Address'.t(),
             dataIndex: 'address',
-            flex: 1,
+            width: 250,
             editable: true
         }]
     }]
