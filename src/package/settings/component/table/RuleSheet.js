@@ -170,6 +170,8 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
             editable: false,
             displayField: 'name',
             valueField: 'type',
+            // displayTpl: '{name} [ {type} ]',
+            itemTpl: '<div>{name} <br/><span style="color: #999; font-size: 10px;">[ {type} ]</span></div>',
             options: Util.conditions,
             required: true,
             listeners: {
