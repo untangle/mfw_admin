@@ -42,7 +42,8 @@ Ext.define('Mfw.store.Nav', {
             iconCls: 'tree system',
             href: 'settings/system',
             children: [
-                { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' }
+                { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' },
+                { text: 'Accounts'.t(), leaf: true, href: 'settings/system/accounts' }
             ]
         }, {
             // Administration
