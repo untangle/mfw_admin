@@ -2,7 +2,7 @@ Ext.define('Mfw.dashboard.Since', {
     extend: 'Ext.Button',
     alias: 'widget.dashboard-since',
 
-    viewModel: {},
+    // viewModel: {},
 
     menu: {
         indented: false,
@@ -19,21 +19,37 @@ Ext.define('Mfw.dashboard.Since', {
 
     // iconCls: 'x-fa fa-clock-o',
 
-    listeners: {
-        initialize: function (btn) {
-            var vm = btn.getViewModel();
+    controller: {
+        init: function (btn) {
+            var me = this, vm = me.getViewModel(), route, btnText;
 
             // watch since
-            vm.bind('{conditions.since}', function (since) {
-                btn.setText(since + ' hour(s)');
-            });
+            vm.bind('{route}', function (route) {
+                if (!route.since) {
+                    btnText = '1 hour';
+                } else {
+                    btnText = route.since + ' hour(s)';
+                }
+                // if (route.since) {
+                //     startTime = new Date(route.since);
+                //     btnText = (!route.until ? 'Since ' : '') + Ext.Date.format(startTime, 'Y-m-d H:i A');
+                // }
+                btn.setText(btnText);
+            }, me, { deep: true });
 
             // set since
             btn.getMenu().on('click', function (menu, item) {
-                vm.set('conditions.since', item.value);
-                Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+                // vm.set('route.since', item.value);
+                // // Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+                // menu.hide();
+                route = vm.get('route');
                 menu.hide();
+                route.since = item.value;
+                Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
+
+
+
             });
         }
-    },
+    }
 });

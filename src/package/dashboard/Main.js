@@ -5,17 +5,16 @@ Ext.define('Mfw.dashboard.Main', {
 
     viewModel: {
         data: {
-            currentView: 'dashboard',
-            conditions: {
-                since: null,
-                fields: []
+            route: {
+                since: null, // timestamp
+                conditions: [] // user conditions
             }
         }
     },
 
     items: [{
         xtype: 'toolbar',
-        userCls: 'x-conditions',
+        userCls: 'x-subbar',
         shadow: false,
         padding: 8,
         // padding: 0, // to remove left spacing
@@ -69,17 +68,17 @@ Ext.define('Mfw.dashboard.Main', {
         items: [{
             xtype: 'component',
             bind: {
-                html: 'Dashboard View since <strong>{conditions.since} hour(s)</strong> <br/><br/>'
+                html: 'Dashboard View since <strong>{route.since} hour(s)</strong> <br/><br/>'
             }
         }, {
             xtype: 'dataview',
             disableSelection: true,
             bind: {
                 store: {
-                    data: '{conditions.fields}'
+                    data: '{route.conditions}'
                 }
             },
-            itemTpl: '<div>{column} {operator} {value} (autoformat: {autoFormatValue})</div>'
+            itemTpl: '<div>{column} {operator} {value}</div>'
         }]
     }]
 });

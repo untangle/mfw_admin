@@ -17,7 +17,7 @@ Ext.define('Mfw.reports.Controller', {
      * Check if reports store is loaded, otherwise load the store before continuing
      */
     onBefore: function () {
-        var me = this, action,
+        var action,
             reportsStore = Ext.getStore('reports');
         if (arguments.length === 1) {
             action = arguments[0];

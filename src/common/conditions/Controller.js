@@ -5,6 +5,7 @@ Ext.define('Mfw.common.conditions.Controller', {
     init: function (cmp) {
         var me = this;
         me.mainView = cmp.up('dashboard') || cmp.up('reports');
+
         me.getViewModel().bind('{route.conditions}', function (conditions) {
             me.generateConditionsButtons(conditions);
         });
@@ -48,7 +49,11 @@ Ext.define('Mfw.common.conditions.Controller', {
                     handler: function (btn) {
                         Ext.Array.removeAt(conditions, btn.fieldIndex);
                         route.conditions = conditions;
-                        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+                        if (me.mainView.isXType('dashboard')) {
+                            Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
+                        } else {
+                            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+                        }
                     }
                 }]
             });
@@ -119,7 +124,11 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         route.conditions = conditions;
 
-        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        if (me.mainView.isXType('dashboard')) {
+            Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
+        } else {
+            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        }
     },
 
     onCancelCondition: function () {
@@ -162,8 +171,11 @@ Ext.define('Mfw.common.conditions.Controller', {
             conditions = vm.get('route.conditions');
         Ext.Array.removeAt(conditions, idx);
 
-        Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-        // Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+        if (me.mainView.isXType('dashboard')) {
+            Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
+        } else {
+            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        }
     },
 
     onColumnChange: function (field, value, oldValue) {

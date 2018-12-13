@@ -5,11 +5,28 @@ Ext.define('Mfw.dashboard.Controller', {
     routes: {
         '': function () {console.log('eeeeeeeeee'); },
         'dashboard:query': {
-            before: 'onBefore',
+            // before: 'onBefore',
             action: 'onAction',
             conditions: { ':query' : '(.*)' }
         }
     },
+
+    init: function () {
+        var me = this, viewModel = me.getViewModel();
+
+        viewModel.bind('{route}', function (route) {
+            var userConditions = [];
+
+            // if (!route.since) {
+            //     route.since = 1;
+            // }
+
+            Ext.Array.each(route.conditions, function (cond) {
+                userConditions.push(cond);
+            });
+        }, me, { deep: true });
+    },
+
 
     onBefore: function () {
         var me = this, query, action,
@@ -32,8 +49,19 @@ Ext.define('Mfw.dashboard.Controller', {
         }
     },
 
-    onAction: function () {
-        Mfw.app.viewport.setActiveItem('dashboard');
+    onAction: function (query) {
+        var me = this,
+            vm = me.getViewModel();
+
+        if (Mfw.app.viewport.getActiveItem().xtype !== 'dashboard' ) {
+            Mfw.app.viewport.setActiveItem('dashboard');
+        }
+
+        if (!query) {
+            Mfw.app.redirectTo(DashboardUtil.routeToQuery(vm.get('route')));
+            return;
+        }
+        me.getViewModel().set('route', DashboardUtil.queryToRoute(query));
     },
 
     sortContextMenu: {

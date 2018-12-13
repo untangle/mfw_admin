@@ -2,48 +2,97 @@ Ext.define('Mfw.dashboard.Util', {
     alternateClassName: 'DashboardUtil',
     singleton: true,
 
-    conditionsToQuery: function (conditions) {
-        var query = '';
-        query += 'since=' + (conditions.since || 1);
-
-        Ext.Array.each(conditions.fields, function(field) {
-            query += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
+    routeToQuery: function (route) {
+        var query = 'dashboard?';
+        if (route.since) {
+            query += 'since=' + route.since;
+        }
+        Ext.Array.each(route.conditions, function(condition) {
+            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + ':' + condition.value;
         });
         return query;
     },
 
-    queryToConditions: function (query) {
-        var decodedParam,
-            decodedParamParts,
-            conditions = {
-                fields: [],
-                since: 1,
-            }, key, val;
+    queryToRoute: function (query) {
+        var route = {
+            since: null,
+            conditions: []
+        };
 
-        Ext.Array.each(query.split('&'), function (paramCond) {
+        if (!query) { return; }
 
-            decodedParam = decodeURIComponent(paramCond);
+        var queryObj = Ext.Object.fromQueryString(query);
 
-            if (decodedParam.indexOf(':') > 0) {
-                decodedParamParts = decodedParam.split(':');
-                conditions.fields.push({
-                    column: decodedParamParts[0],
-                    operator: decodedParamParts[1],
-                    value: decodedParamParts[2],
-                    autoFormatValue: parseInt(decodedParamParts[3], 10) === 1 ? true : false,
+        Ext.Object.each(queryObj, function (key, val) {
+            if (key === 'since') {
+                route.since = parseInt(val, 10);
+                return;
+            }
+            /**
+             * if same column in multiple conditions
+             */
+            if (Ext.isArray(val)) {
+                Ext.Array.each(val, function (v) {
+                    route.conditions.push({
+                        column: key,
+                        operator: v.split(':')[0].toUpperCase(),
+                        value: v.split(':')[1]
+                    });
                 });
             } else {
-                decodedParamParts = decodedParam.split('=');
-                key = decodedParamParts[0];
-                val = decodedParamParts[1];
-
-                if (key === 'since') {
-                    var since, sinceDate = new Date(parseInt(val, 10));
-                    conditions.since = val;
-                }
+                route.conditions.push({
+                    column: key,
+                    operator: val.split(':')[0].toUpperCase(),
+                    value: val.split(':')[1]
+                });
             }
         });
-        return conditions;
+        return route;
     },
+
+
+    // conditionsToQuery: function (conditions) {
+    //     var query = '';
+    //     query += 'since=' + (conditions.since || 1);
+
+    //     Ext.Array.each(conditions.fields, function(field) {
+    //         query += '&' + field.column + ':' + encodeURIComponent(field.operator) + ':' + encodeURIComponent(field.value) + ':' + (field.autoFormatValue === true ? 1 : 0);
+    //     });
+    //     return query;
+    // },
+
+    // queryToConditions: function (query) {
+    //     var decodedParam,
+    //         decodedParamParts,
+    //         conditions = {
+    //             fields: [],
+    //             since: 1,
+    //         }, key, val;
+
+    //     Ext.Array.each(query.split('&'), function (paramCond) {
+
+    //         decodedParam = decodeURIComponent(paramCond);
+
+    //         if (decodedParam.indexOf(':') > 0) {
+    //             decodedParamParts = decodedParam.split(':');
+    //             conditions.fields.push({
+    //                 column: decodedParamParts[0],
+    //                 operator: decodedParamParts[1],
+    //                 value: decodedParamParts[2],
+    //                 autoFormatValue: parseInt(decodedParamParts[3], 10) === 1 ? true : false,
+    //             });
+    //         } else {
+    //             decodedParamParts = decodedParam.split('=');
+    //             key = decodedParamParts[0];
+    //             val = decodedParamParts[1];
+
+    //             if (key === 'since') {
+    //                 var since, sinceDate = new Date(parseInt(val, 10));
+    //                 conditions.since = val;
+    //             }
+    //         }
+    //     });
+    //     return conditions;
+    // },
 
 });
