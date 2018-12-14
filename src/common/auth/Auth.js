@@ -15,7 +15,7 @@ Ext.define('Mfw.Auth', {
     items: [{
         xtype: 'panel',
         shadow: true,
-        width: 280,
+        width: 320,
         height: 'auto',
         bodyPadding: 16,
 
@@ -54,25 +54,25 @@ Ext.define('Mfw.Auth', {
                 }
             },
             defaults: {
-                autoComplete: false
+                autoComplete: false,
+                labelAlign: 'left',
+                labelTextAlign: 'right'
             },
             items: [{
                 xtype: 'component',
                 itemId: 'error',
                 hidden: true,
-                html: '<p style="color: red; font-size: 12px;"><i class="x-fa fa-exclamation-triangle"></i> Invalid username or password!</p>'
+                html: '<p style="color: red; font-size: 12px; text-align: center;"><i class="x-fa fa-exclamation-triangle"></i> Invalid username or password!</p>'
             }, {
                 xtype: 'textfield',
                 name: 'username',
                 label: 'Username',
-                errorTarget: 'side',
                 clearable: false,
                 required: true
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
                 label: 'Password',
-                errorTarget: 'side',
                 clearable: false,
                 required: true
             }, {
@@ -111,7 +111,7 @@ Ext.define('Mfw.Auth', {
                     // }
                     Mfw.app.redirectTo(redirectRoute);
                     document.location.reload();
-                    btn.setDisabled(false);
+                    // btn.setDisabled(false);
                 },
                 failure: function (response) {
                     form.down('#error').show();
