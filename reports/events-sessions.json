@@ -1,8 +1,8 @@
 {
     "name": "Sessions",
-    "category": "Traffic",
+    "category": "Sessions",
     "description": "All processed sessions",
-    "displayOrder": 100,
+    "displayOrder": 1000,
     "type": "EVENTS",
     "table": "sessions"
 }

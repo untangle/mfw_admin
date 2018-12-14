@@ -1,8 +1,8 @@
 {
     "name": "Sessions by Time",
-    "category": "Traffic",
+    "category": "Sessions",
     "description": "The session count over time",
-    "displayOrder": 10,
+    "displayOrder": 100,
     "type": "SERIES",
     "table": "sessions",
     "querySeries": {

@@ -1,12 +1,12 @@
 {
-    "name": "Top Client Addresses by Session Count",
+    "name": "Top Protochain by Session Count",
     "category": "Sessions",
-    "description": "The top client addresses sorted by session count",
-    "displayOrder": 10,
+    "description": "The Application Protochain sorted by session count",
+    "displayOrder": 25,
     "type": "CATEGORIES",
     "table": "sessions",
     "queryCategories": {
-        "groupColumn": "client_address",
+        "groupColumn": "application_protochain",
         "aggregationFunction": "count",
         "aggregationValue": "*"
     },

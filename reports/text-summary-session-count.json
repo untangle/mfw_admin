@@ -1,6 +1,6 @@
 {
     "name": "Session Count Summary",
-    "category": "Traffic",
+    "category": "Sessions",
     "description": "The number of sessions processed",
     "displayOrder": 1,
     "type": "TEXT",

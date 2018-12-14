@@ -1,0 +1,17 @@
+{
+    "name": "Top Clients Sessions by Time",
+    "category": "Sessions",
+    "description": "description",
+    "displayOrder": 11,
+    "type": "CATEGORIES_SERIES",
+    "table": "sessions",
+    "queryCategories": {
+        "groupColumn": "client_address",
+        "aggregationFunction": "count",
+        "aggregationValue": "1",
+        "limit": 10
+    },
+    "rendering": {
+        "type": "spline"
+    }
+}
