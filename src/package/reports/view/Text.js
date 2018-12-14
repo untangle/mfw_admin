@@ -24,7 +24,7 @@ Ext.define('Mfw.reports.Text', {
                 if (!record || record.get('type') !== 'TEXT') {
                     return;
                 }
-                me.loadData();
+                // me.loadData();
             });
         },
 

@@ -36,7 +36,7 @@ Ext.define('Mfw.reports.Events', {
                     return;
                 }
                 grid.setColumns(Table.sessions.columns);
-                me.loadData();
+                // me.loadData();
             });
         },
 
