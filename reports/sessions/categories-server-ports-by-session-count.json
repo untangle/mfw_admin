@@ -2,7 +2,7 @@
     "name": "Top Server Ports by Session Count",
     "category": "Sessions",
     "description": "The top server ports sorted by session count",
-    "displayOrder": 10,
+    "displayOrder": 15,
     "type": "CATEGORIES",
     "table": "sessions",
     "queryCategories": {

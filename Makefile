@@ -57,6 +57,9 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 
 APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(APP_SETUP_SRC) -name '*.js' 2>/dev/null)
 
+# All report entries
+REPORT_ENTRIES = $(shell find reports/ -type f -name '*.json')
+
 ## External resources (ExtJS & Highstock)
 
 # common variables
@@ -123,12 +126,12 @@ highstock-install: highstock-stage dir
 icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
 
-${REPORTS_DIR}/entries.json: reports/*
+${REPORTS_DIR}/entries.json: $(REPORT_ENTRIES)
 	@echo "Building entries.json..."
 	@echo "" > ${REPORTS_DIR}/entries.json
 	@echo "[" >> ${REPORTS_DIR}/entries.json
 	@pre=""
-	@for file in reports/* ; do \
+	for file in $(REPORT_ENTRIES) ; do \
 		echo $${pre} >> ${REPORTS_DIR}/entries.json ; \
 		cat $${file} >> ${REPORTS_DIR}/entries.json ; \
 		pre="," ; \

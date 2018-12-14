@@ -1,12 +1,12 @@
 {
-    "name": "Top Clients Sessions by Time",
+    "name": "Top Server Port Sessions by Time",
     "category": "Sessions",
     "description": "description",
-    "displayOrder": 11,
+    "displayOrder": 16,
     "type": "CATEGORIES_SERIES",
     "table": "sessions",
     "queryCategories": {
-        "groupColumn": "client_address",
+        "groupColumn": "server_port",
         "aggregationFunction": "count",
         "aggregationValue": "1",
         "limit": 10
