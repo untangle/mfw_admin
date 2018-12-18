@@ -308,7 +308,7 @@ Ext.define('Mfw.reports.ChartController', {
                 chart: {
                     type: rendering.get('type'),
                     zoomType: undefined,
-                    marginBottom: 0,
+                    marginBottom: 16,
                     options3d: {
                         enabled: rendering.get('3dEnabled'),
                         alpha: rendering.get('3dAlpha'),

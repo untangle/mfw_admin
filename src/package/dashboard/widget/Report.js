@@ -39,9 +39,14 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 record = viewModel.get('record'), activeItem;
 
             switch (record.get('type')) {
-                case 'TEXT': widget.add({ xtype: 'text-report' }); break;
-                case 'EVENTS': widget.add({ xtype: 'events-report' }); break;
-                default: widget.add({ xtype: 'chart-report' });
+                case 'TEXT':
+                    widget.add({ xtype: 'text-report' }); widget.setWidth(300); break;
+                case 'EVENTS':
+                    widget.add({ xtype: 'events-report' }); widget.setWidth(600); break;
+                case 'SERIES':
+                case 'CATEGORIES_SERIES':
+                    widget.add({ xtype: 'chart-report' }); widget.setWidth(700); break;
+                default: widget.add({ xtype: 'chart-report' }); widget.setWidth(400);
             }
             // widget.setActiveItem(activeItem);
 
