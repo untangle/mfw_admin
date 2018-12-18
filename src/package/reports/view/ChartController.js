@@ -152,6 +152,9 @@ Ext.define('Mfw.reports.ChartController', {
             //         opacity: 1
             //     }
             // },
+            // xAxis: {
+            //     visible: false
+            // },
             yAxis: {
                 opposite: false
             },
@@ -305,7 +308,7 @@ Ext.define('Mfw.reports.ChartController', {
                 chart: {
                     type: rendering.get('type'),
                     zoomType: undefined,
-                    marginBottom: 100,
+                    marginBottom: 0,
                     options3d: {
                         enabled: rendering.get('3dEnabled'),
                         alpha: rendering.get('3dAlpha'),

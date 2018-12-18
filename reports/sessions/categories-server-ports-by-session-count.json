@@ -13,6 +13,6 @@
     "rendering": {
         "type": "pie",
         "donutInnerSize": 50,
-        "3dEnabled": true
+        "3dEnabled": false
     }
 }

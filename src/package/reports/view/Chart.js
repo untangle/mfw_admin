@@ -1,5 +1,5 @@
 Ext.define('Mfw.reports.Chart', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.Container',
     alias: 'widget.chart-report',
 
     controller: 'chart',
@@ -10,7 +10,7 @@ Ext.define('Mfw.reports.Chart', {
     bodyPadding: 0,
 
     items: [{
-        xtype: 'container',
+        xtype: 'component',
         // flex: 1,
         itemId: 'chart'
     }]

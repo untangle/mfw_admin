@@ -10,15 +10,13 @@ Ext.define('Mfw.dashboard.widget.Report', {
     margin: 8,
 
     cls: 'mfw-widget',
-    bodyStyle: {
-        background: '#EEE'
-    },
     // shadow: true,
 
     layout: 'fit',
 
     items: [{
         xtype: 'toolbar',
+        style: { background: 'transparent' },
         docked: 'top',
         shadow: false,
         padding: '0 8',
