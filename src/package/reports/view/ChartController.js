@@ -382,7 +382,7 @@ Ext.define('Mfw.reports.ChartController', {
         } else {
             Ext.Array.each(data, function (point) {
                 normalizedData.push({
-                    name: point[record.getQueryCategories().get('groupColumn')],
+                    name: point[record.getQueryCategories().get('groupColumn')] || 'Unknown',
                     y: point.value
                 });
             });

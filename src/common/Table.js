@@ -54,6 +54,12 @@ Ext.define('Mfw.Table', {
             text: 'Server Interface',
             dataIndex: 'server_interface'
         }, {
+            text: 'Client Interface Type',
+            dataIndex: 'client_interface_type'
+        }, {
+            text: 'Server Interface Type',
+            dataIndex: 'server_interface_type'
+        }, {
             text: 'Local Address',
             dataIndex: 'local_address',
             width: 120
@@ -93,6 +99,73 @@ Ext.define('Mfw.Table', {
             text: 'New Server Port',
             dataIndex: 'server_port_new',
             width: 100
+        }, {
+            text: 'Client Country',
+            dataIndex: 'client_country'
+        }, {
+            text: 'Client Latitude',
+            dataIndex: 'client_latitude'
+        }, {
+            text: 'Client Longitude',
+            dataIndex: 'client_longitude'
+        }, {
+            text: 'Server Country',
+            dataIndex: 'server_country'
+        }, {
+            text: 'Server Latitude',
+            dataIndex: 'server_latitude'
+        }, {
+            text: 'Server Longitude',
+            dataIndex: 'server_longitude'
+        }, {
+            text: 'C2S bytes',
+            dataIndex: 'c2s_bytes'
+        }, {
+            text: 'S2C bytes',
+            dataIndex: 's2c_bytes'
+        }, {
+            text: 'Application ID',
+            dataIndex: 'application_id'
+        }, {
+            text: 'Application Name',
+            dataIndex: 'application_name',
+            width: 160,
+            renderer: function (name) {
+                return name || 'Unknown';
+            }
+        }, {
+            text: 'Application Protochain',
+            dataIndex: 'application_protochain'
+        }, {
+            text: 'Application Category',
+            dataIndex: 'application_category'
+        }, {
+            text: 'Application Blocked',
+            dataIndex: 'application_blocked'
+        }, {
+            text: 'Application Flagged',
+            dataIndex: 'application_flagged'
+        }, {
+            text: 'Application Confidence',
+            dataIndex: 'application_confidence'
+        }, {
+            text: 'Application Detail',
+            dataIndex: 'application_detail'
+        }, {
+            text: 'Certificate Subject CN',
+            dataIndex: 'certificate_subject_cn'
+        }, {
+            text: 'Certificate Subject O',
+            dataIndex: 'certificate_subject_o'
+        }, {
+            text: 'SNL SNI',
+            dataIndex: 'ssl_sni'
+        }, {
+            text: 'Client DNS Hint',
+            dataIndex: 'client_dns_hint'
+        }, {
+            text: 'Server DNS Hint',
+            dataIndex: 'server_dns_hint'
         }],
     },
 

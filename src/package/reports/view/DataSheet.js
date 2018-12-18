@@ -52,13 +52,11 @@ Ext.define('Mfw.reports.Data', {
                     case 'CATEGORIES_SERIES': me.setCategoriesSeriesData(grid, record, data); break;
                     default: Ext.emptyFn;
                 }
-
-
             });
         },
 
         onHide: function (view) {
-            view.down('grid').setColumns([]);
+            // view.down('grid').setColumns([]);
         },
 
         setTextData: function (grid, record, data) {
@@ -88,7 +86,6 @@ Ext.define('Mfw.reports.Data', {
                     flex: 1
                 }
             ]);
-
             // data is set in the viewModel already
         },
 
