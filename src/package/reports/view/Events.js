@@ -54,10 +54,10 @@ Ext.define('Mfw.reports.Events', {
              * text ... {0}... {1} end text
              */
             viewModel.set('data', []);
-            me.getView().up('report').mask();
+            // me.getView().up('report').mask();
             ReportsUtil.fetchReportData(record, function (data) {
                 viewModel.set('data', data);
-                me.getView().up('report').unmask();
+                // me.getView().up('report').unmask();
             });
         }
     }

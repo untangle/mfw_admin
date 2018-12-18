@@ -2,8 +2,6 @@ Ext.define('Mfw.reports.Util', {
     alternateClassName: 'ReportsUtil',
     singleton: true,
 
-    data: [],
-
     routeToQuery: function (route) {
         var query = 'reports?';
         // var hash = Ext.Object.fromQueryString(window.location.hash.replace('#reports?', '')), route = 'reports?';
@@ -93,67 +91,63 @@ Ext.define('Mfw.reports.Util', {
     },
 
     fetchReportData: function (report, cb) {
-        ReportsUtil.data = [];
-        // create query
-        ReportsUtil.createQuery(report, function (queryId) {
-            ReportsUtil.getData(queryId, function () {
-                ReportsUtil.closeQuery(queryId);
-                cb(ReportsUtil.data);
+        var data = [],
+            createQuery = function (report, cb) {
+                Ext.Ajax.request({
+                    url: '/api/reports/create_query',
+                    params: Ext.JSON.encode(report.getData(true)),
+                    success: function(response) {
+                        // get data
+                        var queryId = Ext.decode(response.responseText);
+                        cb(queryId);
+                        // ReportsUtil.fetch2(queryId, 0);
+                    },
+                    failure: function () {
+                        console.error('Unable to create query!');
+                    }
+                });
+            },
+            /**
+             * Gets data "recursively" till completes the time range (error from backend)
+             * @param {integer} queryId
+             * @param {function} cb
+             */
+            getData = function (queryId, cb) {
+                var partialData;
+                Ext.Ajax.request({
+                    url: '/api/reports/get_data/' + queryId,
+                    success: function (response) {
+                        partialData = Ext.decode(response.responseText);
+                        if (!partialData.error) {
+                            Ext.Array.push(data, partialData);
+                            getData(queryId, cb);
+                        } else {
+                            cb();
+                        }
+                    },
+                    failure: function () {
+                        console.error('Unable to fetch data for query ' + queryId);
+                    }
+                });
+            },
+            closeQuery = function (queryId) {
+                Ext.Ajax.request({
+                    url: '/api/reports/close_query/' + queryId,
+                    method: 'POST',
+                    success: function (response) {
+                        // cb(data);
+                    },
+                    failure: function () {
+                        console.error('Unable to to close query ' + queryId);
+                    }
+                });
+            };
+
+        createQuery(report, function (queryId) {
+            getData(queryId, function () {
+                closeQuery(queryId);
+                cb(data);
             });
         });
-    },
-
-    createQuery: function (report, cb) {
-        Ext.Ajax.request({
-            url: '/api/reports/create_query',
-            params: Ext.JSON.encode(report.getData(true)),
-            success: function(response) {
-                // get data
-                var queryId = Ext.decode(response.responseText);
-                cb(queryId);
-                // ReportsUtil.fetch2(queryId, 0);
-            },
-            failure: function (response, opts) {
-                console.error('Unable to create query!');
-            }
-        });
-    },
-
-    /**
-     * Gets data "recursively" till completes the time range (error from backend)
-     * @param {integer} queryId
-     * @param {function} cb
-     */
-    getData: function (queryId, cb) {
-        var data;
-        Ext.Ajax.request({
-            url: '/api/reports/get_data/' + queryId,
-            success: function (response) {
-                data = Ext.decode(response.responseText);
-                if (!data.error) {
-                    Ext.Array.push(ReportsUtil.data, data);
-                    ReportsUtil.getData(queryId, cb);
-                } else {
-                    cb();
-                }
-            },
-            failure: function (response) {
-                console.error('Unable to fetch data for query ' + queryId);
-            }
-        });
-    },
-
-    closeQuery: function (queryId) {
-        Ext.Ajax.request({
-            url: '/api/reports/close_query/' + queryId,
-            method: 'POST',
-            success: function (response) {
-                // cb(data);
-            },
-            failure: function () {
-                console.error('Unable to to close query ' + queryId);
-            }
-        });
     }
-
 });

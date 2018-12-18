@@ -20,6 +20,7 @@ Ext.define('Mfw.reports.ChartController', {
         view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
             chart: {
                 animation: false,
+                // width: '100%',
                 // height: '100%',
                 events: {
                     // selection: function (event) {
@@ -206,12 +207,12 @@ Ext.define('Mfw.reports.ChartController', {
             chart.series[0].remove(true);
         }
 
-        me.getView().up('report').mask();
+        // me.getView().up('report').mask();
 
         ReportsUtil.fetchReportData(record, function (data) {
             me.setData(data);
             me.getViewModel().set('data', data);
-            me.getView().up('report').unmask();
+            // me.getView().up('report').unmask();
         });
     },
 
@@ -342,7 +343,6 @@ Ext.define('Mfw.reports.ChartController', {
         //     text: record.get('description')
         // };
 
-        // console.log(chart.options);
         chart.update(settings, true);
 
     },
@@ -381,8 +381,10 @@ Ext.define('Mfw.reports.ChartController', {
             });
         } else {
             Ext.Array.each(data, function (point) {
+                var name = point[record.getQueryCategories().get('groupColumn')];
+                if (name === null) { name = 'Unknown'; }
                 normalizedData.push({
-                    name: point[record.getQueryCategories().get('groupColumn')] || 'Unknown',
+                    name: name,
                     y: point.value
                 });
             });

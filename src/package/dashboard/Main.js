@@ -12,13 +12,15 @@ Ext.define('Mfw.dashboard.Main', {
         }
     },
 
+    layout: 'fit',
+
     items: [{
         xtype: 'toolbar',
         userCls: 'x-subbar',
         shadow: false,
         padding: 8,
         // padding: 0, // to remove left spacing
-        dock: 'top',
+        docked: 'top',
         items: [{
             xtype: 'dashboard-since'
         }, {
@@ -63,22 +65,27 @@ Ext.define('Mfw.dashboard.Main', {
             }
         }]
     }, {
-        xtype: 'container',
-        padding: 20,
-        items: [{
-            xtype: 'component',
-            bind: {
-                html: 'Dashboard View since <strong>{route.since} hour(s)</strong> <br/><br/>'
-            }
-        }, {
-            xtype: 'dataview',
-            disableSelection: true,
-            bind: {
-                store: {
-                    data: '{route.conditions}'
-                }
-            },
-            itemTpl: '<div>{column} {operator} {value}</div>'
-        }]
+        // widgets holder
+        itemId: 'widgets',
+        xtype: 'panel',
+        padding: 8
+
+        // xtype: 'container',
+        // padding: 20,
+        // items: [{
+        //     xtype: 'component',
+        //     bind: {
+        //         html: 'Dashboard View since <strong>{route.since} hour(s)</strong> <br/><br/>'
+        //     }
+        // }, {
+        //     xtype: 'dataview',
+        //     disableSelection: true,
+        //     bind: {
+        //         store: {
+        //             data: '{route.conditions}'
+        //         }
+        //     },
+        //     itemTpl: '<div>{column} {operator} {value}</div>'
+        // }]
     }]
 });

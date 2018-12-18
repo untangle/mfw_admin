@@ -5,7 +5,7 @@ Ext.define('Mfw.dashboard.Controller', {
     routes: {
         '': function () {console.log('eeeeeeeeee'); },
         'dashboard:query': {
-            // before: 'onBefore',
+            before: 'onBefore',
             action: 'onAction',
             conditions: { ':query' : '(.*)' }
         }
@@ -13,40 +13,49 @@ Ext.define('Mfw.dashboard.Controller', {
 
     init: function () {
         var me = this, viewModel = me.getViewModel();
-
-        viewModel.bind('{route}', function (route) {
-            var userConditions = [];
-
-            // if (!route.since) {
-            //     route.since = 1;
-            // }
-
-            Ext.Array.each(route.conditions, function (cond) {
-                userConditions.push(cond);
-            });
-        }, me, { deep: true });
+        Ext.getStore('reports').on('load', me.loadWidgets, me);
     },
 
 
     onBefore: function () {
-        var me = this, query, action,
-            vm = me.getViewModel();
-
+        var action,
+            reportsStore = Ext.getStore('reports');
         if (arguments.length === 1) {
             action = arguments[0];
         } else {
-            query = arguments[0].replace('?', '');
             action = arguments[1];
         }
 
-        if (!query) {
-            // if no condition parameters, load those condition params from view model and redirect
-            Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
-            action.stop();
+        if (!reportsStore.isLoaded()) {
+            reportsStore.load(function (records, operation, success) {
+                if (success) {
+                    action.resume();
+                } else {
+                    console.warn('Unable to load reports');
+                    action.stop();
+                }
+            });
         } else {
-            vm.set('conditions', DashboardUtil.queryToConditions(query));
             action.resume();
         }
+        // var me = this, query, action,
+        //     vm = me.getViewModel();
+
+        // if (arguments.length === 1) {
+        //     action = arguments[0];
+        // } else {
+        //     query = arguments[0].replace('?', '');
+        //     action = arguments[1];
+        // }
+
+        // if (!query) {
+        //     // if no condition parameters, load those condition params from view model and redirect
+        //     Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
+        //     action.stop();
+        // } else {
+        //     vm.set('conditions', DashboardUtil.queryToConditions(query));
+        //     action.resume();
+        // }
     },
 
     onAction: function (query) {
@@ -103,19 +112,6 @@ Ext.define('Mfw.dashboard.Controller', {
             bind: { disabled: '{pos === "last"}' }
         }]
     },
-
-
-    onBeforeRoute: function () {
-        console.log('on dashboard');
-    },
-
-    // onInitialize: function () {
-    //     console.log('on init');
-    //     Mfw.app.onDashboard = function () {
-    //         console.log('dashboard route');
-    //     }
-    // },
-
 
 
 
@@ -193,12 +189,53 @@ Ext.define('Mfw.dashboard.Controller', {
     },
 
     onDialogOk: function () {
-        var me = this
+        var me = this;
         me.dialog.hide();
     },
     onDialogCancel: function () {
         var me = this;
         me.dialog.hide();
     },
+
+
+
+
+
+
+    loadWidgets: function () {
+        var widgets = [
+            { reportName: 'Top Client Addresses by Session Count' },
+            { reportName: 'Top Server Ports by Session Count' },
+            { reportName: 'Top Clients Sessions by Time' },
+            { reportName: 'Sessions' },
+            { reportName: 'Session Count Summary' }
+        ];
+
+        var me = this, record, widgetsCmp = [],
+            widgetsContainer = me.getView().down('#widgets');
+
+        Ext.Array.each(widgets, function (widget) {
+            record = Ext.getStore('reports').findRecord('name', widget.reportName, 0, false, true, true);
+
+            if (!record) {
+                console.warn('There is no report matching "' + widget.reportName + '"');
+                return;
+            }
+
+            widgetsCmp.push({
+                xtype: 'widget-report',
+                viewModel: {
+                    data: {
+                        record: record
+                    }
+                }
+            });
+        });
+
+        widgetsContainer.add(widgetsCmp);
+
+    }
+
+
 
 });

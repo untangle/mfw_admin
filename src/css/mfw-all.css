@@ -163,3 +163,5 @@ i { font-style: normal; }
 .x-tabbar-light .x-active .x-inner-el { background-color: #FFF; }
 .x-tabbar-light .x-active-indicator-el { background-color: var(--base-color) !important; }
 .x-tabbar-light .x-hovered .x-inner-el { background: #CCC; }
+
+.mfw-widget { border-radius: 5px; float: left; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); }

@@ -7,6 +7,9 @@ Ext.define('Mfw.reports.ReportController', {
         var me = this, viewModel = me.getViewModel();
 
         viewModel.bind('{route}', function (route) {
+
+            if (window.location.hash.indexOf('#reports') < 0) { return; }
+
             var record,
                 activeItem = 'noselection-report',
                 userConditions = [],
