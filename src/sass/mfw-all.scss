@@ -58,6 +58,15 @@ cite {
         .x-icon-el {
             color: #FFF;
         }
+        &.x-pressed {
+            .x-inner-el {
+                background: #222;
+                color: #FFF;
+            }
+            .x-arrow-el {
+                color: #FFF;
+            }
+        }
     }
     .x-button-segmented {
         .x-inner-el {
@@ -605,9 +614,13 @@ i {
     border-radius: 5px;
     float: left;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-    // .x-body-el {
-    //     background-color: #FFF;
-    // }
+    transition: all .2s ease-out;
+    .x-body-el {
+        background-color: #FFF;
+    }
+    &:hover {
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+    }
 }
 
 

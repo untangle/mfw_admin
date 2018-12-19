@@ -12,6 +12,8 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-subbar .x-button { color: #FFF; font-weight: 400; font-size: 12px; }
 .x-subbar .x-button .x-arrow-el { color: #FFF; }
 .x-subbar .x-button .x-icon-el { color: #FFF; }
+.x-subbar .x-button.x-pressed .x-inner-el { background: #222; color: #FFF; }
+.x-subbar .x-button.x-pressed .x-arrow-el { color: #FFF; }
 .x-subbar .x-button-segmented .x-inner-el { background-color: #222; font-size: 12px; font-weight: 400; }
 .x-subbar .x-button-segmented .x-icon-el { color: #FFF; }
 
@@ -164,4 +166,6 @@ i { font-style: normal; }
 .x-tabbar-light .x-active-indicator-el { background-color: var(--base-color) !important; }
 .x-tabbar-light .x-hovered .x-inner-el { background: #CCC; }
 
-.mfw-widget { border-radius: 5px; float: left; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); }
+.mfw-widget { border-radius: 5px; float: left; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); transition: all .2s ease-out; }
+.mfw-widget .x-body-el { background-color: #FFF; }
+.mfw-widget:hover { box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3); }

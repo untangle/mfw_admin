@@ -17,10 +17,15 @@ Ext.define('Mfw.model.Report', {
 
         // helper fields
         {
+            name: '_identifier',
+            calculate: function (data) {
+                return data.name.toLowerCase().replace(/ /g, '-');
+            }
+        }, {
             name: '_route',
             calculate: function (data) {
                 var categorySlug = data.category.toLowerCase().replace(/ /g, '-');
-                return 'cat=' + categorySlug + '&rep=' + data.name.toLowerCase().replace(/ /g, '-');
+                return 'cat=' + categorySlug + '&rep=' + data._identifier;
             }
         }
     ],

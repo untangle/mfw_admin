@@ -1,0 +1,8 @@
+[
+    { "name": "Top Client Addresses by Session Count"},
+    { "name": "Top Server Ports by Session Count" },
+    { "name": "Top Clients Sessions by Time" },
+    { "name": "Sessions" },
+    { "name": "Session Count Summary" },
+    { "name": "Top Server Port Sessions by Time" }
+]

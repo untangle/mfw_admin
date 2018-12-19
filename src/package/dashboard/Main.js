@@ -5,6 +5,7 @@ Ext.define('Mfw.dashboard.Main', {
 
     viewModel: {
         data: {
+            manager: true,
             route: {
                 since: null, // timestamp
                 conditions: [] // user conditions
@@ -15,6 +16,18 @@ Ext.define('Mfw.dashboard.Main', {
     layout: 'fit',
 
     items: [{
+        xtype: 'dashboard-manager',
+        docked: 'left',
+        width: 300,
+        resizable: {
+            split: true,
+            edges: 'east'
+        },
+        hidden: true,
+        bind: {
+            hidden: '{!manager}'
+        }
+    }, {
         xtype: 'toolbar',
         userCls: 'x-subbar',
         shadow: false,
@@ -22,6 +35,21 @@ Ext.define('Mfw.dashboard.Main', {
         // padding: 0, // to remove left spacing
         docked: 'top',
         items: [{
+            iconCls: 'x-fa fa-angle-right',
+            iconAlign: 'right',
+            text: 'Widgets',
+            handler: 'toggleManager',
+            hidden: true,
+            bind: {
+                hidden: '{manager}'
+            }
+        }, {
+            xtype: 'toolbarseparator',
+            hidden: true,
+            bind: {
+                hidden: '{manager}'
+            }
+        }, {
             xtype: 'dashboard-since'
         }, {
             xtype: 'toolbarseparator',
@@ -68,24 +96,7 @@ Ext.define('Mfw.dashboard.Main', {
         // widgets holder
         itemId: 'widgets',
         xtype: 'panel',
-        padding: 8
-
-        // xtype: 'container',
-        // padding: 20,
-        // items: [{
-        //     xtype: 'component',
-        //     bind: {
-        //         html: 'Dashboard View since <strong>{route.since} hour(s)</strong> <br/><br/>'
-        //     }
-        // }, {
-        //     xtype: 'dataview',
-        //     disableSelection: true,
-        //     bind: {
-        //         store: {
-        //             data: '{route.conditions}'
-        //         }
-        //     },
-        //     itemTpl: '<div>{column} {operator} {value}</div>'
-        // }]
+        padding: 8,
+        scrollable: true
     }]
 });

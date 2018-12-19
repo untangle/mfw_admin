@@ -11,12 +11,6 @@ Ext.define('Mfw.dashboard.Controller', {
         }
     },
 
-    init: function () {
-        var me = this, viewModel = me.getViewModel();
-        Ext.getStore('reports').on('load', me.loadWidgets, me);
-    },
-
-
     onBefore: function () {
         var action,
             reportsStore = Ext.getStore('reports');
@@ -38,24 +32,6 @@ Ext.define('Mfw.dashboard.Controller', {
         } else {
             action.resume();
         }
-        // var me = this, query, action,
-        //     vm = me.getViewModel();
-
-        // if (arguments.length === 1) {
-        //     action = arguments[0];
-        // } else {
-        //     query = arguments[0].replace('?', '');
-        //     action = arguments[1];
-        // }
-
-        // if (!query) {
-        //     // if no condition parameters, load those condition params from view model and redirect
-        //     Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
-        //     action.stop();
-        // } else {
-        //     vm.set('conditions', DashboardUtil.queryToConditions(query));
-        //     action.resume();
-        // }
     },
 
     onAction: function (query) {
@@ -201,41 +177,11 @@ Ext.define('Mfw.dashboard.Controller', {
 
 
 
-
-    loadWidgets: function () {
-        var widgets = [
-            { reportName: 'Top Client Addresses by Session Count' },
-            { reportName: 'Top Server Ports by Session Count' },
-            { reportName: 'Top Clients Sessions by Time' },
-            { reportName: 'Sessions' },
-            { reportName: 'Session Count Summary' }
-        ];
-
-        var me = this, record, widgetsCmp = [],
-            widgetsContainer = me.getView().down('#widgets');
-
-        Ext.Array.each(widgets, function (widget) {
-            record = Ext.getStore('reports').findRecord('name', widget.reportName, 0, false, true, true);
-
-            if (!record) {
-                console.warn('There is no report matching "' + widget.reportName + '"');
-                return;
-            }
-
-            widgetsCmp.push({
-                xtype: 'widget-report',
-                viewModel: {
-                    data: {
-                        record: record
-                    }
-                }
-            });
-        });
-
-        widgetsContainer.add(widgetsCmp);
-
+    toggleManager: function () {
+        var me = this, vm = me.getViewModel(),
+            manager = vm.get('manager');
+        vm.set('manager', !manager);
     }
-
 
 
 });

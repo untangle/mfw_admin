@@ -28,7 +28,7 @@ Ext.define('Mfw.dashboard.Since', {
                 if (!route.since) {
                     btnText = '1 hour';
                 } else {
-                    btnText = route.since + ' hour(s)';
+                    btnText = 'Since ' + route.since + ' hour(s)';
                 }
                 // if (route.since) {
                 //     startTime = new Date(route.since);

@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.1.155
+DEV_HOST ?= 192.168.1.154
 DEV_DIR ?= /www
 
 # logging
@@ -37,7 +37,7 @@ APP_SETUP_SRC := $(addprefix src/app/setup/, model store step view *.js)
 APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util)
 
 # PACKAGES SOURCES
-PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, conditions widget *.js)
+PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, model store components widget *.js)
 PKG_SETTINGS_SRC := $(addprefix src/package/settings/, *.js model store component view)
 PKG_REPORTS_SRC := $(addprefix src/package/reports/, conditions model store view *.js)
 
@@ -91,6 +91,7 @@ install: \
 	css \
 	js-admin \
 	html-admin \
+	widgets-admin \
 	js-settings \
 	html-settings \
 	html-reports \
@@ -155,6 +156,11 @@ $(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
 	@cp $^ $@
 
+widgets-admin: $(ADMIN_DIR)/widgets.json
+$(ADMIN_DIR)/widgets.json: src/package/dashboard/widgets.json
+	$(call LOG_FUNCTION,"Building widgets")
+	@cat $^ > $@
+
 js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
 $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
 	$(call LOG_FUNCTION,"Building Settings app")
@@ -196,6 +202,7 @@ dev-install: \
 	dir \
 	js-admin \
 	html-admin \
+	widgets-admin \
 	js-settings \
 	html-settings \
 	html-reports \
@@ -230,6 +237,7 @@ dev-watch:
 	css \
 	js-admin \
 	html-admin \
+	widgets-admin \
 	js-settings \
 	html-settings \
 	html-reports \
