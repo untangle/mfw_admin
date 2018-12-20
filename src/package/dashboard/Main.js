@@ -5,7 +5,7 @@ Ext.define('Mfw.dashboard.Main', {
 
     viewModel: {
         data: {
-            manager: true,
+            manager: false,
             route: {
                 since: null, // timestamp
                 conditions: [] // user conditions
@@ -18,7 +18,7 @@ Ext.define('Mfw.dashboard.Main', {
     items: [{
         xtype: 'dashboard-manager',
         docked: 'left',
-        width: 300,
+        width: 350,
         resizable: {
             split: true,
             edges: 'east'

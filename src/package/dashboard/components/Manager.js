@@ -48,7 +48,12 @@ Ext.define('Mfw.dashboard.Manager', {
     }, {
         xtype: 'grid',
         hideHeaders: true,
-        disableSelection: true,
+        selectable: {
+            mode: 'single',
+            cells: false,
+            // checkbox: true,
+            allowDeselect: true,
+        },
         store: 'widgets',
         columns: [{
             text: 'Widget',
@@ -59,14 +64,32 @@ Ext.define('Mfw.dashboard.Manager', {
             flex: 1,
             cell: {
                 tools: {
+                    up: {
+                        iconCls: 'md-icon-keyboard-arrow-up',
+                        tooltip: 'Move Up',
+                        zone: 'end',
+                        type: 'up',
+                        handler: 'onSort'
+                    },
+                    down: {
+                        iconCls: 'md-icon-keyboard-arrow-down',
+                        tooltip: 'Move Down',
+                        zone: 'end',
+                        type: 'down',
+                        handler: 'onSort'
+                    },
                     remove: {
-                        iconCls: 'md-icon-delete',
+                        iconCls: 'md-icon-close',
+                        tooltip: 'Remove',
                         zone: 'end',
                         handler: 'removeWidget'
-                    }
+                    },
                 }
             }
-        }]
+        }],
+        listeners: {
+            select: 'onSelect'
+        }
     }],
 
     controller: {
@@ -90,8 +113,8 @@ Ext.define('Mfw.dashboard.Manager', {
                 me.updateWidgetsMenu(store);
             }, me);
 
-            widgetsStore.on('add', me.onWidgetsAdd, me);
-
+            widgetsStore.on('add', me.onWidgetAdd, me);
+            widgetsStore.on('remove', me.onWidgetRemove, me);
             widgetsStore.load();
         },
 
@@ -149,23 +172,8 @@ Ext.define('Mfw.dashboard.Manager', {
                     }
                 });
             });
-
-            // console.log(menus);
         },
 
-
-        removeWidget: function (grid, info) {
-            var me = this,
-                widgetsContainer = me.getView().up('dashboard').down('#widgets'),
-                cmp = widgetsContainer.down('#widget_' + info.record.get('_identifier'));
-
-            if (!cmp) {
-                console.warn('Widget compoenent not found! ' + info.record.get('_identifier'));
-            }
-
-            widgetsContainer.remove(cmp);
-            grid.getStore().remove(info.record);
-        },
 
         addWidget: function (menuItem) {
             if (Ext.getStore('widgets').findRecord('name', menuItem.getText(), 0, false, true, true)) {
@@ -180,7 +188,7 @@ Ext.define('Mfw.dashboard.Manager', {
             });
         },
 
-        onWidgetsAdd: function (store, widgets) {
+        onWidgetAdd: function (store, widgets, index) {
             var me = this, record,
                 widget = widgets[0],
                 widgetsContainer = me.getView().up('dashboard').down('#widgets');
@@ -192,7 +200,7 @@ Ext.define('Mfw.dashboard.Manager', {
                 return;
             }
 
-            widgetsContainer.add({
+            widgetsContainer.insert(index, {
                 xtype: 'widget-report',
                 itemId: 'widget_' + widget.get('_identifier'),
                 viewModel: {
@@ -201,7 +209,41 @@ Ext.define('Mfw.dashboard.Manager', {
                     }
                 }
             });
-        }
+        },
+
+        removeWidget: function (grid, info) {
+            grid.getStore().remove(info.record);
+        },
+
+        onWidgetRemove: function (store, widgets, index) {
+            var me = this,
+                widget = widgets[0],
+                widgetsContainer = me.getView().up('dashboard').down('#widgets'),
+                cmp = widgetsContainer.down('#widget_' + widget.get('_identifier'));
+
+            if (!cmp) {
+                console.warn('Widget compoenent not found! ' + widget.get('_identifier'));
+            }
+
+            widgetsContainer.remove(cmp);
+        },
+
+        onSort: function (grid, info) {
+            // var grid = this;
+            var store = grid.getStore(),
+                record = info.record,
+                newIndex, oldIndex = store.indexOf(record);
+            // newIndex, pos;
+            switch (info.tool.type) {
+                case 'up':    newIndex = oldIndex > 0 ? (oldIndex - 1) : oldIndex; break;
+                case 'down':  newIndex = oldIndex < store.getCount() ? (oldIndex + 1) : oldIndex; break;
+                default: break;
+            }
+
+            store.removeAt(oldIndex);
+            store.insert(newIndex, record);
+            // store.sync();
+        },
     }
 
 });
