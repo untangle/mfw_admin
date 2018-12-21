@@ -49,62 +49,6 @@ Ext.define('Mfw.dashboard.Controller', {
         me.getViewModel().set('route', DashboardUtil.queryToRoute(query));
     },
 
-    sortContextMenu: {
-        xtype: 'menu',
-        anchor: true,
-        // padding: 10,
-        // minWidth: 300,
-        viewModel: {
-            data: {
-                pos: null
-            }
-        },
-        defaults: {
-            disabled: true
-        },
-        items: [{
-            text: 'First'.t(),
-            iconCls: 'x-fa fa-angle-double-up',
-            pos: 'first',
-            handler: 'onWidgetMove',
-            bind: { disabled: '{pos === "first"}' }
-        }, {
-            text: 'Up'.t(),
-            iconCls: 'x-fa fa-angle-up',
-            pos: 'up',
-            handler: 'onWidgetMove',
-            bind: { disabled: '{pos === "first"}' }
-        }, {
-            text: 'Down'.t(),
-            iconCls: 'x-fa fa-angle-down',
-            pos: 'down',
-            handler: 'onWidgetMove',
-            bind: { disabled: '{pos === "last"}' }
-        }, {
-            text: 'Last'.t(),
-            iconCls: 'x-fa fa-angle-double-down',
-            pos: 'last',
-            handler: 'onWidgetMove',
-            bind: { disabled: '{pos === "last"}' }
-        }]
-    },
-
-
-
-
-
-
-    showSettings: function () {
-        var me = this;
-        if (!me.dialog) {
-            me.dialog = Ext.Viewport.add({
-                xtype: 'dashboard-manager-dialog',
-                ownerCmp: me.getView()
-            });
-        }
-        me.dialog.show();
-    },
-
     onWidgetSort: function (grid, context) {
         if (!this.sortMenu) {
             this.sortMenu = Ext.create(Ext.apply({
@@ -163,19 +107,6 @@ Ext.define('Mfw.dashboard.Controller', {
             }]
         });
     },
-
-    onDialogOk: function () {
-        var me = this;
-        me.dialog.hide();
-    },
-    onDialogCancel: function () {
-        var me = this;
-        me.dialog.hide();
-    },
-
-
-
-
 
     toggleManager: function () {
         var me = this, vm = me.getViewModel(),

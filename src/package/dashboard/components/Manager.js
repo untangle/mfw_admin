@@ -48,6 +48,9 @@ Ext.define('Mfw.dashboard.Manager', {
     }, {
         xtype: 'grid',
         hideHeaders: true,
+        plugins: {
+            gridcellediting: true
+        },
         selectable: {
             mode: 'single',
             cells: false,
@@ -62,6 +65,40 @@ Ext.define('Mfw.dashboard.Manager', {
             menuDisabled: true,
             dataIndex: 'name',
             flex: 1,
+        }, {
+            text: 'Interval',
+            width: 70,
+            align: 'right',
+            sortable: false,
+            hideable: false,
+            menuDisabled: true,
+            dataIndex: 'interval',
+            renderer: function (val) {
+                return val + 's';
+            },
+            editable: true,
+            editor: {
+                xtype: 'selectfield',
+                required: true,
+                options: [{
+                    text: '5s', value: 5
+                }, {
+                    text: '10s', value: 10
+                }, {
+                    text: '20s', value: 20
+                }, {
+                    text: '30s', value: 30
+                }, {
+                    text: '60s', value: 60
+                }]
+            }
+        }, {
+            text: 'Actions',
+            width: 100,
+            align: 'right',
+            sortable: false,
+            hideable: false,
+            menuDisabled: true,
             cell: {
                 tools: {
                     up: {
@@ -86,10 +123,10 @@ Ext.define('Mfw.dashboard.Manager', {
                     },
                 }
             }
-        }],
-        listeners: {
-            select: 'onSelect'
-        }
+        }]
+        // listeners: {
+        //     select: 'onSelect'
+        // }
     }],
 
     controller: {
@@ -185,7 +222,8 @@ Ext.define('Mfw.dashboard.Manager', {
             menuItem.up('menu').hide();
 
             Ext.getStore('widgets').add({
-                name: menuItem.getText()
+                name: menuItem.getText(),
+                interval: 30 // default interval 30s
             });
         },
 

@@ -2,7 +2,12 @@ Ext.define('Mfw.dashboard.widget.Report', {
     extend: 'Ext.Container',
     alias: 'widget.widget-report',
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            widget: null,
+            record: null
+        }
+    },
 
     width: 500,
     height: 300,
@@ -19,12 +24,12 @@ Ext.define('Mfw.dashboard.widget.Report', {
         style: { background: 'transparent' },
         docked: 'top',
         shadow: false,
-        padding: '0 8',
+        padding: '0 8 0 16',
         items: [{
             xtype: 'container',
             style: 'font-weight: 100;',
             bind: {
-                html: '{record.name}'
+                html: '<a href="#reports?{record._route}" style="color: #333; text-decoration: none; border-bottom: 1px #999 solid; display: inline-block;">{record.name}</a>'
             }
         }, '->', {
             xtype: 'component',
@@ -59,7 +64,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
                     widget.add({ xtype: 'events-report' }); widget.setWidth(600); break;
                 case 'SERIES':
                 case 'CATEGORIES_SERIES':
-                    widget.add({ xtype: 'chart-report' }); widget.setWidth(700); break;
+                    widget.add({ xtype: 'chart-report' }); widget.setWidth(500); break;
                 default: widget.add({ xtype: 'chart-report' }); widget.setWidth(400);
             }
 

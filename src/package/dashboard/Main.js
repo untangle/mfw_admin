@@ -18,7 +18,7 @@ Ext.define('Mfw.dashboard.Main', {
     items: [{
         xtype: 'dashboard-manager',
         docked: 'left',
-        width: 350,
+        width: 400,
         resizable: {
             split: true,
             edges: 'east'
@@ -55,42 +55,6 @@ Ext.define('Mfw.dashboard.Main', {
             xtype: 'toolbarseparator',
         }, {
             xtype: 'conditions-fields'
-        }, '->', {
-            xtype: 'button',
-            iconCls: 'x-fa fa-bars',
-            arrow: false,
-            menu: {
-                items: [{
-                    text: 'Manage'.t(),
-                    iconCls: 'x-fa fa-cog',
-                    handler: 'showSettings'
-                }, {
-                    text: 'Add'.t(),
-                    iconCls: 'x-fa fa-plus',
-                    menu: {
-                        items: [
-                            { text: 'Information'.t() },
-                            { text: 'Resources'.t() },
-                            { text: 'CPU Load'.t() },
-                            { text: 'Network Information'.t() },
-                            { text: 'Network Layout'.t() },
-                            { text: 'Map Distribution'.t() },
-                            { text: 'Notifications'.t() },
-                            '-',
-                            { text: 'More widgets...'.t(), handler: 'onMoreWidgetsInfo' }
-                        ]
-                    }
-                }, '-', {
-                    text: 'Import'.t(),
-                    iconCls: 'x-fa fa-download'
-                }, {
-                    text: 'Export'.t(),
-                    iconCls: 'x-fa fa-upload'
-                }, '-', {
-                    text: 'Reset'.t(),
-                    iconCls: 'x-fa fa-rotate-left'
-                }]
-            }
         }]
     }, {
         // widgets holder
