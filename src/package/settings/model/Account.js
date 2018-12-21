@@ -24,9 +24,14 @@ Ext.define('Mfw.model.Account', {
         writer: {
             type: 'json',
             writeAllFields: true,
+            allowSingle: false, // wrap single record in array
             allDataOptions: {
                 associated: true,
                 persist: true
+            },
+            transform: {
+                fn: Util.sanitize,
+                scope: this
             }
         }
     }

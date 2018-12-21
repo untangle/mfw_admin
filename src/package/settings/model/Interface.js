@@ -161,6 +161,7 @@ Ext.define('Mfw.model.Interface', {
         writer: {
             type: 'json',
             writeAllFields: true,
+            allowSingle: false, // wrap single record in array
             allDataOptions: {
                 associated: true,
                 persist: true
