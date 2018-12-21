@@ -127,7 +127,7 @@ cite {
         min-height: 48px;
         min-width: 48px; // for bars menu
         .x-inner-el { border-radius: 0; padding: 8px 24px; }
-        .x-text-el { text-transform: uppercase; color: #CCC; }
+        .x-text-el { text-transform: none; color: #CCC; }
         .x-icon-el, .x-arrow-el { color: #FFF; }
         &.x-pressed, &.x-pressing {
             .x-icon-el, .x-arrow-el, .x-text-el { color: #FFF; }

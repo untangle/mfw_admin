@@ -36,7 +36,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             margin: '0 3'
         },
         items: [{
-            text: 'Dashboard'.t(),
+            text: 'DASHBOARD'.t(),
             ripple: false,
             // iconCls: 'x-fa fa-home',
             // iconCls: 'md-icon-dashboard',
@@ -45,7 +45,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "dashboard"}'
             }
         }, {
-            text: 'Reports'.t(),
+            text: 'REPORTS'.t(),
             ripple: false,
             // iconCls: 'x-fa fa-area-chart',
             // iconCls: 'md-icon-show-chart',
@@ -54,7 +54,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "reports"}'
             }
         }, {
-            text: 'Settings'.t(),
+            text: 'SETTINGS'.t(),
             ripple: false,
             // iconCls: 'x-fa fa-cog',
             // iconCls: 'md-icon-settings',
@@ -63,7 +63,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "settings"}'
             }
         }, {
-            text: 'Monitor'.t(),
+            text: 'MONITOR'.t(),
             ripple: false,
             // iconCls: 'x-fa fa-desktop',
             // iconCls: 'md-icon-computer',
@@ -110,13 +110,14 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     //     }
     // },
     {
-        // text: 'Account',
+        text: 'admin',
         iconCls: 'x-fa fa-user-circle fa-3x',
+        iconAlign: 'right',
         plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         arrow: false,
         menu: {
-            anchor: true,
+            anchor: false,
             items: [{
                 text: 'Logout',
                 iconCls: 'x-fa fa-sign-out',

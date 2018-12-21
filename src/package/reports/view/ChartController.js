@@ -20,6 +20,7 @@ Ext.define('Mfw.reports.ChartController', {
         view.chart = new Highcharts.stockChart(view.down('#chart').innerElement.dom, {
             chart: {
                 animation: false,
+                type: 'pie', // to avoid initial xAxis cut-off for pies
                 // width: '100%',
                 // height: '100%',
                 events: {

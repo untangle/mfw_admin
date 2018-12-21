@@ -32,7 +32,7 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-toolbar.nav { background: #333; }
 .x-toolbar.nav .x-button { min-height: 48px; min-width: 48px; }
 .x-toolbar.nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
-.x-toolbar.nav .x-button .x-text-el { text-transform: uppercase; color: #CCC; }
+.x-toolbar.nav .x-button .x-text-el { text-transform: none; color: #CCC; }
 .x-toolbar.nav .x-button .x-icon-el, .x-toolbar.nav .x-button .x-arrow-el { color: #FFF; }
 .x-toolbar.nav .x-button.x-pressed .x-icon-el, .x-toolbar.nav .x-button.x-pressed .x-arrow-el, .x-toolbar.nav .x-button.x-pressed .x-text-el, .x-toolbar.nav .x-button.x-pressing .x-icon-el, .x-toolbar.nav .x-button.x-pressing .x-arrow-el, .x-toolbar.nav .x-button.x-pressing .x-text-el { color: #FFF; }
 .x-toolbar.nav .x-button.x-pressed .x-inner-el, .x-toolbar.nav .x-button.x-pressing .x-inner-el { background-color: #222; }
