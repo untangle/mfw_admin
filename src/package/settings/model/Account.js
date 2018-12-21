@@ -15,8 +15,8 @@ Ext.define('Mfw.model.Account', {
     proxy: {
         type: 'ajax',
         api: {
-            read: Util.api + '/settings/admin/credentials',
-            update: Util.api + '/settings/admin/credentials'
+            read: Util.api + '/settings/accounts/credentials',
+            update: Util.api + '/settings/accounts/credentials'
         },
         reader: {
             type: 'json'

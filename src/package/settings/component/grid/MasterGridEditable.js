@@ -47,16 +47,17 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
         toolbarConfig: {
             xtype: 'toolbar',
             docked: 'bottom',
-            items: [{
+            items: ['->', {
                 xtype: 'button',
-                // ui: 'alt',
+                margin: '0 10 0 0',
+                // ui: 'action',
                 text: 'Cancel',
                 align: 'left',
                 action: 'cancel'
             }, {
                 xtype: 'button',
-                // ui: 'alt',
-                text: 'Submit',
+                ui: 'action',
+                text: 'Done',
                 align: 'right',
                 action: 'submit'
             }]
@@ -230,9 +231,9 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
 
             // form.setRecord(null);
 
-            // if (form && !form.destroyed && form.clearFields) {
-            //     form.removeAll(false);
-            // }
+            if (form && !form.destroyed && form.clearFields) {
+                form.reset(true);
+            }
 
             // me.form = me.sheet = Ext.destroy(me.sheet);
         }

@@ -232,6 +232,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         this.getView().getStore().sync({
             success: function () {
                 Ext.toast('Settings saved!');
+                me.onLoad();
             }
         });
     },
@@ -239,8 +240,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     onAddRecord: function () {
         var me = this, grid = me.getView(),
             newRecord = Ext.create(grid.getStore().getModel());
+
         // if custom editor sheet
-        console.log(grid.getEditor());
         if (grid.getEditor()) {
             if (!me.sheet) {
                 me.sheet = Ext.Viewport.add({
@@ -262,8 +263,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
     onEditRecord: function (grid, info) {
         var me = this;
-
-        console.log(grid.getEditor());
 
         // if custom editor sheet
         if (grid.getEditor()) {

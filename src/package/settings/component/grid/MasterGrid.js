@@ -54,7 +54,7 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
          * @cfg {Boolean} enableCopy
          * `true` to allow user to copy/duplicate a record, `false` to disable copy
          */
-        enableCopy: true,
+        enableCopy: false,
 
         /**
          * @cfg {String} disableCopyCondition
