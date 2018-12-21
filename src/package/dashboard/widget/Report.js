@@ -27,16 +27,30 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 html: '{record.name}'
             }
         }, '->', {
+            xtype: 'component',
+            itemId: 'timer',
+            margin: '0 5 0 0',
+            html: ''
+        }, {
             iconCls: 'md-icon-refresh',
             ui: 'round',
             handler: 'loadData'
         }]
     }],
+    listeners: {
+        removed: function (widget) {
+            if (widget.tout) {
+                clearTimeout(widget.tout);
+            }
+        }
+    },
 
     controller: {
         init: function (widget) {
             var me = this, viewModel = widget.getViewModel(),
-                record = viewModel.get('record'), activeItem;
+                record = viewModel.get('record');
+
+            widget.tout = null;
 
             switch (record.get('type')) {
                 case 'TEXT':
@@ -48,8 +62,6 @@ Ext.define('Mfw.dashboard.widget.Report', {
                     widget.add({ xtype: 'chart-report' }); widget.setWidth(700); break;
                 default: widget.add({ xtype: 'chart-report' }); widget.setWidth(400);
             }
-            // widget.setActiveItem(activeItem);
-
 
             viewModel.bind('{route}', function (route) {
                 var conditionSince, userConditions = [];
@@ -70,19 +82,40 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 });
                 record.userConditions().loadData(userConditions);
                 viewModel.set('record', record);
+
                 me.loadData();
             }, me, { deep: true });
         },
 
         loadData: function () {
-            var me = this, view = me.getView(), viewModel = me.getViewModel(),
-                record = viewModel.get('record'), controller;
+            var me = this,
+                view = me.getView(),
+                timer = view.down('#timer'),
+                viewModel = me.getViewModel(),
+                widget = viewModel.get('widget'),
+                record = viewModel.get('record'),
+                controller;
 
             switch (record.get('type')) {
                 case 'TEXT': controller = view.down('text-report').getController(); break;
                 case 'EVENTS': controller = view.down('events-report').getController(); break;
                 default: controller = view.down('chart-report').getController();
             }
+
+            if (view.tout) {
+                clearInterval(view.tout);
+            }
+            view.tout = setTimeout(function () {
+                me.loadData();
+            }, widget.get('interval') * 1000);
+
+            timer.setHtml('');
+            timer.setHtml('<div class="wrapper">' +
+                          '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                          '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                          '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                          '</div>');
+
             controller.loadData();
         }
     }

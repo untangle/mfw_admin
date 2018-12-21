@@ -20,10 +20,10 @@ Ext.define('Mfw.AppBase', {
 
     checkAuth: function (action) {
         var hash = window.location.hash;
-        // if (hash === '') {
-        //     Mfw.app.redirectTo('');
-        //     // action.stop();
-        // }
+        if (hash === '') {
+            Mfw.app.redirectTo('dashboard');
+            action.stop();
+        }
         // console.log(action, hash);
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
@@ -59,6 +59,6 @@ Ext.define('Mfw.AppBase', {
     },
 
     onUnmatchedRoute: function (hash) {
-        Mfw.app.redirectTo('');
+        Mfw.app.redirectTo('#');
     }
 });

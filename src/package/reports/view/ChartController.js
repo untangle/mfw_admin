@@ -204,8 +204,6 @@ Ext.define('Mfw.reports.ChartController', {
             return;
         }
 
-        console.log('LOAD DATA');
-
         while (chart.series.length > 0) {
             chart.series[0].remove(true);
         }

@@ -135,6 +135,7 @@ Ext.define('Mfw.dashboard.Manager', {
                     itemId: 'widget_' + widget.get('_identifier'),
                     viewModel: {
                         data: {
+                            widget: widget,
                             record: record
                         }
                     }
@@ -205,6 +206,7 @@ Ext.define('Mfw.dashboard.Manager', {
                 itemId: 'widget_' + widget.get('_identifier'),
                 viewModel: {
                     data: {
+                        widget: widget,
                         record: record
                     }
                 }

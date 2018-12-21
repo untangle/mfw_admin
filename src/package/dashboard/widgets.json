@@ -1,7 +1,22 @@
 [
-    { "name": "Top Client Addresses by Session Count"},
-    { "name": "Top Clients Sessions by Time" },
-    { "name": "Sessions" },
-    { "name": "Session Count Summary" },
-    { "name": "Top Server Port Sessions by Time" }
+    {
+        "name": "Top Client Addresses by Session Count",
+        "interval": 5
+    },
+    {
+        "name": "Top Clients Sessions by Time",
+        "interval": 10
+    },
+    {
+        "name": "Sessions",
+        "interval": 10
+    },
+    {
+        "name": "Session Count Summary",
+        "interval": 30
+    },
+    {
+        "name": "Top Server Port Sessions by Time",
+        "interval": 30
+    }
 ]
