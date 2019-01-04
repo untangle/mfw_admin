@@ -112,6 +112,15 @@ Ext.define('Mfw.dashboard.Controller', {
         var me = this, vm = me.getViewModel(),
             manager = vm.get('manager');
         vm.set('manager', !manager);
+    },
+
+    // pause loading widgets while not on dashboard
+    onDeactivate: function (view) {
+        view.down('#widgets').getItems().each(function (widget) {
+            if (widget.tout) {
+                clearInterval(widget.tout);
+            }
+        });
     }
 
 

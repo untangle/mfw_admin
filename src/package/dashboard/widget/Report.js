@@ -122,15 +122,14 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 view.tout = setTimeout(function () {
                     me.loadData();
                 }, widget.get('interval') * 1000);
+
+                timer.setHtml('');
+                timer.setHtml('<div class="wrapper">' +
+                              '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                              '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                              '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                              '</div>');
             }
-
-            timer.setHtml('');
-            timer.setHtml('<div class="wrapper">' +
-                          '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                          '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                          '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                          '</div>');
-
             controller.loadData();
         }
     }

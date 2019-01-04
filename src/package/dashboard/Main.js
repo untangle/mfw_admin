@@ -62,5 +62,9 @@ Ext.define('Mfw.dashboard.Main', {
         xtype: 'panel',
         padding: 8,
         scrollable: true
-    }]
+    }],
+
+    listeners: {
+        deactivate: 'onDeactivate'
+    }
 });
