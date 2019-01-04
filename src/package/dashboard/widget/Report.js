@@ -35,7 +35,10 @@ Ext.define('Mfw.dashboard.widget.Report', {
             xtype: 'component',
             itemId: 'timer',
             margin: '0 5 0 0',
-            html: ''
+            hidden: true,
+            bind: {
+                hidden: '{widget.interval === 0}'
+            }
         }, {
             iconCls: 'md-icon-refresh',
             ui: 'round',
@@ -90,6 +93,10 @@ Ext.define('Mfw.dashboard.widget.Report', {
 
                 me.loadData();
             }, me, { deep: true });
+
+            viewModel.bind('{widget.interval}', function (intv) {
+                me.loadData();
+            });
         },
 
         loadData: function () {
@@ -110,9 +117,12 @@ Ext.define('Mfw.dashboard.widget.Report', {
             if (view.tout) {
                 clearInterval(view.tout);
             }
-            view.tout = setTimeout(function () {
-                me.loadData();
-            }, widget.get('interval') * 1000);
+
+            if (widget.get('interval') !== 0) {
+                view.tout = setTimeout(function () {
+                    me.loadData();
+                }, widget.get('interval') * 1000);
+            }
 
             timer.setHtml('');
             timer.setHtml('<div class="wrapper">' +

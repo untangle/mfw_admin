@@ -49,7 +49,9 @@ Ext.define('Mfw.dashboard.Manager', {
         xtype: 'grid',
         hideHeaders: true,
         plugins: {
-            gridcellediting: true
+            gridcellediting: {
+                triggerEvent: 'tap'
+            }
         },
         selectable: {
             mode: 'single',
@@ -74,13 +76,15 @@ Ext.define('Mfw.dashboard.Manager', {
             menuDisabled: true,
             dataIndex: 'interval',
             renderer: function (val) {
-                return val + 's';
+                return val ? val + 's' : 'manual';
             },
             editable: true,
             editor: {
                 xtype: 'selectfield',
                 required: true,
                 options: [{
+                    text: 'manual', value: 0
+                }, {
                     text: '5s', value: 5
                 }, {
                     text: '10s', value: 10
@@ -90,7 +94,15 @@ Ext.define('Mfw.dashboard.Manager', {
                     text: '30s', value: 30
                 }, {
                     text: '60s', value: 60
-                }]
+                }],
+                listeners: {
+                    focus: function (el) {
+                        el.getPicker().show();
+                    },
+                    select: function (el) {
+                        el.blur();
+                    }
+                }
             }
         }, {
             text: 'Actions',
