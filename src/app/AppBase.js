@@ -19,7 +19,8 @@ Ext.define('Mfw.AppBase', {
     },
 
     checkAuth: function (action) {
-        var hash = window.location.hash;
+        var hash = window.location.hash,
+            vm = Mfw.app.viewport.getViewModel();
         if (hash === '') {
             Mfw.app.redirectTo('dashboard');
             action.stop();
@@ -31,12 +32,12 @@ Ext.define('Mfw.AppBase', {
             }
             Mfw.app.redirectTo('auth');
         } else {
+            vm.set('account', Mfw.app.getAccount());
             action.resume();
         }
     },
 
     init: function (app) {
-        var scripts = [];
         Ext.route.Router.suspend();
 
         Ext.Ajax.request({

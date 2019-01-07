@@ -110,7 +110,9 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     //     }
     // },
     {
-        text: 'admin',
+        bind: {
+            text: '{account.username}'
+        },
         iconCls: 'x-fa fa-user-circle fa-3x',
         iconAlign: 'right',
         plugins: 'responsive',
