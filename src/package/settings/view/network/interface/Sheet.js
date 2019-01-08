@@ -35,7 +35,7 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
             handler: 'onBack'
         }, {
             xtype: 'component',
-            bind: { html: '{record.name} / <span style="font-size: smaller; font-weight: 100;">{record.device}, {record.wan ? "WAN" : "nonWAN"}</span>' }
+            bind: { html: '{record.name} [{record.interfaceId}] / <span style="font-size: smaller; font-weight: 100;">{record.device}, {record.wan ? "WAN" : "nonWAN"}</span>' }
             // html: 'Edit Interface'.t()
         }, '->',
         // {
