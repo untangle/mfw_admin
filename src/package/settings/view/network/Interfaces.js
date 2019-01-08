@@ -48,6 +48,14 @@ Ext.define('Mfw.settings.network.Interfaces', {
     },
 
     columns: [{
+        text: 'Id'.t(),
+        dataIndex: 'interfaceId',
+        align: 'right',
+        width: 60,
+        resizable: false,
+        sortable: false,
+        menuDisabled: true
+    }, {
         text: 'Name'.t(),
         dataIndex: 'name',
         flex: 1,
