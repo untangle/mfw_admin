@@ -192,6 +192,7 @@ Ext.define('Mfw.reports.ChartController', {
     loadData: function () {
         var me = this,
             record = me.getViewModel().get('record'),
+            view = me.getView().up('report') || me.getView().up('widget-report'),
             chart = me.getView().chart;
 
         if (!record) { return; }
@@ -209,12 +210,12 @@ Ext.define('Mfw.reports.ChartController', {
             chart.series[0].remove(true);
         }
 
-        // me.getView().up('report').mask();
+        view.mask({xtype: 'loadmask'});
 
         ReportsUtil.fetchReportData(record, function (data) {
             me.setData(data);
             me.getViewModel().set('data', data);
-            // me.getView().up('report').unmask();
+            view.unmask();
         });
     },
 

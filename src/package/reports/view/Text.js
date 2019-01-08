@@ -30,11 +30,13 @@ Ext.define('Mfw.reports.Text', {
 
         loadData: function () {
             var me = this,
+                view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
                 record = viewModel.get('record');
 
             if (!record) { return; }
 
+            view.mask({xtype: 'loadmask'});
             /**
              * data is an array of objects {column_name: value}
              * textString is defined in report rendering settings like:
@@ -58,6 +60,8 @@ Ext.define('Mfw.reports.Text', {
                 });
                 viewModel.set('data', data);
                 viewModel.set('text', Ext.String.format.apply(this, args));
+
+                view.unmask();
             });
         }
     }

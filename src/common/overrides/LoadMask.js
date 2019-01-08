@@ -2,7 +2,7 @@ Ext.define('Ext.override.LoadMask', {
     override: 'Ext.LoadMask',
 
     config: {
-        message: '<span style="color: #EEE;">Wait ...</span>',
+        message: '<span style="color: #EEE;"><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></span>',
         cls: Ext.baseCSSPrefix + 'loading-mask',
         messageCls: null,
         indicator: false
