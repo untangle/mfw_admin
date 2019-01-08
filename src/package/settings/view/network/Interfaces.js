@@ -23,7 +23,12 @@ Ext.define('Mfw.settings.network.Interfaces', {
 
     scrollable: true,
     store: {
-        type: 'interfaces'
+        type: 'interfaces',
+        // do not display hidden interfaces
+        filters: [{
+            property: 'hidden',
+            value: false
+        }]
     },
 
     // plugins: ['rowexpander'],
