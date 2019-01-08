@@ -43,10 +43,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid = me.getView();
 
         grid.getSelectable().deselectAll(); // deselect any rule on load
-        grid.mask({
-            xtype: 'loadmask',
-            message: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
-        });
+
+        grid.mask({xtype: 'loadmask'});
 
         me.table.load({
             success: function (record) {
@@ -110,17 +108,19 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * Push all changes to server
      */
     onSave: function () {
-        var me = this;
+        var me = this,
+            grid = me.getView();
 
         me.beforeSave();
+
+        grid.mask({xtype: 'loadmask'});
         me.table.save({
             success: function () {
                 Ext.toast('Settings saved!', 3000);
                 me.onLoad();
             },
             callback: function () {
-                // grid.unmask();
-                // if reset API used, revert to default API
+                grid.unmask();
             }
         });
     },

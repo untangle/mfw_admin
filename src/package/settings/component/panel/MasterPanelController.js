@@ -18,7 +18,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
                 ui: 'action',
                 align: 'right',
                 handler: 'onSave'
-            })
+            });
         }
 
         if (p.getEnableReload() || p.getEnableReset()) {
@@ -34,11 +34,11 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
             };
 
             if (p.getEnableReload()) {
-                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'x-fa fa-undo', handler: 'onLoad' } )
+                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'x-fa fa-undo', handler: 'onLoad' } );
             }
 
             if (p.getEnableReset()) {
-                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } )
+                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } );
             }
 
             toolbarActions.push(toolbarMenu);
@@ -51,17 +51,28 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
     },
 
     onLoad: function () {
-        var me = this;
+        var me = this, panel = me.getView();
+
+        panel.mask({xtype: 'loadmask'});
+
         me.getView().getRecordModel().load({
             success: function (rec) {
-                console.log(rec);
                 me.getViewModel().set('rec', rec);
+            },
+            failure: function () {
+                console.warn('Unable to load settings!');
+            },
+            callback: function () {
+                panel.unmask();
             }
         });
     },
 
     onSave: function () {
         var me = this, panel = me.getView();
+
+        panel.mask({xtype: 'loadmask'});
+
         if (panel.down('mastergrid')) {
             panel.down('mastergrid').fireEvent('beforesave');
             // commit changes so the records not dirty
@@ -70,6 +81,12 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
         panel.getRecordModel().save({
             success: function () {
                 Ext.toast('Settings saved!');
+            },
+            failure: function () {
+                console.warn('Unable to save settings!');
+            },
+            callback: function () {
+                panel.unmask();
             }
         });
     },
@@ -92,7 +109,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
                             console.log(rec.getData());
                             proxy.setApi(api);
                         }
-                    })
+                    });
                 }
             });
     }

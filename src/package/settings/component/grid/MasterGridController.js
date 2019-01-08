@@ -202,9 +202,14 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onLoad: function () {
-        this.getView().getSelectable().deselectAll();
-        this.getView().getStore().load({
+        var grid = this.getView();
+        grid.getSelectable().deselectAll();
+
+        grid.mask({xtype: 'loadmask'});
+
+        grid.getStore().load({
             callback: function(records) {
+                grid.unmask();
                 // the operation object
                 // contains all of the details of the load operation
             }
@@ -216,7 +221,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
      * of the records is modified or not
      */
     beforeSave: function () {
-        console.log('beforesave');
         this.getView().getStore().each(function (record) {
             if (record.get('_deleteSchedule')) {
                 record.drop();
@@ -227,12 +231,19 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onSave: function () {
-        var me = this;
+        var me = this,
+            grid = me.getView();
+
         me.beforeSave();
-        this.getView().getStore().sync({
+
+        grid.mask({xtype: 'loadmask'});
+        grid.getStore().sync({
             success: function () {
                 Ext.toast('Settings saved!');
                 me.onLoad();
+            },
+            callback: function () {
+                grid.unmask();
             }
         });
     },
