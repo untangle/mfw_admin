@@ -5,11 +5,6 @@ Ext.define('Mfw.store.Widgets', {
 
     model: 'Mfw.model.Widget',
 
-    proxy: {
-        type: 'ajax',
-        url: '/admin/widgets.json',
-        reader: {
-            type: 'json',
-        }
-    }
+    trackRemoved: false,
+    autoSort: false
 });

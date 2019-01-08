@@ -2,6 +2,29 @@ Ext.define('Mfw.dashboard.Util', {
     alternateClassName: 'DashboardUtil',
     singleton: true,
 
+    sanitize: function (data) {
+        Ext.Object.each(data, function (key, value) {
+            if (Ext.String.startsWith(key, '_') || key === 'id') {
+                delete data[key];
+            }
+
+            // remove null or empty string keys
+            if (value === '' || value === null) {
+                delete data[key];
+            }
+
+            if (Ext.isArray(value)) {
+                Ext.Array.each(value, function (v) {
+                    Util.sanitize(v);
+                });
+            }
+            if (Ext.isObject(value)) {
+                Util.sanitize(value);
+            }
+        });
+        return data;
+    },
+
     routeToQuery: function (route) {
         var query = 'dashboard?';
         if (route.since) {

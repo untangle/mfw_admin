@@ -46,6 +46,15 @@ Ext.define('Mfw.dashboard.Manager', {
             }
         }]
     }, {
+        xtype: 'toolbar',
+        docked: 'bottom',
+        items: ['->', {
+            xtype: 'button',
+            ui: 'action',
+            text: 'Save',
+            handler: 'onSave'
+        }]
+    }, {
         xtype: 'grid',
         hideHeaders: true,
         plugins: {
@@ -59,7 +68,9 @@ Ext.define('Mfw.dashboard.Manager', {
             // checkbox: true,
             allowDeselect: true,
         },
-        store: 'widgets',
+        store: {
+            type: 'widgets'
+        },
         columns: [{
             text: 'Widget',
             sortable: false,
@@ -296,6 +307,32 @@ Ext.define('Mfw.dashboard.Manager', {
             store.insert(newIndex, record);
             // store.sync();
         },
+
+        onSave: function () {
+            var me = this,
+                view = me.getView(),
+                vm = me.getViewModel(),
+                grid = view.down('grid');
+
+            grid.getStore().each(function (record) {
+                record.dirty = true; // to push all non-dropped records
+                record.phantom = false; // to push new records
+            });
+
+            view.mask();
+            grid.getStore().sync({
+                success: function () {
+                    Ext.toast('Widgets saved!');
+                },
+                failure: function () {
+                    console.warn('Unable to save widgets!');
+                },
+                callback: function () {
+                    view.unmask();
+                    vm.set('manager', false);
+                }
+            });
+        }
     }
 
 });
