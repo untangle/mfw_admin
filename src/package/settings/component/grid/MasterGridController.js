@@ -145,12 +145,12 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             });
         }
 
-        if (g.getEnableAdd()) {
+        if (g.getEnableReload()) {
             toolbarActions.push({
-                text: 'Add'.t(),
-                iconCls: 'md-icon-add',
+                text: 'Reload'.t(),
+                iconCls: 'md-icon-refresh',
                 align: 'right',
-                handler: 'onAddRecord'
+                handler: 'onLoad'
             });
         }
 
@@ -175,8 +175,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 }
             };
 
-            if (g.getEnableReload()) {
-                toolbarMenu.menu.items.push( { text: 'Reload'.t(), iconCls: 'md-icon-refresh', handler: 'onLoad' } );
+            if (g.getEnableAdd()) {
+                toolbarMenu.menu.items.push( { text: 'Add'.t(), iconCls: 'md-icon-add', handler: 'onAddRecord' } );
             }
 
             if (g.getEnableImport()) {

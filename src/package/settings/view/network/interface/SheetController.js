@@ -82,6 +82,10 @@ Ext.define('Mfw.settings.network.interface.SheetController', {
         grid.getStore().add(
             { v4Address: '12345', v4Prefix: '10' }
         );
+    },
+
+    onHide: function (sheet) {
+        sheet.down('formpanel').setActiveItem('interface-main');
     }
 
 });

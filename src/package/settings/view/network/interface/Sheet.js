@@ -122,6 +122,7 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
 
     }],
     listeners: {
-        initialize: 'onInitialize'
+        initialize: 'onInitialize',
+        hide: 'onHide'
     }
 });
