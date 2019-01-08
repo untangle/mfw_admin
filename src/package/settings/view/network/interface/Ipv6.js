@@ -10,28 +10,17 @@ Ext.define('Mfw.settings.network.interface.Ipv6', {
     scrollable: 'y',
 
     items: [{
-        xtype: 'combobox',
+        xtype: 'selectfield',
         name: 'v6ConfigType',
         reference: 'v4Config',
         label: 'Config Type'.t(),
         labelAlign: 'left',
-        queryMode: 'local',
-        displayField: 'name',
-        valueField: 'value',
         editable: false,
         margin: '0 16',
-        disabled: true,
         bind: {
             value: '{record.v6ConfigType}',
-            disabled: '{!record.wan}'
-        },
-        store: [
-            { name: 'Auto (DHCP)'.t(), value: 'DHCP' },
-            { name: 'SLAAC'.t(), value: 'SLAAC' },
-            { name: 'Assign'.t(), value: 'ASSIGN' },
-            { name: 'Static'.t(),   value: 'STATIC' },
-            { name: 'Disabled'.t(),  value: 'DISABLED' }
-        ]
+            options: '{ipv6Configs}' // defined in sheet formula
+        }
     }, {
         xtype: 'container',
         padding: 16,

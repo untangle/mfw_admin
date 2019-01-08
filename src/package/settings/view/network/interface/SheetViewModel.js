@@ -40,6 +40,25 @@ Ext.define('Mfw.settings.network.interface.SheetViewModel', {
             return settings;
         },
 
+        ipv6Configs: function (get) {
+            var options;
+            if (get('record.wan')) {
+                options = [
+                    { text: 'Disabled'.t(),  value: 'DISABLED' },
+                    { text: 'Static'.t(),   value: 'STATIC' },
+                    { text: 'SLAAC'.t(), value: 'SLAAC' },
+                    { text: 'DHCP'.t(), value: 'DHCP' }
+                ];
+            } else {
+                options = [
+                    { text: 'Disabled'.t(),  value: 'DISABLED' },
+                    { text: 'Static'.t(),   value: 'STATIC' },
+                    { text: 'Assign'.t(), value: 'ASSIGN' }
+                ];
+            }
+            return options;
+        },
+
         enableIpv6Toggle: function (get) {
             return get('record.wan') && get('cardId') === 'ipv6';
         },
