@@ -75,6 +75,7 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
             form = sheet.down('formpanel');
 
         vm.get('record').set(form.getValues());
+        vm.get('record').commit();
 
         // // console.log(vm.get('rec').isValid());
         // var invalidFields = '';
@@ -106,6 +107,8 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
     },
 
     onCancel: function (btn) {
+        var me = this, vm = me.getViewModel();
+        vm.get('record').reject();
         btn.up('sheet').hide();
     }
 
