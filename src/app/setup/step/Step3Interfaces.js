@@ -3,23 +3,23 @@ Ext.define('Mfw.setup.step.Interfaces', {
     alias: 'widget.step-interfaces',
 
     viewModel: {
-    	formulas: {
-    		infoInterface: function (get) {
-    			var intf = get('interfaces.selection'), str = [], v4 = '';
-    			if (!intf) {
-    				return '<i class="x-fa fa-info-circle" style="color: #777;"></i>&nbsp; Select an Interface to see more information!'
-    			}
+        formulas: {
+            infoInterface: function (get) {
+                var intf = get('interfaces.selection'), str = [], v4 = '';
+                if (!intf) {
+                    return '<i class="x-fa fa-info-circle" style="color: #777;"></i>&nbsp; Select an Interface to see more information!';
+                }
 
                 str.push(intf.get('type'));
                 str.push(intf.get('configType'));
 
                 v4 = intf.get('v4ConfigType');
                 if (intf.get('v4StaticAddress')) {
-                    v4 += ', ' + intf.get('v4StaticAddress') + '/' + intf.get('v4StaticPrefix')
+                    v4 += ', ' + intf.get('v4StaticAddress') + '/' + intf.get('v4StaticPrefix');
                 }
                 str.push(v4);
-    			return str.join(' &nbsp;|&nbsp; ');
-    		},
+                return str.join(' &nbsp;|&nbsp; ');
+            },
             infoDevice: function (get) {
                 var intf = get('interfaces.selection'), device;
                 if (!intf) {
@@ -31,7 +31,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 }
                 return 'duplex: ' + device.get('duplex') + ' | mtu: ' + (device.get('mtu') || '-');
             }
-    	}
+        }
     },
 
     style: 'color: #555;',
@@ -41,22 +41,22 @@ Ext.define('Mfw.setup.step.Interfaces', {
     bodyPadding: 24,
 
     items: [{
-    	xtype: 'container',
-    	layout: 'hbox',
-    	padding: '0 0 24 0',
-    	items: [{
-	        xtype: 'component',
-	        flex: 1,
-	        html: '<h1>Interfaces Mapping</h1><p>Use arrow buttons to map an interface with a different device.</p>'
-	    }, {
-			xtype: 'container',
-			items: [{
-		    	xtype: 'button',
-		    	ui: 'action',
-		    	margin: '8 0 0 0',
-		    	text: 'Refresh Interfaces'
-		    }]
-	    }]
+        xtype: 'container',
+        layout: 'hbox',
+        padding: '0 0 24 0',
+        items: [{
+            xtype: 'component',
+            flex: 1,
+            html: '<h1>Interfaces Mapping</h1><p>Use arrow buttons to map an interface with a different device.</p>'
+        }, {
+            xtype: 'container',
+            items: [{
+                xtype: 'button',
+                ui: 'action',
+                margin: '8 0 0 0',
+                text: 'Refresh Interfaces'
+            }]
+        }]
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -106,7 +106,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 style: 'background: #EEE;'
             },
             renderer: function() {
-                return '<i class="x-fa fa-long-arrow-left"></i> map to <i class="x-fa fa-long-arrow-right"></i>'
+                return '<i class="x-fa fa-long-arrow-left"></i> map to <i class="x-fa fa-long-arrow-right"></i>';
             }
         }, {
             text: 'Devices',
@@ -153,10 +153,10 @@ Ext.define('Mfw.setup.step.Interfaces', {
             color: '#777'
         },
         items: [{
-        	xtype: 'component',
-	        bind: {
-	        	html: '{infoInterface}'
-	        }
+            xtype: 'component',
+            bind: {
+                html: '{infoInterface}'
+            }
         }, '->', {
             xtype: 'component',
             bind: {

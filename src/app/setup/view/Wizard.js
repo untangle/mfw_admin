@@ -3,7 +3,27 @@ Ext.define('Mfw.setup.Wizard', {
     layout: 'center',
     style: 'background: #999',
 
-    viewModel: {},
+    viewModel: {
+        formulas: {
+            bridgedOptions: function (get) {
+                var interfaces = [];
+                console.log('here');
+                Ext.getStore('interfaces').each(function (interface) {
+                    // interface should be ADDRESSED
+                    if (interface.get('interfaceId') === get('intf.interfaceId') ||
+                        interface.get('configType') !== 'ADDRESSED') {
+                            return;
+                        }
+
+                    interfaces.push({
+                        text: interface.get('name'),
+                        value: interface.get('interfaceId')
+                    });
+                });
+                return interfaces;
+            }
+        }
+    },
 
 
     alias: 'widget.setup-wizard',
@@ -45,7 +65,7 @@ Ext.define('Mfw.setup.Wizard', {
             style: 'font-size: 24px; font-weight: 100; color: #777;',
             // shadow: true,
             padding: '8 16 4 16',
-            zIndex: 999,
+            zIndex: 10,
             items: [{
                 xtype: 'component',
                 html: '<img src="/static/res/untangle-logo.png" width=90 style="vertical-align: middle; margin-right: 16px;"/>'

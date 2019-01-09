@@ -4,10 +4,7 @@ Ext.define('Mfw.setup.interface.Dhcp', {
 
     title: 'DHCP'.t(),
 
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
+    layout: 'fit',
 
     scrollable: 'y',
 
@@ -22,7 +19,8 @@ Ext.define('Mfw.setup.interface.Dhcp', {
 
         defaults: {
             labelAlign: 'left',
-            labelWidth: 130
+            labelWidth: 130,
+            disabled: true
         },
 
         tbar: {
@@ -38,142 +36,45 @@ Ext.define('Mfw.setup.interface.Dhcp', {
             }]
         },
         defaultType: 'textfield',
+
         items: [{
             label: 'Range Start'.t(),
-            bind: '{intf.dhcpRangeStart}'
+            bind: {
+                value: '{intf.dhcpRangeStart}',
+                disabled: '{!intf.dhcpEnabled}'
+            }
         }, {
             label: 'Range End'.t(),
-            bind: '{intf.dhcpRangeEnd}'
+            bind: {
+                value: '{intf.dhcpRangeEnd}',
+                disabled: '{!intf.dhcpEnabled}'
+            }
         }, {
             xtype: 'numberfield',
             label: 'Lease Duration'.t(),
-            bind: '{intf.dhcpLeaseDuration}'
+            bind: {
+                value: '{intf.dhcpLeaseDuration}',
+                disabled: '{!intf.dhcpEnabled}'
+            }
         }, {
             label: 'Gateway Override'.t(),
-            bind: '{intf.dhcpGatewayOverride}'
+            bind: {
+                value: '{intf.dhcpGatewayOverride}',
+                disabled: '{!intf.dhcpEnabled}'
+            }
         }, {
             xtype: 'combobox',
             label: 'Netmask Override'.t(),
-            bind: '{intf.dhcpPrefixOverride}',
-            minValue: 1,
-            maxValue: 32
+            bind: {
+                value: '{intf.dhcpPrefixOverride}',
+                disabled: '{!intf.dhcpEnabled}',
+            }
         }, {
             label: 'DNS Override'.t(),
-            bind: '{intf.dhcpDNSOverride}'
-        }]
-    }, {
-        xtype: 'component',
-        width: 5,
-        style: 'background: #EEE',
-        hidden: true,
-        bind: {
-            hidden: '{!intf.dhcpEnabled}'
-        }
-    }, {
-        xtype: 'panel',
-        width: '50%',
-        layout: 'fit',
-        // border: true,
-        // bodyBorder: false,
-        tbar: {
-            shadow: false,
-            padding: '0 8 0 16',
-            items: [{
-                xtype: 'displayfield',
-                labelAlign: 'left',
-                label: '<span style="font-size: 14px;">DHCP Options</span>'
-            }, '->', {
-                iconCls: 'md-icon-add',
-                ui: 'round action',
-                tooltip: 'Add new DHCP Option',
-                handler: 'addDhcpOption'
-            }]
-        },
-        hidden: true,
-        bind: {
-            hidden: '{!intf.dhcpEnabled}'
-        },
-        items: [{
-            xtype: 'grid',
-            selectable: false,
-            emptyText: 'No DHCP Options!',
-            plugins: {
-                gridcellediting: {
-                    triggerEvent: 'tap'
-                }
-            },
             bind: {
-                store: '{intf.dhcpOptions}'
-            },
-            columns: [{
-                xtype: 'checkcolumn',
-                width: 44,
-                text: '<i class="x-fa fa-check"></i>',
-                dataIndex: 'enabled',
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                resizable: false,
-                editable: true
-            }, {
-                text: 'Description',
-                dataIndex: 'description',
-                flex: 1,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                editable: true,
-                editor: {
-                    xtype: 'textfield',
-                    required: true,
-                    clearable: false
-                }
-            }, {
-                text: 'Value',
-                dataIndex: 'value',
-                width: 180,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                resizable: false,
-                editable: true,
-                editor: {
-                    xtype: 'textfield',
-                    required: true,
-                    clearable: false
-                }
-            }, {
-                width: 44,
-                menuDisabled: true,
-                hideable: false,
-                sortable: false,
-                resizable: false,
-                cell: {
-                    // toolDefaults: {}
-                    tools: {
-                        remove: {
-                            iconCls: 'md-icon-close',
-                            tooltip: 'Remove Alias',
-                            handler: function (grid, info) {
-                                info.record.drop();
-                            }
-                        }
-                    }
-                }
-            }]
+                value: '{intf.dhcpDNSOverride}',
+                disabled: '{!intf.dhcpEnabled}'
+            }
         }]
-    }],
-
-    controller: {
-        addDhcpOption: function (btn) {
-            var grid = btn.up('panel').down('grid');
-            grid.getStore().add({
-                enabled: true,
-                description: 'enter description ...',
-                value: 'enter value ...'
-            })
-        }
-
-    }
-
+    }]
 });

@@ -41,7 +41,7 @@ Ext.define('Mfw.setup.WizardController', {
                             intf: interface
                         }
                     }
-                })
+                });
             });
             steps.push({ xtype: 'step-upgrades' });
             steps.push({ xtype: 'step-complete' });
@@ -49,7 +49,7 @@ Ext.define('Mfw.setup.WizardController', {
             wizard.add(steps);
             wizard.unmask();
             wizard.setActiveItem(3);
-        })
+        });
 
         interfaces.load();
     },

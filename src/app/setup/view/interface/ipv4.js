@@ -4,17 +4,13 @@ Ext.define('Mfw.setup.interface.Ipv4', {
 
     title: 'IPv4'.t(),
 
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
+    layout: 'fit',
 
     scrollable: 'y',
 
 
     items: [{
         xtype: 'panel',
-        flex: 1,
         bodyPadding: 16,
         // border: true,
         bodyBorder: false,
@@ -151,13 +147,13 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 label: 'Netmask'.t(),
                 editable: false,
                 clearable: false,
-                hidden: true,
+                // hidden: true,
                 required: true,
                 options: Globals.prefixes,
                 bind: {
                     value: '{intf.v4StaticPrefix}',
                     required: '{intf.v4ConfigType === "STATIC"}',
-                    hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
+                    // hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
                 }
             }, {
                 xtype: 'textfield',
@@ -258,102 +254,6 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 html: '<h1 style="text-align: center; color: #777;"><i class="x-fa fa-exclamation-triangle"></i><br/><br/>IPv4 is disabled</h1>'
             }
         ]
-    }, {
-        xtype: 'component',
-        width: 5,
-        style: 'background: #EEE',
-        hidden: true,
-        bind: {
-            hidden: '{intf.v4ConfigType === "DISABLED"}'
-        }
-    }, {
-        xtype: 'panel',
-        width: '50%',
-        layout: 'fit',
-        // border: true,
-        // bodyBorder: false,
-        tbar: {
-            shadow: false,
-            padding: '0 8 0 16',
-            items: [{
-                xtype: 'displayfield',
-                labelAlign: 'left',
-                label: '<span style="font-size: 14px;">IPv4 Aliases</span>'
-            }, '->', {
-                iconCls: 'md-icon-add',
-                ui: 'round action',
-                tooltip: 'Add new Alias',
-                handler: 'addV4Alias'
-            }]
-        },
-        hidden: true,
-        bind: {
-            hidden: '{intf.v4ConfigType === "DISABLED"}'
-        },
-        items: [{
-            xtype: 'grid',
-            selectable: false,
-            emptyText: 'No Aliases!',
-            plugins: {
-                gridcellediting: {
-                    triggerEvent: 'tap'
-                }
-            },
-            bind: {
-                store: '{intf.v4Aliases}'
-            },
-            columns: [{
-                text: 'Address',
-                dataIndex: 'v4Address',
-                flex: 1,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                editable: true,
-                editor: {
-                    xtype: 'textfield',
-                    required: true,
-                    clearable: false
-                }
-            }, {
-                text: 'Prefix',
-                dataIndex: 'v4Prefix',
-                width: 180,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                resizable: false,
-                renderer: function (value) {
-                    return Globals.prefixesMap[value].text || 'not set';
-                },
-                editable: true,
-                editor: {
-                    xtype: 'selectfield',
-                    editable: false,
-                    required: true,
-                    options: Globals.prefixes
-                    // clearable: false
-                }
-            }, {
-                width: 44,
-                menuDisabled: true,
-                hideable: false,
-                sortable: false,
-                resizable: false,
-                cell: {
-                    // toolDefaults: {}
-                    tools: {
-                        remove: {
-                            iconCls: 'md-icon-close',
-                            tooltip: 'Remove Alias',
-                            handler: function (grid, info) {
-                                info.record.drop();
-                            }
-                        }
-                    }
-                }
-            }]
-        }]
     }],
 
     bbar: {
@@ -386,17 +286,5 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 hidden: '{intf.wan}'
             }
         }]
-    },
-
-    controller: {
-        addV4Alias: function (btn) {
-            var grid = btn.up('panel').down('grid');
-            grid.getStore().add({
-                v4Address: '192.168.0.1',
-                v4Prefix: 24
-            });
-        }
-
     }
-
 });

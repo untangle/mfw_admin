@@ -4,17 +4,13 @@ Ext.define('Mfw.setup.interface.Ipv6', {
 
     title: 'IPv6'.t(),
 
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
+    layout: 'fit',
 
     scrollable: 'y',
 
 
     items: [{
         xtype: 'panel',
-        flex: 1,
         bodyPadding: 16,
         // border: true,
         bodyBorder: false,
@@ -37,15 +33,9 @@ Ext.define('Mfw.setup.interface.Ipv6', {
                 editable: false,
                 // margin: '0 16',
                 bind: {
-                    value: '{intf.v6ConfigType}'
-                },
-                options: [
-                    { text: 'Auto (DHCP)'.t(), value: 'DHCP' },
-                    { text: 'SLAAC'.t(), value: 'SLAAC' },
-                    { text: 'Assign'.t(), value: 'ASSIGN' },
-                    { text: 'Static'.t(),   value: 'STATIC' },
-                    { text: 'Disabled'.t(),  value: 'DISABLED' }
-                ]
+                    value: '{intf.v6ConfigType}',
+                    options: '{ipv6Configs}' // defined in sheet formula
+                }
             }]
         },
         items: [
@@ -132,113 +122,5 @@ Ext.define('Mfw.setup.interface.Ipv6', {
                 html: '<h1 style="text-align: center; color: #777;"><i class="x-fa fa-exclamation-triangle"></i><br/><br/>IPv6 is disabled</h1>'
             }
         ]
-    }, {
-        xtype: 'component',
-        width: 5,
-        style: 'background: #EEE',
-        hidden: true,
-        bind: {
-            hidden: '{intf.v4ConfigType === "DISABLED"}'
-        }
-    }, {
-        xtype: 'panel',
-        width: '50%',
-        layout: 'fit',
-        // border: true,
-        // bodyBorder: false,
-        tbar: {
-            shadow: false,
-            padding: '0 8 0 16',
-            items: [{
-                xtype: 'displayfield',
-                labelAlign: 'left',
-                label: '<span style="font-size: 14px;">IPv6 Aliases</span>'
-            }, '->', {
-                iconCls: 'md-icon-add',
-                ui: 'round action',
-                tooltip: 'Add new Alias',
-                handler: 'addV6Alias'
-            }]
-        },
-        hidden: true,
-        bind: {
-            hidden: '{intf.v6ConfigType === "DISABLED"}'
-        },
-        items: [{
-            xtype: 'grid',
-            selectable: false,
-            emptyText: 'No Aliases!',
-            plugins: {
-                gridcellediting: {
-                    triggerEvent: 'tap'
-                }
-            },
-            bind: {
-                store: '{intf.v6Aliases}'
-            },
-            columns: [{
-                text: 'Address',
-                dataIndex: 'v6Address',
-                flex: 1,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                editable: true,
-                editor: {
-                    xtype: 'textfield',
-                    required: true,
-                    clearable: false
-                }
-            }, {
-                text: 'Prefix',
-                dataIndex: 'v6Prefix',
-                width: 180,
-                menuDisabled: true,
-                hideable: false,
-                sortable: true,
-                resizable: false,
-                renderer: function (value) {
-                    return Globals.prefixesMap[value].text || 'not set';
-                },
-                editable: true,
-                editor: {
-                    xtype: 'selectfield',
-                    editable: false,
-                    required: true,
-                    options: Globals.prefixes
-                    // clearable: false
-                }
-            }, {
-                width: 44,
-                menuDisabled: true,
-                hideable: false,
-                sortable: false,
-                resizable: false,
-                cell: {
-                    // toolDefaults: {}
-                    tools: {
-                        remove: {
-                            iconCls: 'md-icon-close',
-                            tooltip: 'Remove Alias',
-                            handler: function (grid, info) {
-                                info.record.drop();
-                            }
-                        }
-                    }
-                }
-            }]
-        }]
-    }],
-
-    controller: {
-        addV6Alias: function (btn) {
-            var grid = btn.up('panel').down('grid');
-            grid.getStore().add({
-                v6Address: '192.168.0.1',
-                v6Prefix: 24
-            });
-        }
-
-    }
-
+    }]
 });

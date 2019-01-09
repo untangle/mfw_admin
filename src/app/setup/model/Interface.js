@@ -1,46 +1,3 @@
-Ext.define('Mfw.model.v4Alias', {
-    extend: 'Ext.data.Model',
-    idProperty: '_id',
-    identifier: 'uuid',
-    fields: [
-        { name: 'v4Address', type: 'string' },
-        { name: 'v4Prefix', type: 'integer' }
-    ]
-});
-
-Ext.define('Mfw.model.v6Alias', {
-    extend: 'Ext.data.Model',
-    idProperty: '_id',
-    identifier: 'uuid',
-    fields: [
-        { name: 'v6Address', type: 'string' },
-        { name: 'v6Prefix', type: 'integer' }
-    ]
-});
-
-Ext.define('Mfw.model.DhcpOptions', {
-    extend: 'Ext.data.Model',
-    idProperty: '_id',
-    identifier: 'uuid',
-    fields: [
-        { name: 'enabled', type: 'boolean' },
-        { name: 'description', type: 'string' },
-        { name: 'value', type: 'string' }
-    ]
-});
-
-
-// Ext.define('Mfw.model.VrrpV4Alias', {
-//     extend: 'Ext.data.Model',
-//     idProperty: '_id',
-//     identifier: 'uuid',
-//     fields: [
-//         { name: 'enabled', type: 'boolean' },
-//         { name: 'description', type: 'string' },
-//         { name: 'value', type: 'string' }
-//     ]
-// });
-
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
@@ -131,24 +88,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessChannel', type: 'integer' }
     ],
 
-    hasMany: [{
-        model: 'Mfw.model.v4Alias',
-        name: 'v4Aliases',
-        associationKey: 'v4Aliases'
-    }, {
-        model: 'Mfw.model.v6Alias',
-        name: 'v6Aliases',
-        associationKey: 'v6Aliases'
-    }, {
-        model: 'Mfw.model.DhcpOptions',
-        name: 'dhcpOptions',
-        associationKey: 'dhcpOptions'
-    }, {
-        model: 'Mfw.model.v4Alias',
-        name: 'vrrpV4Aliases',
-        associationKey: 'vrrpV4Aliases'
-    }],
-
     proxy: {
         type: 'ajax',
         api: {
@@ -165,10 +104,10 @@ Ext.define('Mfw.model.Interface', {
                 associated: true,
                 persist: true
             },
-            transform: {
-                fn: Util.sanitize,
-                scope: this
-            }
+            // transform: {
+            //     fn: Util.sanitize,
+            //     scope: this
+            // }
         }
     }
 });

@@ -7,6 +7,46 @@ Ext.define('Mfw.setup.step.Interface', {
     bodyPadding: 0,
     layout: 'fit',
 
+    viewModel: {
+        formulas: {
+            bridgedOptions: function (get) {
+                var interfaces = [];
+                Ext.getStore('interfaces').each(function (interface) {
+                    // interface should be ADDRESSED
+                    if (interface.get('interfaceId') === get('intf.interfaceId') ||
+                        interface.get('configType') !== 'ADDRESSED') {
+                            return;
+                        }
+
+                    interfaces.push({
+                        text: interface.get('name'),
+                        value: interface.get('interfaceId')
+                    });
+                });
+                return interfaces;
+            },
+
+            ipv6Configs: function (get) {
+                var options;
+                if (get('intf.wan')) {
+                    options = [
+                        { text: 'Disabled'.t(),  value: 'DISABLED' },
+                        { text: 'Static'.t(),   value: 'STATIC' },
+                        { text: 'SLAAC'.t(), value: 'SLAAC' },
+                        { text: 'DHCP'.t(), value: 'DHCP' }
+                    ];
+                } else {
+                    options = [
+                        { text: 'Disabled'.t(),  value: 'DISABLED' },
+                        { text: 'Static'.t(),   value: 'STATIC' },
+                        { text: 'Assign'.t(), value: 'ASSIGN' }
+                    ];
+                }
+                return options;
+            }
+        }
+    },
+
     items: [{
         xtype: 'toolbar',
         width: '250',
@@ -46,6 +86,19 @@ Ext.define('Mfw.setup.step.Interface', {
                 { text: 'Disabled'.t(),  value: 'DISABLED' }
             ]
         }, {
+            xtype: 'selectfield',
+            name: 'bridgedTo',
+            label: 'Bridged To'.t(),
+            editable: false,
+            required: false,
+            forceSelection: true,
+            hidden: true,
+            bind: {
+                hidden: '{intf.configType !== "BRIDGED"}',
+                required: '{intf.configType === "BRIDGED"}',
+                options: '{bridgedOptions}'
+            }
+        }, {
             xtype: 'checkboxfield',
             name: 'wan',
             boxLabel: 'is WAN interface'.t(),
@@ -55,23 +108,25 @@ Ext.define('Mfw.setup.step.Interface', {
                 hidden: '{intf.configType !== "ADDRESSED"}'
             },
             listeners: {
-                uncheck: function (ck) {
-                    ck.up('formpanel').down('[name=v4ConfigType]').setValue('STATIC')
-                }
+                // uncheck: function (ck) {
+                //     ck.up('formpanel').down('[name=v4ConfigType]').setValue('STATIC');
+                // }
             }
-        }, {
-            xtype: 'displayfield',
-            label: 'Type',
-            bind: {
-                value: '{intf.type}'
-            }
-        }, {
-            xtype: 'displayfield',
-            label: 'Mac',
-            bind: {
-                value: '{intf.macaddr}'
-            }
-        }]
+        }
+        // , {
+        //     xtype: 'displayfield',
+        //     label: 'Type',
+        //     bind: {
+        //         value: '{intf.type}'
+        //     }
+        // }, {
+        //     xtype: 'displayfield',
+        //     label: 'Mac',
+        //     bind: {
+        //         value: '{intf.macaddr}'
+        //     }
+        // }
+        ]
     }, {
         xtype: 'tabpanel',
         activeItem: 0,
@@ -101,7 +156,7 @@ Ext.define('Mfw.setup.step.Interface', {
         continue: function (cb) {
             var me = this,
                 store = Mfw.app.getStore('interfaces'),
-                form = me.getView()
+                form = me.getView(),
                 wizard = form.up('setup-wizard');
 
             if (!form.validate()) {
@@ -109,7 +164,8 @@ Ext.define('Mfw.setup.step.Interface', {
                 return;
             }
 
-            wizard.mask(); wizard.lookup('bbar').mask();
+            wizard.mask({xtype: 'loadmask' });
+            wizard.lookup('bbar').mask();
 
             // Important! Mark all records as dirty so whole array is pushed back to server
             store.each(function (record) {
