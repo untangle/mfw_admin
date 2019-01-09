@@ -59,6 +59,23 @@ Ext.define('Mfw.settings.network.interface.SheetViewModel', {
             return options;
         },
 
+        bridgedOptions: function (get) {
+            var interfaces = [];
+            Ext.getStore('interfaces').each(function (interface) {
+                // interface should be ADDRESSED
+                if (interface.get('interfaceId') === get('record.interfaceId') ||
+                    interface.get('configType') !== 'ADDRESSED') {
+                        return;
+                    }
+
+                interfaces.push({
+                    text: interface.get('name'),
+                    value: interface.get('interfaceId')
+                });
+            });
+            return interfaces;
+        },
+
         enableIpv6Toggle: function (get) {
             return get('record.wan') && get('cardId') === 'ipv6';
         },

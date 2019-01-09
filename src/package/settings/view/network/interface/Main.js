@@ -54,24 +54,18 @@ Ext.define('Mfw.settings.network.interface.Main', {
                 { name: 'Disabled'.t(),  value: 'DISABLED' }
             ]
         }, {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             name: 'bridgedTo',
             label: 'Bridged To'.t(),
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
             editable: false,
             required: false,
             forceSelection: true,
             hidden: true,
             bind: {
                 hidden: '{record.configType !== "BRIDGED"}',
-                required: '{record.configType === "BRIDGED"}'
-            },
-            store: [
-                { name: 'Intf 1'.t(), value: '1' },
-                { name: 'Intf 2'.t(),   value: '2' }
-            ]
+                required: '{record.configType === "BRIDGED"}',
+                options: '{bridgedOptions}'
+            }
         }, {
             xtype: 'togglefield',
             name: 'wan',
