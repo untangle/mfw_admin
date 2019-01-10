@@ -129,6 +129,10 @@ Ext.define('Mfw.setup.step.Interface', {
         ]
     }, {
         xtype: 'tabpanel',
+        hidden: true,
+        bind: {
+            hidden: '{intf.type !== "NIC"}'
+        },
         activeItem: 0,
         tabBar: {
             shadow: false
@@ -150,6 +154,12 @@ Ext.define('Mfw.setup.step.Interface', {
             { xtype: 'interface-dhcp' },
             { xtype: 'interface-vrrp' }
         ]
+    }, {
+        xtype: 'interface-wifi',
+        hidden: true,
+        bind: {
+            hidden: '{intf.type !== "WIFI"}'
+        }
     }],
 
     controller: {
