@@ -100,8 +100,6 @@ Ext.define('Mfw.cmp.grid.MasterGridEditable', {
         record.set(data);
 
         var r = record.clone();
-
-        console.log(r);
         if (record.phantom) {
 
             // console.log(record.getData());

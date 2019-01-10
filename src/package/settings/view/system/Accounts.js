@@ -28,6 +28,15 @@ Ext.define('Mfw.settings.system.Accounts', {
         flex: 1,
         editable: true
     }, {
+        text: 'Email',
+        dataIndex: 'email',
+        flex: 1,
+        editable: true,
+        editor: {
+            xtype: 'emailfield',
+            validators: [ { type: 'email'} ]
+        }
+    }, {
         text: 'MD5',
         width: 400,
         dataIndex: 'passwordHashMD5'

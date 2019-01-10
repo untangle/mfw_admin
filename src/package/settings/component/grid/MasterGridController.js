@@ -257,9 +257,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             if (!me.sheet) {
                 me.sheet = Ext.Viewport.add({
                     xtype: grid.getEditor(),
-                    // xtype: 'masterdialog',
                     isNewRecord: true,
-                    ownerCmp: grid
+                    // ownerCmp: grid
                 });
             }
             me.sheet.isNewRecord = true;
@@ -285,8 +284,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 });
             }
             me.sheet.isNewRecord = false;
-
-            console.log(info.record);
 
             me.sheet.getViewModel().set('record', info.record);
             me.sheet.show();

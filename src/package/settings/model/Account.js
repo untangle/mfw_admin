@@ -6,7 +6,8 @@ Ext.define('Mfw.model.Account', {
     identifier: 'uuid',
 
     fields: [
-        { name: 'username', type: 'string' }, // "JUMP","GOTO","ACCEPT","REJECT","DROP","DNAT","SNAT","MASQUERADE","SET_PRIORITY"
+        { name: 'username', type: 'string' },
+        { name: 'email', type: 'string' },
         { name: 'passwordHashMD5', type: 'string' },
         { name: 'passwordHashSHA256', type: 'string' },
         { name: 'passwordHashSHA512', type: 'string' }
