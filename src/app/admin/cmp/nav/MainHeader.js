@@ -110,6 +110,28 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     //     }
     // },
     {
+        text: 'Reset Wizard',
+        handler: function () {
+            Ext.Ajax.request({
+                url: window.location.origin + '/api/settings/system/setupWizard',
+                method: 'POST',
+                params: Ext.JSON.encode({
+                    completed: false
+                }),
+                success: function() {
+                    Ext.Ajax.request({
+                        url: '/account/logout',
+                        callback: function () {
+                            Mfw.app.setAccount(null);
+                            window.location.href = '/setup';
+                        }
+                    });
+
+                }
+            });
+        }
+    },
+    {
         bind: {
             text: '{account.username}'
         },

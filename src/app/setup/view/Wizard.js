@@ -4,6 +4,9 @@ Ext.define('Mfw.setup.Wizard', {
     style: 'background: #999',
 
     viewModel: {
+        data: {
+            settings: {}
+        },
         formulas: {
             bridgedOptions: function (get) {
                 var interfaces = [];
@@ -25,7 +28,6 @@ Ext.define('Mfw.setup.Wizard', {
         }
     },
 
-
     alias: 'widget.setup-wizard',
     controller: 'wizard',
 
@@ -33,6 +35,7 @@ Ext.define('Mfw.setup.Wizard', {
     items: [{
         xtype: 'panel',
         reference: 'wizard',
+
         width: '55%',
         minWidth: 980,
         height: '70%',
@@ -40,7 +43,7 @@ Ext.define('Mfw.setup.Wizard', {
         shadow: true,
         // bodyPadding: 24,
 
-        masked: { xtype: 'loadmask' },
+        // masked: { xtype: 'loadmask' },
 
         layout: {
             type: 'card',
@@ -101,6 +104,29 @@ Ext.define('Mfw.setup.Wizard', {
                     disabled: '{!indicator.activeIndex}',
                     hidden: '{!indicator.activeIndex}'
                 }
+            }, {
+                // helper to reset wizard status
+                text: 'Reset',
+                margin: '0 0 0 16',
+                style: 'color: #999;',
+                hidden: true,
+                hideMode: 'visibility',
+                bind: {
+                    disabled: '{indicator.activeIndex == indicator.count - 1}',
+                    hidden: '{indicator.activeIndex == indicator.count - 1 || !indicator.activeIndex}'
+                },
+                handler: function () {
+                    Ext.Ajax.request({
+                        url: window.location.origin + '/api/settings/system/setupWizard',
+                        method: 'POST',
+                        params: Ext.JSON.encode({
+                            completed: false
+                        }),
+                        success: function() {
+                            window.location.reload();
+                        }
+                    });
+                },
             }, {
                 xtype: 'container',
                 hidden: true,

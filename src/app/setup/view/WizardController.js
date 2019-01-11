@@ -22,15 +22,18 @@ Ext.define('Mfw.setup.WizardController', {
      * Fetches the interfaces and creates the steps for each
      */
     setSteps: function () {
-        var wizard = this.lookup('wizard'),
+        var me = this,
+            view = me.getView(),
+            wizard = view.lookup('wizard'),
             steps = [
                 { xtype: 'step-welcome' },
-                { xtype: 'step-account' },
-                { xtype: 'step-interfaces' }
+                { xtype: 'step-account' }
+                // { xtype: 'step-interfaces' }
             ],
             interfaces = Ext.getStore('interfaces');
 
-        wizard.mask();
+        view.mask({xtype: 'loadmask' });
+        view.lookup('bbar').mask();
 
         interfaces.on('load', function (store, records) {
             store.each(function (interface) {
@@ -47,8 +50,40 @@ Ext.define('Mfw.setup.WizardController', {
             steps.push({ xtype: 'step-complete' });
 
             wizard.add(steps);
-            wizard.unmask();
-            wizard.setActiveItem(3);
+
+            // load current wizard settings
+            // wizardSettings.load({
+            //     success: function (record) {
+            //         vm.set('settings', record);
+            //         console.log(vm.get('settings'));
+            //     },
+            //     failure: function () {
+            //         console.warn('Unable to load Wizard Settings!');
+            //     },
+            //     callback: function () {
+            //         wizard.unmask();
+            //     }
+            // });
+
+            Ext.Ajax.request({
+                url: window.location.origin + '/api/settings/system/setupWizard',
+                success: function(response) {
+                    var obj = Ext.decode(response.responseText);
+                    console.log(obj);
+                    if (obj.completed) {
+                        window.location.href = '/admin';
+                        return;
+                    }
+                    wizard.setActiveItem(obj.currentStep);
+                },
+                failure: function(response) {
+                    console.log('server-side failure with status code ' + response.status);
+                }
+            });
+
+            view.unmask();
+            view.lookup('bbar').unmask();
+
         });
 
         interfaces.load();
@@ -69,10 +104,25 @@ Ext.define('Mfw.setup.WizardController', {
          * wait for a callback from that action before moving to next step
          */
         if (controller && Ext.isFunction(controller.continue)) {
-            // wizard.mask(); navbar.mask(); // mask components
             controller.continue(function () {
                 layout.next();
-                // view.unmask(); navbar.unmask(); // unmask components
+
+                var step = wizard.getActiveItem().xtype;
+
+                Ext.Ajax.request({
+                    url: window.location.origin + '/api/settings/system/setupWizard',
+                    method: 'POST',
+                    params: Ext.JSON.encode({
+                        currentStep: step,
+                        completed: step === 'step-complete'
+                    }),
+                    success: function(response) {
+                        var obj = Ext.decode(response.responseText);
+                    },
+                    failure: function(response) {
+                        console.log('server-side failure with status code ' + response.status);
+                    }
+                });
             });
             return;
         }

@@ -3,9 +3,7 @@ Ext.define('Mfw.setup.interface.Vrrp', {
     alias: 'widget.interface-vrrp',
 
     title: 'VRRP'.t(),
-
     layout: 'fit',
-
     scrollable: 'y',
 
     items: [{
@@ -30,6 +28,7 @@ Ext.define('Mfw.setup.interface.Vrrp', {
                 flex: 1,
                 bind: {
                     checked: '{intf.vrrpEnabled}',
+                    isabled: '{intf.type === "WIFI"}'
                 }
             }]
         },
@@ -38,14 +37,14 @@ Ext.define('Mfw.setup.interface.Vrrp', {
             label: 'VRRP Id'.t(),
             bind: {
                 value: '{intf.vrrpID}',
-                disabled: '{!intf.vrrpEnabled}'
+                disabled: '{!intf.vrrpEnabled || intf.type === "WIFI"}'
             }
         }, {
             xtype: 'numberfield',
             label: 'VRRP Priority'.t(),
             bind: {
                 value: '{intf.vrrpPriority}',
-                disabled: '{!intf.vrrpEnabled}'
+                disabled: '{!intf.vrrpEnabled || intf.type === "WIFI"}'
             }
         }]
     }]

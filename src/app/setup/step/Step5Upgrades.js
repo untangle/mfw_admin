@@ -44,6 +44,12 @@ Ext.define('Mfw.setup.step.Upgrades', {
             html: 'Remain securely connected to the Command Center for cloud management, hot fixes, and support access.<br/>' +
                 'This is the recommended choice for most sites.'
         }]
-    }]
+    }],
+
+    controller: {
+        continue: function (cb) {
+            cb();
+        }
+    }
 
 });

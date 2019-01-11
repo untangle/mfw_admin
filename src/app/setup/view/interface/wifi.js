@@ -9,7 +9,8 @@ Ext.define('Mfw.setup.interface.Wifi', {
 
     defaults: {
         labelAlign: 'left',
-        labelWidth: 130
+        labelWidth: 130,
+        disabled: true
     },
 
     items: [{
@@ -18,12 +19,14 @@ Ext.define('Mfw.setup.interface.Wifi', {
         required: true,
         bind: {
             value: '{intf.wirelessSsid}',
+            disabled: '{intf.type !== "WIFI"}'
         }
     }, {
         xtype: 'selectfield',
         label: 'Wireless Encryption'.t(),
         bind: {
             value: '{intf.wirelessEncryption}',
+            disabled: '{intf.type !== "WIFI"}'
         },
         options: [
             { text: 'None'.t(), value: 'NONE' },
@@ -36,6 +39,7 @@ Ext.define('Mfw.setup.interface.Wifi', {
         label: 'Wireless Mode'.t(),
         bind: {
             value: '{intf.wirelessMode}',
+            disabled: '{intf.type !== "WIFI"}'
         },
         options: [
             { text: 'AP'.t(), value: 'AP' },
@@ -47,6 +51,7 @@ Ext.define('Mfw.setup.interface.Wifi', {
         required: true,
         bind: {
             value: '{intf.wirelessPassword}',
+            disabled: '{intf.type !== "WIFI"}'
         }
     }, {
         xtype: 'numberfield',
@@ -54,6 +59,7 @@ Ext.define('Mfw.setup.interface.Wifi', {
         required: true,
         bind: {
             value: '{intf.wirelessChannel}',
+            disabled: '{intf.type !== "WIFI"}'
         }
     }]
 });

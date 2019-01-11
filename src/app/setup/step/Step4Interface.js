@@ -112,14 +112,14 @@ Ext.define('Mfw.setup.step.Interface', {
                 //     ck.up('formpanel').down('[name=v4ConfigType]').setValue('STATIC');
                 // }
             }
-        }
-        // , {
-        //     xtype: 'displayfield',
-        //     label: 'Type',
-        //     bind: {
-        //         value: '{intf.type}'
-        //     }
-        // }, {
+        }, {
+            xtype: 'displayfield',
+            label: 'Type',
+            bind: {
+                value: '{intf.type === "WIFI"}'
+            }
+        },
+        // {
         //     xtype: 'displayfield',
         //     label: 'Mac',
         //     bind: {
@@ -129,10 +129,6 @@ Ext.define('Mfw.setup.step.Interface', {
         ]
     }, {
         xtype: 'tabpanel',
-        hidden: true,
-        bind: {
-            hidden: '{intf.type !== "NIC"}'
-        },
         activeItem: 0,
         tabBar: {
             shadow: false
@@ -152,14 +148,9 @@ Ext.define('Mfw.setup.step.Interface', {
             { xtype: 'interface-ipv4' },
             { xtype: 'interface-ipv6' },
             { xtype: 'interface-dhcp' },
-            { xtype: 'interface-vrrp' }
+            { xtype: 'interface-vrrp' },
+            { xtype: 'interface-wifi' }
         ]
-    }, {
-        xtype: 'interface-wifi',
-        hidden: true,
-        bind: {
-            hidden: '{intf.type !== "WIFI"}'
-        }
     }],
 
     controller: {
