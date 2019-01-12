@@ -1,5 +1,5 @@
 {
-    "name": "Top Client Addresses by Session Count",
+    "name": "Top Clients by Session Count",
     "category": "Sessions",
     "description": "The top client addresses sorted by session count",
     "displayOrder": 10,
