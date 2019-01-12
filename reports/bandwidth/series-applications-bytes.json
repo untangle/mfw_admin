@@ -16,6 +16,7 @@
         "newColumnName": "session_minutes.time_stamp"
     }],
     "rendering": {
-        "type": "spline"
+        "type": "areaspline",
+        "stacking": "normal"
     }
 }

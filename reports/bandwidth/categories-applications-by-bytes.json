@@ -1,5 +1,5 @@
 {
-    "name": "Top Application by Bandwidth",
+    "name": "Top Applications by Bandwidth",
     "category": "Bandwidth",
     "description": "The application sorted by sum of bytes transferred",
     "displayOrder": 20,
