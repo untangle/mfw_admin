@@ -1,7 +1,7 @@
 {
     "name": "Top Protochains Sessions by Time",
     "category": "Sessions",
-    "description": "description",
+    "description": "Top protochains by session count over time",
     "displayOrder": 26,
     "type": "CATEGORIES_SERIES",
     "table": "sessions",
@@ -12,6 +12,8 @@
         "limit": 10
     },
     "rendering": {
-        "type": "spline"
+        "type": "areaspline",
+        "stacking": "normal",
+        "dataGroupingApproximation": "sum"
     }
 }

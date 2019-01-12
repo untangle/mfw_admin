@@ -1,12 +1,12 @@
 {
-    "name": "Top Applications Bytes by Time",
+    "name": "Top Server Ports Bytes by Time",
     "category": "Bandwidth",
-    "description": "Top applications by bytes over time",
-    "displayOrder": 21,
+    "description": "Top server ports by bytes over time",
+    "displayOrder": 16,
     "type": "CATEGORIES_SERIES",
     "table": "session_minutes left join sessions using (session_id)",
     "queryCategories": {
-        "groupColumn": "application_name",
+        "groupColumn": "server_port",
         "aggregationFunction": "sum",
         "aggregationValue": "bytes/60",
         "limit": 10

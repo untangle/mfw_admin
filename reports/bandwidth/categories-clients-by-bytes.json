@@ -1,12 +1,12 @@
 {
-    "name": "Top Applications by Bandwidth",
+    "name": "Top Clients by Bandwidth",
     "category": "Bandwidth",
-    "description": "The applications by sum of bytes transferred",
-    "displayOrder": 20,
+    "description": "The client addresses by bytes transferred",
+    "displayOrder": 10,
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
     "queryCategories": {
-        "groupColumn": "application_name",
+        "groupColumn": "client_address",
         "aggregationFunction": "sum",
         "aggregationValue": "bytes"
     },

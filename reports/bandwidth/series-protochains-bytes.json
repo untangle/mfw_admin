@@ -1,8 +1,8 @@
 {
-    "name": "Top Applications Bytes by Time",
+    "name": "Top Protochains Bytes by Time",
     "category": "Bandwidth",
-    "description": "Top applications by bytes over time",
-    "displayOrder": 21,
+    "description": "Top protochains by bytes over time",
+    "displayOrder": 26,
     "type": "CATEGORIES_SERIES",
     "table": "session_minutes left join sessions using (session_id)",
     "queryCategories": {

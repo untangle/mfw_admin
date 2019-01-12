@@ -1,7 +1,7 @@
 {
     "name": "Top Server Port Sessions by Time",
     "category": "Sessions",
-    "description": "description",
+    "description": "Top server ports by session count over time",
     "displayOrder": 16,
     "type": "CATEGORIES_SERIES",
     "table": "sessions",
@@ -13,6 +13,8 @@
     },
     "rendering": {
         "type": "areaspline",
+        "stacking": "normal",
+        "dataGroupingApproximation": "sum",
         "lineWidth": 1
     }
 }

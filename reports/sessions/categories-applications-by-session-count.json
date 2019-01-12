@@ -1,7 +1,7 @@
 {
-    "name": "Top Application by Session Count",
+    "name": "Top Applications by Session Count",
     "category": "Sessions",
-    "description": "The Application sorted by session count",
+    "description": "The applications sorted by session count",
     "displayOrder": 20,
     "type": "CATEGORIES",
     "table": "sessions",

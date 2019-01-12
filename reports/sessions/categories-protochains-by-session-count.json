@@ -1,7 +1,7 @@
 {
-    "name": "Top Protochain by Session Count",
+    "name": "Top Protochains by Session Count",
     "category": "Sessions",
-    "description": "The Application Protochain sorted by session count",
+    "description": "The application protochains sorted by session count",
     "displayOrder": 25,
     "type": "CATEGORIES",
     "table": "sessions",

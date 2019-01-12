@@ -1,8 +1,8 @@
 {
-    "name": "Top Applications by Bandwidth",
+    "name": "Top Protochains by Bandwidth",
     "category": "Bandwidth",
-    "description": "The applications by sum of bytes transferred",
-    "displayOrder": 20,
+    "description": "The protochains by sum of bytes transferred",
+    "displayOrder": 25,
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
     "queryCategories": {

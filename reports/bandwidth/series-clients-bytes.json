@@ -1,12 +1,12 @@
 {
-    "name": "Top Applications Bytes by Time",
+    "name": "Top Clients Bytes by Time",
     "category": "Bandwidth",
-    "description": "Top applications by bytes over time",
-    "displayOrder": 21,
+    "description": "Top clients by bytes over time",
+    "displayOrder": 11,
     "type": "CATEGORIES_SERIES",
     "table": "session_minutes left join sessions using (session_id)",
     "queryCategories": {
-        "groupColumn": "application_name",
+        "groupColumn": "client_address",
         "aggregationFunction": "sum",
         "aggregationValue": "bytes/60",
         "limit": 10

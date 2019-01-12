@@ -1,12 +1,12 @@
 {
-    "name": "Top Applications by Bandwidth",
+    "name": "Top Server Ports by Bandwidth",
     "category": "Bandwidth",
-    "description": "The applications by sum of bytes transferred",
-    "displayOrder": 20,
+    "description": "The server ports by bytes transferred",
+    "displayOrder": 15,
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
     "queryCategories": {
-        "groupColumn": "application_name",
+        "groupColumn": "server_port",
         "aggregationFunction": "sum",
         "aggregationValue": "bytes"
     },
