@@ -6,7 +6,7 @@
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
     "queryCategories": {
-        "groupColumn": "application_name",
+        "groupColumn": "application_protochain",
         "aggregationFunction": "sum",
         "aggregationValue": "bytes"
     },
