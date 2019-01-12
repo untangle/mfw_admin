@@ -1,5 +1,5 @@
 {
-    "name": "Top Applications Bytes by Time",
+    "name": "Top Applications Bandwidth by Time",
     "category": "Bandwidth",
     "description": "Top applications by bytes over time",
     "displayOrder": 21,

@@ -1,5 +1,5 @@
 {
-    "name": "Top Clients Bytes by Time",
+    "name": "Top Clients Bandwidth by Time",
     "category": "Bandwidth",
     "description": "Top clients by bytes over time",
     "displayOrder": 11,

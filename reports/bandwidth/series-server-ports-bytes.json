@@ -1,5 +1,5 @@
 {
-    "name": "Top Server Ports Bytes by Time",
+    "name": "Top Server Ports Bandwidth by Time",
     "category": "Bandwidth",
     "description": "Top server ports by bytes over time",
     "displayOrder": 16,
