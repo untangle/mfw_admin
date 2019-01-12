@@ -10,7 +10,7 @@
         "aggregationFunction": "sum",
         "aggregationValue": "bytes"
     },
-    "conditionsDisambiguation": [{
+    "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_minutes.time_stamp"
     }],

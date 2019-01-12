@@ -11,7 +11,7 @@
         "aggregationValue": "bytes",
         "limit": 10
     },
-    "conditionsDisambiguation": [{
+    "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_minutes.time_stamp"
     }],
