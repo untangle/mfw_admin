@@ -8,7 +8,7 @@
     "queryCategories": {
         "groupColumn": "application_name",
         "aggregationFunction": "sum",
-        "aggregationValue": "bytes",
+        "aggregationValue": "bytes/60",
         "limit": 10
     },
     "columnDisambiguation": [{
@@ -17,6 +17,7 @@
     }],
     "rendering": {
         "type": "areaspline",
-        "stacking": "normal"
+        "stacking": "normal",
+        "dataGroupingApproximation": "high"
     }
 }
