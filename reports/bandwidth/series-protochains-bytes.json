@@ -5,6 +5,7 @@
     "displayOrder": 26,
     "type": "CATEGORIES_SERIES",
     "table": "session_minutes left join sessions using (session_id)",
+    "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "application_protochain",
         "aggregationFunction": "sum",

@@ -5,6 +5,7 @@
     "displayOrder": 15,
     "type": "CATEGORIES",
     "table": "sessions",
+    "units": "sessions",
     "queryCategories": {
         "groupColumn": "server_port",
         "aggregationFunction": "count",

@@ -5,6 +5,7 @@
     "displayOrder": 20,
     "type": "CATEGORIES",
     "table": "sessions",
+    "units": "sessions",
     "queryCategories": {
         "groupColumn": "application_name",
         "aggregationFunction": "count",

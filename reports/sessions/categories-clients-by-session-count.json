@@ -5,6 +5,7 @@
     "displayOrder": 10,
     "type": "CATEGORIES",
     "table": "sessions",
+    "units": "sessions",
     "queryCategories": {
         "groupColumn": "client_address",
         "aggregationFunction": "count",

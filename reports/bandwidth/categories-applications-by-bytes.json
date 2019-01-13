@@ -5,6 +5,7 @@
     "displayOrder": 20,
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
+    "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "application_name",
         "aggregationFunction": "sum",

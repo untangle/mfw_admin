@@ -5,6 +5,7 @@
     "displayOrder": 26,
     "type": "CATEGORIES_SERIES",
     "table": "sessions",
+    "units": "sessions",
     "queryCategories": {
         "groupColumn": "application_protochain",
         "aggregationFunction": "count",

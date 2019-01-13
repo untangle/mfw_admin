@@ -5,6 +5,7 @@
     "displayOrder": 15,
     "type": "CATEGORIES",
     "table": "session_minutes join sessions using (session_id)",
+    "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "server_port",
         "aggregationFunction": "sum",
