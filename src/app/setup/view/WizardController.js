@@ -35,8 +35,12 @@ Ext.define('Mfw.setup.WizardController', {
         view.mask({xtype: 'loadmask' });
         view.lookup('bbar').mask();
 
-        interfaces.on('load', function (store, records) {
+        interfaces.on('load', function (store) {
             store.each(function (interface) {
+                // do not add hidden interfaces to setup
+                if (interface.get('hidden')) {
+                    return;
+                }
                 steps.push({
                     xtype: 'step-interface',
                     viewModel: {
