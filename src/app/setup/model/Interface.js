@@ -9,83 +9,80 @@ Ext.define('Mfw.model.Interface', {
     fields: [
         { name: 'interfaceId', type: 'integer' },
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
-        { name: 'device',      type: 'string' },
-        { name: 'wan',         type: 'boolean' },
-        { name: 'wanWeight',   type: 'integer' },
+        { name: 'device',      type: 'string', allowNull: true },
+        { name: 'wan',         type: 'boolean', allowNull: true },
+        { name: 'wanWeight',   type: 'integer', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
 
-        { name: 'natEgress',  type: 'boolean' },
-        { name: 'natIngress', type: 'boolean' },
+        { name: 'natEgress',  type: 'boolean', allowNull: true },
+        { name: 'natIngress', type: 'boolean', allowNull: true },
 
         // IPv4
-        { name: 'v4ConfigType',    type: 'string' }, // ["STATIC","DHCP","PPPOE","DISABLED"]
-        { name: 'v4StaticAddress', type: 'string' },
-        { name: 'v4StaticPrefix',  type: 'integer' }, // 1 - 32
-        { name: 'v4StaticGateway', type: 'string' },
-        { name: 'v4StaticDNS1',    type: 'string' },
-        { name: 'v4StaticDNS2',    type: 'string' },
+        { name: 'v4ConfigType',    type: 'string', allowNull: true }, // ["STATIC","DHCP","PPPOE","DISABLED"]
+        { name: 'v4StaticAddress', type: 'string', allowNull: true },
+        { name: 'v4StaticPrefix',  type: 'integer', allowNull: true }, // 1 - 32
+        { name: 'v4StaticGateway', type: 'string', allowNull: true },
+        { name: 'v4StaticDNS1',    type: 'string', allowNull: true },
+        { name: 'v4StaticDNS2',    type: 'string', allowNull: true },
 
         // IPv4 DHCP overrides
-        { name: 'v4DhcpAddressOverride', type: 'string' },
-        { name: 'v4DhcpPrefixOverride',  type: 'integer', defaultValue: 24 }, // 1 - 32
-        { name: 'v4DhcpGatewayOverride', type: 'string' },
-        { name: 'v4DhcpDNS1Override',    type: 'string' },
-        { name: 'v4DhcpDNS2Override',    type: 'string' },
+        { name: 'v4DhcpAddressOverride', type: 'string', allowNull: true },
+        { name: 'v4DhcpPrefixOverride',  type: 'auto', allowNull: true }, // 1 - 32
+        { name: 'v4DhcpGatewayOverride', type: 'string', allowNull: true },
+        { name: 'v4DhcpDNS1Override',    type: 'string', allowNull: true },
+        { name: 'v4DhcpDNS2Override',    type: 'string', allowNull: true },
 
         // PPPoE
-        { name: 'v4PPPoEUsername',     type: 'string' },
-        { name: 'v4PPPoEPassword',     type: 'string' },
-        { name: 'v4PPPoEUsePeerDNS',   type: 'boolean' },
-        { name: 'v4PPPoEOverrideDNS1', type: 'string' },
-        { name: 'v4PPPoEOverrideDNS2', type: 'string' },
-
-        { name: 'v4Aliases', type: 'auto' },
+        { name: 'v4PPPoEUsername',     type: 'string', allowNull: true },
+        { name: 'v4PPPoEPassword',     type: 'string', allowNull: true },
+        { name: 'v4PPPoEUsePeerDNS',   type: 'boolean', allowNull: true },
+        { name: 'v4PPPoEOverrideDNS1', type: 'string', allowNull: true },
+        { name: 'v4PPPoEOverrideDNS2', type: 'string', allowNull: true },
 
         // IPv6
-        { name: 'v6ConfigType',    type: 'string' }, // ["DHCP","SLAAC","ASSIGN","STATIC","DISABLED"]
-        { name: 'v6StaticAddress', type: 'string' },
-        { name: 'v6StaticPrefix',  type: 'integer' }, // 1 - 128
-        { name: 'v6StaticGateway', type: 'string' },
-        { name: 'v6StaticDNS1',    type: 'string' },
-        { name: 'v6StaticDNS2',    type: 'string' },
+        { name: 'v6ConfigType',    type: 'string', allowNull: true }, // ["DHCP","SLAAC","ASSIGN","STATIC","DISABLED"]
+        { name: 'v6StaticAddress', type: 'string', allowNull: true },
+        { name: 'v6StaticPrefix',  type: 'integer', allowNull: true }, // 1 - 128
+        { name: 'v6StaticGateway', type: 'string', allowNull: true },
+        { name: 'v6StaticDNS1',    type: 'string', allowNull: true },
+        { name: 'v6StaticDNS2',    type: 'string', allowNull: true },
 
         // IPv6 Assign
-        { name: 'v6AssignHint',   type: 'string' },
-        { name: 'v6AssignPrefix', type: 'integer', defaultValue: 128 }, // 1 -128
+        { name: 'v6AssignHint',   type: 'string', allowNull: true },
+        { name: 'v6AssignPrefix', type: 'integer', allowNull: true }, // 1 -128
 
-        { name: 'v6Aliases', type: 'auto' },
-
-        { name: 'routerAdvertisements', type: 'boolean' },
-        { name: 'downloadKbps',         type: 'integer' },
-        { name: 'uploadKbps',           type: 'integer' },
-        { name: 'macaddr',              type: 'string' },
+        { name: 'routerAdvertisements', type: 'boolean', allowNull: true },
+        { name: 'bridgedTo',            type: 'integer', allowNull: true },
+        { name: 'downloadKbps',         type: 'integer', allowNull: true },
+        { name: 'uploadKbps',           type: 'integer', allowNull: true },
+        { name: 'macaddr',              type: 'string', allowNull: true },
 
         // DHCP serving
-        { name: 'dhcpEnabled',         type: 'boolean' },
-        { name: 'dhcpRangeStart',      type: 'string' },
-        { name: 'dhcpRangeEnd',        type: 'string' },
-        { name: 'dhcpLeaseDuration',   type: 'integer' },
-        { name: 'dhcpGatewayOverride', type: 'string' },
-        { name: 'dhcpPrefixOverride',  type: 'integer' }, // 1 - 32
-        { name: 'dhcpDNSOverride',     type: 'string' },
+        { name: 'dhcpEnabled',         type: 'boolean', allowNull: true },
+        { name: 'dhcpRangeStart',      type: 'string', allowNull: true },
+        { name: 'dhcpRangeEnd',        type: 'string', allowNull: true },
+        { name: 'dhcpLeaseDuration',   type: 'integer', allowNull: true },
+        { name: 'dhcpGatewayOverride', type: 'string', allowNull: true },
+        { name: 'dhcpPrefixOverride',  type: 'integer', allowNull: true }, // 1 - 32
+        { name: 'dhcpDNSOverride',     type: 'string', allowNull: true },
 
         // { name: 'dhcpOptions', type: 'auto' },
 
         // VRRP
-        { name: 'vrrpEnabled',  type: 'boolean' },
-        { name: 'vrrpID',       type: 'integer' }, // 1 - 255
-        { name: 'vrrpPriority', type: 'integer' }, // 1 - 255
+        { name: 'vrrpEnabled',  type: 'boolean', allowNull: true },
+        { name: 'vrrpID',       type: 'integer', allowNull: true }, // 1 - 255
+        { name: 'vrrpPriority', type: 'integer', allowNull: true }, // 1 - 255
 
         // { name: 'vrrpV4Aliases', type: 'auto' },
 
         // Wireless
-        { name: 'wirelessSsid',  type: 'string' },
-        { name: 'wirelessEncryption',       type: 'string' }, // ["NONE", "WPA1", "WPA12", "WPA2"]
-        { name: 'wirelessMode', type: 'string' }, // ["AP", "CLIENT"]
-        { name: 'wirelessPassword', type: 'string' },
-        { name: 'wirelessChannel', type: 'integer' }
+        { name: 'wirelessSsid',  type: 'string', allowNull: true },
+        { name: 'wirelessEncryption', type: 'string', allowNull: true }, // ["NONE", "WPA1", "WPA12", "WPA2"]
+        { name: 'wirelessMode', type: 'string', allowNull: true }, // ["AP", "CLIENT"]
+        { name: 'wirelessPassword', type: 'string', allowNull: true },
+        { name: 'wirelessChannel', type: 'integer', allowNull: true }
     ],
 
     proxy: {

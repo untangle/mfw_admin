@@ -42,16 +42,13 @@ Ext.define('Mfw.settings.network.interface.Main', {
             xtype: 'combobox',
             name: 'configType',
             label: 'Type'.t(),
-            queryMode: 'local',
-            displayField: 'name',
-            valueField: 'value',
             editable: false,
             required: true,
             bind: '{record.configType}',
-            store: [
-                { name: 'Addressed'.t(), value: 'ADDRESSED' },
-                { name: 'Bridged'.t(),   value: 'BRIDGED' },
-                { name: 'Disabled'.t(),  value: 'DISABLED' }
+            options: [
+                { text: 'Addressed'.t(), value: 'ADDRESSED' },
+                { text: 'Bridged'.t(),   value: 'BRIDGED' },
+                { text: 'Disabled'.t(),  value: 'DISABLED' }
             ]
         }, {
             xtype: 'selectfield',
@@ -59,9 +56,11 @@ Ext.define('Mfw.settings.network.interface.Main', {
             label: 'Bridged To'.t(),
             editable: false,
             required: false,
+            autoSelect: true,
             forceSelection: true,
             hidden: true,
             bind: {
+                value: '{record.bridgedTo}',
                 hidden: '{record.configType !== "BRIDGED"}',
                 required: '{record.configType === "BRIDGED"}',
                 options: '{bridgedOptions}'

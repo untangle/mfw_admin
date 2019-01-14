@@ -150,7 +150,6 @@ Ext.define('Mfw.setup.step.Account', {
             // }
 
             // to do update password and relogin
-            cb();
         },
 
         doLogin: function (cb) {

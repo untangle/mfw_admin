@@ -28,7 +28,7 @@ Ext.define('Mfw.setup.interface.Vrrp', {
                 flex: 1,
                 bind: {
                     checked: '{intf.vrrpEnabled}',
-                    isabled: '{intf.type === "WIFI"}'
+                    disabled: '{intf.type === "WIFI"}'
                 }
             }]
         },

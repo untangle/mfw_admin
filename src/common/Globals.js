@@ -144,6 +144,7 @@ Ext.define('Mfw.Globals', {
     ],
 
     prefixes: [
+        { value: '', text: 'Not set' },
         { value: 32, text: '/32 - 255.255.255.255' },
         { value: 31, text: '/31 - 255.255.255.254' },
         { value: 30, text: '/30 - 255.255.255.252' },

@@ -147,13 +147,13 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 label: 'Netmask'.t(),
                 editable: false,
                 clearable: false,
-                // hidden: true,
+                hidden: true,
                 required: true,
                 options: Globals.prefixes,
                 bind: {
                     value: '{intf.v4StaticPrefix}',
                     required: '{intf.v4ConfigType === "STATIC"}',
-                    // hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
+                    hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
                 }
             }, {
                 xtype: 'textfield',

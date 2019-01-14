@@ -73,11 +73,10 @@ Ext.define('Mfw.setup.WizardController', {
                 url: window.location.origin + '/api/settings/system/setupWizard',
                 success: function(response) {
                     var obj = Ext.decode(response.responseText);
-                    console.log(obj);
-                    if (obj.completed) {
-                        window.location.href = '/admin';
-                        return;
-                    }
+                    // if (obj.completed) {
+                    //     window.location.href = '/admin';
+                    //     return;
+                    // }
                     wizard.setActiveItem(obj.currentStep);
                 },
                 failure: function(response) {
@@ -117,7 +116,7 @@ Ext.define('Mfw.setup.WizardController', {
                     url: window.location.origin + '/api/settings/system/setupWizard',
                     method: 'POST',
                     params: Ext.JSON.encode({
-                        currentStep: step,
+                        currentStep: step === 'step-complete' ? '' : step,
                         completed: step === 'step-complete'
                     }),
                     success: function(response) {
@@ -141,7 +140,29 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when moving to previous step
      */
     onBack: function () {
-        this.lookup('wizard').getLayout().previous();
+        var wizard = this.lookup('wizard'),
+            layout = this.lookup('wizard').getLayout(),
+            step;
+
+        layout.previous();
+
+        step = wizard.getActiveItem().xtype;
+
+        Ext.Ajax.request({
+            url: window.location.origin + '/api/settings/system/setupWizard',
+            method: 'POST',
+            params: Ext.JSON.encode({
+                currentStep: step === 'step-complete' ? '' : step,
+                completed: step === 'step-complete'
+            }),
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
+
     },
 
     /**

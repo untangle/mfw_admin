@@ -91,9 +91,11 @@ Ext.define('Mfw.setup.step.Interface', {
             label: 'Bridged To'.t(),
             editable: false,
             required: false,
+            autoSelect: true,
             forceSelection: true,
             hidden: true,
             bind: {
+                value: '{intf.bridgedTo}',
                 hidden: '{intf.configType !== "BRIDGED"}',
                 required: '{intf.configType === "BRIDGED"}',
                 options: '{bridgedOptions}'
@@ -116,7 +118,7 @@ Ext.define('Mfw.setup.step.Interface', {
             xtype: 'displayfield',
             label: 'Type',
             bind: {
-                value: '{intf.type === "WIFI"}'
+                value: '{intf.type}'
             }
         },
         // {

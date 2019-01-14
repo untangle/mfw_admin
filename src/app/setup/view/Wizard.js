@@ -105,46 +105,24 @@ Ext.define('Mfw.setup.Wizard', {
                     hidden: '{!indicator.activeIndex}'
                 }
             }, {
-                // helper to reset wizard status
-                text: 'Reset',
-                margin: '0 0 0 16',
-                style: 'color: #999;',
-                hidden: true,
-                hideMode: 'visibility',
-                bind: {
-                    disabled: '{indicator.activeIndex == indicator.count - 1}',
-                    hidden: '{indicator.activeIndex == indicator.count - 1 || !indicator.activeIndex}'
-                },
-                handler: function () {
-                    Ext.Ajax.request({
-                        url: window.location.origin + '/api/settings/system/setupWizard',
-                        method: 'POST',
-                        params: Ext.JSON.encode({
-                            completed: false
-                        }),
-                        success: function() {
-                            window.location.reload();
-                        }
-                    });
-                },
-            }, {
                 xtype: 'container',
                 hidden: true,
                 hideMode: 'visibility'
             },
             // the indicator is inserted here
+            // {
+            //     text: 'Cancel',
+            //     margin: '0 16 0 0',
+            //     style: 'color: #999;',
+            //     handler: 'onCancel',
+            //     hidden: true,
+            //     hideMode: 'visibility',
+            //     bind: {
+            //         disabled: '{indicator.activeIndex == indicator.count - 1}',
+            //         hidden: '{indicator.activeIndex == indicator.count - 1 || !indicator.activeIndex}'
+            //     }
+            // },
             {
-                text: 'Cancel',
-                margin: '0 16 0 0',
-                style: 'color: #999;',
-                handler: 'onCancel',
-                hidden: true,
-                hideMode: 'visibility',
-                bind: {
-                    disabled: '{indicator.activeIndex == indicator.count - 1}',
-                    hidden: '{indicator.activeIndex == indicator.count - 1 || !indicator.activeIndex}'
-                }
-            }, {
                 text: 'Continue',
                 ui: 'action',
                 // iconCls: 'x-fa fa-angle-double-right',
