@@ -37,6 +37,11 @@ Ext.define('Mfw.settings.network.interface.SheetViewModel', {
                 }
                 settings.push({ text: 'VRRP (Redundancy)'.t(), status: get('record.vrrpEnabled') ? 'Enabled'.t() : 'Disabled'.t(), card: 'vrrp' });
             }
+
+            if (get('record.type') === 'WIFI') {
+                settings.push({ text: 'WiFi'.t(), status: '', card: 'wifi' });
+            }
+
             return settings;
         },
 

@@ -113,7 +113,8 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
             { xtype: 'interface-dhcp' },
             { xtype: 'interface-dhcp-options' },
             { xtype: 'interface-vrrp' },
-            { xtype: 'interface-vrrp-aliases' }
+            { xtype: 'interface-vrrp-aliases' },
+            { xtype: 'interface-wifi' }
         ],
 
         listeners: {
