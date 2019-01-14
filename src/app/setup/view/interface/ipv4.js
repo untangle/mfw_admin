@@ -131,7 +131,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             {
                 xtype: 'textfield',
                 name: 'v4StaticAddress',
-                label: 'Addres'.t(),
+                label: 'Address'.t(),
                 errorLabel: 'IPv4 Static Address'.t(),
                 required: false,
                 hidden: true,
@@ -153,7 +153,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 bind: {
                     value: '{intf.v4StaticPrefix}',
                     required: '{intf.v4ConfigType === "STATIC"}',
-                    hidden: '{!intf.wan || intf.v4ConfigType !== "STATIC" }'
+                    hidden: '{intf.v4ConfigType !== "STATIC" }'
                 }
             }, {
                 xtype: 'textfield',
