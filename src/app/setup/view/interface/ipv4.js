@@ -32,10 +32,10 @@ Ext.define('Mfw.setup.interface.Ipv4', {
                 label: '<span style="font-size: 14px;">IPv4 Config Type</span>'.t(),
                 editable: false,
                 // margin: '0 16',
-                disabled: true,
+                // disabled: true,
                 bind: {
                     value: '{intf.v4ConfigType}',
-                    disabled: '{!intf.wan}'
+                    // disabled: '{!intf.wan}'
                 },
                 options: [
                     { text: 'Auto (DHCP)'.t(), value: 'DHCP' },

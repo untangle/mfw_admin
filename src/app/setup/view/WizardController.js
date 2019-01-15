@@ -126,7 +126,8 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when moving to previous step
      */
     onBack: function () {
-        var wizard = this.lookup('wizard'),
+        var me = this,
+            wizard = this.lookup('wizard'),
             layout = this.lookup('wizard').getLayout(),
             step;
 
@@ -139,7 +140,7 @@ Ext.define('Mfw.setup.WizardController', {
             method: 'POST',
             params: Ext.JSON.encode({
                 currentStep: step === 'step-complete' ? '' : step,
-                completed: step === 'step-complete'
+                completed: me.completed || step === 'step-complete'
             }),
             success: function(response) {
                 var obj = Ext.decode(response.responseText);

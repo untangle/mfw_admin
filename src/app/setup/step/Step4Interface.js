@@ -143,9 +143,10 @@ Ext.define('Mfw.setup.step.Interface', {
                 direction: 'horizontal'
             }
         },
-        // defaults: {
-        //     bodyPadding: 16
-        // },
+        hidden: true,
+        bind: {
+            hidden: '{intf.configType !== "ADDRESSED"}'
+        },
         items: [
             { xtype: 'interface-ipv4' },
             { xtype: 'interface-ipv6' },
@@ -153,6 +154,16 @@ Ext.define('Mfw.setup.step.Interface', {
             { xtype: 'interface-vrrp' },
             { xtype: 'interface-wifi' }
         ]
+    }, {
+        xtype: 'container',
+        layout: 'center',
+        hidden: true,
+        bind: {
+            hidden: '{intf.configType === "ADDRESSED"}'
+        },
+        items: [{
+            html: '<h1 style="color: #777; font-weight: 100;">No options!</h1>'
+        }]
     }],
 
     controller: {
