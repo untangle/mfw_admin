@@ -2,6 +2,8 @@ Ext.define('Mfw.setup.WizardController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.wizard',
 
+    completed: false,
+
     init: function () {
         var wizard = this.lookup('wizard'),
             layout = wizard.getLayout(),
@@ -55,28 +57,11 @@ Ext.define('Mfw.setup.WizardController', {
 
             wizard.add(steps);
 
-            // load current wizard settings
-            // wizardSettings.load({
-            //     success: function (record) {
-            //         vm.set('settings', record);
-            //         console.log(vm.get('settings'));
-            //     },
-            //     failure: function () {
-            //         console.warn('Unable to load Wizard Settings!');
-            //     },
-            //     callback: function () {
-            //         wizard.unmask();
-            //     }
-            // });
-
             Ext.Ajax.request({
                 url: window.location.origin + '/api/settings/system/setupWizard',
                 success: function(response) {
                     var obj = Ext.decode(response.responseText);
-                    // if (obj.completed) {
-                    //     window.location.href = '/admin';
-                    //     return;
-                    // }
+                    me.completed = obj.completed;
                     wizard.setActiveItem(obj.currentStep);
                 },
                 failure: function(response) {
@@ -96,7 +81,8 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when continuing to next step
      */
     onContinue: function (btn) {
-        var wizard = this.lookup('wizard'),
+        var me = this,
+            wizard = this.lookup('wizard'),
             navbar = btn.up('toolbar'),
             currentStep = wizard.getActiveItem(),
             layout = wizard.getLayout(),
@@ -117,7 +103,7 @@ Ext.define('Mfw.setup.WizardController', {
                     method: 'POST',
                     params: Ext.JSON.encode({
                         currentStep: step === 'step-complete' ? '' : step,
-                        completed: step === 'step-complete'
+                        completed: me.completed || step === 'step-complete'
                     }),
                     success: function(response) {
                         var obj = Ext.decode(response.responseText);
