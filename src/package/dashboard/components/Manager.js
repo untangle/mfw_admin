@@ -41,7 +41,8 @@ Ext.define('Mfw.dashboard.Manager', {
                     iconCls: 'x-fa fa-upload'
                 }, '-', {
                     text: 'Reset'.t(),
-                    iconCls: 'x-fa fa-rotate-left'
+                    iconCls: 'x-fa fa-rotate-left',
+                    handler: 'onReset'
                 }]
             }
         }]
@@ -307,6 +308,26 @@ Ext.define('Mfw.dashboard.Manager', {
             store.insert(newIndex, record);
             // store.sync();
         },
+
+        // reset widgets to default
+        onReset: function () {
+            var store = Ext.getStore('widgets'),
+                model = store.getModel(),
+                proxy = model.getProxy(),
+                api = proxy.getApi();
+
+            proxy.setApi({ read: api.read.replace('/settings/', '/defaults/') });
+            // revert api to it's default values
+            store.load({
+                success: function () {
+                    proxy.setApi(api);
+                },
+                failure: function () {
+                    console.warn('Unable to reset widgets!');
+                }
+            });
+        },
+
 
         onSave: function () {
             var me = this,
