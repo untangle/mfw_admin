@@ -183,6 +183,8 @@ Ext.define('Mfw.dashboard.Manager', {
             var me = this, record, widgetsCmp = [],
                 widgetsContainer = me.getView().up('dashboard').down('#widgets');
 
+            widgetsContainer.removeAll();
+
             store.each(function (widget) {
                 record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
 
