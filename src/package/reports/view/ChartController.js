@@ -292,6 +292,19 @@ Ext.define('Mfw.reports.ChartController', {
                 },
                 colors: colors,
                 plotOptions: plotOptions,
+                tooltip: {
+                    formatter: function (tooltip) {
+                        var items = this.points;
+
+                        // sort the values
+                        items.sort(function(a, b) {
+                            return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
+                        });
+                        items.reverse();
+
+                        return tooltip.defaultFormatter.call(this, tooltip);
+                    }
+                },
                 legend: {
                     enabled: !isWidget
                 },
