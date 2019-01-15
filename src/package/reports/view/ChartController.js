@@ -222,6 +222,7 @@ Ext.define('Mfw.reports.ChartController', {
 
     update: function () {
         var me = this,
+            isWidget = false,
             record = me.getViewModel().get('record'),
             rendering = record.getRendering(),
             plotOptions = {},
@@ -229,6 +230,10 @@ Ext.define('Mfw.reports.ChartController', {
             chart = me.getView().chart, settings, color;
 
         if (!chart) { return; }
+
+        if (me.getView().up('widget-report')) {
+            isWidget = true;
+        }
 
         if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
 
@@ -287,6 +292,9 @@ Ext.define('Mfw.reports.ChartController', {
                 },
                 colors: colors,
                 plotOptions: plotOptions,
+                legend: {
+                    enabled: !isWidget
+                },
                 xAxis: {
                     visible: true,
                     categories: undefined
@@ -322,7 +330,12 @@ Ext.define('Mfw.reports.ChartController', {
                         borderWidth: rendering.get('borderWidth'),
                         edgeColor: '#fafafa',
                         edgeWidth: rendering.get('borderWidth'),
-                        depth: rendering.get('3dDepth')
+                        depth: isWidget ? 20 : rendering.get('3dDepth'), // if widget use a smaller depth
+                        size: '90%',
+                        dataLabels: {
+                            distance: 10
+                            // formatter: function () { return this.point.name; }
+                        }
                     },
                     column: {
                         colorByPoint: true
@@ -370,7 +383,7 @@ Ext.define('Mfw.reports.ChartController', {
 
             Ext.Array.each(data, function (d) {
                 Ext.Object.each(d, function (key, val) {
-                    if (key !== 'time_trunc') {
+                    if (key !== 'time_trunc' && key !== '<nil>') {
                         if (!series[key]) {
                             series[key] = { name: key, data: [] };
                         } else {
@@ -401,9 +414,9 @@ Ext.define('Mfw.reports.ChartController', {
                     }
                 });
                 newData.push(others);
-                chart.addSeries({ name: record.get('table'), data: newData }, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table').split(' ')[0], data: newData }, true, { duration: 150 });
             } else {
-                chart.addSeries({ name: record.get('table'), data: normalizedData }, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table').split(' ')[0], data: normalizedData }, true, { duration: 150 });
             }
         }
         me.update();

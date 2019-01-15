@@ -26,12 +26,11 @@ Ext.define('Mfw.model.ReportRender', {
         // { name: '3dBeta', type: 'integer', defaultValue: 0 },
         { name: '3dDepth', type: 'integer', defaultValue: 40 },
 
-        { name: 'slicesNumber', type: 'integer', defaultValue: 15 },
+        { name: 'slicesNumber', type: 'integer', defaultValue: 10 },
 
         {
             name: '_icon',
             calculate: function (rendering) {
-                var icon;
                 switch (rendering.type) {
                     case 'line':
                     case 'spline': return 'fa-line-chart';
@@ -41,7 +40,6 @@ Ext.define('Mfw.model.ReportRender', {
                     case 'pie': return 'fa-pie-chart';
                     default: return;
                 }
-                // return icon;
             }
         }
     ]

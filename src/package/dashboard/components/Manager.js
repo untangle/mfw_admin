@@ -209,19 +209,30 @@ Ext.define('Mfw.dashboard.Manager', {
             var me = this,
                 reportsStore = Ext.getStore('reports'),
                 settingsBtn = me.getView().down('#settings-btn'),
-                category, menus = {};
+                category, menus = {}, icon;
 
 
             reportsStore.each(function (record) {
                 category = record.get('category');
+
+                if (record.get('type') === 'EVENTS') {
+                    icon = 'fa-list';
+                } else {
+                    if (record.get('type') === 'TEXT') {
+                        icon = 'fa-align-left';
+                    } else {
+                        icon = record.getRendering().get('_icon');
+                    }
+                }
+
                 if (!menus[category]) {
                     menus[category] = [];
                 }
                 menus[category].push({
                     text: record.get('name'),
+                    iconCls: 'x-fa ' + icon,
                     identifier: record.get('_identifier'),
                     handler: 'addWidget'
-                    // iconCls: 'x-fa ' + record.getRendering().get('_icon')
                 });
             });
 
