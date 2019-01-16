@@ -16,6 +16,14 @@ Ext.define('Mfw.Renderer', {
             return protocol.text + ' <span style="color: #999;">[ ' + protocol.value + ' ]</span>';
         }
         return value;
+    },
+
+    interface: function (value) {
+        var name = Globals.interfacesMap[value];
+        if (name) {
+            return name + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+        }
+        return value;
     }
 
 });

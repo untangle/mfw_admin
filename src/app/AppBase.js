@@ -42,6 +42,18 @@ Ext.define('Mfw.AppBase', {
             url: '/account/status',
             success: function (response1) {
                 if (Mfw.app._app !== 'setup') {
+                    // load interfaces to create names map
+                    Ext.Ajax.request({
+                        url: '/api/settings/network/interfaces',
+                        success: function(response) {
+                            var interfaces = Ext.decode(response.responseText), interfacesMap = {};
+                            Ext.Array.each(interfaces, function (interface) {
+                                interfacesMap[interface.interfaceId] = interface.name;
+                            });
+                            Globals.interfacesMap = interfacesMap;
+                        }
+                    });
+
                     Ext.Ajax.request({
                         url: '/api/settings/system/setupWizard',
                         success: function(response2) {

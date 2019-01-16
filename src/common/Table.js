@@ -25,9 +25,7 @@ Ext.define('Mfw.Table', {
             dataIndex: 'ip_protocol',
             width: 150,
             renderer: Renderer.ip_protocol,
-            cell: {
-                encodeHtml: false
-            },
+            cell: { encodeHtml: false },
             editor: {
                 xtype: 'selectfield',
                 name: 'value',
@@ -49,10 +47,14 @@ Ext.define('Mfw.Table', {
             hidden: true
         }, {
             text: 'Client Interface',
-            dataIndex: 'client_interface'
+            dataIndex: 'client_interface',
+            renderer: Renderer.interface,
+            cell: { encodeHtml: false }
         }, {
             text: 'Server Interface',
-            dataIndex: 'server_interface'
+            dataIndex: 'server_interface',
+            renderer: Renderer.interface,
+            cell: { encodeHtml: false }
         }, {
             text: 'Client Interface Type',
             dataIndex: 'client_interface_type'
