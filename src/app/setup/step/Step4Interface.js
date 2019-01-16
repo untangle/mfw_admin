@@ -72,6 +72,7 @@ Ext.define('Mfw.setup.step.Interface', {
             name: 'name',
             label: 'Name',
             required: true,
+            maxLength: 9,
             clearable: false,
             bind: '{intf.name}',
         }, {

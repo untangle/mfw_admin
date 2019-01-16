@@ -35,6 +35,7 @@ Ext.define('Mfw.settings.network.interface.Main', {
             name: 'name',
             label: 'Name'.t(),
             autoComplete: false,
+            maxLength: 9,
             errorLabel: 'Interface Name'.t(),
             required: true,
             bind: '{record.name}'
