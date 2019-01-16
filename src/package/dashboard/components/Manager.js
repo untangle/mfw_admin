@@ -40,9 +40,9 @@ Ext.define('Mfw.dashboard.Manager', {
                     text: 'Export'.t(),
                     iconCls: 'x-fa fa-upload'
                 }, '-', {
-                    text: 'Reset'.t(),
+                    text: 'Load Defaults'.t(),
                     iconCls: 'x-fa fa-rotate-left',
-                    handler: 'onReset'
+                    handler: 'onLoadDefaults'
                 }]
             }
         }]
@@ -171,12 +171,14 @@ Ext.define('Mfw.dashboard.Manager', {
 
             widgetsStore.on('load', function (store) {
                 me.updateWidgetsComponents(store);
-                me.updateWidgetsMenu(store);
             }, me);
 
             widgetsStore.on('add', me.onWidgetAdd, me);
             widgetsStore.on('remove', me.onWidgetRemove, me);
-            widgetsStore.load();
+
+            widgetsStore.load(function (store) {
+                me.updateWidgetsMenu(store);
+            });
         },
 
         updateWidgetsComponents: function (store) {
@@ -214,6 +216,10 @@ Ext.define('Mfw.dashboard.Manager', {
                 category, menus = {}, icon;
 
 
+            // settingsBtn.getMenu().getItems().each(function (item) {
+            //     console.log(item.getUserCls());
+            // });
+
             reportsStore.each(function (record) {
                 category = record.get('category');
 
@@ -240,6 +246,7 @@ Ext.define('Mfw.dashboard.Manager', {
 
             Ext.Object.each(menus, function (key, val) {
                 settingsBtn.getMenu().insert(2, {
+                    // userCls: 'removable',
                     text: key,
                     iconCls: 'md-icon-add',
                     menu: {
@@ -323,7 +330,7 @@ Ext.define('Mfw.dashboard.Manager', {
         },
 
         // reset widgets to default
-        onReset: function () {
+        onLoadDefaults: function () {
             var store = Ext.getStore('widgets'),
                 model = store.getModel(),
                 proxy = model.getProxy(),
@@ -331,13 +338,8 @@ Ext.define('Mfw.dashboard.Manager', {
 
             proxy.setApi({ read: api.read.replace('/settings/', '/defaults/') });
             // revert api to it's default values
-            store.load({
-                success: function () {
-                    proxy.setApi(api);
-                },
-                failure: function () {
-                    console.warn('Unable to reset widgets!');
-                }
+            store.load(function() {
+                proxy.setApi(api);
             });
         },
 
@@ -349,6 +351,7 @@ Ext.define('Mfw.dashboard.Manager', {
                 grid = view.down('grid');
 
             grid.getStore().each(function (record) {
+                console.log(record);
                 record.dirty = true; // to push all non-dropped records
                 record.phantom = false; // to push new records
             });
