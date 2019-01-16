@@ -398,9 +398,9 @@ Ext.define('Mfw.reports.ChartController', {
 
             Ext.Array.each(data, function (d) {
                 Ext.Object.each(d, function (key, val) {
-                    if (key !== 'time_trunc' && key !== '<nil>') {
+                    if (key !== 'time_trunc') {
                         if (!series[key]) {
-                            series[key] = { name: key, data: [] };
+                            series[key] = { name: (key !== '<nil>') ? key : 'none', data: [] };
                         } else {
                             series[key].data.push([d.time_trunc, val || 0]);
                         }
