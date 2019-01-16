@@ -94,9 +94,10 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 me.loadData();
             }, me, { deep: true });
 
-            viewModel.bind('{widget.interval}', function (intv) {
-                me.loadData();
-            });
+            // THIS BINDING is causing loading the data twice for each widget which is not OK
+            // viewModel.bind('{widget.interval}', function (intv) {
+            //     me.loadData();
+            // });
         },
 
         loadData: function () {
@@ -118,19 +119,20 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 clearInterval(view.tout);
             }
 
-            if (widget.get('interval') !== 0) {
-                view.tout = setTimeout(function () {
-                    me.loadData();
-                }, widget.get('interval') * 1000);
+            controller.loadData(function () {
+                if (widget.get('interval') !== 0) {
+                    view.tout = setTimeout(function () {
+                        me.loadData();
+                    }, widget.get('interval') * 1000);
 
-                timer.setHtml('');
-                timer.setHtml('<div class="wrapper">' +
-                              '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                              '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                              '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                              '</div>');
-            }
-            controller.loadData();
+                    timer.setHtml('');
+                    timer.setHtml('<div class="wrapper">' +
+                                  '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                                  '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                                  '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+                                  '</div>');
+                }
+            });
         }
     }
 

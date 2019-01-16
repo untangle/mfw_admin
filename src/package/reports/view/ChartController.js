@@ -180,7 +180,6 @@ Ext.define('Mfw.reports.ChartController', {
                     borderColor: '#fafafa'
                 }
             }
-            // series: Util.generatePieData(),
         });
 
     },
@@ -202,7 +201,7 @@ Ext.define('Mfw.reports.ChartController', {
         }, me, { deep: true });
     },
 
-    loadData: function () {
+    loadData: function (cb) {
         var me = this,
             record = me.getViewModel().get('record'),
             view = me.getView().up('report') || me.getView().up('widget-report'),
@@ -215,7 +214,9 @@ Ext.define('Mfw.reports.ChartController', {
          * defer the loading till the chart is available
          */
         if (!chart) {
-            Ext.defer(me.loadData, 200, me);
+            Ext.defer(function () {
+                me.loadData(cb);
+            }, 200, me);
             return;
         }
 
@@ -229,6 +230,7 @@ Ext.define('Mfw.reports.ChartController', {
             me.setData(data);
             me.getViewModel().set('data', data);
             view.unmask();
+            if (cb) { cb(); }
         });
     },
 
