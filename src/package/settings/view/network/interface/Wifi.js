@@ -55,6 +55,6 @@ Ext.define('Mfw.settings.network.interface.Wifi', {
         name: 'wirelessChannel',
         label: 'Wireless Channel'.t(),
         required: true,
-        bind: '{intf.wirelessChannel}'
+        bind: '{record.wirelessChannel}'
     }]
 });
