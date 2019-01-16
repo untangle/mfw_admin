@@ -54,6 +54,10 @@
                                 currentView: null
                             }
                         },
+                        userSelectable: {
+                            element: true,
+                            bodyElement: true
+                        },
                         listeners: {
                             activeItemchange: function (vp, item) {
                                 vp.getViewModel().set('currentView', item.xtype);

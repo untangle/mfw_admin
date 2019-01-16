@@ -37,6 +37,13 @@
                         routeAfterAuth: null
                     },
 
+                    viewport: {
+                        userSelectable: {
+                            element: true,
+                            bodyElement: true
+                        }
+                    },
+
                     setViews: function () {
                         Mfw.app.viewport.add([
                             { xtype: 'setup-wizard' }
