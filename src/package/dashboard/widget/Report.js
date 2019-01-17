@@ -42,7 +42,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
         }, {
             iconCls: 'md-icon-refresh',
             ui: 'round',
-            handler: 'loadData'
+            handler: 'reload'
         }]
     }],
     listeners: {
@@ -91,7 +91,9 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 record.userConditions().loadData(userConditions);
                 viewModel.set('record', record);
 
-                me.loadData();
+                WidgetsPipe.add(widget);
+
+                // me.loadData();
             }, me, { deep: true });
 
             // THIS BINDING is causing loading the data twice for each widget which is not OK
@@ -100,40 +102,46 @@ Ext.define('Mfw.dashboard.widget.Report', {
             // });
         },
 
-        loadData: function () {
-            var me = this,
-                view = me.getView(),
-                timer = view.down('#timer'),
-                viewModel = me.getViewModel(),
-                widget = viewModel.get('widget'),
-                record = viewModel.get('record'),
-                controller;
 
-            switch (record.get('type')) {
-                case 'TEXT': controller = view.down('text-report').getController(); break;
-                case 'EVENTS': controller = view.down('events-report').getController(); break;
-                default: controller = view.down('chart-report').getController();
-            }
-
-            if (view.tout) {
-                clearInterval(view.tout);
-            }
-
-            controller.loadData(function () {
-                if (widget.get('interval') !== 0) {
-                    view.tout = setTimeout(function () {
-                        me.loadData();
-                    }, widget.get('interval') * 1000);
-
-                    timer.setHtml('');
-                    timer.setHtml('<div class="wrapper">' +
-                                  '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                                  '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                                  '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-                                  '</div>');
-                }
-            });
+        reload: function () {
+            var me = this;
+            WidgetsPipe.add(me.getView());
         }
+
+        // loadData: function () {
+        //     var me = this,
+        //         view = me.getView(),
+        //         timer = view.down('#timer'),
+        //         viewModel = me.getViewModel(),
+        //         widget = viewModel.get('widget'),
+        //         record = viewModel.get('record'),
+        //         controller;
+
+        //     switch (record.get('type')) {
+        //         case 'TEXT': controller = view.down('text-report').getController(); break;
+        //         case 'EVENTS': controller = view.down('events-report').getController(); break;
+        //         default: controller = view.down('chart-report').getController();
+        //     }
+
+        //     if (view.tout) {
+        //         clearInterval(view.tout);
+        //     }
+
+        //     controller.loadData(function () {
+        //         if (widget.get('interval') !== 0) {
+        //             view.tout = setTimeout(function () {
+        //                 me.loadData();
+        //             }, widget.get('interval') * 1000);
+
+        //             timer.setHtml('');
+        //             timer.setHtml('<div class="wrapper">' +
+        //                           '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+        //                           '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+        //                           '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
+        //                           '</div>');
+        //         }
+        //     });
+        // }
     }
 
 

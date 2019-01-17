@@ -118,7 +118,7 @@ Ext.define('Mfw.dashboard.Controller', {
     onDeactivate: function (view) {
         view.down('#widgets').getItems().each(function (widget) {
             if (widget.tout) {
-                clearInterval(widget.tout);
+                clearTimeout(widget.tout);
             }
         });
     }

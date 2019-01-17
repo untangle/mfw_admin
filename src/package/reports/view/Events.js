@@ -40,7 +40,7 @@ Ext.define('Mfw.reports.Events', {
             });
         },
 
-        loadData: function () {
+        loadData: function (cb) {
             var me = this,
                 // grid = me.getView().down('grid'),
                 view = me.getView().up('report') || me.getView().up('widget-report'),
@@ -58,6 +58,7 @@ Ext.define('Mfw.reports.Events', {
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
                 viewModel.set('data', data);
+                if (cb) { cb(); }
                 view.unmask();
             });
         }

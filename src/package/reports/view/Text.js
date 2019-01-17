@@ -28,7 +28,7 @@ Ext.define('Mfw.reports.Text', {
             });
         },
 
-        loadData: function () {
+        loadData: function (cb) {
             var me = this,
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
@@ -58,6 +58,9 @@ Ext.define('Mfw.reports.Text', {
                         args.push(val);
                     });
                 });
+
+                if (cb) { cb(); }
+
                 viewModel.set('data', data);
                 viewModel.set('text', Ext.String.format.apply(this, args));
 
