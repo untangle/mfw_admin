@@ -138,7 +138,28 @@ Ext.define('Mfw.reports.Controller', {
             tree.setSingleExpand(true);
             root.collapseChildren(true);
         }
+    },
 
+    exportReports: function () {
+        var out, arr = [], data, link;
+
+        Ext.getStore('reports').each(function (record) {
+            data = record.getData();
+            Ext.Object.merge(data, record.getAssociatedData());
+            delete data.userConditions; // remove eventually user conditions
+            arr.push(data);
+        });
+
+        Util.sanitize(arr);
+
+        out = 'data:text/json;charset=utf-8,' + Ext.JSON.encode(arr);
+
+        out = encodeURI(out);
+
+        link = document.createElement('a');
+        link.setAttribute('href', out);
+        link.setAttribute('download', 'reports.json');
+        link.click();
     }
 
 });

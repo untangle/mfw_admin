@@ -92,13 +92,30 @@ Ext.define('Mfw.reports.Main', {
             }],
             tbar: {
                 shadow: false,
+                padding: '0 8',
                 items: [{
                     xtype: 'searchfield',
                     ui: 'faded',
                     flex: 1,
+                    margin: '0 8 0 0',
                     placeholder: 'Find report...'.t(),
                     listeners: {
                         change: 'filterReports'
+                    }
+                }, {
+                    iconCls: 'md-icon-import-export',
+                    ui: 'round',
+                    arrow: false,
+                    menuAlign: 'tr-br?',
+                    menu: {
+                        items: [{
+                            text: 'Export',
+                            iconCls: 'x-fa fa-upload',
+                            handler: 'exportReports'
+                        }, {
+                            text: 'Import (not implemented)',
+                            iconCls: 'x-fa fa-download'
+                        }]
                     }
                 }]
             }

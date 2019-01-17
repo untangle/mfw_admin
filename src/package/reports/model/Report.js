@@ -38,6 +38,10 @@ Ext.define('Mfw.model.Report', {
         model: 'Mfw.model.ReportCondition',
         name: 'userConditions',
         associationKey: 'userConditions'
+    }, {
+        model: 'Mfw.model.ReportColumnDisambiguation',
+        name: 'columnDisambiguation',
+        associationKey: 'columnDisambiguation'
     }],
 
     hasOne: [{
