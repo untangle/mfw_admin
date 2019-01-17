@@ -90,15 +90,15 @@ Ext.define('Mfw.reports.Main', {
                     selectionchange: 'onSelectionChange'
                 }
             }],
-            bbar: {
-                shadow: true,
+            tbar: {
+                shadow: false,
                 items: [{
                     xtype: 'searchfield',
                     ui: 'faded',
                     flex: 1,
                     placeholder: 'Find report...'.t(),
                     listeners: {
-                        change: 'filterSettings'
+                        change: 'filterReports'
                     }
                 }]
             }
