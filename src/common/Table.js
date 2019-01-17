@@ -47,12 +47,12 @@ Ext.define('Mfw.Table', {
             hidden: true
         }, {
             text: 'Client Interface',
-            dataIndex: 'client_interface',
+            dataIndex: 'client_interface_id',
             renderer: Renderer.interface,
             cell: { encodeHtml: false }
         }, {
             text: 'Server Interface',
-            dataIndex: 'server_interface',
+            dataIndex: 'server_interface_id',
             renderer: Renderer.interface,
             cell: { encodeHtml: false }
         }, {
