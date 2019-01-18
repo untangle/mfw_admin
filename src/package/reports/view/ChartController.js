@@ -170,7 +170,20 @@ Ext.define('Mfw.reports.ChartController', {
             //     visible: false
             // },
             yAxis: {
-                opposite: false
+                opposite: false,
+                title: {
+                    align: 'high',
+                    offset: 0,
+                    reserveSpace: false,
+                    y: 3,
+                    rotation: 0,
+                    textAlign: 'left',
+                    style: {
+                        color: '#555',
+                        fontSize: '12px',
+                        fontWeight: 600
+                    }
+                }
             },
             plotOptions: {
                 series: {
@@ -333,7 +346,10 @@ Ext.define('Mfw.reports.ChartController', {
                     categories: undefined
                 },
                 yAxis: {
-                    visible: true
+                    visible: true,
+                    title: {
+                        text: record.get('units') || ''
+                    }
                 }
 
             };

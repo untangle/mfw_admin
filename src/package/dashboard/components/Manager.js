@@ -351,7 +351,6 @@ Ext.define('Mfw.dashboard.Manager', {
                 grid = view.down('grid');
 
             grid.getStore().each(function (record) {
-                console.log(record);
                 record.dirty = true; // to push all non-dropped records
                 record.phantom = false; // to push new records
             });
