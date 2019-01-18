@@ -45,9 +45,27 @@ Ext.define('Mfw.reports.Events', {
                 // grid = me.getView().down('grid'),
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
-                record = viewModel.get('record');
+                record = viewModel.get('record'),
+                since = ReportsUtil.computeSince(me.getViewModel().get('route')),
+                userConditions, sinceCondition;
 
             if (!record) { return; }
+
+            // remove existing since condition
+            userConditions = record.userConditions();
+            sinceCondition = userConditions.findBy(function (c) {
+                return c.get('column') === 'time_stamp' && c.get('operator') === 'GT';
+            });
+            if (sinceCondition >= 0) {
+                userConditions.removeAt(sinceCondition);
+            }
+
+            // add updated since
+            record.userConditions().add({
+                column: 'time_stamp',
+                operator: 'GT',
+                value: since
+            });
 
             /**
              * data is an array of objects {column_name: value}

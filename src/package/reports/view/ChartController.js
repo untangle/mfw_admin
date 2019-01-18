@@ -205,7 +205,9 @@ Ext.define('Mfw.reports.ChartController', {
         var me = this,
             record = me.getViewModel().get('record'),
             view = me.getView().up('report') || me.getView().up('widget-report'),
-            chart = me.getView().chart;
+            chart = me.getView().chart,
+            since = ReportsUtil.computeSince(me.getViewModel().get('route')),
+            userConditions, sinceCondition;
 
         if (!record) { return; }
 
@@ -219,6 +221,22 @@ Ext.define('Mfw.reports.ChartController', {
             }, 200, me);
             return;
         }
+
+        // remove existing since condition
+        userConditions = record.userConditions();
+        sinceCondition = userConditions.findBy(function (c) {
+            return c.get('column') === 'time_stamp' && c.get('operator') === 'GT';
+        });
+        if (sinceCondition >= 0) {
+            userConditions.removeAt(sinceCondition);
+        }
+
+        // add updated since
+        record.userConditions().add({
+            column: 'time_stamp',
+            operator: 'GT',
+            value: since
+        });
 
         while (chart.series.length > 0) {
             chart.series[0].remove(true);

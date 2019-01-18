@@ -79,6 +79,7 @@
         "ReportsUtil": true,
         "DashboardUtil": true,
         "Table": true,
-        "Renderer": true
+        "Renderer": true,
+        "WidgetsPipe": true
     }
 }

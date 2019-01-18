@@ -74,6 +74,9 @@ Ext.define('Mfw.dashboard.widget.Report', {
             viewModel.bind('{route}', function (route) {
                 var conditionSince, userConditions = [];
 
+                // avoid dasboard activity if not on Dashboard
+                if (!Mfw.app.viewport.getActiveItem().isXType('dashboard')) { return; }
+
                 if (route.since) {
                     conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, route.since);
                 } else {

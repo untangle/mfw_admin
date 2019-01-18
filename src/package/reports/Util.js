@@ -90,6 +90,42 @@ Ext.define('Mfw.reports.Util', {
         return route;
     },
 
+    computeSince: function (route) {
+        var conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
+
+
+        if (!route.psince && !route.since) {
+            conditionSince = parseInt(conditionSince.getTime(), 10);
+        }
+
+        // set time conditions
+        if (route.psince && !route.since) {
+            switch (route.psince) {
+                case '1h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
+                case '6h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
+                // case 'today': conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
+                case 'yesterday': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
+                case 'thisweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
+                case 'lastweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
+                case 'month': conditionSince = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
+                default: conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); // today
+            }
+            conditionSince = conditionSince.getTime();
+        }
+
+        if (route.since) {
+            if (route.since <= 24) {
+                // for dashboard represents since hour
+                conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, route.since).getTime();
+            } else {
+                // for reports represents timestamp
+                conditionSince = route.since;
+            }
+        }
+        return conditionSince;
+    },
+
+
     fetchReportData: function (report, cb) {
         var data = [],
             createQuery = function (report, cb) {
