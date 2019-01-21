@@ -14,7 +14,6 @@
     },
     "rendering": {
         "type": "areaspline",
-        "stacking": "normal",
         "dataGroupingApproximation": "sum"
     }
 }
