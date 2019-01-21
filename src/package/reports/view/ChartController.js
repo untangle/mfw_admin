@@ -171,6 +171,7 @@ Ext.define('Mfw.reports.ChartController', {
             // },
             yAxis: {
                 opposite: false,
+                allowDecimals: false,
                 title: {
                     align: 'high',
                     offset: 0,
@@ -339,7 +340,19 @@ Ext.define('Mfw.reports.ChartController', {
                 colors: colors,
                 plotOptions: plotOptions,
                 legend: {
-                    enabled: !isWidget
+                    enabled: !isWidget,
+                    symbolRadius: 0
+                },
+                tooltip: {
+                    pointFormatter: function () {
+                        var str = '<span style="color: ' + this.color + '; font-size: 16px;">\u25A0</span> <span style="font-weight: bold;">' + this.series.name + '</span>';
+                        if (record.get('units') === 'bytes' || record.get('units') === 'bytes/s') {
+                            str += '&rarr; ' + Renderer.bytesRenderer(this.y) + record.get('units');
+                        } else {
+                            str += '&rarr; <b>' + this.y + '</b> ' + (record.get('units') || '');
+                        }
+                        return str + '<br/>';
+                    }
                 },
                 xAxis: {
                     visible: true,
@@ -349,6 +362,17 @@ Ext.define('Mfw.reports.ChartController', {
                     visible: true,
                     title: {
                         text: record.get('units') || ''
+                    },
+                    labels: {
+                        formatter: function() {
+                            var str;
+                            if (record.get('units') === 'bytes' || record.get('units') === 'bytes/s') {
+                                str = Renderer.bytesRenderer(this.value);
+                            } else {
+                                str = this.value;
+                            }
+                            return str;
+                        }
                     }
                 }
 

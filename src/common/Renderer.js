@@ -24,6 +24,17 @@ Ext.define('Mfw.Renderer', {
             return name + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         }
         return value;
+    },
+
+    bytesRenderer: function(bytes) {
+        var units = ['', 'K', 'M', 'G'];
+        var units_itr = 0;
+        while ((bytes >= 1000 || bytes <= -1000) && units_itr < 3) {
+            bytes = bytes/1000;
+            units_itr++;
+        }
+        bytes = Math.round(bytes*100)/100;
+        return '<b>' + bytes + '</b> ' + units[units_itr];
     }
 
 });

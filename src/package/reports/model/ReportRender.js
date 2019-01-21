@@ -18,7 +18,7 @@ Ext.define('Mfw.model.ReportRender', {
 
         { name: 'dataGroupingEnabled', type: 'boolean', defaultValue: true }, // ["average", "open", "high", "low", "close", "sum"],
         { name: 'dataGroupingApproximation', type: 'string', defaultValue: 'sum' }, // ["average", "open", "high", "low", "close", "sum"],
-        { name: 'dataGroupingFactor', type: 'integer', defaultValue: 20 },
+        { name: 'dataGroupingFactor', type: 'integer', defaultValue: 40 },
 
         { name: 'donutInnerSize', type: 'number', defaultValue: 0 }, // percent
         { name: '3dEnabled', type: 'boolean', defaultValue: false },
