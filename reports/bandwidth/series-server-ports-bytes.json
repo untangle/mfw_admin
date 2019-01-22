@@ -18,6 +18,7 @@
     }],
     "rendering": {
         "type": "areaspline",
+        "stacking": "normal",
         "dataGroupingApproximation": "high"
     }
 }
