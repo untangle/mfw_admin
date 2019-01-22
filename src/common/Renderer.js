@@ -35,6 +35,13 @@ Ext.define('Mfw.Renderer', {
         }
         bytes = Math.round(bytes*100)/100;
         return '<b>' + bytes + '</b> ' + units[units_itr];
+    },
+
+    shortenText: function (str) {
+        if (str.length > 15) {
+            str = str.substr(0, 5) + ' ... ' + str.substr(str.length - 5, str.length);
+        }
+        return str;
     }
 
 });

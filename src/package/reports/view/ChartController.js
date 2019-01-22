@@ -348,7 +348,8 @@ Ext.define('Mfw.reports.ChartController', {
                         return tooltip.defaultFormatter.call(this, tooltip);
                     },
                     pointFormatter: function () {
-                        var str = '<span style="color: ' + this.color + '; font-size: 16px;">\u25A0</span> <span style="font-weight: bold;">' + this.series.name + '</span>';
+                        var str = '<span style="color: ' + this.color + '; font-size: 16px;">\u25A0</span>' +
+                                  '<span style="font-weight: bold;">' + Renderer.shortenText(this.series.name) + '</span>';
                         if (record.get('units') === 'bytes' || record.get('units') === 'bytes/s') {
                             str += '&rarr; ' + Renderer.bytesRenderer(this.y) + record.get('units');
                         } else {
@@ -409,8 +410,8 @@ Ext.define('Mfw.reports.ChartController', {
                         depth: isWidget ? 20 : rendering.get('3dDepth'), // if widget use a smaller depth
                         size: '90%',
                         dataLabels: {
-                            distance: 10
-                            // formatter: function () { return this.point.name; }
+                            distance: 10,
+                            formatter: function () { return Renderer.shortenText(this.point.name); }
                         }
                     },
                     column: {
