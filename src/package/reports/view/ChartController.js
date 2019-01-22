@@ -127,19 +127,6 @@ Ext.define('Mfw.reports.ChartController', {
                 style: {
                     // fontSize: isWidget ? '12px' : '14px'
                 },
-                formatter: function (tooltip) {
-                    var items = this.points;
-
-                    // sort the values
-                    if (items) {
-                        items.sort(function(a, b) {
-                            return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
-                        });
-                        items.reverse();
-                    }
-
-                    return tooltip.defaultFormatter.call(this, tooltip);
-                },
                 headerFormat: '<p style="margin: 0 0 5px 0; color: #555;">{point.key}</p>'
             },
             legend: {
@@ -344,6 +331,22 @@ Ext.define('Mfw.reports.ChartController', {
                     symbolRadius: 0
                 },
                 tooltip: {
+                    formatter: function (tooltip) {
+                        if (rendering.get('stacking') !== 'none') {
+                            return tooltip.defaultFormatter.call(this, tooltip);
+                        }
+                        var items = this.points;
+
+                        // sort the values
+                        if (items) {
+                            items.sort(function(a, b) {
+                                return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
+                            });
+                            items.reverse();
+                        }
+
+                        return tooltip.defaultFormatter.call(this, tooltip);
+                    },
                     pointFormatter: function () {
                         var str = '<span style="color: ' + this.color + '; font-size: 16px;">\u25A0</span> <span style="font-weight: bold;">' + this.series.name + '</span>';
                         if (record.get('units') === 'bytes' || record.get('units') === 'bytes/s') {
