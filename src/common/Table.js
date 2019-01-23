@@ -179,14 +179,12 @@ Ext.define('Mfw.Table', {
             allColumns.push({
                 text: column.text,
                 value: column.dataIndex
-            })
+            });
         });
 
         this.initConfig({
-            allColumns: allColumns
-            // operatorsMap: Ext.Array.toValueMap(this.operators, 'id'),
-            // prefixesMap: Ext.Array.toValueMap(this.prefixes, 'value')
-            // columns: columns
+            allColumns: allColumns,
+            allColumnsMap: Ext.Array.toValueMap(allColumns, 'value')
         });
     }
 

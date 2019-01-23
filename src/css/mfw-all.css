@@ -191,3 +191,4 @@ i { font-style: normal; }
   100% { transform: rotate(360deg); } }
 @keyframes opa { 0% { opacity: 1; }
   50%, 100% { opacity: 0; } }
+.x-treelist.no-icons .x-treelist-item-text { margin-left: 0; }

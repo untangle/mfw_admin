@@ -706,3 +706,11 @@ i {
       opacity: 0;
     }
   }
+
+
+
+.x-treelist.no-icons {
+    .x-treelist-item-text {
+        margin-left: 0;
+    }
+}

@@ -37,6 +37,7 @@ Ext.define('Mfw.settings.view.Main', {
 
         items: [{
             xtype: 'treelist',
+            userCls: 'no-icons',
             scrollable: true,
             ui: 'nav',
             style: {

@@ -14,6 +14,7 @@ Ext.define('Mfw.reports.Events', {
 
     items: [{
         xtype: 'grid',
+        reference: 'list',
         // plugins: {
         //     gridfilters: true
         // },
@@ -25,6 +26,24 @@ Ext.define('Mfw.reports.Events', {
             var me = this,
                 viewModel = me.getViewModel(),
                 grid = view.down('grid');
+
+            // if not widget add details panel
+            if (!me.getView().up('widget-report')) {
+                view.add({
+                    xtype: 'grid-selection-details',
+                    docked: 'right',
+                    width: 400,
+                    resizable: {
+                        split: true,
+                        edges: 'west'
+                    },
+                    hidden: true,
+                    bind: {
+                        hidden: '{!list.selection}'
+                    }
+                });
+            }
+
 
             view.getViewModel().bind('{record}', function (record) {
                 if (!record) {
