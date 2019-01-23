@@ -1,6 +1,6 @@
-Ext.define('Mfw.reports.GridSelectionDetails', {
+Ext.define('Mfw.reports.EventDetails', {
     extend: 'Ext.Panel',
-    alias: 'widget.grid-selection-details',
+    alias: 'widget.event-details',
     viewModel: {},
     layout: 'fit',
 
@@ -19,7 +19,19 @@ Ext.define('Mfw.reports.GridSelectionDetails', {
         }, {
             text: 'Value',
             dataIndex: 'val',
-            flex: 1
+            flex: 1,
+            cell: { encodeHtml: false },
+            renderer: function (value, record) {
+                var renderer;
+                switch (record.get('key')) {
+                    case 'time_stamp': renderer = Renderer.time_stamp; break;
+                    case 'ip_protocol': renderer = Renderer.ip_protocol; break;
+                    case 'client_interface_id':
+                    case 'server_interface_id': renderer = Renderer.interface; break;
+                    default: renderer = null;
+                }
+                return renderer ? renderer(value) : value;
+            }
         }]
     }],
 

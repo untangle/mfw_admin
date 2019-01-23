@@ -3,11 +3,14 @@ Ext.define('Mfw.reports.Events', {
     alias: 'widget.events-report',
 
     viewModel: {
-        stores: {
-            events: {
-                data: '{data}'
-            }
-        }
+        // data: {
+        //     data: '{data}'
+        // }
+        // stores: {
+        //     events: {
+        //         data: '{data}'
+        //     }
+        // }
     },
 
     layout: 'fit',
@@ -18,7 +21,14 @@ Ext.define('Mfw.reports.Events', {
         // plugins: {
         //     gridfilters: true
         // },
-        bind: '{events}'
+        // bind: '{events}'
+        store: {
+            model: 'Mfw.model.Session',
+            sorters: [{
+                property: 'time_stamp',
+                direction: 'DESC'
+            }]
+        }
     }],
 
     controller: {
@@ -30,7 +40,7 @@ Ext.define('Mfw.reports.Events', {
             // if not widget add details panel
             if (!me.getView().up('widget-report')) {
                 view.add({
-                    xtype: 'grid-selection-details',
+                    xtype: 'event-details',
                     docked: 'right',
                     width: 400,
                     resizable: {
@@ -94,7 +104,7 @@ Ext.define('Mfw.reports.Events', {
             viewModel.set('data', []);
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
-                viewModel.set('data', data);
+                view.down('grid').getStore().loadData(data);
                 if (cb) { cb(); }
                 view.unmask();
             });
