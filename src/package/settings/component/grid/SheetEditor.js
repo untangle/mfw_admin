@@ -4,7 +4,7 @@ Ext.define('Mfw.cmp.grid.SheetEditor', {
 
     controller: 'sheet-editor',
 
-    title: 'Sheet title'.t(),
+    title: 'Edit'.t(),
 
     viewModel: {
         data: {

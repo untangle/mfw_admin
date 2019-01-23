@@ -27,7 +27,6 @@ Ext.define('Mfw.reports.GridSelectionDetails', {
         init: function (panel) {
             panel.getViewModel().bind('{list.selection}', function (selection) {
                 if (!selection) { return; }
-                console.log(selection.getData());
                 var data = [];
 
                 Ext.Object.each(selection.getData(), function (key, val) {
@@ -36,10 +35,7 @@ Ext.define('Mfw.reports.GridSelectionDetails', {
                         val: val
                     });
                 });
-
-                console.log(data);
                 panel.down('grid').getStore().setData(data);
-
             });
         }
     }

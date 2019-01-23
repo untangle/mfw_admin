@@ -9,7 +9,7 @@ Ext.define('Mfw.model.ReportRender', {
         { name: 'stacking', type: 'string', defaultValue: 'none' }, // normal, percent
         { name: 'colors', type: 'string' },
 
-        { name: 'lineWidth', type: 'number', defaultValue: 2 },
+        { name: 'lineWidth', type: 'number', defaultValue: 1 },
         { name: 'borderWidth', type: 'number', defaultValue: 1 },
         { name: 'topAreaOpacity', type: 'number', defaultValue: 0.7 },
         { name: 'bottomAreaOpacity', type: 'number', defaultValue: 0.1 },
@@ -18,7 +18,7 @@ Ext.define('Mfw.model.ReportRender', {
 
         { name: 'dataGroupingEnabled', type: 'boolean', defaultValue: true }, // ["average", "open", "high", "low", "close", "sum"],
         { name: 'dataGroupingApproximation', type: 'string', defaultValue: 'sum' }, // ["average", "open", "high", "low", "close", "sum"],
-        { name: 'dataGroupingFactor', type: 'integer', defaultValue: 40 },
+        { name: 'dataGroupingFactor', type: 'integer', defaultValue: 30 },
 
         { name: 'donutInnerSize', type: 'number', defaultValue: 0 }, // percent
         { name: '3dEnabled', type: 'boolean', defaultValue: false },

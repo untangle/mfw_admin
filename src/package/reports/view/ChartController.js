@@ -246,6 +246,10 @@ Ext.define('Mfw.reports.ChartController', {
         view.mask({xtype: 'loadmask'});
 
         ReportsUtil.fetchReportData(record, function (data) {
+            // remove first and last data items as they are empty
+            if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
+                data.shift(); data.pop();
+            }
             me.setData(data);
             me.getViewModel().set('data', data);
             view.unmask();
