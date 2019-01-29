@@ -9,7 +9,6 @@ Ext.define('Mfw.dashboard.widget.Report', {
         }
     },
 
-    width: 500,
     height: 300,
 
     margin: 8,
@@ -62,13 +61,13 @@ Ext.define('Mfw.dashboard.widget.Report', {
 
             switch (record.get('type')) {
                 case 'TEXT':
-                    widget.add({ xtype: 'text-report' }); widget.setWidth(300); break;
+                    widget.add({ xtype: 'text-report' }); widget.setUserCls('widget-text'); break;
                 case 'EVENTS':
-                    widget.add({ xtype: 'events-report' }); widget.setWidth(600); break;
+                    widget.add({ xtype: 'events-report' }); widget.setUserCls('widget-events'); break;
                 case 'SERIES':
                 case 'CATEGORIES_SERIES':
-                    widget.add({ xtype: 'chart-report' }); widget.setWidth(500); break;
-                default: widget.add({ xtype: 'chart-report' }); widget.setWidth(400);
+                    widget.add({ xtype: 'chart-report' }); widget.setUserCls('widget-series'); break;
+                default: widget.add({ xtype: 'chart-report' }); widget.setUserCls('widget-pies');
             }
 
             viewModel.bind('{route}', function (route) {

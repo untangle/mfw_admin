@@ -57,11 +57,17 @@ Ext.define('Mfw.dashboard.Main', {
             xtype: 'conditions-fields'
         }]
     }, {
-        // widgets holder
-        itemId: 'widgets',
-        xtype: 'panel',
-        padding: 8,
-        scrollable: true
+        xtype: 'container',
+        innerCls: 'widgets-outer',
+        scrollable: true,
+        items: [{
+            // widgets holder
+            xtype: 'container',
+            itemId: 'widgets',
+            innerCls: 'widgets-inner',
+            padding: 8,
+            scrollable: true
+        }]
     }],
 
     listeners: {
