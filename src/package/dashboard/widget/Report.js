@@ -9,7 +9,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
         }
     },
 
-    height: 300,
+    // height: 300,
 
     margin: 8,
 
