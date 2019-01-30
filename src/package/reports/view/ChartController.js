@@ -116,6 +116,7 @@ Ext.define('Mfw.reports.ChartController', {
             tooltip: {
                 enabled: true,
                 animation: false,
+                outside: true,
                 shared: true,
                 followPointer: true,
                 split: false,
@@ -131,22 +132,14 @@ Ext.define('Mfw.reports.ChartController', {
             },
             legend: {
                 enabled: true,
-                // margin: 0,
-                // // y: isWidget ? 5 : 10,
-                // // useHTML: true,
-                // lineHeight: 12,
-                // itemDistance: 10,
-                // itemStyle: {
-                //     fontSize: '12px',
-                //     fontWeight: 600,
-                //     width: '120px',
-                //     whiteSpace: 'nowrap',
-                //     overflow: 'hidden',
-                //     textOverflow: 'ellipsis'
-                // },
-                // symbolHeight: 8,
-                // symbolWidth: 8,
-                // symbolRadius: 4
+                itemStyle: {
+                    fontSize: '11px',
+                    fontWeight: 300,
+                    width: '100px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                },
             },
             // loading: {
             //     style: {
@@ -260,7 +253,7 @@ Ext.define('Mfw.reports.ChartController', {
 
     update: function () {
         var me = this,
-            isWidget = false,
+            isWidget = me.getViewModel().get('widget') ? true : false,
             record = me.getViewModel().get('record'),
             rendering = record.getRendering(),
             plotOptions = {},
@@ -268,10 +261,6 @@ Ext.define('Mfw.reports.ChartController', {
             chart = me.getView().chart, settings, color;
 
         if (!chart) { return; }
-
-        if (me.getView().up('widget-report')) {
-            isWidget = true;
-        }
 
         if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
 
@@ -331,7 +320,7 @@ Ext.define('Mfw.reports.ChartController', {
                 colors: colors,
                 plotOptions: plotOptions,
                 legend: {
-                    enabled: !isWidget,
+                    // enabled: !isWidget,
                     symbolRadius: 0
                 },
                 tooltip: {
@@ -446,6 +435,7 @@ Ext.define('Mfw.reports.ChartController', {
 
     setData: function (data) {
         var me = this, chart = me.getView().chart, normalizedData = [],
+            isWidget = me.getViewModel().get('widget') ? true : false,
             record = me.getViewModel().get('record');
         if (!chart) { return; }
 
@@ -474,6 +464,9 @@ Ext.define('Mfw.reports.ChartController', {
                 });
             });
             Ext.Object.each(series, function (serie, val) {
+                if (isWidget && chart.series.length >= 5) {
+                    return;
+                }
                 chart.addSeries(val, false, { duration: 150 });
             });
         } else {

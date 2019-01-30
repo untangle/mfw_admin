@@ -58,6 +58,13 @@ Ext.define('Mfw.dashboard.Main', {
         }]
     }, {
         xtype: 'container',
+        cls: 'widget-info',
+        margin: '16 16 0 16',
+        docked: 'top',
+        height: 60,
+        html: 'System Information'
+    }, {
+        xtype: 'container',
         innerCls: 'widgets-outer',
         scrollable: true,
         items: [{
