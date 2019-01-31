@@ -185,7 +185,7 @@ i { font-style: normal; }
 
 .events-tree .x-treecell .x-icon-el { display: none; }
 .events-tree .x-gridcell-body-el { padding: 5px 0; }
-.events-tree .event-key { color: #555; font-weight: 100; }
+.events-tree .event-key { color: #555; font-weight: 400; }
 
 .wrapper { position: relative; background: #FFF; }
 

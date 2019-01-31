@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.1.166
+DEV_HOST ?= 192.168.1.1
 DEV_DIR ?= /www
 
 # logging
@@ -40,6 +40,7 @@ APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util)
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, *.js model store components widget)
 PKG_SETTINGS_SRC := $(addprefix src/package/settings/, *.js model store component view)
 PKG_REPORTS_SRC := $(addprefix src/package/reports/, conditions model store view *.js)
+PKG_MONITOR_SRC := $(addprefix src/package/monitor/, model view *.js)
 
 # APPS ALL SOURCES
 APP_ADMIN_ALL := src/app/AppBase.js \
@@ -47,6 +48,7 @@ APP_ADMIN_ALL := src/app/AppBase.js \
 				 $(PKG_DASHBOARD_SRC) \
 				 $(PKG_SETTINGS_SRC) \
 				 $(PKG_REPORTS_SRC) \
+				 $(PKG_MONITOR_SRC) \
 				 $(APP_ADMIN_SRC) -name '*.js' 2>/dev/null)
 
 APP_SETTINGS_ALL := src/app/AppBase.js \
