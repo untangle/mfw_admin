@@ -464,9 +464,9 @@ Ext.define('Mfw.reports.ChartController', {
                 });
             });
             Ext.Object.each(series, function (serie, val) {
-                if (isWidget && chart.series.length >= 5) {
-                    return;
-                }
+                // if (isWidget && chart.series.length >= 5) {
+                //     return;
+                // }
                 chart.addSeries(val, false, { duration: 150 });
             });
         } else {
