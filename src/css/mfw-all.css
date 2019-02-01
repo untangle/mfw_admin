@@ -157,8 +157,6 @@ i { font-style: normal; }
 
 .highcharts-container { font-family: 'Arial', sans-serif; }
 
-.highcharts-background { fill: transparent; }
-
 .x-tabbar-light { background-color: #EEE; }
 .x-tabbar-light .x-text-el { color: #333; }
 .x-tabbar-light .x-inner-el { background-color: #EEE; }
@@ -171,8 +169,7 @@ i { font-style: normal; }
 .widgets-inner { display: flex; flex-wrap: wrap; flex: none; overflow: scroll; }
 .widgets-inner::after { content: ''; flex-grow: 1000000000; }
 
-.widget-info { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); transition: all .2s ease-out; }
-.widget-info .x-body-el { padding: 0 16px; color: #555; font-size: 16px; font-weight: 100; background: #FFF; line-height: 60px; }
+.widget-info { transition: all .2s ease-out; }
 
 .mfw-widget { flex: 1; flex-basis: 320px; height: 320px; flex-grow: 1; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); transition: all .2s ease-out; background: #FFF; }
 .mfw-widget .x-body-el { background: #FFF; }
@@ -208,3 +205,8 @@ i { font-style: normal; }
 @keyframes opa { 0% { opacity: 1; }
   50%, 100% { opacity: 0; } }
 .x-treelist.no-icons .x-treelist-item-text { margin-left: 0; }
+
+.pie { width: 42px; background: #f06; border-radius: 50%; }
+.pie circle { fill: none; stroke: gold; stroke-width: 50; }
+
+.system-graph { box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); border-radius: 5px; overflow: hidden; }

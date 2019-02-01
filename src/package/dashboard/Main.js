@@ -57,12 +57,11 @@ Ext.define('Mfw.dashboard.Main', {
             xtype: 'conditions-fields'
         }]
     }, {
-        xtype: 'container',
+        xtype: 'widget-system',
         cls: 'widget-info',
         margin: '16 16 0 16',
         docked: 'top',
-        height: 60,
-        html: 'System Information'
+        // height: 60
     }, {
         xtype: 'container',
         innerCls: 'widgets-outer',

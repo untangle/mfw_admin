@@ -577,9 +577,9 @@ i {
     font-family: 'Arial', sans-serif;
 }
 
-.highcharts-background {
-    fill: transparent;
-}
+// .highcharts-background {
+//     fill: transparent;
+// }
 
 
 
@@ -622,15 +622,14 @@ i {
 }
 
 .widget-info {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     transition: all .2s ease-out;
     .x-body-el {
-        padding: 0 16px;
-        color: #555;
-        font-size: 16px;
-        font-weight: 100;
-        background: #FFF;
-        line-height: 60px;
+        // padding: 0 16px;
+        // color: #555;
+        // font-size: 16px;
+        // font-weight: 100;
+        // background: #FFF;
+        // line-height: 60px;
     }
 }
 
@@ -769,4 +768,21 @@ i {
     .x-treelist-item-text {
         margin-left: 0;
     }
+}
+
+.pie {
+    width: 42px;
+    background: #f06;
+    border-radius: 50%;
+    circle {
+        fill: none;
+        stroke: gold;
+        stroke-width: 50;
+    }
+}
+
+.system-graph {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
 }
