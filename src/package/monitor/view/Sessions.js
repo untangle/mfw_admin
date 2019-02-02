@@ -25,8 +25,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Application Name',
         dataIndex: 'application_name',
-        minWidth: 150,
-        flex: 1
+        minWidth: 150
     }, {
         text: 'Application Id',
         dataIndex: 'application_id',
@@ -50,7 +49,8 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Application Protochain',
         dataIndex: 'application_protochain',
-        width: 150
+        width: 150,
+        flex: 1
     }, {
         text: 'Connection State',
         dataIndex: 'connection_state',
