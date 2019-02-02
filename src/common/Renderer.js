@@ -54,7 +54,7 @@ Ext.define('Mfw.Renderer', {
     },
 
     bytesRendererSec: function(bytes) {
-        return bytesRenderer(bytes) + "/s";
+        return Renderer.bytesRenderer(bytes) + "/s";
     },
 
     shortenText: function (str) {
