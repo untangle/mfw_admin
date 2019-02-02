@@ -54,7 +54,18 @@ Ext.define('Mfw.Renderer', {
     },
 
     bytesRendererSec: function(bytes) {
-        return Renderer.bytesRenderer(bytes) + "/s";
+        if (bytes === null || bytes === undefined) {
+            return '';
+        }
+
+        var units = ['B/s', 'kB/s', 'MB/s', 'GB/s'];
+        var units_itr = 0;
+        while ((bytes >= 1000 || bytes <= -1000) && units_itr < 3) {
+            bytes = bytes/1000;
+            units_itr++;
+        }
+        bytes = (Math.round(bytes*100)/100).toFixed(2);
+        return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
     shortenText: function (str) {
