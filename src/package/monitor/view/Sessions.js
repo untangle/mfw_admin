@@ -8,7 +8,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         model: 'Mfw.model.MonitorSession',
         // groupField: 'application_name',
         sorters: [{
-            property: 'bytes',
+            property: 'bytes_per_sec_total_1min',
             direction: 'DESC'
         }]
     },
