@@ -26,7 +26,6 @@ Ext.define('Mfw.Renderer', {
         return value;
     },
 
-
     boolean: function (value) {
         if (value === null || value === undefined) {
             return '';
@@ -52,6 +51,10 @@ Ext.define('Mfw.Renderer', {
         }
         bytes = (Math.round(bytes*100)/100).toFixed(2);
         return '<b>' + bytes + '</b> ' + units[units_itr];
+    },
+
+    bytesRendererSec: function(bytes) {
+        return bytesRenderer(bytes) + "/s";
     },
 
     shortenText: function (str) {

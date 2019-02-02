@@ -50,8 +50,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Application Protochain',
         dataIndex: 'application_protochain',
-        width: 150,
-        hidden: true
+        width: 150
     }, {
         text: 'Connection State',
         dataIndex: 'connection_state',
@@ -61,6 +60,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         dataIndex: 'bypass_packetd',
         width: 80,
         align: 'center',
+        hidden: true,
         cell: { encodeHtml: false },
         renderer: Renderer.boolean
     }, {
@@ -76,6 +76,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         dataIndex: 'timeout_seconds',
         width: 100,
         align: 'right',
+        hidden: true,
         renderer: Renderer.timeout_seconds
     }, {
         text: 'Bytes',
@@ -84,6 +85,29 @@ Ext.define('Mfw.monitor.view.Sessions', {
         align: 'right',
         cell: { encodeHtml: false },
         renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Rate',
+        dataIndex: 'bytes_per_sec_total_1min',
+        width: 100,
+        align: 'right',
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRendererSec
+    }, {
+        text: 'Client Rate',
+        dataIndex: 'bytes_per_sec_c2s_1min',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRendererSec
+    }, {
+        text: 'Server Rate',
+        dataIndex: 'bytes_per_sec_s2c_1min',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRendererSec
     }, {
         text: 'IP Protocol',
         dataIndex: 'ip_protocol',

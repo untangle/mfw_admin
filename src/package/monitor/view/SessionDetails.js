@@ -70,6 +70,9 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                 { key: 'timeout_seconds', text: 'Timeout (s)', leaf: true },
                 { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true },
                 { key: 'bytes', text: 'Bytes', leaf: true },
+                { key: 'bytes_per_sec_total_1min', text: 'Rate', leaf: true },
+                { key: 'bytes_per_sec_c2s_1min', text: 'Rate', leaf: true },
+                { key: 'bytes_per_sec_s2c_1min', text: 'Rate', leaf: true },
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
                 { key: 'assured_flag', text: 'Assured', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
@@ -142,6 +145,9 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
         valueRenderer: function (value, record) {
             var key = record.get('key');
             if (key === 'bytes') { return Renderer.bytesRenderer(value); }
+            if (key === 'bytes_per_sec_total_1min') { return Renderer.bytesRendererSec(value); }
+            if (key === 'bytes_per_sec_c2s_1min') { return Renderer.bytesRendererSec(value); }
+            if (key === 'bytes_per_sec_s2c_1min') { return Renderer.bytesRendererSec(value); }
             if (key === 'bypass_packetd' || key === 'assured_flag') { return Renderer.boolean(value); }
             if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
             if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
