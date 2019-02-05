@@ -162,6 +162,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
             if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
             if (key === 'client_interface_id' || key === 'server_interface_id') { return Renderer.interface(value); }
+            if (key === 'client_interface_type' || key === 'server_interface_type') { return Renderer.interfaceType(value); }
             if (key === 'client_country' || key === 'server_country') { return Renderer.country(value); }
             return value;
         }

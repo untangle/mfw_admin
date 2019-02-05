@@ -57,10 +57,14 @@ Ext.define('Mfw.Table', {
             cell: { encodeHtml: false }
         }, {
             text: 'Client Interface Type',
-            dataIndex: 'client_interface_type'
+            dataIndex: 'client_interface_type',
+            cell: { encodeHtml: false },
+            renderer: Renderer.interfaceType
         }, {
             text: 'Server Interface Type',
-            dataIndex: 'server_interface_type'
+            dataIndex: 'server_interface_type',
+            cell: { encodeHtml: false },
+            renderer: Renderer.interfaceType
         }, {
             text: 'Local Address',
             dataIndex: 'local_address',

@@ -143,7 +143,9 @@ Ext.define('Mfw.monitor.view.Sessions', {
         text: 'Client Interface Type',
         dataIndex: 'client_interface_type',
         width: 100,
-        hidden: true
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.interfaceType
     }, {
         text: 'Client Address',
         dataIndex: 'client_address',
@@ -187,7 +189,9 @@ Ext.define('Mfw.monitor.view.Sessions', {
         text: 'Server Interface Type',
         dataIndex: 'server_interface_type',
         width: 100,
-        hidden: true
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.interfaceType
     }, {
         text: 'Server Address',
         dataIndex: 'server_address',

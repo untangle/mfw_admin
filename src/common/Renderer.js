@@ -26,6 +26,17 @@ Ext.define('Mfw.Renderer', {
         return value;
     },
 
+    interfaceType: function (value) {
+        var type = '';
+        switch (value) {
+            case 1: type = 'WAN'; break;
+            case 2: type = 'LAN'; break;
+            case 3: type = 'Unused'; break;
+            default: type = 'Unset';
+        }
+        return type + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+    },
+
     boolean: function (value) {
         if (value === null || value === undefined) {
             return '';
