@@ -4,7 +4,7 @@
     "description": "Top applications by bytes over time",
     "displayOrder": 21,
     "type": "CATEGORIES_SERIES",
-    "table": "session_minutes left join sessions using (session_id)",
+    "table": "session_stats left join sessions using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "application_name",
@@ -14,7 +14,7 @@
     },
     "columnDisambiguation": [{
         "columnName": "time_stamp",
-        "newColumnName": "session_minutes.time_stamp"
+        "newColumnName": "session_stats.time_stamp"
     }],
     "rendering": {
         "type": "areaspline",

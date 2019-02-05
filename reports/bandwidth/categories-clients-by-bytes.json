@@ -4,7 +4,7 @@
     "description": "The client addresses by bytes transferred",
     "displayOrder": 10,
     "type": "CATEGORIES",
-    "table": "session_minutes join sessions using (session_id)",
+    "table": "session_stats join sessions using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "client_address",
@@ -13,7 +13,7 @@
     },
     "columnDisambiguation": [{
         "columnName": "time_stamp",
-        "newColumnName": "session_minutes.time_stamp"
+        "newColumnName": "session_stats.time_stamp"
     }],
     "rendering": {
         "type": "pie",
