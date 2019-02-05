@@ -12,8 +12,6 @@ Ext.define('Mfw.monitor.Controller', {
     },
 
     onAction: function (param) {
-        var me = this;
-        console.log(param);
         Mfw.app.viewport.setActiveItem('monitor');
         Mfw.app.viewport.getActiveItem().setActiveItem('monitor-' + param);
     },

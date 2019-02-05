@@ -17,9 +17,7 @@ Ext.define('Mfw.model.Session', {
         { name: 'application_name', type: 'string' },
         { name: 'application_protochain', type: 'string' },
 
-        { name: 'bytes', type: 'number', allowNull: true },
         { name: 'c2s_bytes', type: 'number', allowNull: true },
-        { name: 's2c_bytes', type: 'number', allowNull: true },
 
         { name: 'certificate_subject_cn', type: 'string' },
         { name: 'certificate_subject_o', type: 'string' },
@@ -42,9 +40,7 @@ Ext.define('Mfw.model.Session', {
         { name: 'local_address', type: 'string' },
         { name: 'remote_address', type: 'string' },
 
-        { name: 'rate', type: 'number', allowNull: true },
-        { name: 'c2s_rate', type: 'number', allowNull: true },
-        { name: 's2c_rate', type: 'number', allowNull: true },
+        { name: 's2c_bytes', type: 'number', allowNull: true },
 
         { name: 'server_address', type: 'string' },
         { name: 'server_address_new', type: 'string' },

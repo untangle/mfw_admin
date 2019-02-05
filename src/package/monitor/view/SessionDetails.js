@@ -11,8 +11,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             expanded: true,
             children: [
                 {
-                    key: 'Application',
-                    text: 'Application',
+                    key: 'application',
+                    text: '<strong>Application</strong>',
                     children: [
                         { key: 'application_name', text: 'Name', leaf: true },
                         { key: 'application_id', text: 'ID', leaf: true },
@@ -23,8 +23,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     ]
                 },
                 {
-                    key: 'Client',
-                    text: 'Client',
+                    key: 'client',
+                    text: '<strong>Client</strong>',
                     children: [
                         { key: 'client_address', text: 'Address', leaf: true },
                         { key: 'client_address_new', text: 'Address New', leaf: true },
@@ -37,8 +37,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     ]
                 },
                 {
-                    key: 'Server',
-                    text: 'Server',
+                    key: 'server',
+                    text: '<strong>Server</strong>',
                     children: [
                         { key: 'server_address', text: 'Address', leaf: true },
                         { key: 'server_address_new', text: 'Address New', leaf: true },
@@ -51,8 +51,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     ]
                 },
                 {
-                    key: 'Certificate',
-                    text: 'Certificate',
+                    key: 'certificate',
+                    text: '<strong>Certificate</strong>',
                     children: [
                         { key: 'certificate_issuer_c', text: 'Issuer: Country', leaf: true },
                         { key: 'certificate_issuer_cn', text: 'Issuer: Common Name', leaf: true },
@@ -65,14 +65,19 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'certificate_subject_san', text: 'Subject: SAN', leaf: true }
                     ]
                 },
+                {
+                    key: 'rate',
+                    text: '<strong>Rate</strong>',
+                    children: [
+                        { key: 's2c_rate', text: 'Server Rate', leaf: true },
+                        { key: 'c2s_rate', text: 'Client Rate', leaf: true },
+                    ]
+                },
                 { key: 'session_id', text: 'Session ID', leaf: true },
                 { key: 'connection_state', text: 'Connection State', leaf: true },
                 { key: 'timeout_seconds', text: 'Timeout (s)', leaf: true },
                 { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true },
                 { key: 'bytes', text: 'Bytes', leaf: true },
-                { key: 'rate', text: 'Rate', leaf: true },
-                { key: 'c2s_rate', text: 'Client Rate', leaf: true },
-                { key: 's2c_rate', text: 'Server Rate', leaf: true },
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
                 { key: 'assured_flag', text: 'Assured', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
@@ -90,7 +95,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
         dataIndex: 'text',
         width: 200,
         cell: {
-            cellCls: 'event-key'
+            cellCls: 'event-key',
+            encodeHtml: false
         }
     }, {
         xtype: 'column',
@@ -123,19 +129,23 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     }
 
                     if (key === 'application_name') {
-                        rootNode.findChild('key', 'Application', true).set('val', val);
+                        rootNode.findChild('key', 'application', true).set('val', val);
                     }
 
                     if (key === 'client_address') {
-                        rootNode.findChild('key', 'Client', true).set('val', val);
+                        rootNode.findChild('key', 'client', true).set('val', val);
                     }
 
                     if (key === 'server_address') {
-                        rootNode.findChild('key', 'Server', true).set('val', val);
+                        rootNode.findChild('key', 'server', true).set('val', val);
                     }
 
                     if (key === 'certificate_subject_cn') {
-                        rootNode.findChild('key', 'Certificate', true).set('val', val);
+                        rootNode.findChild('key', 'certificate', true).set('val', val);
+                    }
+
+                    if (key === 'rate') {
+                        rootNode.findChild('key', 'rate', true).set('val', val);
                     }
 
                 });

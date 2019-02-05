@@ -52,6 +52,10 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'server_port_new', type: 'number', allowNull: true },
         { name: 'server_reverse_dns', type: 'string', allowNull: true },
 
+        { name: 'rate', type: 'number' },
+        { name: 's2c_rate', type: 'number' },
+        { name: 'c2s_rate', type: 'number' },
+
         { name: 'session_id', type: 'number', allowNull: true },
         { name: 'ssl_sni', type: 'string', allowNull: true },
         { name: 'timeout_seconds', type: 'number', allowNull: true }
