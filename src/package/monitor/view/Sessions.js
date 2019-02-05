@@ -324,6 +324,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
 
         onDeactivate: function (grid) {
             grid.getStore().loadData([]);
+            grid.down('monitor-session-details').collapseAll();
         },
 
         reload: function () {
