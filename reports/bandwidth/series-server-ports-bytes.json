@@ -9,7 +9,7 @@
     "queryCategories": {
         "groupColumn": "server_port",
         "aggregationFunction": "sum",
-        "aggregationValue": "rate",
+        "aggregationValue": "bytes/60",
         "limit": 10
     },
     "columnDisambiguation": [{
