@@ -108,7 +108,9 @@ Ext.define('Mfw.cmp.grid.SheetEditorController', {
 
     onCancel: function (btn) {
         var me = this, vm = me.getViewModel();
-        vm.get('record').reject();
+        if (vm.get('record')) {
+            vm.get('record').reject();
+        }
         btn.up('sheet').hide();
     }
 

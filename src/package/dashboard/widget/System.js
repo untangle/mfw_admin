@@ -138,13 +138,6 @@ Ext.define('Mfw.dashboard.widget.System', {
                 url: '/api/status/system',
                 success: function (response) {
                     var system = Ext.decode(response.responseText);
-                    console.log(system);
-                    // console.log();
-
-                    // view.cpuChart.series[0].addPoint(system.loadavg.last1min);
-
-                    // vm.set('system', system);
-
                     // add the point
                     view.cpuChart.series[0].addPoint(system.loadavg.last1min, false, true);
 

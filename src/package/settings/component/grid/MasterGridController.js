@@ -166,7 +166,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
             toolbarMenu = {
                 xtype: 'button',
-                iconCls: 'md-icon-more-vert',
+                iconCls: 'md-icon-keyboard-arrow-down',
+                text: 'More',
                 arrow: false,
                 ui: 'action',
                 align: 'right',

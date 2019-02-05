@@ -46,12 +46,17 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     //     // me.getView().getStore().sync();
     // },
 
-    onAdd: function () {
-        var me = this, store = me.getView().getStore();
-        var rec = Ext.create('Mfw.model.Interface', {
-            name: 'new interface',
-            // interfaceId: 0
-        });
-        store.add(rec);
+    onAddRecord: function () {
+        var me = this;
+        if (!me.intfDialog) {
+            me.intfDialog = Ext.Viewport.add({
+                xtype: 'interface-dialog',
+                ownerCmp: me.getView()
+            });
+            me.intfDialog.on('destroy', function () {
+                me.intfDialog = null;
+            });
+        }
+        me.intfDialog.show();
     }
 });
