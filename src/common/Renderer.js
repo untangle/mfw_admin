@@ -6,7 +6,7 @@ Ext.define('Mfw.Renderer', {
         if (value === null || value === undefined) {
             return '';
         }
-        return '0x' + value.toString(16);
+        return '0x' + (("00000000" + value.toString(16)).substr(-8));
     },
 
     time_stamp: function (value) {
