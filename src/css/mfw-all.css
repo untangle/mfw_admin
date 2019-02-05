@@ -210,3 +210,5 @@ i { font-style: normal; }
 .pie circle { fill: none; stroke: gold; stroke-width: 50; }
 
 .system-graph { box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); border-radius: 5px; overflow: hidden; }
+
+.chart-wrapper .x-component { height: 100%; }

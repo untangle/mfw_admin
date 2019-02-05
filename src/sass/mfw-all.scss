@@ -786,3 +786,8 @@ i {
     border-radius: 5px;
     overflow: hidden;
 }
+
+// needed for chart reflow on chart container resize
+.chart-wrapper .x-component {
+    height: 100%;
+}

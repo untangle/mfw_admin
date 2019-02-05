@@ -6,13 +6,15 @@ Ext.define('Mfw.reports.Chart', {
 
     viewModel: {},
 
-    layout: 'fit',
     bodyPadding: 0,
-
+    innerCls: 'chart-wrapper',
     items: [{
         xtype: 'component',
-        // flex: 1,
         itemId: 'chart'
-    }]
+    }],
+
+    listeners: {
+        resize: 'onResize'
+    }
 
 });

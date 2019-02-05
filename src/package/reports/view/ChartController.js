@@ -195,6 +195,12 @@ Ext.define('Mfw.reports.ChartController', {
         }, me, { deep: true });
     },
 
+    onResize: function (view) {
+        if (view.chart) {
+            view.chart.reflow();
+        }
+    },
+
     loadData: function (cb) {
         var me = this,
             record = me.getViewModel().get('record'),
