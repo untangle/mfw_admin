@@ -8,7 +8,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         model: 'Mfw.model.MonitorSession',
         // groupField: 'application_name',
         sorters: [{
-            property: 'bytes_per_sec_total_1min',
+            property: 'rate',
             direction: 'DESC'
         }]
     },
@@ -87,14 +87,14 @@ Ext.define('Mfw.monitor.view.Sessions', {
         renderer: Renderer.bytesRenderer
     }, {
         text: 'Rate',
-        dataIndex: 'bytes_per_sec_total_1min',
+        dataIndex: 'rate',
         width: 100,
         align: 'right',
         cell: { encodeHtml: false },
         renderer: Renderer.bytesRendererSec
     }, {
         text: 'Client Rate',
-        dataIndex: 'bytes_per_sec_c2s_1min',
+        dataIndex: 'c2s_rate',
         width: 100,
         align: 'right',
         hidden: true,
@@ -102,7 +102,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         renderer: Renderer.bytesRendererSec
     }, {
         text: 'Server Rate',
-        dataIndex: 'bytes_per_sec_s2c_1min',
+        dataIndex: 's2c_rate',
         width: 100,
         align: 'right',
         hidden: true,
