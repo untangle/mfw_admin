@@ -2,6 +2,13 @@ Ext.define('Mfw.Renderer', {
     alternateClassName: 'Renderer',
     singleton: true,
 
+    hex: function (value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        return '0x' + value.toString(16);
+    },
+
     time_stamp: function (value) {
         var date = new Date(value),
             day = Ext.Date.format(date, 'd.m.Y'),

@@ -154,6 +154,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
 
         valueRenderer: function (value, record) {
             var key = record.get('key');
+            if (key === 'mark') { return Renderer.hex(value); }
             if (key === 'bytes') { return Renderer.bytesRenderer(value); }
             if (key === 'rate') { return Renderer.bytesRendererSec(value); }
             if (key === 'c2s_rate') { return Renderer.bytesRendererSec(value); }

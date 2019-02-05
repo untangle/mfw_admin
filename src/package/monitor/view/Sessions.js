@@ -118,7 +118,8 @@ Ext.define('Mfw.monitor.view.Sessions', {
         text: 'Mark',
         dataIndex: 'mark',
         width: 100,
-        hidden: true
+        hidden: true,
+        renderer: Renderer.hex
     }, {
         text: 'Priority',
         dataIndex: 'priority',
