@@ -12,6 +12,9 @@
         "aggregationValue": "bytes/60",
         "limit": 10
     },
+    "querySeries": {
+        "timeIntervalSeconds": 60
+    },
     "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_stats.time_stamp"
