@@ -28,9 +28,9 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'bytes', type: 'number', allowNull: true },
         { name: 's2c_bytes', type: 'number', allowNull: true },
         { name: 'c2s_bytes', type: 'number', allowNull: true },
-        { name: 'rate', type: 'number', allowNull: true },
-        { name: 's2c_rate', type: 'number', allowNull: true },
-        { name: 'c2s_rate', type: 'number', allowNull: true },
+        { name: 'rate', type: 'number' },
+        { name: 's2c_rate', type: 'number' },
+        { name: 'c2s_rate', type: 'number' },
 
         { name: 'certificate_issuer_c', type: 'string' },
         { name: 'certificate_issuer_cn', type: 'string' },
@@ -63,8 +63,8 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'ssl_sni', type: 'string', allowNull: true }
 
         // { name: 'connection_state', type: 'string', allowNull: true },
-        //{ name: 'assured_flag', type: 'boolean', allowNull: true },
-        //{ name: 'timeout_seconds', type: 'number', allowNull: true }
+        // { name: 'assured_flag', type: 'boolean', allowNull: true },
+        // { name: 'timeout_seconds', type: 'number', allowNull: true }
     ],
 
     proxy: {
