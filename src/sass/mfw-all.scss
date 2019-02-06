@@ -791,3 +791,22 @@ i {
 .chart-wrapper .x-component {
     height: 100%;
 }
+
+
+.monitor-menu {
+    background: #333;
+    .x-menu-body-el {
+        background: #333;
+        padding: 0;
+    }
+    .x-menuitem .x-body-el {
+        color: #EEE;
+        // font-size: 12px;
+        font-weight: 600;
+        height: 44px;
+    }
+    .x-menuitem.x-active .x-body-el {
+        color: #EEE;
+        background: #222;
+    }
+}

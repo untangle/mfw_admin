@@ -212,3 +212,8 @@ i { font-style: normal; }
 .system-graph { box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); border-radius: 5px; overflow: hidden; }
 
 .chart-wrapper .x-component { height: 100%; }
+
+.monitor-menu { background: #333; }
+.monitor-menu .x-menu-body-el { background: #333; padding: 0; }
+.monitor-menu .x-menuitem .x-body-el { color: #EEE; font-weight: 600; height: 44px; }
+.monitor-menu .x-menuitem.x-active .x-body-el { color: #EEE; background: #222; }
