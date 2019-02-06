@@ -23,6 +23,11 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 130,
         hidden: true
     }, {
+        text: 'Conntrack ID',
+        dataIndex: 'conntrack_id',
+        width: 130,
+        hidden: true
+    }, {
         text: 'Application Name',
         dataIndex: 'application_name',
         minWidth: 150
@@ -52,10 +57,6 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 150,
         flex: 1
     }, {
-        text: 'Connection State',
-        dataIndex: 'connection_state',
-        width: 130
-    }, {
         text: 'Bypass',
         dataIndex: 'bypass_packetd',
         width: 80,
@@ -64,25 +65,26 @@ Ext.define('Mfw.monitor.view.Sessions', {
         cell: { encodeHtml: false },
         renderer: Renderer.boolean
     }, {
-        text: 'Assured',
-        dataIndex: 'assured_flag',
-        width: 80,
-        align: 'center',
-        hidden: true,
-        cell: { encodeHtml: false },
-        renderer: Renderer.boolean
-    }, {
-        text: 'Timeout',
-        dataIndex: 'timeout_seconds',
-        width: 100,
-        align: 'right',
-        hidden: true,
-        renderer: Renderer.timeout_seconds
-    }, {
         text: 'Bytes',
         dataIndex: 'bytes',
         width: 100,
         align: 'right',
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Client Bytes',
+        dataIndex: 'c2s_bytes',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Server Bytes',
+        dataIndex: 's2c_bytes',
+        width: 100,
+        align: 'right',
+        hidden: true,
         cell: { encodeHtml: false },
         renderer: Renderer.bytesRenderer
     }, {

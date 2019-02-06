@@ -73,13 +73,18 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'c2s_rate', text: 'Client Rate', leaf: true },
                     ]
                 },
+                {
+                    key: 'bytes',
+                    text: 'Bytes',
+                    children: [
+                        { key: 's2c_bytes', text: 'Server Bytes', leaf: true },
+                        { key: 'c2s_bytes', text: 'Client Bytes', leaf: true },
+                    ]
+                },
                 { key: 'session_id', text: 'Session ID', leaf: true },
-                { key: 'connection_state', text: 'Connection State', leaf: true },
-                { key: 'timeout_seconds', text: 'Timeout (s)', leaf: true },
+                { key: 'conntrack_id', text: 'Conntrack ID', leaf: true },
                 { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true },
-                { key: 'bytes', text: 'Bytes', leaf: true },
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
-                { key: 'assured_flag', text: 'Assured', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
                 { key: 'remote_address', text: 'Remote Address', leaf: true },
                 { key: 'mark', text: 'Mark', leaf: true },
@@ -156,11 +161,12 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             var key = record.get('key');
             if (key === 'mark') { return Renderer.hex(value); }
             if (key === 'bytes') { return Renderer.bytesRenderer(value); }
+            if (key === 'c2s_bytes') { return Renderer.bytesRenderer(value); }
+            if (key === 's2c_bytes') { return Renderer.bytesRenderer(value); }
             if (key === 'rate') { return Renderer.bytesRendererSec(value); }
             if (key === 'c2s_rate') { return Renderer.bytesRendererSec(value); }
             if (key === 's2c_rate') { return Renderer.bytesRendererSec(value); }
-            if (key === 'bypass_packetd' || key === 'assured_flag') { return Renderer.boolean(value); }
-            if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
+            if (key === 'bypass_packetd') { return Renderer.boolean(value); }
             if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
             if (key === 'client_interface_id' || key === 'server_interface_id') { return Renderer.interface(value); }
             if (key === 'client_interface_type' || key === 'server_interface_type') { return Renderer.interfaceType(value); }
