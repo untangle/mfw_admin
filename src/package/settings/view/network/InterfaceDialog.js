@@ -18,7 +18,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
 
     items: [{
-        xtype: 'formpanel',
+        xtype: 'panel',
         padding: 0,
         items: [{
             xtype: 'selectfield',
@@ -35,7 +35,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             }]
         }, {
             xtype: 'container',
-            layout: 'form',
             defaults: {
                 labelAlign: 'left',
                 labelTextAlign: 'right'
@@ -58,17 +57,15 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             }, {
                 xtype: 'checkbox',
                 name: 'nat',
-                label: 'Is NAT',
+                label: 'Enable NAT',
                 allowNull: false,
                 bind: {
                     checked: '{wanCk.checked ? true : false}',
                     disabled: '{wanCk.checked}'
                 }
             }, {
-                xtype: 'filefield',
-                name: 'config',
-                label: 'OpenVPN config file',
-                // required: true
+                width: 400,
+                html: "OpenVPN config file: <input id='inputFile' type='file' name='uploaded'/>"
             }]
         }]
     }],
@@ -89,22 +86,59 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
     controller: {
         onSubmit: function () {
-            var form = this.getView().down('formpanel');
+            var panel = this.getView().down('panel');
 
-            if (!form.validate()) { return; }
+            // FIXME if (!panel.validate()) { return; }
 
-            console.log(form.getValues());
+            // FIXME - load settings? are they already loaded somewher?
+            var settings = {};
+            // FIXME - calculate lowest unused interfaceId > 0 (X)
+            // FIXME - calculate lowest unused tun interface (tunY) (Y)
 
-            form.submit({
-                url: '/someurl',
-                success: function () {
-                    Ext.Msg.alert('Form submitted successfully!');
-                },
-                failure: function () {
-                    Ext.Msg.alert('Form submition failed!');
+            var file = document.getElementById("inputFile").files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                console.log("Read file: " + file.name);
+                console.log("Read file size: " + file.size);
+                console.log("Read file type: " + file.type);
+                console.log("Read file contents: " + reader.result);
+
+                if (settings["files"] == null)
+                    settings["files"] = [];
+
+                var newfile = {};
+                newfile["path"] = "/etc/config/openvpn-X.ovpn"; //FIXME calculate correct X
+                newfile["encoding"] = "base64";
+                newfile["operation"] = "restart-networking";
+                newfile["contents"] = btoa(reader.result);
+
+                // remove any prexisting file with same path
+                for (var i = 0; i < settings["files"].length; i++) {
+                    if (settings["files"][i]["path"] == newfile["path"])
+                        settings["files"].splice(i, 1);
                 }
 
-            });
+                settings["files"].push(newfile);
+
+                var newinterface = {};
+
+                newinterface["configType"] = "ADDRESSED";
+                newinterface["type"] = "OPENVPN";
+                newinterface["device"] = "tunY"; // FIXME calculate correct Y
+                newinterface["interfaceId"] = 1/*X*/; // FIXME calculate correct X
+                newinterface["name"] = "name"; // FIXME use name specified in panel
+                newinterface["wan"] = true; // FIXME use wan checkbox value
+                newinterface["natEgress"] = true; // FIXME use nat checkbox value
+
+                if (settings["interfaces"] == null)
+                    settings["interfaces"] = [];
+                settings["interfaces"].push(newinterface);
+
+                console.log("New settings:");
+                console.log("%j", settings);
+                // FIXME save new settings settings
+            };
+            reader.readAsText(file);
         }
     }
 
