@@ -4,7 +4,7 @@
     "description": "The client addresses by bytes transferred",
     "displayOrder": 10,
     "type": "CATEGORIES",
-    "table": "session_stats join sessions using (session_id)",
+    "table": "sessions right join session_stats using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "client_address",

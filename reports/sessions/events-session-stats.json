@@ -1,0 +1,8 @@
+{
+    "name": "Sessions Stats",
+    "category": "Sessions",
+    "description": "All sessions stats",
+    "displayOrder": 1001,
+    "type": "EVENTS",
+    "table": "sessions right join session_stats using (session_id)"
+}
