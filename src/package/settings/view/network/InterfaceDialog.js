@@ -8,7 +8,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     title: 'Add/Edit Interface'.t(),
     width: 500,
     height: 400,
-    bodyPadding: 0,
+
     showAnimation: {
         duration: 0
     },
@@ -18,7 +18,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
 
     items: [{
-        xtype: 'panel',
+        xtype: 'formpanel',
         padding: 0,
         items: [{
             xtype: 'selectfield',
@@ -31,7 +31,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             required: true,
             options: [{
                 text: 'OpenVPN',
-                value: 'OpenVPN'
+                value: 'OPENVPN'
             }]
         }, {
             xtype: 'container',
@@ -40,8 +40,10 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 labelTextAlign: 'right'
             },
             hidden: true,
+            layout: 'form',
+            padding: 0,
             bind: {
-                hidden: '{interfaceType.value !== "OpenVPN"}'
+                hidden: '{interfaceType.value !== "OPENVPN"}'
             },
             items: [{
                 xtype: 'textfield',
@@ -56,7 +58,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 allowNull: false
             }, {
                 xtype: 'checkbox',
-                name: 'nat',
+                name: 'natEgress',
                 label: 'Enable NAT',
                 allowNull: false,
                 bind: {
@@ -64,8 +66,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     disabled: '{wanCk.checked}'
                 }
             }, {
-                width: 400,
-                html: "OpenVPN config file: <input id='inputFile' type='file' name='uploaded'/>"
+                xtype: 'filefield',
+                name: 'uploaded',
+                label: 'OpenVPN config file',
+                required: true,
+                listeners: {
+                    change: 'onFileChange'
+                }
+                // required: true
             }]
         }]
     }],
@@ -85,60 +93,141 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
 
     controller: {
-        onSubmit: function () {
-            var panel = this.getView().down('panel');
-
-            // FIXME if (!panel.validate()) { return; }
-
-            // FIXME - load settings? are they already loaded somewher?
-            var settings = {};
-            // FIXME - calculate lowest unused interfaceId > 0 (X)
-            // FIXME - calculate lowest unused tun interface (tunY) (Y)
-
-            var file = document.getElementById("inputFile").files[0];
-            var reader = new FileReader();
-            reader.onload = function () {
-                console.log("Read file: " + file.name);
-                console.log("Read file size: " + file.size);
-                console.log("Read file type: " + file.type);
-                console.log("Read file contents: " + reader.result);
-
-                if (settings["files"] == null)
-                    settings["files"] = [];
-
-                var newfile = {};
-                newfile["path"] = "/etc/config/openvpn-X.ovpn"; //FIXME calculate correct X
-                newfile["encoding"] = "base64";
-                newfile["operation"] = "restart-networking";
-                newfile["contents"] = btoa(reader.result);
-
-                // remove any prexisting file with same path
-                for (var i = 0; i < settings["files"].length; i++) {
-                    if (settings["files"][i]["path"] == newfile["path"])
-                        settings["files"].splice(i, 1);
+        init: function (view) {
+            Ext.getStore('files').load({
+                callback: function(records, operation, success) {
+                    // nothing
                 }
+            });
+        },
 
-                settings["files"].push(newfile);
+        onFileChange: function (fileField, newFile, oldFile, e) {
+            var me = this,
+                reader = new FileReader(),
+                file = fileField.getFiles()[0];
 
-                var newinterface = {};
-
-                newinterface["configType"] = "ADDRESSED";
-                newinterface["type"] = "OPENVPN";
-                newinterface["device"] = "tunY"; // FIXME calculate correct Y
-                newinterface["interfaceId"] = 1/*X*/; // FIXME calculate correct X
-                newinterface["name"] = "name"; // FIXME use name specified in panel
-                newinterface["wan"] = true; // FIXME use wan checkbox value
-                newinterface["natEgress"] = true; // FIXME use nat checkbox value
-
-                if (settings["interfaces"] == null)
-                    settings["interfaces"] = [];
-                settings["interfaces"].push(newinterface);
-
-                console.log("New settings:");
-                console.log("%j", settings);
-                // FIXME save new settings settings
+            reader.onload = function (event) {
+                me.uploadedFile = Ext.create('Mfw.model.File', {
+                    path: '/etc/config/openvpn-X.ovpn', //FIXME calculate correct X
+                    encoding: 'base64',
+                    operation: 'restart-networking',
+                    contents: btoa(reader.result)
+                });
             };
             reader.readAsText(file);
+        },
+
+        updateFiles: function (cb) {
+            var me = this,
+                filesStore = Ext.getStore('files');
+
+            if (!me.uploadedFile) {
+                cb();
+            }
+
+            filesStore.add(me.uploadedFile);
+            filesStore.each(function (record) {
+                record.dirty = true; // to push all non-dropped records
+                record.phantom = false; // to push new records
+            });
+            filesStore.sync({
+                success: function () {
+                    cb();
+                },
+                failure: function () {
+                    console.warn('Unable to save file!');
+                }
+            });
+        },
+
+        onSubmit: function () {
+            var me = this,
+                interfacesStore = Ext.getStore('interfaces'),
+                newInterface = new Mfw.model.Interface(),
+                form = me.getView().down('formpanel');
+
+            if (!form.validate()) { return; }
+
+            // // save files than interfaces
+            me.getView().mask();
+            me.updateFiles(function() {
+                // set new values
+                newInterface.set(form.getValues());
+                newInterface.set({
+                    interfaceId: interfacesStore.count() + 1,
+                    configType: 'ADDRESSED',
+                    device: 'tunY' // Fix Y
+                });
+
+                interfacesStore.add(newInterface);
+
+                interfacesStore.each(function (record) {
+                    record.dirty = true;
+                    record.phantom = false;
+                });
+
+                interfacesStore.sync({
+                    success: function () {
+                        me.getView().close();
+                    },
+                    failure: function () {
+                        console.warn('Unable to save interfaces!');
+                    }
+                });
+            });
+
+
+            // // FIXME if (!panel.validate()) { return; }
+
+            // // FIXME - load settings? are they already loaded somewher?
+            // var settings = {};
+            // // FIXME - calculate lowest unused interfaceId > 0 (X)
+            // // FIXME - calculate lowest unused tun interface (tunY) (Y)
+
+            // var file = document.getElementById("inputFile").files[0];
+            // var reader = new FileReader();
+            // reader.onload = function () {
+            //     console.log("Read file: " + file.name);
+            //     console.log("Read file size: " + file.size);
+            //     console.log("Read file type: " + file.type);
+            //     console.log("Read file contents: " + reader.result);
+
+            //     if (settings["files"] == null)
+            //         settings["files"] = [];
+
+            //     var newfile = {};
+            //     newfile["path"] = "/etc/config/openvpn-X.ovpn"; //FIXME calculate correct X
+            //     newfile["encoding"] = "base64";
+            //     newfile["operation"] = "restart-networking";
+            //     newfile["contents"] = btoa(reader.result);
+
+            //     // remove any prexisting file with same path
+            //     for (var i = 0; i < settings["files"].length; i++) {
+            //         if (settings["files"][i]["path"] == newfile["path"])
+            //             settings["files"].splice(i, 1);
+            //     }
+
+            //     settings["files"].push(newfile);
+
+            //     var newinterface = {};
+
+            //     newinterface["configType"] = "ADDRESSED";
+            //     newinterface["type"] = "OPENVPN";
+            //     newinterface["device"] = "tunY"; // FIXME calculate correct Y
+            //     newinterface["interfaceId"] = 1/*X*/; // FIXME calculate correct X
+            //     newinterface["name"] = "name"; // FIXME use name specified in panel
+            //     newinterface["wan"] = true; // FIXME use wan checkbox value
+            //     newinterface["natEgress"] = true; // FIXME use nat checkbox value
+
+            //     if (settings["interfaces"] == null)
+            //         settings["interfaces"] = [];
+            //     settings["interfaces"].push(newinterface);
+
+            //     console.log("New settings:");
+            //     console.log("%j", settings);
+            //     // FIXME save new settings settings
+            // };
+            // reader.readAsText(file);
         }
     }
 
