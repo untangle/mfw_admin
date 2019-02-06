@@ -30,7 +30,11 @@ Ext.define('Mfw.Renderer', {
         if (name) {
             return name + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         }
-        return value;
+        if (value == 0) {
+            return 'Unset' + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+        } else {
+            return value;
+        }
     },
 
     interfaceType: function (value) {
