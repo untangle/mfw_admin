@@ -75,7 +75,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                 },
                 {
                     key: 'bytes',
-                    text: 'Bytes',
+                    text: '<strong>Bytes</strong>',
                     children: [
                         { key: 's2c_bytes', text: 'Server Bytes', leaf: true },
                         { key: 'c2s_bytes', text: 'Client Bytes', leaf: true },
@@ -153,6 +153,9 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         rootNode.findChild('key', 'rate', true).set('val', val);
                     }
 
+                    if (key === 'bytes') {
+                        rootNode.findChild('key', 'bytes', true).set('val', val);
+                    }
                 });
             });
         },
