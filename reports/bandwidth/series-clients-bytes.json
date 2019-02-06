@@ -4,7 +4,7 @@
     "description": "Top clients by bytes over time",
     "displayOrder": 11,
     "type": "CATEGORIES_SERIES",
-    "table": "sessions right join session_stats using (session_id)",
+    "table": "session_stats left join sessions using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "client_address",

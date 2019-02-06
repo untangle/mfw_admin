@@ -4,5 +4,5 @@
     "description": "All sessions stats",
     "displayOrder": 1001,
     "type": "EVENTS",
-    "table": "sessions right join session_stats using (session_id)"
+    "table": "session_stats left join sessions using (session_id)"
 }

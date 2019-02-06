@@ -4,7 +4,7 @@
     "description": "The applications by sum of bytes transferred",
     "displayOrder": 20,
     "type": "CATEGORIES",
-    "table": "sessions right join session_stats using (session_id)",
+    "table": "session_stats left join sessions using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "application_name",

@@ -4,7 +4,7 @@
     "description": "The server ports by bytes transferred",
     "displayOrder": 15,
     "type": "CATEGORIES",
-    "table": "sessions right join session_stats using (session_id)",
+    "table": "session_stats left join sessions using (session_id)",
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "server_port",
