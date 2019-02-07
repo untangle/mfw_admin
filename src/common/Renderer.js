@@ -71,7 +71,9 @@ Ext.define('Mfw.Renderer', {
             bytes = bytes/1000;
             units_itr++;
         }
-        bytes = (Math.round(bytes*100)/100).toFixed(1);
+        if (units_itr != 0) {
+            bytes = (Math.round(bytes*100)/100).toFixed(1);
+        }
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
@@ -86,7 +88,9 @@ Ext.define('Mfw.Renderer', {
             bytes = bytes/1000;
             units_itr++;
         }
-        bytes = (Math.round(bytes*100)/100).toFixed(1);
+        if (units_itr != 0) {
+            bytes = (Math.round(bytes*100)/100).toFixed(1);
+        }
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
@@ -101,10 +105,43 @@ Ext.define('Mfw.Renderer', {
             packets = packets/1000;
             units_itr++;
         }
-        packets = (Math.round(packets*100)/100).toFixed(1);
+        if (units_itr != 0) {
+            packets = (Math.round(packets*100)/100).toFixed(1);
+        }
         return '<b>' + packets + '</b> ' + units[units_itr];
     },
 
+    tcpStateRenderer: function(tcp_state) {
+        if (tcp_state === null || tcp_state === undefined) {
+            return '';
+        }
+
+        switch(tcp_state) {
+        case 0:
+            return '';
+        case 1:
+            return 'SYN_SENT';
+        case 2:
+            return 'SYN_RECV';
+        case 3:
+            return 'ESTABLISHED';
+        case 4:
+            return 'FIN_WAIT';
+        case 5:
+            return 'CLOSE_WAIT';
+        case 6:
+            return 'LAST_ACK';
+        case 7:
+            return 'TIME_WAIT';
+        case 8:
+            return 'CLOSE';
+        case 9:
+            return 'SYN_SENT2';
+        default:
+            return tcp_state;
+        }
+    },
+    
     familyRenderer: function(family) {
         if (family == 2) {
             return "IPv4";

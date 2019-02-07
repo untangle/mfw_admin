@@ -188,7 +188,9 @@ Ext.define('Mfw.monitor.view.Sessions', {
         dataIndex: 'tcp_state',
         width: 100,
         align: 'right',
-        hidden: true // FIXME need renderer
+        cell: { encodeHtml: false },
+        renderer: Renderer.tcpStateRenderer,
+        hidden: true
     }, {
         text: 'Start Time',
         dataIndex: 'timestamp_start',

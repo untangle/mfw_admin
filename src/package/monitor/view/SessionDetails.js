@@ -208,6 +208,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             if (key === 'bypass_packetd') { return Renderer.boolean(value); }
             if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
             if (key === 'family') { return Renderer.familyRenderer(value); }
+            if (key === 'tcp_state') { return Renderer.tcpStateRenderer(value); }
             if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
             if (key === 'client_interface_id' || key === 'server_interface_id') { return Renderer.interface(value); }
             if (key === 'client_interface_type' || key === 'server_interface_type') { return Renderer.interfaceType(value); }
