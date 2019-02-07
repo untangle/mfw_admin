@@ -69,7 +69,10 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 xtype: 'filefield',
                 name: 'uploaded',
                 label: 'OpenVPN config file',
-                required: true,
+                required: false,
+                bind: {
+                    required: '{interfaceType.value === "OPENVPN"}'
+                },
                 listeners: {
                     change: 'onFileChange'
                 }
@@ -106,38 +109,10 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 reader = new FileReader(),
                 file = fileField.getFiles()[0];
 
-            reader.onload = function (event) {
-                me.uploadedFile = Ext.create('Mfw.model.File', {
-                    path: '/etc/config/openvpn-X.ovpn', //FIXME calculate correct X
-                    encoding: 'base64',
-                    operation: 'restart-networking',
-                    contents: btoa(reader.result)
-                });
+            reader.onload = function () {
+                me.uploadedFile = btoa(reader.result);
             };
             reader.readAsText(file);
-        },
-
-        updateFiles: function (cb) {
-            var me = this,
-                filesStore = Ext.getStore('files');
-
-            if (!me.uploadedFile) {
-                cb();
-            }
-
-            filesStore.add(me.uploadedFile);
-            filesStore.each(function (record) {
-                record.dirty = true; // to push all non-dropped records
-                record.phantom = false; // to push new records
-            });
-            filesStore.sync({
-                success: function () {
-                    cb();
-                },
-                failure: function () {
-                    console.warn('Unable to save file!');
-                }
-            });
         },
 
         onSubmit: function () {
@@ -148,86 +123,38 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
             if (!form.validate()) { return; }
 
-            // // save files than interfaces
-            me.getView().mask();
-            me.updateFiles(function() {
-                // set new values
-                newInterface.set(form.getValues());
-                newInterface.set({
-                    interfaceId: interfacesStore.count() + 1,
-                    configType: 'ADDRESSED',
-                    device: 'tunY' // Fix Y
-                });
+            me.getView().mask({ xtype: 'loadmask' });
 
-                interfacesStore.add(newInterface);
-
-                interfacesStore.each(function (record) {
-                    record.dirty = true;
-                    record.phantom = false;
-                });
-
-                interfacesStore.sync({
-                    success: function () {
-                        me.getView().close();
-                    },
-                    failure: function () {
-                        console.warn('Unable to save interfaces!');
-                    }
-                });
+            newInterface.set(form.getValues());
+            newInterface.set({
+                interfaceId: interfacesStore.count() + 1,
+                configType: 'ADDRESSED',
+                device: 'tunY' // Fix Y
             });
 
+            if (me.uploadedFile) {
+                newInterface.set('openvpnConfFile', {
+                    encoding: 'base64',
+                    contents: me.uploadedFile
+                });
+            }
 
-            // // FIXME if (!panel.validate()) { return; }
+            interfacesStore.add(newInterface);
 
-            // // FIXME - load settings? are they already loaded somewher?
-            // var settings = {};
-            // // FIXME - calculate lowest unused interfaceId > 0 (X)
-            // // FIXME - calculate lowest unused tun interface (tunY) (Y)
+            interfacesStore.each(function (record) {
+                record.dirty = true;
+                record.phantom = false;
+            });
 
-            // var file = document.getElementById("inputFile").files[0];
-            // var reader = new FileReader();
-            // reader.onload = function () {
-            //     console.log("Read file: " + file.name);
-            //     console.log("Read file size: " + file.size);
-            //     console.log("Read file type: " + file.type);
-            //     console.log("Read file contents: " + reader.result);
-
-            //     if (settings["files"] == null)
-            //         settings["files"] = [];
-
-            //     var newfile = {};
-            //     newfile["path"] = "/etc/config/openvpn-X.ovpn"; //FIXME calculate correct X
-            //     newfile["encoding"] = "base64";
-            //     newfile["operation"] = "restart-networking";
-            //     newfile["contents"] = btoa(reader.result);
-
-            //     // remove any prexisting file with same path
-            //     for (var i = 0; i < settings["files"].length; i++) {
-            //         if (settings["files"][i]["path"] == newfile["path"])
-            //             settings["files"].splice(i, 1);
-            //     }
-
-            //     settings["files"].push(newfile);
-
-            //     var newinterface = {};
-
-            //     newinterface["configType"] = "ADDRESSED";
-            //     newinterface["type"] = "OPENVPN";
-            //     newinterface["device"] = "tunY"; // FIXME calculate correct Y
-            //     newinterface["interfaceId"] = 1/*X*/; // FIXME calculate correct X
-            //     newinterface["name"] = "name"; // FIXME use name specified in panel
-            //     newinterface["wan"] = true; // FIXME use wan checkbox value
-            //     newinterface["natEgress"] = true; // FIXME use nat checkbox value
-
-            //     if (settings["interfaces"] == null)
-            //         settings["interfaces"] = [];
-            //     settings["interfaces"].push(newinterface);
-
-            //     console.log("New settings:");
-            //     console.log("%j", settings);
-            //     // FIXME save new settings settings
-            // };
-            // reader.readAsText(file);
+            interfacesStore.sync({
+                success: function () {
+                    me.getView().unmask();
+                    me.getView().close();
+                },
+                failure: function () {
+                    console.warn('Unable to save interfaces!');
+                }
+            });
         }
     }
 

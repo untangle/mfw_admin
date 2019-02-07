@@ -54,6 +54,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 ownerCmp: me.getView()
             });
             me.intfDialog.on('destroy', function () {
+                me.onLoad();
                 me.intfDialog = null;
             });
         }

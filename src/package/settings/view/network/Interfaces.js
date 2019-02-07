@@ -9,7 +9,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
 
     config: {
         enableManualSort: false,
-        disableDeleteCondition: '{record.wan}',
+        disableDeleteCondition: '{record.wan && record.type === "NIC"}',
         disableCopyCondition: '{record.wan}',
         editor: 'interface-sheet',
         recordModel: 'Mfw.model.Interface'

@@ -22,12 +22,7 @@ Ext.define('Mfw.settings.network.interface.Ipv4Aliases', {
     // plugins: {
     //     gridcellediting: true
     // },
-
-    store: {
-        data: [
-            { v4Address: '1.2.3.4', v4Prefix: '8' }
-        ]
-    },
+    bind: '{record.v4Aliases}',
 
     columns: [{
         text: 'Address'.t(),
@@ -44,7 +39,10 @@ Ext.define('Mfw.settings.network.interface.Ipv4Aliases', {
         cell: {
             tools: [{
                 type: 'delete',
-                iconCls: 'x-fa fa-times'
+                iconCls: 'x-fa fa-times',
+                handler: function (grid, info) {
+                    grid.getStore().remove(info.record);
+                }
             }]
         }
     }]

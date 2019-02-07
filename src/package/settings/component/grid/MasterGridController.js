@@ -208,13 +208,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         grid.mask({xtype: 'loadmask'});
 
-        grid.getStore().load({
-            callback: function(records) {
-                grid.unmask();
-                // the operation object
-                // contains all of the details of the load operation
-            }
-        });
+        grid.getStore().load();
     },
 
     /**

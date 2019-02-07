@@ -23,11 +23,7 @@ Ext.define('Mfw.settings.network.interface.DhcpOptions', {
     //     gridcellediting: true
     // },
 
-    store: {
-        data: [
-            { enabled: true, description: 'aaaaa', value: 'bbbbb' }
-        ]
-    },
+    bind: '{record.dhcpOptions}',
 
     columns: [{
         xtype: 'checkcolumn',
@@ -48,7 +44,10 @@ Ext.define('Mfw.settings.network.interface.DhcpOptions', {
         cell: {
             tools: [{
                 type: 'delete',
-                iconCls: 'x-fa fa-times'
+                iconCls: 'x-fa fa-times',
+                handler: function (grid, info) {
+                    grid.getStore().remove(info.record);
+                }
             }]
         }
     }]

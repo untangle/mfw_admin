@@ -23,11 +23,7 @@ Ext.define('Mfw.settings.network.interface.Ipv6Aliases', {
     //     gridcellediting: true
     // },
 
-    store: {
-        data: [
-            { v6Address: '12345', v6Prefix: '10' }
-        ]
-    },
+    bind: '{record.v6Aliases}',
 
     columns: [{
         text: 'Address'.t(),
@@ -44,7 +40,10 @@ Ext.define('Mfw.settings.network.interface.Ipv6Aliases', {
         cell: {
             tools: [{
                 type: 'delete',
-                iconCls: 'x-fa fa-times'
+                iconCls: 'x-fa fa-times',
+                handler: function (grid, info) {
+                    grid.getStore().remove(info.record);
+                }
             }]
         }
     }]

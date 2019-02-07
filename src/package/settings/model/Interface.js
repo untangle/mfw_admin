@@ -4,7 +4,7 @@ Ext.define('Mfw.model.v4Alias', {
     identifier: 'uuid',
     fields: [
         { name: 'v4Address', type: 'string' },
-        { name: 'v4Prefix', type: 'integer' }
+        { name: 'v4Prefix',  type: 'integer' }
     ]
 });
 
@@ -14,7 +14,7 @@ Ext.define('Mfw.model.v6Alias', {
     identifier: 'uuid',
     fields: [
         { name: 'v6Address', type: 'string' },
-        { name: 'v6Prefix', type: 'integer' }
+        { name: 'v6Prefix',  type: 'integer' }
     ]
 });
 
@@ -23,9 +23,34 @@ Ext.define('Mfw.model.DhcpOptions', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'enabled', type: 'boolean' },
+        { name: 'enabled',     type: 'boolean' },
         { name: 'description', type: 'string' },
-        { name: 'value', type: 'string' }
+        { name: 'value',       type: 'string' }
+    ]
+});
+
+Ext.define('Mfw.model.OpenVpnConfFile', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'encoding', type: 'string' },
+        { name: 'contents', type: 'string' }
+    ]
+});
+
+Ext.define('Mfw.model.WireguardPeer', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'publicKey',       type: 'string' },
+        { name: 'allowedIps',      type: 'auto' },
+        { name: 'host',            type: 'string' },
+        { name: 'port',            type: 'integer' },
+        { name: 'presharedKey',    type: 'string' },
+        { name: 'keepalive',       type: 'integer' }, // seconds
+        { name: 'routeAllowedIps', type: 'boolean' }
     ]
 });
 
@@ -54,7 +79,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string', allowNull: true },
         { name: 'wan',         type: 'boolean', allowNull: true },
-        { name: 'wanWeight',   type: 'integer', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
@@ -83,18 +107,25 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v4PPPoEUsePeerDNS',   type: 'boolean', allowNull: true },
         { name: 'v4PPPoEOverrideDNS1', type: 'string', allowNull: true },
         { name: 'v4PPPoEOverrideDNS2', type: 'string', allowNull: true },
+        { name: 'v4DhcpDNS2Override',  type: 'string', allowNull: true },
+
+        // hasMany v4Aliases
 
         // IPv6
-        { name: 'v6ConfigType',    type: 'string', allowNull: true }, // ["DHCP","SLAAC","ASSIGN","STATIC","DISABLED"]
-        { name: 'v6StaticAddress', type: 'string', allowNull: true },
-        { name: 'v6StaticPrefix',  type: 'integer', allowNull: true }, // 1 - 128
-        { name: 'v6StaticGateway', type: 'string', allowNull: true },
-        { name: 'v6StaticDNS1',    type: 'string', allowNull: true },
-        { name: 'v6StaticDNS2',    type: 'string', allowNull: true },
+        { name: 'v6ConfigType',       type: 'string', allowNull: true }, // ["DHCP","SLAAC","ASSIGN","STATIC","DISABLED"]
+        { name: 'v6StaticAddress',    type: 'string', allowNull: true },
+        { name: 'v6StaticPrefix',     type: 'integer', allowNull: true }, // 1 - 128
+        { name: 'v6StaticGateway',    type: 'string', allowNull: true },
+        { name: 'v6StaticDNS1',       type: 'string', allowNull: true },
+        { name: 'v6StaticDNS2',       type: 'string', allowNull: true },
+        { name: 'v6DhcpDNS1Override', type: 'string', allowNull: true },
+        { name: 'v6DhcpDNS2Override', type: 'string', allowNull: true },
 
         // IPv6 Assign
         { name: 'v6AssignHint',   type: 'string', allowNull: true },
         { name: 'v6AssignPrefix', type: 'integer', allowNull: true }, // 1 -128
+
+        // hasMany v6Aliases
 
         { name: 'routerAdvertisements', type: 'boolean', allowNull: true },
         { name: 'bridgedTo',            type: 'integer', allowNull: true },
@@ -111,21 +142,31 @@ Ext.define('Mfw.model.Interface', {
         { name: 'dhcpPrefixOverride',  type: 'integer', allowNull: true }, // 1 - 32
         { name: 'dhcpDNSOverride',     type: 'string', allowNull: true },
 
-        // { name: 'dhcpOptions', type: 'auto' },
+        // hasMany dhcpOptions
 
         // VRRP
         { name: 'vrrpEnabled',  type: 'boolean', allowNull: true },
         { name: 'vrrpID',       type: 'integer', allowNull: true }, // 1 - 255
         { name: 'vrrpPriority', type: 'integer', allowNull: true }, // 1 - 255
 
-        // { name: 'vrrpV4Aliases', type: 'auto' },
+        // hasMany vrrpV4Aliases
 
         // Wireless
-        { name: 'wirelessSsid',  type: 'string', allowNull: true },
+        { name: 'wirelessSsid',       type: 'string', allowNull: true },
         { name: 'wirelessEncryption', type: 'string', allowNull: true }, // ["NONE", "WPA1", "WPA12", "WPA2"]
-        { name: 'wirelessMode', type: 'string', allowNull: true }, // ["AP", "CLIENT"]
-        { name: 'wirelessPassword', type: 'string', allowNull: true },
-        { name: 'wirelessChannel', type: 'integer', allowNull: true }
+        { name: 'wirelessMode',       type: 'string', allowNull: true }, // ["AP", "CLIENT"]
+        { name: 'wirelessPassword',   type: 'string', allowNull: true },
+        { name: 'wirelessChannel',    type: 'integer', allowNull: true },
+
+        // OPENVPN
+
+        // wireguard
+        { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
+        { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
+        { name: 'wireguardPort',       type: 'integer', allowNull: true },
+
+        // hasMany wireguardPeers
+
     ],
 
     hasMany: [{
@@ -144,6 +185,16 @@ Ext.define('Mfw.model.Interface', {
         model: 'Mfw.model.v4Alias',
         name: 'vrrpV4Aliases',
         associationKey: 'vrrpV4Aliases'
+    }, {
+        model: 'Mfw.model.wireguardPeer',
+        name: 'wireguardPeers',
+        associationKey: 'wireguardPeers'
+    }],
+
+    hasOne: [{
+        model: 'Mfw.model.OpenvpnConfFile',
+        name: 'openvpnConfFile',
+        associationKey: 'openvpnConfFile'
     }],
 
     proxy: {
