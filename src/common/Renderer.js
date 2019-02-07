@@ -71,6 +71,7 @@ Ext.define('Mfw.Renderer', {
             bytes = bytes/1000;
             units_itr++;
         }
+        bytes = (Math.round(bytes*100)/100).toFixed(1);
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
@@ -85,7 +86,7 @@ Ext.define('Mfw.Renderer', {
             bytes = bytes/1000;
             units_itr++;
         }
-        bytes = (Math.round(bytes*100)/100).toFixed(2);
+        bytes = (Math.round(bytes*100)/100).toFixed(1);
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
@@ -100,6 +101,7 @@ Ext.define('Mfw.Renderer', {
             packets = packets/1000;
             units_itr++;
         }
+        packets = (Math.round(packets*100)/100).toFixed(1);
         return '<b>' + packets + '</b> ' + units[units_itr];
     },
 
