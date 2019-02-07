@@ -199,9 +199,9 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             if (key === 'byte_rate') { return Renderer.bytesSecRenderer(value); }
             if (key === 'client_byte_rate') { return Renderer.bytesSecRenderer(value); }
             if (key === 'server_byte_rate') { return Renderer.bytesSecRenderer(value); }
-            if (key === 'packets') { return Renderer.bytesRenderer(value); }
-            if (key === 'client_packets') { return Renderer.bytesRenderer(value); }
-            if (key === 'server_packets') { return Renderer.bytesRenderer(value); }
+            if (key === 'packets') { return Renderer.packetsRenderer(value); }
+            if (key === 'client_packets') { return Renderer.packetsRenderer(value); }
+            if (key === 'server_packets') { return Renderer.packetsRenderer(value); }
             if (key === 'packet_rate') { return Renderer.packetsSecRenderer(value); }
             if (key === 'client_packet_rate') { return Renderer.packetsSecRenderer(value); }
             if (key === 'server_packet_rate') { return Renderer.packetsSecRenderer(value); }

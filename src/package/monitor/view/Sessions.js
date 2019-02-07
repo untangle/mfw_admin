@@ -117,7 +117,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRenderer
+        renderer: Renderer.packetsRenderer
     }, {
         text: 'Client Packets',
         dataIndex: 'client_packets',
@@ -125,7 +125,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRenderer
+        renderer: Renderer.packetsRenderer
     }, {
         text: 'Server Packets',
         dataIndex: 'server_packets',
@@ -133,7 +133,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRenderer
+        renderer: Renderer.packetsRenderer
     }, {
         text: 'Packet Rate',
         dataIndex: 'packet_rate',

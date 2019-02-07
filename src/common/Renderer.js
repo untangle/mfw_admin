@@ -65,7 +65,7 @@ Ext.define('Mfw.Renderer', {
             return '';
         }
 
-        var units = ['', 'K', 'M', 'G'];
+        var units = ['B', 'KB', 'MB', 'GB', 'TB'];
         var units_itr = 0;
         while ((bytes >= 1000 || bytes <= -1000) && units_itr < 3) {
             bytes = bytes/1000;
@@ -92,6 +92,23 @@ Ext.define('Mfw.Renderer', {
             bytes = (Math.round(bytes*100)/100).toFixed(1);
         }
         return '<b>' + bytes + '</b> ' + units[units_itr];
+    },
+
+    packetsRenderer: function(packets) {
+        if (packets === null || packets === undefined) {
+            return '';
+        }
+
+        var units = ['', 'K', 'M', 'B'];
+        var units_itr = 0;
+        while ((packets >= 1000 || packets <= -1000) && units_itr < 3) {
+            packets = packets/1000;
+            units_itr++;
+        }
+        if (units_itr != 0) {
+            packets = (Math.round(packets*100)/100).toFixed(1);
+        }
+        return '<b>' + packets + '</b> ' + units[units_itr];
     },
 
     packetsSecRenderer: function(packets) {
