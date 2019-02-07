@@ -147,19 +147,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         if (g.getEnableReload()) {
             toolbarActions.push({
-                text: 'Reload'.t(),
+                // text: 'Reload'.t(),
                 iconCls: 'md-icon-refresh',
                 align: 'right',
                 handler: 'onLoad'
-            });
-        }
-
-        if (g.getEnableSave()) {
-            toolbarActions.push({
-                text: 'Save'.t(),
-                iconCls: 'md-icon-save',
-                align: 'right',
-                handler: 'onSave'
             });
         }
 
@@ -169,7 +160,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 iconCls: 'md-icon-keyboard-arrow-down',
                 text: 'More',
                 arrow: false,
-                ui: 'action',
                 align: 'right',
                 menu: {
                     items: []
@@ -178,6 +168,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
             if (g.getEnableAdd()) {
                 toolbarMenu.menu.items.push( { text: 'Add'.t(), iconCls: 'md-icon-add', handler: 'onAddRecord' } );
+                toolbarMenu.menu.items.push( { text: 'Add New'.t(), iconCls: 'md-icon-add', handler: 'onAddRecordAll' } );
             }
 
             if (g.getEnableImport()) {
@@ -193,6 +184,15 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             }
 
             toolbarActions.push(toolbarMenu);
+        }
+
+        if (g.getEnableSave()) {
+            toolbarActions.push({
+                text: 'Save'.t(),
+                iconCls: 'md-icon-save',
+                align: 'right',
+                handler: 'onSave'
+            });
         }
 
         if (toolbarActions.length > 0) {
