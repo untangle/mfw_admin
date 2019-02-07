@@ -66,31 +66,52 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     ]
                 },
                 {
-                    key: 'rate',
-                    text: '<strong>Rate</strong>',
+                    key: 'byte_rate',
+                    text: '<strong>Byte Rate</strong>',
                     children: [
-                        { key: 's2c_rate', text: 'Server Rate', leaf: true },
-                        { key: 'c2s_rate', text: 'Client Rate', leaf: true },
+                        { key: 'server_byte_rate', text: 'Server Byte Rate', leaf: true },
+                        { key: 'client_byte_rate', text: 'Client Byte Rate', leaf: true },
                     ]
                 },
                 {
                     key: 'bytes',
                     text: '<strong>Bytes</strong>',
                     children: [
-                        { key: 's2c_bytes', text: 'Server Bytes', leaf: true },
-                        { key: 'c2s_bytes', text: 'Client Bytes', leaf: true },
+                        { key: 'server_bytes', text: 'Server Bytes', leaf: true },
+                        { key: 'client_bytes', text: 'Client Bytes', leaf: true },
+                    ]
+                },
+                {
+                    key: 'packet_rate',
+                    text: '<strong>Packet Rate</strong>',
+                    children: [
+                        { key: 'server_byte_rate', text: 'Server Packet Rate', leaf: true },
+                        { key: 'client_byte_rate', text: 'Client Packet Rate', leaf: true },
+                    ]
+                },
+                {
+                    key: 'packets',
+                    text: '<strong>Packets</strong>',
+                    children: [
+                        { key: 'server_packets', text: 'Server Packets', leaf: true },
+                        { key: 'client_packets', text: 'Client Packets', leaf: true },
                     ]
                 },
                 { key: 'session_id', text: 'Session ID', leaf: true },
                 { key: 'conntrack_id', text: 'Conntrack ID', leaf: true },
-                { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true },
+                { key: 'family', text: 'Family', leaf: true },
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
                 { key: 'remote_address', text: 'Remote Address', leaf: true },
                 { key: 'mark', text: 'Mark', leaf: true },
+                { key: 'tcp_state', text: 'TCP State', leaf: true },
+                { key: 'timeout_seconds', text: 'Timeout (s)', leaf: true },
+                { key: 'timestamp_start', text: 'Start Time', leaf: true },
+                { key: 'timestamp_stop', text: 'Stop Time', leaf: true },
                 { key: 'priority', text: 'Priority', leaf: true },
                 { key: 'protocol', text: 'Protocol', leaf: true },
-                { key: 'ssl_sni', text: 'SSL SNI', leaf: true }
+                { key: 'ssl_sni', text: 'SSL SNI', leaf: true },
+                { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true }
             ]
         }
     },
@@ -149,13 +170,22 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         rootNode.findChild('key', 'certificate', true).set('val', val);
                     }
 
-                    if (key === 'rate') {
-                        rootNode.findChild('key', 'rate', true).set('val', val);
+                    if (key === 'byte_rate') {
+                        rootNode.findChild('key', 'byte_rate', true).set('val', val);
                     }
 
                     if (key === 'bytes') {
                         rootNode.findChild('key', 'bytes', true).set('val', val);
                     }
+
+                    if (key === 'packet_rate') {
+                        rootNode.findChild('key', 'packet_rate', true).set('val', val);
+                    }
+
+                    if (key === 'packets') {
+                        rootNode.findChild('key', 'packets', true).set('val', val);
+                    }
+
                 });
             });
         },
@@ -164,13 +194,21 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             var key = record.get('key');
             if (key === 'mark') { return Renderer.hex(value); }
             if (key === 'bytes') { return Renderer.bytesRenderer(value); }
-            if (key === 'c2s_bytes') { return Renderer.bytesRenderer(value); }
-            if (key === 's2c_bytes') { return Renderer.bytesRenderer(value); }
-            if (key === 'rate') { return Renderer.bytesRendererSec(value); }
-            if (key === 'c2s_rate') { return Renderer.bytesRendererSec(value); }
-            if (key === 's2c_rate') { return Renderer.bytesRendererSec(value); }
+            if (key === 'client_bytes') { return Renderer.bytesRenderer(value); }
+            if (key === 'server_bytes') { return Renderer.bytesRenderer(value); }
+            if (key === 'byte_rate') { return Renderer.bytesSecRenderer(value); }
+            if (key === 'client_byte_rate') { return Renderer.bytesSecRenderer(value); }
+            if (key === 'server_byte_rate') { return Renderer.bytesSecRenderer(value); }
+            if (key === 'packets') { return Renderer.bytesRenderer(value); }
+            if (key === 'client_packets') { return Renderer.bytesRenderer(value); }
+            if (key === 'server_packets') { return Renderer.bytesRenderer(value); }
+            if (key === 'packet_rate') { return Renderer.packetsSecRenderer(value); }
+            if (key === 'client_packet_rate') { return Renderer.packetsSecRenderer(value); }
+            if (key === 'server_packet_rate') { return Renderer.packetsSecRenderer(value); }
             if (key === 'bypass_packetd') { return Renderer.boolean(value); }
             if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
+            if (key === 'family') { return Renderer.familyRenderer(value); }
+            if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
             if (key === 'client_interface_id' || key === 'server_interface_id') { return Renderer.interface(value); }
             if (key === 'client_interface_type' || key === 'server_interface_type') { return Renderer.interfaceType(value); }
             if (key === 'client_country' || key === 'server_country') { return Renderer.country(value); }

@@ -8,7 +8,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         model: 'Mfw.model.MonitorSession',
         // groupField: 'application_name',
         sorters: [{
-            property: 'rate',
+            property: 'byte_rate',
             direction: 'DESC'
         }]
     },
@@ -73,7 +73,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         renderer: Renderer.bytesRenderer
     }, {
         text: 'Client Bytes',
-        dataIndex: 'c2s_bytes',
+        dataIndex: 'client_bytes',
         width: 100,
         align: 'right',
         hidden: true,
@@ -81,35 +81,90 @@ Ext.define('Mfw.monitor.view.Sessions', {
         renderer: Renderer.bytesRenderer
     }, {
         text: 'Server Bytes',
-        dataIndex: 's2c_bytes',
+        dataIndex: 'server_bytes',
         width: 100,
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
         renderer: Renderer.bytesRenderer
     }, {
-        text: 'Rate',
-        dataIndex: 'rate',
+        text: 'Byte Rate',
+        dataIndex: 'byte_rate',
         width: 100,
         align: 'right',
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRendererSec
+        renderer: Renderer.bytesSecRenderer
     }, {
-        text: 'Client Rate',
-        dataIndex: 'c2s_rate',
+        text: 'Client Byte Rate',
+        dataIndex: 'client_byte_rate',
         width: 100,
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRendererSec
+        renderer: Renderer.bytesSecRenderer
     }, {
-        text: 'Server Rate',
-        dataIndex: 's2c_rate',
+        text: 'Server Byte Rate',
+        dataIndex: 'server_byte_rate',
         width: 100,
         align: 'right',
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.bytesRendererSec
+        renderer: Renderer.bytesSecRenderer
+    }, {
+        text: 'Packets',
+        dataIndex: 'packets',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Client Packets',
+        dataIndex: 'client_packets',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Server Packets',
+        dataIndex: 'server_packets',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.bytesRenderer
+    }, {
+        text: 'Packet Rate',
+        dataIndex: 'packet_rate',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.packetsSecRenderer
+    }, {
+        text: 'Client Packet Rate',
+        dataIndex: 'client_packet_rate',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.packetsSecRenderer
+    }, {
+        text: 'Server Packet Rate',
+        dataIndex: 'server_packet_rate',
+        width: 100,
+        align: 'right',
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.packetsSecRenderer
+    }, {
+        text: 'Family',
+        dataIndex: 'family',
+        width: 100,
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.familyRenderer
     }, {
         text: 'IP Protocol',
         dataIndex: 'ip_protocol',
@@ -128,6 +183,29 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 100,
         align: 'right',
         hidden: true
+    }, {
+        text: 'TCP State',
+        dataIndex: 'tcp_state',
+        width: 100,
+        align: 'right',
+        hidden: true // FIXME need renderer
+    }, {
+        text: 'Start Time',
+        dataIndex: 'timestamp_start',
+        width: 100,
+        hidden: true // FIXME need renderer
+    }, {
+        text: 'Stop Time',
+        dataIndex: 'timestamp_stop',
+        width: 100,
+        hidden: true // FIXME need renderer
+    }, {
+        text: 'Timeout',
+        dataIndex: 'timeout_seconds',
+        width: 100,
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.timeout_seconds
     }, {
         text: 'Local Address',
         dataIndex: 'local_address',

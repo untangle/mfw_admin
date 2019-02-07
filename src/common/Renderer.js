@@ -71,11 +71,10 @@ Ext.define('Mfw.Renderer', {
             bytes = bytes/1000;
             units_itr++;
         }
-        bytes = (Math.round(bytes*100)/100).toFixed(2);
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
-    bytesRendererSec: function(bytes) {
+    bytesSecRenderer: function(bytes) {
         if (bytes === null || bytes === undefined) {
             return '';
         }
@@ -90,6 +89,30 @@ Ext.define('Mfw.Renderer', {
         return '<b>' + bytes + '</b> ' + units[units_itr];
     },
 
+    packetsSecRenderer: function(packets) {
+        if (packets === null || packets === undefined) {
+            return '';
+        }
+
+        var units = ['/s', 'K/s', 'M/s', 'B/s'];
+        var units_itr = 0;
+        while ((packets >= 1000 || packets <= -1000) && units_itr < 3) {
+            packets = packets/1000;
+            units_itr++;
+        }
+        return '<b>' + packets + '</b> ' + units[units_itr];
+    },
+
+    familyRenderer: function(family) {
+        if (family == 2) {
+            return "IPv4";
+        } else if (family == 10) {
+            return "IPv6";
+        } else {
+            return family;
+        }
+    },
+    
     shortenText: function (str) {
         if (str.length > 15) {
             str = str.substr(0, 5) + ' ... ' + str.substr(str.length - 5, str.length);
