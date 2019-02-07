@@ -193,22 +193,22 @@ Ext.define('Mfw.setup.interface.Ipv4', {
             {
                 xtype: 'textfield',
                 label: 'Username'.t(),
-                name: 'v4PPoEUsername',
+                name: 'v4PPPoEUsername',
                 required: false,
                 hidden: true,
                 bind: {
-                    value: '{intf.v4PPoEUsername}',
+                    value: '{intf.v4PPPoEUsername}',
                     required: '{intf.wan && intf.v4ConfigType === "PPPOE"}',
                     hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
                 }
             }, {
                 xtype: 'passwordfield',
-                name: 'v4PPoEPassword',
+                name: 'v4PPPoEPassword',
                 label: 'Password'.t(),
                 required: false,
                 hidden: true,
                 bind: {
-                    value: '{intf.v4PPoEPassword}',
+                    value: '{intf.v4PPPoEPassword}',
                     required: '{intf.wan && intf.v4ConfigType === "PPPOE"}',
                     hidden: '{!intf.wan || intf.v4ConfigType !== "PPPOE"}'
                 }

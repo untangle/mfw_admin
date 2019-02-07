@@ -190,19 +190,19 @@ Ext.define('Mfw.settings.network.interface.Ipv4', {
         },
         items: [{
             label: 'Username'.t(),
-            name: 'v4PPoEUsername',
+            name: 'v4PPPoEUsername',
             required: false,
             bind: {
-                value: '{record.v4PPoEUsername}',
+                value: '{record.v4PPPoEUsername}',
                 required: '{record.v4ConfigType === "PPPOE"}'
             }
         }, {
             inputType: 'password',
-            name: 'v4PPoEPassword',
+            name: 'v4PPPoEPassword',
             label: 'Password'.t(),
             required: false,
             bind: {
-                value: '{record.v4PPoEPassword}',
+                value: '{record.v4PPPoEPassword}',
                 required: '{record.v4ConfigType === "PPPOE"}'
             }
         }, {
