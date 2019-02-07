@@ -209,11 +209,13 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Local Address',
         dataIndex: 'local_address',
-        width: 130
+        width: 130,
+        hidden: true
     }, {
         text: 'Remote Address',
         dataIndex: 'remote_address',
-        width: 130
+        width: 130,
+        hidden: true
     }, {
         text: 'Client Interface',
         dataIndex: 'client_interface_id',
@@ -230,8 +232,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Client Address',
         dataIndex: 'client_address',
-        width: 130,
-        hidden: true
+        width: 130
     }, {
         text: 'Client Address New',
         dataIndex: 'client_address_new',
@@ -276,8 +277,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Server Address',
         dataIndex: 'server_address',
-        width: 130,
-        hidden: true
+        width: 130
     }, {
         text: 'Server Address New',
         dataIndex: 'server_address_new',
