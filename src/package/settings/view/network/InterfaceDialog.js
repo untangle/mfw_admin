@@ -128,8 +128,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             newInterface.set(form.getValues());
             newInterface.set({
                 interfaceId: interfacesStore.count() + 1,
-                configType: 'ADDRESSED',
-                device: 'tunY' // Fix Y
+                configType: 'ADDRESSED'
             });
 
             if (me.uploadedFile) {
