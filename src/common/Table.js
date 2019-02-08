@@ -11,7 +11,7 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Time Stamp',
             dataIndex: 'time_stamp',
-            renderer: Renderer.time_stamp,
+            renderer: Renderer.timeStamp,
             width: 180,
             cell: {
                 encodeHtml: false
@@ -24,7 +24,7 @@ Ext.define('Mfw.Table', {
             text: 'IP Protocol',
             dataIndex: 'ip_protocol',
             width: 150,
-            renderer: Renderer.ip_protocol,
+            renderer: Renderer.ipProtocol,
             cell: { encodeHtml: false },
             editor: {
                 xtype: 'selectfield',

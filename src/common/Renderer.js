@@ -9,7 +9,8 @@ Ext.define('Mfw.Renderer', {
         return '0x' + (("00000000" + value.toString(16)).substr(-8));
     },
 
-    time_stamp: function (value) {
+    timeStamp: function (value) {
+        // FIXME this uses the browser timezone, not the server timezone
         var date = new Date(value),
             day = Ext.Date.format(date, 'd.m.Y'),
             hour = Ext.Date.format(date, 'h:i:s a');
@@ -17,7 +18,7 @@ Ext.define('Mfw.Renderer', {
         return '<span style="color: #999;">' + day + '</span> &nbsp;' + hour;
     },
 
-    ip_protocol: function (value) {
+    ipProtocol: function (value) {
         var protocol = Globals.protocolsMap[value];
         if (protocol) {
             return protocol.text + ' <span style="color: #999;">[ ' + protocol.value + ' ]</span>';
@@ -176,7 +177,7 @@ Ext.define('Mfw.Renderer', {
         return str;
     },
 
-    timeout_seconds: function (sec) {
+    timeRangeSeconds: function (sec) {
         if (sec === null || sec === undefined) {
             return '';
         }
@@ -189,6 +190,18 @@ Ext.define('Mfw.Renderer', {
         var mDisplay = m > 10 ? m : ('0' + m);
         var sDisplay = s > 10 ? s : ('0' + s);
         return hDisplay + ':' + mDisplay + ':' + sDisplay;
+    },
+
+    timeRangeMilliseconds: function (msec) {
+        if (msec === null || msec === undefined) {
+            return '';
+        }
+        msec = Number(msec);
+        var sec = msec/1000;
+        var millis = (msec%1000)+"";
+        while (millis.length < 3) millis = "0" + millis;
+
+        return Renderer.timeRangeSeconds(sec) + "." + millis;
     },
 
     country: function (value) {

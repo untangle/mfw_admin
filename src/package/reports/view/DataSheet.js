@@ -97,7 +97,7 @@ Ext.define('Mfw.reports.Data', {
                 cell: {
                     encodeHtml: false
                 },
-                renderer: Renderer.time_stamp
+                renderer: Renderer.timeStamp
             }, {
                 text: record.get('table'),
                 dataIndex: record.get('table'),
@@ -121,7 +121,7 @@ Ext.define('Mfw.reports.Data', {
                         cell: {
                             encodeHtml: false
                         },
-                        renderer: Renderer.time_stamp
+                        renderer: Renderer.timeStamp
                     });
                     return;
                 }

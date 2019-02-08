@@ -170,7 +170,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
         dataIndex: 'ip_protocol',
         width: 100,
         cell: { encodeHtml: false },
-        renderer: Renderer.ip_protocol
+        renderer: Renderer.ipProtocol
     }, {
         text: 'Mark',
         dataIndex: 'mark',
@@ -192,22 +192,19 @@ Ext.define('Mfw.monitor.view.Sessions', {
         renderer: Renderer.tcpStateRenderer,
         hidden: true
     }, {
-        text: 'Start Time',
-        dataIndex: 'timestamp_start',
+        text: 'Age',
+        dataIndex: 'age_milliseconds',
         width: 100,
-        hidden: true // FIXME need renderer
-    }, {
-        text: 'Stop Time',
-        dataIndex: 'timestamp_stop',
-        width: 100,
-        hidden: true // FIXME need renderer
+        hidden: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.timeRangeMilliseconds
     }, {
         text: 'Timeout',
         dataIndex: 'timeout_seconds',
         width: 100,
         hidden: true,
         cell: { encodeHtml: false },
-        renderer: Renderer.timeout_seconds
+        renderer: Renderer.timeRangeSeconds
     }, {
         text: 'Local Address',
         dataIndex: 'local_address',

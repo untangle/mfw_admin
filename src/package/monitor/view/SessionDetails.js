@@ -62,7 +62,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'certificate_subject_l', text: 'Subject: Locality', leaf: true },
                         { key: 'certificate_subject_o', text: 'Subject: Organization', leaf: true },
                         { key: 'certificate_subject_p', text: 'Subject: P', leaf: true },
-                        { key: 'certificate_subject_san', text: 'Subject: SAN', leaf: true }
+                        { key: 'certificate_subject_san', text: 'Subject: SAN', leaf: true },
+                        { key: 'ssl_sni', text: 'SSL SNI', leaf: true }
                     ]
                 },
                 {
@@ -103,14 +104,11 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
                 { key: 'remote_address', text: 'Remote Address', leaf: true },
-                { key: 'mark', text: 'Mark', leaf: true },
                 { key: 'tcp_state', text: 'TCP State', leaf: true },
-                { key: 'timeout_seconds', text: 'Timeout (s)', leaf: true },
-                { key: 'timestamp_start', text: 'Start Time', leaf: true },
-                { key: 'timestamp_stop', text: 'Stop Time', leaf: true },
+                { key: 'age_milliseconds', text: 'Age', leaf: true },
+                { key: 'timeout_seconds', text: 'Timeout', leaf: true },
                 { key: 'priority', text: 'Priority', leaf: true },
-                { key: 'protocol', text: 'Protocol', leaf: true },
-                { key: 'ssl_sni', text: 'SSL SNI', leaf: true },
+                { key: 'mark', text: 'Mark', leaf: true },
                 { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true }
             ]
         }
@@ -206,10 +204,11 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
             if (key === 'client_packet_rate') { return Renderer.packetsSecRenderer(value); }
             if (key === 'server_packet_rate') { return Renderer.packetsSecRenderer(value); }
             if (key === 'bypass_packetd') { return Renderer.boolean(value); }
-            if (key === 'ip_protocol') { return Renderer.ip_protocol(value); }
+            if (key === 'ip_protocol') { return Renderer.ipProtocol(value); }
             if (key === 'family') { return Renderer.familyRenderer(value); }
             if (key === 'tcp_state') { return Renderer.tcpStateRenderer(value); }
-            if (key === 'timeout_seconds') { return Renderer.timeout_seconds(value); }
+            if (key === 'timeout_seconds') { return Renderer.timeRangeSeconds(value); }
+            if (key === 'age_milliseconds') { return Renderer.timeRangeMilliseconds(value); }
             if (key === 'client_interface_id' || key === 'server_interface_id') { return Renderer.interface(value); }
             if (key === 'client_interface_type' || key === 'server_interface_type') { return Renderer.interfaceType(value); }
             if (key === 'client_country' || key === 'server_country') { return Renderer.country(value); }
