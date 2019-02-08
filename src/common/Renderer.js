@@ -32,7 +32,9 @@ Ext.define('Mfw.Renderer', {
             return name + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         }
         if (value == 0) {
-            return 'Unset' + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+            return 'unset' + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+        } else if (value == 255) {
+            return 'local' + ' <span style="color: #999;">[ ' + 255 + ' ]</span>';
         } else {
             return value;
         }
