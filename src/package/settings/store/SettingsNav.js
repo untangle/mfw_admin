@@ -37,6 +37,15 @@ Ext.define('Mfw.store.Nav', {
                 { text: 'Web Filter'.t(), leaf: true, href: 'settings/firewall/web-filter' }
             ]
         }, {
+            // Smart Routing
+            text: '<strong>' + 'Routing'.t() + '</strong>',
+            iconCls: 'tree system',
+            href: 'settings/routing',
+            children: [
+                { text: 'WAN Policies'.t(), leaf: true, href: 'settings/routing/wan-policies' },
+                { text: 'WAN Rules'.t(), leaf: true, href: 'settings/routing/wan-rules' }
+            ]
+        }, {
             // System
             text: '<strong>' + 'System'.t() + '</strong>',
             iconCls: 'tree system',
