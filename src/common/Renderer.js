@@ -45,8 +45,8 @@ Ext.define('Mfw.Renderer', {
         switch (value) {
             case 1: type = 'WAN'; break;
             case 2: type = 'LAN'; break;
-            case 3: type = 'Unused'; break;
-            default: type = 'Unset';
+            case 3: type = 'unused'; break;
+            default: type = 'unset';
         }
         return type + ' <span style="color: #999;">[ ' + value + ' ]</span>';
     },

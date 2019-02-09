@@ -86,8 +86,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     key: 'packet_rate',
                     text: '<strong>Packet Rate</strong>',
                     children: [
-                        { key: 'server_byte_rate', text: 'Server Packet Rate', leaf: true },
-                        { key: 'client_byte_rate', text: 'Client Packet Rate', leaf: true },
+                        { key: 'server_packet_rate', text: 'Server Packet Rate', leaf: true },
+                        { key: 'client_packet_rate', text: 'Client Packet Rate', leaf: true },
                     ]
                 },
                 {
