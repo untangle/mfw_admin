@@ -18,7 +18,7 @@ Ext.define('Mfw.model.WanCriterion', {
     identifier: 'uuid',
     fields: [
         { name: 'type',  type: 'string', defaultValue: 'ATTRIBUTE' }, // [ "ATTRIBUTE", "METRIC" ]
-        { name: 'attribute', type: 'string', defaultValue: 'VPN' }, // [ "VPN", "NAME" ]
+        { name: 'attribute', type: 'string', allowNull: true }, // [ "VPN", "NAME" ]
         { name: 'name_contains', type: 'string' },
         { name: 'metric', type: 'string' }, // [ "LATENCY", "AVAILABLE_BANDWIDTH", "JITTER", "PACKET_LOSS" ]
         { name: 'metric_value', type: 'integer' },
@@ -33,12 +33,12 @@ Ext.define('Mfw.model.WanPolicy', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'policyId',  type: 'integer' },
+        { name: 'policyId', type: 'integer', allowNull: true },
         { name: 'enabled',    type: 'boolean', defaultValue: true },
         { name: 'description', type: 'string' },
         { name: 'type', type: 'string', defaultValue: 'SPECIFIC_WAN' }, // ["SPECIFIC_WAN", "BEST_OF", "BALANCE" ]
-        { name: 'best_of_metric', type: 'string', defaultValue: 'LOWEST_LATENCY' }, // [ "LOWEST_LATENCY", "HIGHEST_AVAILABLE_BANDWIDTH", "LOWEST_JITTER", "LOWEST_PACKET_LOSS" ]
-        { name: 'balance_algorithm', type: 'string', defaultValue: 'WEIGHTED' } // [ "WEIGHTED", "LATENCY", "AVAILABLE_BANDWIDTH", "BANDWIDTH" ]
+        { name: 'best_of_metric', type: 'string', allowNull: true }, // [ "LOWEST_LATENCY", "HIGHEST_AVAILABLE_BANDWIDTH", "LOWEST_JITTER", "LOWEST_PACKET_LOSS" ]
+        { name: 'balance_algorithm', type: 'string', allowNull: true } // [ "WEIGHTED", "LATENCY", "AVAILABLE_BANDWIDTH", "BANDWIDTH" ]
     ],
 
     hasMany: [{
@@ -54,8 +54,8 @@ Ext.define('Mfw.model.WanPolicy', {
     proxy: {
         type: 'ajax',
         api: {
-            read: Util.api + '/settings/wan/wan-policies',
-            update: Util.api + '/settings/wan/wan-policies'
+            read: Util.api + '/settings/wan/policies',
+            update: Util.api + '/settings/wan/policies'
         },
         reader: {
             type: 'json'

@@ -98,28 +98,31 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
             record.criteria().each(function (c) {
                 if (c.get('type') === 'ATTRIBUTE') {
                     if (c.get('attribute') === 'VPN') {
-                        output.push('Type <b>is VPN</b>');
+                        output.push('is <b>is VPN</b>');
                     }
                     if (c.get('attribute') === 'NAME') {
-                        output.push('Name contains <b>' + c.get('name_contains') + '</b>');
+                        output.push('name contains "<strong>' + c.get('name_contains') + '</strong>"');
                     }
                 }
                 if (c.get('type') === 'METRIC') {
                     text = '';
                     switch (c.get('metric')) {
-                        case 'LATENCY': text += '<b>Latency</b>'; break;
-                        case 'AVAILABLE_BANDWIDTH': text += '<b>Available bandwidth</b>'; break;
-                        case 'JITTER': text += '<b>Jitter</b>'; break;
-                        case 'PACKET_LOSS': text += '<b>Packet loss</b>'; break;
+                        case 'LATENCY': text += 'latency'; break;
+                        case 'AVAILABLE_BANDWIDTH': text += 'available bandwidth'; break;
+                        case 'JITTER': text += 'jitter'; break;
+                        case 'PACKET_LOSS': text += 'packet loss'; break;
                         default: text += 'n/a';
                     }
 
                     text += ' ' + c.get('metric_op');
-                    text += ' <b>' + c.get('metric_value') + '</b>';
+                    text += ' <strong>' + c.get('metric_value') + '</strong>';
                     output.push(text);
                 }
             });
-            return output.join('<br/>');
+            if (output.length > 0) {
+                return 'Interface ' + output.join(', ');
+            }
+            return '';
         }
     }]
 });

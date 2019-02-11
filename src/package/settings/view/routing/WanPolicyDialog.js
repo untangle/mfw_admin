@@ -34,6 +34,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 xtype: 'textfield',
                 label: 'Description',
                 name: 'description',
+                required: true,
                 bind: '{policy.description}',
                 width: 400
             }, {
@@ -66,6 +67,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             }, {
                 xtype: 'selectfield',
                 label: 'Best of Metric',
+                placeholder: 'Please select ...',
                 name: 'best_of_metric',
                 flex: 1,
                 hidden: true,
@@ -84,6 +86,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             }, {
                 xtype: 'selectfield',
                 label: 'Balance Algorithm',
+                placeholder: 'Please select ...',
                 name: 'balance_algorithm',
                 flex: 1,
                 hidden: true,
@@ -121,7 +124,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                     //     { name: 'checked', type: 'boolean', defaultValue: true }
                     // ]
                 },
-                width: '25%',
+                width: 350,
                 items: [{
                     xtype: 'toolbar',
                     docked: 'top',
@@ -173,183 +176,69 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                         text: 'Add',
                         iconCls: 'md-icon-add',
                         arrow: false,
-                        // menu: {
-                        //     items: [{
-                        //         text: 'Attribute',
-                        //         menu: {
-                        //             items: [{
-                        //                 text: 'VPN'
-                        //             }, {
-                        //                 text: 'Name',
-                        //                 menu: {
-                        //                     items: [{
-                        //                         xtype: 'textfield',
-                        //                         label: 'Contains',
-                        //                         labelAlign: 'top'
-                        //                     }]
-                        //                 }
-                        //             }]
-                        //         }
-                        //     }, {
-                        //         text: 'Metric',
-                        //         menu: {
-                        //             items: [{
-                        //                 text: 'Latency'
-                        //             }, {
-                        //                 text: 'Available Bandwidth'
-                        //             }, {
-                        //                 text: 'Jitter'
-                        //             }, {
-                        //                 text: 'Packet Loss'
-                        //             }]
-                        //         }
-                        //     }]
-                        // },
+                        menuAlign: 'tr-br?',
+                        menu: {
+                            items: [{
+                                text: 'Interface is VPN',
+                                handler: 'isVpnCriteria'
+                            }, '-', {
+                                xtype: 'container',
+                                items: [{
+                                    xtype: 'component',
+                                    html: 'Interface Name contains',
+                                    style: 'font-size: 13px'
+                                }, {
+                                    xtype: 'textfield',
+                                    placeholder: 'Type name ...',
+                                    autoComplete: false,
+                                    keyMapEnabled: true,
+                                    keyMap: {
+                                        enter: {
+                                            key: Ext.event.Event.ENTER,
+                                            handler: 'onNameContains'
+                                        }
+                                    }
+                                }]
+                            }, '-', {
+                                text: 'Define metric ...',
+                                handler: 'metricDialog'
+                            }]
+                        },
                         handler: 'addCriteria'
                     }]
                 }],
                 bind: '{policy.criteria}',
 
-                itemConfig: {
-                    viewModel: true,
-                },
-
                 columns: [{
-                    text: 'Type',
-                    dataIndex: 'type',
-                    width: 120,
-                    renderer: function (value) {
-                        if (value === 'ATTRIBUTE') { return 'Attribute'; }
-                        if (value === 'METRIC') { return 'Metric'; }
-                    },
-                    editor: {
-                        xtype: 'selectfield',
-                        options: [
-                            { text: 'Attribute', value: 'ATTRIBUTE' },
-                            { text: 'Metric', value: 'METRIC' }
-                        ]
-                    }
-                }, {
-                    text: 'Attribute',
-                    dataIndex: 'attribute',
+                    text: 'Definition',
                     flex: 1,
-                    cell: {
-                        bind: {
-                            style: '{record.type !== "ATTRIBUTE" ? "text-decoration: line-through" : "text-decoration: none"}',
-                            disabled: '{record.type !== "ATTRIBUTE"}'
+                    cell: { encodeHtml: false },
+                    renderer: function (value, record) {
+                        var output = [], text;
+                        if (record.get('type') === 'ATTRIBUTE') {
+                            if (record.get('attribute') === 'VPN') {
+                                output.push('Interface is VPN');
+                            }
+                            if (record.get('attribute') === 'NAME') {
+                                output.push('Interface Name contains "<b>' + record.get('name_contains') + '</b>"');
+                            }
                         }
-                    },
-                    renderer: function (value) {
-                        if (value === 'VPN') { return 'VPN'; }
-                        if (value === 'NAME') { return 'Name'; }
-                    },
-                    editor: {
-                        xtype: 'selectfield',
-                        bind: {
-                            disabled: '{record.type !== "ATTRIBUTE"}'
-                        },
-                        options: [
-                            { text: 'VPN', value: 'VPN' },
-                            { text: 'Name', value: 'NAME' }
-                        ]
-                    }
-                }, {
-                    text: 'Name Contains',
-                    dataIndex: 'name_contains',
-                    width: 160,
-                    cell: {
-                        encodeHtml: false,
-                        bind: {
-                            style: '{record.type !== "ATTRIBUTE" || record.attribute !== "NAME" ? "text-decoration: line-through" : "text-decoration: none"}',
-                            disabled: '{record.type !== "ATTRIBUTE" || record.attribute !== "NAME"}'
+                        if (record.get('type') === 'METRIC') {
+                            text = 'Interface ';
+                            switch (record.get('metric')) {
+                                case 'LATENCY': text += 'Latency'; break;
+                                case 'AVAILABLE_BANDWIDTH': text += 'Available bandwidth'; break;
+                                case 'JITTER': text += 'Jitter'; break;
+                                case 'PACKET_LOSS': text += 'Packet loss'; break;
+                                default: text += 'n/a';
+                            }
+
+                            text += ' ' + record.get('metric_op');
+                            text += ' ' + record.get('metric_value') + '';
+                            output.push(text);
                         }
-                    },
-                    renderer: function (value) {
-                        if (!value) { return '<em>not set</em>'; }
-                        return value;
-                    },
-                    editor: {
-                        xtype: 'textfield',
-                        placeholder: 'Name ...',
-                        bind: {
-                            disabled: '{record.type !== "ATTRIBUTE" || record.attribute !== "NAME"}'
-                        }
-                    }
-                }, {
-                    text: 'Metric',
-                    dataIndex: 'metric',
-                    width: 150,
-                    cell: {
-                        bind: {
-                            style: '{record.type !== "METRIC" ? "text-decoration: line-through" : "text-decoration: none"}',
-                            disabled: '{record.type !== "METRIC"}'
-                        }
-                    },
-                    renderer: function (value) {
-                        var text;
-                        switch (value) {
-                            case 'LATENCY': text = 'Latency'; break;
-                            case 'AVAILABLE_BANDWIDTH': text = 'Available Bandwidth'; break;
-                            case 'JITTER': text = 'Jitter'; break;
-                            case 'PACKET_LOSS': text = 'Packet Loss'; break;
-                            default: text = 'Metric ...';
-                        }
-                        return text;
-                    },
-                    editor: {
-                        xtype: 'selectfield',
-                        placeholder: 'Metric ...',
-                        bind: {
-                            disabled: '{record.type !== "METRIC"}'
-                        },
-                        options: [
-                            { text: 'Latency', value: 'LATENCY' },
-                            { text: 'Available Bandwidth', value: 'AVAILABLE_BANDWIDTH' },
-                            { text: 'Jitter', value: 'JITTER' },
-                            { text: 'Packet Loss', value: 'PACKET_LOSS' }
-                        ]
-                    }
-                }, {
-                    text: 'Operator',
-                    dataIndex: 'metric_op',
-                    width: 100,
-                    cell: {
-                        bind: {
-                            style: '{record.type !== "METRIC" ? "text-decoration: line-through" : "text-decoration: none"}',
-                            disabled: '{record.type !== "METRIC"}'
-                        }
-                    },
-                    renderer: function (value) {
-                        return value || 'Operator ...';
-                    },
-                    editor: {
-                        xtype: 'selectfield',
-                        placeholder: 'Operator ...',
-                        bind: {
-                            disabled: '{record.type !== "METRIC"}'
-                        },
-                        options: [
-                            { text: '<', value: '<' },
-                            { text: '>', value: '>' },
-                            { text: '<=', value: '<=' },
-                            { text: '>=', value: '>=' },
-                        ]
-                    }
-                }, {
-                    text: 'Value',
-                    dataIndex: 'metric_value',
-                    width: 100,
-                    cell: {
-                        bind: {
-                            style: '{record.type !== "METRIC" ? "text-decoration: line-through" : "text-decoration: none"}',
-                            disabled: '{record.type !== "METRIC"}'
-                        }
-                    },
-                    editor: {
-                        xtype: 'numberfield',
-                        bind: {
-                            disabled: '{record.type !== "METRIC"}'
-                        }
+
+                        return output.join('<br/>');
                     }
                 }, {
                     width: 40,
@@ -368,7 +257,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                         }
                     }
                 }]
-
             }]
         }]
     }, {
@@ -396,6 +284,42 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             interfacesGrid.getStore().load();
         },
 
+        isVpnCriteria: function (item) {
+            var me = this;
+            me.getViewModel().get('policy').criteria().add({
+                type: 'ATTRIBUTE',
+                attribute: 'VPN'
+            });
+            item.up('menu').hide();
+        },
+
+        onNameContains: function (event, field) {
+            var me = this, name = field.getValue();
+            if (!name) { return; }
+            me.getViewModel().get('policy').criteria().add({
+                type: 'ATTRIBUTE',
+                attribute: 'NAME',
+                name_contains: name
+            });
+            field.setValue('');
+            field.blur();
+            field.up('button').getMenu().hide();
+            // console.log();
+
+            // .hide();
+        },
+
+        metricDialog: function (item) {
+            var me = this,
+                metricDialog = me.getView().add({ xtype: 'wan-metric-dialog'} );
+            metricDialog.show();
+            metricDialog.on('close', function () {
+                metricDialog.destroy();
+            });
+            item.up('menu').hide();
+        },
+
+
         addCriteria: function () {
             var me = this, vm = me.getViewModel(),
                 newCriteria = Ext.create('Mfw.model.WanCriterion'),
@@ -422,8 +346,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                     });
                 }
             });
-
-            console.log(policy.getData(true));
 
             dialog.ownerCmp.getStore().add(policy);
             dialog.close();
