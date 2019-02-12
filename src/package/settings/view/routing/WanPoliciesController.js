@@ -8,7 +8,22 @@ Ext.define('Mfw.settings.routing.WanPoliciesController', {
         if (!me.wanPolicyDialog) {
             me.wanPolicyDialog = Ext.Viewport.add({
                 xtype: 'wan-policy-dialog',
-                ownerCmp: me.getView()
+                ownerCmp: me.getView(),
+            });
+            me.wanPolicyDialog.on('destroy', function (dialog) {
+                me.wanPolicyDialog = null;
+            });
+        }
+        me.wanPolicyDialog.show();
+    },
+
+    onEditRecord: function (grid, info) {
+        var me = this;
+        if (!me.wanPolicyDialog) {
+            me.wanPolicyDialog = Ext.Viewport.add({
+                xtype: 'wan-policy-dialog',
+                ownerCmp: me.getView(),
+                policy: info.record
             });
             me.wanPolicyDialog.on('destroy', function (dialog) {
                 me.wanPolicyDialog = null;
@@ -16,4 +31,5 @@ Ext.define('Mfw.settings.routing.WanPoliciesController', {
         }
         me.wanPolicyDialog.show();
     }
+
 });

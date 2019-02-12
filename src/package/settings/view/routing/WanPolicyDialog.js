@@ -2,16 +2,32 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.wan-policy-dialog',
 
-    viewModel: {},
-
-    title: 'Add/Edit WAN Policy'.t(),
-    width: 1100,
-    height: 600,
-    maximizable: true,
-    resizable: {
-        edges: 'all',
-        dynamic: true
+    viewModel: {
+        data: {
+            wans: []
+        },
+        stores: {
+            availableWans: {
+                data: '{wans}'
+            }
+        }
     },
+
+    config: {
+        policy: null
+    },
+
+    bind: {
+        title: '{action === "ADD" ? "Create" : "Edit"} WAN Policy',
+    },
+    width: 900,
+    height: 600,
+    draggable: false,
+    // maximizable: true,
+    // resizable: {
+    //     edges: 'all',
+    //     dynamic: true
+    // },
     showAnimation: {
         duration: 0
     },
@@ -22,7 +38,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
 
 
     items: [{
-        xtype: 'container',
+        xtype: 'formpanel',
         layout: 'vbox',
         items: [{
             xtype: 'containerfield',
@@ -34,6 +50,8 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 xtype: 'textfield',
                 label: 'Description',
                 name: 'description',
+                placeholder: 'Enter description ...',
+                autoComplete: false,
                 required: true,
                 bind: '{policy.description}',
                 width: 400
@@ -53,7 +71,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             },
             items: [{
                 xtype: 'selectfield',
-                reference: 'type',
                 label: 'Type',
                 name: 'type',
                 required: true,
@@ -61,12 +78,30 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 width: 250,
                 options: [
                     { text: 'Specific WAN', value: 'SPECIFIC_WAN' },
-                    { text: 'Best Of', value: 'BEST_OF' },
+                    { text: 'Best WANs', value: 'BEST_OF' },
                     { text: 'Balance', value: 'BALANCE' }
                 ]
             }, {
                 xtype: 'selectfield',
-                label: 'Best of Metric',
+                itemId: 'specificWanSelection',
+                label: 'Select WAN',
+                placeholder: 'Please select ...',
+                flex: 1,
+                hidden: true,
+                required: true,
+                displayTpl: '{name} [ {interfaceId} ]',
+                itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+                valueField: 'interfaceId',
+                displayField: 'name',
+                bind: {
+                    // value: '{policy.balance_algorithm}',
+                    hidden: '{policy.type !== "SPECIFIC_WAN"}',
+                    required: '{policy.type === "SPECIFIC_WAN"}',
+                    options: '{wans}'
+                }
+            }, {
+                xtype: 'selectfield',
+                label: 'Select Metric',
                 placeholder: 'Please select ...',
                 name: 'best_of_metric',
                 flex: 1,
@@ -74,8 +109,8 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 required: true,
                 bind: {
                     value: '{policy.best_of_metric}',
-                    hidden: '{type.value !== "BEST_OF"}',
-                    required: '{type.value === "BEST_OF"}',
+                    hidden: '{policy.type !== "BEST_OF"}',
+                    required: '{policy.type === "BEST_OF"}',
                 },
                 options: [
                     { text: 'Lowest Latency', value: 'LOWEST_LATENCY' },
@@ -85,7 +120,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 ]
             }, {
                 xtype: 'selectfield',
-                label: 'Balance Algorithm',
+                label: 'Select Algorithm',
                 placeholder: 'Please select ...',
                 name: 'balance_algorithm',
                 flex: 1,
@@ -93,14 +128,32 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 required: true,
                 bind: {
                     value: '{policy.balance_algorithm}',
-                    hidden: '{type.value !== "BALANCE"}',
-                    required: '{type.value === "BALANCE"}',
+                    hidden: '{policy.type !== "BALANCE"}',
+                    required: '{policy.type === "BALANCE"}',
                 },
                 options: [
                     { text: 'Weighted', value: 'WEIGHTED' },
                     { text: 'Latency', value: 'LATENCY' },
                     { text: 'Available Bandwidth', value: 'AVAILABLE_BANDWIDTH' },
                     { text: 'Bandwidth', value: 'BANDWIDTH' }
+                ]
+            }, {
+                xtype: 'selectfield',
+                reference: 'wanSelection',
+                label: 'Select WANs',
+                placeholder: 'Please select ...',
+                value: 'ALL',
+                flex: 1,
+                hidden: true,
+                required: true,
+                bind: {
+                    hidden: '{policy.type === "SPECIFIC_WAN"}',
+                    required: '{policy.type !== "SPECIFIC_WAN"}',
+                },
+                options: [
+                    { text: 'All WANs', value: 'ALL' },
+                    { text: 'Specific WANs', value: 'SPECIFIC' },
+                    { text: 'Criteria', value: 'CRITERIA' }
                 ]
             }]
         }, {
@@ -113,65 +166,99 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             },
             items: [{
                 xtype: 'grid',
-                itemId: 'wanInterfaces',
-                store: {
-                    type: 'interfaces',
-                    filters: [{
-                        property: 'wan',
-                        value: true
-                    }],
-                    // fields: [
-                    //     { name: 'checked', type: 'boolean', defaultValue: true }
-                    // ]
+                itemId: 'wans',
+                plugins: {
+                    gridcellediting: {
+                        triggerEvent: 'tap'
+                    }
                 },
-                width: 350,
+                width: 300,
+                selectable: false,
+                hidden: true,
+                bind: {
+                    hidden: '{policy.type === "SPECIFIC_WAN"}',
+                    store: '{availableWans}'
+                },
+                scrollable: 'y',
                 items: [{
                     xtype: 'toolbar',
                     docked: 'top',
                     shadow: false,
                     items: [{
                         xtype: 'component',
-                        html: 'WANs'
-                    },
-                    // '->', {
-                    //     xtype: 'checkbox',
-                    //     reference: 'allWans',
-                    //     boxLabel: 'All WANs'
-                    // }
-                ]
+                        html: 'Select WANs',
+                        style: 'font-weight: 100'
+                    }]
                 }],
-                // bind: '{record.interfaces}',
                 columns: [{
                     xtype: 'checkcolumn',
                     dataIndex: 'checked',
                     width: 40,
-                    checked: true
+                    hidden: true,
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
+                    bind: {
+                        hidden: '{wanSelection.value === "ALL"}'
+                    }
                 }, {
                     text: 'Interface',
                     dataIndex: 'interfaceId',
                     flex: 1,
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
                     cell: { encodeHtml: false },
                     renderer: Renderer.interface
                 }, {
-                    text: 'Weight'
+                    text: 'Weight (click to edit)',
+                    dataIndex: 'weight',
+                    width: 150,
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
+                    hidden: true,
+                    bind: {
+                        hidden: '{policy.balance_algorithm !== "WEIGHTED"}'
+                    },
+                    // renderer: 'weightRenderer',
+                    editable: true,
+                    editor: {
+                        xtype: 'numberfield',
+                        required: true,
+                        defaultValue: 100,
+                        minValue: 0,
+                        maxValue: 100
+                    }
                 }]
+                // listeners: {
+                //     // hack to not display column headers
+                //     show: function (grid) {
+                //         grid.setHideHeaders(true);
+                //     }
+                // }
             }, {
                 xtype: 'grid',
                 flex: 1,
                 plugins: {
-                    // grideditable: true,
                     gridcellediting: {
                         triggerEvent: 'tap'
                     }
                 },
                 selectable: false,
+                hidden: true,
+                bind: {
+                    store: '{policy.criteria}',
+                    hidden: '{policy.type === "SPECIFIC_WAN"}'
+                },
                 items: [{
                     xtype: 'toolbar',
                     docked: 'top',
                     shadow: false,
                     items: [{
                         xtype: 'component',
-                        html: 'Criterias'
+                        html: 'Criterias',
+                        style: 'font-weight: 100'
                     }, '->', {
                         text: 'Add',
                         iconCls: 'md-icon-add',
@@ -183,6 +270,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                                 handler: 'isVpnCriteria'
                             }, '-', {
                                 xtype: 'container',
+                                layout: 'vbox',
                                 items: [{
                                     xtype: 'component',
                                     html: 'Interface Name contains',
@@ -190,6 +278,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                                 }, {
                                     xtype: 'textfield',
                                     placeholder: 'Type name ...',
+                                    margin: '16 0 0 0',
                                     autoComplete: false,
                                     keyMapEnabled: true,
                                     keyMap: {
@@ -207,12 +296,13 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                         handler: 'addCriteria'
                     }]
                 }],
-                bind: '{policy.criteria}',
-
                 columns: [{
                     text: 'Definition',
                     flex: 1,
                     cell: { encodeHtml: false },
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
                     renderer: function (value, record) {
                         var output = [], text;
                         if (record.get('type') === 'ATTRIBUTE') {
@@ -256,7 +346,9 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                             },
                         }
                     }
-                }]
+                }],
+                deferEmptyText: false,
+                emptyText: true
             }]
         }]
     }, {
@@ -265,11 +357,11 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
         items: ['->', {
             text: 'Cancel',
             margin: '0 8 0 0',
-            handler: function () {  // standard button (see below)
-                this.up('dialog').destroy();
-            }
+            handler: 'onCancel'
         }, {
-            text: 'Add',
+            bind: {
+                text: '{action === "ADD" ? "Create" : "Update"}'
+            },
             ui: 'action',
             handler: 'onSubmit'
         }]
@@ -277,11 +369,54 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
 
     controller: {
         init: function (view) {
-            var availableWans = [],
-                interfacesGrid = view.down('#wanInterfaces'),
-                newRec = Ext.create('Mfw.model.WanPolicy');
-            view.getViewModel().set('policy', newRec);
-            interfacesGrid.getStore().load();
+            var wans = [],
+                policy,
+                vm = view.getViewModel();
+
+            if (view.getPolicy()) {
+                vm.set({
+                    policy: view.getPolicy(),
+                    action: 'EDIT'
+                });
+            } else {
+                vm.set({
+                    policy: Ext.create('Mfw.model.WanPolicy'),
+                    action: 'ADD'
+                });
+            }
+
+            Ext.getStore('interfaces').load(function (records) {
+                Ext.Array.each(records, function (record) {
+                    if (record.get('wan')) {
+                        wans.push({
+                            checked: true,
+                            name: record.get('name'),
+                            interfaceId: record.get('interfaceId'),
+                            weight: 100
+                        });
+                    }
+                });
+
+                vm.set('wans', wans);
+            });
+
+            policy = vm.get('policy');
+
+
+            // FIXME: some all, specific wan selection when editing policy
+
+            if (vm.get('action') === 'EDIT') {
+                var firstInterfaceId = vm.get('policy').interfaces().first().get('id');
+                if (policy.get('type') === 'SPECIFIC_WAN') {
+                    view.down('#specificWanSelection').setValue(firstInterfaceId);
+                } else {
+                    if (firstInterfaceId === 0) {
+                        view.lookup('wanSelection').setValue('ALL');
+                    } else {
+                        view.lookup('wanSelection').setValue('SPECIFIC');
+                    }
+                }
+            }
         },
 
         isVpnCriteria: function (item) {
@@ -304,9 +439,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             field.setValue('');
             field.blur();
             field.up('button').getMenu().hide();
-            // console.log();
-
-            // .hide();
         },
 
         metricDialog: function (item) {
@@ -320,6 +452,15 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
         },
 
 
+        weightRenderer: function (value) {
+            var me = this, vm = me.getViewModel();
+            if (vm.get('wanSelection').value === 'ALL') {
+                return 'evenly';
+            } else {
+                return value;
+            }
+        },
+
         addCriteria: function () {
             var me = this, vm = me.getViewModel(),
                 newCriteria = Ext.create('Mfw.model.WanCriterion'),
@@ -332,22 +473,52 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             grid.getStore().remove(info.record);
         },
 
+        onCancel: function () {
+            var me = this;
+            me.getViewModel().get('policy').reject();
+            me.getView().destroy();
+        },
+
         onSubmit: function () {
             var me = this,
                 vm = me.getViewModel(),
                 policy = vm.get('policy'),
-                dialog = me.getView();
+                dialog = me.getView(),
+                form = dialog.down('formpanel');
 
-            dialog.down('#wanInterfaces').getStore().each(function (intf) {
-                if (intf.get('checked')) {
+            if (!form.validate()) { return; }
+
+            policy.interfaces().removeAll();
+            if (policy.get('type') !== 'SPECIFIC_WAN') {
+                if (vm.get('wanSelection').value === "ALL") {
                     policy.interfaces().add({
-                        id: intf.get('interfaceId'),
-                        weight: 100
+                        id: 0
+                    });
+                } else {
+                    dialog.down('#wans').getStore().each(function (intf) {
+                        if (intf.get('checked')) {
+                            policy.interfaces().add({
+                                id: intf.get('interfaceId'),
+                                weight: (policy.get('balance_algorithm') === 'WEIGHTED') ? intf.get('weight') : null
+                            });
+                        }
                     });
                 }
-            });
+            } else {
+                policy.interfaces().add({
+                    id: dialog.down('#specificWanSelection').getValue(),
+                    weight: null
+                });
+            }
 
-            dialog.ownerCmp.getStore().add(policy);
+            if (vm.get('action') === 'ADD') {
+                dialog.ownerCmp.getStore().add(policy);
+            } else {
+                policy.commit();
+                // dialog.ownerCmp.getStore().add(policy);
+            }
+
+
             dialog.close();
         }
 

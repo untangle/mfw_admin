@@ -7,7 +7,8 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
 
     config: {
         enableManualSort: false,
-        recordModel: 'Mfw.model.WanPolicy'
+        recordModel: 'Mfw.model.WanPolicy',
+        editor: 'wan-policy-dialog'
     },
 
     sortable: false,
@@ -35,58 +36,51 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
     }, {
         text: 'Type',
         dataIndex: 'type',
-        width: 150,
-        renderer: function (value) {
+        width: 300,
+        cell: { encodeHtml: false },
+        renderer: function (value, record) {
             var str;
-            switch (value) {
-                case 'SPECIFIC_WAN': str = 'Specific WAN'; break;
-                case 'BEST_OF': str = 'Best Of'; break;
-                case 'BALANCE': str = 'Balance'; break;
-                default:
+            if (record.get('type') === 'SPECIFIC_WAN') {
+                str = '<strong>Specific WAN</strong>';
             }
-            return str;
-        }
-    }, {
-        text: 'Best of Metric',
-        dataIndex: 'best_of_metric',
-        width: 200,
-        renderer: function (value) {
-            var str;
-            switch (value) {
-                case 'LOWEST_LATENCY': str = 'Lowest Latency'; break;
-                case 'HIGHEST_AVAILABLE_BANDWIDTH': str = 'Highest Available Bandwidth'; break;
-                case 'LOWEST_JITTER': str = 'Lowest Jitter'; break;
-                case 'LOWEST_PACKET_LOSS': str = 'Lowest Packet Loss'; break;
-                default:
+            if (record.get('type') === 'BEST_OF') {
+                str = '<strong>Best WANs with </strong> ';
+                switch (record.get('best_of_metric')) {
+                    case 'LOWEST_LATENCY': str += 'Lowest Latency'; break;
+                    case 'HIGHEST_AVAILABLE_BANDWIDTH': str += 'Highest Available Bandwidth'; break;
+                    case 'LOWEST_JITTER': str += 'Lowest Jitter'; break;
+                    case 'LOWEST_PACKET_LOSS': str += 'Lowest Packet Loss'; break;
+                    default: break;
+                }
+            }
+            if (record.get('type') === 'BALANCE') {
+                str = '<strong>Balance</strong> ';
+                switch (record.get('balance_algorithm')) {
+                    case 'WEIGHTED': str += 'Weighted'; break;
+                    case 'LATENCY': str += 'Latency'; break;
+                    case 'AVAILABLE_BANDWIDTH': str += 'Available Bandwidth'; break;
+                    case 'BANDWIDTH': str += 'Bandwidth'; break;
+                    default: break;
+                }
             }
             return str;
         }
     }, {
         text: 'Interfaces',
         dataIndex: 'interfaces',
-        width: 240,
+        flex: 1,
         cell: { encodeHtml: false },
         renderer: function (value, record) {
-            var output = [], text;
+            var output = [],
+                weighted = record.get('balance_algorithm') === 'WEIGHTED';
             record.interfaces().each(function (i) {
-                output.push(Renderer.interface(i.get('id')) + ' (' + i.get('weight') + ')');
+                if (i.get('id') === 0) {
+                    output.push('All WAN Interfaces' + (weighted ? ' (evenly weighted)' : ''));
+                } else {
+                    output.push(Renderer.interface(i.get('id')) + (weighted ? ' (w: ' + i.get('weight') + ')' : ''));
+                }
             });
             return output.join(', ');
-        }
-    }, {
-        text: 'Balance Algorithm',
-        dataIndex: 'balance_algorithm',
-        width: 200,
-        renderer: function (value) {
-            var str;
-            switch (value) {
-                case 'WEIGHTED': str = 'Weighted'; break;
-                case 'LATENCY': str = 'Latency'; break;
-                case 'AVAILABLE_BANDWIDTH': str = 'Available Bandwidth'; break;
-                case 'BANDWIDTH': str = 'Bandwidth'; break;
-                default:
-            }
-            return str;
         }
     }, {
         text: 'Criteria',
