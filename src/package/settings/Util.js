@@ -12,7 +12,7 @@ Ext.define('Mfw.settings.Util', {
      */
     sanitize: function (data) {
         Ext.Object.each(data, function (key, value) {
-            if (Ext.String.startsWith(key, '_') || key === 'id' || key === 'output') {
+            if (Ext.String.startsWith(key, '_') || key === 'id' || key === 'output' || key === 'mfw.model.table.Table') {
                 delete data[key];
             }
 

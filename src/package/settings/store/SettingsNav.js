@@ -43,7 +43,7 @@ Ext.define('Mfw.store.Nav', {
             href: 'settings/routing',
             children: [
                 { text: 'WAN Policies'.t(), leaf: true, href: 'settings/routing/wan-policies' },
-                { text: 'WAN Policy Chains'.t(), leaf: true, href: 'settings/routing/wan-policy-chains' }
+                { text: 'WAN Rules'.t(), leaf: true, href: 'settings/routing/wan-rules' }
             ]
         }, {
             // System

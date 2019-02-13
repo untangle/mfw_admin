@@ -318,6 +318,23 @@ Ext.define('Mfw.cmp.grid.table.RuleSheet', {
                 });
             }
 
+            if (Ext.Array.contains(actions, 'WAN_POLICY')) {
+                fields.push({
+                    xtype: 'selectfield',
+                    name: 'policy',
+                    label: 'Choose WAN Policy'.t(),
+                    editable: false,
+                    required: true,
+                    hidden: true,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: sheet.table.policies,
+                    bind: {
+                        hidden: '{actiontype.value !== "WAN_POLICY"}'
+                    }
+                });
+            }
+
             me.actionform.down('#actiontype').setOptions(options);
             me.actionform.add(fields);
         },

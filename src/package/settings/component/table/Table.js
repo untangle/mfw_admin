@@ -44,7 +44,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         'SNAT': { value: 'SNAT', text: 'Source Address'.t() },
         'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade'.t() },
         'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority'.t() },
-        'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() }
+        'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() },
+        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() }
     },
 
     itemConfig: {
@@ -261,7 +262,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         text: 'Action'.t(),
         dataIndex: 'action',
         menuDisabled: true,
-        width: 250,
+        width: 350,
         cell: {
             encodeHtml: false,
             bind: {

@@ -7,16 +7,15 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             table; // the table model which holds the rules
 
         me.table = table = new Mfw.model.table.Table();
-        table.getProxy().setApi(grid.getApi());
+
+        if (grid.chainsOnly) {
+            me.table.chains().getProxy().setApi(grid.getApi());
+        } else {
+            me.table.getProxy().setApi(grid.getApi());
+        }
 
         me.chainsmenu = grid.down('#chainsmenu');
-
         me.decorate(); // adds menus, extra columns, buttons
-
-        me.rulesheet = grid.add({
-            xtype: 'rulesheet',
-            table: grid
-        });
 
         table.chains().on({
             // when adding a new chain, update chains menu and select the new chain
@@ -32,7 +31,21 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
         });
 
-        me.onLoad();
+        if (grid.before) {
+            grid.before(function () {
+                me.rulesheet = grid.add({
+                    xtype: 'rulesheet',
+                    table: grid
+                });
+                me.onLoad();
+            });
+        } else {
+            me.rulesheet = grid.add({
+                xtype: 'rulesheet',
+                table: grid
+            });
+            me.onLoad();
+        }
     },
 
     /**
@@ -46,27 +59,41 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         grid.mask({xtype: 'loadmask'});
 
-        me.table.load({
-            success: function (record) {
-                // on load set records as not dirty or phantom
-                record.chains().each(function (chain) {
+        if (!grid.chainsOnly) {
+            me.table.load({
+                success: function (record) {
+                    // on load set records as not dirty or phantom
+                    record.chains().each(function (chain) {
+                        chain.rules().each(function (record) {
+                            record.dirty = false;
+                            record.phantom = false;
+                        });
+                    });
+
+                    me.selectChain();
+                    me.updateChainsMenu();
+                },
+                callback: function () {
+                    grid.unmask();
+                    // if reset API used, revert to default API
+                    if (!me.table.getProxy().getApi().update) {
+                        me.table.getProxy().setApi(grid.getApi());
+                    }
+                }
+            });
+        } else {
+            me.table.chains().load(function (records) {
+                Ext.Array.each(records, function (chain) {
                     chain.rules().each(function (record) {
                         record.dirty = false;
                         record.phantom = false;
                     });
                 });
-
                 me.selectChain();
                 me.updateChainsMenu();
-            },
-            callback: function () {
                 grid.unmask();
-                // if reset API used, revert to default API
-                if (!me.table.getProxy().getApi().update) {
-                    me.table.getProxy().setApi(grid.getApi());
-                }
-            }
-        });
+            });
+        }
     },
 
     /**
@@ -96,11 +123,17 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     beforeSave: function () {
         var me = this;
         me.table.chains().each(function (chain) {
+            chain.dirty = true;
+            chain.phantom = false;
             chain.rules().each(function (record) {
                 if (record.get('_deleteSchedule')) { record.drop(); }
                 record.dirty = true;
                 record.phantom = false;
             });
+            /**
+             * don't know why loading an associeted store ("chains") from a model ("table") is polluting the record with the "mfw.model.table.Table" key
+             * which is then removed upon sanitization
+             */
         });
     },
 
@@ -114,15 +147,28 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         me.beforeSave();
 
         grid.mask({xtype: 'loadmask'});
-        me.table.save({
-            success: function () {
-                Ext.toast('Settings saved!', 3000);
-                me.onLoad();
-            },
-            callback: function () {
-                grid.unmask();
-            }
-        });
+
+        if (grid.chainsOnly) {
+            me.table.chains().sync({
+                success: function () {
+                    Ext.toast('Settings saved!', 3000);
+                    me.onLoad();
+                },
+                callback: function () {
+                    grid.unmask();
+                }
+            });
+        } else {
+            me.table.save({
+                success: function () {
+                    Ext.toast('Settings saved!', 3000);
+                    me.onLoad();
+                },
+                callback: function () {
+                    grid.unmask();
+                }
+            });
+        }
     },
 
     /**
@@ -600,8 +646,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     actionRenderer: function (action) {
-        // console.log (action);
-        var actionStr = 'Missing or No Action...'.t();
+        var me = this, grid = me.getView(),
+            actionStr = 'Missing or No Action...'.t();
+
+        if (grid.policies) {
+            var policiesMap = Ext.Array.toValueMap(grid.policies, 'value');
+        }
+
         if (action && action.type) {
             switch (action.type) {
                 case 'JUMP':            actionStr = 'Jump to'.t(); break;
@@ -615,6 +666,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case 'MASQUERADE':      actionStr = 'Masquerade'.t(); break;
                 case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
                 case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
+                case 'WAN_POLICY':      actionStr = ''; break;
                 default: break;
             }
             if (action.type === 'JUMP' || action.type === 'GOTO') {
@@ -628,6 +680,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
             if (action.type === 'SET_PRIORITY') {
                 actionStr += ' ' + action.priority;
+            }
+            if (action.type === 'WAN_POLICY') {
+                actionStr += policiesMap[action.policy].text + ' <span style="color: #999;">[ policy ' + action.policy + ' ]</span> ';
             }
         }
         return actionStr;
