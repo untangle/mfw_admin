@@ -33,7 +33,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'client_interface_type', text: 'Interface Type', leaf: true },
                         { key: 'client_port', text: 'Port', leaf: true },
                         { key: 'client_port_new', text: 'Port New', leaf: true },
-                        { key: 'client_reverse_dns', text: 'Reverse DNS', leaf: true }
+                        { key: 'client_reverse_dns', text: 'Reverse DNS', leaf: true },
+                        { key: 'client_dns_hint', text: 'DNS Hint', leaf: true }
                     ]
                 },
                 {
@@ -47,7 +48,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'server_interface_type', text: 'Interface Type', leaf: true },
                         { key: 'server_port', text: 'Port', leaf: true },
                         { key: 'server_port_new', text: 'Port New', leaf: true },
-                        { key: 'server_reverse_dns', text: 'Reverse DNS', leaf: true }
+                        { key: 'server_reverse_dns', text: 'Reverse DNS', leaf: true },
+                        { key: 'server_dns_hint', text: 'DNS Hint', leaf: true }
                     ]
                 },
                 {

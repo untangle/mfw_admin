@@ -261,6 +261,11 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 200,
         hidden: true
     }, {
+        text: 'Client DNS Hint',
+        dataIndex: 'client_dns_hint',
+        width: 200,
+        hidden: true
+    }, {
         text: 'Server Interface',
         dataIndex: 'server_interface_id',
         width: 100,
@@ -303,6 +308,11 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Server Reverse DNS',
         dataIndex: 'server_reverse_dns',
+        width: 200,
+        hidden: true
+    }, {
+        text: 'Server DNS Hint',
+        dataIndex: 'server_dns_hint',
         width: 200,
         hidden: true
     }, {

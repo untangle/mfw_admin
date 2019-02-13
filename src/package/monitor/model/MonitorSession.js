@@ -58,6 +58,7 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'client_port', type: 'number', allowNull: true },
         { name: 'client_port_new', type: 'number', allowNull: true },
         { name: 'client_reverse_dns', type: 'string', allowNull: true },
+        { name: 'client_dns_hint', type: 'string', allowNull: true },
 
         { name: 'server_address', type: 'string', allowNull: true },
         { name: 'server_address_new', type: 'string', allowNull: true },
@@ -67,6 +68,7 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'server_port', type: 'number', allowNull: true },
         { name: 'server_port_new', type: 'number', allowNull: true },
         { name: 'server_reverse_dns', type: 'string', allowNull: true },
+        { name: 'server_dns_hint', type: 'string', allowNull: true },
 
         { name: 'ssl_sni', type: 'string', allowNull: true },
 
