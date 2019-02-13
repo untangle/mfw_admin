@@ -5,7 +5,7 @@ Ext.define('Mfw.model.WanInterface', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'id',  type: 'integer' },
+        { name: 'interfaceId', type: 'integer' },
         { name: 'weight', type: 'integer', allowNull: true }
     ]
 });

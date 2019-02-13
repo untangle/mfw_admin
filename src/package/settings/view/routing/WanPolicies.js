@@ -74,16 +74,16 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
             var output = [],
                 weighted = record.get('balance_algorithm') === 'WEIGHTED';
             record.interfaces().each(function (i) {
-                if (i.get('id') === 0) {
-                    output.push('All WAN Interfaces' + (weighted ? ' (evenly weighted)' : ''));
+                if (i.get('interfaceId') === 0) {
+                    output.push('All WANs' + (weighted ? ' (evenly weighted)' : ''));
                 } else {
-                    output.push(Renderer.interface(i.get('id')) + (weighted ? ' (w: ' + i.get('weight') + ')' : ''));
+                    output.push(Renderer.interface(i.get('interfaceId')) + (weighted ? ' (w: ' + i.get('weight') + ')' : ''));
                 }
             });
             return output.join(', ');
         }
     }, {
-        text: 'Criteria',
+        text: 'Selection Criteria',
         dataIndex: 'criteria',
         flex: 1,
         cell: { encodeHtml: false },
@@ -92,7 +92,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
             record.criteria().each(function (c) {
                 if (c.get('type') === 'ATTRIBUTE') {
                     if (c.get('attribute') === 'VPN') {
-                        output.push('is <b>is VPN</b>');
+                        output.push('<b>is VPN</b>');
                     }
                     if (c.get('attribute') === 'NAME') {
                         output.push('name contains "<strong>' + c.get('name_contains') + '</strong>"');

@@ -152,8 +152,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 },
                 options: [
                     { text: 'All WANs', value: 'ALL' },
-                    { text: 'Specific WANs', value: 'SPECIFIC' },
-                    { text: 'Criteria', value: 'CRITERIA' }
+                    { text: 'Specific WANs', value: 'SPECIFIC' }
                 ]
             }]
         }, {
@@ -176,7 +175,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 selectable: false,
                 hidden: true,
                 bind: {
-                    hidden: '{policy.type === "SPECIFIC_WAN"}',
+                    hidden: '{wanSelection.value === "ALL"}',
                     store: '{availableWans}'
                 },
                 scrollable: 'y',
@@ -194,13 +193,9 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                     xtype: 'checkcolumn',
                     dataIndex: 'checked',
                     width: 40,
-                    hidden: true,
                     sortable: false,
                     hideable: false,
-                    menuDisabled: true,
-                    bind: {
-                        hidden: '{wanSelection.value === "ALL"}'
-                    }
+                    menuDisabled: true
                 }, {
                     text: 'Interface',
                     dataIndex: 'interfaceId',
@@ -221,14 +216,15 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                     bind: {
                         hidden: '{policy.balance_algorithm !== "WEIGHTED"}'
                     },
-                    // renderer: 'weightRenderer',
                     editable: true,
                     editor: {
                         xtype: 'numberfield',
                         required: true,
                         defaultValue: 100,
-                        minValue: 0,
-                        maxValue: 100
+                        maxLength: 5,
+                        decimals: 0,
+                        minValue: 1,
+                        maxValue: 10000
                     }
                 }]
                 // listeners: {
@@ -370,7 +366,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
     controller: {
         init: function (view) {
             var wans = [],
-                policy,
+                policy, interfaces,
                 vm = view.getViewModel();
 
             if (view.getPolicy()) {
@@ -385,11 +381,15 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 });
             }
 
+            policy = vm.get('policy');
+            interfaces = policy.interfaces();
+
             Ext.getStore('interfaces').load(function (records) {
                 Ext.Array.each(records, function (record) {
                     if (record.get('wan')) {
                         wans.push({
-                            checked: true,
+                            // check interfaces which are used in this policy
+                            checked: interfaces.findRecord('interfaceId', record.get('interfaceId')) ? true : false,
                             name: record.get('name'),
                             interfaceId: record.get('interfaceId'),
                             weight: 100
@@ -400,19 +400,18 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 vm.set('wans', wans);
             });
 
-            policy = vm.get('policy');
-
-
-            // FIXME: some all, specific wan selection when editing policy
-
             if (vm.get('action') === 'EDIT') {
-                var firstInterfaceId = vm.get('policy').interfaces().first().get('id');
+                var firstInterfaceId = interfaces.first().get('interfaceId');
+
+                // is specific wan select single interface
                 if (policy.get('type') === 'SPECIFIC_WAN') {
                     view.down('#specificWanSelection').setValue(firstInterfaceId);
                 } else {
                     if (firstInterfaceId === 0) {
+                        // if ALL interfaces
                         view.lookup('wanSelection').setValue('ALL');
                     } else {
+                        // is specific interfaces selection
                         view.lookup('wanSelection').setValue('SPECIFIC');
                     }
                 }
@@ -452,15 +451,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
         },
 
 
-        weightRenderer: function (value) {
-            var me = this, vm = me.getViewModel();
-            if (vm.get('wanSelection').value === 'ALL') {
-                return 'evenly';
-            } else {
-                return value;
-            }
-        },
-
         addCriteria: function () {
             var me = this, vm = me.getViewModel(),
                 newCriteria = Ext.create('Mfw.model.WanCriterion'),
@@ -492,13 +482,13 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             if (policy.get('type') !== 'SPECIFIC_WAN') {
                 if (vm.get('wanSelection').value === "ALL") {
                     policy.interfaces().add({
-                        id: 0
+                        interfaceId: 0
                     });
                 } else {
                     dialog.down('#wans').getStore().each(function (intf) {
                         if (intf.get('checked')) {
                             policy.interfaces().add({
-                                id: intf.get('interfaceId'),
+                                interfaceId: intf.get('interfaceId'),
                                 weight: (policy.get('balance_algorithm') === 'WEIGHTED') ? intf.get('weight') : null
                             });
                         }
@@ -506,7 +496,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 }
             } else {
                 policy.interfaces().add({
-                    id: dialog.down('#specificWanSelection').getValue(),
+                    interfaceId: dialog.down('#specificWanSelection').getValue(),
                     weight: null
                 });
             }
@@ -515,9 +505,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 dialog.ownerCmp.getStore().add(policy);
             } else {
                 policy.commit();
-                // dialog.ownerCmp.getStore().add(policy);
             }
-
 
             dialog.close();
         }
