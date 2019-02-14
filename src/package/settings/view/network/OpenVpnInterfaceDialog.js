@@ -14,7 +14,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
     },
 
     bind: {
-        title: '{action === "ADD" ? "Create" : "Edit"} new Interface',
+        title: '{action === "ADD" ? "Create New" : "Edit"} Interface',
     },
     width: 900,
     height: 600,
@@ -95,7 +95,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
             userSelectable: 'text',
             scrollable: true,
             html: 'No file selected.',
-            style: 'font-family: "Courier New", sans-serif; background-color: #EFEFEF; border-radius: 2px; padding: 8px;',
+            style: 'font-family: "Courier New", sans-serif; background-color: #EFEFEF; border-radius: 2px; padding: 8px; word-break: break-all',
             flex: 1
         }]
     }, {
@@ -124,9 +124,9 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             if (intf && intf.getOpenvpnConfFile()) {
                 vm.set('confFileSet', true);
-                content.setHtml('There is an existing OpenVPN config file base64 encoded:<br/><br/>' +
+                content.setHtml('There is an existing OpenVPN configuration file base64 encoded:<br/><br/>' +
                                  intf.getOpenvpnConfFile().get('contents') +
-                                 '<br/><br/> Select another file to change it!'
+                                 '<br/><br/> Select another OpenVPN config file to update configuration!'
                                );
             }
 
