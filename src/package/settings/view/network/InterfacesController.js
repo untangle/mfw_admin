@@ -17,13 +17,22 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     },
 
     onEditRecord: function (grid, info) {
-        var me = this;
+        var me = this,
+            intf = info.record;
 
-        me.intfDialog = Ext.Viewport.add({
-            xtype: 'openvpn-interface-dialog',
-            ownerCmp: me.getView(),
-            interface: info.record
-        });
+        if (intf.get('type') === 'OPENVPN') {
+            me.intfDialog = Ext.Viewport.add({
+                xtype: 'openvpn-interface-dialog',
+                ownerCmp: me.getView(),
+                interface: intf
+            });
+        } else {
+            me.intfDialog = Ext.Viewport.add({
+                xtype: 'generic-interface-dialog',
+                ownerCmp: me.getView(),
+                interface: intf
+            });
+        }
         me.intfDialog.on('destroy', function () {
             me.onLoad();
             me.intfDialog = null;
