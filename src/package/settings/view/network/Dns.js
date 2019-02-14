@@ -91,13 +91,13 @@ Ext.define('Mfw.settings.network.Dns', {
                 bind: '{rec.localServers}',
 
                 columns: [{
-                    text: 'Name'.t(),
-                    dataIndex: 'name',
+                    text: 'Domain'.t(),
+                    dataIndex: 'domain',
                     flex: 1,
                     editable: true
                 } , {
-                    text: 'Address'.t(),
-                    dataIndex: 'address',
+                    text: 'Local Server'.t(),
+                    dataIndex: 'localServer',
                     flex: 1,
                     editable: true
                 }]
