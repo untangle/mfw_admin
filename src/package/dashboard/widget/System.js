@@ -46,7 +46,6 @@ Ext.define('Mfw.dashboard.widget.System', {
     controller: {
         init: function (view) {
             var me = this, vm = view.getViewModel();
-            console.log();
             Ext.Ajax.request({
                 url: '/api/status/hardware',
                 success: function (response) {
@@ -132,8 +131,7 @@ Ext.define('Mfw.dashboard.widget.System', {
 
         getSystemStatus: function () {
             var me = this,
-                view = me.getView(),
-                vm = me.getViewModel();
+                view = me.getView();
             Ext.Ajax.request({
                 url: '/api/status/system',
                 success: function (response) {

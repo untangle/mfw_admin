@@ -192,7 +192,7 @@ Ext.define('Mfw.model.Interface', {
     }],
 
     hasOne: [{
-        model: 'Mfw.model.OpenvpnConfFile',
+        model: 'Mfw.model.OpenVpnConfFile',
         name: 'openvpnConfFile',
         associationKey: 'openvpnConfFile'
     }],
