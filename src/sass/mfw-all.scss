@@ -821,3 +821,23 @@ i {
         font-family: "Courier New", sans-serif;
     }
 }
+
+
+.x-segmentedbutton.button-tabs {
+    .x-button.x-pressed {
+        color: #FFF;
+    }
+    .x-button-segmented.x-pressing, .x-button-segmented.x-pressed {
+        color: #FFF;
+        .x-inner-el {
+            background-color: var(--base-color);
+        }
+    }
+    .x-button-segmented {
+        color: #333;
+        .x-inner-el {
+            background-color: #ECECEC;
+        }
+    }
+
+}
