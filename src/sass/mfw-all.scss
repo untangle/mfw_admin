@@ -810,3 +810,14 @@ i {
         background: #222;
     }
 }
+
+
+
+.file-upload {
+    background-color: #EFEFEF;
+    border-radius: 2px;
+    .x-input-el {
+        padding: 8px;
+        font-family: "Courier New", sans-serif;
+    }
+}

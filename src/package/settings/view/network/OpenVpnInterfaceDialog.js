@@ -14,7 +14,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
     },
 
     bind: {
-        title: '{action === "ADD" ? "Create New" : "Edit"} Interface',
+        title: '{action === "ADD" ? "Create New" : "Edit"} OpenVPN Interface',
     },
     width: 900,
     height: 600,
@@ -89,14 +89,15 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 change: 'onFileChange'
             }
         }, {
-            xtype: 'component',
+            xtype: 'textareafield',
+            userCls: 'file-upload',
             itemId: 'fileContent',
+            flex: 1,
             margin: 16,
-            userSelectable: 'text',
-            scrollable: true,
-            html: 'No file selected.',
-            style: 'font-family: "Courier New", sans-serif; background-color: #EFEFEF; border-radius: 2px; padding: 8px; word-break: break-all',
-            flex: 1
+            autoCorrect: false,
+            editable: false,
+            focusable: true,
+            value: 'No file selected.'
         }]
     }, {
         xtype: 'toolbar',
@@ -124,10 +125,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             if (intf && intf.getOpenvpnConfFile()) {
                 vm.set('confFileSet', true);
-                content.setHtml('There is an existing OpenVPN configuration file base64 encoded:<br/><br/>' +
-                                 intf.getOpenvpnConfFile().get('contents') +
-                                 '<br/><br/> Select another OpenVPN config file to update configuration!'
-                               );
+                content.setValue(atob(intf.getOpenvpnConfFile().get('contents')));
             }
 
             vm.set({
@@ -147,7 +145,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 content = me.getView().down('#fileContent');
 
             reader.onload = function () {
-                content.setHtml(reader.result.replace(/\n/g, '<br/>'));
+                content.setValue(reader.result);
                 me.uploadedFile = btoa(reader.result);
             };
             reader.readAsText(file);
