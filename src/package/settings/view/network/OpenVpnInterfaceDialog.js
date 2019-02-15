@@ -162,10 +162,6 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             me.getView().mask({ xtype: 'loadmask' });
 
-            interface.set({
-                interfaceId: interfacesStore.count() + 1
-            });
-
             if (me.uploadedFile) {
                 var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
                     encoding: 'base64',
@@ -175,6 +171,9 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
             }
 
             if (vm.get('action') === 'ADD') {
+                interface.set({
+                    interfaceId: interfacesStore.count() + 1
+                });
                 interfacesStore.add(interface);
             } else {
                 interface.commit();
