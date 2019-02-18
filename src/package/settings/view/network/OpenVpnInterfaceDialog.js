@@ -1,5 +1,4 @@
 Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
-    // extend: 'Ext.Panel',
     extend: 'Ext.Dialog',
     alias: 'widget.openvpn-interface-dialog',
 
@@ -41,8 +40,9 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 xtype: 'selectfield',
                 label: 'Interface Type',
                 margin: '0 16',
-                width: 200,
+                width: 150,
                 placeholder: 'Select Type ...',
+                disabled: true,
                 required: true,
                 bind: '{interface.type}',
                 options: [{
@@ -56,7 +56,20 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 autoComplete: false,
                 required: true,
                 bind: '{interface.name}',
-                width: 300
+                flex: 1
+            }, {
+                xtype: 'selectfield',
+                name: 'configType',
+                label: 'Config Type'.t(),
+                flex: 1,
+                margin: '0 16',
+                editable: false,
+                required: true,
+                bind: '{interface.configType}',
+                options: [
+                    { text: 'Addressed'.t(), value: 'ADDRESSED' },
+                    { text: 'Disabled'.t(),  value: 'DISABLED' }
+                ]
             }, {
                 xtype: 'checkbox',
                 label: '&nbsp;',
