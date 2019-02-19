@@ -1356,12 +1356,15 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
 
             interfacesStore.sync({
                 success: function () {
-                    me.getView().unmask();
-                    me.getView().close();
+                    Ext.toast('Settings saved!');
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
                 },
+                callback: function () {
+                    me.getView().unmask();
+                    me.getView().close();
+                }
             });
         }
     }
