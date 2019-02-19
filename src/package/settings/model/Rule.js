@@ -1,3 +1,13 @@
+Ext.define('Mfw.model.table.Action', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'type', type: 'string' }, // "JUMP","GOTO","ACCEPT","REJECT","DROP","DNAT","SNAT","MASQUERADE","SET_PRIORITY"
+    ]
+
+});
+
 Ext.define('Mfw.model.table.Rule', {
     extend: 'Ext.data.Model',
     alias: 'model.table-rule',
@@ -6,9 +16,8 @@ Ext.define('Mfw.model.table.Rule', {
     identifier: 'uuid',
     fields: [
         { name: 'ruleId', type: 'integer' },
-        { name: 'enabled', type: 'boolean' },
+        { name: 'enabled', type: 'boolean', defaultValue: true },
         { name: 'description', type: 'string' },
-        { name: 'action', type: 'auto' },
         { name: '_deleteSchedule', type: 'boolean', default: false }
     ],
 
@@ -18,27 +27,28 @@ Ext.define('Mfw.model.table.Rule', {
         associationKey: 'conditions'
     }],
 
-    // hasOne: {
-    //     model: 'Mfw.model.table.Action',
-    //     name: 'action',
-    //     associationKey: 'action'
-    // },
+    hasOne: {
+        model: 'Mfw.model.table.Action',
+        name: 'action',
+        associationKey: 'action'
+    },
 
     proxy: {
         type: 'ajax',
-        // api: {
-        //     read: Util.api + '/settings/network',
-        //     update: Util.api + '/settings/network'
-        // },
         reader: {
             type: 'json'
         },
         writer: {
             type: 'json',
             writeAllFields: true,
+            allowSingle: false,
             allDataOptions: {
                 associated: true,
                 persist: true
+            },
+            transform: {
+                fn: Util.sanitize,
+                scope: this
             }
         }
     }

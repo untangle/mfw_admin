@@ -35,12 +35,12 @@ Ext.define('Mfw.settings.Util', {
     },
 
     ruleOperators: [
-        { value: '==', text: 'Equals'.t(), sign: ' [ = ]' },
-        { value: '!=', text: 'Not Equals'.t(), sign: ' [ &ne; ]' },
-        { value: '>', text: 'Greater Than'.t(), sign: ' [ &gt; ]' },
-        { value: '<', text: 'Less Than'.t(), sign: ' [ &lt; ]' },
-        { value: '>=', text: 'Greater Than or Equal'.t(), sign:' [ &ge; ]' },
-        { value: '<=', text: 'Less Than or Equal'.t(), sign: ' [ &le; ]' }
+        { value: '==', text: 'Equals'.t(), sign: ' = ' },
+        { value: '!=', text: 'Not Equals'.t(), sign: ' != ' },
+        { value: '>', text: 'Greater Than'.t(), sign: ' > ' },
+        { value: '<', text: 'Less Than'.t(), sign: ' < ' },
+        { value: '>=', text: 'Greater Than or Equal'.t(), sign:' >= ' },
+        { value: '<=', text: 'Less Than or Equal'.t(), sign: ' <= ' }
     ],
 
     conditions: [{

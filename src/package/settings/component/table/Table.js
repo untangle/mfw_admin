@@ -273,7 +273,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     }],
 
     listeners: {
-        initialize: 'onInitialize',
         select: 'onSelect',
         deselect: 'onDeselect',
         beforesave: 'beforeSave', // custom event to prepare records

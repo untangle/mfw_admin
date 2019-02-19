@@ -2,7 +2,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.tablegrid',
 
-    onInitialize: function (grid) {
+    init: function (grid) {
         var me = this,
             table; // the table model which holds the rules
 
@@ -33,17 +33,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         if (grid.before) {
             grid.before(function () {
-                me.rulesheet = grid.add({
-                    xtype: 'rulesheet',
-                    table: grid
-                });
                 me.onLoad();
             });
         } else {
-            me.rulesheet = grid.add({
-                xtype: 'rulesheet',
-                table: grid
-            });
             me.onLoad();
         }
     },
@@ -308,39 +300,22 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     onEditRule: function (grid, info) {
         var me = this;
-        // if (!me.rulesheet) {
-        //     me.rulesheet = grid.add({
-        //         xtype: 'rulesheet',
-        //         table: grid
-        //     });
-        // }
-        me.rulesheet.getViewModel().set('ruleOperation', 'EDIT');
-        me.rulesheet.setRule(info.record);
-        me.rulesheet.show();
-        return;
+        Ext.Viewport.add({
+            xtype: 'rule-dialog',
+            ownerCmp: me.getView(),
+            rule: info.record
+        }).show();
     },
 
     /**
-     * Shows the Rule sheet editor
+     * Shows the Rule dialog
      */
     onNewRule: function () {
-        var me = this, grid = me.getView(),
-            newRule = new Ext.create('Mfw.model.table.Rule', {
-                description: 'New Rule'.t() + '...',
-                conditions: []
-            });
-
-        if (!me.rulesheet) {
-            me.rulesheet = grid.add({
-                xtype: 'rulesheet',
-                table: grid
-            });
-        }
-        me.rulesheet.table = grid;
-        me.rulesheet.getViewModel().set('ruleOperation', 'NEW');
-        me.rulesheet.setRule(newRule);
-        me.rulesheet.show();
-        return;
+        var me = this;
+        Ext.Viewport.add({
+            xtype: 'rule-dialog',
+            ownerCmp: me.getView()
+        }).show();
     },
 
     onDeleteRecord: function (grid, info) {
@@ -645,16 +620,17 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         }
     },
 
-    actionRenderer: function (action) {
+    actionRenderer: function (value, record) {
         var me = this, grid = me.getView(),
+            action = record.getAction(), type,
             actionStr = 'Missing or No Action...'.t();
 
         if (grid.policies) {
             var policiesMap = Ext.Array.toValueMap(grid.policies, 'value');
         }
-
-        if (action && action.type) {
-            switch (action.type) {
+        if (action && action.get('type')) {
+            type = action.get('type');
+            switch (type) {
                 case 'JUMP':            actionStr = 'Jump to'.t(); break;
                 case 'GOTO':            actionStr = 'Go to'.t(); break;
                 case 'ACCEPT':          actionStr = 'Accept'.t(); break;
@@ -669,20 +645,20 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case 'WAN_POLICY':      actionStr = ''; break;
                 default: break;
             }
-            if (action.type === 'JUMP' || action.type === 'GOTO') {
-                actionStr += ' ' + action.chain;
+            if (type === 'JUMP' || type === 'GOTO') {
+                actionStr += ' ' + action.get('chain');
             }
-            if (action.type === 'SNAT') {
-                actionStr += ' ' + action.snat_address;
+            if (type === 'SNAT') {
+                actionStr += ' ' + action.get('snat_address');
             }
-            if (action.type === 'DNAT') {
-                actionStr += ' ' + action.dnat_address;
+            if (type === 'DNAT') {
+                actionStr += ' ' + action.get('dnat_address');
             }
-            if (action.type === 'SET_PRIORITY') {
-                actionStr += ' ' + action.priority;
+            if (type === 'SET_PRIORITY') {
+                actionStr += ' ' + action.get('priority');
             }
-            if (action.type === 'WAN_POLICY') {
-                actionStr += policiesMap[action.policy].text + ' <span style="color: #999;">[ policy ' + action.policy + ' ]</span> ';
+            if (type === 'WAN_POLICY') {
+                actionStr += policiesMap[action.get('policy')].text + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
             }
         }
         return actionStr;
