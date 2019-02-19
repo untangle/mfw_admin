@@ -6,12 +6,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         var me = this,
             table; // the table model which holds the rules
 
-        me.table = table = new Mfw.model.table.Table();
+        grid.table = table = new Mfw.model.table.Table();
 
         if (grid.chainsOnly) {
-            me.table.chains().getProxy().setApi(grid.getApi());
+            grid.table.chains().getProxy().setApi(grid.getApi());
         } else {
-            me.table.getProxy().setApi(grid.getApi());
+            grid.table.getProxy().setApi(grid.getApi());
         }
 
         me.chainsmenu = grid.down('#chainsmenu');
@@ -52,7 +52,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         grid.mask({xtype: 'loadmask'});
 
         if (!grid.chainsOnly) {
-            me.table.load({
+            grid.table.load({
                 success: function (record) {
                     // on load set records as not dirty or phantom
                     record.chains().each(function (chain) {
@@ -68,13 +68,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 callback: function () {
                     grid.unmask();
                     // if reset API used, revert to default API
-                    if (!me.table.getProxy().getApi().update) {
-                        me.table.getProxy().setApi(grid.getApi());
+                    if (!grid.table.getProxy().getApi().update) {
+                        grid.table.getProxy().setApi(grid.getApi());
                     }
                 }
             });
         } else {
-            me.table.chains().load(function (records) {
+            grid.table.chains().load(function (records) {
                 Ext.Array.each(records, function (chain) {
                     chain.rules().each(function (record) {
                         record.dirty = false;
@@ -102,7 +102,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             function (answer) {
                 if (answer === 'yes') {
                     // update proxy api to load defaults
-                    me.table.getProxy().setApi({ read: api.read.replace('/settings/', '/defaults/') });
+                    grid.table.getProxy().setApi({ read: api.read.replace('/settings/', '/defaults/') });
                     me.onLoad();
                 }
             });
@@ -113,8 +113,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * so the proxy will push all records via 'UPDATE' method
      */
     beforeSave: function () {
-        var me = this;
-        me.table.chains().each(function (chain) {
+        var me = this, grid = me.getView();
+        grid.table.chains().each(function (chain) {
             chain.dirty = true;
             chain.phantom = false;
             chain.rules().each(function (record) {
@@ -141,7 +141,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         grid.mask({xtype: 'loadmask'});
 
         if (grid.chainsOnly) {
-            me.table.chains().sync({
+            grid.table.chains().sync({
                 success: function () {
                     Ext.toast('Settings saved!', 3000);
                     me.onLoad();
@@ -151,7 +151,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 }
             });
         } else {
-            me.table.save({
+            grid.table.save({
                 success: function () {
                     Ext.toast('Settings saved!', 3000);
                     me.onLoad();
@@ -168,8 +168,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * @param {String} [name] The chain name.
      */
     selectChain: function (name) {
-        var me = this, vm = me.getViewModel(),
-            chains = me.table.chains(),
+        var me = this, grid = me.getView(), vm = me.getViewModel(),
+            chains = grid.table.chains(),
             chain;
 
         // if no name is passed it selects the default or base chain
@@ -191,8 +191,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * Updates the chains menu
      */
     updateChainsMenu: function () {
-        var me = this, menuItems = [], tpl, store = [];
-        me.table.chains().each(function (chain) {
+        var me = this, grid = me.getView(), menuItems = [], tpl, store = [];
+        grid.table.chains().each(function (chain) {
             if (chain.get('name') !== me.selectedChain.get('name')) {
                 store.push({ name: chain.get('name') });
             }
@@ -222,20 +222,26 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         var me = this, grid = me.getView(),
             chain, operation = sender.operation;
 
-        if (operation === 'EDIT') {
-            chain = me.selectedChain;
-        } else {
-            chain = new Mfw.model.table.Chain({ name: 'new-chain' });
-        }
 
-        if (!me.chainsheet) {
-            me.chainsheet = grid.add({ xtype: 'chainsheet' });
-            me.chainsheet.table = me.table; // pass table model to sheet
-        }
-        me.chainsheet.setChain(chain);
-        me.chainsheet.getViewModel().set('operation', operation);
-        me.chainsheet.show();
-        return;
+        Ext.Viewport.add({
+            xtype: 'chain-dialog',
+            ownerCmp: grid,
+            chain: operation === 'EDIT' ? me.selectedChain : null
+        }).show();
+        // if (operation === 'EDIT') {
+        //     chain = me.selectedChain;
+        // } else {
+        //     chain = new Mfw.model.table.Chain({ name: 'new-chain' });
+        // }
+
+        // if (!me.chainsheet) {
+        //     me.chainsheet = grid.add({ xtype: 'chainsheet' });
+        //     me.chainsheet.table = me.table; // pass table model to sheet
+        // }
+        // me.chainsheet.setChain(chain);
+        // me.chainsheet.getViewModel().set('operation', operation);
+        // me.chainsheet.show();
+        // return;
     },
 
     /**
@@ -264,7 +270,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                      * Deletes all rules having action Jump or Goto pointing to the
                      * chain to be deleted
                      */
-                    me.table.chains().each(function (chain) {
+                    grid.table.chains().each(function (chain) {
                         chain.rules().each(function (rule) {
                             if (rule.get('action').type === "JUMP" || rule.get('action').type === "GOTO") {
                                 if (rule.get('action').chain === me.selectedChain.get('name')) {
@@ -274,7 +280,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                         });
                     });
                     // remove the chain
-                    me.table.chains().remove(me.selectedChain);
+                    grid.table.chains().remove(me.selectedChain);
                 }
             });
     },
@@ -283,10 +289,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * Sets a Chain as default
      */
     onSetDefaultChain: function () {
-        var me = this, oldDefault;
+        var me = this, grid = me.getView(), oldDefault;
 
         // find the current default chain and remove default;
-        oldDefault = me.table.chains().findRecord('default', true);
+        oldDefault = grid.table.chains().findRecord('default', true);
         oldDefault.set('default', false);
 
         // set default the current chain selection

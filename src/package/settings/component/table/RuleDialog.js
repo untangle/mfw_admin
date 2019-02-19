@@ -193,10 +193,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                                 }
                             }
                         }
-                    }],
-                    listeners: {
-                        childtap: 'onEditCondition'
-                    }
+                    }]
                 }]
             }, {
                 xtype: 'formpanel',
@@ -245,9 +242,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         items: ['->', {
             text: 'Cancel',
             margin: '0 8 0 0',
-            handler: function () {  // standard button (see below)
-                this.up('dialog').destroy();
-            }
+            handler: 'onCancel'
         }, {
             bind: {
                 text: '{action === "ADD" ? "Create" : "Update"}'
@@ -494,6 +489,20 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>';
         },
 
+
+        onCancel: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                rule = vm.get('rule');
+
+            // FIX reject conditions on cancel
+            rule.reject(true);
+            // rule.conditions().each(function (c) {
+            //     console.log(c);
+            // });
+            rule.getAction().reject(true);
+            me.getView().destroy();
+        },
 
         onSubmit: function () {
             var me = this,
