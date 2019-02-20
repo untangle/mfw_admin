@@ -841,3 +841,16 @@ i {
     }
 
 }
+
+
+
+.btn-tool {
+    .x-body-el { color: #FFF; }
+}
+
+.cell-edit-icon .x-icon-el {
+    color: #CCC;
+    &:before {
+        font-size: 14px;
+    }
+}

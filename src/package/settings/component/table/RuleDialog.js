@@ -500,7 +500,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // rule.conditions().each(function (c) {
             //     console.log(c);
             // });
-            rule.getAction().reject(true);
+            if (rule.getAction()) { rule.getAction().reject(true); }
             me.getView().destroy();
         },
 

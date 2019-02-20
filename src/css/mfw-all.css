@@ -226,3 +226,8 @@ i { font-style: normal; }
 .x-segmentedbutton.button-tabs .x-button-segmented.x-pressing .x-inner-el, .x-segmentedbutton.button-tabs .x-button-segmented.x-pressed .x-inner-el { background-color: var(--base-color); }
 .x-segmentedbutton.button-tabs .x-button-segmented { color: #333; }
 .x-segmentedbutton.button-tabs .x-button-segmented .x-inner-el { background-color: #ECECEC; }
+
+.btn-tool .x-body-el { color: #FFF; }
+
+.cell-edit-icon .x-icon-el { color: #CCC; }
+.cell-edit-icon .x-icon-el:before { font-size: 14px; }

@@ -1,62 +1,25 @@
 Ext.define('Mfw.model.DnsStaticEntry', {
     extend: 'Ext.data.Model',
 
+    idProperty: '_id',
+    identifier: 'uuid',
     fields: [
         { name: 'description', type: 'string' },
         { name: 'name', type: 'string' },
-        { name: 'address', type: 'string', allowNull: true }
-    ],
-
-    proxy: {
-        type: 'ajax',
-        api: {
-            read: Util.api + '/settings/dns/staticEntries',
-            update: Util.api + '/settings/dns/staticEntries'
-        },
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json',
-            writeAllFields: true,
-            writeRecordId: false,
-            allDataOptions: {
-                serialize: true
-                // changes: false,
-                // persist: false
-            }
-        }
-    }
+        { name: 'address', type: 'string' }
+    ]
 });
 
 Ext.define('Mfw.model.DnsLocalServer', {
     extend: 'Ext.data.Model',
 
+    idProperty: '_id',
+    identifier: 'uuid',
     fields: [
         { name: 'name', type: 'string' },
         { name: 'address', type: 'string', allowNull: true }
     ],
 
-    proxy: {
-        type: 'ajax',
-        api: {
-            read: Util.api + '/settings/dns/localServers',
-            update: Util.api + '/settings/dns/localServers'
-        },
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json',
-            writeAllFields: true,
-            writeRecordId: false,
-            allDataOptions: {
-                serialize: true
-                // changes: false,
-                // persist: false
-            }
-        }
-    }
 });
 
 Ext.define('Mfw.model.Dns', {
