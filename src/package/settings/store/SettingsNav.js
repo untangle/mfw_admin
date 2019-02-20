@@ -33,7 +33,6 @@ Ext.define('Mfw.store.Nav', {
                 { text: 'Shaping'.t(), leaf: true, href: 'settings/firewall/shaping' },
                 { text: 'Port Forward'.t(), leaf: true, href: 'settings/firewall/port-forward' },
                 { text: 'Captive Portal'.t(), leaf: true, href: 'settings/firewall/captive-portal' },
-                { text: 'Vote'.t(), leaf: true, href: 'settings/firewall/vote' },
                 { text: 'Web Filter'.t(), leaf: true, href: 'settings/firewall/web-filter' }
             ]
         }, {
