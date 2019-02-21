@@ -4,7 +4,12 @@ Ext.define('Mfw.settings.network.Dns', {
 
     title: 'DNS'.t(),
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            visibleAddStaticEntry: false,
+            visibleAddLocalServer: false
+        }
+    },
 
     layout: 'fit',
 
@@ -39,22 +44,40 @@ Ext.define('Mfw.settings.network.Dns', {
                 docked: 'top',
                 shadow: false,
                 zIndex: 2,
+                padding: '0 8 0 16',
+                bind: {
+                    shadow: '{!visibleAddStaticEntry}'
+                },
                 items: [{
                     xtype: 'component',
                     html: 'Static Entries',
                     style: 'font-weight: 400;'
-                }]
+                }, '->', {
+                    xtype: 'button',
+                    iconCls: 'md-icon-add',
+                    text: 'Add',
+                    handler: 'toggleAddStaticEntry',
+                    hidden: true,
+                    bind: {
+                        hidden: '{visibleAddStaticEntry}'
+                    },
+                }],
             }, {
                 xtype: 'formpanel',
                 reference: 'staticentryform',
                 itemId: 'staticentryform',
                 docked: 'top',
                 shadow: true,
+                // style: 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)',
                 padding: '0 16 16 16',
                 zIndex: 1,
                 layout: {
                     type: 'hbox',
                     align: 'bottom'
+                },
+                hidden: true,
+                bind: {
+                    hidden: '{!visibleAddStaticEntry}'
                 },
                 defaults: {
                     labelAlign: 'top',
@@ -70,10 +93,24 @@ Ext.define('Mfw.settings.network.Dns', {
                     }
                 },
                 items: [{
+                    xtype: 'toolbar',
+                    docked: 'top',
+                    shadow: false,
+                    style: 'background: transparent',
+                    items: [{
+                        xtype: 'component',
+                        style: 'font-weight: 100; font-size: 14px;',
+                        html: 'Add Static Entry',
+                    }, '->', {
+                        xtype: 'button',
+                        iconCls: 'md-icon-close',
+                        handler: 'toggleAddStaticEntry'
+                    }]
+                }, {
                     xtype: 'textfield',
                     name: 'name',
                     width: 200,
-                    label: 'Add Static Entry'.t(),
+                    label: 'Name'.t(),
                     placeholder: 'Enter name ...'
                 }, {
                     xtype: 'textfield',
@@ -96,7 +133,15 @@ Ext.define('Mfw.settings.network.Dns', {
                     ui: 'action',
                     margin: '0 0 0 16',
                     handler: 'addStaticEntryBtn'
-                }]
+                }],
+                listeners: {
+                    show: function (form) {
+                        form.getFields('name').focus();
+                    },
+                    hide: function (form) {
+                        form.reset(true);
+                    }
+                }
             }],
 
             bind: '{dns.staticEntries}',
@@ -225,18 +270,31 @@ Ext.define('Mfw.settings.network.Dns', {
                 xtype: 'toolbar',
                 docked: 'top',
                 shadow: false,
-                // padding: '0 8',
+                bind: {
+                    shadow: '{!visibleAddLocalServer}'
+                },
                 zIndex: 2,
+                padding: '0 8 0 16',
                 items: [{
                     xtype: 'component',
                     html: 'Local Servers',
                     style: 'font-weight: 400;'
+                }, '->', {
+                    xtype: 'button',
+                    iconCls: 'md-icon-add',
+                    text: 'Add',
+                    handler: 'toggleAddLocalServer',
+                    hidden: true,
+                    bind: {
+                        hidden: '{visibleAddLocalServer}'
+                    },
                 }]
             }, {
                 xtype: 'formpanel',
                 itemId: 'localserverform',
                 docked: 'top',
                 shadow: true,
+                // style: 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)',
                 padding: '0 16 16 16',
                 zIndex: 1,
                 layout: {
@@ -256,11 +314,29 @@ Ext.define('Mfw.settings.network.Dns', {
                         }
                     }
                 },
+                hidden: true,
+                bind: {
+                    hidden: '{!visibleAddLocalServer}'
+                },
                 items: [{
+                    xtype: 'toolbar',
+                    docked: 'top',
+                    shadow: false,
+                    style: 'background: transparent',
+                    items: [{
+                        xtype: 'component',
+                        style: 'font-weight: 100; font-size: 14px;',
+                        html: 'Add Local Server',
+                    }, '->', {
+                        xtype: 'button',
+                        iconCls: 'md-icon-close',
+                        handler: 'toggleAddLocalServer'
+                    }]
+                }, {
                     xtype: 'textfield',
                     name: 'domain',
                     flex: 1,
-                    label: 'Add Local Server'.t(),
+                    label: 'Domain'.t(),
                     placeholder: 'Enter domain ...'
                 }, {
                     xtype: 'textfield',
@@ -276,7 +352,15 @@ Ext.define('Mfw.settings.network.Dns', {
                     ui: 'action',
                     margin: '0 0 0 16',
                     handler: 'addLocalServerBtn'
-                }]
+                }],
+                listeners: {
+                    show: function (form) {
+                        form.getFields('domain').focus();
+                    },
+                    hide: function (form) {
+                        form.reset(true);
+                    }
+                }
             }],
 
             bind: '{dns.localServers}',
@@ -395,11 +479,26 @@ Ext.define('Mfw.settings.network.Dns', {
             });
         },
 
+        toggleAddStaticEntry: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                visible = vm.get('visibleAddStaticEntry');
+            vm.set('visibleAddStaticEntry', !visible);
+        },
+
+        toggleAddLocalServer: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                visible = vm.get('visibleAddLocalServer');
+            vm.set('visibleAddLocalServer', !visible);
+        },
+
         addStaticEntryBtn: function (btn) {
             var me = this, form = btn.up('formpanel');
             if (!form.validate()) { return; }
 
             me.getView().down('#staticEntries').getStore().add(form.getValues());
+            form.getFields('name').focus();
             form.reset(true);
         },
 
@@ -408,6 +507,7 @@ Ext.define('Mfw.settings.network.Dns', {
             if (!form.validate()) { return; }
             me.getView().down('#staticEntries').getStore().add(form.getValues());
             fld.blur();
+            form.getFields('name').focus();
             form.reset(true);
         },
 
@@ -417,6 +517,7 @@ Ext.define('Mfw.settings.network.Dns', {
             if (!form.validate()) { return; }
 
             me.getView().down('#localServers').getStore().add(form.getValues());
+            form.getFields('domain').focus();
             form.reset(true);
         },
 
@@ -424,6 +525,7 @@ Ext.define('Mfw.settings.network.Dns', {
             var me = this, form = fld.up('formpanel');
             if (!form.validate()) { return; }
             me.getView().down('#localServers').getStore().add(form.getValues());
+            form.getFields('domain').focus();
             fld.blur();
             form.reset(true);
         },
@@ -445,6 +547,11 @@ Ext.define('Mfw.settings.network.Dns', {
                 }
                 record.dirty = true;
                 record.phantom = false;
+            });
+
+            me.getViewModel().set({
+                visibleAddStaticEntry: false,
+                visibleAddLocalServer: false
             });
 
             me.getView().mask({ xtype: 'loadmask' });
