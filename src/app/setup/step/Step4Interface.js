@@ -131,44 +131,65 @@ Ext.define('Mfw.setup.step.Interface', {
         // }
         ]
     }, {
-        xtype: 'tabpanel',
-        activeItem: 0,
-        tabBar: {
-            shadow: false
-        },
-        layout: {
-            type: 'card',
-            animation: {
-                type: 'fade',
-                duration: 150,
-                direction: 'horizontal'
-            }
-        },
-        // hidden: true,
-        // bind: {
-        //     hidden: '{intf.configType !== "ADDRESSED"}'
-        // },
-        items: [
-            { xtype: 'interface-ipv4' },
-            { xtype: 'interface-ipv6' },
-            { xtype: 'interface-dhcp' },
-            { xtype: 'interface-vrrp' },
-            { xtype: 'interface-wifi' }
-        ]
-    }
-    // {
-    //     xtype: 'container',
-    //     layout: 'center',
-    //     hidden: true,
-    //     bind: {
-    //         hidden: '{intf.configType === "ADDRESSED"}'
-    //     },
-    //     items: [{
-    //         html: '<h1 style="color: #777; font-weight: 100;">No options!</h1>'
-    //     }]
-    // }
-    ],
-
+        xtype: 'container',
+        layout: 'fit',
+        items: [{
+            xtype: 'segmentedbutton',
+            docked: 'top',
+            userCls: 'button-tabs',
+            margin: 16,
+            allowMultiple: false,
+            reference: 'viewSelection',
+            defaults: {
+                ripple: false,
+                hidden: true,
+                bind: {
+                    hidden: '{intf.configType !== "ADDRESSED"}'
+                },
+            },
+            activeItem: 0,
+            items: [
+                { text: 'IPv4', value: '#ipv4', pressed: true },
+                { text: 'IPv6', value: '#ipv6' },
+                { text: 'DHCP', value: '#dhcp' },
+                { text: 'VRRP', value: '#vrrp' },
+                {
+                    text: 'WiFi',
+                    value: '#wifi',
+                    hidden: true,
+                    bind: {
+                        hidden: '{intf.type !== "WIFI" && intf.configType !== "DISABLED"}'
+                    }
+                }
+            ]
+        }, {
+            xtype: 'panel',
+            itemId: 'cardPanel',
+            layout: {
+                type: 'card',
+                deferRender: false
+                // animation: {
+                //     duration: 150,
+                //     type: 'slide',
+                //     direction: 'horizontal'
+                // },
+            },
+            flex: 1,
+            hidden: true,
+            bind: {
+                activeItem: '{intf.configType === "ADDRESSED" ? viewSelection.value : (intf.type === "WIFI" ? "#wifi" : "#ipv4") }',
+                hidden: '{intf.configType !== "ADDRESSED"}'
+            },
+            margin: '0 16 16 16',
+            items: [
+                { xtype: 'interface-ipv4', itemId: 'ipv4' },
+                { xtype: 'interface-ipv6', itemId: 'ipv6' },
+                { xtype: 'interface-dhcp', itemId: 'dhcp' },
+                { xtype: 'interface-vrrp', itemId: 'vrrp' },
+                { xtype: 'interface-wifi', itemId: 'wifi' }
+            ]
+        }]
+    }],
     controller: {
         continue: function (cb) {
             var me = this,
@@ -205,8 +226,4 @@ Ext.define('Mfw.setup.step.Interface', {
             // cb();
         },
     }
-
-
-
-
 });

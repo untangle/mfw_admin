@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.interface.Ipv6', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-ipv6',
 
-    title: 'IPv6'.t(),
+    // title: 'IPv6'.t(),
 
     layout: 'fit',
 

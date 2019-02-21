@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.interface.Ipv4', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-ipv4',
 
-    title: 'IPv4'.t(),
+    // title: 'IPv4'.t(),
 
     layout: 'fit',
 

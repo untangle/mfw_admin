@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.interface.Vrrp', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-vrrp',
 
-    title: 'VRRP'.t(),
+    // title: 'VRRP'.t(),
     layout: 'fit',
     scrollable: 'y',
 

@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.interface.Dhcp', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-dhcp',
 
-    title: 'DHCP'.t(),
+    // title: 'DHCP'.t(),
 
     layout: 'fit',
 

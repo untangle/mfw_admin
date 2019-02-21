@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.interface.Wifi', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-wifi',
 
-    title: 'WiFi Settings'.t(),
+    // title: 'WiFi Settings'.t(),
     bodyPadding: 16,
     layout: 'vbox',
     scrollable: 'y',
@@ -13,10 +13,6 @@ Ext.define('Mfw.setup.interface.Wifi', {
         disabled: true
     },
 
-    hidden: true,
-    bind: {
-        hidden: '{intf.type !== "WIFI"}'
-    },
 
     items: [{
         xtype: 'textfield',
