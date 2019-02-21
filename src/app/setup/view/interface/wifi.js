@@ -13,6 +13,11 @@ Ext.define('Mfw.setup.interface.Wifi', {
         disabled: true
     },
 
+    hidden: true,
+    bind: {
+        hidden: '{intf.type !== "WIFI"}'
+    },
+
     items: [{
         xtype: 'textfield',
         label: 'Wireless SSID'.t(),
