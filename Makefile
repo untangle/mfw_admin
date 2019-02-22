@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= 192.168.1.1
+DEV_HOST ?= sdwan
 DEV_DIR ?= /www
 
 # logging
@@ -74,7 +74,9 @@ LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
 # ExtJS
-EXTJS_VERSION := 6.6.0
+EXTJS_VERSION := 6.7.0
+ # the folder name inside the archive which now seems to differ
+EXTJS_FULL_VERSION := 6.7.0.161
 EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
 EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
@@ -120,7 +122,7 @@ highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
 
 extjs-install: extjs-stage dir
-	cp -r $(STAGING_DIR)/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
+	cp -r $(STAGING_DIR)/ext-$(EXTJS_FULL_VERSION)/build $(STATIC_DIR)/res/lib/ext
 
 highstock-install: highstock-stage dir
 	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock

@@ -13,6 +13,10 @@ Ext.define('Mfw.monitor.view.Sessions', {
         }]
     },
 
+    plugins: {
+        gridfilters: true
+    },
+
     selectable: {
         mode: 'single'
     },
