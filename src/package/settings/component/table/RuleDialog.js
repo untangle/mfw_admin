@@ -2,7 +2,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.rule-dialog',
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            visibleAdd: false
+        }
+    },
 
     config: {
         rule: null
@@ -65,39 +69,80 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 xtype: 'container',
                 flex: 1,
                 layout: 'fit',
-                padding: '16 0 0 0',
+                padding: 0,
                 items: [{
                     xtype: 'toolbar',
                     docked: 'top',
                     shadow: false,
-                    padding: '0 8',
+                    bind: {
+                        shadow: '{!visibleAdd}'
+                    },
+                    padding: '0 8 0 16',
                     zIndex: 2,
                     items: [{
                         xtype: 'component',
                         html: 'Conditions',
-                        style: 'font-weight: 100;'
+                        style: 'font-weight: 400;'
+                    },  '->', {
+                        xtype: 'button',
+                        iconCls: 'md-icon-add',
+                        text: 'Add',
+                        handler: 'toggleAdd',
+                        hidden: true,
+                        bind: {
+                            hidden: '{visibleAdd}'
+                        },
                     }]
                 }, {
                     xtype: 'formpanel',
                     itemId: 'conditionform',
                     docked: 'top',
                     shadow: true,
+                    // border: true,
+                    style: 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);',
                     padding: '0 16 16 16',
                     zIndex: 1,
                     layout: {
                         type: 'hbox',
                         align: 'bottom'
                     },
-                    // hidden: true,
+                    hidden: true,
+                    bind: {
+                        hidden: '{!visibleAdd}'
+                    },
                     defaults: {
-                        labelAlign: 'top'
+                        labelAlign: 'top',
+                        autoComplete: false,
+                        required: true,
+                        clearable: false,
+                        keyMapEnabled: true,
+                        keyMap: {
+                            enter: {
+                                key: Ext.event.Event.ENTER,
+                                handler: 'addCondition'
+                            }
+                        }
                     },
                     items: [{
+                        xtype: 'toolbar',
+                        docked: 'top',
+                        shadow: false,
+                        style: 'background: transparent',
+                        items: [{
+                            xtype: 'component',
+                            style: 'font-weight: 100; font-size: 14px;',
+                            html: 'Add Condition',
+                        }, '->', {
+                            xtype: 'button',
+                            iconCls: 'md-icon-close',
+                            handler: 'toggleAdd'
+                        }]
+                    }, {
                         xtype: 'selectfield',
                         reference: 'conditionType',
                         name: 'type',
-                        width: 200,
-                        label: 'Add Condition'.t(),
+                        width: 220,
+                        label: 'Type'.t(),
                         placeholder: 'Select type ...',
                         // flex: 1,
                         matchFieldWidth: false,
@@ -105,7 +150,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         displayField: 'name',
                         valueField: 'type',
                         // displayTpl: '{name} [ {type} ]',
-                        itemTpl: '<div>{name} <br/><span style="color: #999; font-size: 10px;">[ {type} ]</span></div>',
+                        itemTpl: '<div>{name} <span style="color: #999; font-size: 10px;">[ {type} ]</span></div>',
                         options: Util.conditions,
                         required: true,
                         alignTarget: 'el',
@@ -116,11 +161,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         xtype: 'selectfield',
                         itemId: 'operation',
                         name: 'op',
-                        width: 90,
+                        width: 70,
                         matchFieldWidth: false,
-                        textAlign: 'center',
+                        // textAlign: 'center',
                         margin: '0 16',
-                        label: 'Operation'.t(),
+                        label: 'Operator'.t(),
                         editable: false,
                         required: true,
                         displayTpl: '{sign}',
@@ -148,10 +193,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         bind: {
                             hidden: '{!conditionType.value}'
                         }
-                    }]
+                    }],
+                    listeners: {
+                        show: function (form) {
+                            form.getFields('type').focus();
+                        },
+                        hide: function (form) {
+                            form.reset(true);
+                        }
+                    }
                 }, {
                     xtype: 'grid',
-                    userCls: 'c-noheaders',
+                    // userCls: 'c-noheaders',
                     emptyText: 'No Conditions!'.t(),
                     deferEmptyText: false,
                     rowLines: false,
@@ -162,10 +215,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     margin: 0,
                     padding: 0,
                     bind: '{rule.conditions}',
+                    plugins: {
+                        gridcellediting: {
+                            triggerEvent: 'tap'
+                        }
+                    },
+                    itemConfig: {
+                        viewModel: true
+                    },
                     columns: [{
-                        text: 'some text',
+                        text: 'Type',
                         dataIndex: 'type',
-                        flex: 1,
+                        width: 250,
                         cell: {
                             bodyStyle: {
                                 padding: 0
@@ -174,6 +235,23 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         },
                         renderer: 'conditionRenderer'
                     }, {
+                        text: 'Operator',
+                        dataIndex: 'op',
+                        width: 80,
+                        // cell: {
+                        //     tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
+                        // },
+                        // editable: true
+                    }, {
+                        text: 'Value',
+                        dataIndex: 'value',
+                        flex: 1,
+                        cell: {
+                            encodeHtml: false,
+                            // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
+                        },
+                        renderer: 'valueRenderer'
+                    }, {
                         width: 70,
                         align: 'center',
                         sortable: false,
@@ -181,10 +259,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         menuDisabled: true,
                         cell: {
                             tools: {
-                                // edit: {
-                                //     iconCls: 'md-icon-edit',
-                                //     handler: 'onEditCondition'
-                                // },
                                 delete: {
                                     iconCls: 'md-icon-delete',
                                     handler: function (grid, info) {
@@ -274,9 +348,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 rule = new Mfw.model.table.Rule({
                     enabled: true
                 });
-                rule.conditions().loadData([]);
+                // rule.conditions().setData([]);
             }
+
+            rule.conditions().commitChanges(); // needed
             vm.set('rule', rule);
+        },
+
+        toggleAdd: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                visible = vm.get('visibleAdd');
+            vm.set('visibleAdd', !visible);
         },
 
         onConditionTypeChange: function (combo, newValue) {
@@ -448,7 +531,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             });
 
             // insert value field into the form as the third field
-            form.insert(2, valueField);
+            form.insert(3, valueField);
         },
 
         addCondition: function () {
@@ -459,47 +542,39 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (!form.validate()) { return; }
             rule.conditions().add(form.getValues());
+            form.getFields('type').focus();
             form.reset(true);
         },
 
         conditionRenderer: function (value, record) {
-            var op, ruleCondition, valueRender;
-            switch (record.get('op')) {
-                case '==': op = '='; break;
-                case '!=': op = '&ne;'; break;
-                case '>': op = '&gt;'; break;
-                case '<': op = '&lt;'; break;
-                case '>=': op = '&ge;'; break;
-                case '<=': op = '&le;'; break;
-                default: op = '?'; break;
-            }
-
+            var ruleCondition;
             ruleCondition = Util.ruleConditionsMap[record.get('type')];
-            valueRender = record.get('value');
+            return '<div class="condition"><span>' + ruleCondition.name + '</span>';
+        },
+
+        valueRenderer: function (value, record) {
+            var ruleCondition = Util.ruleConditionsMap[record.get('type')],
+                valueRender = '<strong>' + record.get('value') + '</strong>';
+
             // todo different value render based on condition type
             if (ruleCondition.type === 'IP_PROTOCOL') {
                 if (!Globals.protocolsMap[record.get('value')]) {
                     console.warn('Invalid IP Protocol defined as string, expected integer!');
                     return;
                 }
-                valueRender = Globals.protocolsMap[record.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+                valueRender = '<strong>' + Globals.protocolsMap[record.get('value')].text +
+                              '</strong> <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
             }
-
-            return '<div class="condition"><span>' + ruleCondition.name + '</span> ' +
-                    '<em style="font-weight: bold; font-style: normal; color: #000; padding: 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>';
+            return valueRender;
         },
-
 
         onCancel: function () {
             var me = this,
                 vm = me.getViewModel(),
                 rule = vm.get('rule');
 
-            // FIX reject conditions on cancel
             rule.reject(true);
-            // rule.conditions().each(function (c) {
-            //     console.log(c);
-            // });
+            rule.conditions().rejectChanges();
             if (rule.getAction()) { rule.getAction().reject(true); }
             me.getView().destroy();
         },
@@ -515,6 +590,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // validate
             form.validate();
             actionform.validate();
+            vm.set('visibleAdd', false);
+
             if (!form.isValid() || !actionform.isValid()) { return; }
 
             // add action
