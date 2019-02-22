@@ -54,7 +54,12 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 autoComplete: false,
                 required: true,
                 bind: '{policy.description}',
-                width: 400
+                width: 400,
+                listeners: {
+                    painted: function (field) {
+                        field.focus();
+                    }
+                }
             }, {
                 xtype: 'checkbox',
                 label: '&nbsp;',

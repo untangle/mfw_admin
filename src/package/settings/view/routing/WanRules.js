@@ -3,6 +3,7 @@ Ext.define('Mfw.settings.routing.WanRules', {
     alias: 'widget.mfw-settings-routing-wan-rules',
 
     title: 'WAN Rules'.t(),
+    ruleTitle: 'WAN', // used in rule dialog
 
     chainsOnly: true,
 

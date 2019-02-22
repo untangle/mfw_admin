@@ -13,7 +13,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     },
 
     bind: {
-        title: '{action === "ADD" ? "Create New" : "Edit"} Rule',
+        title: '{action === "ADD" ? "Create New" : "Edit"} <span style="color: #777;">{ruleType}</span> Rule',
     },
     width: 900,
     height: 600,
@@ -46,7 +46,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 autoComplete: false,
                 clearable: false,
                 required: true,
-                bind: '{rule.description}'
+                bind: '{rule.description}',
+                listeners: {
+                    painted: function (field) {
+                        field.focus();
+                    }
+                }
             }, {
                 xtype: 'checkboxfield',
                 name: 'enabled',
@@ -342,7 +347,10 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 dialog.down('#actionform').getFields('type').setOptions(actionOptions);
             }
 
-            vm.set('action', !rule ? "ADD" : "EDIT");
+            vm.set({
+                action: !rule ? "ADD" : "EDIT",
+                ruleType: dialog.ownerCmp.ruleTitle || dialog.ownerCmp.getTitle()
+            });
 
             if (!rule) {
                 rule = new Mfw.model.table.Rule({

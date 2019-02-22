@@ -38,20 +38,5 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             me.intfDialog = null;
         });
         me.intfDialog.show();
-    },
-
-    onAddRecordAll: function () {
-        var me = this;
-        if (!me.intfDialog) {
-            me.intfDialog = Ext.Viewport.add({
-                xtype: 'interface-dialog-all',
-                ownerCmp: me.getView()
-            });
-            me.intfDialog.on('destroy', function () {
-                me.onLoad();
-                me.intfDialog = null;
-            });
-        }
-        me.intfDialog.show();
     }
 });

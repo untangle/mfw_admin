@@ -13,7 +13,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
     },
 
     bind: {
-        title: '{action === "ADD" ? "Create New" : "Edit"} OpenVPN Interface',
+        title: '{action === "ADD" ? "Create" : "Edit"} OpenVPN Interface',
     },
     width: 900,
     height: 600,
@@ -56,7 +56,12 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 autoComplete: false,
                 required: true,
                 bind: '{interface.name}',
-                flex: 1
+                flex: 1,
+                listeners: {
+                    painted: function (field) {
+                        field.focus();
+                    }
+                }
             }, {
                 xtype: 'selectfield',
                 name: 'configType',

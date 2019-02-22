@@ -39,8 +39,8 @@ Ext.define('Mfw.setup.WizardController', {
 
         interfaces.on('load', function (store) {
             store.each(function (interface) {
-                // do not add hidden interfaces to setup
-                if (interface.get('hidden')) {
+                // do not add hidden or OpenVPN interfaces to setup
+                if (interface.get('hidden') || interface.get('type') === 'OPENVPN') {
                     return;
                 }
                 steps.push({

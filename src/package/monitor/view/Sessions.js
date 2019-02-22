@@ -388,13 +388,19 @@ Ext.define('Mfw.monitor.view.Sessions', {
             handler: 'reload'
         }]
     }, {
-        xtype: 'monitor-session-details',
+        xtype: 'panel',
         docked: 'right',
-        width: 450
-        // hidden: true,
-        // bind: {
-        //     hidden: '{!list.selection}'
-        // }
+        width: 450,
+        minWidth: 300,
+        maxWidth: 500,
+        resizable: {
+            split: true,
+            edges: 'west'
+        },
+        layout: 'fit',
+        items: [{
+            xtype: 'monitor-session-details',
+        }]
     }],
 
     listeners: {
