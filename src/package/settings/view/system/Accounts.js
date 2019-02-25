@@ -26,29 +26,33 @@ Ext.define('Mfw.settings.system.Accounts', {
         text: 'Username',
         dataIndex: 'username',
         flex: 1,
+        minWidth: 200,
         editable: true
     }, {
         text: 'Email',
         dataIndex: 'email',
         flex: 1,
+        minWidth: 200,
         editable: true,
         editor: {
             xtype: 'emailfield',
             validators: [ { type: 'email'} ]
         }
-    }, {
-        text: 'MD5',
-        width: 400,
-        dataIndex: 'passwordHashMD5'
-    }, {
-        text: 'SHA256',
-        width: 300,
-        dataIndex: 'passwordHashSHA256'
-    }, {
-        text: 'SHA512',
-        width: 300,
-        dataIndex: 'passwordHashSHA512'
-    }, {
+    },
+    // {
+    //     text: 'MD5',
+    //     width: 400,
+    //     dataIndex: 'passwordHashMD5'
+    // }, {
+    //     text: 'SHA256',
+    //     width: 300,
+    //     dataIndex: 'passwordHashSHA256'
+    // }, {
+    //     text: 'SHA512',
+    //     width: 300,
+    //     dataIndex: 'passwordHashSHA512'
+    // },
+    {
         // added just to be available in editor form
         hidden: true,
         dataIndex: 'passwordCleartext',
