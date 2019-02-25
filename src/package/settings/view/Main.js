@@ -22,7 +22,7 @@ Ext.define('Mfw.settings.view.Main', {
         docked: 'left',
         width: '300',
 
-        bbar: {
+        tbar: {
             shadow: true,
             items: [{
                 xtype: 'searchfield',

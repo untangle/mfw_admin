@@ -56,6 +56,35 @@ Ext.define('Mfw.settings.view.MainController', {
         Mfw.app.redirectTo(record.get('href'));
         // }
 
-    }
+    },
+
+    filterSettings: function (field, value) {
+        var me = this,
+            tree = me.getView().down('treelist'),
+            store = tree.getStore(),
+            root = store.getRoot();
+            // expandedNode = null;
+
+        store.clearFilter();
+
+        if (value) {
+            // find expanded node if exists
+            // root.eachChild(function (child) {
+            //     if (child.isExpanded()) {
+            //         expandedNode = child;
+            //     }
+            // });
+
+            tree.setSingleExpand(false);
+            root.expandChildren(true);
+            store.filterBy(function (node) {
+                var v = new RegExp(value, 'i');
+                return node.isLeaf() ? v.test(node.get('text')) : false;
+            });
+        } else {
+            tree.setSingleExpand(true);
+            root.collapseChildren(true);
+        }
+    },
 
 });
