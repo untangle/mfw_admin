@@ -141,7 +141,7 @@ highstock-install: highstock-stage dir
 	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
 
 moment-install: moment-stage dir
-	cp -r $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
+	cp -fr $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
 
 icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
