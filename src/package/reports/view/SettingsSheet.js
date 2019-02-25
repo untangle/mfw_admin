@@ -290,7 +290,7 @@ Ext.define('Mfw.reports.Settings', {
                         xtype: 'sliderfield',
                         flex: 1,
                         minValue: 0,
-                        maxValue: 100,
+                        maxValue: 70,
                         increment: 5,
                         bind: {
                             value: '{record.rendering.3dAlpha}'
