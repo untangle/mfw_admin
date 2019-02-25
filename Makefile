@@ -132,7 +132,7 @@ highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
 
 moment-stage: $(MOMENT_FILE)
-	@unzip $(MOMENT_FILE) -d $(STAGING_DIR)/moment
+	@unzip -o $(MOMENT_FILE) -d $(STAGING_DIR)/moment
 
 extjs-install: extjs-stage dir
 	cp -r $(STAGING_DIR)/ext-$(EXTJS_FULL_VERSION)/build $(STATIC_DIR)/res/lib/ext
@@ -141,7 +141,7 @@ highstock-install: highstock-stage dir
 	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
 
 moment-install: moment-stage dir
-	cp -fr $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
+	cp -r $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
 
 icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
