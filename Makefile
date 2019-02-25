@@ -89,6 +89,11 @@ HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
 HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
 HIGHSTOCK_FILES_LIST := $(DOWNLOADS_DIR)/highstock-list.txt
 
+# MomentJS
+MOMENT_ARCHIVE := moment.zip
+MOMENT_URL := $(RESOURCES_BASE_URL)/$(MOMENT_ARCHIVE)
+MOMENT_FILE := $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
+
 # main targets
 install: \
 	dir \
@@ -102,6 +107,7 @@ install: \
 	html-setup \
 	extjs-install \
 	highstock-install \
+	moment-install \
 	icons-install \
 	reports-install
 
@@ -113,7 +119,11 @@ highstock-download: $(HIGHSTOCK_FILE)
 $(HIGHSTOCK_FILE):
 	wget -O $@ $(HIGHSTOCK_URL)
 
-downloads: extjs-download highstock-download
+moment-download: $(MOMENT_FILE)
+$(MOMENT_FILE):
+	wget -O $@ $(MOMENT_URL)
+
+downloads: extjs-download highstock-download moment-download
 
 extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),$(STAGING_DIR))
@@ -121,11 +131,17 @@ extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
 highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
 
+moment-stage: $(MOMENT_FILE)
+	@unzip $(MOMENT_FILE) -d $(STAGING_DIR)/moment
+
 extjs-install: extjs-stage dir
 	cp -r $(STAGING_DIR)/ext-$(EXTJS_FULL_VERSION)/build $(STATIC_DIR)/res/lib/ext
 
 highstock-install: highstock-stage dir
 	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
+
+moment-install: moment-stage dir
+	cp -r $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
 
 icons-install: icons dir
 	cp -r icons/* $(STATIC_DIR)/res/
@@ -247,6 +263,7 @@ dev-watch:
 	highstock-stage \
 	extjs-install \
 	highstock-install \
+	moment-install \
 	dev-deploy \
 	dev-install \
 	dev-sass \
