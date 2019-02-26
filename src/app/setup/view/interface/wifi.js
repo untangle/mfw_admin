@@ -53,7 +53,11 @@ Ext.define('Mfw.setup.interface.Wifi', {
         bind: {
             value: '{intf.wirelessPassword}',
             disabled: '{intf.type !== "WIFI"}'
-        }
+        },
+        validators: [{
+            type: 'length',
+            min: 8
+        }]
     }, {
         xtype: 'numberfield',
         label: 'Wireless Channel'.t(),

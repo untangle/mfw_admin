@@ -1234,7 +1234,11 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
                         bind: {
                             value: '{interface.wirelessPassword}',
                             required: '{interface.type === "WIFI"}'
-                        }
+                        },
+                        validators: [{
+                            type: 'length',
+                            min: 8
+                        }]
                     }]
                 }, {
                     xtype: 'containerfield',
