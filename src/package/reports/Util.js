@@ -91,7 +91,7 @@ Ext.define('Mfw.reports.Util', {
     },
 
     computeSince: function (route) {
-        var tz = moment().tz('America/Los_Angeles'), conditionSince;
+        var tz = moment().tz(Mfw.app.tz.displayName), conditionSince;
 
         if (!route.psince && !route.since) {
             conditionSince = tz.startOf('day').valueOf();
