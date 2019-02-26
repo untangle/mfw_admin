@@ -58,7 +58,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Application Protochain',
         dataIndex: 'application_protochain',
-        width: 150,
+        minWidth: 200,
         flex: 1
     }, {
         text: 'Bypass',

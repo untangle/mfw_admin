@@ -359,7 +359,19 @@ Ext.define('Mfw.reports.ChartController', {
                 },
                 xAxis: {
                     visible: true,
-                    categories: undefined
+                    categories: undefined,
+                    dateTimeLabelFormats: {
+                        second: '%l:%M:%S %p',
+                        minute: '%l:%M %p',
+                        hour: '%l:%M %p',
+                        day: '%Y-%m-%d',
+                        week: '%e. %b',
+                        month: '%b \'%y',
+                        year: '%Y'
+                    },
+                    labels: {
+                        autoRotation: false
+                    }
                 },
                 yAxis: {
                     visible: true,
