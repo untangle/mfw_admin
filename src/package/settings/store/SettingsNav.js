@@ -50,7 +50,7 @@ Ext.define('Mfw.store.Nav', {
             iconCls: 'tree system',
             href: 'settings/system',
             children: [
-                { text: 'Host/Domain'.t(), leaf: true, href: 'settings/system/host' },
+                { text: 'Settings'.t(), leaf: true, href: 'settings/system/settings' },
                 { text: 'Accounts'.t(), leaf: true, href: 'settings/system/accounts' }
             ]
         }]
