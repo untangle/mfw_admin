@@ -105,7 +105,6 @@ Ext.define('Mfw.settings.system.Settings', {
             tz = Ext.Array.findBy(Globals.timezones, function (zone) {
                 return zone.text === values.displayName;
             });
-            console.log(tz);
 
             Ext.apply(system, {
                 hostName: values.hostName,
