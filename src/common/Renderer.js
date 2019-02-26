@@ -10,7 +10,7 @@ Ext.define('Mfw.Renderer', {
     },
 
     timeStamp: function (value) {
-        var m = moment(value).tz(Mfw.app.tz.location);
+        var m = moment(value).tz(Mfw.app.tz.displayName);
         return '<span style="color: #999;">' + m.format('DD.MM.YY') + '</span> &nbsp;' + m.format('hh:mm:ss A');
     },
 

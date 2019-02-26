@@ -71,7 +71,7 @@ Ext.define('Mfw.AppBase', {
                             Mfw.app.tz = decoded.timeZone;
                             Highcharts.setOptions({
                                 time: {
-                                    timezone: Mfw.app.tz.location
+                                    timezone: Mfw.app.tz.displayName
                                 }
                             });
 

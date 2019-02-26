@@ -96,10 +96,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         style: 'color: #91e971; font-size: 12px; font-weight: 400; font-family: "Roboto"',
         listeners: {
             painted: function (el) {
-                var location = Mfw.app.tz.location;
-                el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.location).format('hh:mm A'));
+                var location = Mfw.app.tz.displayName;
+                el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
                 setInterval(function () {
-                    el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.location).format('hh:mm A'));
+                    el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
                 }, 1000 * 60);
             }
         }
