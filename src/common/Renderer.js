@@ -10,12 +10,8 @@ Ext.define('Mfw.Renderer', {
     },
 
     timeStamp: function (value) {
-        // FIXME this uses the browser timezone, not the server timezone
-        var date = new Date(value),
-            day = Ext.Date.format(date, 'd.m.Y'),
-            hour = Ext.Date.format(date, 'h:i:s a');
-
-        return '<span style="color: #999;">' + day + '</span> &nbsp;' + hour;
+        var m = moment(value).tz(Mfw.app.tz.location);
+        return '<span style="color: #999;">' + m.format('DD.MM.YY') + '</span> &nbsp;' + m.format('hh:mm:ss A');
     },
 
     ipProtocol: function (value) {
@@ -161,7 +157,7 @@ Ext.define('Mfw.Renderer', {
             return tcp_state;
         }
     },
-    
+
     familyRenderer: function(family) {
         if (family == 2) {
             return "IPv4";
@@ -171,7 +167,7 @@ Ext.define('Mfw.Renderer', {
             return family;
         }
     },
-    
+
     shortenText: function (str) {
         if (str.length > 15) {
             str = str.substr(0, 5) + ' ... ' + str.substr(str.length - 5, str.length);

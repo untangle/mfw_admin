@@ -91,32 +91,30 @@ Ext.define('Mfw.reports.Util', {
     },
 
     computeSince: function (route) {
-        var conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date()));
-
+        var tz = moment().tz('America/Los_Angeles'), conditionSince;
 
         if (!route.psince && !route.since) {
-            conditionSince = parseInt(conditionSince.getTime(), 10);
+            conditionSince = tz.startOf('day').valueOf();
         }
 
         // set time conditions
         if (route.psince && !route.since) {
             switch (route.psince) {
-                case '1h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1); break;
-                case '6h': conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 6); break;
-                // case 'today': conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); break;
-                case 'yesterday': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, 1); break;
-                case 'thisweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay()); break;
-                case 'lastweek': conditionSince = Ext.Date.subtract(Ext.Date.clearTime(Util.serverToClientDate(new Date())), Ext.Date.DAY, (Util.serverToClientDate(new Date())).getDay() + 7); break;
-                case 'month': conditionSince = Ext.Date.getFirstDateOfMonth(Util.serverToClientDate(new Date())); break;
-                default: conditionSince = Ext.Date.clearTime(Util.serverToClientDate(new Date())); // today
+                case '1h': conditionSince = tz.subtract(1, 'hour').valueOf(); break;
+                case '6h': conditionSince = tz.subtract(6, 'hour').valueOf(); break;
+                // today
+                case 'yesterday': conditionSince = tz.subtract(1, 'day').startOf('day').valueOf(); break;
+                case 'thisweek': conditionSince = tz.startOf('week').valueOf(); break;
+                case 'lastweek': conditionSince = tz.subtract(1, 'week').startOf('week').valueOf(); break;
+                case 'month': conditionSince = tz.startOf('month').valueOf(); break;
+                default: conditionSince = tz.startOf('day').valueOf();
             }
-            conditionSince = conditionSince.getTime();
         }
 
         if (route.since) {
             if (route.since <= 24) {
                 // for dashboard represents since hour
-                conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, route.since).getTime();
+                conditionSince = tz.subtract(route.since, 'hour').valueOf();
             } else {
                 // for reports represents timestamp
                 conditionSince = route.since;

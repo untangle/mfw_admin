@@ -55,10 +55,11 @@ Ext.define('Mfw.AppBase', {
                     });
 
                     Ext.Ajax.request({
-                        url: '/api/settings/system/setupWizard',
+                        url: '/api/settings/system',
                         success: function(response2) {
-                            var obj = Ext.decode(response2.responseText);
-                            if (!obj.completed) {
+                            var decoded = Ext.decode(response2.responseText);
+
+                            if (!decoded.setupWizard.completed) {
                                 window.location.href = '/setup';
                                 return;
                             } else {
@@ -66,6 +67,14 @@ Ext.define('Mfw.AppBase', {
                                 Mfw.app.setViews();
                                 Ext.route.Router.resume();
                             }
+
+                            Mfw.app.tz = decoded.timeZone;
+                            Highcharts.setOptions({
+                                time: {
+                                    timezone: Mfw.app.tz.location
+                                }
+                            });
+
                         },
                         failure: function(response) {
                             console.log('server-side failure with status code ' + response.status);

@@ -91,53 +91,20 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "settings"}'
             }
         }]
-    }, '->',
-    //     {
-    //     /**
-    //      * Temporary usage to reset the setting to their initial state when the machine was installed
-    //      */
-    //     xtype: 'button',
-    //     text: 'Reset Settings'.t(),//
-    //     handler: function () {
-    //         var originalServerData = {"dhcp":{"dhcpAuthoritative":true,"staticDhcpEntries":[]},"dns":{"localServers":[],"staticEntries":[]},"firewall":{"variables":[{"key":"HTTP_PORT","value":"80"},{"key":"HTTPS_PORT","value":"443"}]},"network":{"devices":[{"duplex":"AUTO","mtu":null,"name":"eth0"},{"duplex":"AUTO","mtu":null,"name":"eth1"}],"interfaces":[{"configType":"ADDRESSED","device":"eth0","dhcpEnabled":true,"dhcpLeaseDuration":3600,"dhcpRangeEnd":"192.168.1.200","dhcpRangeStart":"192.168.1.100","interfaceId":1,"name":"internal","type":"NIC","v4ConfigType":"STATIC","v4StaticAddress":"192.168.1.1","v4StaticPrefix":24,"v6AssignHint":"1234","v6AssignPrefix":64,"v6ConfigType":"ASSIGN","wan":false},{"configType":"ADDRESSED","device":"eth1","interfaceId":2,"name":"external","natEgress":true,"type":"NIC","v4ConfigType":"DHCP","v6ConfigType":"DISABLED","wan":true}],"switches":[]},"system":{"domainName":"example.com","hostName":"mfw"},"version":1}
-    //         Ext.Ajax.request({
-    //             url: Util.api + '/settings',
-    //             method: 'POST',
-    //             params: Ext.JSON.encode(originalServerData),
-    //             success: function() {
-    //                 Ext.toast('Settings saved!');
-    //                 window.location.reload(true);
-    //             },
-    //             failure: function(response) {
-    //                 Ext.toast('Error while saving settings!');
-    //                 console.log('server-side failure with status code ' + response.status);
-    //             }
-    //         })
-    //     }
-    // },
-    // {
-    //     text: 'Reset Wizard',
-    //     handler: function () {
-    //         Ext.Ajax.request({
-    //             url: window.location.origin + '/api/settings/system/setupWizard',
-    //             method: 'POST',
-    //             params: Ext.JSON.encode({
-    //                 completed: false
-    //             }),
-    //             success: function() {
-    //                 Ext.Ajax.request({
-    //                     url: '/account/logout',
-    //                     callback: function () {
-    //                         Mfw.app.setAccount(null);
-    //                         window.location.href = '/setup';
-    //                     }
-    //                 });
+    }, '->', {
+        xtype: 'component',
+        style: 'color: #91e971; font-size: 12px; font-weight: 400; font-family: "Roboto"',
+        listeners: {
+            painted: function (el) {
+                var location = Mfw.app.tz.location;
+                el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.location).format('hh:mm A'));
+                setInterval(function () {
+                    el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.location).format('hh:mm A'));
+                }, 1000 * 60);
+            }
+        }
 
-    //             }
-    //         });
-    //     }
-    // },
-    {
+    }, {
         bind: {
             text: '{account.username}'
         },

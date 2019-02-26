@@ -80,6 +80,7 @@
         "DashboardUtil": true,
         "Table": true,
         "Renderer": true,
-        "WidgetsPipe": true
+        "WidgetsPipe": true,
+        "moment": true
     }
 }
