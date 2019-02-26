@@ -86,7 +86,8 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
                 bind: '{interface.type}',
                 options: [
                     { text: 'OpenVPN', value: 'OPENVPN' },
-                    { text: 'Interface Card (NIC)', value: 'NIC' }
+                    { text: 'Interface Card (NIC)', value: 'NIC' },
+                    { text: 'Wireless', value: 'WIFI' }
                 ]
             }, {
                 xtype: 'textfield',
@@ -160,12 +161,16 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
             margin: '16 8 16 8',
             allowMultiple: false,
             reference: 'viewSelection',
-            hidden: true,
-            bind: {
-                hidden: '{interface.configType !== "ADDRESSED"}'
-            },
+            // hidden: true,
+            // bind: {
+            //     hidden: '{interface.configType !== "ADDRESSED"}'
+            // },
             defaults: {
-                ripple: false
+                ripple: false,
+                hidden: true,
+                bind: {
+                    hidden: '{interface.configType !== "ADDRESSED"}'
+                },
             },
             activeItem: 0,
             items: [
@@ -178,7 +183,7 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
                     value: '#wifi',
                     hidden: true,
                     bind: {
-                        hidden: '{interface.type !== "WIFI"}'
+                        hidden: '{interface.type !== "WIFI" || interface.configType === "DISABLED"}'
                     }
                 }
             ]
@@ -198,7 +203,7 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
             hidden: true,
             bind: {
                 activeItem: '{viewSelection.value}',
-                hidden: '{interface.configType !== "ADDRESSED"}'
+                hidden: '{interface.configType === "DISABLED" || (interface.configType === "BRIDGED" && interface.type !== "WIFI")}'
             },
             items: [{
                 xtype: 'container',
@@ -1285,6 +1290,11 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
                 interface: intf,
                 action: intf ? 'EDIT' : 'ADD'
             });
+
+            if (intf.get('type') === "WIFI") {
+                view.down('segmentedbutton').setValue('#wifi');
+                // console.log('yeah');
+            }
         },
 
         addV4Alias: function () {

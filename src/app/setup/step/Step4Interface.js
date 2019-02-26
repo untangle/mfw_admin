@@ -147,7 +147,6 @@ Ext.define('Mfw.setup.step.Interface', {
                     hidden: '{intf.configType !== "ADDRESSED"}'
                 },
             },
-            activeItem: 0,
             items: [
                 { text: 'IPv4', value: '#ipv4', pressed: true },
                 { text: 'IPv6', value: '#ipv6' },
@@ -175,14 +174,18 @@ Ext.define('Mfw.setup.step.Interface', {
                 // },
             },
             flex: 1,
-            hidden: true,
-            bind: {
-                activeItem: '{intf.configType === "ADDRESSED" ? viewSelection.value : (intf.type === "WIFI" ? "#wifi" : "#ipv4") }',
-                hidden: '{intf.configType !== "ADDRESSED"}'
-            },
             margin: '0 16 16 16',
+            // defaults: {
+            //     hidden: true,
+            // },
+            activeItem: 1,
+            // hidden: true,
+            bind: {
+                activeItem: '{viewSelection.value}',
+                // hidden: '{intf.configType !== "ADDRESSED" || (intf.type === "WIFI" && intf.configType === "DISABLED")}'
+            },
             items: [
-                { xtype: 'interface-ipv4', itemId: 'ipv4' },
+                { xtype: 'interface-ipv4', itemId: 'ipv4', hidden: true, bind: { hidden: '{intf.configType !== "ADDRESSED"}' } },
                 { xtype: 'interface-ipv6', itemId: 'ipv6' },
                 { xtype: 'interface-dhcp', itemId: 'dhcp' },
                 { xtype: 'interface-vrrp', itemId: 'vrrp' },
@@ -190,7 +193,17 @@ Ext.define('Mfw.setup.step.Interface', {
             ]
         }]
     }],
+    listeners: {
+        activate: 'onActivate'
+    },
     controller: {
+        onActivate: function (view) {
+            var intf = view.getViewModel().get('intf');
+            if (intf.get('type') === 'WIFI') {
+                view.down('segmentedbutton').setValue('#wifi');
+            }
+        },
+
         continue: function (cb) {
             var me = this,
                 store = Mfw.app.getStore('interfaces'),
