@@ -11,25 +11,12 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         // padding: '0 10',
         margin: '0 16 0 0',
         html: '<a href="#dashboard"><img src="/static/res/untangle-logo.png" style="height: 30px;"/></a>',
-        // plugins: 'responsive',
         // responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
-    }, {
-        xtype: 'component',
-        margin: '5 0 0 0',
-        style: {
-            color: '#777'
-        },
-        bind: {
-            html: '{currentViewTitle}'
-        },
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
     }, {
         xtype: 'container',
         flex: 1,
         layout: 'hbox',
         defaultType: 'button',
-        plugins: 'responsive',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         defaults: {
             ripple: false,
@@ -110,8 +97,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         },
         iconCls: 'x-fa fa-user-circle fa-3x',
         iconAlign: 'right',
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        // responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         arrow: false,
         menu: {
             anchor: false,
@@ -133,7 +119,6 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     },
     // {
     //     iconCls: 'x-fa fa-bars',
-    //     plugins: 'responsive',
     //     responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
     //     handler: function () {
     //         // Mfw.app.mainMenu.show();

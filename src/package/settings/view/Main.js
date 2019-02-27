@@ -10,6 +10,11 @@ Ext.define('Mfw.settings.view.Main', {
         type: 'api' // api or static
     },
 
+    responsiveFormulas: {
+        small: 'width <= 1300',
+        large: 'width > 1300'
+    },
+
     items: [{
         layout: 'fit',
         xtype: 'panel',

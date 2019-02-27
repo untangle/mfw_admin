@@ -76,8 +76,6 @@ Ext.define('Mfw.common.conditions.Sheet', {
         // layout: 'form',
         defaults: {
             margin: '20 0',
-            // plugins: 'responsive',
-            // responsiveConfig: { large: { margin: '20 0' }, small: { margin: 0 } }
         },
         items: [{
             xtype: 'selectfield',

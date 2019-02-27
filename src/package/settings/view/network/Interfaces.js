@@ -59,32 +59,27 @@ Ext.define('Mfw.settings.network.Interfaces', {
         text: 'Name'.t(),
         dataIndex: 'name',
         flex: 1,
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
         text: 'Type'.t(),
         dataIndex: 'type',
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
         text: 'Device'.t(),
         dataIndex: 'device',
         menuDisabled: true,
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
         text: 'Config Type'.t(),
         dataIndex: 'configType',
         menuDisabled: true,
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
     }, {
         text: 'Current Address'.t(),
         width: 150,
         dataIndex: 'v4StaticAddress',
         menuDisabled: true,
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
     }, {
         text: 'Is WAN',
         dataIndex: 'wan',
@@ -96,7 +91,6 @@ Ext.define('Mfw.settings.network.Interfaces', {
         renderer: function (value) {
             return value ? '<i class="x-fa fa-check">' : '';
         },
-        plugins: 'responsive',
-        responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
+        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
     }]
 });
