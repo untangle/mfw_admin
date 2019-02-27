@@ -113,14 +113,18 @@ Ext.define('Mfw.setup.step.Account', {
 
         loadTimezone: function () {
             var me = this,
-                vm = me.getViewModel(),
                 form = me.getView().down('formpanel');
 
             Ext.Ajax.request({
                 url: '/api/settings/system/timeZone',
                 success: function (result) {
                     var tz = Ext.decode(result.responseText);
-                    form.getFields('displayName').setValue(tz.displayName);
+                    if (!tz || tz === null) {
+                        form.getFields('displayName').setValue('UTC');
+                    } else {
+                        form.getFields('displayName').setValue(tz.displayName || 'UTC');
+                    }
+
                 },
                 failure: function () {
                     console.warn('Unable to load Timezone!');

@@ -74,16 +74,17 @@ Ext.define('Mfw.settings.system.Settings', {
 
         load: function () {
             var me = this,
-                vm = me.getViewModel(),
-                form = me.getView().down('formpanel');
+                vm = me.getViewModel();
 
             me.getView().mask({xtype: 'loadmask' });
             Ext.Ajax.request({
                 url: '/api/settings/system',
                 success: function (result) {
-                    var decoded = Ext.decode(result.responseText);
-                    console.log(decoded);
-                    vm.set('system', decoded);
+                    var system = Ext.decode(result.responseText);
+                    if (!system.timeZone || !system.timeZone.displayName) {
+                        system.timeZone = { displayName: 'UTC', value: 'UTC' };
+                    }
+                    vm.set('system', system);
                 },
                 callback: function () {
                     me.getView().unmask();
