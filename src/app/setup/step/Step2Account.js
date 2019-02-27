@@ -82,6 +82,7 @@ Ext.define('Mfw.setup.step.Account', {
                 labelTextAlign: 'right',
                 required: true,
                 valueField: 'text',
+                value: moment.tz.guess(),
                 options: Globals.timezones
             }]
         }]
@@ -106,32 +107,8 @@ Ext.define('Mfw.setup.step.Account', {
         },
 
         onActivate: function (view) {
-            var me = this;
             view.down('formpanel').reset(true);
-            me.loadTimezone();
         },
-
-        loadTimezone: function () {
-            var me = this,
-                form = me.getView().down('formpanel');
-
-            Ext.Ajax.request({
-                url: '/api/settings/system/timeZone',
-                success: function (result) {
-                    var tz = Ext.decode(result.responseText);
-                    if (!tz || tz === null) {
-                        form.getFields('displayName').setValue('UTC');
-                    } else {
-                        form.getFields('displayName').setValue(tz.displayName || 'UTC');
-                    }
-
-                },
-                failure: function () {
-                    console.warn('Unable to load Timezone!');
-                }
-            });
-        },
-
 
         setAccount: function () {
             var me = this,
