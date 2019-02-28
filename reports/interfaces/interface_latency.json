@@ -1,15 +1,15 @@
 {
-    "name": "Interface Usage",
+    "name": "Interface Latency",
     "category": "Interfaces",
-    "description": "Interface rx_rates over time",
-    "displayOrder": 10,
+    "description": "Interface latency over time",
+    "displayOrder": 20,
     "type": "CATEGORIES_SERIES",
     "table": "interface_stats",
-    "units": "bytes/s",
+    "units": "ms",
     "queryCategories": {
         "groupColumn": "interface_id",
-        "aggregationFunction": "sum",
-        "aggregationValue": "rx_bytes/60",
+        "aggregationFunction": "avg",
+        "aggregationValue": "avg_latency/1000000",
         "limit": 10
     },
     "querySeries": {
@@ -17,6 +17,6 @@
     },
     "rendering": {
         "type": "spline",
-        "dataGroupingApproximation": "high"
+        "dataGroupingApproximation": "average"
     }
 }
