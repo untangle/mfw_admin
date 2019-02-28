@@ -1,7 +1,7 @@
 {
-    "name": "Interface Latency",
+    "name": "Interface Average Latency",
     "category": "Interfaces",
-    "description": "Interface latency over time",
+    "description": "Interface average latency over time",
     "displayOrder": 20,
     "type": "CATEGORIES_SERIES",
     "table": "interface_stats",
