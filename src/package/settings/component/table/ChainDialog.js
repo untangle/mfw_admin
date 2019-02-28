@@ -11,10 +11,10 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
     bind: {
         title: '{action === "ADD" ? "Create New" : "Edit"} Chain',
     },
-    width: 300,
-    height: 400,
+    width: 400,
+    minHeight: 500,
 
-    bodyPadding: '0 16',
+    bodyPadding: '0 0 16 0',
 
     showAnimation: {
         duration: 0
@@ -23,50 +23,75 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
     layout: 'fit',
 
     items: [{
-        xtype: 'container',
-        padding: 0,
+        xtype: 'formpanel',
+        // padding: 0,
         layout: 'vbox',
+        defaults: {
+            labelAlign: 'top',
+            clearable: false
+        },
         items: [{
-            xtype: 'formpanel',
-            // padding: 0,
-            layout: 'vbox',
+            xtype: 'containerfield',
+            layout: 'hbox',
+            items: [{
+                xtype: 'checkboxfield',
+                margin: '0 32 0 0',
+                name: 'base',
+                boxLabel: 'BASE'.t(),
+                bodyAlign: 'left',
+                bind: '{chain.base}'
+            }, {
+                xtype: 'checkboxfield',
+                flex: 1,
+                name: 'default',
+                boxLabel: 'DEFAULT'.t(),
+                bodyAlign: 'left',
+                bind: '{chain.default}'
+            }]
+        }, {
+            xtype:'textfield',
+            placeholder: 'Enter a name',
+            name: 'name',
+            label: 'Name'.t(),
+            autoComplete: false,
+            required: true,
+            bind: '{chain.name}',
+            listeners: {
+                painted: function (field) {
+                    field.focus();
+                }
+            }
+        }, {
+            xtype: 'textareafield',
+            name: 'description',
+            margin: '0 0 16 0',
+            placeholder: 'Enter a description',
+            label: 'Description'.t(),
+            autoComplete: false,
+            required: true,
+            bind: '{chain.description}'
+        }, {
+            xtype: 'containerfield',
+            layout: 'hbox',
             defaults: {
                 labelAlign: 'top',
                 clearable: false
             },
             items: [{
-                xtype:'textfield',
-                name: 'name',
-                label: 'Name'.t(),
-                autoComplete: false,
-                required: true,
-                bind: '{chain.name}'
-            }, {
-                xtype: 'textfield',
-                name: 'description',
-                label: 'Description'.t(),
-                autoComplete: false,
-                required: true,
-                bind: '{chain.description}'
-            }, {
                 xtype: 'combobox',
-                name: 'type',
-                label: 'Type'.t(),
-                editable: false,
-                itemTpl: '<tpl>{text}</tpl>',
-                bind: '{chain.type}',
-                options: [
-                    { value: 'filter', text: 'Filter'.t() },
-                    { value: 'route', text: 'Route'.t() },
-                    { value: 'nat', text: 'NAT'.t() }
-                ]
-            }, {
-                xtype: 'combobox',
+                width: 120,
                 name: 'hook',
                 label: 'Hook'.t(),
+                placeholder: 'Choose hook',
                 editable: false,
                 itemTpl: '<tpl>{text}</tpl>',
-                bind: '{chain.hook}',
+                required: true,
+                hidden: true,
+                bind: {
+                    value: '{chain.hook}',
+                    required: '{chain.base}',
+                    hidden: '{!chain.base}'
+                },
                 options: [
                     { value: 'prerouting', text: 'Prerouting'.t() },
                     { value: 'input', text: 'Input'.t() },
@@ -75,6 +100,22 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                     { value: 'postrouting', text: 'Postrouting'.t() },
                     { value: 'ingress', text: 'Ingress'.t() }
                 ]
+            }, {
+                xtype: 'numberfield',
+                margin: '0 0 0 16',
+                flex: 1,
+                name: 'priority',
+                label: 'Priority'.t(),
+                placeholder: 'Integer between -500 and 500',
+                minValue: -500,
+                maxValue: 500,
+                required: true,
+                hidden: true,
+                bind: {
+                    value: '{chain.priority}',
+                    required: '{chain.base}',
+                    hidden: '{!chain.base}'
+                }
             }]
         }]
     }, {
@@ -83,9 +124,7 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
         items: ['->', {
             text: 'Cancel',
             margin: '0 8 0 0',
-            handler: function () {  // standard button (see below)
-                this.up('dialog').destroy();
-            }
+            handler: 'onCancel'
         }, {
             bind: {
                 text: '{action === "ADD" ? "Create" : "Update"}'
@@ -106,8 +145,6 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
             });
         },
 
-
-
         onSubmit: function () {
             var me = this,
                 grid = me.getView().ownerCmp,
@@ -123,6 +160,15 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 chain.commit();
             }
 
+            me.getView().destroy();
+        },
+
+        onCancel: function() {
+            var me = this,
+                vm = me.getViewModel(),
+                chain = vm.get('chain');
+
+            chain.reject();
             me.getView().destroy();
         }
     }

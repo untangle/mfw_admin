@@ -12,7 +12,6 @@ Ext.define('Mfw.model.table.Chain', {
         { name: 'hook',        type: 'string' },
         { name: 'name',        type: 'string' },
         { name: 'priority',    type: 'integer', defaultValue: null },
-        { name: 'type',        type: 'string' }
     ],
 
     hasMany: {

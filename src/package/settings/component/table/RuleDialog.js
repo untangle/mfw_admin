@@ -581,9 +581,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 vm = me.getViewModel(),
                 rule = vm.get('rule');
 
-            rule.reject(true);
+            rule.reject();
             rule.conditions().rejectChanges();
-            if (rule.getAction()) { rule.getAction().reject(true); }
+            if (rule.getAction()) { rule.getAction().reject(); }
             me.getView().destroy();
         },
 

@@ -64,10 +64,13 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         items: [{
             xtype: 'button',
             itemId: 'chainsmenu',
+            minWidth: 200,
+            textAlign: 'left',
             bind: {
                 text: '{selectedChain.name}'
             },
             menu: {
+                minWidth: 200,
                 userCls: 'x-htmlmenu chain-menu',
                 // anchor: true,
             }
@@ -97,21 +100,21 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             }
         }, {
             xtype: 'component',
-            style: 'font-size: 12px; font-weight: normal;',
-            margin: '0 0 0 16',
-            hidden: true,
-            bind: {
-                html: '<span style="color: #777;">' + 'Type'.t() + ':</span> <strong>{selectedChain.type}</strong>',
-                hidden: '{!selectedChain.type}'
-            }
-        }, {
-            xtype: 'component',
-            style: 'font-size: 12px; font-weight: normal;',
+            style: 'font-size: 14px; font-weight: normal;',
             margin: '0 0 0 16',
             hidden: true,
             bind: {
                 html: '<span style="color: #777;">' + 'Hook'.t() + ':</span> <strong>{selectedChain.hook}</strong>',
-                hidden: '{!selectedChain.hook}'
+                hidden: '{!selectedChain.base}'
+            }
+        }, {
+            xtype: 'component',
+            style: 'font-size: 14px; font-weight: normal;',
+            margin: '0 0 0 16',
+            hidden: true,
+            bind: {
+                html: '<span style="color: #777;">' + 'Priority'.t() + ':</span> <strong>{selectedChain.priority}</strong>',
+                hidden: '{!selectedChain.base}'
             }
         }, '->', {
             xtype: 'component',
