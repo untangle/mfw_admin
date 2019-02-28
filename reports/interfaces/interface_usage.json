@@ -1,0 +1,22 @@
+{
+    "name": "Interface Usage",
+    "category": "Interfaces",
+    "description": "Interface rx_rates over time",
+    "displayOrder": 21,
+    "type": "CATEGORIES_SERIES",
+    "table": "interface_stats",
+    "units": "bytes/s",
+    "queryCategories": {
+        "groupColumn": "interface_id",
+        "aggregationFunction": "sum",
+        "aggregationValue": "rx_bytes/60",
+        "limit": 5
+    },
+    "querySeries": {
+        "timeIntervalSeconds": 60
+    },
+    "rendering": {
+        "type": "spline",
+        "dataGroupingApproximation": "high"
+    }
+}
