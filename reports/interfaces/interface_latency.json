@@ -9,7 +9,7 @@
     "queryCategories": {
         "groupColumn": "interface_id",
         "aggregationFunction": "avg",
-        "aggregationValue": "avg_latency/1000000",
+        "aggregationValue": "latency_1",
         "limit": 10
     },
     "querySeries": {
