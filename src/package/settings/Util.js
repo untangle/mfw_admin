@@ -34,6 +34,35 @@ Ext.define('Mfw.settings.Util', {
         return data;
     },
 
+    /** it should export the top model/store and not associeted stores */
+    export: function (from, filename) {
+        var isStore = from instanceof Ext.data.Store,
+            isModel = from instanceof Ext.data.Model,
+            data = [], out, link;
+
+
+        if (isModel) {
+            data = from.getData(true);
+        }
+
+        if (isStore) {
+            from.each(function (r) {
+                data.push(r.getData(true));
+            });
+        }
+
+        Util.sanitize(data);
+
+        out = 'data:text/json;charset=utf-8,' + Ext.JSON.encode(data);
+        out = encodeURI(out);
+
+        link = document.createElement('a');
+        link.setAttribute('href', out);
+        link.setAttribute('download', filename + '.json');
+        link.click();
+    },
+
+
     ruleOperators: [
         { value: '==', text: 'Equals'.t(), sign: ' = ' },
         { value: '!=', text: 'Not Equals'.t(), sign: ' != ' },

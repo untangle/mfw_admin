@@ -423,7 +423,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     onExport: function () {
-        Ext.toast('open export dialog');
+        var grid = this.getView(),
+            fileName = grid.getTitle().replace(/ /g, '_') + '-Chains-' + moment.tz(Mfw.app.tz.displayName).format('DD-MM-YY-hhmmA');
+
+        Util.export(grid.table, fileName);
     },
 
     onDestroy: function () {
@@ -480,7 +483,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 }, {
                     html: 'Export'.t(),
                     iconCls: 'md-icon-call-made',
-                    // handler: 'onExport'
+                    handler: 'onExport'
                 }, '-', {
                     xtype: 'component',
                     html: 'Chain',

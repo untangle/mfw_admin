@@ -3,18 +3,22 @@ Ext.define('Mfw.Exception', {
     singleton: true,
 
     show: function (error) {
-        var errorJson, exceptionText, fullStack,
+        var exceptionText, fullStack,
             status = error.status,
             statusText = error.statusText;
 
         if (error.responseJson) {
             // store sync, model save
-            exceptionText = errorJson.output.match(/Exception: (.*?)\n/g)[0];
+            exceptionText = error.responseJson.output.match(/Exception: (.*?)\n/g)[0];
             exceptionText = exceptionText.replace('Exception: ', '');
-            fullStack = errorJson.output.replace(/\n/g, '</br>');
+            fullStack = error.responseJson.output.replace(/\n/g, '</br>');
         } else {
             // ajax
-            exceptionText = Ext.JSON.decode(error.responseText).error;
+            if (error.responseText) {
+                exceptionText = Ext.JSON.decode(error.responseText).error;
+            } else {
+                return;
+            }
         }
 
 

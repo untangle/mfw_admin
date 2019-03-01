@@ -369,7 +369,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onExport: function () {
-        Ext.toast('open export dialog');
+        var grid = this.getView(),
+            fileName = grid.getTitle().replace(/ /g, '_') + '-' + moment.tz(Mfw.app.tz.displayName).format('DD-MM-YY-hhmmA');
+
+        Util.export(grid.getStore(), fileName);
     },
 
     onReset: function () {
