@@ -169,6 +169,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 iconCls: 'md-icon-keyboard-arrow-down',
                 text: 'More',
                 arrow: false,
+                menuAlign: 'tr-br?',
                 align: 'right',
                 menu: {
                     items: []

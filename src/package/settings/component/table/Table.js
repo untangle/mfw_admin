@@ -62,6 +62,11 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         docked: 'top',
         padding: '0 8',
         items: [{
+            xtype: 'component',
+            html: 'Chain:',
+            style: 'font-size: 14px; color: #555;',
+            margin: '0 8'
+        }, {
             xtype: 'button',
             itemId: 'chainsmenu',
             minWidth: 200,

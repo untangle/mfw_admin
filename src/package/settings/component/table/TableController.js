@@ -278,8 +278,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                      */
                     grid.table.chains().each(function (chain) {
                         chain.rules().each(function (rule) {
-                            if (rule.get('action').type === "JUMP" || rule.get('action').type === "GOTO") {
-                                if (rule.get('action').chain === me.selectedChain.get('name')) {
+                            if (rule.getAction() && rule.getAction().get('type') === 'JUMP' || rule.getAction().get('type') === 'GOTO') {
+                                if (rule.getAction().get('chain') === me.selectedChain.get('name')) {
                                     rule.drop();
                                 }
                             }
@@ -287,6 +287,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     });
                     // remove the chain
                     grid.table.chains().remove(me.selectedChain);
+                    me.onSave();
                 }
             });
     },
@@ -299,7 +300,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         // find the current default chain and remove default;
         oldDefault = grid.table.chains().findRecord('default', true);
-        oldDefault.set('default', false);
+        if (oldDefault) { oldDefault.set('default', false); }
 
         // set default the current chain selection
         me.selectedChain.set('default', true);
@@ -448,15 +449,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             handler: 'onLoad'
         }, {
             xtype: 'button',
-            text: 'Save'.t(),
-            iconCls: 'md-icon-save',
-            align: 'right',
-            handler: 'onSave'
-        }, {
-            xtype: 'button',
-            iconCls: 'md-icon-more-vert',
+            text: 'More',
+            iconCls: 'md-icon-keyboard-arrow-down',
             align: 'right',
             arrow: false,
+            menuAlign: 'tr-br?',
             menu: {
                 anchor: true,
                 minWidth: 150,
@@ -526,6 +523,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     handler: 'onDefaults'
                 }]
             }
+        }, {
+            xtype: 'button',
+            text: 'Save'.t(),
+            iconCls: 'md-icon-save',
+            align: 'right',
+            handler: 'onSave'
         }]);
 
         // g.getStore().on('beforesync', me.onBeforeSync);

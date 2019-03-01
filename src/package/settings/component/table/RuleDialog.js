@@ -42,6 +42,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 xtype: 'textfield',
                 name: 'description',
                 label: 'Description'.t(),
+                placeholder: 'Enter description ...',
                 flex: 1,
                 autoComplete: false,
                 clearable: false,

@@ -109,6 +109,7 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 placeholder: 'Integer between -500 and 500',
                 minValue: -500,
                 maxValue: 500,
+                autoComplete: false,
                 required: true,
                 hidden: true,
                 bind: {
@@ -154,6 +155,13 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
 
             if (!form.validate()) { return; }
 
+            // proper set the default chain
+            if (chain.get('default')) {
+                // if editing chain is set as default, remove previously default chain
+                var oldDefault = grid.table.chains().findRecord('default', true);
+                if (oldDefault) { oldDefault.set('default', false); }
+            }
+
             if (vm.get('action') === 'ADD') {
                 grid.table.chains().add(chain);
             } else {
@@ -165,10 +173,12 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
 
         onCancel: function() {
             var me = this,
-                vm = me.getViewModel(),
-                chain = vm.get('chain');
+                grid = me.getView().ownerCmp;
 
-            chain.reject();
+            grid.table.chains().each(function (ch) {
+                ch.reject();
+            });
+
             me.getView().destroy();
         }
     }
