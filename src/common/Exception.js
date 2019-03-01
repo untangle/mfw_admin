@@ -3,12 +3,20 @@ Ext.define('Mfw.Exception', {
     singleton: true,
 
     show: function (error) {
-        var errorMsg = error.responseJson,
+        var errorJson, exceptionText, fullStack,
             status = error.status,
-            exceptionText = errorMsg.output.match(/Exception: (.*?)\n/g)[0],
             statusText = error.statusText;
 
-        exceptionText = exceptionText.replace('Exception: ', '');
+        if (error.responseJson) {
+            // store sync, model save
+            exceptionText = errorJson.output.match(/Exception: (.*?)\n/g)[0];
+            exceptionText = exceptionText.replace('Exception: ', '');
+            fullStack = errorJson.output.replace(/\n/g, '</br>');
+        } else {
+            // ajax
+            exceptionText = Ext.JSON.decode(error.responseText).error;
+        }
+
 
         Ext.create({
             xtype: 'actionsheet',
@@ -43,6 +51,7 @@ Ext.define('Mfw.Exception', {
                 xtype: 'button',
                 ui: 'action',
                 text: 'Show full stack',
+                hidden: !fullStack,
                 handler: function (btn) {
                     btn.up('actionsheet').down('#fullstack').setHidden(false);
                     btn.hide();
@@ -52,7 +61,7 @@ Ext.define('Mfw.Exception', {
                 itemId: 'fullstack',
                 hidden: true,
                 flex: 1,
-                html: '<p style="font-size: 16px; font-weight: bold;">Full stack:</p> <code>' + errorMsg.output.replace(/\n/g, '</br>') + '</code>'
+                html: '<p style="font-size: 16px; font-weight: bold;">Full stack:</p> <code>' + fullStack + '</code>'
             }],
             listeners: {
                 hide: function (sheet) {
@@ -62,4 +71,10 @@ Ext.define('Mfw.Exception', {
         }).show();
     }
 
+});
+
+// capture Ajax exceptions
+
+Ext.Ajax.on('requestexception', function (conn, response) {
+    Exception.show(response);
 });

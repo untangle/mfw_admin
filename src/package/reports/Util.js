@@ -126,18 +126,19 @@ Ext.define('Mfw.reports.Util', {
 
     fetchReportData: function (report, cb) {
         var data = [],
-            createQuery = function (report, cb) {
+            createQuery = function (report, cb2) {
                 Ext.Ajax.request({
                     url: '/api/reports/create_query',
                     params: Ext.JSON.encode(report.getData(true)),
                     success: function(response) {
                         // get data
                         var queryId = Ext.decode(response.responseText);
-                        cb(queryId);
+                        cb2(queryId);
                         // ReportsUtil.fetch2(queryId, 0);
                     },
                     failure: function () {
-                        console.error('Unable to create query!');
+                        cb2();
+                        // console.error('Unable to create query!');
                     }
                 });
             },
@@ -146,7 +147,7 @@ Ext.define('Mfw.reports.Util', {
              * @param {integer} queryId
              * @param {function} cb
              */
-            getData = function (queryId, cb) {
+            getData = function (queryId, cb3) {
                 var partialData;
                 Ext.Ajax.request({
                     url: '/api/reports/get_data/' + queryId,
@@ -154,9 +155,9 @@ Ext.define('Mfw.reports.Util', {
                         partialData = Ext.decode(response.responseText);
                         if (!partialData.error) {
                             Ext.Array.push(data, partialData);
-                            getData(queryId, cb);
+                            getData(queryId, cb3);
                         } else {
-                            cb();
+                            cb3();
                         }
                     },
                     failure: function () {
@@ -178,6 +179,10 @@ Ext.define('Mfw.reports.Util', {
             };
 
         createQuery(report, function (queryId) {
+            if (!queryId) {
+                cb('error');
+                return;
+            }
             getData(queryId, function () {
                 closeQuery(queryId);
                 cb(data);

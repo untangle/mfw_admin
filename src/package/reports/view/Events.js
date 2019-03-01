@@ -104,9 +104,10 @@ Ext.define('Mfw.reports.Events', {
             viewModel.set('data', []);
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
+                view.unmask();
+                if (data === 'error') { return; }
                 view.down('grid').getStore().loadData(data);
                 if (cb) { cb(); }
-                view.unmask();
             });
         }
     }

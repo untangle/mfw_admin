@@ -63,6 +63,9 @@ Ext.define('Mfw.reports.Text', {
             ReportsUtil.fetchReportData(record, function (data) {
                 var args = [];
 
+                view.unmask();
+                if (data === 'error') { return; }
+
                 if (!record.getRendering() || !record.getRendering().get('textString')) {
                     console.error('Invalid report settings detected. textString rendering missing!');
                     viewModel.set('text', 'Invalid report settings!');
@@ -81,8 +84,6 @@ Ext.define('Mfw.reports.Text', {
 
                 viewModel.set('data', data);
                 viewModel.set('text', Ext.String.format.apply(this, args));
-
-                view.unmask();
             });
         }
     }
