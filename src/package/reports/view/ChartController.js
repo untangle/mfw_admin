@@ -463,7 +463,7 @@ Ext.define('Mfw.reports.ChartController', {
         }
 
         if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
-            var series = {};
+            var series = {}, name;
 
             // Ext.Array.sort(data, function (a, b) {
             //     if (a.time_trunc < b.time_trunc) { return -1; }
@@ -474,8 +474,12 @@ Ext.define('Mfw.reports.ChartController', {
             Ext.Array.each(data, function (d) {
                 Ext.Object.each(d, function (key, val) {
                     if (key !== 'time_trunc') {
+                        name = key;
+                        if (record.get('category') === 'Interfaces') {
+                            name = Globals.interfacesMap[key] + ' [' + key + ']';
+                        }
                         if (!series[key]) {
-                            series[key] = { name: (key !== '<nil>') ? key : 'none', data: [] };
+                            series[key] = { name: (name !== '<nil>') ? name : 'none', data: [] };
                         } else {
                             series[key].data.push([d.time_trunc, val || 0]);
                         }

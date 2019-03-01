@@ -17,6 +17,7 @@
     },
     "rendering": {
         "type": "spline",
+        "lineWidth": 2,
         "dataGroupingApproximation": "average"
     }
 }
