@@ -21,6 +21,7 @@ Ext.define('Mfw.reports.ChartController', {
             chart: {
                 animation: false,
                 type: 'pie', // to avoid initial xAxis cut-off for pies
+                backgroundColor: 'transparent',
                 // width: '100%',
                 // height: '100%',
                 events: {
@@ -243,7 +244,7 @@ Ext.define('Mfw.reports.ChartController', {
         }
 
         view.mask({xtype: 'loadmask'});
-
+        chart.zoomOut();
         ReportsUtil.fetchReportData(record, function (data) {
             view.unmask();
             if (!Ext.isArray(data)) { return; }
