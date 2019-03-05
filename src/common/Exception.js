@@ -80,5 +80,9 @@ Ext.define('Mfw.Exception', {
 // capture Ajax exceptions
 
 Ext.Ajax.on('requestexception', function (conn, response) {
+    // temporary fix to avoid showing exception when checking if user is authenticated in login screen
+    if (response.request.url === '/account/status') {
+        return;
+    }
     Exception.show(response);
 });
