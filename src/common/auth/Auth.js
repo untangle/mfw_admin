@@ -5,7 +5,7 @@ Ext.define('Mfw.Auth', {
     style: 'background: #999',
 
     config: {
-        redirectRoute: null
+        redirectTo: null
     },
 
     layout: 'center',
@@ -93,8 +93,7 @@ Ext.define('Mfw.Auth', {
         onLogin: function () {
             var me = this,
                 form = me.getView().down('formpanel'),
-                btn = form.down('button'),
-                redirectRoute = Mfw.app.getRouteAfterAuth() || '';
+                btn = form.down('button');
 
             if (!form.validate()) { return; }
 
@@ -104,16 +103,10 @@ Ext.define('Mfw.Auth', {
                 method: 'POST',
                 params: form.getValues(),
                 success: function () {
-                    // if (redirectRoute === '#auth') {
-                    //     Mfw.app.redirectTo('#');
-                    // } else {
-                    //     Mfw.app.redirectTo(redirectRoute);
-                    // }
-                    Mfw.app.redirectTo(redirectRoute);
-                    document.location.reload();
-                    // btn.setDisabled(false);
+                    window.location.replace(me.getView().getRedirectTo());
+                    window.location.reload();
                 },
-                failure: function (response) {
+                failure: function () {
                     form.down('#error').show();
                     btn.setDisabled(false);
                 }

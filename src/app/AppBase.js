@@ -28,7 +28,8 @@ Ext.define('Mfw.AppBase', {
         // console.log(action, hash);
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
-                Mfw.app.setRouteAfterAuth(hash);
+                // set redirectTo after login
+                Mfw.app.viewport.down('auth').setRedirectTo(window.location.href);
             }
             Mfw.app.redirectTo('auth');
         } else {
@@ -90,7 +91,8 @@ Ext.define('Mfw.AppBase', {
 
             failure: function() {
                 Mfw.app.viewport.add({
-                    xtype: 'auth'
+                    xtype: 'auth',
+                    redirectTo: window.location.href // initial redirectTo
                 });
                 Ext.route.Router.resume();
                 Mfw.app.redirectTo('auth');
