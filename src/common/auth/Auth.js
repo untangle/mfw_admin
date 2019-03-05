@@ -68,7 +68,10 @@ Ext.define('Mfw.Auth', {
                 name: 'username',
                 label: 'Username',
                 clearable: false,
-                required: true
+                required: true,
+                listeners: {
+                    painted: function (f) { f.focus(); }
+                }
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
