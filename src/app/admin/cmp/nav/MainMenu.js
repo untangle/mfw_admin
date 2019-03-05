@@ -19,7 +19,7 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         xtype: 'component',
         width: 100,
         margin: 10,
-        html: '<img src="' + 'res/untangle-logo.png" style="height: 30px;"/>'
+        html: '<img src="' + '/static/res/untangle-logo-w.png" style="height: 30px;"/>'
     }, {
         text: 'Dashboard'.t(),
         iconCls: 'x-fa fa-home',

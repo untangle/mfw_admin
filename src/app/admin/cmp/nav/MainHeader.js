@@ -9,8 +9,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     items: [{
         xtype: 'component',
         // padding: '0 10',
-        margin: '0 16 0 0',
-        html: '<a href="#dashboard"><img src="/static/res/untangle-logo.png" style="height: 30px;"/></a>',
+        margin: '2 16 0 0',
+        html: '<a href="#dashboard"><img src="/static/res/untangle-logo-w.png" style="height: 40px;"/></a>',
         // responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
     }, {
         xtype: 'container',
