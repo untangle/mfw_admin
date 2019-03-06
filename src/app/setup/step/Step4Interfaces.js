@@ -38,8 +38,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     layout: 'vbox',
 
-    bodyPadding: 24,
-
     items: [{
         xtype: 'component',
         padding: '0 0 24 0',
@@ -163,16 +161,17 @@ Ext.define('Mfw.setup.step.Interfaces', {
     }, {
         xtype: 'container',
         flex: 1,
-        layout: 'hbox',
-        padding: '0 0 24 0',
+        layout: { type: 'hbox', align: 'top', pack: 'right' },
         items: [{
-            xtype: 'container',
-            items: [{
-                xtype: 'button',
-                ui: 'action',
-                margin: '8 0 0 0',
-                text: 'Refresh Interfaces'
-            }]
+            xtype: 'button',
+            margin: '0 16 0 0',
+            text: 'Refresh Interfaces'
+        }, {
+            xtype: 'button',
+            width: 150,
+            text: 'Continue',
+            ui: 'action',
+            handler: 'onContinue'
         }]
     }],
     listeners: {
@@ -200,6 +199,14 @@ Ext.define('Mfw.setup.step.Interfaces', {
             if (value === 'BRIDGED') {
                 return 'Bridged to <strong>' + Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo')).get('name') + '</strong>';
             }
+        },
+
+        onContinue: function (cb) {
+            var me = this,
+                wizard = me.getView().up('#wizard'),
+                layout = wizard.getLayout();
+
+            layout.next();
         }
     }
 

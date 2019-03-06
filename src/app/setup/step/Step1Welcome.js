@@ -23,10 +23,12 @@ Ext.define('Mfw.setup.step.Welcome', {
         text: 'Continue',
         ui: 'action',
         handler: 'onContinue'
-    }, {
-        xtype: 'component',
-        html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-    }],
+    },
+    // {
+    //     xtype: 'component',
+    //     html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
+    // }
+    ],
     // {
     //     xtype: 'container',
     //     layout: 'vbox',
