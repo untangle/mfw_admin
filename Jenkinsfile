@@ -8,9 +8,7 @@ pipeline {
   stages {
     stage('Build') {
       agent any
-      steps {
-	sh "true"
-      }
+      steps { sh "true" }
     }
 
   }
