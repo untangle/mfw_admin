@@ -1,6 +1,6 @@
-Ext.define('Mfw.setup.step.Account', {
+Ext.define('Mfw.setup.step.Timezone', {
     extend: 'Ext.Panel',
-    alias: 'widget.step-account',
+    alias: 'widget.step-timezone',
 
     style: 'color: #555;',
 
@@ -15,7 +15,7 @@ Ext.define('Mfw.setup.step.Account', {
         xtype: 'component',
         width: 500,
         padding: '0 0 24 0',
-        html: '<h1 style="text-align: center;">Admin Account</h1><hr/>'
+        html: '<h1 style="text-align: center;">Timezone</h1><hr/>'
     }, {
         xtype: 'formpanel',
         padding: 0,
@@ -40,45 +40,15 @@ Ext.define('Mfw.setup.step.Account', {
             items: [{
                 xtype: 'component',
                 style: 'font-size: 14px;',
-                html: 'Choose a new password for the <strong>admin</strong> account'
+                html: 'Choose server timezone'
             }, {
-                xtype: 'textfield',
+                xtype: 'selectfield',
                 userCls: 'x-custom-field',
-                id: 'password',
-                animateUnderline: false,
-                // ui: 'faded',
-                name: 'password',
-                // shadow: true,
-                // width: 250,
-                // ui: 'solo',
-                label: 'Password',
-                // labelAlign: 'top',
-                // labelTextAlign: 'right',
+                name: 'displayName',
+                // label: 'Timezone'.t(),
                 required: true,
-                value: 'passwd'
-            }, {
-                xtype: 'passwordfield',
-                userCls: 'x-custom-field',
-                id: 'confirm',
-                name: 'confirm',
-                // width: 250,
-                // ui: 'solo',
-                label: 'Confirm',
-                // labelAlign: 'top',
-                required: true,
-                value: 'passwd'
-            }, {
-                xtype: 'emailfield',
-                userCls: 'x-custom-field',
-                name: 'email',
-                margin: '16 0 0 0',
-                // width: 300,
-                // ui: 'solo',
-                label: 'Email',
-            }, {
-                xtype: 'component',
-                style: 'color: #777; line-height: 1; padding: 3px;',
-                html: 'Administrators receive email alerts and report summaries.'
+                valueField: 'text',
+                options: Globals.timezones
             }, {
                 xtype: 'button',
                 margin: '16 0 0 0',
@@ -91,27 +61,17 @@ Ext.define('Mfw.setup.step.Account', {
     }],
 
     listeners: {
-        activate: 'onActivate'
+        activate: 'loadTimezone'
     },
 
     controller: {
         init: function (view) {
             // set validation on confirm field
-            var passField = view.down('#password'),
-                confirmField = view.down('#confirm');
-
-            confirmField.setValidators(function (value) {
-                if (value !== passField.getValue()) {
-                    return 'Passwords do not match!';
-                }
-                return true;
-            });
         },
 
         onActivate: function (view) {
             var me = this;
-            view.down('formpanel').reset(true);
-            // me.loadTimezone();
+            me.loadTimezone();
         },
 
         loadTimezone: function () {
@@ -133,35 +93,6 @@ Ext.define('Mfw.setup.step.Account', {
                     console.warn('Unable to load Timezone!');
                 }
             });
-        },
-
-
-        setAccount: function () {
-            var me = this,
-                deferred = new Ext.Deferred(),
-                adminAccount = Ext.create('Mfw.model.Account'),
-                form = me.getView().down('formpanel');
-
-            adminAccount.load({
-                success: function (account) {
-                    if (account && account.get('username') === 'admin') {
-                        var values = form.getValues();
-                        account.set('passwordCleartext', values.password);
-                        account.set('email', values.email);
-                        adminAccount.save({
-                            success: function () {
-                                deferred.resolve();
-                            },
-                            failure: function () {
-                                deferred.reject();
-                            }
-                        });
-                    } else {
-                        // if account admin non existent add it
-                    }
-                }
-            });
-            return deferred.promise;
         },
 
         setTimezone: function () {

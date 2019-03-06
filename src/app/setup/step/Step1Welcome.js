@@ -6,17 +6,26 @@ Ext.define('Mfw.setup.step.Welcome', {
 
     layout: {
         type: 'vbox',
-        align: 'stretch'
+        align: 'middle'
     },
 
     bodyPadding: 24,
 
     items: [{
         xtype: 'component',
-        padding: '100 0 24 0',
+        padding: '0 24',
         style: 'text-align: center;',
-        html: '<h1>Thanks for choosing Untangle!</h1>' +
-            '<p style="font-size: 16px;">A wizard will guide you through the initial setup and configuration of the Server.</p>'
+        html: '<h1 style="font-size: 32px;">Thanks for choosing Untangle!</h1>' +
+            '<p style="font-size: 16px; margin-top: 32px;">A wizard will guide you through the initial setup and configuration of the Server.</p>'
+    }, {
+        xtype: 'button',
+        width: 200,
+        text: 'Continue',
+        ui: 'action',
+        handler: 'onContinue'
+    }, {
+        xtype: 'component',
+        html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
     }],
     // {
     //     xtype: 'container',
@@ -44,9 +53,9 @@ Ext.define('Mfw.setup.step.Welcome', {
     //     }]
     // }
     // ]
-    controller: {
-        continue: function (cb) {
-            cb();
-        }
-    }
+    // controller: {
+    //     continue: function (cb) {
+    //         cb();
+    //     }
+    // }
 });

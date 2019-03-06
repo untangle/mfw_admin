@@ -1,6 +1,6 @@
-Ext.define('Mfw.setup.step.Interfaces', {
+Ext.define('Mfw.setup.step.InterfaceMapping', {
     extend: 'Ext.Panel',
-    alias: 'widget.step-interfaces',
+    alias: 'widget.step-interfacemapping',
 
     viewModel: {
         formulas: {
@@ -41,16 +41,27 @@ Ext.define('Mfw.setup.step.Interfaces', {
     bodyPadding: 24,
 
     items: [{
-        xtype: 'component',
+        xtype: 'container',
+        layout: 'hbox',
         padding: '0 0 24 0',
-        html: '<h1 style="text-align: center;">Interfaces</h1><hr/>'
+        items: [{
+            xtype: 'component',
+            flex: 1,
+            html: '<h1>Interfaces Mapping</h1><p>Use arrow buttons to map an interface with a different device.</p>'
+        }, {
+            xtype: 'container',
+            items: [{
+                xtype: 'button',
+                ui: 'action',
+                margin: '8 0 0 0',
+                text: 'Refresh Interfaces'
+            }]
+        }]
     }, {
         xtype: 'grid',
         reference: 'interfaces',
         flex: 1,
         store: 'interfaces',
-        rowLines: false,
-        selectable: false,
         columns: [
         // {
         //     dataIndex: 'status',
@@ -69,79 +80,41 @@ Ext.define('Mfw.setup.step.Interfaces', {
         //     }
         // },
         {
-            text: 'Id'.t(),
-            dataIndex: 'interfaceId',
-            align: 'right',
-            width: 40,
-            resizable: false,
-            sortable: false,
-            menuDisabled: true
-        }, {
-            text: 'Name'.t(),
+            text: 'Name',
             dataIndex: 'name',
             flex: 1,
-            minWidth: 150,
-            cell: { encodeHtml: false },
-            renderer: function (value, record) {
-                if (record.get('wan')) {
-                    return '<strong>' + value + ' (WAN) </strong>';
-                }
-                return '<strong>' + value + '</strong>';
-            }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'Type'.t(),
-            dataIndex: 'type',
-            width: 70
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'Device'.t(),
-            dataIndex: 'device',
-            menuDisabled: true,
-            width: 70
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'Config Type'.t(),
-            dataIndex: 'configType',
-            menuDisabled: true,
-            minWidth: 150,
             cell: {
-                encodeHtml: false,
+                style: 'font-weight: bold'
             },
-            renderer: 'configTypeRenderer'
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'IPv4'.t(),
-            width: 180,
-            dataIndex: 'v4ConfigType',
-            menuDisabled: true,
             renderer: function (value, record) {
-                if (value === 'DHCP' || value === 'PPPOE') {
-                    return value;
-                }
-                if (value === 'STATIC') {
-                    return 'STATIC, ' + record.get('v4StaticAddress');
-                }
-                return '-';
+                return value + (record.get('wan') ? ' [WAN]' : '');
             }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
-        }, {
-            text: 'IPv6'.t(),
-            width: 180,
-            dataIndex: 'v6ConfigType',
-            menuDisabled: true,
-            renderer: function (value) {
-                if (value) {
-                    return value;
-                }
-                return '-';
-            }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
         }, {
             text: 'MAC',
-            dataIndex: 'macaddr',
-            minWidth: 140,
-            menuDisabled: true
+            dataIndex: 'mac',
+            width: 150
+        }, {
+            text: 'Device',
+            align: 'right',
+            width: 100,
+            dataIndex: 'device'
+        }, {
+            width: 120,
+            align: 'center',
+            cell: {
+                encodeHtml: false,
+                style: 'background: #EEE;'
+            },
+            renderer: function() {
+                return '<i class="x-fa fa-long-arrow-left"></i> map to <i class="x-fa fa-long-arrow-right"></i>';
+            }
+        }, {
+            text: 'Devices',
+            dataIndex: 'device',
+            width: 100,
+            cell: {
+                style: 'font-weight: bold;'
+            }
         }, {
             // align: 'center',
             width: 80,
@@ -156,23 +129,39 @@ Ext.define('Mfw.setup.step.Interfaces', {
                             store.removeAt(oldIdx);
                             store.insert(oldIdx - 1 , rec);
                         }
+                    },
+                    down: {
+                        iconCls: 'x-fa fa-arrow-circle-down',
+                        tooltip: 'Move Down',
+                        handler: function (grid, info) {
+                            var store = grid.getStore(), rec = info.record;
+                            var oldIdx = store.indexOf(rec);
+                            store.removeAt(oldIdx);
+                            store.insert(oldIdx + 1 , rec);
+                        }
                     }
                 }
             }
         }]
     }, {
-        xtype: 'container',
-        flex: 1,
-        layout: 'hbox',
-        padding: '0 0 24 0',
+        xtype: 'toolbar',
+        docked: 'bottom',
+        padding: '0 40',
+        style: {
+            background: 'transparent',
+            fontSize: '12px',
+            color: '#777'
+        },
         items: [{
-            xtype: 'container',
-            items: [{
-                xtype: 'button',
-                ui: 'action',
-                margin: '8 0 0 0',
-                text: 'Refresh Interfaces'
-            }]
+            xtype: 'component',
+            bind: {
+                html: '{infoInterface}'
+            }
+        }, '->', {
+            xtype: 'component',
+            bind: {
+                html: '{infoDevice}'
+            }
         }]
     }],
     listeners: {
@@ -181,25 +170,15 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     controller: {
         onActivate: function (view) {
-            Ext.getStore('interfaces').load();
+            // console.log();
+            // var store = view.lookup('interfaces').getStore();
+            // store.load();
 
-            // Mfw.app.getStore('devices').load();
+            Mfw.app.getStore('devices').load();
 
             // console.log(store.getData());
             // view.lookup('interfaces').getStore().load();
             // console.log('activate');
-        },
-
-        configTypeRenderer: function (value, record) {
-            if (value === 'ADDRESSED') {
-                return 'Addressed';
-            }
-            if (value === 'DISABLED') {
-                return 'Disabled';
-            }
-            if (value === 'BRIDGED') {
-                return 'Bridged to <strong>' + Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo')).get('name') + '</strong>';
-            }
         }
     }
 
