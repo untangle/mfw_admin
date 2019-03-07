@@ -100,10 +100,6 @@ Ext.define('Mfw.settings.network.interface.Sheet', {
         padding: 0,
         margin: 0,
 
-        // defaults: {
-        //     margin: '8 0'
-        // },
-
         items: [
             { xtype: 'interface-main' },
             { xtype: 'interface-ipv4' },

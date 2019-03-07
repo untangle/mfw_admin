@@ -21,6 +21,11 @@ Ext.define('Mfw.setup.step.Account', {
         padding: 0,
 
         width: 300,
+        layout: {
+            type: 'vbox',
+            align: 'center'
+        },
+
         // disabled: true,
         // bind: {
         //     disabled: '{skip.checked}'
@@ -29,7 +34,7 @@ Ext.define('Mfw.setup.step.Account', {
             xtype: 'container',
             layout: {
                 type: 'vbox',
-                pack: 'right'
+                pack: 'center'
             },
             // flex: 1,
             defaults: {
@@ -42,18 +47,13 @@ Ext.define('Mfw.setup.step.Account', {
                 style: 'font-size: 14px;',
                 html: 'Choose a new password for the <strong>admin</strong> account'
             }, {
-                xtype: 'textfield',
+                xtype: 'passwordfield',
                 userCls: 'x-custom-field',
                 id: 'password',
+                autoComplete: false,
                 animateUnderline: false,
-                // ui: 'faded',
                 name: 'password',
-                // shadow: true,
-                // width: 250,
-                // ui: 'solo',
                 label: 'Password',
-                // labelAlign: 'top',
-                // labelTextAlign: 'right',
                 required: true,
                 value: 'passwd'
             }, {
@@ -61,10 +61,7 @@ Ext.define('Mfw.setup.step.Account', {
                 userCls: 'x-custom-field',
                 id: 'confirm',
                 name: 'confirm',
-                // width: 250,
-                // ui: 'solo',
                 label: 'Confirm',
-                // labelAlign: 'top',
                 required: true,
                 value: 'passwd'
             }, {
@@ -79,14 +76,21 @@ Ext.define('Mfw.setup.step.Account', {
                 xtype: 'component',
                 style: 'color: #777; line-height: 1; padding: 3px;',
                 html: 'Administrators receive email alerts and report summaries.'
-            }, {
-                xtype: 'button',
-                margin: '16 0 0 0',
-                width: 150,
-                text: 'Continue',
-                ui: 'action',
-                handler: 'onContinue'
             }]
+        }, {
+            xtype: 'component',
+            margin: '32 0 0 0',
+            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+            hidden: true,
+            bind: { hidden: '{!processing}' }
+        }, {
+            xtype: 'button',
+            margin: '32 0 0 0',
+            width: 120,
+            text: 'Continue',
+            ui: 'action',
+            handler: 'onContinue',
+            bind: { hidden: '{processing}' }
         }]
     }],
 
@@ -108,33 +112,30 @@ Ext.define('Mfw.setup.step.Account', {
             });
         },
 
-        onActivate: function (view) {
-            var me = this;
-            view.down('formpanel').reset(true);
-            // me.loadTimezone();
-        },
-
-        loadTimezone: function () {
+        onActivate: function (card) {
             var me = this,
-                form = me.getView().down('formpanel');
+                vm = me.getViewModel();
 
-            Ext.Ajax.request({
-                url: '/api/settings/system/timeZone',
-                success: function (result) {
-                    var tz = Ext.decode(result.responseText);
-                    if (!tz || tz === null) {
-                        form.getFields('displayName').setValue('UTC');
-                    } else {
-                        form.getFields('displayName').setValue(tz.displayName || 'UTC');
-                    }
+            card.down('formpanel').reset(true);
 
-                },
-                failure: function () {
-                    console.warn('Unable to load Timezone!');
+            me.accountsStore = Ext.create('Ext.data.Store', {
+                model: 'Mfw.model.Account'
+            });
+
+
+            vm.set('processing', true);
+            me.accountsStore.load(function (records) {
+                me.adminAccount = me.accountsStore.findRecord('username', 'admin');
+
+                if (!me.adminAccount) {
+                    me.adminAccount = Ext.create('Mfw.model.Account', {
+                        username: 'admin'
+                    });
+                    me.accountsStore.add(me.adminAccount);
                 }
+                vm.set('processing', false);
             });
         },
-
 
         setAccount: function () {
             var me = this,
@@ -144,6 +145,7 @@ Ext.define('Mfw.setup.step.Account', {
 
             adminAccount.load({
                 success: function (account) {
+                    console.log(account);
                     if (account && account.get('username') === 'admin') {
                         var values = form.getValues();
                         account.set('passwordCleartext', values.password);
@@ -164,63 +166,27 @@ Ext.define('Mfw.setup.step.Account', {
             return deferred.promise;
         },
 
-        setTimezone: function () {
-            var me = this,
-                deferred = new Ext.Deferred(),
-                form = me.getView().down('formpanel'),
-                tz, tzName = tzName = form.getFields('displayName').getValue();
-
-            tz = Ext.Array.findBy(Globals.timezones, function (zone) {
-                return zone.text === tzName;
-            });
-
-            Ext.Ajax.request({
-                url: '/api/settings/system/timeZone',
-                method: 'POST',
-                params: Ext.JSON.encode({
-                    displayName: tz.text,
-                    value: tz.value,
-                }),
-                success: function () {
-                    deferred.resolve();
-                },
-                failure: function(response) {
-                    console.log('server-side failure with status code ' + response.status);
-                    deferred.reject();
-                }
-            });
-
-            return deferred.promise;
-        },
-
         onContinue: function (cb) {
             var me = this,
-                wizard = me.getView().up('#wizard'),
-                layout = wizard.getLayout();
+                vm = me.getViewModel(),
+                form = me.getView().down('formpanel'), values,
+                wzCtrl = me.getView().up('setup-wizard').getController();
 
-            layout.next();
-            // cb();
-            // var me = this, // skip = me.lookup('skip'),
-            //     form = me.getView().down('formpanel'),
-            //     view = me.getView(),
-            //     wizard = view.up('setup-wizard');
+            if (!form.validate()) { return; }
 
-            // if (!form.validate()) { return; }
+            values = form.getValues();
 
-            // wizard.mask({xtype: 'loadmask' });
-            // wizard.lookup('bbar').mask();
+            me.adminAccount.set({
+                passwordCleartext: values.password,
+                email: values.email
+            });
 
-            // Ext.Deferred.sequence([me.setAccount, me.setTimezone], me)
-            //     .then(
-            //         function () {
-            //             cb();
-            //         }, function (error) {
-            //             console.error('Unable to save!');
-            //         })
-            //     .always(function () {
-            //         wizard.unmask();
-            //         wizard.lookup('bbar').unmask();
-            //     });
+            vm.set('processing', true);
+            me.accountsStore.sync({
+                success: function () {
+                    wzCtrl.update();
+                }
+            });
         }
     }
 

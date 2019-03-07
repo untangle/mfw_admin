@@ -20,13 +20,17 @@ Ext.define('Mfw.setup.step.Timezone', {
         xtype: 'formpanel',
         padding: 0,
 
-        width: 300,
+        layout: {
+            type: 'vbox',
+            align: 'center'
+        },
         // disabled: true,
         // bind: {
         //     disabled: '{skip.checked}'
         // },
         items: [{
             xtype: 'container',
+            width: 300,
             layout: {
                 type: 'vbox',
                 pack: 'right'
@@ -49,14 +53,21 @@ Ext.define('Mfw.setup.step.Timezone', {
                 required: true,
                 valueField: 'text',
                 options: Globals.timezones
-            }, {
-                xtype: 'button',
-                margin: '16 0 0 0',
-                width: 150,
-                text: 'Continue',
-                ui: 'action',
-                handler: 'onContinue'
             }]
+        }, {
+            xtype: 'component',
+            margin: '32 0 0 0',
+            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+            hidden: true,
+            bind: { hidden: '{!processing}' }
+        }, {
+            xtype: 'button',
+            margin: '32 0 0 0',
+            width: 120,
+            text: 'Continue',
+            ui: 'action',
+            handler: 'onContinue',
+            bind: { hidden: '{processing}' }
         }]
     }],
 

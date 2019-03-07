@@ -48,14 +48,21 @@ Ext.define('Mfw.setup.step.Upgrades', {
                 html: 'Remain securely connected to the Command Center for cloud management, hot fixes, and support access.<br/>' +
                     'This is the recommended choice for most sites.'
             }]
-        }, {
-            xtype: 'button',
-            margin: '16 0 0 0',
-            width: 150,
-            text: 'Continue',
-            ui: 'action',
-            handler: 'onContinue'
         }]
+    }, {
+        xtype: 'component',
+        margin: '32 0 0 0',
+        html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+        hidden: true,
+        bind: { hidden: '{!processing}' }
+    }, {
+        xtype: 'button',
+        margin: '32 0 0 0',
+        width: 120,
+        text: 'Continue',
+        ui: 'action',
+        handler: 'onContinue',
+        bind: { hidden: '{processing}' }
     }],
 
     controller: {

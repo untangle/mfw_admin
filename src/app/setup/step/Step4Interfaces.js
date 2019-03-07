@@ -2,39 +2,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
     extend: 'Ext.Panel',
     alias: 'widget.step-interfaces',
 
-    viewModel: {
-        formulas: {
-            infoInterface: function (get) {
-                var intf = get('interfaces.selection'), str = [], v4 = '';
-                if (!intf) {
-                    return '<i class="x-fa fa-info-circle" style="color: #777;"></i>&nbsp; Select an Interface to see more information!';
-                }
-
-                str.push(intf.get('type'));
-                str.push(intf.get('configType'));
-
-                v4 = intf.get('v4ConfigType');
-                if (intf.get('v4StaticAddress')) {
-                    v4 += ', ' + intf.get('v4StaticAddress') + '/' + intf.get('v4StaticPrefix');
-                }
-                str.push(v4);
-                return str.join(' &nbsp;|&nbsp; ');
-            },
-            infoDevice: function (get) {
-                var intf = get('interfaces.selection'), device;
-                if (!intf) {
-                    return;
-                }
-                device = Mfw.app.getStore('devices').findRecord('name', intf.get('device'));
-                if (!device) {
-                    return;
-                }
-                return 'duplex: ' + device.get('duplex') + ' | mtu: ' + (device.get('mtu') || '-');
-            }
-        }
-    },
-
-    style: 'color: #555;',
+    viewModel: {},
 
     layout: 'vbox',
 
@@ -49,84 +17,88 @@ Ext.define('Mfw.setup.step.Interfaces', {
         store: 'interfaces',
         rowLines: false,
         selectable: false,
+        itemConfig: {
+            viewModel: true,
+        },
+
         columns: [
         // {
-        //     dataIndex: 'status',
-        //     width: 40,
+        //     width: 5,
+        //     minWidth: 5,
+        //     sortable: false,
+        //     hideable: false,
+        //     resizable: false,
+        //     menuDisabled: true,
         //     cell: {
-        //         encodeHtml: false,
+        //         userCls: 'x-statuscolumn'
         //     },
-        //     renderer: function (v) {
-        //         if (v === 'CONNECTED') {
-        //             return '<i class="x-fa fa-circle" style="color: green;"></i>'
+        //     renderer: function (value, record, dataIndex, cell) {
+        //         cell.setUserCls('');
+        //         if (record.isDirty()) {
+        //             cell.setUserCls('status-dirty');
         //         }
-        //         if (v === 'DISCONNECTED') {
-        //             return '<i class="x-fa fa-circle" style="color: #999;"></i>'
+        //         if (record.get('_deleteSchedule')) {
+        //             cell.setUserCls('status-delete');
         //         }
-        //         return '<i class="x-fa fa-exclamation-circle" style="color: orange;"></i>'
+        //         if (record.phantom) {
+        //             cell.setUserCls('status-phantom');
+        //         }
         //     }
+        // }, {
+        //     text: 'Id'.t(),
+        //     dataIndex: 'interfaceId',
+        //     align: 'right',
+        //     width: 40,
+        //     resizable: false,
+        //     sortable: false,
+        //     menuDisabled: true
         // },
         {
-            text: 'Id'.t(),
-            dataIndex: 'interfaceId',
-            align: 'right',
-            width: 40,
-            resizable: false,
-            sortable: false,
-            menuDisabled: true
-        }, {
-            text: 'Name'.t(),
+            text: 'Name [id] / Type / Device',
             dataIndex: 'name',
             flex: 1,
             minWidth: 150,
+            menuDisabled: true,
+            sortable: false,
             cell: { encodeHtml: false },
             renderer: function (value, record) {
-                if (record.get('wan')) {
-                    return '<strong>' + value + ' (WAN) </strong>';
-                }
-                return '<strong>' + value + '</strong>';
+                return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('type') + ' / ' + record.get('device');
+                // if (record.get('wan')) {
+                //     return '<strong>' + value + ' (WAN) </strong>';
+                // }
+                // return '<strong>' + value + '</strong>';
             }
             // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
         }, {
-            text: 'Type'.t(),
-            dataIndex: 'type',
-            width: 70
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'Device'.t(),
-            dataIndex: 'device',
-            menuDisabled: true,
-            width: 70
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-        }, {
-            text: 'Config Type'.t(),
+            text: 'Config'.t(),
             dataIndex: 'configType',
             menuDisabled: true,
+            sortable: false,
             minWidth: 150,
             cell: {
                 encodeHtml: false,
             },
             renderer: 'configTypeRenderer'
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
         }, {
             text: 'IPv4'.t(),
             width: 180,
             dataIndex: 'v4ConfigType',
+            sortable: false,
             menuDisabled: true,
             renderer: function (value, record) {
                 if (value === 'DHCP' || value === 'PPPOE') {
                     return value;
                 }
                 if (value === 'STATIC') {
-                    return 'STATIC, ' + record.get('v4StaticAddress');
+                    return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
                 }
                 return '-';
             }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
         }, {
             text: 'IPv6'.t(),
             width: 180,
             dataIndex: 'v6ConfigType',
+            sortable: false,
             menuDisabled: true,
             renderer: function (value) {
                 if (value) {
@@ -134,26 +106,24 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 }
                 return '-';
             }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
         }, {
             text: 'MAC',
             dataIndex: 'macaddr',
             minWidth: 140,
+            sortable: false,
             menuDisabled: true
         }, {
-            // align: 'center',
-            width: 80,
+            width: 44,
+            sortable: false,
+            resizable: false,
+            menuDisabled: true,
             cell: {
                 tools: {
-                    up: {
-                        iconCls: 'x-fa fa-arrow-circle-up',
-                        tooltip: 'Move Up',
-                        handler: function (grid, info) {
-                            var store = grid.getStore(), rec = info.record;
-                            var oldIdx = store.indexOf(rec);
-                            store.removeAt(oldIdx);
-                            store.insert(oldIdx - 1 , rec);
-                        }
+                    edit: {
+                        bind: {
+                            hidden: '{record.configType !== "ADDRESSED" && record.type !== "WIFI"}'
+                        },
+                        handler: 'onEdit',
                     }
                 }
             }
@@ -165,7 +135,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
         items: [{
             xtype: 'button',
             margin: '0 16 0 0',
-            text: 'Refresh Interfaces'
+            text: 'Refresh',
+            handler: 'refresh'
         }, {
             xtype: 'button',
             width: 150,
@@ -207,6 +178,36 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 layout = wizard.getLayout();
 
             layout.next();
+        },
+
+        editv4: function (grid, info) {
+            var me = this;
+            Ext.Viewport.add({
+                xtype: 'setup-interface-ipv4',
+                ownerCmp: me.getView(),
+                viewModel: {
+                    data: {
+                        interface: info.record
+                    }
+                }
+            }).show();
+        },
+
+        onEdit: function (grid, info) {
+            var me = this;
+            Ext.Viewport.add({
+                xtype: 'setup-interface-dialog',
+                ownerCmp: me.getView(),
+                viewModel: {
+                    data: {
+                        interface: info.record
+                    }
+                }
+            }).show();
+        },
+
+        refresh: function () {
+            Ext.getStore('interfaces').load();
         }
     }
 
