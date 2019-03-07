@@ -113,15 +113,15 @@ install: \
 
 extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
-	wget -O $@ $(EXTJS_URL)
+	wget -q -O $@ $(EXTJS_URL)
 
 highstock-download: $(HIGHSTOCK_FILE)
 $(HIGHSTOCK_FILE):
-	wget -O $@ $(HIGHSTOCK_URL)
+	wget -q -O $@ $(HIGHSTOCK_URL)
 
 moment-download: $(MOMENT_FILE)
 $(MOMENT_FILE):
-	wget -O $@ $(MOMENT_URL)
+	wget -q -O $@ $(MOMENT_URL)
 
 downloads: extjs-download highstock-download moment-download
 

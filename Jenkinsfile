@@ -1,15 +1,12 @@
-// this Jenkinsfile itself does pretty much nothing, but allows us to
-// easily declare a Jenkins project and then use it as an upstream for
-// the main MFW pipeline
-
 pipeline {
   agent any
 
   stages {
     stage('Build') {
-      agent any
-      steps { sh "true" }
+      agent { label 'mfw' }
+      steps { 
+        sh "docker-compose -f docker-compose.build.yml -p admin_jenkins run build-local"
+      }
     }
-
   }
 }
