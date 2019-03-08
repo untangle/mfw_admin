@@ -136,7 +136,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
             xtype: 'button',
             iconCls: 'md-icon-refresh',
             text: 'Refresh',
-            handler: 'refresh'
+            handler: 'refresh',
+            width: 120
         }, {
             flex: 1
         }, {
@@ -149,9 +150,12 @@ Ext.define('Mfw.setup.step.Interfaces', {
             width: 150,
             text: 'Continue',
             ui: 'action',
-            handler: 'onContinue'
+            handler: 'onContinue',
+            hidden: true,
+            bind: { hidden: '{processing}' }
         }, {
-            flex: 1
+            flex: 1,
+            margin: '0 120 0 0'
         }]
     }],
     listeners: {
@@ -175,12 +179,12 @@ Ext.define('Mfw.setup.step.Interfaces', {
             }
         },
 
-        onContinue: function (cb) {
+        onContinue: function () {
             var me = this,
                 wzCtrl = me.getView().up('setup-wizard').getController();
 
             // each interface is updated upon editing
-
+            me.getViewModel().set('processing', true);
             wzCtrl.update();
 
             // Ext.getStore('interfaces').sync({

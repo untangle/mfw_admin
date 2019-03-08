@@ -71,6 +71,7 @@ Ext.define('Mfw.setup.step.Upgrades', {
             var me = this,
                 wzCtrl = me.getView().up('setup-wizard').getController();
 
+            me.getViewModel().set('processing', true);
             wzCtrl.update();
         }
     }
