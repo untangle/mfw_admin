@@ -54,16 +54,14 @@ Ext.define('Mfw.setup.step.Account', {
                 animateUnderline: false,
                 name: 'password',
                 label: 'Password',
-                required: true,
-                value: 'passwd'
+                required: true
             }, {
                 xtype: 'passwordfield',
                 userCls: 'x-custom-field',
                 id: 'confirm',
                 name: 'confirm',
                 label: 'Confirm',
-                required: true,
-                value: 'passwd'
+                required: true
             }, {
                 xtype: 'emailfield',
                 userCls: 'x-custom-field',
