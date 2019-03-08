@@ -133,37 +133,10 @@ Ext.define('Mfw.setup.step.Account', {
                     });
                     me.accountsStore.add(me.adminAccount);
                 }
-                vm.set('processing', false);
+                Ext.defer(function () {
+                    vm.set('processing', false);
+                }, 300);
             });
-        },
-
-        setAccount: function () {
-            var me = this,
-                deferred = new Ext.Deferred(),
-                adminAccount = Ext.create('Mfw.model.Account'),
-                form = me.getView().down('formpanel');
-
-            adminAccount.load({
-                success: function (account) {
-                    console.log(account);
-                    if (account && account.get('username') === 'admin') {
-                        var values = form.getValues();
-                        account.set('passwordCleartext', values.password);
-                        account.set('email', values.email);
-                        adminAccount.save({
-                            success: function () {
-                                deferred.resolve();
-                            },
-                            failure: function () {
-                                deferred.reject();
-                            }
-                        });
-                    } else {
-                        // if account admin non existent add it
-                    }
-                }
-            });
-            return deferred.promise;
         },
 
         onContinue: function (cb) {

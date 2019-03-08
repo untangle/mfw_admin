@@ -52,35 +52,4 @@ Ext.define('Mfw.setup.step.Welcome', {
             wzCtrl.update();
         }
     }
-    // {
-    //     xtype: 'container',
-    //     layout: 'vbox',
-    //     defaults: {
-    //         xtype: 'radiofield',
-    //         bodyAlign: 'start'
-    //     },
-    //     items: [{
-    //         boxLabel: '<strong>Basic</strong>',
-    //         name: 'mode',
-    //         checked: true,
-    //         margin: '0 16 0 0'
-    //     }, {
-    //         xtype: 'component',
-    //         margin: '0 0 16 0',
-    //         html: 'Basic setup is suited for ... more text to follow ....'
-    //     }, {
-    //         boxLabel: '<strong>Advanced</strong>',
-    //         name: 'mode'
-    //     }, {
-    //         xtype: 'component',
-    //         margin: '0 0 16 0',
-    //         html: 'Choose Advanced mode if you know what you are doing and want to customize things from the start!'
-    //     }]
-    // }
-    // ]
-    // controller: {
-    //     continue: function (cb) {
-    //         cb();
-    //     }
-    // }
 });

@@ -39,22 +39,23 @@ Ext.define('Mfw.setup.WizardController', {
             currentStep = wizard.getActiveItem().xtype,
             nextStep = me.steps[me.steps.indexOf(currentStep) + 1];
 
-        layout.next();
-        vm.set('processing', false);
-        // Ext.Ajax.request({
-        //     url: '/api/settings/system/setupWizard',
-        //     method: 'POST',
-        //     params: Ext.JSON.encode({
-        //         currentStep: nextStep === 'step-complete' ? '' : nextStep,
-        //         completed: me.completed || nextStep === 'step-complete'
-        //     }),
-        //     success: function() {
-        //         layout.next();
-        //     },
-        //     failure: function(response) {
-        //         console.log('server-side failure with status code ' + response.status);
-        //     }
-        // });
+        Ext.Ajax.request({
+            url: '/api/settings/system/setupWizard',
+            method: 'POST',
+            params: Ext.JSON.encode({
+                currentStep: nextStep === 'step-complete' ? '' : nextStep,
+                completed: me.completed || nextStep === 'step-complete'
+            }),
+            success: function() {
+                layout.next();
+                Ext.defer(function () {
+                    vm.set('processing', false);
+                }, 300);
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
     },
 
 

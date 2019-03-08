@@ -17,12 +17,12 @@ Ext.define('Mfw.setup.step.Upgrades', {
         },
         items: [{
             xtype: 'component',
-            padding: '0 0 24 0',
-            html: '<h1 style="text-align: center;">Upgrades</h1><hr/><p>Automatic Upgrades and Command Center Access</p>'
+            padding: '0 32 24 32',
+            html: '<h1 style="text-align: center;">Upgrades</h1><hr/><br/><p>Automatic Upgrades and Command Center Access</p>'
         }, {
             xtype: 'fieldcontainer',
             layout: 'vbox',
-            margin: '0 0 16 0',
+            margin: '0 32 16 32',
             items: [{
                 xtype: 'checkbox',
                 bodyAlign: 'start',
@@ -37,6 +37,7 @@ Ext.define('Mfw.setup.step.Upgrades', {
         }, {
             xtype: 'fieldcontainer',
             layout: 'vbox',
+            margin: '0 32 16 32',
             items: [{
                 xtype: 'checkbox',
                 bodyAlign: 'start',
@@ -68,10 +69,9 @@ Ext.define('Mfw.setup.step.Upgrades', {
     controller: {
         onContinue: function (cb) {
             var me = this,
-                wizard = me.getView().up('#wizard'),
-                layout = wizard.getLayout();
+                wzCtrl = me.getView().up('setup-wizard').getController();
 
-            layout.next();
+            wzCtrl.update();
         }
     }
 

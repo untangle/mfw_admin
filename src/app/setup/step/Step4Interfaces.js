@@ -131,18 +131,27 @@ Ext.define('Mfw.setup.step.Interfaces', {
     }, {
         xtype: 'container',
         flex: 1,
-        layout: { type: 'hbox', align: 'top', pack: 'right' },
+        layout: { type: 'hbox', align: 'top', pack: 'center' },
         items: [{
             xtype: 'button',
-            margin: '0 16 0 0',
+            iconCls: 'md-icon-refresh',
             text: 'Refresh',
             handler: 'refresh'
+        }, {
+            flex: 1
+        }, {
+            xtype: 'component',
+            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+            hidden: true,
+            bind: { hidden: '{!processing}' }
         }, {
             xtype: 'button',
             width: 150,
             text: 'Continue',
             ui: 'action',
             handler: 'onContinue'
+        }, {
+            flex: 1
         }]
     }],
     listeners: {
@@ -150,14 +159,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
-        onActivate: function (view) {
+        onActivate: function () {
             Ext.getStore('interfaces').load();
-
-            // Mfw.app.getStore('devices').load();
-
-            // console.log(store.getData());
-            // view.lookup('interfaces').getStore().load();
-            // console.log('activate');
         },
 
         configTypeRenderer: function (value, record) {
@@ -174,10 +177,17 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
         onContinue: function (cb) {
             var me = this,
-                wizard = me.getView().up('#wizard'),
-                layout = wizard.getLayout();
+                wzCtrl = me.getView().up('setup-wizard').getController();
 
-            layout.next();
+            // each interface is updated upon editing
+
+            wzCtrl.update();
+
+            // Ext.getStore('interfaces').sync({
+            //     success: function () {
+            //         console.log('OK');
+            //     }
+            // });
         },
 
         editv4: function (grid, info) {
