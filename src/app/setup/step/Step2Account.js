@@ -49,6 +49,7 @@ Ext.define('Mfw.setup.step.Account', {
             }, {
                 xtype: 'passwordfield',
                 userCls: 'x-custom-field',
+                errorTarget: 'side',
                 id: 'password',
                 autoComplete: false,
                 animateUnderline: false,
@@ -58,6 +59,7 @@ Ext.define('Mfw.setup.step.Account', {
             }, {
                 xtype: 'passwordfield',
                 userCls: 'x-custom-field',
+                errorTarget: 'side',
                 id: 'confirm',
                 name: 'confirm',
                 label: 'Confirm',
@@ -65,11 +67,13 @@ Ext.define('Mfw.setup.step.Account', {
             }, {
                 xtype: 'emailfield',
                 userCls: 'x-custom-field',
+                errorTarget: 'side',
                 name: 'email',
                 margin: '16 0 0 0',
+                label: 'Email',
+                validators: 'email'
                 // width: 300,
                 // ui: 'solo',
-                label: 'Email',
             }, {
                 xtype: 'component',
                 style: 'color: #777; line-height: 1; padding: 3px;',
