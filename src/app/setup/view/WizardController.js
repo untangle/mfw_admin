@@ -4,19 +4,58 @@ Ext.define('Mfw.setup.WizardController', {
 
     completed: false,
 
+    steps: [
+        'step-welcome',
+        'step-account',
+        'step-timezone',
+        'step-interfaces',
+        'step-upgrades',
+        'step-complete'
+    ],
+
     init: function () {
-        var wizard = this.lookup('wizard'),
+        var me = this,
+            wizard = this.lookup('wizard');
+
+        Ext.Ajax.request({
+            url: '/api/settings/system/setupWizard',
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+                me.completed = obj.completed;
+                wizard.setActiveItem(obj.currentStep || 1);
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
+    },
+
+
+    update: function () {
+        var me = this,
+            vm = me.getViewModel(),
+            wizard = me.lookup('wizard'),
             layout = wizard.getLayout(),
-            indicator = layout.getIndicator(),
-            bbar = this.lookup('bbar');
+            currentStep = wizard.getActiveItem().xtype,
+            nextStep = me.steps[me.steps.indexOf(currentStep) + 1];
 
-        // indicator.on('indicatortap', function (cmp, idx, item) {
-        //     console.log(arguments);
-        //     return false;
-        // })
-
-        bbar.insert(2, indicator);
-        this.setSteps();
+        Ext.Ajax.request({
+            url: '/api/settings/system/setupWizard',
+            method: 'POST',
+            params: Ext.JSON.encode({
+                currentStep: nextStep === 'step-complete' ? '' : nextStep,
+                completed: me.completed || nextStep === 'step-complete'
+            }),
+            success: function() {
+                layout.next();
+                Ext.defer(function () {
+                    vm.set('processing', false);
+                }, 300);
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
     },
 
 
@@ -81,43 +120,71 @@ Ext.define('Mfw.setup.WizardController', {
      * Handler method when continuing to next step
      */
     onContinue: function (btn) {
+        console.log('on_continue');
         var me = this,
+            vm = me.getViewModel(),
             wizard = this.lookup('wizard'),
-            navbar = btn.up('toolbar'),
-            currentStep = wizard.getActiveItem(),
             layout = wizard.getLayout(),
+            currentStep = wizard.getActiveItem(),
             controller = currentStep.getController();
 
-        /**
-         * If current step has a continue method used for posting data
-         * wait for a callback from that action before moving to next step
-         */
+
+
         if (controller && Ext.isFunction(controller.continue)) {
             controller.continue(function () {
                 layout.next();
+                vm.set('processing', false);
 
-                var step = wizard.getActiveItem().xtype;
+                // var step = wizard.getActiveItem().xtype;
 
-                Ext.Ajax.request({
-                    url: window.location.origin + '/api/settings/system/setupWizard',
-                    method: 'POST',
-                    params: Ext.JSON.encode({
-                        currentStep: step === 'step-complete' ? '' : step,
-                        completed: me.completed || step === 'step-complete'
-                    }),
-                    success: function(response) {
-                        var obj = Ext.decode(response.responseText);
-                    },
-                    failure: function(response) {
-                        console.log('server-side failure with status code ' + response.status);
-                    }
-                });
+                // Ext.Ajax.request({
+                //     url: window.location.origin + '/api/settings/system/setupWizard',
+                //     method: 'POST',
+                //     params: Ext.JSON.encode({
+                //         currentStep: step === 'step-complete' ? '' : step,
+                //         completed: me.completed || step === 'step-complete'
+                //     }),
+                //     success: function(response) {
+                //         var obj = Ext.decode(response.responseText);
+                //     },
+                //     failure: function(response) {
+                //         console.log('server-side failure with status code ' + response.status);
+                //     }
+                // });
             });
             return;
         }
-        /**
-         * Otherwise just move to next step
-         */
+
+        // /**
+        //  * If current step has a continue method used for posting data
+        //  * wait for a callback from that action before moving to next step
+        //  */
+        // if (controller && Ext.isFunction(controller.continue)) {
+        //     controller.continue(function () {
+        //         layout.next();
+
+        //         var step = wizard.getActiveItem().xtype;
+
+        //         Ext.Ajax.request({
+        //             url: window.location.origin + '/api/settings/system/setupWizard',
+        //             method: 'POST',
+        //             params: Ext.JSON.encode({
+        //                 currentStep: step === 'step-complete' ? '' : step,
+        //                 completed: me.completed || step === 'step-complete'
+        //             }),
+        //             success: function(response) {
+        //                 var obj = Ext.decode(response.responseText);
+        //             },
+        //             failure: function(response) {
+        //                 console.log('server-side failure with status code ' + response.status);
+        //             }
+        //         });
+        //     });
+        //     return;
+        // }
+        // /**
+        //  * Otherwise just move to next step
+        //  */
         layout.next();
     },
 

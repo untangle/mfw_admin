@@ -297,7 +297,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     items: [{
                         xtype: 'component',
                         html: 'Action',
-                        style: 'font-weight: 100;'
+                        style: 'font-weight: 400;'
                     }]
                 }, {
                     xtype: 'selectfield',

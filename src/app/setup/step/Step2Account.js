@@ -6,84 +6,91 @@ Ext.define('Mfw.setup.step.Account', {
 
     layout: {
         type: 'vbox',
-        align: 'stretch'
+        align: 'middle'
     },
 
-    bodyPadding: 24,
+    // bodyPadding: 24,
 
     items: [{
         xtype: 'component',
+        width: 500,
         padding: '0 0 24 0',
-        html: '<h1>Admin Account</h1><br/><hr/>'
+        html: '<h1 style="text-align: center;">Admin Account</h1><hr/>'
     }, {
         xtype: 'formpanel',
         padding: 0,
-        layout: 'hbox',
+
+        width: 300,
+        layout: {
+            type: 'vbox',
+            align: 'center'
+        },
+
         // disabled: true,
         // bind: {
         //     disabled: '{skip.checked}'
         // },
         items: [{
             xtype: 'container',
-            layout: 'vbox',
-            flex: 1,
+            layout: {
+                type: 'vbox',
+                pack: 'center'
+            },
+            // flex: 1,
             defaults: {
-                clearable: false
+                clearable: false,
+                labelAlign: 'top',
+                // labelTextAlign: 'right'
             },
             items: [{
                 xtype: 'component',
-                html: '<p>Choose a new password for the <strong>admin</strong> account</p>'
+                style: 'font-size: 14px;',
+                html: 'Choose a new password for the <strong>admin</strong> account'
             }, {
                 xtype: 'passwordfield',
+                userCls: 'x-custom-field',
                 id: 'password',
+                autoComplete: false,
+                animateUnderline: false,
                 name: 'password',
-                width: 300,
-                // ui: 'solo',
                 label: 'Password',
-                labelAlign: 'left',
-                labelTextAlign: 'right',
-                required: true
+                required: true,
+                value: 'passwd'
             }, {
                 xtype: 'passwordfield',
+                userCls: 'x-custom-field',
                 id: 'confirm',
                 name: 'confirm',
-                width: 300,
-                // ui: 'solo',
                 label: 'Confirm',
-                labelAlign: 'left',
-                labelTextAlign: 'right',
-                required: true
-            }, {
-                xtype: 'component',
-                margin: '24 0 0 0',
-                html: '<p>Administrators receive email alerts and report summaries.</p>'
+                required: true,
+                value: 'passwd'
             }, {
                 xtype: 'emailfield',
+                userCls: 'x-custom-field',
                 name: 'email',
-                width: 300,
+                margin: '16 0 0 0',
+                // width: 300,
                 // ui: 'solo',
                 label: 'Email',
-                labelAlign: 'left',
-                labelTextAlign: 'right'
+            }, {
+                xtype: 'component',
+                style: 'color: #777; line-height: 1; padding: 3px;',
+                html: 'Administrators receive email alerts and report summaries.'
             }]
         }, {
-            xtype: 'container',
-            layout: 'vbox',
-            flex: 1,
-            items: [{
-                xtype: 'component',
-                html: '<p>Select Timezone</p>'
-            }, {
-                xtype: 'selectfield',
-                width: 400,
-                name: 'displayName',
-                label: 'Timezone'.t(),
-                labelAlign: 'left',
-                labelTextAlign: 'right',
-                required: true,
-                valueField: 'text',
-                options: Globals.timezones
-            }]
+            xtype: 'component',
+            margin: '32 0 0 0',
+            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+            hidden: true,
+            bind: { hidden: '{!processing}' }
+        }, {
+            xtype: 'button',
+            margin: '32 0 0 0',
+            width: 120,
+            text: 'Continue',
+            ui: 'action',
+            handler: 'onContinue',
+            bind: { hidden: '{processing}' }
         }]
     }],
 
@@ -105,113 +112,54 @@ Ext.define('Mfw.setup.step.Account', {
             });
         },
 
-        onActivate: function (view) {
-            var me = this;
-            view.down('formpanel').reset(true);
-            me.loadTimezone();
-        },
-
-        loadTimezone: function () {
+        onActivate: function (card) {
             var me = this,
-                form = me.getView().down('formpanel');
+                vm = me.getViewModel();
 
-            Ext.Ajax.request({
-                url: '/api/settings/system/timeZone',
-                success: function (result) {
-                    var tz = Ext.decode(result.responseText);
-                    if (!tz || tz === null) {
-                        form.getFields('displayName').setValue(moment.tz.guess());
-                    } else {
-                        form.getFields('displayName').setValue(tz.displayName || 'UTC');
-                    }
+            card.down('formpanel').reset(true);
 
-                },
-                failure: function () {
-                    console.warn('Unable to load Timezone!');
+            me.accountsStore = Ext.create('Ext.data.Store', {
+                model: 'Mfw.model.Account'
+            });
+
+
+            vm.set('processing', true);
+            me.accountsStore.load(function (records) {
+                me.adminAccount = me.accountsStore.findRecord('username', 'admin');
+
+                if (!me.adminAccount) {
+                    me.adminAccount = Ext.create('Mfw.model.Account', {
+                        username: 'admin'
+                    });
+                    me.accountsStore.add(me.adminAccount);
                 }
+                Ext.defer(function () {
+                    vm.set('processing', false);
+                }, 300);
             });
         },
 
-
-        setAccount: function () {
+        onContinue: function (cb) {
             var me = this,
-                deferred = new Ext.Deferred(),
-                adminAccount = Ext.create('Mfw.model.Account'),
-                form = me.getView().down('formpanel');
-
-            adminAccount.load({
-                success: function (account) {
-                    if (account && account.get('username') === 'admin') {
-                        var values = form.getValues();
-                        account.set('passwordCleartext', values.password);
-                        account.set('email', values.email);
-                        adminAccount.save({
-                            success: function () {
-                                deferred.resolve();
-                            },
-                            failure: function () {
-                                deferred.reject();
-                            }
-                        });
-                    } else {
-                        // if account admin non existent add it
-                    }
-                }
-            });
-            return deferred.promise;
-        },
-
-        setTimezone: function () {
-            var me = this,
-                deferred = new Ext.Deferred(),
-                form = me.getView().down('formpanel'),
-                tz, tzName = tzName = form.getFields('displayName').getValue();
-
-            tz = Ext.Array.findBy(Globals.timezones, function (zone) {
-                return zone.text === tzName;
-            });
-
-            Ext.Ajax.request({
-                url: '/api/settings/system/timeZone',
-                method: 'POST',
-                params: Ext.JSON.encode({
-                    displayName: tz.text,
-                    value: tz.value,
-                }),
-                success: function () {
-                    deferred.resolve();
-                },
-                failure: function(response) {
-                    console.log('server-side failure with status code ' + response.status);
-                    deferred.reject();
-                }
-            });
-
-            return deferred.promise;
-        },
-
-        continue: function (cb) {
-            var me = this, // skip = me.lookup('skip'),
-                form = me.getView().down('formpanel'),
-                view = me.getView(),
-                wizard = view.up('setup-wizard');
+                vm = me.getViewModel(),
+                form = me.getView().down('formpanel'), values,
+                wzCtrl = me.getView().up('setup-wizard').getController();
 
             if (!form.validate()) { return; }
 
-            wizard.mask({xtype: 'loadmask' });
-            wizard.lookup('bbar').mask();
+            values = form.getValues();
 
-            Ext.Deferred.sequence([me.setAccount, me.setTimezone], me)
-                .then(
-                    function () {
-                        cb();
-                    }, function (error) {
-                        console.error('Unable to save!');
-                    })
-                .always(function () {
-                    wizard.unmask();
-                    wizard.lookup('bbar').unmask();
-                });
+            me.adminAccount.set({
+                passwordCleartext: values.password,
+                email: values.email
+            });
+
+            vm.set('processing', true);
+            me.accountsStore.sync({
+                success: function () {
+                    wzCtrl.update();
+                }
+            });
         }
     }
 
