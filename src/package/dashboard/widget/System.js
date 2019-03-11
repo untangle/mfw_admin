@@ -39,13 +39,16 @@ Ext.define('Mfw.dashboard.widget.System', {
         height: 42
     }],
 
-    listeners: {
-        // painted: 'onPainted'
-    },
-
     controller: {
         init: function (view) {
             var me = this, vm = view.getViewModel();
+            me.dashboard = view.up('dashboard');
+
+            me.dashboard.on('activate', me.onActivate, me);
+            me.dashboard.on('deactivate', me.onDeactivate, me);
+
+            me.tout = null;
+
             Ext.Ajax.request({
                 url: '/api/status/hardware',
                 success: function (response) {
@@ -58,10 +61,7 @@ Ext.define('Mfw.dashboard.widget.System', {
                     view.cpuChart = me.createChart(view.down('#cpu-graph'), 'cpu');
                     view.memChart = me.createChart(view.down('#mem-graph'), 'mem');
 
-                    me.getSystemStatus();
-
-
-
+                    // me.getSystemStatus();
                 },
                 failure: function () {
                     console.error('Unable to get hardware ');
@@ -129,6 +129,19 @@ Ext.define('Mfw.dashboard.widget.System', {
             });
         },
 
+        onActivate: function () {
+            var me = this;
+            me.getSystemStatus();
+        },
+
+        onDeactivate: function() {
+            var me = this;
+            if (me.tout) {
+                clearTimeout(me.tout);
+                me.tout = null;
+            }
+        },
+
         getSystemStatus: function () {
             var me = this,
                 view = me.getView();
@@ -146,7 +159,7 @@ Ext.define('Mfw.dashboard.widget.System', {
                     view.memChart.redraw();
 
 
-                    setTimeout(function () {
+                    me.tout = setTimeout(function () {
                         me.getSystemStatus();
                     }, 5000);
 
