@@ -854,3 +854,28 @@ i {
         font-size: 14px;
     }
 }
+
+
+
+
+.x-custom-field  {
+    .x-body-wrap-el {
+        border: 1px #DDD solid;
+        height: 32px;
+        border-radius: 3px;
+        height: auto;
+    }
+    .x-input-el { padding: 12px; background: #FFF }
+    .x-underline-el { display: none; }
+    &.x-focused .x-body-wrap-el {
+        border-color: var(--base-color);
+    }
+}
+
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #EEE;
+    background-image: linear-gradient(to right, #EEE, green, #EEE);
+}
