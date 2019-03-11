@@ -32,106 +32,11 @@ Ext.define('Mfw.settings.system.Accounts', {
         model: 'Mfw.model.Account'
     },
 
-    layout: 'hbox',
-
-    items: [{
-        xtype: 'formpanel',
-        reference: 'staticentryform',
-        itemId: 'staticentryform',
-        docked: 'top',
-        shadow: true,
-        // style: 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2)',
-        padding: '0 16 16 16',
-        zIndex: 1,
-        layout: {
-            type: 'hbox',
-            align: 'bottom'
-        },
-        hidden: true,
-        bind: {
-            hidden: '{!visibleAdd}'
-        },
-        defaults: {
-            labelAlign: 'top',
-            autoComplete: false,
-            required: true,
-            clearable: false,
-            keyMapEnabled: true,
-            keyMap: {
-                enter: {
-                    key: Ext.event.Event.ENTER,
-                    handler: 'addStaticEntryKeyEvt'
-                }
-            }
-        },
-        items: [{
-            xtype: 'toolbar',
-            docked: 'top',
-            shadow: false,
-            style: 'background: transparent',
-            items: [{
-                xtype: 'component',
-                style: 'font-weight: 100; font-size: 14px;',
-                html: 'Add Account',
-            }, '->', {
-                xtype: 'button',
-                iconCls: 'md-icon-close',
-                handler: 'onAddRecord'
-            }]
-        }, {
-            xtype: 'textfield',
-            name: 'username',
-            width: 200,
-            label: 'Username'.t(),
-            placeholder: 'Enter username ...'
-        }, {
-            xtype: 'passwordfield',
-            name: 'passwordCleartext',
-            label: 'Password',
-            margin: '0 8 0 16',
-            width: 200,
-            placeholder: 'Enter password ...'
-        }, {
-            xtype: 'passwordfield',
-            name: 'confirm',
-            label: 'Confirm Password',
-            margin: '0 8 0 8',
-            width: 200,
-            placeholder: 'Re-type password ...',
-        }, {
-            xtype: 'emailfield',
-            name: 'email',
-            label: 'Email',
-            margin: '0 8 0 8',
-            width: 200,
-            required: false,
-            placeholder: 'Enter email ...'
-        }, {
-            xtype: 'button',
-            text: 'Add',
-            ui: 'action',
-            margin: '0 0 0 16',
-            handler: 'doAddBtn'
-        }],
-        listeners: {
-            show: function (form) {
-                form.getFields('username').focus();
-            },
-            hide: function (form) {
-                form.reset(true);
-            }
-        }
-    }],
-
     columns: [{
         text: 'Username',
         dataIndex: 'username',
         width: 250,
-        minWidth: 250,
-        editable: true,
-        cell: {
-            tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
-        }
+        minWidth: 250
     }, {
         text: 'Email',
         dataIndex: 'email',
@@ -145,54 +50,179 @@ Ext.define('Mfw.settings.system.Accounts', {
             xtype: 'emailfield',
             validators: [ { type: 'email'} ]
         }
-    },
-    // {
-    //     text: 'MD5',
-    //     width: 400,
-    //     dataIndex: 'passwordHashMD5'
-    // }, {
-    //     text: 'SHA256',
-    //     width: 300,
-    //     dataIndex: 'passwordHashSHA256'
-    // }, {
-    //     text: 'SHA512',
-    //     width: 300,
-    //     dataIndex: 'passwordHashSHA512'
-    // },
-    {
-        // added just to be available in editor form
-        hidden: true,
-        dataIndex: 'passwordCleartext',
-        editable: true,
-        text: 'Set new password',
-        editor: {
-            xtype: 'passwordfield',
-            required: true
-        }
     }]
-});
-
-Ext.define('Mfw.settings.system.AccountDialog', {
-
 });
 
 Ext.define('Mfw.settings.system.AccountsController', {
     extend: 'Mfw.cmp.grid.MasterGridController',
     alias: 'controller.mfw-settings-system-accounts_controller',
 
-    onAddRecord: function (btn) {
-        var me = this,
-        vm = me.getViewModel(),
-        visible = vm.get('visibleAdd');
-        vm.set('visibleAdd', !visible);
+    onAddRecord: function () {
+        var me = this;
+        Ext.create('Mfw.settings.system.AccountDialog', {
+            viewModel: {
+                data: {
+                    account: Ext.create('Mfw.model.Account', {}),
+                    action: 'ADD'
+                }
+            },
+            ownerCmp: me.getView() // important so it inherits same controller
+        }).show();
     },
 
-    doAddBtn: function (btn) {
-        var me = this, form = btn.up('formpanel');
+    onEditRecord: function (grid, info) {
+        var me = this;
+
+        Ext.create('Mfw.settings.system.AccountDialog', {
+            viewModel: {
+                data: {
+                    account: info.record,
+                    action: 'EDIT'
+                }
+            },
+            ownerCmp: me.getView() // important so it inherits same controller
+        }).show();
+    },
+
+    onSubmit: function (btn) {
+        var me = this,
+            dialog = btn.up('dialog'),
+            form = dialog.down('formpanel'),
+            vm = dialog.getViewModel(),
+            account = vm.get('account');
+
         if (!form.validate()) { return; }
 
-        me.getView().getStore().add(form.getValues());
-        form.getFields('username').focus();
-        form.reset(true);
+        if (vm.get('action') === 'ADD') {
+            account.set({
+                username: form.getFields('username').getValue(),
+                passwordCleartext: form.getFields('passwordCleartext').getValue()
+            });
+            me.getView().getStore().add(account);
+            dialog.destroy();
+        } else {
+            account.set({
+                passwordCleartext: form.getFields('passwordCleartext').getValue(),
+                passwordHashMD5: null,
+                passwordHashSHA256: null,
+                passwordHashSHA512: null
+            });
+            account.commit();
+            dialog.destroy();
+        }
+    }
+});
+
+Ext.define('Mfw.settings.system.AccountDialog', {
+    extend: 'Ext.Dialog',
+    alias: 'widget.mfw-settings-system-account-dialog',
+
+    bind: {
+        title: '{action === "ADD" ? "Create New" : "Edit "} <em>{account.username}</em> Account',
+    },
+    width: 300,
+    height: 400,
+
+    showAnimation: {
+        duration: 100
+    },
+
+    layout: 'fit',
+
+    items: [{
+        xtype: 'formpanel',
+        padding: 0,
+        layout: 'vbox',
+        defaults: {
+            labelAlign: 'top',
+            clearable: false
+        },
+        items: [{
+            xtype: 'textfield',
+            name: 'username',
+            label: 'Username'.t(),
+            placeholder: 'Enter username ...',
+            required: true,
+            hidden: true,
+            bind: {
+                value: '{account.username}',
+                hidden: '{action === "EDIT"}',
+                required: '{action === "ADD"}'
+            }
+        }, {
+            xtype: 'passwordfield',
+            name: 'passwordCleartext',
+            placeholder: 'Enter password ...',
+            required: true,
+            bind: {
+                label: '{action === "EDIT" ? "Set New " : ""} Password'
+            }
+        }, {
+            xtype: 'passwordfield',
+            name: 'confirm',
+            bind: {
+                label: 'Confirm {action === "EDIT" ? "New" : ""} Password'
+            },
+            placeholder: 'Re-type password ...',
+            required: true
+        }, {
+            xtype: 'emailfield',
+            name: 'email',
+            label: 'Email',
+            required: false,
+            placeholder: 'Enter email ...',
+            bind: '{account.email}'
+        }],
+    }, {
+        xtype: 'toolbar',
+        docked: 'bottom',
+        items: ['->', {
+            text: 'Cancel',
+            margin: '0 8 0 0',
+            handler: function () {  // standard button (see below)
+                this.up('dialog').destroy();
+            }
+        }, {
+            bind: {
+                text: '{action === "ADD" ? "Create" : "Update"}'
+            },
+            ui: 'action',
+            handler: 'onSubmit'
+        }]
+    }],
+    listeners: {
+        // set some validators
+        show: function (dialog) {
+            var form = dialog.down('formpanel'),
+                vm = dialog.getViewModel(),
+                initialUser,
+                userField = form.getFields('username'),
+                passField = form.getFields('passwordCleartext'),
+                confirmField = form.getFields('confirm');
+
+            if (vm.get('action') === 'ADD') {
+                form.getFields('username').focus();
+            } else {
+                form.getFields('passwordCleartext').focus();
+                initialUser = vm.get('account').get('username');
+            }
+
+            userField.setValidators(function (value) {
+                if (value !== initialUser && dialog.ownerCmp.getStore().findRecord('username', value, 0, false, true, true)) {
+                    return 'This username already exists!';
+                }
+                if (value.indexOf(' ') >= 0) {
+                    return 'Username must not contain spaces!';
+                }
+                return true;
+            });
+
+            confirmField.setValidators(function (value) {
+                if (value !== passField.getValue()) {
+                    return 'Passwords do not match!';
+                }
+                return true;
+            });
+        }
     }
 });
