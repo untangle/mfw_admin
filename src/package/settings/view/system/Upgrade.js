@@ -61,7 +61,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             var form = this.getView().up('form').getForm();
             if(form.isValid()){
                 form.submit({
-                    url: '/sysupgrade',
+                    url: '/api/sysupgrade',
                     waitMsg: 'Upgrading...',
                     success: function(fp, o) {
                         msg('Success', tpl.apply(o.result));
