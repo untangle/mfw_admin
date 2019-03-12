@@ -51,12 +51,10 @@ Ext.define('Mfw.settings.system.Upgrade', {
                     url: '/api/sysupgrade',
                     waitMsg: 'Upgrading...',
                     success: function(fp, o) {
-                        //FIXME display success
-                        console.log("UPGRADE SUCCESS");
+                        Ext.Msg.alert('Upgrade', 'The upgrade is in progress.');
                     },
                     failure: function(fp, o) {
-                        //FIXME display error
-                        console.log("UPGRADE FAILURE");
+                        Ext.Msg.alert('Error', 'The returned an error.' + ' ' + o);
                     }
                 });
             }            
