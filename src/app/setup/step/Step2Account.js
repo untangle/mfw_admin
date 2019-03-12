@@ -26,10 +26,13 @@ Ext.define('Mfw.setup.step.Account', {
             align: 'center'
         },
 
-        // disabled: true,
-        // bind: {
-        //     disabled: '{skip.checked}'
-        // },
+        keyMapEnabled: true,
+        keyMap: {
+            enter: {
+                key: Ext.event.Event.ENTER,
+                handler: 'onContinue'
+            }
+        },
         items: [{
             xtype: 'container',
             layout: {
@@ -40,7 +43,7 @@ Ext.define('Mfw.setup.step.Account', {
             defaults: {
                 clearable: false,
                 labelAlign: 'top',
-                // labelTextAlign: 'right'
+                autoComplete: false
             },
             items: [{
                 xtype: 'component',
@@ -51,11 +54,13 @@ Ext.define('Mfw.setup.step.Account', {
                 userCls: 'x-custom-field',
                 errorTarget: 'side',
                 id: 'password',
-                autoComplete: false,
                 animateUnderline: false,
                 name: 'password',
                 label: 'Password',
-                required: true
+                required: true,
+                listeners: {
+                    painted: function (f) { f.focus(); }
+                }
             }, {
                 xtype: 'passwordfield',
                 userCls: 'x-custom-field',
@@ -141,7 +146,7 @@ Ext.define('Mfw.setup.step.Account', {
             });
         },
 
-        onContinue: function (cb) {
+        onContinue: function () {
             var me = this,
                 vm = me.getViewModel(),
                 form = me.getView().down('formpanel'), values,

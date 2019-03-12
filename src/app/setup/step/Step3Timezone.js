@@ -17,7 +17,13 @@ Ext.define('Mfw.setup.step.Timezone', {
     }, {
         xtype: 'formpanel',
         padding: 0,
-
+        keyMapEnabled: true,
+        keyMap: {
+            enter: {
+                key: Ext.event.Event.ENTER,
+                handler: 'onContinue'
+            }
+        },
         layout: {
             type: 'vbox',
             align: 'center'
@@ -40,7 +46,10 @@ Ext.define('Mfw.setup.step.Timezone', {
                 label: 'Choose timezone'.t(),
                 required: true,
                 valueField: 'text',
-                options: Globals.timezones
+                options: Globals.timezones,
+                listeners: {
+                    painted: function (f) { f.focus(); }
+                }
             }]
         }, {
             xtype: 'component',

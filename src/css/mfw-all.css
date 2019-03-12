@@ -232,9 +232,9 @@ i { font-style: normal; }
 .cell-edit-icon .x-icon-el { color: #CCC; }
 .cell-edit-icon .x-icon-el:before { font-size: 14px; }
 
-.x-custom-field .x-body-wrap-el { border: 1px #DDD solid; height: 32px; border-radius: 3px; height: auto; }
-.x-custom-field .x-input-el { padding: 12px; background: #FFF; }
+.x-custom-field .x-body-wrap-el { background: #FFF; border: 1px #DDD solid; border-radius: 3px; }
+.x-custom-field .x-input-el { padding: 4px 12px; line-height: 32px; background: #FFF; }
 .x-custom-field .x-underline-el { display: none; }
-.x-custom-field.x-focused .x-body-wrap-el { border-color: var(--base-color); }
+.x-custom-field.x-focused .x-body-wrap-el { border-color: var(--base-color); box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1); }
 
 hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient(to right, #EEE, green, #EEE); }

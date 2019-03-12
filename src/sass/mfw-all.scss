@@ -860,15 +860,12 @@ i {
 
 .x-custom-field  {
     .x-body-wrap-el {
-        border: 1px #DDD solid;
-        height: 32px;
-        border-radius: 3px;
-        height: auto;
+        background: #FFF; border: 1px #DDD solid; border-radius: 3px;
     }
-    .x-input-el { padding: 12px; background: #FFF }
+    .x-input-el { padding: 4px 12px; line-height: 32px; background: #FFF; }
     .x-underline-el { display: none; }
     &.x-focused .x-body-wrap-el {
-        border-color: var(--base-color);
+        border-color: var(--base-color); box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
     }
 }
 

@@ -9,6 +9,7 @@ Ext.define('Mfw.setup.Wizard', {
 
     viewModel: {
         data: {
+            processing: false,
             settings: {}
         },
         // formulas: {
@@ -40,14 +41,6 @@ Ext.define('Mfw.setup.Wizard', {
         reference: 'wizard',
         flex: 1,
         width: 900,
-        // minWidth: 980,
-        // height: '70%',
-        // style: 'border-radius: 8px;',
-        // shadow: true,
-        // bodyPadding: 24,
-
-        // masked: { xtype: 'loadmask' },
-        // activeItem: 0,
         layout: {
             type: 'card',
             // animation: null,
@@ -56,14 +49,6 @@ Ext.define('Mfw.setup.Wizard', {
                 // duration: 250,
                 // direction: 'horizontal'
             },
-            // indicator: {
-            //     reference: 'indicator',
-            //     tapMode: 'item',
-            //     publishes: [
-            //         'activeIndex',
-            //         'count'
-            //     ]
-            // }
         },
         items: [{
             xtype: 'component',

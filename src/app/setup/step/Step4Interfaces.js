@@ -2,8 +2,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
     extend: 'Ext.Panel',
     alias: 'widget.step-interfaces',
 
-    viewModel: {},
-
     layout: 'vbox',
 
     items: [{
@@ -21,40 +19,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
             viewModel: true,
         },
 
-        columns: [
-        // {
-        //     width: 5,
-        //     minWidth: 5,
-        //     sortable: false,
-        //     hideable: false,
-        //     resizable: false,
-        //     menuDisabled: true,
-        //     cell: {
-        //         userCls: 'x-statuscolumn'
-        //     },
-        //     renderer: function (value, record, dataIndex, cell) {
-        //         cell.setUserCls('');
-        //         if (record.isDirty()) {
-        //             cell.setUserCls('status-dirty');
-        //         }
-        //         if (record.get('_deleteSchedule')) {
-        //             cell.setUserCls('status-delete');
-        //         }
-        //         if (record.phantom) {
-        //             cell.setUserCls('status-phantom');
-        //         }
-        //     }
-        // }, {
-        //     text: 'Id'.t(),
-        //     dataIndex: 'interfaceId',
-        //     align: 'right',
-        //     width: 40,
-        //     resizable: false,
-        //     sortable: false,
-        //     menuDisabled: true
-        // },
-        {
-            text: 'Name [id] / Type / Device',
+        columns: [{
+            text: 'Name [ id ] / Type / Device',
             dataIndex: 'name',
             flex: 1,
             minWidth: 150,
@@ -183,28 +149,20 @@ Ext.define('Mfw.setup.step.Interfaces', {
             var me = this,
                 wzCtrl = me.getView().up('setup-wizard').getController();
 
-            // each interface is updated upon editing
             me.getViewModel().set('processing', true);
             wzCtrl.update();
+            // interfaces are updated on each editing instance
+
+            // Ext.getStore('interfaces').each(function (record) {
+            //     record.dirty = true;
+            //     record.phantom = false;
+            // });
 
             // Ext.getStore('interfaces').sync({
             //     success: function () {
-            //         console.log('OK');
+            //         wzCtrl.update();
             //     }
             // });
-        },
-
-        editv4: function (grid, info) {
-            var me = this;
-            Ext.Viewport.add({
-                xtype: 'setup-interface-ipv4',
-                ownerCmp: me.getView(),
-                viewModel: {
-                    data: {
-                        interface: info.record
-                    }
-                }
-            }).show();
         },
 
         onEdit: function (grid, info) {

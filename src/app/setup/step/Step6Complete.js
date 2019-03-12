@@ -30,9 +30,9 @@ Ext.define('Mfw.setup.step.Complete', {
             html: '<h2 style="font-weight: 100;">The Untangle Server is now configured!</h2>'
         }, {
             xtype: 'button',
-            text: 'Go To Admin',
+            text: 'Open Dashboard',
             ui: 'action',
-            width: 200,
+            // width: 200,
             margin: '16 0 0 0',
             handler: function () {
                 window.location.href = '/admin';
