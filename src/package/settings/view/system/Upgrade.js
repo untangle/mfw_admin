@@ -21,27 +21,16 @@ Ext.define('Mfw.settings.system.Upgrade', {
 
     items: [{
         xtype: 'formpanel',
-        layout: 'vbox',
         width: 300,
-        defaults: {
-            labelAlign: 'top',
-            clearable: false,
-            required: true
-        },
         items: [{
             xtype: 'filefield',
             name: 'file',
             label: 'Sysupgrade File'.t()
-        }, {
-            xtype: 'toolbar',
-            shadow: false,
-            style: 'background: transparent;',
-            docked: 'bottom',
-            items: ['->', {
-                text: 'Upload',
-                ui: 'action',
-                handler: 'onUpload'
-            }]
+        }],
+        buttons: [{
+            text: 'Upload',
+            ui: 'action',
+            handler: 'onSubmit'
         }]
     }],
 
@@ -55,16 +44,19 @@ Ext.define('Mfw.settings.system.Upgrade', {
     controller: {
         init: function (view) {
         },
-
-        onUpload: function () {
-            //FIXME
-            var form = this.getView().up('form').getForm();
+        onSubmit: function () {
+            var form = this.getView();
             if(form.isValid()){
                 form.submit({
                     url: '/api/sysupgrade',
                     waitMsg: 'Upgrading...',
                     success: function(fp, o) {
-                        msg('Success', tpl.apply(o.result));
+                        //FIXME display success
+                        console.log("UPGRADE SUCCESS");
+                    },
+                    failure: function(fp, o) {
+                        //FIXME display error
+                        console.log("UPGRADE FAILURE");
                     }
                 });
             }            
