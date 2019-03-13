@@ -12,7 +12,14 @@ Ext.define('Mfw.setup.step.Interfaces', {
         xtype: 'grid',
         reference: 'interfaces',
         flex: 1,
-        store: 'interfaces',
+        store: {
+            type: 'interfaces',
+            // do not display hidden interfaces
+            filters: [{
+                property: 'hidden',
+                value: false
+            }]
+        },
         rowLines: false,
         selectable: false,
         itemConfig: {
