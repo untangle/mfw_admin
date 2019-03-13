@@ -13,8 +13,8 @@ ifneq ($(DEV),false)
 else
   GREEN :=
 endif
-LOG_FUNCTION = @echo -e $(shell date +%T.%3N) $(GREEN)$(1)$(NC)
-WARN_FUNCTION = @echo -e $(shell date +%T.%3N) $(YELLOW)$(1)$(NC)
+LOG_FUNCTION = @/bin/echo -e $(shell date +%T.%3N) $(GREEN)$(1)$(NC)
+WARN_FUNCTION = @/bin/echo -e $(shell date +%T.%3N) $(YELLOW)$(1)$(NC)
 
 # mfw Admin app
 ADMIN_DIR := $(DESTDIR)/admin
