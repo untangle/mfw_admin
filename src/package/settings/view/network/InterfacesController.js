@@ -28,7 +28,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             });
         } else {
             me.intfDialog = Ext.Viewport.add({
-                xtype: 'generic-interface-dialog',
+                xtype: 'interface-dialog',
                 ownerCmp: me.getView(),
                 interface: intf
             });
@@ -38,5 +38,18 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             me.intfDialog = null;
         });
         me.intfDialog.show();
+    },
+
+    configTypeRenderer: function (value, record) {
+        if (value === 'ADDRESSED') {
+            return 'Addressed';
+        }
+        if (value === 'DISABLED') {
+            return 'Disabled';
+        }
+        if (value === 'BRIDGED') {
+            var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
+            return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';
+        }
     }
 });

@@ -31,18 +31,6 @@ Ext.define('Mfw.settings.network.Interfaces', {
         }]
     },
 
-    // plugins: ['rowexpander'],
-
-    // itemConfig: {
-    //     body: {
-    //         tpl: '<tpl if="dhcpEnabled === true">' +
-    //                 '<div><strong>DHCP</strong>: enabled, <strong>Range</strong>: {dhcpRangeStart} - {dhcpRangeEnd}, <strong>Lease Duration</strong>: {dhcpLeaseDuration/60}</div>' +
-    //              '</tpl>' +
-    //              '<div><strong>IPv4</strong>: {v4ConfigType}, {v4StaticAddress} / {v4StaticPrefix}</div>' +
-    //              '<div><strong>IPv6</strong>: {v6ConfigType}</div>'
-    //     }
-    // },
-
     bind: {
         hideHeaders: '{smallScreen}'
     },
@@ -58,39 +46,61 @@ Ext.define('Mfw.settings.network.Interfaces', {
     }, {
         text: 'Name'.t(),
         dataIndex: 'name',
-        flex: 1,
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        menuDisabled: true,
+        sortable: false,
+        flex: 1
     }, {
         text: 'Type'.t(),
+        menuDisabled: true,
         dataIndex: 'type',
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        sortable: false
     }, {
         text: 'Device'.t(),
         dataIndex: 'device',
         menuDisabled: true,
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
+        sortable: false
     }, {
-        text: 'Config Type'.t(),
+        text: 'Config'.t(),
         dataIndex: 'configType',
         menuDisabled: true,
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
-    }, {
-        text: 'Current Address'.t(),
-        width: 150,
-        dataIndex: 'v4StaticAddress',
-        menuDisabled: true,
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
-    }, {
-        text: 'Is WAN',
-        dataIndex: 'wan',
-        align: 'center',
-        menuDisabled: true,
+        sortable: false,
+        minWidth: 180,
         cell: {
             encodeHtml: false,
         },
+        renderer: 'configTypeRenderer'
+    }, {
+        text: 'IPv4'.t(),
+        minWidth: 200,
+        dataIndex: 'v4ConfigType',
+        sortable: false,
+        menuDisabled: true,
+        renderer: function (value, record) {
+            if (value === 'DHCP' || value === 'PPPOE') {
+                return value;
+            }
+            if (value === 'STATIC') {
+                return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
+            }
+            return '-';
+        }
+    }, {
+        text: 'IPv6'.t(),
+        minWidth: 200,
+        dataIndex: 'v6ConfigType',
+        sortable: false,
+        menuDisabled: true,
         renderer: function (value) {
-            return value ? '<i class="x-fa fa-check">' : '';
-        },
-        // responsiveConfig: { large: { hidden: false }, small: { hidden: true } }
+            if (value) {
+                return value;
+            }
+            return '-';
+        }
+    }, {
+        text: 'MAC',
+        dataIndex: 'macaddr',
+        minWidth: 140,
+        sortable: false,
+        menuDisabled: true
     }]
 });

@@ -46,6 +46,8 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 align: 'center',
                 sortable: false,
                 hideable: false,
+                resizable: false,
+                menuDisabled: true,
                 cell: {
                     tools: {}
                 }

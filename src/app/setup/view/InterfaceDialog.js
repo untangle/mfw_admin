@@ -1,9 +1,26 @@
 Ext.define('Mfw.setup.InterfaceDialog', {
     extend: 'Ext.Dialog',
-    alias: 'widget.setup-interface-dialog',
+    alias: 'widget.interface-dialog',
 
     viewModel: {
         formulas: {
+            bridgedOptions: function (get) {
+                var interfaces = [];
+                Ext.getStore('interfaces').each(function (intf) {
+                    // interface should be ADDRESSED
+                    if (intf.get('interfaceId') === get('interface.interfaceId') ||
+                        intf.get('configType') !== 'ADDRESSED') {
+                            return;
+                        }
+
+                    interfaces.push({
+                        text: intf.get('name'),
+                        value: intf.get('interfaceId')
+                    });
+                });
+                return interfaces;
+            },
+
             ipv6Configs: function (get) {
                 var options;
                 if (get('interface.wan')) {
@@ -25,10 +42,14 @@ Ext.define('Mfw.setup.InterfaceDialog', {
         }
     },
 
-    bind: {
-        title: '{interface.name} settings',
+    config: {
+        interface: null
     },
-    width: 400,
+
+    bind: {
+        title: '{action === "ADD" ? "Create New" : "Edit"} {interface.type === "NIC" ? "Card" : ""} Interface',
+    },
+    width: 600,
     height: 600,
 
     showAnimation: {
@@ -63,7 +84,53 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                 required: true,
                 bind: '{interface.name}',
                 flex: 1,
+            }, {
+                xtype: 'selectfield',
+                name: 'configType',
+                label: 'Config Type'.t(),
+                flex: 1,
+                editable: false,
+                required: true,
+                bind: '{interface.configType}',
+                options: [
+                    { text: 'Addressed'.t(), value: 'ADDRESSED' },
+                    { text: 'Bridged'.t(),   value: 'BRIDGED' },
+                    { text: 'Disabled'.t(),  value: 'DISABLED' }
+                ]
+            }, {
+                xtype: 'checkbox',
+                name: 'wan',
+                label: '&nbsp;',
+                boxLabel: 'Is WAN',
+                bodyAlign: 'start',
+                margin: '0 16',
+                flex: 1,
+                disabled: true,
+                hidden: true,
+                bind: {
+                    checked: '{interface.wan}',
+                    disabled: '{interface.configType !== "ADDRESSED"}',
+                    hidden: '{interface.configType !== "ADDRESSED"}'
+                }
             }]
+        }, {
+            xtype: 'selectfield',
+            name: 'bridgedTo',
+            width: '50%',
+            label: 'Bridged To'.t(),
+            placeholder: 'Select bridge ...',
+            editable: false,
+            required: false,
+            autoSelect: true,
+            hidden: true,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            bind: {
+                value: '{interface.bridgedTo}',
+                hidden: '{interface.configType !== "BRIDGED"}',
+                required: '{interface.configType === "BRIDGED"}',
+                options: '{bridgedOptions}'
+            }
         }, {
             xtype: 'container',
             flex: 1,
@@ -611,8 +678,113 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                 }
                             }]
                         }]
-                    }],
-
+                    }]
+                }]
+            }, {
+                xtype: 'container',
+                itemId: 'dhcp',
+                layout: 'hbox',
+                items: [{
+                    // DHCP
+                    xtype: 'panel',
+                    flex: 1,
+                    layout: 'vbox',
+                    padding: '0 16',
+                    // defaults: {
+                    //     margin: '0 0 24 0'
+                    // },
+                    items: [{
+                        xtype: 'checkbox',
+                        name: 'dhcpEnabled',
+                        boxLabel: 'Enable DHCP Serving',
+                        bodyAlign: 'start',
+                        bind: {
+                            checked: '{interface.dhcpEnabled}',
+                        }
+                    }, {
+                        xtype: 'containerfield',
+                        layout: 'hbox',
+                        defaults: {
+                            labelAlign: 'top'
+                        },
+                        items: [{
+                            xtype: 'textfield',
+                            name: 'dhcpRangeStart',
+                            label: 'Range Start'.t(),
+                            clearable: false,
+                            required: false,
+                            hidden: true,
+                            flex: 1,
+                            bind: {
+                                value: '{interface.dhcpRangeStart}',
+                                required: '{interface.dhcpEnabled}',
+                                hidden: '{!interface.dhcpEnabled}'
+                            }
+                        }, {
+                            xtype: 'textfield',
+                            name: 'dhcpRangeEnd',
+                            label: 'Range End'.t(),
+                            clearable: false,
+                            required: false,
+                            hidden: true,
+                            flex: 1,
+                            margin: '0 16',
+                            bind: {
+                                value: '{interface.dhcpRangeEnd}',
+                                required: '{interface.dhcpEnabled}',
+                                hidden: '{!interface.dhcpEnabled}'
+                            }
+                        }, {
+                            xtype: 'numberfield',
+                            name: 'dhcpLeaseDuration',
+                            label: 'Lease Duration'.t(),
+                            hidden: true,
+                            width: 100,
+                            bind: {
+                                value: '{interface.dhcpLeaseDuration}',
+                                hidden: '{!interface.dhcpEnabled}'
+                            }
+                        }]
+                    }, {
+                        xtype: 'containerfield',
+                        layout: 'hbox',
+                        defaults: {
+                            labelAlign: 'top'
+                        },
+                        items: [{
+                            xtype: 'textfield',
+                            name: 'dhcpGatewayOverride',
+                            label: 'Gateway Override'.t(),
+                            hidden: true,
+                            flex: 1,
+                            bind: {
+                                value: '{interface.dhcpGatewayOverride}',
+                                hidden: '{!interface.dhcpEnabled}'
+                            }
+                        }, {
+                            xtype: 'selectfield',
+                            name: 'dhcpPrefixOverride',
+                            label: 'Netmask Override'.t(),
+                            hidden: true,
+                            flex: 1,
+                            margin: '0 0 0 16',
+                            bind: {
+                                value: '{interface.dhcpPrefixOverride}',
+                                hidden: '{!interface.dhcpEnabled}',
+                            },
+                            options: Globals.prefixes
+                        }]
+                    }, {
+                        xtype: 'textfield',
+                        name: 'dhcpDNSOverride',
+                        label: 'DNS Override'.t(),
+                        labelAlign: 'top',
+                        hidden: true,
+                        bind: {
+                            value: '{interface.dhcpDNSOverride}',
+                            hidden: '{!interface.dhcpEnabled}'
+                        }
+                    }]
                 }]
             }, {
                 // WIFI
@@ -710,7 +882,9 @@ Ext.define('Mfw.setup.InterfaceDialog', {
             margin: '0 8 0 0',
             handler: 'onCancel'
         }, {
-            text: 'Update',
+            bind: {
+                text: '{action === "ADD" ? "Create" : "Update"}'
+            },
             ui: 'action',
             handler: 'onSubmit'
         }]
@@ -723,8 +897,14 @@ Ext.define('Mfw.setup.InterfaceDialog', {
 
             if (intf.get('type') === "WIFI") {
                 view.down('segmentedbutton').setValue('#wifi');
-                // console.log('yeah');
             }
+        },
+
+        onCancel: function () {
+            var me = this;
+            me.getViewModel().get('interface').reject();
+
+            me.getView().destroy();
         },
 
         onSubmit: function () {
@@ -769,15 +949,6 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                     me.getView().close();
                 }
             });
-        },
-
-        onCancel: function () {
-            var me = this,
-                vm = me.getViewModel(),
-                interface = vm.get('interface');
-
-            interface.reject();
-            me.getView().destroy();
         }
     }
 

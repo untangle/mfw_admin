@@ -93,9 +93,9 @@ Ext.define('Mfw.setup.step.Interfaces', {
             cell: {
                 tools: {
                     edit: {
-                        bind: {
-                            hidden: '{record.configType !== "ADDRESSED" && record.type !== "WIFI"}'
-                        },
+                        // bind: {
+                        //     hidden: '{record.configType !== "ADDRESSED" && record.type !== "WIFI"}'
+                        // },
                         handler: 'onEdit',
                     }
                 }
@@ -148,7 +148,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 return 'Disabled';
             }
             if (value === 'BRIDGED') {
-                return 'Bridged to <strong>' + Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo')).get('name') + '</strong>';
+                var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
+                return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';
             }
         },
 
@@ -175,11 +176,12 @@ Ext.define('Mfw.setup.step.Interfaces', {
         onEdit: function (grid, info) {
             var me = this;
             Ext.Viewport.add({
-                xtype: 'setup-interface-dialog',
+                xtype: 'interface-dialog',
                 ownerCmp: me.getView(),
                 viewModel: {
                     data: {
-                        interface: info.record
+                        interface: info.record,
+                        action: 'EDIT'
                     }
                 }
             }).show();

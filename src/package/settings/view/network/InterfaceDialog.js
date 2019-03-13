@@ -1,6 +1,6 @@
-Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
+Ext.define('Mfw.settings.network.InterfaceDialog', {
     extend: 'Ext.Dialog',
-    alias: 'widget.generic-interface-dialog',
+    alias: 'widget.interface-dialog',
 
     viewModel: {
         formulas: {
@@ -1297,7 +1297,6 @@ Ext.define('Mfw.settings.network.GenericInterfaceDialog', {
 
             if (intf.get('type') === "WIFI") {
                 view.down('segmentedbutton').setValue('#wifi');
-                // console.log('yeah');
             }
         },
 
