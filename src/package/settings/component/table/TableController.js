@@ -221,6 +221,15 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     /**
+     * If action is JUMP or GOTO the chain can be selected form Action column
+     * @param {*} btn
+     */
+    selectChainFromGrid: function (btn) {
+        var me = this;
+        me.selectChain(btn.getRecord().getAction().get('chain'));
+    },
+
+    /**
      * Show chain sheet to edit or create a new Chain
      * @param {Component} sender The button which initiates the EDIT/NEW operation
      */
@@ -649,8 +658,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         if (action && action.get('type')) {
             type = action.get('type');
             switch (type) {
-                case 'JUMP':            actionStr = 'Jump to'.t(); break;
-                case 'GOTO':            actionStr = 'Go to'.t(); break;
+                // case 'JUMP':            actionStr = 'Jump to'.t(); break;
+                // case 'GOTO':            actionStr = 'Go to'.t(); break;
                 case 'ACCEPT':          actionStr = 'Accept'.t(); break;
                 case 'RETURN':          actionStr = 'Return'.t(); break;
                 case 'REJECT':          actionStr = 'Reject'.t(); break;
@@ -664,7 +673,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 default: break;
             }
             if (type === 'JUMP' || type === 'GOTO') {
-                actionStr += ' ' + action.get('chain');
+                actionStr = '';
             }
             if (type === 'SNAT') {
                 actionStr += ' ' + action.get('snat_address');
