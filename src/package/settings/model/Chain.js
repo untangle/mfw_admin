@@ -6,7 +6,6 @@ Ext.define('Mfw.model.table.Chain', {
     identifier: 'uuid',
     fields: [
         { name: 'base',        type: 'boolean', defaultValue: false },
-        { name: 'default',     type: 'boolean', defaultValue: false },
         { name: 'description', type: 'string' },
         { name: 'editable',    type: 'boolean', defaultValue: true },
         { name: 'hook',        type: 'string' },

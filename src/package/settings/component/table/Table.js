@@ -89,14 +89,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             }
         }, {
             xtype: 'component',
-            userCls: 'chain-default',
-            html: 'DEFAULT'.t(),
-            hidden: true,
-            bind: {
-                hidden: '{!selectedChain.default}'
-            }
-        }, {
-            xtype: 'component',
             userCls: 'chain-editable',
             html: 'READONLY'.t(),
             hidden: true,
@@ -195,17 +187,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             hidden: true,
             bind: { hidden: '{!selectedChain.editable}' },
             handler: 'onDeleteChain'
-        }, {
-            iconCls: 'md-icon-star',
-            tooltip: {
-                html: 'Set as default chain'.t(),
-                anchor: true,
-                hideDelay: 0,
-                showDelay: 0
-            },
-            hidden: true,
-            bind: { hidden: '{!selectedChain.editable || selectedChain.default}' },
-            handler: 'onSetDefaultChain'
         }]
     }],
 

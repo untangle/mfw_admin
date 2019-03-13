@@ -40,13 +40,6 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 boxLabel: 'BASE'.t(),
                 bodyAlign: 'left',
                 bind: '{chain.base}'
-            }, {
-                xtype: 'checkboxfield',
-                flex: 1,
-                name: 'default',
-                boxLabel: 'DEFAULT'.t(),
-                bodyAlign: 'left',
-                bind: '{chain.default}'
             }]
         }, {
             xtype:'textfield',
@@ -154,13 +147,6 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 form = me.getView().down('formpanel');
 
             if (!form.validate()) { return; }
-
-            // proper set the default chain
-            if (chain.get('default')) {
-                // if editing chain is set as default, remove previously default chain
-                var oldDefault = grid.table.chains().findRecord('default', true);
-                if (oldDefault) { oldDefault.set('default', false); }
-            }
 
             if (vm.get('action') === 'ADD') {
                 grid.table.chains().add(chain);

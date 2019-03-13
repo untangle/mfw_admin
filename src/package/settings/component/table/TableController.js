@@ -174,22 +174,25 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      * @param {String} [name] The chain name.
      */
     selectChain: function (name) {
-        var me = this, grid = me.getView(), vm = me.getViewModel(),
-            chains = grid.table.chains(),
-            chain;
+        var me = this,
+            grid = me.getView(),
+            vm = me.getViewModel(),
+            chains = grid.table.chains();
+            // chain = grid.table.chains().first();
+            // chain;
 
-        // if no name is passed it selects the default or base chain
+        // if no name is passed it selects the first chain
         if (!name) {
-            me.selectedChain = chain = chains.findRecord('default', true) || chains.findRecord('base', true);
+            me.selectedChain = chains.first();
         } else {
-            me.selectedChain = chain = chains.findRecord('name', name);
+            me.selectedChain = chains.findRecord('name', name, 0, false, true, true);
         }
 
-        if (!chain) {
-            console.warn('No default, base or given name chain found!');
+        if (!me.selectedChain) {
+            console.warn('Table has no chains!');
             return;
         }
-        vm.set('selectedChain', chain);
+        vm.set('selectedChain', me.selectedChain);
         me.updateChainsMenu();
     },
 
@@ -205,7 +208,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
             tpl = '<p>' + chain.get('name') +
                    (chain.get('base') ? '<span class="base">BASE</span>' : '') +
-                   (chain.get('default') ? '<span class="default">DEFAULT</span>' : '') +
                    (!chain.get('editable') ? '<span class="readonly">READONLY</span>' : '') +
                    '<br/><em>' + chain.get('description') + '</em></p>';
             menuItems.push({
@@ -226,7 +228,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     selectChainFromGrid: function (btn) {
         var me = this;
+        me.getView().getSelectable().deselectAll(); // avoid selecting the record
         me.selectChain(btn.getRecord().getAction().get('chain'));
+
     },
 
     /**
@@ -235,28 +239,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     onChainOperation: function (sender) {
         var me = this, grid = me.getView(),
-            chain, operation = sender.operation;
-
+            operation = sender.operation;
 
         Ext.Viewport.add({
             xtype: 'chain-dialog',
             ownerCmp: grid,
             chain: operation === 'EDIT' ? me.selectedChain : null
         }).show();
-        // if (operation === 'EDIT') {
-        //     chain = me.selectedChain;
-        // } else {
-        //     chain = new Mfw.model.table.Chain({ name: 'new-chain' });
-        // }
-
-        // if (!me.chainsheet) {
-        //     me.chainsheet = grid.add({ xtype: 'chainsheet' });
-        //     me.chainsheet.table = me.table; // pass table model to sheet
-        // }
-        // me.chainsheet.setChain(chain);
-        // me.chainsheet.getViewModel().set('operation', operation);
-        // me.chainsheet.show();
-        // return;
     },
 
     /**
@@ -264,10 +253,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     onDeleteChain: function () {
         var me = this, grid = me.getView(), msg = '';
-
-        if (me.selectedChain.get('default')) {
-            msg += Ext.String.format('<p><strong>{0}</strong> is a <strong>DEFAULT</strong> chain. You may consider selecting a new default chain before deleting!</p>'.t(), me.selectedChain.get('name'));
-        }
 
         msg += Ext.String.format('<p>By deleting <strong>{0}</strong> all the rules defined by it will be lost!</p>'.t(), me.selectedChain.get('name'));
 
@@ -299,22 +284,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     me.onSave();
                 }
             });
-    },
-
-    /**
-     * Sets a Chain as default
-     */
-    onSetDefaultChain: function () {
-        var me = this, grid = me.getView(), oldDefault;
-
-        // find the current default chain and remove default;
-        oldDefault = grid.table.chains().findRecord('default', true);
-        if (oldDefault) { oldDefault.set('default', false); }
-
-        // set default the current chain selection
-        me.selectedChain.set('default', true);
-        // update chains menu to reflect the change
-        me.updateChainsMenu();
     },
 
     /**
@@ -518,13 +487,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     hidden: true,
                     bind: { hidden: '{!selectedChain.editable}' },
                     handler: 'onDeleteChain'
-                }, {
-                    html: 'Set as Default'.t(),
-                    iconCls: 'md-icon-star',
-                    menuHideDelay: 0,
-                    hidden: true,
-                    bind: { hidden: '{!selectedChain.editable || selectedChain.default}' },
-                    handler: 'onSetDefaultChain'
                 }, '-', {
                     html: 'Reload'.t(),
                     iconCls: 'md-icon-refresh',
