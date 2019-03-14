@@ -1,4 +1,4 @@
-Ext.define('Mfw.model.DhcpStaticEntry', {
+Ext.define('Mfw.model.StaticDhcpEntry', {
     extend: 'Ext.data.Model',
 
     fields: [
@@ -19,7 +19,7 @@ Ext.define('Mfw.model.DhcpStaticEntry', {
         writer: {
             type: 'json',
             writeAllFields: true,
-            writeRecordId: false,
+            allowSingle: false,
             allDataOptions: {
                 serialize: true
                 // changes: false,
@@ -41,7 +41,7 @@ Ext.define('Mfw.model.Dhcp', {
     ],
 
     hasMany: [{
-        model: 'Mfw.model.DhcpStaticEntry',
+        model: 'Mfw.model.StaticDhcpEntry',
         name: 'staticDhcpEntries',
         associationKey: 'staticDhcpEntries'
     }],
