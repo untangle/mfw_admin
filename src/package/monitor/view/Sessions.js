@@ -270,6 +270,12 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 200,
         hidden: true
     }, {
+        text: 'Client Hops',
+        dataIndex: 'client_hops',
+        width: 100,
+        align: 'right',
+        hidden: true
+    }, {
         text: 'Server Interface',
         dataIndex: 'server_interface_id',
         width: 100,
@@ -318,6 +324,12 @@ Ext.define('Mfw.monitor.view.Sessions', {
         text: 'Server DNS Hint',
         dataIndex: 'server_dns_hint',
         width: 200,
+        hidden: true
+    }, {
+        text: 'Server Hops',
+        dataIndex: 'server_hops',
+        width: 100,
+        align: 'right',
         hidden: true
     }, {
         text: 'Cert. Issuer C',
@@ -370,6 +382,11 @@ Ext.define('Mfw.monitor.view.Sessions', {
         text: 'SSL SNI',
         dataIndex: 'ssl_sni',
         width: 130,
+        hidden: true
+    }, {
+        text: 'WAN Policy',
+        dataIndex: 'wan_policy',
+        width: 135,
         hidden: true
     }],
 

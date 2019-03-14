@@ -4,6 +4,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
     viewModel: {},
     expanderOnly: false,
     userCls: 'events-tree',
+    selectable: false,
     store: {
         type: 'tree',
         rootVisible: false,
@@ -34,7 +35,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'client_port', text: 'Port', leaf: true },
                         { key: 'client_port_new', text: 'Port New', leaf: true },
                         { key: 'client_reverse_dns', text: 'Reverse DNS', leaf: true },
-                        { key: 'client_dns_hint', text: 'DNS Hint', leaf: true }
+                        { key: 'client_dns_hint', text: 'DNS Hint', leaf: true },
+                        { key: 'client_hops', text: 'Hops', leaf: true }
                     ]
                 },
                 {
@@ -49,7 +51,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'server_port', text: 'Port', leaf: true },
                         { key: 'server_port_new', text: 'Port New', leaf: true },
                         { key: 'server_reverse_dns', text: 'Reverse DNS', leaf: true },
-                        { key: 'server_dns_hint', text: 'DNS Hint', leaf: true }
+                        { key: 'server_dns_hint', text: 'DNS Hint', leaf: true },
+                        { key: 'server_hops', text: 'Hops', leaf: true }
                     ]
                 },
                 {
@@ -72,32 +75,32 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     key: 'byte_rate',
                     text: '<strong>Byte Rate</strong>',
                     children: [
-                        { key: 'server_byte_rate', text: 'Server Byte Rate', leaf: true },
-                        { key: 'client_byte_rate', text: 'Client Byte Rate', leaf: true },
+                        { key: 'server_byte_rate', text: 'Server', leaf: true },
+                        { key: 'client_byte_rate', text: 'Client', leaf: true },
                     ]
                 },
                 {
                     key: 'bytes',
                     text: '<strong>Bytes</strong>',
                     children: [
-                        { key: 'server_bytes', text: 'Server Bytes', leaf: true },
-                        { key: 'client_bytes', text: 'Client Bytes', leaf: true },
+                        { key: 'server_bytes', text: 'Server', leaf: true },
+                        { key: 'client_bytes', text: 'Client', leaf: true },
                     ]
                 },
                 {
                     key: 'packet_rate',
                     text: '<strong>Packet Rate</strong>',
                     children: [
-                        { key: 'server_packet_rate', text: 'Server Packet Rate', leaf: true },
-                        { key: 'client_packet_rate', text: 'Client Packet Rate', leaf: true },
+                        { key: 'server_packet_rate', text: 'Server', leaf: true },
+                        { key: 'client_packet_rate', text: 'Client', leaf: true },
                     ]
                 },
                 {
                     key: 'packets',
                     text: '<strong>Packets</strong>',
                     children: [
-                        { key: 'server_packets', text: 'Server Packets', leaf: true },
-                        { key: 'client_packets', text: 'Client Packets', leaf: true },
+                        { key: 'server_packets', text: 'Server', leaf: true },
+                        { key: 'client_packets', text: 'Client', leaf: true },
                     ]
                 },
                 { key: 'session_id', text: 'Session ID', leaf: true },
@@ -111,7 +114,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                 { key: 'timeout_seconds', text: 'Timeout', leaf: true },
                 { key: 'priority', text: 'Priority', leaf: true },
                 { key: 'mark', text: 'Mark', leaf: true },
-                { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true }
+                { key: 'bypass_packetd', text: 'Bypass PacketD', leaf: true },
+                { key: 'wan_policy', text: 'WAN Policy', leaf: true }
             ]
         }
     },
@@ -149,43 +153,19 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                 var rootNode = tree.getRootNode();
 
                 Ext.Object.each(selection.getData(), function (key, val) {
-                    var node = rootNode.findChild('key', key, true);
-                    if (node) {
-                        node.set('val', val);
+                    var node, expandKey;
+                    switch (key) {
+                        case 'application_name': expandKey = 'application'; break;
+                        case 'client_address': expandKey = 'client'; break;
+                        case 'server_address': expandKey = 'server'; break;
+                        case 'certificate_subject_cn': expandKey = 'certificate'; break;
+                        default: break;
                     }
-
-                    if (key === 'application_name') {
-                        rootNode.findChild('key', 'application', true).set('val', val);
+                    if (expandKey) {
+                        key = expandKey;
                     }
-
-                    if (key === 'client_address') {
-                        rootNode.findChild('key', 'client', true).set('val', val);
-                    }
-
-                    if (key === 'server_address') {
-                        rootNode.findChild('key', 'server', true).set('val', val);
-                    }
-
-                    if (key === 'certificate_subject_cn') {
-                        rootNode.findChild('key', 'certificate', true).set('val', val);
-                    }
-
-                    if (key === 'byte_rate') {
-                        rootNode.findChild('key', 'byte_rate', true).set('val', val);
-                    }
-
-                    if (key === 'bytes') {
-                        rootNode.findChild('key', 'bytes', true).set('val', val);
-                    }
-
-                    if (key === 'packet_rate') {
-                        rootNode.findChild('key', 'packet_rate', true).set('val', val);
-                    }
-
-                    if (key === 'packets') {
-                        rootNode.findChild('key', 'packets', true).set('val', val);
-                    }
-
+                    node = rootNode.findChild('key', key, true);
+                    if (node) { node.set('val', val); }
                 });
             });
         },
