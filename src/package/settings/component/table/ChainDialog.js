@@ -53,6 +53,12 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 painted: function (field) {
                     field.focus();
                 }
+            },
+            validators: function (value) {
+                if (value.indexOf(' ') >= 0) {
+                    return 'Name should not contain spaces!';
+                }
+                return true;
             }
         }, {
             xtype: 'textareafield',
