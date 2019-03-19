@@ -126,10 +126,8 @@ Ext.define('Mfw.reports.ChartController', {
                 hideDelay: 0,
                 backgroundColor: 'rgba(247, 247, 247, 0.95)',
                 useHTML: true,
-                style: {
-                    // fontSize: isWidget ? '12px' : '14px'
-                },
-                headerFormat: '<p style="margin: 0 0 5px 0; color: #555;">{point.key}</p>'
+                xDateFormat: '%A, %b %e, %l:%M %p',
+                headerFormat: '<p style="font-weight: bold; margin: 0 0 5px 0; color: #555;">{point.key}</p>'
             },
             legend: {
                 enabled: true,
@@ -300,7 +298,17 @@ Ext.define('Mfw.reports.ChartController', {
                     dataGrouping: {
                         enabled: rendering.get('dataGroupingEnabled'),
                         approximation: rendering.get('dataGroupingApproximation'),
-                        groupPixelWidth: rendering.get('dataGroupingFactor')
+                        groupPixelWidth: rendering.get('dataGroupingFactor'),
+                        dateTimeLabelFormats: {
+                            millisecond: ['%A, %b %e, %l:%M:%S.%L %p', '%A, %b %e, %l:%M:%S.%L %p', ' - %l:%M:%S.%L %p'],
+                            second: ['%A, %b %e, %l:%M:%S %p', '%A, %b %e, %l:%M:%S %p', ' - %l:%M:%S %p'],
+                            minute: ['%A, %b %e, %l:%M %p', '%A, %b %e, %l:%M %p', ' - %l:%M %p'],
+                            hour: ['%A, %b %e, %l:%M %p', '%A, %b %e, %l:%M %p', ' - %l:%M %p'],
+                            day: ['%A, %b %e, %Y', '%A, %b %e', ' - %A, %b %e, %Y'],
+                            week: ['Week from %A, %b %e, %Y', '%A, %b %e', ' - %A, %b %e, %Y'],
+                            month: ['%B %Y', '%B', ' - %B %Y'],
+                            year: ['%Y', '%Y', ' - %Y']
+                        }
                     }
                 };
             });
