@@ -69,7 +69,11 @@ Ext.define('Mfw.AppBase', {
                                 Ext.route.Router.resume();
                             }
 
-                            Mfw.app.tz = decoded.timeZone;
+                            if (decoded.timeZone) {
+                                Mfw.app.tz = decoded.timeZone;
+                            } else {
+                                Mfw.app.tz = { displayName: 'UTC', value: 'UTC' };
+                            }
                             Highcharts.setOptions({
                                 time: {
                                     timezone: Mfw.app.tz.displayName
