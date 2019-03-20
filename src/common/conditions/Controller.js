@@ -178,35 +178,14 @@ Ext.define('Mfw.common.conditions.Controller', {
         }
     },
 
-    onColumnChange: function (field, value, oldValue) {
-        var me = this, form = me.sheet.down('formpanel'),
-            conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
-            // fixme for when multiple tables are defined
-            column = Ext.Array.findBy(Table.sessions.columns, function (item) {
-                return item.dataIndex === value;
-            });
-
-        if (!column) {
-            // console.warn('Column ' + value + ' not defined!');
-            return;
-        }
-
-        if (column.editor) {
-            form.insert(2, column.editor);
-        } else {
-            form.insert(2, {
-                xtype: 'textfield',
-                name: 'value',
-                // label: 'Enter value'.t(),
-                placeholder: 'Enter value'.t(),
-                autoComplete: false,
-                required: true
-            });
-        }
-
-        if (conditionIdx !== null) {
-            me.sheet.down('formpanel').setValues(me.mainView.getViewModel().get('route.conditions')[conditionIdx]);
-        }
+    conditionsDialog: function () {
+        var me = this;
+        Ext.Viewport.add({
+            xtype: 'conditions-dialog',
+            ownerCmp: me.getView(),
+            condition: null
+        }).show();
     }
+
 
 });

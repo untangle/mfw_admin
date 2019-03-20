@@ -33,9 +33,10 @@ Ext.define('Mfw.Table', {
             editor: {
                 xtype: 'selectfield',
                 name: 'value',
-                // label: 'Choose operator'.t(),
+                label: 'Value'.t(),
+                labelAlign: 'top',
                 placeholder: 'Choose protocol'.t(),
-                required: true,
+                flex: 1,
                 editable: false,
                 displayTpl: '{text} [ {value} ]',
                 itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',

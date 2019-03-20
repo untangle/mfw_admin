@@ -17,7 +17,7 @@ Ext.define('Mfw.common.conditions.Fields', {
     items: [{
         xtype: 'button',
         bind: { text: 'Conditions'.t() + ' ({conditionsCount})' },
-        handler: 'showSheetGrid',
+        handler: 'conditionsDialog',
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',
