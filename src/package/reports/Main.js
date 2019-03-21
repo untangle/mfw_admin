@@ -39,13 +39,6 @@ Ext.define('Mfw.reports.Main', {
         }, {
             xtype: 'conditions-fields'
         }
-        // , '->', {
-        //     text: 'Toast 1',
-        //     handler: function () {
-        //         // Notification.toast('normal', 'some message' + (new Date().getTime()));
-        //         Ext.toast('some message' + (new Date().getTime()), 3000);
-        //     }
-        // }
     ]
     }, {
         xtype: 'panel',

@@ -51,6 +51,7 @@ Ext.define('Mfw.AppBase', {
                             Ext.Array.each(interfaces, function (interface) {
                                 interfacesMap[interface.interfaceId] = interface.name;
                             });
+                            Globals.interfaces = interfaces;
                             Globals.interfacesMap = interfacesMap;
                         }
                     });

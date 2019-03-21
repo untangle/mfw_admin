@@ -51,11 +51,11 @@ Ext.define('Mfw.Renderer', {
         if (value === null || value === undefined) {
             return '';
         }
-        if (value === true) {
-            return '<i class="x-fa fa-check"></i>';
+        if (value === true || value === 'true' || value === 1) {
+            return 'YES';
         }
-        if (value === false) {
-            return '<i class="x-fa fa-ban"></i>';
+        if (value === false || value === 'false' || value === 0) {
+            return 'NO';
         }
     },
 

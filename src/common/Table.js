@@ -13,9 +13,7 @@ Ext.define('Mfw.Table', {
             dataIndex: 'time_stamp',
             renderer: Renderer.timeStamp,
             width: 180,
-            cell: {
-                encodeHtml: false
-            }
+            cell: { encodeHtml: false }
         }, {
             text: 'End Time',
             dataIndex: 'end_time',
@@ -29,19 +27,7 @@ Ext.define('Mfw.Table', {
             dataIndex: 'ip_protocol',
             width: 150,
             renderer: Renderer.ipProtocol,
-            cell: { encodeHtml: false },
-            editor: {
-                xtype: 'selectfield',
-                name: 'value',
-                label: 'Value'.t(),
-                labelAlign: 'top',
-                placeholder: 'Choose protocol'.t(),
-                flex: 1,
-                editable: false,
-                displayTpl: '{text} [ {value} ]',
-                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                options: Globals.protocols
-            }
+            cell: { encodeHtml: false }
         }, {
             text: 'Host Name',
             dataIndex: 'hostname',
@@ -274,6 +260,100 @@ Ext.define('Mfw.Table', {
         ]
     },
 
+
+    createColumnField: function (columnName) {
+        var field = null;
+        switch(columnName) {
+            case 'ip_protocol':
+                field = {
+                    xtype: 'selectfield',
+                    placeholder: 'Choose protocol ...'.t(),
+                    editable: false,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: Globals.protocols
+                }; break;
+            case 'client_interface_id':
+            case 'server_interface_id':
+                field = {
+                    xtype: 'selectfield',
+                    placeholder: 'Choose interface ...'.t(),
+                    editable: false,
+                    valueField: 'interfaceId',
+                    displayTpl: '{name} [ {interfaceId} ]',
+                    itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+                    options: Globals.interfaces
+                }; break;
+            case 'client_interface_type':
+            case 'server_interface_type':
+                field = {
+                    xtype: 'selectfield',
+                    placeholder: 'Choose type ...'.t(),
+                    editable: false,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: [
+                        { text: 'WAN', value: 1 },
+                        { text: 'LAN', value: 2 },
+                        { text: 'unused', value: 3 },
+                        { text: 'unset', value: 0 }
+                    ]
+                }; break;
+            case 'client_country':
+            case 'server_country':
+                field = {
+                    xtype: 'selectfield',
+                    placeholder: 'Choose country ...'.t(),
+                    editable: false,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: Globals.countries
+                }; break;
+            case 'local_address':
+            case 'remote_address':
+            case 'client_address':
+            case 'server_address':
+            case 'client_address_new':
+            case 'server_address_new':
+                field = {
+                    xtype: 'textfield',
+                    placeholder: 'Enter address ...'.t(),
+                    validators: ['ipaddress']
+                }; break;
+            case 'client_port':
+            case 'server_port':
+                field = {
+                    xtype: 'numberfield',
+                    decimals: 0,
+                    placeholder: 'Enter port ...'.t()
+                    // validators: [{
+                    //     type: 'format',
+                    //     matcher: new RegExp('^[1-9]\d*$')
+                    // }]
+                }; break;
+            case 'application_blocked':
+            case 'application_flagged':
+            field = {
+                xtype: 'togglefield',
+                boxLabel: 'Yes',
+                bodyAlign: 'start'
+            }; break;
+
+            default: break;
+        }
+        if (field) {
+            Ext.apply(field, {
+                columnName: columnName,
+                name: 'value',
+                label: 'Value'.t(),
+                labelAlign: 'top',
+                flex: 1,
+                clearable: false,
+                autoComplete: false
+            });
+        }
+        return field;
+    },
 
     constructor: function() {
         var allColumns = [];

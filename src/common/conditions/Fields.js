@@ -15,9 +15,11 @@ Ext.define('Mfw.common.conditions.Fields', {
     },
 
     items: [{
-        xtype: 'button',
-        bind: { text: 'Conditions'.t() + ' ({conditionsCount})' },
-        handler: 'conditionsDialog',
+        xtype: 'component',
+        margin: '0 16',
+        style: 'color: #FFF; font-size: 12px; font-weight: normal; line-height: 32px;',
+        html: 'Conditions'.t()
+        // bind: { html: 'Conditions'.t() + ' ({conditionsCount})' }
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',
@@ -29,10 +31,6 @@ Ext.define('Mfw.common.conditions.Fields', {
         xtype: 'button',
         ui: 'round',
         iconCls: 'md-icon-add',
-        handler: 'addConditionFromToolbar'
+        handler: 'conditionsDialog'
     }]
-
-    // listeners: {
-    //     initialize: 'onInitialize'
-    // }
 });

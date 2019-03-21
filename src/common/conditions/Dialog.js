@@ -29,6 +29,13 @@ Ext.define('Mfw.common.conditions.Dialog', {
     items: [{
         xtype: 'formpanel',
         padding: 0,
+        keyMapEnabled: true,
+        keyMap: {
+            enter: {
+                key: Ext.event.Event.ENTER,
+                handler: 'onSubmit'
+            }
+        },
         items: [{
             xtype: 'selectfield',
             name: 'column',
@@ -42,7 +49,8 @@ Ext.define('Mfw.common.conditions.Dialog', {
             options: Table.allColumns,
             required: true,
             listeners: {
-                change: 'onColumnChange'
+                change: 'onColumnChange',
+                painted: function (f) { f.focus(); }
             }
         }, {
             xtype: 'containerfield',
@@ -58,7 +66,6 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 placeholder: 'Choose operator'.t(),
                 width: 180,
                 margin: '0 16 0 0',
-                editable: false,
                 displayTpl: '{text} [ {value} ]',
                 itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                 value: 'EQ',
@@ -66,6 +73,8 @@ Ext.define('Mfw.common.conditions.Dialog', {
             }, {
                 xtype: 'textfield',
                 itemId: 'valueTextField',
+                autoComplete: false,
+                clearable: false,
                 flex: 1,
                 name: 'value',
                 label: 'Value'.t(),
@@ -91,38 +100,35 @@ Ext.define('Mfw.common.conditions.Dialog', {
 
     controller: {
         init: function (dialog) {
-            var grid = dialog.ownerCmp,
-                vm = dialog.getViewModel(),
-                condition = vm.get('condition'),
-                actionOptions = [];
+            var vm = dialog.getViewModel(),
+                form = dialog.down('formpanel'),
+                conditions = vm.get('route.conditions');
 
-            if (!condition) {
-                // condition = {
-                //     field: '',
-                //     operator: '',
-                //     value: ''
-                // };
-                // if subset of actions defined
-                // Ext.Array.each(actions, function (action) {
-                //     actionOptions.push(grid.actionsMap[action]);
-                // });
-                // dialog.down('#actionform').getFields('type').setOptions(actionOptions);
+            // editing existing condition
+            if (dialog.conditionIdx >= 0) {
+                form.setValues(conditions[dialog.conditionIdx]);
+                vm.set('action', 'EDIT');
+            } else {
+                form.setValues({
+                    column: '',
+                    operator: 'EQ',
+                    value: ''
+                });
+                vm.set('action', 'ADD');
             }
-            vm.set({
-                action: !condition ? "ADD" : "EDIT"
-            });
-            console.log(vm);
         },
 
         onColumnChange: function (field, value) {
-            var me = this, form = me.getView().down('formpanel'),
+            var me = this,
+                vm = me.getViewModel(),
+                dialog = me.getView(),
+                form = dialog.down('formpanel'),
+                conditions = vm.get('route.conditions'),
                 customEditor = form.down('containerfield').getAt(2),
                 // conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
                 column = Ext.Array.findBy(Table.sessions.columns, function (item) {
                     return item.dataIndex === value;
                 });
-
-            console.log(me.getViewModel().get('route.conditions'));
 
             if (!column) {
                 console.warn('Column ' + value + ' not defined!');
@@ -132,15 +138,23 @@ Ext.define('Mfw.common.conditions.Dialog', {
             // remove an existing custom column value field editor if exists
             if (customEditor) { form.down('containerfield').remove(customEditor); }
 
+            var columnField = Table.createColumnField(column.dataIndex);
+
             // add custom column value field
-            if (column.editor) {
+            if (columnField) {
                 // hide default textfield
-                form.down('#valueTextField').setName('').hide();
+                form.down('#valueTextField').setName('').hide().disable();
                 // add custom field editor
-                form.down('containerfield').add(column.editor);
+                form.down('containerfield').add(columnField);
+
+                // set again the values because of the custom field
+                if (dialog.conditionIdx >= 0 && conditions[dialog.conditionIdx].column === columnField.columnName) {
+                    form.setValues(conditions[dialog.conditionIdx]);
+                }
             } else {
                 // show default textfield
-                form.down('#valueTextField').setName('value').show();
+                form.down('#valueTextField').setName('value').show().enable();
+                form.down('#valueTextField').setValue('').setError(null);
             }
         },
 
@@ -151,35 +165,25 @@ Ext.define('Mfw.common.conditions.Dialog', {
 
         onSubmit: function () {
             var me = this,
+                dialog = me.getView(),
                 vm = me.getViewModel(),
                 route = vm.get('route'),
-                conditions = route.conditions,
                 form = me.getView().down('formpanel');
 
-            console.log(form.validate());
-
             if (!form.validate()) { return; }
-            route.conditions.push(form.getValues());
 
-            console.log(route);
+            if (vm.get('action') === 'ADD') {
+                route.conditions.push(form.getValues());
+            } else {
+                route.conditions[dialog.conditionIdx] = form.getValues();
+            }
 
-            // route.conditions = conditions;
-
-            // if (me.mainView.isXType('dashboard')) {
-            //     Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
-            // } else {
+            if (dialog.ownerCmp.isXType('dashboard')) {
+                Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
+            } else {
                 Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
-            // }
+            }
 
-            // // add action
-            // // rule.set('action', actionform.getValues());
-
-            // // add rule
-            // if (vm.get('action') === 'ADD') {
-            //     grid.getStore().add(rule);
-            // } else {
-            //     rule.commit();
-            // }
             me.getView().destroy();
         }
     }
