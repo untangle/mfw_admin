@@ -12,6 +12,8 @@ Ext.define('Mfw.reports.Report', {
     },
     bodyPadding: 0,
 
+    relative: true,
+
     items: [{
         xtype: 'toolbar',
         docked: 'top',
@@ -49,6 +51,16 @@ Ext.define('Mfw.reports.Report', {
             handler: 'onSettings',
             tooltip: 'Settings'
         }]
+    }, {
+        xtype: 'component',
+        docked: 'top',
+        margin: '0 16 16 16',
+        style: 'background: #DDD; font-size: 12px; line-height: 32px; padding: 0 8px; border-radius: 3px;',
+        hidden: true,
+        bind: {
+            hidden: '{!record || !invalidConditionsWarning}',
+            html: '{invalidConditionsWarning}'
+        },
     }, {
         xtype: 'noselection-report'
     }, {

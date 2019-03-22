@@ -12,7 +12,8 @@ Ext.define('Mfw.reports.ReportController', {
 
             var record,
                 activeItem = 'noselection-report',
-                userConditions = [];
+                userConditions = [],
+                invalidConditions = []; // not all conditions might fit a specific report
 
             // check if report route
             if (route.cat && route.rep) {
@@ -32,12 +33,6 @@ Ext.define('Mfw.reports.ReportController', {
             }
             view.setActiveItem(activeItem);
 
-            // userConditions.push({
-            //     column: 'time_stamp',
-            //     operator: 'GT',
-            //     value: conditionSince
-            // });
-
             if (route.until) {
                 userConditions.push({
                     column: 'time_stamp',
@@ -47,8 +42,20 @@ Ext.define('Mfw.reports.ReportController', {
             }
 
             Ext.Array.each(route.conditions, function (cond) {
-                userConditions.push(cond);
+                if (record._validColumns.indexOf(cond.column) < 0) {
+                    if (invalidConditions.indexOf(cond.column) < 0) {
+                        invalidConditions.push(cond.column);
+                    }
+                } else {
+                    userConditions.push(cond);
+                }
             });
+
+            if (invalidConditions.length > 0) {
+                viewModel.set('invalidConditionsWarning', '<i class="fa fa-info-circle"></i> <span style="color: #b13232; font-weight: bold;">Some conditions were ommited!</span> <strong>' + invalidConditions.join(', ') + '</strong> does not apply for this report.');
+            } else {
+                viewModel.set('invalidConditionsWarning', null);
+            }
 
             record.userConditions().loadData(userConditions);
             viewModel.set('record', record);

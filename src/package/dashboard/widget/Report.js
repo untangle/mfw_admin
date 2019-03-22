@@ -43,6 +43,16 @@ Ext.define('Mfw.dashboard.widget.Report', {
             ui: 'round',
             handler: 'reload'
         }]
+    }, {
+        xtype: 'component',
+        docked: 'top',
+        margin: '0 16 16 16',
+        style: 'background: #DDD; font-size: 12px; line-height: 32px; padding: 0 8px; border-radius: 3px;',
+        hidden: true,
+        bind: {
+            hidden: '{!record || !invalidConditionsWarning}',
+            html: '{invalidConditionsWarning}'
+        },
     }],
     listeners: {
         removed: function (widget) {
@@ -55,7 +65,8 @@ Ext.define('Mfw.dashboard.widget.Report', {
     controller: {
         init: function (widget) {
             var me = this, viewModel = widget.getViewModel(),
-                record = viewModel.get('record');
+                record = viewModel.get('record'),
+                invalidConditions = [];
 
             widget.tout = null;
 
@@ -88,8 +99,21 @@ Ext.define('Mfw.dashboard.widget.Report', {
                     value: conditionSince.getTime()
                 });
                 Ext.Array.each(route.conditions, function (cond) {
-                    userConditions.push(cond);
+                    if (record._validColumns.indexOf(cond.column) < 0) {
+                        if (invalidConditions.indexOf(cond.column) < 0) {
+                            invalidConditions.push(cond.column);
+                        }
+                    } else {
+                        userConditions.push(cond);
+                    }
                 });
+
+                if (invalidConditions.length > 0) {
+                    viewModel.set('invalidConditionsWarning', '<i class="fa fa-info-circle"></i> <strong>' + invalidConditions.join(', ') + '</strong> condition(s) ommited!');
+                } else {
+                    viewModel.set('invalidConditionsWarning', null);
+                }
+
                 record.userConditions().loadData(userConditions);
                 viewModel.set('record', record);
 
@@ -104,46 +128,10 @@ Ext.define('Mfw.dashboard.widget.Report', {
             // });
         },
 
-
         reload: function () {
             var me = this;
             WidgetsPipe.add(me.getView());
         }
-
-        // loadData: function () {
-        //     var me = this,
-        //         view = me.getView(),
-        //         timer = view.down('#timer'),
-        //         viewModel = me.getViewModel(),
-        //         widget = viewModel.get('widget'),
-        //         record = viewModel.get('record'),
-        //         controller;
-
-        //     switch (record.get('type')) {
-        //         case 'TEXT': controller = view.down('text-report').getController(); break;
-        //         case 'EVENTS': controller = view.down('events-report').getController(); break;
-        //         default: controller = view.down('chart-report').getController();
-        //     }
-
-        //     if (view.tout) {
-        //         clearInterval(view.tout);
-        //     }
-
-        //     controller.loadData(function () {
-        //         if (widget.get('interval') !== 0) {
-        //             view.tout = setTimeout(function () {
-        //                 me.loadData();
-        //             }, widget.get('interval') * 1000);
-
-        //             timer.setHtml('');
-        //             timer.setHtml('<div class="wrapper">' +
-        //                           '<div class="pie spinner" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-        //                           '<div class="pie filler" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-        //                           '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
-        //                           '</div>');
-        //         }
-        //     });
-        // }
     }
 
 

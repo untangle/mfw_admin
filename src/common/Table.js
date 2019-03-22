@@ -2,6 +2,8 @@ Ext.define('Mfw.Table', {
     alternateClassName: 'Table',
     singleton: true,
 
+    names: ['sessions', 'session_stats', 'interface_stats'],
+
     sessions: {
         columns: [{
             text: 'Session ID',
@@ -259,7 +261,6 @@ Ext.define('Mfw.Table', {
             { text: 'TX Compressed Rate', dataIndex: 'tx_compressed_rate' }
         ]
     },
-
 
     createColumnField: function (columnName) {
         var field = null;
