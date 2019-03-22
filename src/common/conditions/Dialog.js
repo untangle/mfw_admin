@@ -126,7 +126,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 conditions = vm.get('route.conditions'),
                 customEditor = form.down('containerfield').getAt(2),
                 // conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
-                column = Ext.Array.findBy(Table.sessions.columns, function (item) {
+                column = Ext.Array.findBy(Table.allColumns, function (item) {
                     return item.dataIndex === value;
                 });
 

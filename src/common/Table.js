@@ -357,14 +357,33 @@ Ext.define('Mfw.Table', {
     },
 
     constructor: function() {
-        var allColumns = [];
+        // hardcode some more common columns used for conditions
+        var me = this,
+            allColumns = [
+            { text: 'Host Name', value: 'hostname' },
+            { text: 'User Name', value: 'username' },
+            { text: 'IP Protocol', value: 'ip_protocol' },
+            { text: 'Client Interface', value: 'client_interface_id' },
+            { text: 'Server Interface', value: 'server_interface_id' },
+            { text: 'Client Port', value: 'client_port' },
+            { text: 'Server Port', value: 'server_port' },
+            { text: 'Client Address', value: 'client_address' },
+            { text: 'Server Address', value: 'server_address' },
+        ];
 
-        Ext.Array.each(this.sessions.columns, function (column) {
-            allColumns.push({
-                text: column.text,
-                value: column.dataIndex
+        Ext.Array.each(me.names, function (name) {
+            Ext.Array.each(me[name].columns, function (column) {
+                if (!Ext.Array.findBy(allColumns, function (c) {
+                    return c.value === column.dataIndex;
+                })) {
+                    allColumns.push({
+                        text: column.text,
+                        value: column.dataIndex
+                    });
+                }
             });
         });
+
 
         this.initConfig({
             allColumns: allColumns,
