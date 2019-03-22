@@ -126,6 +126,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 form = dialog.down('formpanel'),
                 conditions = vm.get('route.conditions'),
                 customEditor = form.down('containerfield').getAt(2),
+                customOperators = [],
                 // conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
                 column = Ext.Array.findBy(Table.allColumns, function (c) {
                     return c.dataIndex === value;
@@ -140,6 +141,15 @@ Ext.define('Mfw.common.conditions.Dialog', {
             if (customEditor) { form.down('containerfield').remove(customEditor); }
 
             var columnField = Table.createColumnField(column.dataIndex);
+
+            if (column.operators) {
+                Ext.Array.each(column.operators, function (op) {
+                    customOperators.push(Globals.operatorsMap[op]);
+                });
+                form.getFields('operator').setOptions(customOperators);
+            } else {
+                form.getFields('operator').setOptions(Globals.operators);
+            }
 
             // add custom column value field
             if (columnField) {

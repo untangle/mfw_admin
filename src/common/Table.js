@@ -23,7 +23,8 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Family',
             dataIndex: 'family',
-            hidden: true
+            hidden: true,
+            operators: ['EQ']
         }, {
             text: 'IP Protocol',
             dataIndex: 'ip_protocol',
@@ -42,22 +43,26 @@ Ext.define('Mfw.Table', {
             text: 'Client Interface',
             dataIndex: 'client_interface_id',
             renderer: Renderer.interface,
-            cell: { encodeHtml: false }
+            cell: { encodeHtml: false },
+            operators: ['EQ', 'NE']
         }, {
             text: 'Server Interface',
             dataIndex: 'server_interface_id',
             renderer: Renderer.interface,
-            cell: { encodeHtml: false }
+            cell: { encodeHtml: false },
+            operators: ['EQ', 'NE']
         }, {
             text: 'Client Interface Type',
             dataIndex: 'client_interface_type',
             cell: { encodeHtml: false },
-            renderer: Renderer.interfaceType
+            renderer: Renderer.interfaceType,
+            operators: ['EQ', 'NE']
         }, {
             text: 'Server Interface Type',
             dataIndex: 'server_interface_type',
             cell: { encodeHtml: false },
-            renderer: Renderer.interfaceType
+            renderer: Renderer.interfaceType,
+            operators: ['EQ', 'NE']
         }, {
             text: 'Local Address',
             dataIndex: 'local_address',
@@ -134,10 +139,12 @@ Ext.define('Mfw.Table', {
             dataIndex: 'application_category'
         }, {
             text: 'Application Blocked',
-            dataIndex: 'application_blocked'
+            dataIndex: 'application_blocked',
+            operators: ['EQ']
         }, {
             text: 'Application Flagged',
-            dataIndex: 'application_flagged'
+            dataIndex: 'application_flagged',
+            operators: ['EQ']
         }, {
             text: 'Application Confidence',
             dataIndex: 'application_confidence'

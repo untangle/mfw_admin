@@ -837,7 +837,7 @@ Ext.define('Mfw.Globals', {
 
     constructor: function() {
         this.initConfig({
-            operatorsMap: Ext.Array.toValueMap(this.operators, 'id'),
+            operatorsMap: Ext.Array.toValueMap(this.operators, 'value'),
             prefixesMap: Ext.Array.toValueMap(this.prefixes, 'value'),
             protocolsMap: Ext.Array.toValueMap(this.protocols, 'value'),
             countriesMap: Ext.Array.toValueMap(this.countries, 'value')
