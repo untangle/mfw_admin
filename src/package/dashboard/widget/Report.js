@@ -65,8 +65,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
     controller: {
         init: function (widget) {
             var me = this, viewModel = widget.getViewModel(),
-                record = viewModel.get('record'),
-                invalidConditions = [];
+                record = viewModel.get('record');
 
             widget.tout = null;
 
@@ -82,7 +81,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
             }
 
             viewModel.bind('{route}', function (route) {
-                var conditionSince, userConditions = [];
+                var conditionSince, userConditions = [], invalidConditions = [];
 
                 // avoid dasboard activity if not on Dashboard
                 if (!Mfw.app.viewport.getActiveItem().isXType('dashboard')) { return; }

@@ -382,7 +382,6 @@ Ext.define('Mfw.Table', {
             });
         });
 
-        console.log(allColumns);
         this.initConfig({
             allColumns: allColumns,
             allColumnsMap: Ext.Array.toValueMap(allColumns, 'dataIndex')
