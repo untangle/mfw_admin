@@ -43,8 +43,9 @@ Ext.define('Mfw.common.conditions.Dialog', {
             labelAlign: 'top',
             placeholder: 'Choose field'.t(),
             editable: false,
-            displayTpl: '{text} [ {value} ]',
-            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            valueField: 'dataIndex',
+            displayTpl: '{text} [ {dataIndex} ]',
+            itemTpl: '{text} <span style="color: #999">[ {dataIndex} ]</span>',
             forceSelection: true,
             options: Table.allColumns,
             required: true,
@@ -126,8 +127,8 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 conditions = vm.get('route.conditions'),
                 customEditor = form.down('containerfield').getAt(2),
                 // conditionIdx = me.sheet.getViewModel().get('conditionIdx'),
-                column = Ext.Array.findBy(Table.allColumns, function (item) {
-                    return item.dataIndex === value;
+                column = Ext.Array.findBy(Table.allColumns, function (c) {
+                    return c.dataIndex === value;
                 });
 
             if (!column) {

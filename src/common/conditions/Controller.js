@@ -32,7 +32,7 @@ Ext.define('Mfw.common.conditions.Controller', {
 
         Ext.Array.each(conditions, function (condition, idx) {
             if (condition === 'time_stamp') { return; }
-            columnName = Ext.Array.findBy(Table.allColumns, function (item) { return item.value === condition.column; } ).text;
+            columnName = Ext.Array.findBy(Table.allColumns, function (item) { return item.dataIndex === condition.column; } ).text;
             operatorSymbol = Ext.Array.findBy(Globals.operators, function (item) { return item.value === condition.operator; } ).symbol;
 
             switch (condition.column) {

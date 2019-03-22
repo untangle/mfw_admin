@@ -359,35 +359,33 @@ Ext.define('Mfw.Table', {
     constructor: function() {
         // hardcode some more common columns used for conditions
         var me = this,
-            allColumns = [
-            { text: 'Host Name', value: 'hostname' },
-            { text: 'User Name', value: 'username' },
-            { text: 'IP Protocol', value: 'ip_protocol' },
-            { text: 'Client Interface', value: 'client_interface_id' },
-            { text: 'Server Interface', value: 'server_interface_id' },
-            { text: 'Client Port', value: 'client_port' },
-            { text: 'Server Port', value: 'server_port' },
-            { text: 'Client Address', value: 'client_address' },
-            { text: 'Server Address', value: 'server_address' },
-        ];
+            allColumns = [];
+        //     allColumns = [
+        //     { text: 'Host Name', value: 'hostname' },
+        //     { text: 'User Name', value: 'username' },
+        //     { text: 'IP Protocol', value: 'ip_protocol' },
+        //     { text: 'Client Interface', value: 'client_interface_id' },
+        //     { text: 'Server Interface', value: 'server_interface_id' },
+        //     { text: 'Client Port', value: 'client_port' },
+        //     { text: 'Server Port', value: 'server_port' },
+        //     { text: 'Client Address', value: 'client_address' },
+        //     { text: 'Server Address', value: 'server_address' },
+        // ];
 
         Ext.Array.each(me.names, function (name) {
             Ext.Array.each(me[name].columns, function (column) {
                 if (!Ext.Array.findBy(allColumns, function (c) {
-                    return c.value === column.dataIndex;
+                    return c.dataIndex === column.dataIndex;
                 })) {
-                    allColumns.push({
-                        text: column.text,
-                        value: column.dataIndex
-                    });
+                    allColumns.push(column);
                 }
             });
         });
 
-
+        console.log(allColumns);
         this.initConfig({
             allColumns: allColumns,
-            allColumnsMap: Ext.Array.toValueMap(allColumns, 'value')
+            allColumnsMap: Ext.Array.toValueMap(allColumns, 'dataIndex')
         });
     }
 
