@@ -18,6 +18,8 @@ Ext.define('Mfw.reports.Events', {
     items: [{
         xtype: 'grid',
         reference: 'list',
+        deferEmptyText: false,
+        emptyText: 'No Data!',
         // plugins: {
         //     gridfilters: true
         // },
@@ -104,6 +106,7 @@ Ext.define('Mfw.reports.Events', {
             viewModel.set('data', []);
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
+                console.log(data);
                 view.unmask();
                 if (data === 'error') { return; }
                 view.down('grid').getStore().loadData(data);

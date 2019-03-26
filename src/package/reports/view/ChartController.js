@@ -56,6 +56,10 @@ Ext.define('Mfw.reports.ChartController', {
                     // }
                 }
             },
+            lang: {
+                noData: 'No Data!',
+                loading: ''
+            },
             exporting: {
                 enabled: false,
                 buttons: {
@@ -103,12 +107,9 @@ Ext.define('Mfw.reports.ChartController', {
             },
 
             noData: {
-                position: {
-                    y: -20
-                },
                 style: {
                     fontSize: '16px',
-                    fontWeight: 'normal',
+                    fontWeight: '100',
                     color: '#555',
                     textAlign: 'center'
                 }
@@ -243,8 +244,11 @@ Ext.define('Mfw.reports.ChartController', {
 
         view.mask({xtype: 'loadmask'});
         chart.zoomOut();
+        chart.showLoading();
         ReportsUtil.fetchReportData(record, function (data) {
+            chart.hideLoading();
             view.unmask();
+
             if (!Ext.isArray(data)) { return; }
             // remove first and last data items as they are empty
             if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {

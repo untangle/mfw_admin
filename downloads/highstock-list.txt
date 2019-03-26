@@ -7,3 +7,4 @@ highcharts-3d.js
 highcharts-more.js
 highstock.js
 modules/exporting.js
+modules/no-data-to-display.js
