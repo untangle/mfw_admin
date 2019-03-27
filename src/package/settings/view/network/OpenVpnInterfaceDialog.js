@@ -34,7 +34,8 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
             xtype: 'containerfield',
             defaults: {
                 // margin: '0 8',
-                labelAlign: 'top'
+                labelAlign: 'top',
+                clearable: false
             },
             items: [{
                 xtype: 'selectfield',
@@ -92,6 +93,45 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 bind: {
                     checked: '{interface.wan ? true : false}',
                     disabled: '{interface.wan}'
+                }
+            }]
+        }, {
+            xtype: 'containerfield',
+            layout: 'hbox',
+            defaults: {
+                labelAlign: 'top',
+                clearable: false,
+                autoComplete: false
+            },
+            items: [{
+                xtype: 'checkbox',
+                label: '&nbsp;',
+                margin: '0 0 0 16',
+                boxLabel: 'Requires authentication',
+                bodyAlign: 'start',
+                bind: {
+                    checked: '{interface.openvpnUsernamePasswordEnabled}'
+                }
+            }, {
+                xtype: 'textfield',
+                label: 'OpenVPN Username',
+                margin: '0 16',
+                width: 200,
+                bind: {
+                    value: '{interface.openvpnUsername}',
+                    required: '{interface.openvpnUsernamePasswordEnabled}',
+                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                }
+            }, {
+                xtype: 'textfield',
+                label: 'OpenVPN Password/Base64',
+                flex: 1,
+                bind: {
+                    value: '{interface.openvpnPasswordBase64}',
+                    required: '{interface.openvpnUsernamePasswordEnabled}',
+                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
                 }
             }]
         }, {

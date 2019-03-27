@@ -11,7 +11,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string', allowNull: true },
         { name: 'wan',         type: 'boolean', allowNull: true },
-        { name: 'wanWeight',   type: 'integer', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
@@ -48,6 +47,8 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v6StaticGateway', type: 'string', allowNull: true },
         { name: 'v6StaticDNS1',    type: 'string', allowNull: true },
         { name: 'v6StaticDNS2',    type: 'string', allowNull: true },
+        { name: 'v6DhcpDNS1Override', type: 'string', allowNull: true },
+        { name: 'v6DhcpDNS2Override', type: 'string', allowNull: true },
 
         // IPv6 Assign
         { name: 'v6AssignHint',   type: 'string', allowNull: true },
@@ -82,7 +83,18 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessEncryption', type: 'string', allowNull: true }, // ["NONE", "WPA1", "WPA12", "WPA2"]
         { name: 'wirelessMode', type: 'string', allowNull: true }, // ["AP", "CLIENT"]
         { name: 'wirelessPassword', type: 'string', allowNull: true },
-        { name: 'wirelessChannel', type: 'integer', allowNull: true }
+        { name: 'wirelessChannel', type: 'integer', allowNull: true },
+
+        // OpenVPN
+        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
+        { name: 'openvpnUsername',                type: 'string',  allowNull: true },
+        { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
+
+        // wireguard
+        { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
+        { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
+        { name: 'wireguardPort',       type: 'integer', allowNull: true }
+
     ],
 
     proxy: {

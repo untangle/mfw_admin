@@ -107,7 +107,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v4PPPoEUsePeerDNS',   type: 'boolean', allowNull: true },
         { name: 'v4PPPoEOverrideDNS1', type: 'string', allowNull: true },
         { name: 'v4PPPoEOverrideDNS2', type: 'string', allowNull: true },
-        { name: 'v4DhcpDNS2Override',  type: 'string', allowNull: true },
 
         // hasMany v4Aliases
 
@@ -158,12 +157,15 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessPassword',   type: 'string', allowNull: true },
         { name: 'wirelessChannel',    type: 'integer', allowNull: true },
 
-        // OPENVPN
+        // OpenVPN
+        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
+        { name: 'openvpnUsername',                type: 'string',  allowNull: true },
+        { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
 
         // wireguard
         { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
         { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
-        { name: 'wireguardPort',       type: 'integer', allowNull: true },
+        { name: 'wireguardPort',       type: 'integer', allowNull: true }
 
         // hasMany wireguardPeers
 
