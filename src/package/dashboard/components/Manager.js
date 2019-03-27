@@ -22,17 +22,19 @@ Ext.define('Mfw.dashboard.Manager', {
                     text: 'General'.t(),
                     iconCls: 'md-icon-add',
                     menu: {
+                        defaults: {
+                            handler: 'addGeneralWidget'
+                        },
                         items: [
-                            { text: 'Information'.t() },
+                            { text: 'Server Info'.t() },
                             { text: 'Resources'.t() },
                             { text: 'CPU Load'.t() },
-                            { text: 'Network Information'.t() },
+                            { text: 'Network Info'.t() },
                             { text: 'Network Layout'.t() },
                             { text: 'Map Distribution'.t() },
                             { text: 'Notifications'.t() }
                         ]
                     }
-                    // handler: 'showSettings'
                 }, '-', '-', {
                     text: 'Import'.t(),
                     iconCls: 'x-fa fa-download'
@@ -188,15 +190,18 @@ Ext.define('Mfw.dashboard.Manager', {
             widgetsContainer.removeAll();
 
             store.each(function (widget) {
-                record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
+                console.log(widget.get('isReport'));
+                if (widget.get('isReport')) {
+                    record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
 
-                if (!record) {
-                    console.warn('There is no report matching "' + widget.get('name') + '"');
-                    return;
+                    if (!record) {
+                        console.warn('There is no report matching "' + widget.get('name') + '"');
+                        return;
+                    }
                 }
 
                 widgetsCmp.push({
-                    xtype: 'widget-report',
+                    xtype: widget.get('isReport') ? 'widget-report' : ('widget-' + widget.get('_identifier')),
                     itemId: 'widget_' + widget.get('_identifier'),
                     viewModel: {
                         data: {
@@ -240,7 +245,7 @@ Ext.define('Mfw.dashboard.Manager', {
                     text: record.get('name'),
                     iconCls: 'x-fa ' + icon,
                     identifier: record.get('_identifier'),
-                    handler: 'addWidget'
+                    handler: 'addReportWidget'
                 });
             });
 
@@ -257,7 +262,7 @@ Ext.define('Mfw.dashboard.Manager', {
         },
 
 
-        addWidget: function (menuItem) {
+        addReportWidget: function (menuItem) {
             if (Ext.getStore('widgets').findRecord('name', menuItem.getText(), 0, false, true, true)) {
                 Ext.Msg.alert('Info', 'Widget already in Dashboard!', Ext.emptyFn);
                 return;
@@ -267,7 +272,23 @@ Ext.define('Mfw.dashboard.Manager', {
 
             Ext.getStore('widgets').add({
                 name: menuItem.getText(),
-                interval: 30 // default interval 30s
+                interval: 30, // default interval 30s
+                isReport: true
+            });
+        },
+
+        addGeneralWidget: function (menuItem) {
+            if (Ext.getStore('widgets').findRecord('name', menuItem.getText(), 0, false, true, true)) {
+                Ext.Msg.alert('Info', 'Widget already in Dashboard!', Ext.emptyFn);
+                return;
+            }
+
+            menuItem.up('menu').hide();
+
+            Ext.getStore('widgets').add({
+                name: menuItem.getText(),
+                interval: 30, // default interval 30s
+                isReport: false
             });
         },
 
@@ -276,23 +297,35 @@ Ext.define('Mfw.dashboard.Manager', {
                 widget = widgets[0],
                 widgetsContainer = me.getView().up('dashboard').down('#widgets');
 
-            record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
+            if (widget.get('isReport')) {
+                record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
 
-            if (!record) {
-                console.warn('There is no report matching "' + widget.get('name') + '"');
-                return;
-            }
-
-            widgetsContainer.insert(index, {
-                xtype: 'widget-report',
-                itemId: 'widget_' + widget.get('_identifier'),
-                viewModel: {
-                    data: {
-                        widget: widget,
-                        record: record
-                    }
+                if (!record) {
+                    console.warn('There is no report matching "' + widget.get('name') + '"');
+                    return;
                 }
-            });
+
+                widgetsContainer.insert(index, {
+                    xtype: 'widget-report',
+                    itemId: 'widget_' + widget.get('_identifier'),
+                    viewModel: {
+                        data: {
+                            widget: widget,
+                            record: record
+                        }
+                    }
+                });
+            } else {
+                widgetsContainer.insert(index, {
+                    xtype: 'widget-' + widget.get('_identifier'),
+                    itemId: 'widget_' + widget.get('_identifier'),
+                    viewModel: {
+                        data: {
+                            widget: widget
+                        }
+                    }
+                });
+            }
         },
 
         removeWidget: function (grid, info) {

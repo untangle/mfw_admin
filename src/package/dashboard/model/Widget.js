@@ -6,6 +6,8 @@ Ext.define('Mfw.model.Widget', {
     identifier: 'uuid',
     fields: [
         { name: 'name', type: 'string' },
+        { name: 'interval', type: 'number' },
+        { name: 'isReport', type: 'boolean', defaultValue: true },
         {
             name: '_identifier',
             calculate: function (data) {
