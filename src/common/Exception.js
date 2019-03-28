@@ -9,7 +9,13 @@ Ext.define('Mfw.Exception', {
 
         if (error.responseJson) {
             // store sync, model save
-            exceptionText = error.responseJson.output.match(/Exception: (.*?)\n/g)[0];
+            exceptionText = error.responseJson.output.match(/Exception: (.*?)\n/g);
+
+            if (Ext.isArray(exceptionText)) {
+                exceptionText = exceptionText[0];
+            } else {
+                exceptionText = error.responseJson.error;
+            }
             exceptionText = exceptionText.replace('Exception: ', '');
             fullStack = error.responseJson.output.replace(/\n/g, '</br>');
         } else {

@@ -116,7 +116,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 xtype: 'textfield',
                 label: 'OpenVPN Username',
                 margin: '0 16',
-                width: 200,
+                flex: 1,
                 bind: {
                     value: '{interface.openvpnUsername}',
                     required: '{interface.openvpnUsernamePasswordEnabled}',
@@ -125,10 +125,23 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 }
             }, {
                 xtype: 'textfield',
-                label: 'OpenVPN Password/Base64',
+                label: 'OpenVPN Password',
+                itemId: 'password',
                 flex: 1,
                 bind: {
-                    value: '{interface.openvpnPasswordBase64}',
+                    // value: '{interface.openvpnPasswordBase64}',
+                    required: '{interface.openvpnUsernamePasswordEnabled}',
+                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                }
+            }, {
+                xtype: 'textfield',
+                label: 'Confirm Password',
+                itemId: 'confirmPassword',
+                margin: '0 16',
+                flex: 1,
+                bind: {
+                    // value: '{interface.openvpnPasswordBase64}',
                     required: '{interface.openvpnUsernamePasswordEnabled}',
                     disabled: '{!interface.openvpnUsernamePasswordEnabled}',
                     hidden: '{!interface.openvpnUsernamePasswordEnabled}'
@@ -179,11 +192,25 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
         init: function (view) {
             var vm = view.getViewModel(),
                 intf = view.getInterface(),
+                passwordFld = view.down('#password'),
+                confirmPasswordFld = view.down('#confirmPassword'),
                 content = view.down('#fileContent');
+
+            confirmPasswordFld.setValidators(function (value) {
+                if (value !== passwordFld.getValue()) {
+                    return 'Passwords do not match!';
+                }
+                return true;
+            });
 
             if (intf && intf.getOpenvpnConfFile()) {
                 vm.set('confFileSet', true);
                 content.setValue(atob(intf.getOpenvpnConfFile().get('contents')));
+            }
+            if (intf && intf.get('openvpnUsernamePasswordEnabled')) {
+                passwordFld.setValue(atob(intf.get('openvpnPasswordBase64')));
+                confirmPasswordFld.setValue(atob(intf.get('openvpnPasswordBase64')));
+
             }
 
             vm.set({
@@ -214,7 +241,8 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 vm = me.getViewModel(),
                 interface = vm.get('interface'),
                 interfacesStore = Ext.getStore('interfaces'),
-                form = me.getView().down('formpanel');
+                form = me.getView().down('formpanel'),
+                passwordFld = form.down('#password');
 
             if (!form.validate()) { return; }
 
@@ -228,10 +256,16 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 interface.setOpenvpnConfFile(ovpnConfFile);
             }
 
+            // set base64 password
+            if (interface.get('openvpnUsernamePasswordEnabled')) {
+                interface.set('openvpnPasswordBase64', btoa(passwordFld.getValue()));
+            }
+
             if (vm.get('action') === 'ADD') {
-                interface.set({
-                    interfaceId: interfacesStore.count() + 1
-                });
+                // do not set interfaceId
+                // interface.set({
+                //     interfaceId: interfacesStore.count() + 1
+                // });
                 interfacesStore.add(interface);
             } else {
                 interface.commit();
@@ -249,6 +283,9 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
+                },
+                callback: function () {
+                    me.getView().unmask();
                 }
             });
         }

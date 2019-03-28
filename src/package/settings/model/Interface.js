@@ -69,13 +69,13 @@ Ext.define('Mfw.model.WireguardPeer', {
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
-    idProperty: 'interfaceId',
+    // idProperty: 'interfaceId',
     // identifier: {
     //     type: 'sequential',
     //     seed: 0
     // },
     fields: [
-        { name: 'interfaceId', type: 'integer' },
+        { name: 'interfaceId', type: 'integer', allowNull: true },
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string', allowNull: true },
         { name: 'wan',         type: 'boolean', allowNull: true },
@@ -158,7 +158,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessChannel',    type: 'integer', allowNull: true },
 
         // OpenVPN
-        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
+        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true, defaultValue: false },
         { name: 'openvpnUsername',                type: 'string',  allowNull: true },
         { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
 
