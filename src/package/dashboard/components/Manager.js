@@ -190,7 +190,6 @@ Ext.define('Mfw.dashboard.Manager', {
             widgetsContainer.removeAll();
 
             store.each(function (widget) {
-                console.log(widget.get('isReport'));
                 if (widget.get('isReport')) {
                     record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
 
