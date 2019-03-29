@@ -1,6 +1,7 @@
 .vscode
 downloads/*zip
 downloads/*xz
+downloads/*js
 staging/
 tmp
 mfw

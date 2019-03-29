@@ -62,7 +62,7 @@ APP_SETUP_ALL := src/app/AppBase.js $(shell find $(APP_COMMON_SRC) $(APP_SETUP_S
 # All report entries
 REPORT_ENTRIES = $(shell find reports/ -type f -name '*.json')
 
-## External resources (ExtJS & Highstock)
+## External resources (ExtJS & Highcharts)
 
 # common variables
 DOWNLOADS_DIR := downloads
@@ -82,12 +82,14 @@ EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
 EXTJS_FILES_LIST := $(DOWNLOADS_DIR)/extjs-list.txt
 
-# Highstock
-HIGHSTOCK_VERSION := 6.1.4
-HIGHSTOCK_ARCHIVE := Highstock-$(HIGHSTOCK_VERSION).zip
-HIGHSTOCK_URL := $(RESOURCES_BASE_URL)/$(HIGHSTOCK_ARCHIVE)
-HIGHSTOCK_FILE := $(DOWNLOADS_DIR)/$(HIGHSTOCK_ARCHIVE)
-HIGHSTOCK_FILES_LIST := $(DOWNLOADS_DIR)/highstock-list.txt
+# Highcharts
+HIGHCHARTS_VERSION := 7.0.3
+HIGHCHARTS_ARCHIVE := Highcharts-$(HIGHCHARTS_VERSION).zip
+HIGHCHARTS_URL := $(RESOURCES_BASE_URL)/highcharts/$(HIGHCHARTS_VERSION)/$(HIGHCHARTS_ARCHIVE)
+HIGHCHARTS_FILE := $(DOWNLOADS_DIR)/$(HIGHCHARTS_ARCHIVE)
+HIGHCHARTS_FILES_LIST := $(DOWNLOADS_DIR)/highcharts-list.txt
+HIGHCHARTS_MAP_MODULE_URL := $(RESOURCES_BASE_URL)/highcharts/$(HIGHCHARTS_VERSION)/map.js
+HIGHCHARTS_MAP_DATA_URL := $(RESOURCES_BASE_URL)/highcharts/$(HIGHCHARTS_VERSION)/world.js
 
 # MomentJS
 MOMENT_ARCHIVE := moment.zip
@@ -106,7 +108,7 @@ install: \
 	js-setup \
 	html-setup \
 	extjs-install \
-	highstock-install \
+	highcharts-install \
 	moment-install \
 	icons-install \
 	reports-install
@@ -115,21 +117,41 @@ extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
 	wget -q -O $@ $(EXTJS_URL)
 
-highstock-download: $(HIGHSTOCK_FILE)
-$(HIGHSTOCK_FILE):
-	wget -q -O $@ $(HIGHSTOCK_URL)
+highcharts-download: $(HIGHCHARTS_FILE)
+$(HIGHCHARTS_FILE):
+	wget -q -O $@ $(HIGHCHARTS_URL)
+
+highcharts-map-module-download: $(DOWNLOADS_DIR)/map.js
+$(DOWNLOADS_DIR)/map.js:
+	wget -q -O $@ $(HIGHCHARTS_MAP_MODULE_URL)
+
+highcharts-map-data-download: $(DOWNLOADS_DIR)/world.js
+$(DOWNLOADS_DIR)/world.js:
+	wget -q -O $@ $(HIGHCHARTS_MAP_DATA_URL)
+
 
 moment-download: $(MOMENT_FILE)
 $(MOMENT_FILE):
 	wget -q -O $@ $(MOMENT_URL)
 
-downloads: extjs-download highstock-download moment-download
+downloads: \
+	extjs-download \
+	highcharts-download \
+	highcharts-map-module-download \
+	highcharts-map-data-download \
+	moment-download
 
 extjs-stage: $(EXTJS_FILES_LIST) $(EXTJS_FILE)
 	$(call UNZIP_SUBSET_FUNCTION,$(EXTJS_FILE),$(EXTJS_FILES_LIST),$(STAGING_DIR))
 
-highstock-stage: $(HIGHSTOCK_FILES_LIST) $(HIGHSTOCK_FILE)
-	$(call UNZIP_SUBSET_FUNCTION,$(HIGHSTOCK_FILE),$(HIGHSTOCK_FILES_LIST),$(STAGING_DIR))
+highcharts-stage: $(HIGHCHARTS_FILES_LIST) $(HIGHCHARTS_FILE)
+	$(call UNZIP_SUBSET_FUNCTION,$(HIGHCHARTS_FILE),$(HIGHCHARTS_FILES_LIST),$(STAGING_DIR))
+
+highcharts-map-module-stage: $(DOWNLOADS_DIR)/map.js
+	cp -r $(DOWNLOADS_DIR)/map.js $(STAGING_DIR)/code/modules
+
+highcharts-map-data-stage: $(DOWNLOADS_DIR)/world.js
+	cp -r $(DOWNLOADS_DIR)/world.js $(STAGING_DIR)/code
 
 moment-stage: $(MOMENT_FILE)
 	@unzip -o $(MOMENT_FILE) -d $(STAGING_DIR)/moment
@@ -137,8 +159,8 @@ moment-stage: $(MOMENT_FILE)
 extjs-install: extjs-stage dir
 	cp -r $(STAGING_DIR)/ext-$(EXTJS_FULL_VERSION)/build $(STATIC_DIR)/res/lib/ext
 
-highstock-install: highstock-stage dir
-	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highstock
+highcharts-install: highcharts-stage highcharts-map-module-stage highcharts-map-data-stage dir
+	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highcharts
 
 moment-install: moment-stage dir
 	cp -r $(STAGING_DIR)/moment $(STATIC_DIR)/res/lib/moment
@@ -257,12 +279,12 @@ dev-watch:
 	html-setup \
 	resources \
 	extjs-download \
-	highstock-download \
+	highcharts-download \
 	downloads \
 	extjs-stage \
-	highstock-stage \
+	highcharts-stage \
 	extjs-install \
-	highstock-install \
+	highcharts-install \
 	moment-install \
 	dev-deploy \
 	dev-install \
