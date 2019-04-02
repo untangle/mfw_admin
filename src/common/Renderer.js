@@ -209,6 +209,28 @@ Ext.define('Mfw.Renderer', {
         } else {
             return value;
         }
+    },
+
+    uptime: function (value) {
+        var numyears = Math.floor(value / 31536000),
+            numdays = Math.floor((value % 31536000) / 86400),
+            numhours = Math.floor(((value % 31536000) % 86400) / 3600),
+            numminutes = Math.floor((((value % 31536000) % 86400) % 3600) / 60),
+            uptime = '';
+
+        if (numyears > 0) {
+            uptime += numyears + 'y ';
+        }
+        if (numdays > 0) {
+            uptime += numdays + 'd ';
+        }
+        if (numhours > 0) {
+            uptime += numhours + 'h ';
+        }
+        if (numminutes > 0) {
+            uptime += numminutes + 'm';
+        }
+        return uptime;
     }
 
 });

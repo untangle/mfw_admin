@@ -876,3 +876,20 @@ hr {
     background: #EEE;
     background-image: linear-gradient(to right, #EEE, green, #EEE);
 }
+
+
+
+.info-widget {
+    table {
+        font-size: 14px;
+        td {
+            vertical-align: top;
+            padding: 2px 0;
+        }
+        td:first-child {
+            padding: 2px 8px 2px 16px;
+            font-weight: bold;
+            text-align: right;
+        }
+    }
+}

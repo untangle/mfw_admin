@@ -53,6 +53,11 @@ Ext.define('Mfw.dashboard.WidgetsPipe', {
                     me.processing = false;
                     if (me.queue.length > 0) { me.process(); }
                 });
+            } else {
+                // should be removed later
+                Ext.Array.removeAt(me.queue, 0);
+                me.processing = false;
+                if (me.queue.length > 0) { me.process(); }
             }
         }
     }
