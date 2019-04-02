@@ -4,5 +4,17 @@
     "description": "All processed sessions",
     "displayOrder": 1000,
     "type": "EVENTS",
-    "table": "sessions"
+    "table": "sessions",
+    "rendering": {
+        "defaultColumns": ["time_stamp",
+                           "ip_protocol",
+                           "client_interface_id",
+                           "server_interface_id",
+                           "client_address",
+                           "server_address",
+                           "client_port",
+                           "server_port",
+                           "application_name",
+                           "application_protochain"]
+    }
 }
