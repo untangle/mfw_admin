@@ -893,3 +893,19 @@ hr {
         }
     }
 }
+
+.cpu-widget {
+    color: var(--base-color);
+    text-align: center;
+    p {
+        // margin: 10px;
+        font-size: 54px;
+        span {
+            font-size: 12px;
+            color: #999;
+        }
+    }
+    &.oldval {
+        color: #999;
+    }
+}

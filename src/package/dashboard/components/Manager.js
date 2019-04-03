@@ -27,7 +27,6 @@ Ext.define('Mfw.dashboard.Manager', {
                         },
                         items: [
                             { text: 'Server Info'.t() },
-                            { text: 'Resources'.t() },
                             { text: 'CPU Load'.t() },
                             { text: 'Network Info'.t() },
                             { text: 'Network Layout'.t() },

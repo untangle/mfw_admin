@@ -100,8 +100,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         },
 
         loadData: function (cb) {
-            var me = this, info, system, hardware, html = '',
-                vm = me.getViewModel();
+            var me = this, info, system, hardware, html = '';
             me.getView().mask({xtype: 'loadmask'});
             Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware], me)
                 .then(function (result) {
@@ -113,7 +112,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            '<tr><td>Timezone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
-                           '<tr><td>Up Time: </td><td>' + Renderer.uptime(system.uptime.total) + ' (idle: ' + Renderer.uptime(system.uptime.idle) + ')</td></tr>' +
+                           '<tr><td>Up Time: </td><td>' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M (' + parseInt(system.meminfo.mem_free/1000, 10) + 'M free)</td></tr>' +
                            '</table>';

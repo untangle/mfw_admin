@@ -14,6 +14,11 @@ Ext.define('Mfw.Renderer', {
         return '<span style="color: #999;">' + m.format('DD.MM.YY') + '</span> &nbsp;' + m.format('hh:mm:ss A');
     },
 
+    time: function (value) {
+        var m = moment(value).tz(Mfw.app.tz.displayName);
+        return '<span style="color: #999;">' + m.format('hh:mm:ss A') + '</span>';
+    },
+
     ipProtocol: function (value) {
         var protocol = Globals.protocolsMap[value];
         if (protocol) {
