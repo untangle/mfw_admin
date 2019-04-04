@@ -29,7 +29,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         }, {
             iconCls: 'md-icon-refresh',
             ui: 'round',
-            handler: 'loadData'
+            handler: 'reload'
         }]
     }, {
         xtype: 'container',
@@ -124,6 +124,11 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 .always(function () {
                     me.getView().unmask();
                 });
+        },
+
+        reload: function () {
+            var me = this, widget = me.getView();
+            WidgetsPipe.addFirst(widget);
         }
     }
 });

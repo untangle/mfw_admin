@@ -285,7 +285,7 @@ Ext.define('Mfw.dashboard.Manager', {
 
             Ext.getStore('widgets').add({
                 name: menuItem.getText(),
-                interval: 30, // default interval 30s
+                interval: 0, // default interval 30s
                 isReport: false
             });
         },

@@ -18,7 +18,7 @@ Ext.define('Mfw.dashboard.widget.CpuLoad', {
     margin: 8,
     cls: 'mfw-widget',
     layout: 'vbox',
-    // minWidth: 400,
+    maxWidth: 320,
 
     items: [{
         xtype: 'toolbar',
