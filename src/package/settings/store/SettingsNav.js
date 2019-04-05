@@ -52,7 +52,8 @@ Ext.define('Mfw.store.Nav', {
             children: [
                 { text: 'Settings'.t(), leaf: true, href: 'settings/system/settings' },
                 { text: 'Accounts'.t(), leaf: true, href: 'settings/system/accounts' },
-                { text: 'Upgrade'.t(), leaf: true, href: 'settings/system/upgrade' }
+                { text: 'Upgrade'.t(), leaf: true, href: 'settings/system/upgrade' },
+                { text: 'About'.t(), leaf: true, href: 'settings/system/about' }
             ]
         }]
     }
