@@ -99,22 +99,41 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             return deferred.promise;
         },
 
+        getBuild: function () {
+            var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+
+            Ext.Ajax.request({
+                url: '/api/status/build',
+                success: function (response) {
+                    var build = Ext.decode(response.responseText);
+                    deferred.resolve(build);
+                },
+                failure: function () {
+                    deferred.reject('Unable to get build!');
+                }
+            });
+            return deferred.promise;
+        },
+
         loadData: function (cb) {
-            var me = this, info, system, hardware, html = '';
+            var me = this, info, system, hardware, build, html = '';
             me.getView().mask({xtype: 'loadmask'});
-            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware], me)
+            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild], me)
                 .then(function (result) {
                     info = result[0];
                     system = result[1];
                     hardware = result[2];
+                    build = result[3];
 
                     html = '<table>' +
+                           '<tr><td>Board: </td><td>' + (Globals.boardsMap[hardware.boardName] || hardware.boardName) + '</td></tr>' +
+                           '<tr><td>Build: </td><td>' + build.pretty_name + '</td></tr>' +
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            '<tr><td>Timezone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
                            '<tr><td>Up Time: </td><td>' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
-                           '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M (' + parseInt(system.meminfo.mem_free/1000, 10) + 'M free)</td></tr>' +
+                           '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
                     if (cb) { cb(); }

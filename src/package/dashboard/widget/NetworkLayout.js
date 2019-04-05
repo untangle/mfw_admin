@@ -109,8 +109,6 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
 
                     wans.setStore(wansStore);
                     lans.setStore(lansStore);
-
-                    console.log(interfaces);
                     if (cb) { cb(); }
                 },
                 failure: function () {

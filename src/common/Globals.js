@@ -403,6 +403,10 @@ Ext.define('Mfw.Globals', {
         { text: 'Pacific/Wallis',                 value: 'WFT-12'}
     ],
 
+    boardsMap: {
+        'armada-385-linksys-shelby': 'Linksys WRT1900ACS'
+    },
+
     protocols: [
         { text: 'HOPOPT', value: 0 },
         { text: 'ICMP', value: 1 },
