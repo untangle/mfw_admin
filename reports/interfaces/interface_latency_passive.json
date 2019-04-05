@@ -1,0 +1,23 @@
+{
+    "name": "Interface Average Passive Latency",
+    "category": "Interfaces",
+    "description": "Interface average latency (passively measured) over time",
+    "displayOrder": 22,
+    "type": "CATEGORIES_SERIES",
+    "table": "interface_stats",
+    "units": "ms",
+    "queryCategories": {
+        "groupColumn": "interface_id",
+        "aggregationFunction": "avg",
+        "aggregationValue": "passive_latency_1",
+        "limit": 10
+    },
+    "querySeries": {
+        "timeIntervalSeconds": 60
+    },
+    "rendering": {
+        "type": "spline",
+        "lineWidth": 2,
+        "dataGroupingApproximation": "average"
+    }
+}
