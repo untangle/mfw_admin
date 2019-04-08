@@ -72,7 +72,39 @@ Ext.define('Mfw.settings.Util', {
         { value: '<=', text: 'Less Than or Equal'.t(), sign: ' <= ' }
     ],
 
+    limitRateUnits: [
+        { text: 'Bytes/Second',   value: 'BYTES_PER_SECOND' },
+        { text: 'KBytes/Second',  value: 'KBYTES_PER_SECOND' },
+        { text: 'MBytes/Second',  value: 'MBYTES_PER_SECOND' },
+        { text: 'Packets/Second', value: 'PACKETS_PER_SECOND' },
+        { text: 'Packets/Minute', value: 'PACKETS_PER_MINUTE' },
+        { text: 'Packets/Hour',   value: 'PACKETS_PER_HOUR' },
+        { text: 'Packets/Day',    value: 'PACKETS_PER_DAY' },
+        { text: 'Packets/Week',   value: 'PACKETS_PER_WEEK' }
+    ],
+
     conditions: [{
+        type:'LIMIT_RATE',
+        name: 'Limit Rate'.t(),
+        operators: ['<', '>'],
+        field: {
+            xtype: 'numberfield',
+        },
+        unitField: {
+            xtype: 'selectfield',
+            temId: 'unitField',
+            name: 'unit',
+            label: 'Unit',
+            placeholder: 'Choose rate unit ...',
+            forceSelection: true,
+            editable: false,
+            matchFieldWidth: false,
+            // width: 220,
+            // displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>'
+            // options: this.limitRateUnits
+        }
+    }, {
         type:'IP_PROTOCOL',
         name: 'IP Protocol'.t(),
         operators: ['==', '!='],
@@ -355,9 +387,11 @@ Ext.define('Mfw.settings.Util', {
     },
 
     constructor: function() {
+        this.conditions[0].unitField.options = this.limitRateUnits;
         this.initConfig({
             ruleOperatorsMap: Ext.Array.toValueMap(this.ruleOperators, 'value'),
-            ruleConditionsMap: Ext.Array.toValueMap(this.conditions, 'type')
+            ruleConditionsMap: Ext.Array.toValueMap(this.conditions, 'type'),
+            limitRateUnitsMap: Ext.Array.toValueMap(this.limitRateUnits, 'value')
         });
     }
 });

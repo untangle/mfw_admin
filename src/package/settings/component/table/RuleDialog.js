@@ -15,7 +15,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     bind: {
         title: '{action === "ADD" ? "Create New" : "Edit"} <span style="color: #777;">{ruleType}</span> Rule',
     },
-    width: 900,
+    width: 1000,
     height: 600,
 
     bodyPadding: '0 16',
@@ -147,7 +147,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         xtype: 'selectfield',
                         reference: 'conditionType',
                         name: 'type',
-                        width: 220,
+                        width: 200,
                         label: 'Type'.t(),
                         placeholder: 'Select type ...',
                         // flex: 1,
@@ -176,7 +176,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         required: true,
                         displayTpl: '{sign}',
                         itemTpl: '<tpl>{text} {sign}</tpl>',
-                        value: '==',
+                        // value: '==',
                         hidden: true,
                         bind: {
                             hidden: '{!conditionType.value}'
@@ -204,9 +204,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         show: function (form) {
                             form.getFields('type').focus();
                         },
-                        hide: function (form) {
-                            form.reset(true);
-                        }
+                        // hide: function (form) {
+                        //     form.reset(true);
+                        // }
                     }
                 }, {
                     xtype: 'grid',
@@ -374,24 +374,42 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         onConditionTypeChange: function (combo, newValue) {
             var me = this,
                 form = me.getView().down('#conditionform'),
-                existingField = form.getFields('value', true);
+                existingValueField = form.getFields('value', true),
+                existingUnitField = form.getFields('unit', true);
 
-            if (!newValue) {
-                // if (existingField) {
-                //     form.remove(existingField);
-                // }
-                return;
+            // remove exiting value/unit fields
+            if (existingValueField) {
+                form.remove(existingValueField);
             }
 
-            // if existing field matches combo condition type it's fine
-            if (existingField) {
-                if (existingField.type === newValue) { // keep the field
-                    return;
-                } else { // remove the field
-                    form.remove(existingField);
-                }
+            if (existingUnitField) {
+                form.remove(existingUnitField);
             }
-            me.setValueField(newValue);
+
+
+            if (!newValue) { return; }
+
+            // if (!newValue) {
+            //     // if (existingField) {
+            //     //     form.remove(existingField);
+            //     // }
+            //     return;
+            // }
+
+            // // remove unit field if existing
+            // if (existingUnitField) {
+            //     form.remove(existingUnitField);
+            // }
+
+            // // if existing field matches combo condition type it's fine
+            // if (existingValueField) {
+            //     if (existingValueField.type === newValue) { // keep the field
+            //         return;
+            //     } else { // remove the field
+            //         form.remove(existingValueField);
+            //     }
+            // }
+            me.setFields(newValue);
         },
 
 
@@ -503,20 +521,25 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
 
 
-        setValueField: function (conditionType) {
+        setFields: function (conditionType) {
             /**
              * !!! before setting the record on the form it is needed to
              * add the proper value field to the form based on condition type
              */
             var me = this, condition = Ext.Array.findBy(Util.conditions, function (c) { return c.type === conditionType; }),
                 valueField, ops = [], form = me.getView().down('#conditionform');
-            if (condition && condition.field) {
+
+            if (!condition) {
+                console.warn(conditionType + ' condition not defined!');
+                return;
+            }
+
+            if (condition.field) {
                 // get the condition field
                 valueField = condition.field;
             } else {
                 // use a textfield as fallback
                 valueField = { xtype: 'textfield' };
-                console.warn(conditionType + ' condition definition missing!');
             }
 
             if (condition && condition.operators) {
@@ -534,19 +557,26 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 itemId: 'valueField',
                 name: 'value',
                 label: 'Value',
+                margin: '0 16 0 0',
                 flex: 1,
+                minWidth: 80,
                 clearable: false,
                 autoComplete: false,
-                placeholder: 'Choose value ...'.t(),
+                placeholder: 'Set value ...'.t(),
                 required: true,
-                hidden: true,
-                bind: {
-                    hidden: '{!conditionType.value}'
-                },
+                // hidden: true,
+                // bind: {
+                //     hidden: '{!conditionType.value}'
+                // },
             });
 
             // insert value field into the form as the third field
             form.insert(3, valueField);
+
+            // insert condition field into the form as the fourth field
+            if (condition.unitField) {
+                form.insert(4, condition.unitField);
+            }
         },
 
         addCondition: function () {
@@ -558,7 +588,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             if (!form.validate()) { return; }
             rule.conditions().add(form.getValues());
             form.getFields('type').focus();
-            form.reset(true);
+            form.getFields('type').reset();
+            form.getFields('op').reset();
+            // form.reset(true);
         },
 
         conditionRenderer: function (value, record) {
@@ -580,6 +612,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 valueRender = '<strong>' + Globals.protocolsMap[record.get('value')].text +
                               '</strong> <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
             }
+
+            if (ruleCondition.type === 'LIMIT_RATE') {
+                valueRender = '<strong>' + value + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('unit')].text + '</em>';
+            }
+
             return valueRender;
         },
 

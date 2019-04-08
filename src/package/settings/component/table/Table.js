@@ -199,7 +199,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         align: 'right',
         // hidden: true,
         renderer: function (v) {
-            return ( v === 0 ) ? 'new' : '#' + v;
+            return ( v === 0 ) ? '#?' : '#' + v;
         }
     }, {
         xtype: 'checkcolumn',
