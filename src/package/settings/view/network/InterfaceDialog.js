@@ -185,6 +185,13 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     bind: {
                         hidden: '{interface.type !== "WIFI" || interface.configType === "DISABLED"}'
                     }
+                }, {
+                    text: 'QoS',
+                    value: '#qos',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!interface.wan}'
+                    }
                 }
             ]
         }, {
@@ -1265,7 +1272,50 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                         bind: '{interface.wirelessChannel}'
                     }]
                 }]
-            }]
+            }, {
+                xtype: 'container',
+                itemId: 'qos',
+                layout: 'vbox',
+                padding: '0 16',
+                // flex: 1,
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'qosEnabled',
+                    boxLabel: 'Enable QoS',
+                    bodyAlign: 'start',
+                    bind: {
+                        checked: '{interface.qosEnabled}',
+                    }
+                }, {
+                    xtype: 'numberfield',
+                    name: 'downloadKbps',
+                    label: 'Download Kbps'.t(),
+                    required: false,
+                    hidden: true,
+                    labelAlign: 'top',
+                    width: 200,
+                    clearable: false,
+                    bind: {
+                        value: '{interface.downloadKbps}',
+                        required: '{interface.qosEnabled}',
+                        hidden: '{!interface.qosEnabled}'
+                    }
+                }, {
+                    xtype: 'numberfield',
+                    name: 'uploadKbps',
+                    label: 'Upload Kbps'.t(),
+                    required: false,
+                    hidden: true,
+                    labelAlign: 'top',
+                    width: 200,
+                    clearable: false,
+                    bind: {
+                        value: '{interface.uploadKbps}',
+                        required: '{interface.qosEnabled}',
+                        hidden: '{!interface.qosEnabled}'
+                    }
+                }]
+        }]
         }]
     }, {
         xtype: 'toolbar',
