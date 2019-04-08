@@ -464,12 +464,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 if (!action) { rule.getAction().set('priority', null); }
                 // if (!action) { rule.setAction(Ext.create('Mfw.model.table.Action', { type: value, priority: null })); }
                 actionform.add({
-                    xtype: 'numberfield',
+                    xtype: 'selectfield',
                     itemId: 'actionValue',
                     name: 'priority',
                     label: 'Priority'.t(),
                     bind: '{rule.action.priority}',
-                    required: true
+                    required: true,
+                    options: [
+                        { text: 'Priority 1', value: 1 },
+                        { text: 'Priority 2', value: 2 },
+                        { text: 'Priority 3', value: 3 },
+                        { text: 'Priority 4', value: 4 }
+                    ]
                 });
                 return;
             }
