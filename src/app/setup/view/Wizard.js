@@ -68,6 +68,7 @@ Ext.define('Mfw.setup.Wizard', {
             { xtype: 'step-account' },
             { xtype: 'step-timezone' },
             { xtype: 'step-interfaces' },
+            { xtype: 'step-performance' },
             { xtype: 'step-upgrades' },
             { xtype: 'step-complete' }
         ]
