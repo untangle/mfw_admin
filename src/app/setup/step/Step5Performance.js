@@ -51,18 +51,33 @@ Ext.define('Mfw.setup.step.Performance', {
                 return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b>';
             }
         }, {
-            text: 'Ping',
-            dataIndex: '_ping',
+            xtype: 'checkcolumn',
+            text: 'QoS',
+            width: 50,
+            dataIndex: 'qosEnabled'
+        }, {
+            text: 'Download',
             align: 'right',
-            cell: { encodeHtml: false },
+            width: 120,
+            dataIndex: 'downloadKbps',
+            cell: {
+                encodeHtml: false,
+                tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'start' }]
+            },
             renderer: function (value) {
-                return '<strong>' + (value || '?') + '</strong> ms';
+                return '<strong>' + (value || '?') + '</strong> Kbps';
+            },
+            editor: {
+                xtype: 'numberfield',
+                clearable: false,
+                required: true,
+                maxLength: 6
             }
         }, {
-            text: 'Download Speed',
-            dataIndex: '_download',
+            text: 'Upload',
             align: 'right',
-            width: 150,
+            width: 120,
+            dataIndex: 'uploadKbps',
             cell: {
                 encodeHtml: false,
                 tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'start' }]
@@ -70,19 +85,50 @@ Ext.define('Mfw.setup.step.Performance', {
             editable: true,
             renderer: function (value) {
                 return '<strong>' + (value || '?') + '</strong> Kbps';
+            },
+            editor: {
+                xtype: 'numberfield',
+                clearable: false,
+                required: true,
+                maxLength: 6
             }
         }, {
-            text: 'Upload Speed',
-            dataIndex: '_upload',
-            align: 'right',
-            width: 150,
+            text: 'Performance Test',
+            minWidth: 420,
             cell: {
                 encodeHtml: false,
-                tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'start' }]
+                tools: [{
+                    xtype: 'button',
+                    cls: 'btn-tool',
+                    zone: 'end',
+                    margin: '0 16 0 0',
+                    text: 'Set',
+                    hidden: true,
+                    bind: {
+                        value: '{record.interfaceId}',
+                        hidden: '{!record._ping}',
+                        ui: '{record._ping ? "action" : ""}'
+                    },
+                    handler: 'setValues'
+                }, {
+                    xtype: 'button',
+                    cls: 'btn-tool',
+                    zone: 'end',
+                    text: 'Run',
+                    bind: {
+                        value: '{record.interfaceId}',
+                        ui: '{!record._ping ? "action" : ""}'
+                    },
+                    handler: 'testInterface'
+                }]
             },
-            editable: true,
-            renderer: function (value) {
-                return '<strong>' + (value || '?') + '</strong> Kbps';
+            renderer: function (value, record) {
+                if (record.get('_download') && record.get('_upload') && record.get('_ping')) {
+                    return '<i class="x-fa fa-arrow-down"> ' + record.get('_download') + ' Kbps / ' +
+                           '<i class="x-fa fa-arrow-up"> ' + record.get('_upload') + ' Kbps / ' +
+                           'ping ' + record.get('_ping') + ' ms';
+                }
+                return '<span style="color: #777; font-style: italic;">Not tested yet</span>';
             }
         }]
     }, {
@@ -109,58 +155,121 @@ Ext.define('Mfw.setup.step.Performance', {
     },
 
     controller: {
-        onActivate: function () {
-            var me = this,
-                interfacesStore = Ext.getStore('interfaces');
-
-            if (interfacesStore.loadCount === 0) {
-                Ext.getStore('interfaces').load(function () {
-                    me.testInterfaces();
-                });
-            } else {
-                me.testInterfaces();
+        onActivate: function (view) {
+            if (view.down('grid').getStore().loadCount === 0) {
+                view.down('grid').getStore().load();
             }
         },
 
-        testInterfaces: function () {
-            var me = this, testsArray = [], vm = me.getViewModel();
+        // testInterfaces: function () {
+        //     var me = this, testsArray = [], vm = me.getViewModel();
 
-            Ext.getStore('interfaces').each(function (intf) {
-                testsArray.push(function () {
-                    var deferred = new Ext.Deferred(); // create the Ext.Deferred object
-                    Ext.defer(function () {
-                        intf.set({
-                            _ping: Ext.Number.randomInt(5, 70),
-                            _download: Ext.Number.randomInt(3000, 8000),
-                            _upload: Ext.Number.randomInt(2000, 8000)
-                        });
-                        deferred.resolve(intf.get);
-                    }, 3000, me);
-                    return deferred.promise;
+        //     Ext.getStore('interfaces').each(function (intf) {
+        //         testsArray.push(function () {
+        //             var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+        //             Ext.defer(function () {
+        //                 intf.set({
+        //                     _ping: Ext.Number.randomInt(5, 70),
+        //                     _download: Ext.Number.randomInt(3000, 8000),
+        //                     _upload: Ext.Number.randomInt(2000, 8000)
+        //                 });
+        //                 deferred.resolve(intf.get);
+        //             }, 500, me);
+        //             return deferred.promise;
+        //         });
+        //     });
+
+        //     vm.set('processing', true);
+
+        //     Ext.Deferred.sequence(testsArray, me)
+        //         .then(function (result) {
+        //             // console.log(result);
+        //         }, function (error) {
+        //             console.warn('Unable to test: ', error);
+        //         })
+        //         .always(function () {
+        //             vm.set('processing', false);
+        //             // me.getView().unmask();
+        //         });
+
+        // },
+
+        testInterface: function (btn) {
+            var me = this, interfaceId = btn.getValue(),
+                interface = me.getView().down('grid').getStore().findRecord('interfaceId', interfaceId);
+
+                Ext.Msg.show({
+                    title: '',
+                    message: '<p>Testing performance for <span style="color: #333;">' + interface.get('name') + '</span></p>' +
+                             '<p style="text-align: center; margin: 0;">Please wait ... <br/><br/><i class="fa fa-spinner fa-spin fa-fw"></i></p>',
+                    showAnimation: false,
+                    hideAnimation: false,
+                    buttons: []
                 });
+
+                // test code down here, dummy for now
+                Ext.defer(function () {
+                    var p = Ext.Number.randomInt(5, 70),
+                        d =  Ext.Number.randomInt(3000, 8000),
+                        u = Ext.Number.randomInt(2000, 8000);
+
+                    interface.set({
+                        _ping: p,
+                        _download: d,
+                        _upload: u
+                    });
+                    if (!interface.get('downloadKbps')) {
+                        interface.set('downloadKbps', d);
+                    }
+                    if (!interface.get('uploadKbps')) {
+                        interface.set('uploadKbps', u);
+                    }
+                    Ext.Msg.hide();
+                }, 500, me);
+        },
+
+        setValues: function (btn) {
+            var me = this, interfaceId = btn.getValue(),
+                interface = me.getView().down('grid').getStore().findRecord('interfaceId', interfaceId);
+
+            interface.set({
+                downloadKbps: interface.get('_download'),
+                uploadKbps: interface.get('_upload')
             });
-
-            vm.set('processing', true);
-
-            Ext.Deferred.sequence(testsArray, me)
-                .then(function (result) {
-                    // console.log(result);
-                }, function (error) {
-                    console.warn('Unable to test: ', error);
-                })
-                .always(function () {
-                    vm.set('processing', false);
-                    // me.getView().unmask();
-                });
-
         },
 
         onContinue: function () {
             var me = this,
+                info = [],
                 wzCtrl = me.getView().up('setup-wizard').getController();
 
+            me.getView().down('grid').getStore().each(function (intf) {
+                if (intf.get('qosEnabled')) {
+                    if (!intf.get('downloadKbps') || !intf.get('uploadKbps')) {
+                        info.push('<p style="font-size: 14px;">Interface <strong>' + intf.get('name') + '</strong> requires download/upload limits to be set!</p>');
+                    }
+                }
+            });
+
+            if (info.length > 0) {
+                Ext.Msg.alert('Info', info.join('<br/>'));
+                return;
+            }
+
+            Ext.getStore('interfaces').getDataSource().each(function (record) {
+                record.dirty = true;
+                record.phantom = false;
+            });
+
             me.getViewModel().set('processing', true);
-            wzCtrl.update();
+            Ext.getStore('interfaces').sync({
+                success: function () {
+                    wzCtrl.update();
+                },
+                failure: function () {
+                    console.warn('Unable to save interfaces!');
+                }
+            });
         }
     }
 

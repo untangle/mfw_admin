@@ -136,8 +136,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
-        onActivate: function () {
-            Ext.getStore('interfaces').load();
+        onActivate: function (view) {
+            view.down('grid').getStore().load();
         },
 
         configTypeRenderer: function (value, record) {
@@ -188,7 +188,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
         },
 
         refresh: function () {
-            Ext.getStore('interfaces').load();
+            var me = this;
+            me.getView().down('grid').getStore().load();
         }
     }
 

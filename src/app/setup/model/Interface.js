@@ -113,10 +113,10 @@ Ext.define('Mfw.model.Interface', {
                 associated: true,
                 persist: true
             },
-            // transform: {
-            //     fn: Util.sanitize,
-            //     scope: this
-            // }
+            transform: {
+                fn: Util.sanitize,
+                scope: this
+            }
         }
     }
 });
