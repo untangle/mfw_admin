@@ -1345,6 +1345,11 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 action: intf ? 'EDIT' : 'ADD'
             });
 
+            // switch to first tab when wan is false to prevent view inconsistency
+            vm.bind('{interface.wan}', function (value) {
+                if (!value) { view.down('segmentedbutton').setValue('#ipv4');  }
+            });
+
             if (intf.get('type') === "WIFI") {
                 view.down('segmentedbutton').setValue('#wifi');
             }

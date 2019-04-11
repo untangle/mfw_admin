@@ -321,6 +321,11 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 }),
                 action: intf ? 'EDIT' : 'ADD'
             });
+
+            // switch to first tab when wan is false to prevent view inconsistency
+            vm.bind('{interface.wan}', function (value) {
+                if (!value) { view.down('segmentedbutton').setValue('#conf');  }
+            });
         },
         onFileChange: function (fileField) {
             var me = this,
