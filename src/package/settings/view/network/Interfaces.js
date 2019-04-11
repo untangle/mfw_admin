@@ -44,21 +44,27 @@ Ext.define('Mfw.settings.network.Interfaces', {
         sortable: false,
         menuDisabled: true
     }, {
-        text: 'Name'.t(),
+        text: 'Name / Type / Device',
         dataIndex: 'name',
+        flex: 1,
+        minWidth: 150,
         menuDisabled: true,
         sortable: false,
-        flex: 1
+        cell: { encodeHtml: false },
+        renderer: function (value, record) {
+            return '<b>' + record.get('name') + ' </b> / ' + record.get('type') + ' / ' + record.get('device');
+        }
     }, {
-        text: 'Type'.t(),
+        text: 'WAN'.t(),
+        dataIndex: 'wan',
+        align: 'center',
+        resizable: false,
         menuDisabled: true,
-        dataIndex: 'type',
-        sortable: false
-    }, {
-        text: 'Device'.t(),
-        dataIndex: 'device',
-        menuDisabled: true,
-        sortable: false
+        sortable: false,
+        width: 70,
+        renderer: function (value) {
+            return value ? 'WAN' : '-';
+        }
     }, {
         text: 'Config'.t(),
         dataIndex: 'configType',
@@ -102,5 +108,51 @@ Ext.define('Mfw.settings.network.Interfaces', {
         minWidth: 140,
         sortable: false,
         menuDisabled: true
+    }, {
+        xtype: 'checkcolumn',
+        text: 'QoS',
+        width: 50,
+        dataIndex: 'qosEnabled',
+        resizable: false,
+        menuDisabled: true,
+        sortable: false,
+        cell: {
+            hidden: true,
+            hideMode: 'visibility',
+            bind: {
+                hidden: '{!record.wan}'
+            }
+        }
+
+    }, {
+        text: 'Download',
+        align: 'right',
+        width: 120,
+        dataIndex: 'downloadKbps',
+        resizable: false,
+        menuDisabled: true,
+        sortable: false,
+        cell: {
+            encodeHtml: false,
+        },
+        renderer: function (value, record) {
+            if (!record.get('wan')) { return '-'; }
+            return '<strong>' + (value || '?') + '</strong> Kbps';
+        }
+    }, {
+        text: 'Upload',
+        align: 'right',
+        width: 120,
+        dataIndex: 'uploadKbps',
+        resizable: false,
+        menuDisabled: true,
+        sortable: false,
+        cell: {
+            encodeHtml: false
+        },
+        renderer: function (value, record) {
+            if (!record.get('wan')) { return '-'; }
+            return '<strong>' + (value || '?') + '</strong> Kbps';
+        }
     }]
 });
