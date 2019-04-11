@@ -816,9 +816,21 @@ i {
 .file-upload {
     background-color: #EFEFEF;
     border-radius: 2px;
+    border: 1px #DDD solid;
+    &.x-invalid {
+        border-color: var(--alert-color);
+    }
+    .x-underline-el { display: none; }
     .x-input-el {
         padding: 8px;
+        color: #777;
         font-family: "Courier New", sans-serif;
+    }
+    &.editable {
+        border: 1px #999 solid;
+        .x-input-el {
+            color: #333;
+        }
     }
 }
 

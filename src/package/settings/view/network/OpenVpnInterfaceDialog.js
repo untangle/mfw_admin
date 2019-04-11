@@ -150,27 +150,53 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 layout: 'vbox',
                 itemId: 'conf',
                 items: [{
-                    xtype: 'filefield',
-                    label: 'OpenVPN config file',
-                    margin: '0 0 16 0',
-                    // width: 516,
-                    required: false,
-                    bind: {
-                        required: '{interface.type === "OPENVPN" && !confFileSet}'
+                    xtype: 'containerfield',
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
                     },
-                    listeners: {
-                        change: 'onFileChange'
-                    }
+                    items: [{
+                        xtype: 'filefield',
+                        label: 'OpenVPN config file',
+                        margin: '0 100 16 0',
+                        width: 500,
+                        // required: false,
+                        // bind: {
+                        //     required: '{interface.type === "OPENVPN" && !confFileSet}'
+                        // },
+                        listeners: {
+                            change: 'onFileChange'
+                        }
+                    }, {
+                        xtype: 'component',
+                        flex: 1
+                    }, {
+                        xtype: 'checkbox',
+                        reference: 'inlineEdit',
+                        label: '&nbsp',
+                        boxLabel: 'Inline Edit',
+                        margin: '0 0 8 0',
+                        // hidden: true,
+                        checked: false,
+                        // bind: {
+                        //     hidden: '{!confFileSet}'
+                        // }
+                    }]
                 }, {
                     xtype: 'textareafield',
-                    userCls: 'file-upload',
+                    cls: 'file-upload',
                     itemId: 'fileContent',
                     flex: 1,
                     margin: '0 0 16 0',
                     autoCorrect: false,
                     editable: false,
-                    focusable: true,
-                    value: 'No file selected.'
+                    focusable: false,
+                    placeholder: 'Select a file ...',
+                    required: true,
+                    bind: {
+                        userCls: '{inlineEdit.checked ? "editable" : ""}',
+                        editable: '{inlineEdit.checked}'
+                    }
                 }]
             }, {
                 xtype: 'container',
@@ -336,6 +362,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
             reader.onload = function () {
                 content.setValue(reader.result);
                 me.uploadedFile = btoa(reader.result);
+                me.getViewModel().set('confFileSet', true);
             };
             reader.readAsText(file);
         },
@@ -346,19 +373,20 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 interface = vm.get('interface'),
                 interfacesStore = Ext.getStore('interfaces'),
                 form = me.getView().down('formpanel'),
+                content = form.down('#fileContent'),
                 passwordFld = form.down('#password');
 
             if (!form.validate()) { return; }
 
             me.getView().mask({ xtype: 'loadmask' });
 
-            if (me.uploadedFile) {
-                var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
-                    encoding: 'base64',
-                    contents: me.uploadedFile
-                });
-                interface.setOpenvpnConfFile(ovpnConfFile);
-            }
+            // if (me.uploadedFile) {
+            var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
+                encoding: 'base64',
+                contents: btoa(content.getValue())
+            });
+            interface.setOpenvpnConfFile(ovpnConfFile);
+            // }
 
             // set base64 password
             if (interface.get('openvpnUsernamePasswordEnabled')) {
@@ -366,10 +394,6 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
             }
 
             if (vm.get('action') === 'ADD') {
-                // do not set interfaceId
-                // interface.set({
-                //     interfaceId: interfacesStore.count() + 1
-                // });
                 interfacesStore.add(interface);
             } else {
                 interface.commit();
@@ -382,14 +406,15 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             interfacesStore.sync({
                 success: function () {
-                    me.getView().unmask();
                     me.getView().close();
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
                 },
                 callback: function () {
-                    me.getView().unmask();
+                    if (me.getView()) {
+                        me.getView().unmask();
+                    }
                 }
             });
         }

@@ -218,8 +218,12 @@ i { font-style: normal; }
 .monitor-menu .x-menuitem .x-body-el { color: #EEE; font-weight: 600; height: 44px; }
 .monitor-menu .x-menuitem.x-active .x-body-el { color: #EEE; background: #222; }
 
-.file-upload { background-color: #EFEFEF; border-radius: 2px; }
-.file-upload .x-input-el { padding: 8px; font-family: "Courier New", sans-serif; }
+.file-upload { background-color: #EFEFEF; border-radius: 2px; border: 1px #DDD solid; }
+.file-upload.x-invalid { border-color: var(--alert-color); }
+.file-upload .x-underline-el { display: none; }
+.file-upload .x-input-el { padding: 8px; color: #777; font-family: "Courier New", sans-serif; }
+.file-upload.editable { border: 1px #999 solid; }
+.file-upload.editable .x-input-el { color: #333; }
 
 .x-segmentedbutton.button-tabs .x-button.x-pressed { color: #FFF; }
 .x-segmentedbutton.button-tabs .x-button-segmented.x-pressing, .x-segmentedbutton.button-tabs .x-button-segmented.x-pressed { color: #FFF; }
