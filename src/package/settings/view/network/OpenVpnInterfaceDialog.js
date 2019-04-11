@@ -13,7 +13,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
     },
 
     bind: {
-        title: '{action === "ADD" ? "Create" : "Edit"} OpenVPN Interface',
+        title: '{action === "ADD" ? "Create New" : "Edit"} OpenVPN Interface',
     },
     width: 900,
     height: 600,
@@ -24,23 +24,27 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
     layout: 'fit',
 
-
+    bodyPadding: '0 8',
 
     items: [{
         xtype: 'formpanel',
         padding: 0,
         layout: 'vbox',
+        defaults: {
+            margin: '0 8',
+            labelAlign: 'top'
+        },
         items: [{
             xtype: 'containerfield',
+            margin: 0,
             defaults: {
-                // margin: '0 8',
+                margin: '0 8',
                 labelAlign: 'top',
                 clearable: false
             },
             items: [{
                 xtype: 'selectfield',
                 label: 'Interface Type',
-                margin: '0 16',
                 width: 150,
                 placeholder: 'Select Type ...',
                 disabled: true,
@@ -96,79 +100,174 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 }
             }]
         }, {
-            xtype: 'containerfield',
-            layout: 'hbox',
+            xtype: 'segmentedbutton',
+            userCls: 'button-tabs',
+            margin: '16 8 16 8',
+            allowMultiple: false,
+            reference: 'viewSelection',
+            // hidden: true,
+            // bind: {
+            //     hidden: '{interface.configType !== "ADDRESSED"}'
+            // },
             defaults: {
-                labelAlign: 'top',
-                clearable: false,
-                autoComplete: false
+                ripple: false,
+                hidden: true,
+                bind: {
+                    hidden: '{interface.configType !== "ADDRESSED"}'
+                },
+            },
+            activeItem: 0,
+            items: [
+                { text: 'Config File', value: '#conf', pressed: true },
+                { text: 'Authentication', value: '#auth' },
+                {
+                    text: 'QoS',
+                    value: '#qos',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!interface.wan}'
+                    }
+                }
+            ]
+        }, {
+            xtype: 'panel',
+            itemId: 'cardPanel',
+            layout: {
+                type: 'card',
+                deferRender: false
+            },
+            flex: 1,
+            // hidden: true,
+            bind: {
+                activeItem: '{viewSelection.value}',
+                // hidden: '{interface.configType === "DISABLED" || (interface.configType === "BRIDGED" && interface.type !== "WIFI")}'
+            },
+            defaults: {
+                padding: '0 16',
             },
             items: [{
-                xtype: 'checkbox',
-                label: '&nbsp;',
-                margin: '0 0 0 16',
-                boxLabel: 'Requires authentication',
-                bodyAlign: 'start',
-                bind: {
-                    checked: '{interface.openvpnUsernamePasswordEnabled}'
-                }
+                xtype: 'container',
+                layout: 'vbox',
+                itemId: 'conf',
+                items: [{
+                    xtype: 'filefield',
+                    label: 'OpenVPN config file',
+                    margin: '0 0 16 0',
+                    // width: 516,
+                    required: false,
+                    bind: {
+                        required: '{interface.type === "OPENVPN" && !confFileSet}'
+                    },
+                    listeners: {
+                        change: 'onFileChange'
+                    }
+                }, {
+                    xtype: 'textareafield',
+                    userCls: 'file-upload',
+                    itemId: 'fileContent',
+                    flex: 1,
+                    margin: '0 0 16 0',
+                    autoCorrect: false,
+                    editable: false,
+                    focusable: true,
+                    value: 'No file selected.'
+                }]
             }, {
-                xtype: 'textfield',
-                label: 'OpenVPN Username',
-                margin: '0 16',
-                flex: 1,
-                bind: {
-                    value: '{interface.openvpnUsername}',
-                    required: '{interface.openvpnUsernamePasswordEnabled}',
-                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
-                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
-                }
+                xtype: 'container',
+                layout: 'vbox',
+                itemId: 'auth',
+                items: [{
+                    xtype: 'checkbox',
+                    boxLabel: 'Requires authentication',
+                    bodyAlign: 'start',
+                    bind: {
+                        checked: '{interface.openvpnUsernamePasswordEnabled}'
+                    }
+                }, {
+                    xtype: 'containerfield',
+                    layout: 'hbox',
+                    defaults: {
+                        labelAlign: 'top',
+                        clearable: false,
+                        autoComplete: false
+                    },
+                    items: [{
+                        xtype: 'textfield',
+                        label: 'OpenVPN Username',
+                        flex: 1,
+                        bind: {
+                            value: '{interface.openvpnUsername}',
+                            required: '{interface.openvpnUsernamePasswordEnabled}',
+                            disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                            hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                        }
+                    }, {
+                        xtype: 'textfield',
+                        label: 'OpenVPN Password',
+                        itemId: 'password',
+                        flex: 1,
+                        margin: '0 16',
+                        bind: {
+                            // value: '{interface.openvpnPasswordBase64}',
+                            required: '{interface.openvpnUsernamePasswordEnabled}',
+                            disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                            hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                        }
+                    }, {
+                        xtype: 'textfield',
+                        label: 'Confirm Password',
+                        itemId: 'confirmPassword',
+                        flex: 1,
+                        bind: {
+                            // value: '{interface.openvpnPasswordBase64}',
+                            required: '{interface.openvpnUsernamePasswordEnabled}',
+                            disabled: '{!interface.openvpnUsernamePasswordEnabled}',
+                            hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                        }
+                    }]
+                }]
             }, {
-                xtype: 'textfield',
-                label: 'OpenVPN Password',
-                itemId: 'password',
-                flex: 1,
-                bind: {
-                    // value: '{interface.openvpnPasswordBase64}',
-                    required: '{interface.openvpnUsernamePasswordEnabled}',
-                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
-                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
-                }
-            }, {
-                xtype: 'textfield',
-                label: 'Confirm Password',
-                itemId: 'confirmPassword',
-                margin: '0 16',
-                flex: 1,
-                bind: {
-                    // value: '{interface.openvpnPasswordBase64}',
-                    required: '{interface.openvpnUsernamePasswordEnabled}',
-                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
-                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
-                }
+                xtype: 'container',
+                itemId: 'qos',
+                layout: 'vbox',
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'qosEnabled',
+                    boxLabel: 'Enable QoS',
+                    bodyAlign: 'start',
+                    bind: {
+                        checked: '{interface.qosEnabled}',
+                    }
+                }, {
+                    xtype: 'numberfield',
+                    name: 'downloadKbps',
+                    label: 'Download Kbps'.t(),
+                    required: false,
+                    hidden: true,
+                    labelAlign: 'top',
+                    width: 200,
+                    clearable: false,
+                    bind: {
+                        value: '{interface.downloadKbps}',
+                        required: '{interface.qosEnabled}',
+                        hidden: '{!interface.qosEnabled}'
+                    }
+                }, {
+                    xtype: 'numberfield',
+                    name: 'uploadKbps',
+                    label: 'Upload Kbps'.t(),
+                    required: false,
+                    hidden: true,
+                    labelAlign: 'top',
+                    width: 200,
+                    clearable: false,
+                    bind: {
+                        value: '{interface.uploadKbps}',
+                        required: '{interface.qosEnabled}',
+                        hidden: '{!interface.qosEnabled}'
+                    }
+                }]
             }]
-        }, {
-            xtype: 'filefield',
-            label: 'OpenVPN config file',
-            margin: 16,
-            width: 516,
-            required: false,
-            bind: {
-                required: '{interface.type === "OPENVPN" && !confFileSet}'
-            },
-            listeners: {
-                change: 'onFileChange'
-            }
-        }, {
-            xtype: 'textareafield',
-            userCls: 'file-upload',
-            itemId: 'fileContent',
-            flex: 1,
-            margin: 16,
-            autoCorrect: false,
-            editable: false,
-            focusable: true,
-            value: 'No file selected.'
         }]
     }, {
         xtype: 'toolbar',
