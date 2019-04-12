@@ -599,7 +599,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
 
             if (ruleCondition.type === 'LIMIT_RATE') {
-                valueRender = '<strong>' + c.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[c.get('unit')].text + '</em>';
+                valueRender = '<strong>' + c.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[c.get('rate_unit')].text + '</em>';
             }
 
 

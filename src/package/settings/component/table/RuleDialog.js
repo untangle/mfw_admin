@@ -375,7 +375,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             var me = this,
                 form = me.getView().down('#conditionform'),
                 existingValueField = form.getFields('value', true),
-                existingUnitField = form.getFields('unit', true);
+                existingUnitField = form.getFields('rate_unit', true);
 
             // remove exiting value/unit fields
             if (existingValueField) {
@@ -614,7 +614,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             if (ruleCondition.type === 'LIMIT_RATE') {
-                valueRender = '<strong>' + value + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('unit')].text + '</em>';
+                valueRender = '<strong>' + value + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
             }
 
             return valueRender;

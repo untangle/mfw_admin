@@ -93,8 +93,8 @@ Ext.define('Mfw.settings.Util', {
         unitField: {
             xtype: 'selectfield',
             temId: 'unitField',
-            name: 'unit',
-            label: 'Unit',
+            name: 'rate_unit',
+            label: 'Rate Unit',
             placeholder: 'Choose rate unit ...',
             forceSelection: true,
             editable: false,

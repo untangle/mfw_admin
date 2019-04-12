@@ -7,7 +7,7 @@ Ext.define('Mfw.model.table.Condition', {
     fields: [
         { name: 'type',  type: 'string' },
         { name: 'op',    type: 'string' },
-        { name: 'unit',  type: 'string', defaultValue: null },
+        { name: 'rate_unit',  type: 'string', defaultValue: null },
         { name: 'value', type: 'auto' }
     ],
 
