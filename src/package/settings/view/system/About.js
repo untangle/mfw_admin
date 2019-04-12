@@ -4,13 +4,45 @@ Ext.define('Mfw.settings.system.About', {
 
     title: 'About'.t(),
 
-    layout: 'vbox',
+    layout: 'fit',
 
     items: [{
         xtype: 'container',
         itemId: 'build',
         style: 'font-size: 14px;',
         padding: 16,
+        items: [{
+            xtype: 'toolbar',
+            docked: 'top',
+            items: [{
+                xtype: 'component',
+                html: 'Build'
+            }]
+        }]
+    }, {
+        xtype: 'panel',
+        width: '50%',
+        docked: 'right',
+        resizable: {
+            split: true,
+            edges: 'west'
+        },
+        layout: 'fit',
+        items: [{
+            xtype: 'toolbar',
+            docked: 'top',
+            items: [{
+                xtype: 'component',
+                html: 'SDWAN Packages'
+            }]
+        }, {
+            xtype: 'component',
+            itemId: 'packages',
+            height: '100%',
+            cls: 'x-iframe',
+            padding: '0 0 0 8',
+            html: 'Loading ...'
+        }]
     }],
 
     controller: {
@@ -34,6 +66,7 @@ Ext.define('Mfw.settings.system.About', {
                            '</table>';
                     view.down('#build').setHtml(html);
 
+                    view.down('#packages').setHtml('<iframe src="' + build.lede_device_manufacturer_url + '" width="100%" height="100%" style="border: none;"></iframe>');
                 },
                 failure: function () {
                     console.warn('Unable to get build!');
