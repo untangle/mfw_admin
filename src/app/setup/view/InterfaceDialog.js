@@ -803,9 +803,10 @@ Ext.define('Mfw.setup.InterfaceDialog', {
 
         onSubmit: function () {
             var me = this,
+                dialog = me.getView(),
                 vm = me.getViewModel(),
                 interface = vm.get('interface'),
-                interfacesStore = Ext.getStore('interfaces'),
+                interfacesStore = dialog.ownerCmp.down('grid').getStore(),
                 form = me.getView().down('formpanel');
 
             var invalidFields = [];
@@ -836,6 +837,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                     Ext.toast('Settings saved!');
                 },
                 failure: function () {
+                    interfacesStore.load(); // reload on failure
                     console.warn('Unable to save interfaces!');
                 },
                 callback: function () {

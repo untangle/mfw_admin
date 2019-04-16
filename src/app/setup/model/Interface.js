@@ -100,8 +100,8 @@ Ext.define('Mfw.model.Interface', {
     proxy: {
         type: 'ajax',
         api: {
-            read: window.location.origin + '/api/settings/network/interfaces',
-            update: window.location.origin + '/api/settings/network/interfaces'
+            read: '/api/settings/network/interfaces',
+            update: '/api/settings/network/interfaces'
         },
         reader: {
             type: 'json'
@@ -109,6 +109,7 @@ Ext.define('Mfw.model.Interface', {
         writer: {
             type: 'json',
             writeAllFields: true,
+            allowSingle: false, // wrap single record in array
             allDataOptions: {
                 associated: true,
                 persist: true
