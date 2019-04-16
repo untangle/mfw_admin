@@ -11,7 +11,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         // padding: '0 10',
         margin: '2 16 0 0',
         html: '<a href="#dashboard"><img src="/static/res/untangle-logo-w.png" style="height: 40px;"/></a>',
-        // responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
+        responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
     }, {
         xtype: 'container',
         flex: 1,
@@ -78,20 +78,22 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "settings"}'
             }
         }]
-    }, '->', {
-        xtype: 'component',
-        style: 'color: #91e971; font-size: 12px; font-weight: 400; font-family: "Roboto"',
-        listeners: {
-            painted: function (el) {
-                var location = Mfw.app.tz.displayName;
-                el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
-                setInterval(function () {
-                    el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
-                }, 1000 * 60);
-            }
-        }
+    }, '->',
+    // {
+    //     xtype: 'component',
+    //     style: 'color: #91e971; font-size: 12px; font-weight: 400; font-family: "Roboto"',
+    //     listeners: {
+    //         painted: function (el) {
+    //             var location = Mfw.app.tz.displayName;
+    //             el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
+    //             setInterval(function () {
+    //                 el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
+    //             }, 1000 * 60);
+    //         }
+    //     }
 
-    }, {
+    // },
+    {
         bind: {
             text: '{account.username}'
         },
@@ -116,23 +118,18 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 }
             }]
         }
-    },
-    // {
-    //     iconCls: 'x-fa fa-bars',
-    //     responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
-    //     handler: function () {
-    //         // Mfw.app.mainMenu.show();
-
-    //         var me = this;
-    //         if (!me.menu) {
-    //             me.menu = Ext.Viewport.add({
-    //                 xtype: 'menu-sheet',
-    //                 // ownerCmp: me.getView()
-    //             });
-    //         }
-    //         me.menu.show();
-
-    //     }
-    // }
-    ]
+    }, {
+        iconCls: 'x-fa fa-bars',
+        responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
+        handler: function () {
+            var me = this;
+            if (!me.menu) {
+                me.menu = Ext.Viewport.add({
+                    xtype: 'mfw-menu',
+                    // ownerCmp: me.getView()
+                });
+            }
+            me.menu.show();
+        }
+    }]
 });

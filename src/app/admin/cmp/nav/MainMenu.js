@@ -1,9 +1,12 @@
 Ext.define('Mfw.cmp.nav.MainMenu', {
     extend: 'Ext.Sheet',
-    alias: 'widget.menu-sheet',
+    alias: 'widget.mfw-menu',
+
+    bodyStyle: 'background: #333',
+
+    cls: 'nav',
 
     padding: 10,
-    // width: 200,
     defaults: {
         width: 200,
         xtype: 'button',
@@ -21,33 +24,34 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         margin: 10,
         html: '<img src="' + '/static/res/untangle-logo-w.png" style="height: 30px;"/>'
     }, {
-        text: 'Dashboard'.t(),
-        iconCls: 'x-fa fa-home',
+        text: 'DASHBOARD'.t(),
+        // iconCls: 'x-fa fa-home',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo(''); }
     }, {
-        text: 'Reports'.t(),
-        iconCls: 'x-fa fa-area-chart',
+        text: 'REPORTS'.t(),
+        // iconCls: 'x-fa fa-area-chart',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('reports'); }
     }, {
-        text: 'Settings'.t(),
-        iconCls: 'x-fa fa-cog',
+        text: 'SETTINGS'.t(),
+        // iconCls: 'x-fa fa-cog',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('settings'); }
     }, {
         xtype: 'menuseparator'
     }, {
-        text: 'Sessions'.t(),
-        iconCls: 'icon-monitor sessions'
+        text: 'SESSIONS'.t(),
+        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/sessions'); }
+        // iconCls: 'icon-monitor sessions'
     }, {
-        text: 'Hosts'.t(),
-        iconCls: 'icon-monitor hosts',
-        // handler: function () { Ung.app.redirectTo('#apps'); }
+        text: 'HOSTS'.t(),
+        // iconCls: 'icon-monitor hosts',
+        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/hosts'); }
     }, {
-        text: 'Devices'.t(),
-        iconCls: 'icon-monitor devices',
-        // handler: function () { Ung.app.redirectTo('#apps'); }
+        text: 'DEVICES'.t(),
+        // iconCls: 'icon-monitor devices',
+        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/devices'); }
     }, {
-        text: 'Users'.t(),
-        iconCls: 'icon-monitor users',
-        // handler: function () { Ung.app.redirectTo('#apps'); }
+        text: 'USERS'.t(),
+        // iconCls: 'icon-monitor users',
+        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/users'); }
     }]
 });

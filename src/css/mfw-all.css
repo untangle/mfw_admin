@@ -29,13 +29,13 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-htmlmenu.chain-menu .x-menuitem.selected { background: #EEE; }
 .x-htmlmenu.chain-menu .x-menuitem.selected .x-innerhtml p { border-left: 6px var(--accent-color) solid; }
 
-.x-toolbar.nav { background: #333; }
-.x-toolbar.nav .x-button { min-height: 48px; min-width: 48px; }
-.x-toolbar.nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
-.x-toolbar.nav .x-button .x-text-el { text-transform: none; color: #CCC; }
-.x-toolbar.nav .x-button .x-icon-el, .x-toolbar.nav .x-button .x-arrow-el { color: #FFF; }
-.x-toolbar.nav .x-button.x-pressed .x-icon-el, .x-toolbar.nav .x-button.x-pressed .x-arrow-el, .x-toolbar.nav .x-button.x-pressed .x-text-el, .x-toolbar.nav .x-button.x-pressing .x-icon-el, .x-toolbar.nav .x-button.x-pressing .x-arrow-el, .x-toolbar.nav .x-button.x-pressing .x-text-el { color: #FFF; }
-.x-toolbar.nav .x-button.x-pressed .x-inner-el, .x-toolbar.nav .x-button.x-pressing .x-inner-el { background-color: #222; }
+.nav { background: #333; }
+.nav .x-button { min-height: 48px; min-width: 48px; }
+.nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
+.nav .x-button .x-text-el { text-transform: none; color: #CCC; }
+.nav .x-button .x-icon-el, .nav .x-button .x-arrow-el { color: #FFF; }
+.nav .x-button.x-pressed .x-icon-el, .nav .x-button.x-pressed .x-arrow-el, .nav .x-button.x-pressed .x-text-el, .nav .x-button.x-pressing .x-icon-el, .nav .x-button.x-pressing .x-arrow-el, .nav .x-button.x-pressing .x-text-el { color: #FFF; }
+.nav .x-button.x-pressed .x-inner-el, .nav .x-button.x-pressing .x-inner-el { background-color: #222; }
 
 .x-button .x-icon-el { width: 16px !important; height: 16px !important; }
 .x-button .x-icon-el::before { font-size: 16px !important; }
