@@ -98,6 +98,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 required: true,
                 bind: '{interface.name}',
                 flex: 1,
+                maxLength: 10,
+                validators: [{
+                    type: 'format',
+                    matcher: new RegExp('^[A-za-z0-9]+$'),
+                    message: 'must be alphanumeric, without spaces'
+                }]
             }, {
                 xtype: 'selectfield',
                 name: 'configType',
