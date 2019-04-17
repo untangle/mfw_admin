@@ -81,6 +81,12 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 required: true,
                 bind: '{interface.name}',
                 flex: 1,
+                maxLength: 10,
+                validators: [{
+                    type: 'format',
+                    matcher: new RegExp('^[A-za-z0-9]+$'),
+                    message: 'must be alphanumeric, without spaces'
+                }],
                 listeners: {
                     painted: function (field) {
                         field.focus();
