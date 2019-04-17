@@ -4,7 +4,24 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
     viewModel: {
         data: {
-            confFileSet: false
+            confFileSet: false,
+        },
+        formulas: {
+            boundOptions: function () {
+                var interfaces = [{
+                    text: 'any WAN',
+                    value: 0
+                }];
+                Ext.getStore('interfaces').each(function (intf) {
+                    if (intf.get('type') === 'NIC' && intf.get('wan')) {
+                        interfaces.push({
+                            text: intf.get('name'),
+                            value: intf.get('interfaceId')
+                        });
+                    }
+                });
+                return interfaces;
+            }
         }
     },
 
@@ -42,19 +59,21 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                 labelAlign: 'top',
                 clearable: false
             },
-            items: [{
-                xtype: 'selectfield',
-                label: 'Interface Type',
-                width: 150,
-                placeholder: 'Select Type ...',
-                disabled: true,
-                required: true,
-                bind: '{interface.type}',
-                options: [{
-                    text: 'OpenVPN',
-                    value: 'OPENVPN'
-                }]
-            }, {
+            items: [
+            // {
+            //     xtype: 'selectfield',
+            //     label: 'Interface Type',
+            //     width: 150,
+            //     placeholder: 'Select Type ...',
+            //     disabled: true,
+            //     required: true,
+            //     bind: '{interface.type}',
+            //     options: [{
+            //         text: 'OpenVPN',
+            //         value: 'OPENVPN'
+            //     }]
+            // },
+            {
                 xtype: 'textfield',
                 label: 'Interface Name',
                 placeholder: 'Enter Name ...',
@@ -80,6 +99,18 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                     { text: 'Addressed'.t(), value: 'ADDRESSED' },
                     { text: 'Disabled'.t(),  value: 'DISABLED' }
                 ]
+            }, {
+                xtype: 'selectfield',
+                label: 'Bound to',
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                value: 0,
+                bind: {
+                    value: '{interface.openvpnBoundInterfaceId}',
+                    options: '{boundOptions}'
+                }
             }, {
                 xtype: 'checkbox',
                 label: '&nbsp;',
@@ -343,7 +374,8 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
                     type: 'OPENVPN',
                     configType: 'ADDRESSED',
                     wan: true,
-                    natEgress: true
+                    natEgress: true,
+                    openvpnBoundInterfaceId: 0
                 }),
                 action: intf ? 'EDIT' : 'ADD'
             });
