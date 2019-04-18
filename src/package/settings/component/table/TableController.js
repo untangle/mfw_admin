@@ -49,8 +49,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         grid.getSelectable().deselectAll(); // deselect any rule on load
 
-        grid.mask({xtype: 'loadmask'});
-
         if (!grid.chainsOnly) {
             grid.table.load({
                 success: function (record) {
@@ -72,7 +70,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     me.updateChainsMenu();
                 },
                 callback: function () {
-                    grid.unmask();
                     // if reset API used, revert to default API
                     if (!grid.table.getProxy().getApi().update) {
                         grid.table.getProxy().setApi(grid.getApi());
@@ -89,7 +86,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 });
                 me.selectChain();
                 me.updateChainsMenu();
-                grid.unmask();
+                // grid.unmask();
             });
         }
     },
@@ -138,32 +135,26 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     /**
      * Push all changes to server
      */
-    onSave: function () {
+    onSave: function (cb) {
         var me = this,
             grid = me.getView();
 
         me.beforeSave();
 
-        grid.mask({xtype: 'loadmask'});
+        Sync.progress();
 
         if (grid.chainsOnly) {
             grid.table.chains().sync({
                 success: function () {
-                    Ext.toast('Settings saved!', 3000);
-                    me.onLoad();
-                },
-                callback: function () {
-                    grid.unmask();
+                    if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
+                    Sync.success();
                 }
             });
         } else {
             grid.table.save({
                 success: function () {
-                    Ext.toast('Settings saved!', 3000);
-                    me.onLoad();
-                },
-                callback: function () {
-                    grid.unmask();
+                    if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
+                    Sync.success();
                 }
             });
         }
@@ -655,7 +646,18 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
         }
         return actionStr;
+    },
+
+    checkSaved: function (cb) {
+        var isSaved = true,
+            store = this.getView().getStore(),
+            modified = store.getModifiedRecords(),
+            added = store.getNewRecords(),
+            removed = store.getRemovedRecords();
+
+        if (modified.length > 0 || added.length > 0 || removed.length > 0) {
+            isSaved = false;
+        }
+        cb(isSaved);
     }
-
-
 });

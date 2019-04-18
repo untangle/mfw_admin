@@ -554,11 +554,11 @@ Ext.define('Mfw.settings.network.Dns', {
                 visibleAddLocalServer: false
             });
 
-            me.getView().mask({ xtype: 'loadmask' });
+            Sync.progress();
             dns.save({
-                callback: function () {
-                    me.load();
-                    // me.getView().unmask();
+                success: function (cb) {
+                    if (Ext.isFunction(cb)) { cb(); } else { me.load(); }
+                    Sync.success();
                 }
             });
 

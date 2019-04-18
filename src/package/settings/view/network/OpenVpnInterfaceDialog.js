@@ -416,7 +416,7 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             if (!form.validate()) { return; }
 
-            me.getView().mask({ xtype: 'loadmask' });
+            Sync.progress();
 
             // if (me.uploadedFile) {
             var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
@@ -444,15 +444,11 @@ Ext.define('Mfw.settings.network.OpenVpnInterfaceDialog', {
 
             interfacesStore.sync({
                 success: function () {
+                    Sync.success();
                     me.getView().close();
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
-                },
-                callback: function () {
-                    if (me.getView()) {
-                        me.getView().unmask();
-                    }
                 }
             });
         }

@@ -1420,7 +1420,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 return;
             }
 
-            me.getView().mask({ xtype: 'loadmask' });
+            Sync.progress();
 
             interface.commit();
             interfacesStore.each(function (record) {
@@ -1430,14 +1430,11 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
             interfacesStore.sync({
                 success: function () {
-                    Ext.toast('Settings saved!');
+                    Sync.success();
+                    me.getView().close();
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
-                },
-                callback: function () {
-                    me.getView().unmask();
-                    me.getView().close();
                 }
             });
         }

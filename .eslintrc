@@ -82,6 +82,7 @@
         "Renderer": true,
         "Exception": true,
         "WidgetsPipe": true,
+        "Sync": true,
         "moment": true
     }
 }

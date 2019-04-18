@@ -47,15 +47,46 @@ Ext.define('Mfw.settings.view.MainController', {
         list.setSelection(null);
     },
 
+    // check if saved
+    onItemClick: function (list, info) {
+        var me = this,
+            isSaved = true,
+            currentView = me.getView().down('#currentSettings'),
+            currentViewController;
+
+        if (!currentView) {
+            return;
+        }
+
+        currentViewController = currentView.getController();
+
+        if (currentViewController && Ext.isFunction(currentViewController.checkSaved)) {
+            currentViewController.checkSaved(function (saved) {
+                isSaved = saved;
+            });
+        }
+
+        if (!isSaved) {
+            Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Changes not saved!',
+            'Do you want to save changes before continuing?',
+            function (answer) {
+                if (answer === 'yes') {
+                    currentViewController.onSave(function () {
+                        Mfw.app.redirectTo(info.node.get('href'));
+                    });
+                }
+                if (answer === 'no') {
+                    Mfw.app.redirectTo(info.node.get('href'));
+                }
+            });
+        }
+
+        return isSaved;
+    },
+
     onSelectionChange: function (el, record) {
-        var me = this, view = me.getView();
-
         if (!record || !record.get('href')) { return; }
-
-        // if (view.getType() === 'api') {
         Mfw.app.redirectTo(record.get('href'));
-        // }
-
     },
 
     filterSettings: function (field, value) {

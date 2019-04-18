@@ -63,12 +63,12 @@ Ext.define('Mfw.settings.view.Main', {
                 // autoLoad: true
             },
             listeners: {
+                itemclick: 'onItemClick',
                 selectionchange: 'onSelectionChange'
             }
         }]
     }],
     listeners: {
-        // initialize: 'onInitialize',
         deactivate: 'onDeactivate'
     }
 

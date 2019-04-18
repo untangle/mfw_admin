@@ -242,14 +242,12 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
 
         me.beforeSave();
 
-        grid.mask({xtype: 'loadmask'});
+        Sync.progress();
+
         grid.getStore().sync({
-            success: function () {
-                Ext.toast('Settings saved!');
-                me.onLoad();
-            },
-            callback: function () {
-                grid.unmask();
+            success: function (cb) {
+                if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
+                Sync.success();
             }
         });
     },
@@ -400,6 +398,20 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     });
                 }
             });
+    },
+
+
+    checkSaved: function (cb) {
+        var isSaved = true,
+            store = this.getView().getStore(),
+            modified = store.getModifiedRecords(),
+            added = store.getNewRecords(),
+            removed = store.getRemovedRecords();
+
+        if (modified.length > 0 || added.length > 0 || removed.length > 0) {
+            isSaved = false;
+        }
+        cb(isSaved);
     },
 
     onDestroy: function () {

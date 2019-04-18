@@ -116,20 +116,17 @@ Ext.define('Mfw.settings.system.Settings', {
                 }
             });
 
-            me.getView().mask({xtype: 'loadmask' });
+            Sync.progress();
             Ext.Ajax.request({
                 url: '/api/settings/system',
                 method: 'POST',
                 params: Ext.JSON.encode(system),
                 success: function () {
-                    window.location.href = '/';
-                    Ext.toast('System settings saved!');
+                    Sync.success();
+                    window.location.reload();
                 },
                 failure: function(response) {
                     console.log('server-side failure with status code ' + response.status);
-                },
-                callback: function () {
-                    me.getView().unmask();
                 }
             });
         }

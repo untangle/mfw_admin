@@ -319,10 +319,11 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
             me.getViewModel().set('visibleAdd', false);
 
-            me.getView().mask({ xtype: 'loadmask' });
+            Sync.progress();
             dhcp.save({
-                callback: function () {
-                    me.load();
+                success: function (cb) {
+                    if (Ext.isFunction(cb)) { cb(); } else { me.load(); }
+                    Sync.success();
                 }
             });
 

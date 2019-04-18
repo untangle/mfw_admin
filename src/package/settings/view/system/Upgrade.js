@@ -10,15 +10,6 @@ Ext.define('Mfw.settings.system.Upgrade', {
         }
     },
 
-    // layout: "form",
-    // bind: {
-    //     layout: '{!smallScreen ? "form" : "vbox"}',
-    // },
-
-    // defaults: {
-    //     labelAlign: 'right'
-    // },
-
     items: [{
         xtype: 'formpanel',
         width: 300,
@@ -34,16 +25,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
         }]
     }],
 
-    // buttons: {
-    //     save: {
-    //         text: 'Save'.t(),
-    //         ui: 'action'
-    //     }
-    // },
-
     controller: {
-        init: function (view) {
-        },
         onSubmit: function () {
             var form = this.getView();
             if(form.isValid()){
@@ -57,7 +39,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
                         Ext.Msg.alert('Error', 'The returned an error.' + ' ' + o);
                     }
                 });
-            }            
+            }
         }
     }
 
