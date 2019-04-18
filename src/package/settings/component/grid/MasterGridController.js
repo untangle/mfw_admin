@@ -401,17 +401,16 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
 
-    checkSaved: function (cb) {
-        var isSaved = true,
+    checkModified: function (cb) {
+        var isModified = false,
             store = this.getView().getStore(),
             modified = store.getModifiedRecords(),
             added = store.getNewRecords(),
             removed = store.getRemovedRecords();
-
         if (modified.length > 0 || added.length > 0 || removed.length > 0) {
-            isSaved = false;
+            isModified = true;
         }
-        cb(isSaved);
+        cb(isModified);
     },
 
     onDestroy: function () {

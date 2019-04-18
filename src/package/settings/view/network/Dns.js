@@ -530,7 +530,7 @@ Ext.define('Mfw.settings.network.Dns', {
             form.reset(true);
         },
 
-        onSave: function () {
+        onSave: function (cb) {
             var me = this,
                 dns = me.getViewModel().get('dns');
 
@@ -556,12 +556,28 @@ Ext.define('Mfw.settings.network.Dns', {
 
             Sync.progress();
             dns.save({
-                success: function (cb) {
+                success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.load(); }
                     Sync.success();
                 }
             });
+        },
 
+        checkModified: function (cb) {
+            var me = this, isModified = false,
+                dns = me.getViewModel().get('dns'),
+                entries = dns.staticEntries(),
+                servers = dns.localServers();
+
+            if (entries.getModifiedRecords().length > 0 ||
+                entries.getNewRecords().length > 0 ||
+                entries.getRemovedRecords().length > 0 ||
+                servers.getModifiedRecords().length > 0 ||
+                servers.getNewRecords().length > 0 ||
+                servers.getRemovedRecords().length > 0) {
+                isModified = true;
+            }
+            cb(isModified);
         }
     }
 });

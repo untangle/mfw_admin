@@ -509,7 +509,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             if (vm.get('action') === 'ADD') {
                 dialog.ownerCmp.getStore().add(policy);
             } else {
-                policy.commit();
+                // policy.commit();
             }
 
             dialog.close();

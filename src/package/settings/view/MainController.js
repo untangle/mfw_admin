@@ -50,7 +50,8 @@ Ext.define('Mfw.settings.view.MainController', {
     // check if saved
     onItemClick: function (list, info) {
         var me = this,
-            isSaved = true,
+            isModified = false,
+            win,
             currentView = me.getView().down('#currentSettings'),
             currentViewController;
 
@@ -60,28 +61,47 @@ Ext.define('Mfw.settings.view.MainController', {
 
         currentViewController = currentView.getController();
 
-        if (currentViewController && Ext.isFunction(currentViewController.checkSaved)) {
-            currentViewController.checkSaved(function (saved) {
-                isSaved = saved;
+        if (currentViewController && Ext.isFunction(currentViewController.checkModified)) {
+            currentViewController.checkModified(function (modified) {
+                isModified = modified;
             });
         }
 
-        if (!isSaved) {
-            Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Changes not saved!',
-            'Do you want to save changes before continuing?',
-            function (answer) {
-                if (answer === 'yes') {
-                    currentViewController.onSave(function () {
+        if (isModified) {
+            win = Ext.Msg.show({
+                title: '<span style="font-size: 16px;">' + currentView.getTitle() + ' changes not saved!</span>',
+                width: 350,
+                message: 'Save changes before continue?',
+                showAnimation: false,
+                hideAnimation: false,
+                buttons: [{
+                    text: 'Cancel',
+                    margin: '0 16 0 0',
+                    handler: function () {
+                        win.close();
+                    }
+                }, {
+                    text: 'Discard',
+                    ui: 'alt decline',
+                    margin: '0 16 0 0',
+                    handler: function () {
+                        win.close();
                         Mfw.app.redirectTo(info.node.get('href'));
-                    });
-                }
-                if (answer === 'no') {
-                    Mfw.app.redirectTo(info.node.get('href'));
-                }
+                    }
+                }, {
+                    text: 'Save',
+                    ui: 'action',
+                    handler: function () {
+                        win.close();
+                        currentViewController.onSave(function () {
+                            Mfw.app.redirectTo(info.node.get('href'));
+                        });
+                    }
+                }]
             });
         }
 
-        return isSaved;
+        return !isModified;
     },
 
     onSelectionChange: function (el, record) {

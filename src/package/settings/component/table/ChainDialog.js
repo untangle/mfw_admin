@@ -157,7 +157,7 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
             if (vm.get('action') === 'ADD') {
                 grid.table.chains().add(chain);
             } else {
-                chain.commit();
+                // chain.commit();
             }
 
             me.getView().destroy();

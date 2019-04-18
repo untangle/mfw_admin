@@ -305,7 +305,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
         },
 
 
-        onSave: function () {
+        onSave: function (cb) {
             var me = this,
                 dhcp = me.getViewModel().get('dhcp');
 
@@ -321,12 +321,25 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
             Sync.progress();
             dhcp.save({
-                success: function (cb) {
+                success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.load(); }
                     Sync.success();
                 }
             });
+        },
 
+        checkModified: function (cb) {
+            var me = this, isModified = false,
+                dhcp = me.getViewModel().get('dhcp'),
+                store = dhcp.staticDhcpEntries();
+
+            if (dhcp.isDirty() ||
+                store.getModifiedRecords().length > 0 ||
+                store.getNewRecords().length > 0 ||
+                store.getRemovedRecords().length > 0) {
+                isModified = true;
+            }
+            cb(isModified);
         }
     }
 });

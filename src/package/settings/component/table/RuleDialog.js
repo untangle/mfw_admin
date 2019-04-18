@@ -653,7 +653,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             if (vm.get('action') === 'ADD') {
                 grid.getStore().add(rule);
             } else {
-                rule.commit();
+                // rule.commit();
             }
             me.getView().destroy();
         }
