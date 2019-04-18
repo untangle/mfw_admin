@@ -11,7 +11,7 @@ Ext.define('Ext.override.data.Batch', {
             me.fireEvent('exception', me, operation);
 
             // custom code
-            Exception.show(operation.getError().response);
+            Sync.exception(operation.getError().response);
             // end custom code
 
         }

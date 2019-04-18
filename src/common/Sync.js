@@ -85,14 +85,16 @@ Ext.define('Mfw.Sync', {
                     }
                 }, {
                     xtype: 'button',
+                    reference: 'stackBtn',
                     ui: 'alt decline',
                     text: 'Show full stack',
+                    hidden: true,
+                    publishes: ['hidden'],
                     bind: {
-                        hidden: '{!exception.stack}',
+                        hidden: '{!exception}',
                     },
-                    // hidden
                     handler: function (btn) {
-                        btn.up('actionsheet').down('#fullstack').setHidden(false);
+                        // btn.up('actionsheet').down('#fullstack').setHidden(false);
                         btn.hide();
                     }
                 }, {
@@ -101,6 +103,7 @@ Ext.define('Mfw.Sync', {
                     hidden: true,
                     flex: 1,
                     bind: {
+                        hidden: '{!stackBtn.hidden}',
                         html: '<p style="font-size: 16px; font-weight: bold;">Full stack:</p> <code>{exception.stack}</code>'
                     }
 
@@ -110,7 +113,8 @@ Ext.define('Mfw.Sync', {
             listeners: {
                 hide: function (sheet) {
                     sheet.getViewModel().set({
-                        progress: true,
+                        progress: false,
+                        success: false,
                         exception: false,
                         warning: false
                     });
@@ -170,7 +174,10 @@ Ext.define('Mfw.Sync', {
         };
 
         this.sheet.getViewModel().set({
-            exception: exception
+            progress: false,
+            success: false,
+            exception: exception,
+            warning: false
         });
     },
 

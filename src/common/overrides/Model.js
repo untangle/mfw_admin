@@ -25,7 +25,7 @@ Ext.define('Ext.override.data.Model', {
             }
             else {
                 // custom code
-                Exception.show(operation.getError().response);
+                Sync.exception(operation.getError().response);
                 // end custom code
                 Ext.callback(options.failure, scope, args);
             }
