@@ -5,9 +5,9 @@ Ext.define('Mfw.model.table.Table', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'description', type: 'string' },
-        { name: 'family',      type: 'string' },
-        { name: 'name',        type: 'string' }
+        { name: 'chain_type', type: 'string' },
+        { name: 'family',     type: 'string' },
+        { name: 'name',       type: 'string' }
     ],
 
     hasMany: {
