@@ -42,12 +42,14 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Client Interface',
             dataIndex: 'client_interface_id',
+            minWidth: 150,
             renderer: Renderer.interface,
             cell: { encodeHtml: false },
             operators: ['EQ', 'NE']
         }, {
             text: 'Server Interface',
             dataIndex: 'server_interface_id',
+            minWidth: 150,
             renderer: Renderer.interface,
             cell: { encodeHtml: false },
             operators: ['EQ', 'NE']
@@ -133,7 +135,9 @@ Ext.define('Mfw.Table', {
             }
         }, {
             text: 'Application Protochain',
-            dataIndex: 'application_protochain'
+            dataIndex: 'application_protochain',
+            minWidth: 200,
+            flex: 1
         }, {
             text: 'Application Category',
             dataIndex: 'application_category'

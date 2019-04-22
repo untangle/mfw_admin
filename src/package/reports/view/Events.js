@@ -58,6 +58,9 @@ Ext.define('Mfw.reports.Events', {
 
 
             view.getViewModel().bind('{record}', function (record) {
+                var columns = Table.sessions.columns,
+                    defaultColumns;
+
                 if (!record) {
                     // clear data when deactivating reports
                     viewModel.set('data', []);
@@ -66,7 +69,17 @@ Ext.define('Mfw.reports.Events', {
                 if (record.get('type') !== 'EVENTS') {
                     return;
                 }
-                grid.setColumns(Table.sessions.columns);
+
+                if (record.getRendering()) {
+                    defaultColumns = record.getRendering().get('defaultColumns');
+                    // set default columns
+                    if (defaultColumns) {
+                        Ext.Array.each(columns, function (column) {
+                            column.hidden = !Ext.Array.contains(defaultColumns, column.dataIndex);
+                        });
+                    }
+                }
+                grid.setColumns(columns);
                 // me.loadData();
             });
         },
@@ -106,7 +119,6 @@ Ext.define('Mfw.reports.Events', {
             viewModel.set('data', []);
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
-                console.log(data);
                 view.unmask();
                 if (data === 'error') { return; }
                 view.down('grid').getStore().loadData(data);
