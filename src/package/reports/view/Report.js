@@ -45,11 +45,6 @@ Ext.define('Mfw.reports.Report', {
             bind: {
                 hidden: '{record.type === "EVENTS"}'
             }
-        }, {
-            // iconCls: 'x-fa fa-sliders fa-gray',
-            iconCls: 'md-icon-settings',
-            handler: 'onSettings',
-            tooltip: 'Settings'
         }]
     }, {
         xtype: 'component',
