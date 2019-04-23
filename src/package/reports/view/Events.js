@@ -2,16 +2,7 @@ Ext.define('Mfw.reports.Events', {
     extend: 'Ext.Panel',
     alias: 'widget.events-report',
 
-    viewModel: {
-        // data: {
-        //     data: '{data}'
-        // }
-        // stores: {
-        //     events: {
-        //         data: '{data}'
-        //     }
-        // }
-    },
+    viewModel: {},
 
     layout: 'fit',
 
@@ -36,7 +27,6 @@ Ext.define('Mfw.reports.Events', {
     controller: {
         init: function (view) {
             var me = this,
-                viewModel = me.getViewModel(),
                 grid = view.down('grid');
 
             // if not widget add details panel
@@ -58,21 +48,23 @@ Ext.define('Mfw.reports.Events', {
 
 
             view.getViewModel().bind('{record}', function (record) {
-                var columns = Table.sessions.columns,
-                    defaultColumns;
+                var columns = [], defaultColumns;
 
-                if (!record) {
-                    // clear data when deactivating reports
-                    viewModel.set('data', []);
-                    return;
-                }
-                if (record.get('type') !== 'EVENTS') {
+                grid.getStore().loadData([]);
+
+                if (!record || record.get('type') !== 'EVENTS') {
+                    // clear data
+                    grid.getStore().loadData([]);
                     return;
                 }
 
+                Ext.Array.each(Table.sessions.columns, function (column) {
+                    columns.push(Ext.clone(column)); // !!!! important to clone the value to not modify reference
+                });
+
+                // set the default columns if define din rendering
                 if (record.getRendering()) {
                     defaultColumns = record.getRendering().get('defaultColumns');
-                    // set default columns
                     if (defaultColumns) {
                         Ext.Array.each(columns, function (column) {
                             column.hidden = !Ext.Array.contains(defaultColumns, column.dataIndex);
@@ -80,13 +72,11 @@ Ext.define('Mfw.reports.Events', {
                     }
                 }
                 grid.setColumns(columns);
-                // me.loadData();
             });
         },
 
         loadData: function (cb) {
             var me = this,
-                // grid = me.getView().down('grid'),
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
                 record = viewModel.get('record'),
@@ -94,6 +84,8 @@ Ext.define('Mfw.reports.Events', {
                 userConditions, sinceCondition;
 
             if (!record) { return; }
+
+            view.down('grid').getStore().loadData([]);
 
             // remove existing since condition
             userConditions = record.userConditions();
@@ -116,7 +108,6 @@ Ext.define('Mfw.reports.Events', {
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
-            viewModel.set('data', []);
             view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
                 view.unmask();

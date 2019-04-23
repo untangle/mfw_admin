@@ -17,17 +17,6 @@ Ext.define('Mfw.reports.Text', {
     }],
 
     controller: {
-        init: function (view) {
-            var me = this;
-
-            view.getViewModel().bind('{record}', function (record) {
-                if (!record || record.get('type') !== 'TEXT') {
-                    return;
-                }
-                // me.loadData();
-            });
-        },
-
         loadData: function (cb) {
             var me = this,
                 view = me.getView().up('report') || me.getView().up('widget-report'),

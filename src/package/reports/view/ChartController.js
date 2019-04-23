@@ -179,20 +179,8 @@ Ext.define('Mfw.reports.ChartController', {
     },
 
     init: function (view) {
-        var me = this, record,
-            viewModel = me.getViewModel();
-
+        var me = this;
         view.on('painted', me.onPainted);
-
-        viewModel.bind('{record.rendering}', function (rendering) {
-            record = viewModel.get('record');
-            if (!record) { return; }
-            if (record.get('type') === 'TEXT' ||
-                record.get('type') === 'EVENTS') {
-                    return;
-            }
-            me.update();
-        }, me, { deep: true });
     },
 
     onResize: function (view) {

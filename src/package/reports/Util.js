@@ -153,6 +153,17 @@ Ext.define('Mfw.reports.Util', {
                     url: '/api/reports/get_data/' + queryId,
                     success: function (response) {
                         partialData = Ext.decode(response.responseText);
+
+                        /**
+                         * ! for EVENTS reports limit the data length to max 3000 records
+                         * ! until some real paging will be available
+                         */
+                        if (report.get('type') === 'EVENTS' && data.length >= 2000) {
+                            Ext.Array.push(data, partialData);
+                            cb3();
+                            return;
+                        }
+
                         if (!partialData.error) {
                             Ext.Array.push(data, partialData);
                             getData(queryId, cb3);
@@ -169,7 +180,7 @@ Ext.define('Mfw.reports.Util', {
                 Ext.Ajax.request({
                     url: '/api/reports/close_query/' + queryId,
                     method: 'POST',
-                    success: function (response) {
+                    success: function () {
                         // cb(data);
                     },
                     failure: function () {
