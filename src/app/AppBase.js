@@ -42,55 +42,67 @@ Ext.define('Mfw.AppBase', {
         Ext.Ajax.request({
             url: '/account/status',
             success: function (response1) {
-                if (Mfw.app._app !== 'setup') {
-                    // load interfaces to create names map
-                    Ext.Ajax.request({
-                        url: '/api/settings/network/interfaces',
-                        success: function(response) {
-                            var interfaces = Ext.decode(response.responseText), interfacesMap = {};
-                            Ext.Array.each(interfaces, function (interface) {
-                                interfacesMap[interface.interfaceId] = interface.name;
-                            });
-                            Globals.interfaces = interfaces;
-                            Globals.interfacesMap = interfacesMap;
-                        }
+                var resp = Ext.decode(response1.responseText);
+
+                if (resp.error) {
+                    Mfw.app.viewport.add({
+                        xtype: 'auth',
+                        redirectTo: window.location.href // initial redirectTo
                     });
-
-                    Ext.Ajax.request({
-                        url: '/api/settings/system',
-                        success: function(response2) {
-                            var decoded = Ext.decode(response2.responseText);
-
-                            if (!decoded.setupWizard.completed) {
-                                window.location.href = '/setup';
-                                return;
-                            } else {
-                                Mfw.app.setAccount(Ext.decode(response1.responseText));
-                                Mfw.app.setViews();
-                                Ext.route.Router.resume();
-                            }
-
-                            if (decoded.timeZone) {
-                                Mfw.app.tz = decoded.timeZone;
-                            } else {
-                                Mfw.app.tz = { displayName: 'UTC', value: 'UTC' };
-                            }
-                            Highcharts.setOptions({
-                                time: {
-                                    timezone: Mfw.app.tz.displayName
-                                }
-                            });
-
-                        },
-                        failure: function(response) {
-                            console.log('server-side failure with status code ' + response.status);
-                            Ext.route.Router.resume();
-                            Mfw.app.redirectTo('auth');
-                        }
-                    });
-                } else {
-                    Mfw.app.setViews();
                     Ext.route.Router.resume();
+                    Mfw.app.redirectTo('auth');
+                } else {
+
+                    if (Mfw.app._app !== 'setup') {
+                        // load interfaces to create names map
+                        Ext.Ajax.request({
+                            url: '/api/settings/network/interfaces',
+                            success: function(response) {
+                                var interfaces = Ext.decode(response.responseText), interfacesMap = {};
+                                Ext.Array.each(interfaces, function (interface) {
+                                    interfacesMap[interface.interfaceId] = interface.name;
+                                });
+                                Globals.interfaces = interfaces;
+                                Globals.interfacesMap = interfacesMap;
+                            }
+                        });
+
+                        Ext.Ajax.request({
+                            url: '/api/settings/system',
+                            success: function(response2) {
+                                var decoded = Ext.decode(response2.responseText);
+
+                                if (!decoded.setupWizard.completed) {
+                                    window.location.href = '/setup';
+                                    return;
+                                } else {
+                                    Mfw.app.setAccount(Ext.decode(response1.responseText));
+                                    Mfw.app.setViews();
+                                    Ext.route.Router.resume();
+                                }
+
+                                if (decoded.timeZone) {
+                                    Mfw.app.tz = decoded.timeZone;
+                                } else {
+                                    Mfw.app.tz = { displayName: 'UTC', value: 'UTC' };
+                                }
+                                Highcharts.setOptions({
+                                    time: {
+                                        timezone: Mfw.app.tz.displayName
+                                    }
+                                });
+
+                            },
+                            failure: function(response) {
+                                console.log('server-side failure with status code ' + response.status);
+                                Ext.route.Router.resume();
+                                Mfw.app.redirectTo('auth');
+                            }
+                        });
+                    } else {
+                        Mfw.app.setViews();
+                        Ext.route.Router.resume();
+                    }
                 }
             },
 
