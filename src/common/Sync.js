@@ -179,6 +179,9 @@ Ext.define('Mfw.Sync', {
             exception: exception,
             warning: false
         });
+        if (this.sheet.isHidden()) {
+            this.sheet.show();
+        }
     },
 
     hide: function () {
