@@ -433,7 +433,7 @@ Ext.define('Mfw.reports.ChartController', {
                 },
                 xAxis: {
                     visible: rendering.get('type') === 'column',
-                    categories: categs
+                    // categories: categs
                 },
                 yAxis: {
                     visible: rendering.get('type') === 'column'
