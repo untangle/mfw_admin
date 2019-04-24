@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.firewall.Shaping', {
             read: Util.api + '/settings/firewall/tables/shaping',
             update: Util.api + '/settings/firewall/tables/shaping'
         },
-        actions: ['JUMP','GOTO','ACCEPT','RETURN','DROP','SET_PRIORITY']
+        actions: ['JUMP','GOTO','ACCEPT','RETURN','DROP','SET_PRIORITY'],
+        hash: 'settings/firewall/shaping'
     }
 });

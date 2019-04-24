@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.firewall.Access', {
             read: Util.api + '/settings/firewall/tables/access',
             update: Util.api + '/settings/firewall/tables/access'
         },
-        actions: ['JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP']
+        actions: ['JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP'],
+        hash: 'settings/firewall/access'
     }
 });

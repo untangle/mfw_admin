@@ -10,29 +10,54 @@ Ext.define('Mfw.settings.view.MainController', {
     },
 
     onAction: function (route) {
-        var me = this, view = me.getView(), xtype,
+        var me = this, view = me.getView(),
             cmp = view.down('#currentSettings'),
             tree = view.down('treelist'),
-            node = tree.getStore().findNode('href', 'settings' + route);
+            node = tree.getStore().findNode('href', 'settings'),
+            routeParts, table, chain, widget;
 
         Mfw.app.viewport.setActiveItem('settings');
 
         if (cmp) { cmp.destroy(); }
 
         if (route) {
-            xtype = 'mfw-settings' + route.replace(/\//g, '-');
+            if (Ext.String.startsWith(route, '/firewall')) {
+                routeParts = route.split('/'),
+                table = routeParts[2],
+                chain = routeParts[3],
+                widget = {
+                    xtype: 'mfw-settings-firewall',
+                };
 
-            if (Ext.ClassManager.getByAlias('widget.' + xtype)) {
-                view.add({
-                    xtype: xtype,
-                    itemId: 'currentSettings'
-                });
+                node = tree.getStore().findNode('href', 'settings/firewall');
+                if (table) {
+                    widget.xtype = 'mfw-settings-firewall-' + table;
+                    node = tree.getStore().findNode('href', 'settings/firewall/' + table);
+                    if (chain) {
+                        widget.chain = chain;
+                        node = tree.getStore().findNode('href', 'settings/firewall/' + table + '/' + chain);
+                    }
+                }
+            } else {
+                node = tree.getStore().findNode('href', 'settings' + route);
+                widget = {
+                    xtype: 'mfw-settings' + route.replace(/\//g, '-'),
+                };
+            }
+
+            widget.itemId = 'currentSettings';
+
+            if (Ext.ClassManager.getByAlias('widget.' + widget.xtype)) {
+                view.add(widget);
             } else {
                 console.log('view does not exists');
             }
         }
 
+        // Ext.defer(function () {
         tree.setSelection(node);
+        // }, 100);
+
     },
 
     onDeactivate: function (view) {
@@ -104,9 +129,19 @@ Ext.define('Mfw.settings.view.MainController', {
         return !isModified;
     },
 
-    onSelectionChange: function (el, record) {
-        if (!record || !record.get('href')) { return; }
-        Mfw.app.redirectTo(record.get('href'));
+    onSelectionChange: function (el, node) {
+        var hash = window.location.hash.replace('#', '');
+
+        if (!node || !node.get('href')) { return; }
+
+        if (!node.isLeaf()) {
+            node.expand();
+        }
+
+        if (hash !== node.get('href')) {
+            // console.log(node.get('redirect'));
+            Mfw.app.redirectTo(node.get('href'));
+        }
     },
 
     filterSettings: function (field, value) {

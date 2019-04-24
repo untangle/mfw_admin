@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.firewall.Nat', {
             read: Util.api + '/settings/firewall/tables/nat',
             update: Util.api + '/settings/firewall/tables/nat'
         },
-        actions: ['JUMP','GOTO','ACCEPT','RETURN','SNAT','MASQUERADE']
+        actions: ['JUMP','GOTO','ACCEPT','RETURN','SNAT','MASQUERADE'],
+        hash: 'settings/firewall/nat'
     }
 });

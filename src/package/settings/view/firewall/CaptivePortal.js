@@ -7,6 +7,7 @@ Ext.define('Mfw.settings.firewall.CaptivePortal', {
         api: {
             read: Util.api + '/settings/firewall/tables/captive-portal',
             update: Util.api + '/settings/firewall/tables/captive-portal'
-        }
+        },
+        hash: 'settings/firewall/captive-portal'
     }
 });
