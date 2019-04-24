@@ -54,19 +54,21 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                     text: 'SESSIONS'.t(),
                     iconCls: 'icon-monitor sessions',
                     handler: function (item) { Mfw.app.redirectTo('monitor/sessions'); item.up('menu').hide(); }
-                }, {
-                    text: 'HOSTS'.t(),
-                    iconCls: 'icon-monitor hosts',
-                    handler: function (item) { Mfw.app.redirectTo('monitor/hosts'); item.up('menu').hide(); }
-                }, {
-                    text: 'DEVICES'.t(),
-                    iconCls: 'icon-monitor devices',
-                    handler: function (item) { Mfw.app.redirectTo('monitor/devices'); item.up('menu').hide(); }
-                }, {
-                    text: 'USERS'.t(),
-                    iconCls: 'icon-monitor users',
-                    handler: function (item) { Mfw.app.redirectTo('monitor/users'); item.up('menu').hide(); }
-                }]
+                }
+                // {
+                //     text: 'HOSTS'.t(),
+                //     iconCls: 'icon-monitor hosts',
+                //     handler: function (item) { Mfw.app.redirectTo('monitor/hosts'); item.up('menu').hide(); }
+                // }, {
+                //     text: 'DEVICES'.t(),
+                //     iconCls: 'icon-monitor devices',
+                //     handler: function (item) { Mfw.app.redirectTo('monitor/devices'); item.up('menu').hide(); }
+                // }, {
+                //     text: 'USERS'.t(),
+                //     iconCls: 'icon-monitor users',
+                //     handler: function (item) { Mfw.app.redirectTo('monitor/users'); item.up('menu').hide(); }
+                // }
+                ]
             }
         }, {
             text: 'SETTINGS'.t(),

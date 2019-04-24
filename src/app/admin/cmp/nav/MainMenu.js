@@ -41,17 +41,19 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         text: 'SESSIONS'.t(),
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/sessions'); }
         // iconCls: 'icon-monitor sessions'
-    }, {
-        text: 'HOSTS'.t(),
-        // iconCls: 'icon-monitor hosts',
-        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/hosts'); }
-    }, {
-        text: 'DEVICES'.t(),
-        // iconCls: 'icon-monitor devices',
-        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/devices'); }
-    }, {
-        text: 'USERS'.t(),
-        // iconCls: 'icon-monitor users',
-        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/users'); }
-    }]
+    }
+    // {
+    //     text: 'HOSTS'.t(),
+    //     // iconCls: 'icon-monitor hosts',
+    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/hosts'); }
+    // }, {
+    //     text: 'DEVICES'.t(),
+    //     // iconCls: 'icon-monitor devices',
+    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/devices'); }
+    // }, {
+    //     text: 'USERS'.t(),
+    //     // iconCls: 'icon-monitor users',
+    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/users'); }
+    // }
+    ]
 });
