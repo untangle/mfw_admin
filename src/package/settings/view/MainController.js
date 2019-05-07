@@ -14,6 +14,7 @@ Ext.define('Mfw.settings.view.MainController', {
             cmp = view.down('#currentSettings'),
             tree = view.down('treelist'),
             node = tree.getStore().findNode('href', 'settings'),
+            prefix, // used for chains routing in /firewall or /routing
             routeParts, table, chain, widget;
 
         Mfw.app.viewport.setActiveItem('settings');
@@ -21,21 +22,23 @@ Ext.define('Mfw.settings.view.MainController', {
         if (cmp) { cmp.destroy(); }
 
         if (route) {
-            if (Ext.String.startsWith(route, '/firewall')) {
+            if (Ext.String.startsWith(route, '/firewall') || Ext.String.startsWith(route, '/routing/wan-rules')) {
                 routeParts = route.split('/'),
+                prefix = routeParts[1], // "firewall" or "routing"
                 table = routeParts[2],
                 chain = routeParts[3],
+
                 widget = {
-                    xtype: 'mfw-settings-firewall',
+                    xtype: 'mfw-settings-' + prefix,
                 };
 
-                node = tree.getStore().findNode('href', 'settings/firewall');
+                node = tree.getStore().findNode('href', 'settings/' + prefix);
                 if (table) {
-                    widget.xtype = 'mfw-settings-firewall-' + table;
-                    node = tree.getStore().findNode('href', 'settings/firewall/' + table);
+                    widget.xtype = 'mfw-settings-' + prefix + '-' + table;
+                    node = tree.getStore().findNode('href', 'settings/' + prefix + '/' + table);
                     if (chain) {
                         widget.chain = chain;
-                        node = tree.getStore().findNode('href', 'settings/firewall/' + table + '/' + chain);
+                        node = tree.getStore().findNode('href', 'settings/' + prefix + '/' + table + '/' + chain);
                     }
                 }
             } else {
@@ -54,10 +57,9 @@ Ext.define('Mfw.settings.view.MainController', {
             }
         }
 
-        // Ext.defer(function () {
-        tree.setSelection(node);
-        // }, 100);
-
+        if (node) {
+            tree.setSelection(node);
+        }
     },
 
     onDeactivate: function (view) {
@@ -139,7 +141,6 @@ Ext.define('Mfw.settings.view.MainController', {
         }
 
         if (hash !== node.get('href')) {
-            // console.log(node.get('redirect'));
             Mfw.app.redirectTo(node.get('href'));
         }
     },
