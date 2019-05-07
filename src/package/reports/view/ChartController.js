@@ -328,23 +328,27 @@ Ext.define('Mfw.reports.ChartController', {
                 colors: colors,
                 plotOptions: plotOptions,
                 legend: {
-                    // enabled: !isWidget,
-                    symbolRadius: 0
+                    layout: 'horizontal',
+                    floating: false,
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    itemMarginTop: 0,
+                    itemMarginBottom: 0
                 },
                 tooltip: {
                     formatter: function (tooltip) {
                         if (rendering.get('stacking') !== 'none') {
                             return tooltip.defaultFormatter.call(this, tooltip);
                         }
-                        var items = this.points;
 
-                        // sort the values
-                        if (items) {
-                            items.sort(function(a, b) {
-                                return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
-                            });
-                            items.reverse();
-                        }
+                        // !!! Sorting !!! already made on the backend
+                        // var items = this.points;
+                        // if (items) {
+                        //     items.sort(function(a, b) {
+                        //         return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));
+                        //     });
+                        //     items.reverse();
+                        // }
 
                         return tooltip.defaultFormatter.call(this, tooltip);
                     },
@@ -431,6 +435,17 @@ Ext.define('Mfw.reports.ChartController', {
                         colorByPoint: true
                     }
                 },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    verticalAlign: 'top',
+                    floating: true,
+                    itemMarginTop: 3,
+                    itemMarginBottom: 3,
+                    x: 5,
+                    y: 5,
+                    labelFormatter: function () { return '<strong>' + Renderer.shortenText(this.name) + '</strong>'; }
+                },
                 xAxis: {
                     visible: rendering.get('type') === 'column',
                     // categories: categs
@@ -512,9 +527,9 @@ Ext.define('Mfw.reports.ChartController', {
                     }
                 });
                 newData.push(others);
-                chart.addSeries({ name: record.get('table').split(' ')[0], data: newData }, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table').split(' ')[0], data: newData, showInLegend: !isWidget }, true, { duration: 150 });
             } else {
-                chart.addSeries({ name: record.get('table').split(' ')[0], data: normalizedData }, true, { duration: 150 });
+                chart.addSeries({ name: record.get('table').split(' ')[0], data: normalizedData, showInLegend: !isWidget }, true, { duration: 150 });
             }
         }
         me.update();
