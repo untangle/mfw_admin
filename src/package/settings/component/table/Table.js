@@ -30,7 +30,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     config: {
         api: null,
         // use all available actions unless a subset is specified in each Table
-        actions: ['JUMP', 'GOTO', 'ACCEPT', 'REJECT', 'DROP', 'DNAT', 'SNAT', 'MASQUERADE', 'SET_PRIORITY']
+        actions: ['JUMP', 'GOTO', 'ACCEPT', 'REJECT', 'DROP', 'DNAT', 'SNAT', 'MASQUERADE', 'SET_PRIORITY'],
+        chain: null,
+        hash: ''
     },
 
     actionsMap: {
@@ -75,8 +77,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 text: '{selectedChain.name}'
             },
             menu: {
-                minWidth: 200,
+                minWidth: 250,
                 userCls: 'x-htmlmenu chain-menu',
+                shadow: false
                 // anchor: true,
             }
         }, {

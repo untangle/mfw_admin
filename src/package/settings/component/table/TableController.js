@@ -66,7 +66,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     //     });
                     // });
 
-                    me.selectChain();
+                    me.selectChain(grid.getChain());
                     me.updateChainsMenu();
                 },
                 callback: function () {
@@ -84,7 +84,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                         record.phantom = false;
                     });
                 });
-                me.selectChain();
+                me.selectChain(grid.getChain());
                 me.updateChainsMenu();
                 // grid.unmask();
             });
@@ -175,6 +175,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         // if no name is passed it selects the first chain
         if (!name) {
             me.selectedChain = chains.first();
+            Mfw.app.redirectTo(grid.getHash() + '/' + me.selectedChain.get('name'));
+            return;
         } else {
             me.selectedChain = chains.findRecord('name', name, 0, false, true, true);
         }
@@ -206,7 +208,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     userCls: '{selectedChain.name === "' + chain.get('name') + '" ? "selected" : ""}'
                 },
                 html: tpl,
-                handler: function (item) { item.up('menu').hide(); me.selectChain(chain.get('name')); }
+                handler: function (item) {
+                    item.up('menu').hide();
+                    Mfw.app.redirectTo(grid.getHash() + '/' + chain.get('name'));
+                    // me.selectChain(chain.get('name'));
+                }
             });
         });
         me.getViewModel().set('chainNames', store);
@@ -399,7 +405,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     onDestroy: function () {
-        console.log('destroy');
+        // console.log('destroy');
     },
 
 

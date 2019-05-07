@@ -10,12 +10,35 @@ Ext.define('Mfw.settings.view.Firewall', {
         xtype: 'tree',
         expanderOnly: false,
         singleExpand: true,
+        selectable: false,
+        itemConfig: {
+            viewModel: true, // important
+        },
         columns: [{
             xtype: 'treecolumn',
             text: 'Tables / Chains / Rules',
             dataIndex: 'text',
             cell: { encodeHtml: false },
             width: 500
+        }, {
+            width: 80,
+            align: 'center',
+            cell: {
+                encodeHtml: false,
+                tools: [{
+                    xtype: 'button',
+                    text: 'Edit',
+                    hidden: true,
+                    bind: {
+                        record: '{record}',
+                        hidden: '{!record.href}',
+
+                    },
+                    handler: function (btn) {
+                        Mfw.app.redirectTo(btn.getRecord().get('href'));
+                    }
+                }]
+            }
         }, {
             text: 'Conditions',
             dataIndex: 'conditions',
@@ -54,6 +77,7 @@ Ext.define('Mfw.settings.view.Firewall', {
                     data[table] = {
                         text: '<span style="font-size: 14px; font-weight: bold;">' + table + '</span>',
                         iconCls: 'md-icon-view-list',
+                        href: 'settings/firewall/' + table.replace(/ /g, '-').toLowerCase(),
                         // expanded: true,
                         children: []
                     };
@@ -70,6 +94,7 @@ Ext.define('Mfw.settings.view.Firewall', {
                 });
                 data[table].children.push({
                     text: '<strong>' + chain.get('name') + '</strong> (' + chain.rules().count() + ' rules)',
+                    href: 'settings/firewall/' + table.replace(/ /g, '-').toLowerCase() + '/' + chain.get('name'),
                     iconCls: 'md-icon-link',
                     children: rules
                 });
