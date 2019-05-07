@@ -46,15 +46,11 @@ Ext.define('Mfw.Sync', {
                 items: {
                     xtype: 'component',
                     html: '<i class="fa fa-upload"></i> &nbsp; Sync Settings',
-                    // bind: {
-                    //     html: '{!exception ? "Sync Settings ..." : "Sync Settings: " + exception.statusText + " ("exception.status + ")"}'
-                    // }
-                    // html: status + ' - ' + statusText
+                    bind: {
+                        html: '{sync ? "<i class=\'fa fa-upload\'></i> &nbsp; Sync Settings" : "Exception"}'
+                    }
                 },
                 style: 'background: #519839; color: #FFF; font-weight: 600;'
-                // bind: {
-                //     style: '{toolbarStyle}',
-                // }
             }, {
                 xtype: 'component',
                 style: 'font-size: 14px; color: #555;',
@@ -91,7 +87,7 @@ Ext.define('Mfw.Sync', {
                     hidden: true,
                     publishes: ['hidden'],
                     bind: {
-                        hidden: '{!exception}',
+                        hidden: '{!exception || !exception.stack}'
                     },
                     handler: function (btn) {
                         // btn.up('actionsheet').down('#fullstack').setHidden(false);
@@ -103,7 +99,7 @@ Ext.define('Mfw.Sync', {
                     hidden: true,
                     flex: 1,
                     bind: {
-                        hidden: '{!stackBtn.hidden}',
+                        hidden: '{!stackBtn.hidden || !exception.stack}',
                         html: '<p style="font-size: 16px; font-weight: bold;">Full stack:</p> <code>{exception.stack}</code>'
                     }
 
@@ -115,8 +111,9 @@ Ext.define('Mfw.Sync', {
                     sheet.getViewModel().set({
                         progress: false,
                         success: false,
-                        exception: false,
-                        warning: false
+                        exception: {},
+                        warning: false,
+                        sync: true // boolean to identify if it's a sync update
                     });
                 }
             }
@@ -145,7 +142,12 @@ Ext.define('Mfw.Sync', {
     },
 
     exception: function (response) {
-        var exception, summary, stack;
+        var exception, summary, stack, isSync = false;
+
+        // if it's a sync API call
+        if (response.request.url.startsWith('/api/settings')) {
+            isSync = true;
+        }
 
         if (response.responseJson) {
             // store sync, model save
@@ -177,7 +179,8 @@ Ext.define('Mfw.Sync', {
             progress: false,
             success: false,
             exception: exception,
-            warning: false
+            warning: false,
+            sync: isSync
         });
         if (this.sheet.isHidden()) {
             this.sheet.show();
@@ -200,5 +203,4 @@ Ext.Ajax.on('requestexception', function (conn, response) {
         return;
     }
     Sync.exception(response);
-    // Exception.show(response);
 });
