@@ -400,9 +400,17 @@ Ext.define('Mfw.monitor.view.Sessions', {
                 html: 'Sessions ({count})'
             }
         }, '->', {
-            text: 'Reload',
+            xtype: 'checkbox',
+            itemId: 'autoRefresh',
+            boxLabel: 'Auto Refresh (5 sec)',
+            margin: '0 16 0 0',
+            listeners: {
+                change: 'setAutoRefresh'
+            }
+        }, {
+            text: 'Refresh',
             ui: 'action',
-            handler: 'reload'
+            handler: 'load'
         }]
     }, {
         xtype: 'panel',
@@ -426,27 +434,47 @@ Ext.define('Mfw.monitor.view.Sessions', {
     },
 
     controller: {
-        init: function (grid) {
-            var vm = grid.getViewModel();
-            grid.getStore().on('load', function (store) {
-                grid.getSelectable().select(store.first());
-                vm.set('count', store.count());
+        load: function () {
+            var me = this,
+                grid = me.getView(),
+                arCk = me.getView().down('#autoRefresh'),
+                vm = me.getViewModel();
+
+            if (me.tout) { clearTimeout(me.tout); }
+
+            grid.getStore().load(function () {
+                grid.getSelectable().select(grid.getStore().first());
+                vm.set('count', grid.getStore().count());
+
+                if (arCk.isChecked()) {
+                    me.tout = setTimeout(function () {
+                        me.load();
+                    }, 5000);
+                }
             });
         },
 
+        setAutoRefresh: function (ck, checked) {
+            var me = this;
+            if (checked) {
+                me.load();
+            } else {
+                if (me.tout) {
+                    clearTimeout(me.tout);
+                }
+            }
+        },
 
-        onActivate: function (grid) {
-            grid.getStore().load();
+        onActivate: function () {
+            this.load();
         },
 
         onDeactivate: function (grid) {
             grid.getStore().loadData([]);
             grid.down('monitor-session-details').collapseAll();
-        },
-
-        reload: function () {
-            this.getView().getStore().reload();
+            if (this.tout) {
+                clearTimeout(this.tout);
+            }
         }
     }
-
 });
