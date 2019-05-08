@@ -25,35 +25,18 @@ Ext.define('Mfw.reports.ChartController', {
                 // width: '100%',
                 // height: '100%',
                 events: {
-                    // selection: function (event) {
-                    //     // if (isWidget) { return; } // applies only when viewing the report
-                    //     if (event.resetSelection) {
-                    //         me.chart.update({
-                    //             exporting: {
-                    //                 buttons: {
-                    //                     timerangeButton: {
-                    //                         enabled: false
-                    //                     }
-                    //                 }
-                    //             }
-                    //         });
-                    //         me.chart.selectedrange = null;
-                    //     } else {
-                    //         me.chart.update({
-                    //             exporting: {
-                    //                 buttons: {
-                    //                     timerangeButton: {
-                    //                         enabled: true
-                    //                     }
-                    //                 }
-                    //             }
-                    //         });
-                    //         me.chart.selectedrange = {
-                    //             min: event.xAxis[0].min,
-                    //             max: event.xAxis[0].max
-                    //         };
-                    //     }
-                    // }
+                    selection: function (event) {
+                        // only has effect on reports and not widgets
+                        if (view.up('report')) {
+                            var store = view.up('report').down('#data-panel').down('grid').getStore();
+                            store.clearFilter();
+                            if (!event.resetSelection) {
+                                store.filterBy(function (rec) {
+                                    return (rec.get('time_trunc') > event.xAxis[0].min && rec.get('time_trunc') < event.xAxis[0].max);
+                                });
+                            }
+                        }
+                    }
                 }
             },
             lang: {
