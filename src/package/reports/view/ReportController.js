@@ -4,7 +4,8 @@ Ext.define('Mfw.reports.ReportController', {
     alias: 'controller.report',
 
     init: function (view) {
-        var me = this, viewModel = me.getViewModel();
+        var me = this,
+            viewModel = me.getViewModel();
 
         viewModel.bind('{route}', function (route) {
 
@@ -58,14 +59,22 @@ Ext.define('Mfw.reports.ReportController', {
             }
 
             record.userConditions().loadData(userConditions);
+
             viewModel.set('record', record);
+
             me.loadData();
+
         }, me, { deep: true });
     },
 
     loadData: function () {
         var me = this, view = me.getView(), viewModel = me.getViewModel(),
+            dataGrid = view.down('#data-panel').down('grid'),
             record = viewModel.get('record'), controller;
+
+        // clear data grid
+        dataGrid.getStore().setData([]);
+        dataGrid.setColumns([]);
 
         if (!record) { return; }
 
@@ -75,27 +84,131 @@ Ext.define('Mfw.reports.ReportController', {
             default: controller = view.down('chart-report').getController();
         }
 
-        controller.loadData();
+        controller.loadData(function (data) {
+            me.setDataGrid(dataGrid, record, data);
+        });
     },
 
+    /**
+     * Sets the data grid columns and data
+     * The columns might not be known/set but only after data is received, so are created based on that
+     * @param {*} record
+     * @param {*} data
+     */
+    setDataGrid: function (grid, record, data) {
+        var reportType = record.get('type'), columns;
 
-    onSettings: function () {
-        var me = this;
-        if (!me.setingsSheet) {
-            me.setingsSheet = me.getView().add({
-                xtype: 'settings-sheet',
-                owner: me.getView()
+        // no data grid for EVENTS reports
+        if (reportType === 'EVENTS') { return; }
+
+        // for PIE charts
+        if (reportType === 'CATEGORIES') {
+            var tableName = record.get('table').split(' ')[0], // take first table name from JOIN
+                columnName = record.getQueryCategories().get('groupColumn'),
+                column;
+
+            /**
+             * !!!! HARDCODE table name
+             */
+
+            var tableNames = ['sessions', 'session_stats'];
+
+            Ext.Array.each(tableNames, function (table) {
+                if (!Table[table] || !Table[table].columns) {
+                    console.warn('Table ' + table + ' is not defined!');
+                    return;
+                }
+
+                if (!column) {
+                    column = Ext.Array.findBy(Table[table].columns, function (col) {
+                        return col.dataIndex === columnName;
+                    });
+                }
+            });
+
+            if (!column) {
+                console.warn('Column not found/defined!');
+                return;
+            }
+
+            column.renderer = function (val) {
+                return val || 'Unknown';
+            };
+            column.width = 300;
+
+            columns = [
+                column, {
+                    text: 'Value',
+                    dataIndex: 'value',
+                    flex: 1
+                }
+            ];
+        }
+
+        // for CATEGORIES_SERIES
+        if (reportType === 'CATEGORIES_SERIES') {
+            columns = [];
+            // create columns from first data row
+            Ext.Object.each(data[0], function (key, val) {
+                if (key === 'id') { return; }
+                if (key === 'time_trunc') {
+                    columns.unshift({
+                        text: 'Time',
+                        dataIndex: 'time_trunc',
+                        width: 180,
+                        menuDisabled: true,
+                        sortable: false,
+                        cell: {
+                            encodeHtml: false
+                        },
+                        renderer: Renderer.timeStamp
+                    });
+                    return;
+                }
+
+                columns.push({
+                    text: key === '<nil>' ? 'none' : key,
+                    dataIndex: key,
+                    width: 120,
+                    menuDisabled: true,
+                    sortable: false,
+                    renderer: function (value) {
+                        return !value ? 0 : value;
+                    }
+                });
             });
         }
-        me.setingsSheet.show();
+
+        // for simple SERIES
+        if (reportType === 'SERIES') {
+            columns = [{
+                text: 'Time',
+                dataIndex: 'time_trunc',
+                width: 180,
+                menuDisabled: true,
+                sortable: false,
+                cell: {
+                    encodeHtml: false
+                },
+                renderer: Renderer.timeStamp
+            }, {
+                text: record.get('table'),
+                dataIndex: record.get('table'),
+                flex: 1,
+                menuDisabled: true,
+                sortable: false,
+                renderer: function (value) {
+                    return !value ? 0 : value;
+                }
+            }];
+        }
+
+        grid.setColumns(columns);
+        grid.getStore().setData(data);
     },
 
-    onData: function () {
+    showData: function () {
         var me = this;
-        if (!me.dataSheet) {
-            me.dataSheet = me.getView().down('data-sheet');
-        }
-        me.dataSheet.show();
+        me.getView().down('#data-panel').show();
     }
-
 });

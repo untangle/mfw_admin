@@ -93,6 +93,9 @@ Ext.define('Mfw.reports.Controller', {
             route: route,
             record: null
         });
+
+        // depress data btn which also hides the data grid
+        view.down('#dataBtn').setPressed(false);
     },
 
     onSelectionChange: function (list, node) {

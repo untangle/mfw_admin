@@ -32,19 +32,23 @@ Ext.define('Mfw.reports.Report', {
                       '<p style="margin: 0; font-weight: 100; font-size: 14px; color: #777;">{record.description}</p>'
             }
         }, '->', {
-            // iconCls: 'x-fa fa-refresh fa-gray',
-            iconCls: 'md-icon-refresh',
-            handler: 'loadData',
-            tooltip: 'Reload'
-        }, {
-            // iconCls: 'x-fa fa-th-list fa-gray',
-            iconCls: 'md-icon-view-list',
-            handler: 'onData',
-            tooltip: 'View Data',
+            enableToggle: true,
+            reference: 'dataBtn',
+            itemId: 'dataBtn',
+            // handler: 'showData',
+            margin: '0 8 0 0',
             hidden: true,
+            // publishes: 'pressed',
+            pressed: false,
             bind: {
+                text: '{dataBtn.pressed ? "Hide Data" : "Show Data"}',
                 hidden: '{record.type === "EVENTS"}'
             }
+        }, {
+            text: 'Refresh',
+            ui: 'action',
+            handler: 'loadData',
+            tooltip: 'Reload'
         }]
     }, {
         xtype: 'component',
@@ -65,7 +69,30 @@ Ext.define('Mfw.reports.Report', {
     }, {
         xtype: 'events-report'
     }, {
-        xtype: 'data-sheet'
+        // data panel + grid
+        xtype: 'panel',
+        itemId: 'data-panel',
+        docked: 'bottom',
+        height: 300,
+        minHeight: 300,
+
+        resizable: {
+            split: true,
+            edges: 'north'
+        },
+
+        layout: 'fit',
+        items: [{
+            xtype: 'grid',
+            store: {
+                data: []
+            }
+        }],
+
+        hidden: true,
+        bind: {
+            hidden: '{!dataBtn.pressed}'
+        }
     }]
 
 });

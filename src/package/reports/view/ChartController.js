@@ -243,8 +243,8 @@ Ext.define('Mfw.reports.ChartController', {
                 data.shift(); data.pop();
             }
             me.setData(data);
-            me.getViewModel().set('data', data);
-            if (cb) { cb(); }
+            // me.getViewModel().set('data', data);
+            if (cb) { cb(data); }
         });
     },
 
