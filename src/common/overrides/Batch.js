@@ -22,6 +22,8 @@ Ext.define('Ext.override.data.Batch', {
         else {
             me.fireEvent('operationcomplete', me, operation);
             me.runNextOperation();
+
+            // add code to capture Warnings on batch operations
         }
     }
 });
