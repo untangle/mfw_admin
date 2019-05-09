@@ -317,15 +317,11 @@ Ext.Ajax.on('requestexception', function (conn, response) {
 
 // capture sync warnings
 Ext.Ajax.on('requestcomplete', function (conn, response) {
-    var output;
-
     if (response.request.method !== 'POST') { return; }
 
     if (response.responseJson) {
-        output = response.responseJson.output;
-    }
-
-    if (output.includes('WARNING')) {
-        Sync.warning(response);
+        if (response.responseJson.output && response.responseJson.output.includes('WARNING')) {
+            Sync.warning(response);
+        }
     }
 });
