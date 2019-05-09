@@ -195,7 +195,7 @@ $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 html-admin: $(ADMIN_DIR)/index.html
 $(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
-	@cp $^ $@
+	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
 
 js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
 $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
@@ -205,7 +205,7 @@ $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
 html-settings: $(SETTINGS_DIR)/index.html
 $(SETTINGS_DIR)/index.html: src/app/settings/index.html
 	$(call LOG_FUNCTION,"Building Settings HTML")
-	@cp $^ $@
+	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
 
 js-setup: $(SETUP_DIR)/mfw-setup-all.js
 $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
@@ -215,12 +215,12 @@ $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
 html-setup: $(SETUP_DIR)/index.html
 $(SETUP_DIR)/index.html: src/app/setup/index.html
 	$(call LOG_FUNCTION,"Building Setup HTML")
-	@cp $^ $@
+	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
 
 html-reports: $(REPORTS_DIR)/index.html
 $(REPORTS_DIR)/index.html: src/app/reports/index.html
 	$(call LOG_FUNCTION,"Building Reports HTML")
-	@cp $^ $@
+	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
 
 dir: $(DESTDIR)
 $(DESTDIR):
