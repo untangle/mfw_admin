@@ -32,7 +32,6 @@ Ext.define('Mfw.Sync', {
                                 return '<i class=\'fa fa-upload\'></i> &nbsp; Saving ...';
                             }
                         }
-                        // otherwise show warning or exception heading
                         if (get('exception')) {
                             if (get('sync')) {
                                 return '<i class=\'fa fa-exclamation-triangle\'></i> &nbsp; Sync Settings ... failed!';
@@ -110,15 +109,18 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 16px;',
                     bind: {
-                        html: '<h2 style="font-weight: 400; margin: 0;">Exception: {exception.statusText} ({exception.status})</h2><p>{exception.summary}</p>'
+                        html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
+                              '<i class="x-fa fa-exclamation-triangle fa-red"></i> Exception! <i class="x-fa fa-exclamation-triangle fa-red"></i></h2>' +
+                              '<p>{exception.summary}</p>'
                     }
                 }, {
                     xtype: 'button',
                     reference: 'exceptionStackBtn',
-                    ui: 'action',
-                    text: 'More ...',
+                    ui: 'raised',
+                    text: 'MORE ...',
                     hidden: true,
                     publishes: ['hidden'],
+                    margin: '8 3',
                     bind: {
                         hidden: '{!exception || !exception.stack}'
                     },
@@ -146,16 +148,18 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 16px;',
                     bind: {
-                        html: '<h2 style="font-weight: 400; margin: 0;">Warning!</h2><p>{warning.summary}</p>'
+                        html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
+                              '<i class="x-fa fa-exclamation-triangle fa-orange"></i> Warning! <i class="x-fa fa-exclamation-triangle fa-orange"></i></h2>' +
+                              '<p>{warning.summary}</p>'
                     }
                 }, {
                     xtype: 'button',
                     reference: 'warningStackBtn',
-                    ui: 'action',
-                    text: 'More ...',
+                    ui: 'raised',
+                    text: 'MORE ...',
                     hidden: true,
                     publishes: ['hidden'],
-                    margin: '16 0 0 0',
+                    margin: '8 3',
                     bind: {
                         hidden: '{!warning || !warning.stack}'
                     },
@@ -263,7 +267,7 @@ Ext.define('Mfw.Sync', {
     },
 
     warning: function (response) {
-        var regExp = /Error: ([\s\S]*?)\^\^\^\^\^/gm, // ! to work it depends on how the backend sends output
+        var regExp = /Error: ([\s\S]*?)\^/gm, // ! to work it depends on how the backend sends output
             match, // the match against response output
             summary,
             stack,
@@ -277,12 +281,11 @@ Ext.define('Mfw.Sync', {
 
         if (response.responseJson) {
             match = regExp.exec(response.responseJson.output);
-            summary = match[1] || 'Unknown';
+            summary = Ext.isArray(match) ? match[1] : 'Unknown';
             stack = response.responseJson.output.replace(/\n/g, '</br>');
         }
 
         warning = {
-            statusText: 'Warning ...',
             summary: summary,
             stack: stack
         };
@@ -307,7 +310,6 @@ Ext.define('Mfw.Sync', {
 // capture all AJAX exceptions
 Ext.Ajax.on('requestexception', function (conn, response) {
     // avoid showing exception when checking if user is authenticated in login screen
-    console.log('exception');
     var url = response.request.url;
     if ( url === '/account/status' || url === '/account/login') {
         return;

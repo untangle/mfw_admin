@@ -10,7 +10,7 @@ Ext.define('Ext.override.data.Batch', {
             me.exceptions.push(operation);
             me.fireEvent('exception', me, operation);
 
-            // custom code
+            // custom code to capture exceptions
             Sync.exception(operation.getError().response);
             // end custom code
 
@@ -20,10 +20,17 @@ Ext.define('Ext.override.data.Batch', {
             me.pause();
         }
         else {
+            // custom code to capture warnings
+            var resp = operation.getResponse();
+            if (resp && resp.responseJson) {
+                if (resp.responseJson.output && resp.responseJson.output.includes('WARNING')) {
+                    Sync.warning(resp);
+                }
+            }
+            // end custom code
+
             me.fireEvent('operationcomplete', me, operation);
             me.runNextOperation();
-
-            // add code to capture Warnings on batch operations
         }
     }
 });
