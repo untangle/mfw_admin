@@ -4,6 +4,7 @@ DESTDIR ?= /tmp/mfw
 DEV ?= false
 DEV_HOST ?= sdwan
 DEV_DIR ?= /www
+VERSION ?= $(shell git describe --always --long --tags --dirty)
 
 # logging
 NC := "\033[0m" # no color
@@ -111,7 +112,8 @@ install: \
 	highcharts-install \
 	moment-install \
 	icons-install \
-	reports-install
+	reports-install \
+	cacheguard
 
 extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
@@ -195,7 +197,7 @@ $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 html-admin: $(ADMIN_DIR)/index.html
 $(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
-	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
+	@cp $^ $@
 
 js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
 $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
@@ -205,7 +207,7 @@ $(SETTINGS_DIR)/mfw-settings-all.js: $(APP_SETTINGS_ALL)
 html-settings: $(SETTINGS_DIR)/index.html
 $(SETTINGS_DIR)/index.html: src/app/settings/index.html
 	$(call LOG_FUNCTION,"Building Settings HTML")
-	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
+	@cp $^ $@
 
 js-setup: $(SETUP_DIR)/mfw-setup-all.js
 $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
@@ -215,17 +217,21 @@ $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
 html-setup: $(SETUP_DIR)/index.html
 $(SETUP_DIR)/index.html: src/app/setup/index.html
 	$(call LOG_FUNCTION,"Building Setup HTML")
-	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
+	@cp $^ $@
 
 html-reports: $(REPORTS_DIR)/index.html
 $(REPORTS_DIR)/index.html: src/app/reports/index.html
 	$(call LOG_FUNCTION,"Building Reports HTML")
-	@sed -e 's/<CACHEGUARD>/v=1.2.3.4/g' $^ > $@
+	@cp $^ $@
 
 dir: $(DESTDIR)
 $(DESTDIR):
 	$(call LOG_FUNCTION,"Creating directories")
 	@mkdir -p $(DESTDIR) $(ADMIN_DIR) $(STATIC_DIR)/res/lib $(SETUP_DIR) $(SETTINGS_DIR) $(REPORTS_DIR)
+
+cacheguard: dir
+	$(call LOG_FUNCTION,"Versioning with $(VERSION)")
+	@find $(DESTDIR) -type f | xargs sed -i -e 's/<CACHEGUARD>/version='$(VERSION)'/g'
 
 clean:
 	rm -fr $(DESTDIR) $(STAGING_DIR)
@@ -277,6 +283,7 @@ dev-watch:
 	html-reports \
 	js-setup \
 	html-setup \
+	cacheguard \
 	resources \
 	extjs-download \
 	highcharts-download \
