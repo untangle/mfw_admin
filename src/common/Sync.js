@@ -15,6 +15,7 @@ Ext.define('Mfw.Sync', {
             maxHeight: 500,
             zIndex: 888,
             toFrontOnShow: true,
+            hideOnMaskTap: false,
             viewModel: {
                 data: {
                     progress: true, // progress state
@@ -73,11 +74,6 @@ Ext.define('Mfw.Sync', {
                 }
             },
 
-            bind: {
-                scrollable: '{exception || warning}',
-                hideOnMaskTap: '{exception || warning}',
-                // height: '{!exception && !warning ? 100 : "auto"}'
-            },
 
             items: [{
                 xtype: 'toolbar',
@@ -111,30 +107,48 @@ Ext.define('Mfw.Sync', {
                     bind: {
                         html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
                               '<i class="x-fa fa-exclamation-triangle fa-red"></i> Exception! <i class="x-fa fa-exclamation-triangle fa-red"></i></h2>' +
-                              '<p>{exception.summary}</p>'
+                              '<p style="margin: 16px 0 8px 0;">{exception.summary}</p>'
                     }
                 }, {
-                    xtype: 'button',
-                    reference: 'exceptionStackBtn',
-                    ui: 'raised',
-                    text: 'MORE ...',
-                    hidden: true,
-                    publishes: ['hidden'],
-                    margin: '8 3',
-                    bind: {
-                        hidden: '{!exception || !exception.stack}'
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaults: {
+                        xtype: 'button',
+                        margin: '8 16 8 0'
                     },
-                    handler: function (btn) {
-                        btn.hide();
-                    }
+                    items: [{
+                        reference: 'exceptionStackBtn',
+                        ui: 'action',
+                        text: 'More info ...',
+                        hidden: true,
+                        publishes: ['hidden'],
+                        bind: {
+                            hidden: '{!exception || !exception.stack}'
+                        },
+                        handler: function (btn) {
+                            btn.hide();
+                        }
+                    }, {
+                        text: 'Close',
+                        bind: {
+                            ui: '{exceptionStackBtn.hidden ? "action" : ""}'
+                        },
+                        handler: function (btn) {
+                            btn.up('sheet').hide();
+                        }
+                    }]
                 }, {
                     xtype: 'component',
-                    itemId: 'fullstack',
                     hidden: true,
+                    maxHeight: 300,
+                    scrollable: true,
                     flex: 1,
+                    margin: '8 0 0 0',
+                    style: 'background: #f1f1f1;',
+                    padding: 16,
                     bind: {
                         hidden: '{!exceptionStackBtn.hidden || !exception.stack}',
-                        html: '<hr style="margin: 32px 0;"/><p style="font-size: 16px; font-weight: bold;"></p> <code>{exception.stack}</code>'
+                        html: '<p style="font-size: 16px; font-weight: bold; margin: 0;"></p> <code>{exception.stack}</code>'
                     }
 
                 }]
@@ -150,30 +164,48 @@ Ext.define('Mfw.Sync', {
                     bind: {
                         html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
                               '<i class="x-fa fa-exclamation-triangle fa-orange"></i> Warning! <i class="x-fa fa-exclamation-triangle fa-orange"></i></h2>' +
-                              '<p>{warning.summary}</p>'
+                              '<p style="margin: 16px 0 8px 0;">{warning.summary}</p>'
                     }
                 }, {
-                    xtype: 'button',
-                    reference: 'warningStackBtn',
-                    ui: 'raised',
-                    text: 'MORE ...',
-                    hidden: true,
-                    publishes: ['hidden'],
-                    margin: '8 3',
-                    bind: {
-                        hidden: '{!warning || !warning.stack}'
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaults: {
+                        xtype: 'button',
+                        margin: '8 16 8 0'
                     },
-                    handler: function (btn) {
-                        btn.hide();
-                    }
+                    items: [{
+                        reference: 'warningStackBtn',
+                        ui: 'action',
+                        text: 'More info ...',
+                        hidden: true,
+                        publishes: ['hidden'],
+                        bind: {
+                            hidden: '{!warning || !warning.stack}'
+                        },
+                        handler: function (btn) {
+                            btn.hide();
+                        }
+                    }, {
+                        text: 'Close',
+                        bind: {
+                            ui: '{(!warningStackBtn.hidden || !warning.stack) ? "" : "action"}'
+                        },
+                        handler: function (btn) {
+                            btn.up('sheet').hide();
+                        }
+                    }]
                 }, {
                     xtype: 'component',
-                    itemId: 'fullstack',
                     hidden: true,
+                    maxHeight: 300,
+                    scrollable: true,
                     flex: 1,
+                    margin: '8 0 0 0',
+                    style: 'background: #f1f1f1;',
+                    padding: 16,
                     bind: {
                         hidden: '{!warningStackBtn.hidden || !warning.stack}',
-                        html: '<hr style="margin: 32px 0;"/><p style="font-size: 16px; font-weight: bold;"></p> <code>{warning.stack}</code>'
+                        html: '<p style="font-size: 16px; font-weight: bold; margin: 0;"></p> <code>{warning.stack}</code>'
                     }
 
                 }]
