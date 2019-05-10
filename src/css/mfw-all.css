@@ -1,5 +1,7 @@
 :root { --base-color: #519839; --base-highlight-color: #91e971; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
 
+.x-root { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
+
 cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
 cite.nok { color: red; border-bottom: 1px red dashed; }

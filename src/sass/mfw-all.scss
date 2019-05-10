@@ -7,6 +7,13 @@
     --accent-light-color: #cef1c1;
 }
 
+.x-root {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
 cite {
     font-style: normal;
     &.ok {
