@@ -3,8 +3,9 @@ Ext.define('Mfw.settings.system.About', {
     alias: 'widget.mfw-settings-system-about',
 
     title: 'About'.t(),
-
     layout: 'fit',
+
+    viewModel: {},
 
     items: [{
         xtype: 'container',
@@ -18,6 +19,18 @@ Ext.define('Mfw.settings.system.About', {
                 xtype: 'component',
                 html: 'Build'
             }]
+        }, {
+            xtype: 'component',
+            bind: {
+                html: '<table cellspacing=10>' +
+                '<tr><td>Name: </td><td>{build.name}</td></tr>' +
+                '<tr><td>UID: </td><td>{uid}</td></tr>' +
+                '<tr><td>Build: </td><td>{build.build_id}</td></tr>' +
+                '<tr><td>JIRA: </td><td><a href="{build.bug_url}" target="_blank">{build.bug_url}</a></td></tr>' +
+                '<tr><td>Github: </td><td><a href="{build.home_url}" target="_blank">{build.home_url}</a></td></tr>' +
+                '<tr><td>Support: </td><td><a href="{build.support_url}" target="_blank">{build.support_url}</a></td></tr>' +
+                '</table>'
+            }
         }]
     }, {
         xtype: 'panel',
@@ -41,32 +54,31 @@ Ext.define('Mfw.settings.system.About', {
             height: '100%',
             cls: 'x-iframe',
             padding: '0 0 0 8',
-            html: 'Loading ...'
+            html: 'Loading ...',
+            bind: {
+                html: '<iframe src="{build.lede_device_manufacturer_url}" width="100%" height="100%" style="border: none;"></iframe>'
+            }
         }]
     }],
 
     controller: {
         init: function (view) {
+            var vm = view.getViewModel();
             Ext.Ajax.request({
                 url: '/api/status/build',
                 success: function (response) {
-                    var build = Ext.decode(response.responseText), html;
+                    vm.set('build', Ext.decode(response.responseText));
 
-                    // temporary to remove double quotes
-                    Ext.Object.each(build, function(key, value) {
-                        build[key] = value.replace(/"/g, '');
+                    // get UID
+                    Ext.Ajax.request({
+                        url: '/api/status/uid',
+                        success: function (response) {
+                            vm.set('uid', response.responseText);
+                        },
+                        failure: function () {
+                            console.warn('Unable to get uid!');
+                        }
                     });
-
-                    html = '<table cellspacing=10>' +
-                           '<tr><td>Name: </td><td>' + build.name + '</td></tr>' +
-                           '<tr><td>Build: </td><td>' + build.build_id + '</td></tr>' +
-                           '<tr><td>JIRA: </td><td><a href="' + build.bug_url + '" target="_blank">' + build.bug_url + '</a></td></tr>' +
-                           '<tr><td>Github: </td><td><a href="' + build.home_url + '" target="_blank">' + build.home_url + '</a></td></tr>' +
-                           '<tr><td>Support: </td><td><a href="' + build.support_url + '" target="_blank">' + build.support_url + '</a></td></tr>' +
-                           '</table>';
-                    view.down('#build').setHtml(html);
-
-                    view.down('#packages').setHtml('<iframe src="' + build.lede_device_manufacturer_url + '" width="100%" height="100%" style="border: none;"></iframe>');
                 },
                 failure: function () {
                     console.warn('Unable to get build!');
