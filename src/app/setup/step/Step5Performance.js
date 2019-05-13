@@ -48,7 +48,7 @@ Ext.define('Mfw.setup.step.Performance', {
             sortable: false,
             cell: { encodeHtml: false },
             renderer: function (value, record) {
-                return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b>';
+                return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('device');
             }
         }, {
             xtype: 'checkcolumn',
@@ -117,7 +117,8 @@ Ext.define('Mfw.setup.step.Performance', {
                     text: 'Run',
                     bind: {
                         value: '{record.interfaceId}',
-                        ui: '{!record._ping ? "action" : ""}'
+                        ui: '{!record._ping ? "action" : ""}',
+                        hidden: '{!record.device}'
                     },
                     handler: 'testInterface'
                 }]
@@ -161,39 +162,6 @@ Ext.define('Mfw.setup.step.Performance', {
             }
         },
 
-        // testInterfaces: function () {
-        //     var me = this, testsArray = [], vm = me.getViewModel();
-
-        //     Ext.getStore('interfaces').each(function (intf) {
-        //         testsArray.push(function () {
-        //             var deferred = new Ext.Deferred(); // create the Ext.Deferred object
-        //             Ext.defer(function () {
-        //                 intf.set({
-        //                     _ping: Ext.Number.randomInt(5, 70),
-        //                     _download: Ext.Number.randomInt(3000, 8000),
-        //                     _upload: Ext.Number.randomInt(2000, 8000)
-        //                 });
-        //                 deferred.resolve(intf.get);
-        //             }, 500, me);
-        //             return deferred.promise;
-        //         });
-        //     });
-
-        //     vm.set('processing', true);
-
-        //     Ext.Deferred.sequence(testsArray, me)
-        //         .then(function (result) {
-        //             // console.log(result);
-        //         }, function (error) {
-        //             console.warn('Unable to test: ', error);
-        //         })
-        //         .always(function () {
-        //             vm.set('processing', false);
-        //             // me.getView().unmask();
-        //         });
-
-        // },
-
         testInterface: function (btn) {
             var me = this, interfaceId = btn.getValue(),
                 interface = me.getView().down('grid').getStore().findRecord('interfaceId', interfaceId);
@@ -201,31 +169,31 @@ Ext.define('Mfw.setup.step.Performance', {
                 Ext.Msg.show({
                     title: '',
                     message: '<p>Testing performance for <span style="color: #333;">' + interface.get('name') + '</span></p>' +
-                             '<p style="text-align: center; margin: 0;">Please wait ... <br/><br/><i class="fa fa-spinner fa-spin fa-fw"></i></p>',
+                             '<p style="text-align: center; margin: 0;">Please wait! It might take few minutes ... <br/><br/><i class="fa fa-spinner fa-spin fa-fw"></i></p>',
                     showAnimation: false,
                     hideAnimation: false,
                     buttons: []
                 });
 
-                // test code down here, dummy for now
-                Ext.defer(function () {
-                    var p = Ext.Number.randomInt(5, 70),
-                        d =  Ext.Number.randomInt(3000, 8000),
-                        u = Ext.Number.randomInt(2000, 8000);
-
-                    interface.set({
-                        _ping: p,
-                        _download: d,
-                        _upload: u
-                    });
-                    if (!interface.get('downloadKbps')) {
-                        interface.set('downloadKbps', d);
+                Ext.Ajax.request({
+                    url: '/api/status/wantest/' + interface.get('device'),
+                    timeout: 100000, // 10 minutes timeout
+                    success: function (response) {
+                        var resp = Ext.decode(response.responseText);
+                        interface.set({
+                            _ping: resp.ping,
+                            _download: resp.download,
+                            _upload: resp.upload
+                        });
+                        interface.set('downloadKbps', resp.download);
+                        interface.set('uploadKbps', resp.upload);
+                        Ext.Msg.hide();
+                    },
+                    failure: function () {
+                        // error is caught/displayed by exception handling mechanism
+                        Ext.Msg.hide();
                     }
-                    if (!interface.get('uploadKbps')) {
-                        interface.set('uploadKbps', u);
-                    }
-                    Ext.Msg.hide();
-                }, 500, me);
+                });
         },
 
         setValues: function (btn) {

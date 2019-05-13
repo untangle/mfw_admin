@@ -274,7 +274,11 @@ Ext.define('Mfw.Sync', {
         } else {
             // ajax
             if (response.responseText) {
-                summary = Ext.JSON.decode(response.responseText).error;
+                try {
+                    summary = Ext.JSON.decode(response.responseText, true).error;
+                } catch(e) {
+                    summary = response.responseText;
+                }
             } else {
                 return;
             }
