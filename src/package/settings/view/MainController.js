@@ -9,7 +9,7 @@ Ext.define('Mfw.settings.view.MainController', {
         }
     },
 
-    onAction: function (route) {
+    onAction: function (route, b) {
         var me = this, view = me.getView(),
             cmp = view.down('#currentSettings'),
             tree = view.down('treelist'),
@@ -47,14 +47,19 @@ Ext.define('Mfw.settings.view.MainController', {
                 };
             }
 
-            widget.itemId = 'currentSettings';
-
-            if (Ext.ClassManager.getByAlias('widget.' + widget.xtype)) {
-                view.add(widget);
-            } else {
-                console.log('view does not exists');
-            }
+        } else {
+            widget = {
+                xtype: 'noselection-settings'
+            };
         }
+        widget.itemId = 'currentSettings';
+
+        if (Ext.ClassManager.getByAlias('widget.' + widget.xtype)) {
+            view.add(widget);
+        } else {
+            console.log('view does not exists');
+        }
+
 
         if (node) {
             tree.setSelection(node);
@@ -142,13 +147,6 @@ Ext.define('Mfw.settings.view.MainController', {
         store.clearFilter();
 
         if (value) {
-            // find expanded node if exists
-            // root.eachChild(function (child) {
-            //     if (child.isExpanded()) {
-            //         expandedNode = child;
-            //     }
-            // });
-
             tree.setSingleExpand(false);
             root.expandChildren(true);
             store.filterBy(function (node) {
