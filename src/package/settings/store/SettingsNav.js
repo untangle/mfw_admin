@@ -32,8 +32,9 @@ Ext.define('Mfw.store.Nav', {
                 { text: 'NAT'.t(), leaf: true, href: 'settings/firewall/nat' },
                 { text: 'Shaping'.t(), leaf: true, href: 'settings/firewall/shaping' },
                 { text: 'Port Forward'.t(), leaf: true, href: 'settings/firewall/port-forward' },
-                { text: 'Captive Portal'.t(), leaf: true, href: 'settings/firewall/captive-portal' },
-                { text: 'Web Filter'.t(), leaf: true, href: 'settings/firewall/web-filter' }
+                // not implemented
+                // { text: 'Captive Portal'.t(), leaf: true, href: 'settings/firewall/captive-portal' },
+                // { text: 'Web Filter'.t(), leaf: true, href: 'settings/firewall/web-filter' }
             ]
         }, {
             // Smart Routing
