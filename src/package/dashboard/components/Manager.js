@@ -28,19 +28,21 @@ Ext.define('Mfw.dashboard.Manager', {
                         items: [
                             { text: 'Server Info'.t() },
                             { text: 'CPU Load'.t() },
-                            { text: 'Network Info'.t() },
+                            // { text: 'Network Info'.t() },
                             { text: 'Network Layout'.t() },
                             { text: 'Map Distribution'.t() },
-                            { text: 'Notifications'.t() }
+                            // { text: 'Notifications'.t() }
                         ]
                     }
-                }, '-', '-', {
-                    text: 'Import'.t(),
-                    iconCls: 'x-fa fa-download'
-                }, {
-                    text: 'Export'.t(),
-                    iconCls: 'x-fa fa-upload'
-                }, '-', {
+                }, '-',
+                // '-', {
+                //     text: 'Import'.t(),
+                //     iconCls: 'x-fa fa-download'
+                // }, {
+                //     text: 'Export'.t(),
+                //     iconCls: 'x-fa fa-upload'
+                // },
+                '-', {
                     text: 'Load Defaults'.t(),
                     iconCls: 'x-fa fa-rotate-left',
                     handler: 'onLoadDefaults'

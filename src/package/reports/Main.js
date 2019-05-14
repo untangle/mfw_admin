@@ -96,20 +96,23 @@ Ext.define('Mfw.reports.Main', {
                         change: 'filterReports'
                     }
                 }, {
-                    iconCls: 'md-icon-import-export',
+                    // iconCls: 'md-icon-import-export',
+                    iconCls: 'x-fa fa-upload',
+                    tooltip: 'Export Reports',
                     ui: 'round',
                     arrow: false,
-                    menuAlign: 'tr-br?',
-                    menu: {
-                        items: [{
-                            text: 'Export',
-                            iconCls: 'x-fa fa-upload',
-                            handler: 'exportReports'
-                        }, {
-                            text: 'Import (not implemented)',
-                            iconCls: 'x-fa fa-download'
-                        }]
-                    }
+                    handler: 'exportReports'
+                    // menuAlign: 'tr-br?',
+                    // menu: {
+                    //     items: [{
+                    //         text: 'Export',
+                    //         iconCls: 'x-fa fa-upload',
+                    //         handler: 'exportReports'
+                    //     }, {
+                    //         text: 'Import (not implemented)',
+                    //         iconCls: 'x-fa fa-download'
+                    //     }]
+                    // }
                 }]
             }
         }, {

@@ -178,9 +178,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 }
             };
 
-            if (g.getEnableImport()) {
-                toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'md-icon-call-received', handler: 'onImport' } );
-            }
+            // not implemented
+            // if (g.getEnableImport()) {
+            //     toolbarMenu.menu.items.push( { text: 'Import'.t(), iconCls: 'md-icon-call-received', handler: 'onImport' } );
+            // }
 
             if (g.getEnableExport()) {
                 toolbarMenu.menu.items.push( { text: 'Export'.t(), iconCls: 'md-icon-call-made', handler: 'onExport' } );
