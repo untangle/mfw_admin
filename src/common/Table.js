@@ -175,47 +175,77 @@ Ext.define('Mfw.Table', {
 
     session_stats: {
         columns: [{
-            text: 'Session Id',
+            text: 'Session ID',
             dataIndex: 'session_id'
         }, {
             text: 'Time Stamp',
             dataIndex: 'time_stamp'
         }, {
             text: 'Bytes',
-            dataIndex: 'bytes'
+            dataIndex: 'bytes',
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesRenderer
         }, {
             text: 'Client Bytes',
-            dataIndex: 'client_bytes'
+            dataIndex: 'client_bytes',
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesRenderer
         }, {
             text: 'Server Bytes',
-            dataIndex: 'server_bytes'
+            dataIndex: 'server_bytes',
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesRenderer
         }, {
             text: 'Byte Rate',
-            dataIndex: 'byte_rate'
+            dataIndex: 'byte_rate',
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesSecRenderer
         }, {
             text: 'Client Byte Rate',
-            dataIndex: 'client_byte_rate'
+            dataIndex: 'client_byte_rate',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesSecRenderer
         }, {
             text: 'Server Byte Rate',
-            dataIndex: 'server_byte_rate'
+            dataIndex: 'server_byte_rate',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.bytesSecRenderer
         }, {
             text: 'Packets',
-            dataIndex: 'packets'
+            dataIndex: 'packets',
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsRenderer
         }, {
             text: 'Client Packets',
-            dataIndex: 'client_packets'
+            dataIndex: 'client_packets',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsRenderer
         }, {
             text: 'Server Packets',
-            dataIndex: 'server_packets'
+            dataIndex: 'server_packets',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsRenderer
         }, {
             text: 'Packet Rate',
-            dataIndex: 'packet_rate'
+            dataIndex: 'packet_rate',
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsSecRenderer
         }, {
             text: 'Client Packet Rate',
-            dataIndex: 'client_packet_rate'
+            dataIndex: 'client_packet_rate',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsSecRenderer
         }, {
             text: 'Server Packet Rate',
-            dataIndex: 'server_packet_rate'
+            dataIndex: 'server_packet_rate',
+            width: 120,
+            cell: { encodeHtml: false },
+            renderer: Renderer.packetsSecRenderer
         }]
     },
 

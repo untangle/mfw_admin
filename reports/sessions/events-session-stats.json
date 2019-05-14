@@ -9,5 +9,22 @@
     "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_stats.time_stamp"
-    }]
+    }],
+    "rendering": {
+        "defaultColumns": [
+            "time_stamp",
+            "client_address",
+            "server_address",
+            "bytes",
+            "client_bytes",
+            "server_bytes",
+            "byte_rate",
+            "client_byte_rate",
+            "server_byte_rate",
+            "packets",
+            "client_packets",
+            "server_packets",
+            "packet_rate"
+        ]
+    }
 }

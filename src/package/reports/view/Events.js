@@ -48,7 +48,8 @@ Ext.define('Mfw.reports.Events', {
 
 
             view.getViewModel().bind('{record}', function (record) {
-                var columns = [], defaultColumns;
+                var tableNames = [],
+                    columns = [], defaultColumns;
 
                 grid.getStore().loadData([]);
 
@@ -58,8 +59,26 @@ Ext.define('Mfw.reports.Events', {
                     return;
                 }
 
-                Ext.Array.each(Table.sessions.columns, function (column) {
-                    columns.push(Ext.clone(column)); // !!!! important to clone the value to not modify reference
+                /**
+                 * there could be a single table
+                 * or multiple tables in a JOIN, definec in tables array
+                 */
+
+                if (record.get('tables')) {
+                    tableNames = record.get('tables');
+                } else {
+                    tableNames.push(record.get('table'));
+                }
+
+                Ext.Array.each(tableNames, function (table) {
+                    Ext.Array.each(Table[table].columns, function (column) {
+                        // make sure to avoid duplicate columns, e.g. time_stamp
+                        if (!Ext.Array.findBy(columns, function (c) {
+                            return column.dataIndex === c.dataIndex;
+                        })) {
+                            columns.push(Ext.clone(column)); // !!!! important to clone the value to not modify reference
+                        }
+                    });
                 });
 
                 // set the default columns if define din rendering
