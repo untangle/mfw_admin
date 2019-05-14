@@ -5,6 +5,7 @@
     "displayOrder": 20,
     "type": "CATEGORIES",
     "table": "session_stats left join sessions using (session_id)",
+    "tables": ["sessions", "session_stats"],
     "units": "bytes/s",
     "queryCategories": {
         "groupColumn": "application_name",

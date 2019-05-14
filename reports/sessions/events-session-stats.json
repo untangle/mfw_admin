@@ -5,6 +5,7 @@
     "displayOrder": 1001,
     "type": "EVENTS",
     "table": "session_stats left join sessions using (session_id)",
+    "tables": ["sessions", "session_stats"],
     "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_stats.time_stamp"

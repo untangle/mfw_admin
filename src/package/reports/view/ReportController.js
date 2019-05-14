@@ -103,15 +103,20 @@ Ext.define('Mfw.reports.ReportController', {
 
         // for PIE charts
         if (reportType === 'CATEGORIES') {
-            var tableName = record.get('table').split(' ')[0], // take first table name from JOIN
+            var tableNames = [], // tables to lok for columns
                 columnName = record.getQueryCategories().get('groupColumn'),
                 column;
 
             /**
-             * !!!! HARDCODE table name
+             * there could be a single table
+             * or multiple tables in a JOIN, definec in tables array
              */
 
-            var tableNames = ['sessions', 'session_stats'];
+            if (record.get('tables')) {
+                tableNames = record.get('tables');
+            } else {
+                tableNames.push(record.get('table'));
+            }
 
             Ext.Array.each(tableNames, function (table) {
                 if (!Table[table] || !Table[table].columns) {
