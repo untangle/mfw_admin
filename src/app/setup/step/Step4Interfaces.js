@@ -12,14 +12,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
         xtype: 'grid',
         reference: 'interfaces',
         flex: 1,
-        store: {
-            type: 'interfaces',
-            // do not display hidden interfaces
-            filters: [{
-                property: 'hidden',
-                value: false
-            }]
-        },
+        store: 'interfaces',
         rowLines: false,
         selectable: false,
         itemConfig: {
@@ -136,8 +129,13 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
-        onActivate: function (view) {
-            view.down('grid').getStore().load();
+        onActivate: function () {
+            var store = Ext.getStore('interfaces');
+            store.load();
+            store.clearFilter(true);
+            store.setFilters([
+                { property: 'hidden', value: false }
+            ]);
         },
 
         configTypeRenderer: function (value, record) {
@@ -188,8 +186,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
         },
 
         refresh: function () {
-            var me = this;
-            me.getView().down('grid').getStore().load();
+            Ext.getStore('interfaces').load();
         }
     }
 

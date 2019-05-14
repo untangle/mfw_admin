@@ -250,7 +250,8 @@ dev-install: \
 	js-setup \
 	html-setup \
 	dev-sass \
-	css
+	css \
+	cacheguard
 
 # generates the mfw-all.css
 dev-sass: src/css/mfw-all.css

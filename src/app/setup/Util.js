@@ -1,10 +1,8 @@
-Ext.define('Mfw.settings.Util', {
+Ext.define('Mfw.Util', {
     alternateClassName: 'Util',
     singleton: true,
 
     api: window.location.origin + '/api',
-    // api: 'http://192.168.101.233/api',
-
 
     /**
      * Called recursively to transform/sanitize data sent back to server

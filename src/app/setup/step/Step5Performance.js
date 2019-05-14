@@ -25,14 +25,7 @@ Ext.define('Mfw.setup.step.Performance', {
                 triggerEvent: 'tap'
             }
         },
-        store: {
-            type: 'interfaces',
-            // do not display hidden interfaces
-            filters: [{
-                property: 'wan',
-                value: true
-            }]
-        },
+        store: 'interfaces',
         rowLines: false,
         selectable: false,
         itemConfig: {
@@ -156,10 +149,16 @@ Ext.define('Mfw.setup.step.Performance', {
     },
 
     controller: {
-        onActivate: function (view) {
-            if (view.down('grid').getStore().loadCount === 0) {
-                view.down('grid').getStore().load();
+        onActivate: function () {
+            var store = Ext.getStore('interfaces');
+            if (store.loadCount === 0) {
+                store.load();
             }
+            store.clearFilter(true);
+            store.setFilters([
+                { property: 'hidden', value: false },
+                { property: 'wan', value: true }
+            ]);
         },
 
         testInterface: function (btn) {
