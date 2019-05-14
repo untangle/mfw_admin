@@ -42,7 +42,7 @@ Ext.define('Mfw.reports.Report', {
             pressed: false,
             bind: {
                 text: '{dataBtn.pressed ? "Hide Data" : "Show Data"}',
-                hidden: '{record.type === "EVENTS"}'
+                hidden: '{record.type === "TEXT" || record.type === "EVENTS"}'
             }
         }, {
             text: 'Refresh',

@@ -92,14 +92,17 @@ Ext.define('Mfw.reports.ReportController', {
     /**
      * Sets the data grid columns and data
      * The columns might not be known/set but only after data is received, so are created based on that
-     * @param {*} record
-     * @param {*} data
      */
     setDataGrid: function (grid, record, data) {
-        var reportType = record.get('type'), columns;
+        var me = this,
+            reportType = record.get('type'), columns;
 
         // no data grid for EVENTS reports
-        if (reportType === 'EVENTS') { return; }
+        if (reportType === 'TEXT' || reportType === 'EVENTS') {
+            me.getView().down('#dataBtn').setPressed(false);
+            grid.getStore().loadData([]);
+            return;
+        }
 
         // for PIE charts
         if (reportType === 'CATEGORIES') {
@@ -145,7 +148,18 @@ Ext.define('Mfw.reports.ReportController', {
                 column, {
                     text: 'Value',
                     dataIndex: 'value',
-                    flex: 1
+                    // flex: 1
+                }, {
+                    text: 'Add as Condition',
+                    width: 200,
+                    flex: 1,
+                    cell: {
+                        encodeHtml: false,
+                        tools: [{
+                            iconCls: 'x-fa fa-plus',
+                            handler: 'addCondition'
+                        }]
+                    }
                 }
             ];
         }
@@ -215,5 +229,24 @@ Ext.define('Mfw.reports.ReportController', {
     showData: function () {
         var me = this;
         me.getView().down('#data-panel').show();
+    },
+
+    addCondition: function (grid, info) {
+        var me = this, vm = me.getViewModel(),
+            column = grid.getColumns()[0].getDataIndex(),
+            value = info.record.getData()[column],
+            route = vm.get('route');
+
+
+        if (column && value) {
+            route.conditions.push({
+                column: column,
+                operator: 'EQ',
+                value: value
+            });
+            Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+        } else {
+            console.warn('Unable to add Condition!');
+        }
     }
 });
