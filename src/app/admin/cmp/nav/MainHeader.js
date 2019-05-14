@@ -96,42 +96,69 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
     // },
     {
+        iconCls: 'x-fa fa-question-circle fa-3x',
+        tooltip: 'Help',
+        hidden: true,
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        handler: 'showHelp'
+    },
+    {
         bind: {
             text: '{account.username}'
         },
         iconCls: 'x-fa fa-user-circle fa-3x',
         iconAlign: 'right',
-        // responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        hidden: true,
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         arrow: false,
         menu: {
             anchor: false,
             items: [{
                 text: 'Logout',
                 iconCls: 'x-fa fa-sign-out',
-                handler: function () {
-                    Ext.Ajax.request({
-                        url: '/account/logout',
-                        callback: function () {
-                            Mfw.app.setAccount(null);
-                            Mfw.app.redirectTo('auth');
-                            document.location.reload();
-                        }
-                    });
-                }
+                handler: 'logout'
             }]
         }
     }, {
         iconCls: 'x-fa fa-bars',
+        hidden: true,
         responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
-        handler: function () {
+        handler: 'showMenu'
+    }],
+    listeners: {
+        // fire resize event to trigger responsive config for the hamburger menu
+        painted: function() {
+            Ext.fireEvent('resize');
+        }
+    },
+
+
+    controller: {
+        logout: function () {
+            Ext.Ajax.request({
+                url: '/account/logout',
+                callback: function () {
+                    Mfw.app.setAccount(null);
+                    Mfw.app.redirectTo('auth');
+                    document.location.reload();
+                }
+            });
+        },
+
+        showMenu: function () {
             var me = this;
             if (!me.menu) {
                 me.menu = Ext.Viewport.add({
                     xtype: 'mfw-menu',
-                    // ownerCmp: me.getView()
+                    ownerCmp: me.getView()
                 });
             }
             me.menu.show();
+        },
+
+        showHelp: function () {
+            // not yet implemented
+            console.log('help');
         }
-    }]
+    }
 });

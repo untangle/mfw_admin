@@ -33,7 +33,7 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-htmlmenu.chain-menu .x-menuitem.selected .x-innerhtml p { border-left: 6px var(--accent-color) solid; }
 
 .nav { background: #333; }
-.nav .x-button { min-height: 48px; min-width: 48px; }
+.nav .x-button { min-height: 48px; min-width: 48px; margin-bottom: 0 !important; }
 .nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
 .nav .x-button .x-text-el { text-transform: none; color: #CCC; }
 .nav .x-button .x-icon-el, .nav .x-button .x-arrow-el { color: #FFF; }

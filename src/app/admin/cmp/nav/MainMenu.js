@@ -6,7 +6,7 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
 
     cls: 'nav',
 
-    padding: 10,
+    // padding: 10,
     defaults: {
         width: 200,
         xtype: 'button',
@@ -36,24 +36,22 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         // iconCls: 'x-fa fa-cog',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('settings'); }
     }, {
-        xtype: 'menuseparator'
+        xtype: 'menuseparator',
+        style: 'border-color: #555'
     }, {
         text: 'SESSIONS'.t(),
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/sessions'); }
         // iconCls: 'icon-monitor sessions'
-    }
-    // {
-    //     text: 'HOSTS'.t(),
-    //     // iconCls: 'icon-monitor hosts',
-    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/hosts'); }
-    // }, {
-    //     text: 'DEVICES'.t(),
-    //     // iconCls: 'icon-monitor devices',
-    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/devices'); }
-    // }, {
-    //     text: 'USERS'.t(),
-    //     // iconCls: 'icon-monitor users',
-    //     handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/users'); }
-    // }
-    ]
+    }, {
+        xtype: 'menuseparator',
+        style: 'border-color: #555'
+    }, {
+        text: 'Help'.t(),
+        iconCls: 'x-fa fa-question-circle',
+        handler: 'showHelp'
+    }, {
+        text: 'Logout'.t(),
+        iconCls: 'x-fa fa-sign-out',
+        handler: 'logout'
+    }]
 });
