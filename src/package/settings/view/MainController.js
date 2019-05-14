@@ -38,7 +38,6 @@ Ext.define('Mfw.settings.view.MainController', {
                     node = tree.getStore().findNode('href', 'settings/' + prefix + '/' + table);
                     if (chain) {
                         widget.chain = chain;
-                        node = tree.getStore().findNode('href', 'settings/' + prefix + '/' + table + '/' + chain);
                     }
                 }
             } else {
@@ -126,23 +125,11 @@ Ext.define('Mfw.settings.view.MainController', {
                     }
                 }]
             });
+        } else {
+            Mfw.app.redirectTo(info.node.get('href'));
         }
 
         return !isModified;
-    },
-
-    onSelectionChange: function (el, node) {
-        var hash = window.location.hash.replace('#', '');
-
-        if (!node || !node.get('href')) { return; }
-
-        if (!node.isLeaf()) {
-            node.expand();
-        }
-
-        if (hash !== node.get('href')) {
-            Mfw.app.redirectTo(node.get('href'));
-        }
     },
 
     filterSettings: function (field, value) {

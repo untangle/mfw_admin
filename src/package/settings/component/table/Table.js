@@ -4,7 +4,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
 
     viewModel: {
         data: {
-            selectedChain: null,
+            selectedChain: {
+                rules: []
+            },
             chainNames: null
         },
         formulas: {
