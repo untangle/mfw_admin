@@ -236,6 +236,13 @@ Ext.define('Mfw.Renderer', {
             uptime += numminutes + 'm';
         }
         return uptime;
-    }
+    },
+
+    round: function(value) {
+        if (!value) {
+            return 0;
+        }
+        return '<b>' + value.toFixed(2) + '</b>';
+    },
 
 });

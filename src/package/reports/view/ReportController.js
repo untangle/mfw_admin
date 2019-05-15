@@ -69,7 +69,7 @@ Ext.define('Mfw.reports.ReportController', {
 
     loadData: function () {
         var me = this, view = me.getView(), viewModel = me.getViewModel(),
-            dataGrid = view.down('#data-panel').down('grid'),
+            dataGrid = view.down('#dataPanel').down('grid'),
             record = viewModel.get('record'), controller;
 
         // clear data grid
@@ -148,7 +148,14 @@ Ext.define('Mfw.reports.ReportController', {
                 column, {
                     text: 'Value',
                     dataIndex: 'value',
-                    // flex: 1
+                    cell: { encodeHtml: false },
+                    renderer: function (value) {
+                        var units = record.get('units');
+                        if (units === 'bytes/s') {
+                            return Renderer.bytesSecRenderer(value);
+                        }
+                        return !value ? 0 : value;
+                    }
                 }, {
                     text: 'Add as Condition',
                     width: 200,
@@ -191,8 +198,17 @@ Ext.define('Mfw.reports.ReportController', {
                     width: 120,
                     menuDisabled: true,
                     sortable: false,
+                    cell: { encodeHtml: false },
                     renderer: function (value) {
-                        return !value ? 0 : value;
+                        var units = record.get('units');
+                        if (!value) { return 0; }
+                        if (units === 'bytes/s') {
+                            return Renderer.bytesSecRenderer(value);
+                        }
+                        if (units === 'ms') {
+                            return Renderer.round(value) + ' ms';
+                        }
+                        return value;
                     }
                 });
             });
@@ -228,7 +244,7 @@ Ext.define('Mfw.reports.ReportController', {
 
     showData: function () {
         var me = this;
-        me.getView().down('#data-panel').show();
+        me.getView().down('#dataPanel').show();
     },
 
     addCondition: function (grid, info) {
@@ -238,7 +254,9 @@ Ext.define('Mfw.reports.ReportController', {
             route = vm.get('route');
 
 
-        if (column && value) {
+        console.log(column, value);
+
+        if (column) {
             route.conditions.push({
                 column: column,
                 operator: 'EQ',

@@ -71,7 +71,7 @@ Ext.define('Mfw.reports.Report', {
     }, {
         // data panel + grid
         xtype: 'panel',
-        itemId: 'data-panel',
+        itemId: 'dataPanel',
         docked: 'bottom',
         height: 300,
         minHeight: 300,

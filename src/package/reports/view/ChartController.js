@@ -28,7 +28,7 @@ Ext.define('Mfw.reports.ChartController', {
                     selection: function (event) {
                         // only has effect on reports and not widgets
                         if (view.up('report')) {
-                            var store = view.up('report').down('#data-panel').down('grid').getStore();
+                            var store = view.up('report').down('#dataPanel').down('grid').getStore();
                             store.clearFilter();
                             if (!event.resetSelection) {
                                 store.filterBy(function (rec) {

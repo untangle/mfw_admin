@@ -22,5 +22,18 @@ Ext.define('Mfw.reports.NoSelection', {
                 html: '<h1 style="font-weight: 100;">Select a Report from a category!</h1>'
             }
         }]
-    }]
+    }],
+
+    listeners: {
+        activate: function (view) {
+            var dataBtn = view.up('report').down('#dataBtn'),
+                dataPanel = view.up('report').down('#dataPanel');
+
+            dataBtn.setPressed(false);
+            if (dataPanel) {
+                console.log(dataPanel.down('grid').getStore());
+                dataPanel.down('grid').getStore().loadData([]);
+            }
+        }
+    }
 });
