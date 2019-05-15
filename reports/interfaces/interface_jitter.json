@@ -1,0 +1,23 @@
+{
+    "name": "Interface Average Jitter",
+    "category": "Interfaces",
+    "description": "Interface average jitter over time",
+    "displayOrder": 20,
+    "type": "CATEGORIES_SERIES",
+    "table": "interface_stats",
+    "units": "ms",
+    "queryCategories": {
+        "groupColumn": "interface_id",
+        "aggregationFunction": "avg",
+        "aggregationValue": "jitter_1",
+        "limit": 10
+    },
+    "querySeries": {
+        "timeIntervalSeconds": 60
+    },
+    "rendering": {
+        "type": "spline",
+        "lineWidth": 2,
+        "dataGroupingApproximation": "average"
+    }
+}

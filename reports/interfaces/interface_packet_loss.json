@@ -1,0 +1,23 @@
+{
+    "name": "Interface Packet Loss",
+    "category": "Interfaces",
+    "description": "Interface packet loss over time",
+    "displayOrder": 10,
+    "type": "CATEGORIES_SERIES",
+    "table": "interface_stats",
+    "units": "packets/s",
+    "queryCategories": {
+        "groupColumn": "interface_id",
+        "aggregationFunction": "sum",
+        "aggregationValue": "ping_timeout/60",
+        "limit": 10
+    },
+    "querySeries": {
+        "timeIntervalSeconds": 60
+    },
+    "rendering": {
+        "type": "spline",
+        "lineWidth": 2,
+        "dataGroupingApproximation": "high"
+    }
+}
