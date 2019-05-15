@@ -26,7 +26,7 @@ Ext.define('Mfw.reports.Util', {
         }
 
         Ext.Array.each(route.conditions, function(condition) {
-            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + ':' + condition.value;
+            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + '$' + condition.value;
         });
 
         return query;
@@ -75,15 +75,15 @@ Ext.define('Mfw.reports.Util', {
                 Ext.Array.each(val, function (v) {
                     route.conditions.push({
                         column: key,
-                        operator: v.split(':')[0].toUpperCase(),
-                        value: v.split(':')[1]
+                        operator: v.split('$')[0].toUpperCase(),
+                        value: v.split('$')[1]
                     });
                 });
             } else {
                 route.conditions.push({
                     column: key,
-                    operator: val.split(':')[0].toUpperCase(),
-                    value: val.split(':')[1]
+                    operator: val.split('$')[0].toUpperCase(),
+                    value: val.split('$')[1]
                 });
             }
         });
