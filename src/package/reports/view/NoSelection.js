@@ -31,7 +31,6 @@ Ext.define('Mfw.reports.NoSelection', {
 
             dataBtn.setPressed(false);
             if (dataPanel) {
-                console.log(dataPanel.down('grid').getStore());
                 dataPanel.down('grid').getStore().loadData([]);
             }
         }

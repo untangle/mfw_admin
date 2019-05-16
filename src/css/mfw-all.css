@@ -268,3 +268,5 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .layout-widget .item.wan .connector { bottom: -15px; top: auto; }
 
 .x-iframe .x-innerhtml { height: 100%; }
+
+.pointer-list .x-listitem { cursor: pointer; }

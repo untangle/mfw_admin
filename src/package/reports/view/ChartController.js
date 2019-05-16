@@ -193,6 +193,9 @@ Ext.define('Mfw.reports.ChartController', {
             return;
         }
 
+        // hide xAxis while loading data
+        chart.update({ xAxis: { visible: false } }, true);
+
         // remove existing since condition
         userConditions = record.userConditions();
         sinceCondition = userConditions.findBy(function (c) {
@@ -385,8 +388,6 @@ Ext.define('Mfw.reports.ChartController', {
 
 
         if (record.get('type') === 'CATEGORIES') {
-            var categs = [];
-
             if (!chart.series[0]) { return; }
 
             settings = {

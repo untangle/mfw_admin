@@ -253,9 +253,6 @@ Ext.define('Mfw.reports.ReportController', {
             value = info.record.getData()[column],
             route = vm.get('route');
 
-
-        console.log(column, value);
-
         if (column) {
             route.conditions.push({
                 column: column,
