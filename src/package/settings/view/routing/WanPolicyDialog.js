@@ -83,7 +83,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 width: 250,
                 options: [
                     { text: 'Specific WAN', value: 'SPECIFIC_WAN' },
-                    { text: 'Best WANs', value: 'BEST_OF' },
+                    { text: 'Best WAN', value: 'BEST_OF' },
                     { text: 'Balance', value: 'BALANCE' }
                 ]
             }, {

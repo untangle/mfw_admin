@@ -44,7 +44,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
                 str = '<strong>Specific WAN</strong>';
             }
             if (record.get('type') === 'BEST_OF') {
-                str = '<strong>Best WANs with </strong> ';
+                str = '<strong>Best WAN with </strong> ';
                 switch (record.get('best_of_metric')) {
                     case 'LOWEST_LATENCY': str += 'Lowest Latency'; break;
                     case 'HIGHEST_AVAILABLE_BANDWIDTH': str += 'Highest Available Bandwidth'; break;
