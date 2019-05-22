@@ -161,7 +161,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             bind: { hidden: '{selcount !== 1}' }
         }, {
             text: 'New Rule'.t(),
-            iconCls: 'md-icon-add',
+            // iconCls: 'md-icon-add',
+            ui: 'action',
             hidden: true,
             bind: { hidden: '{!selectedChain.editable}' },
             handler: 'onNewRule'

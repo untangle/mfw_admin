@@ -600,7 +600,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
 
 
-            strArr.push('<div class="condition"><span>' + ruleCondition.name + '</span> ' +
+            strArr.push('<div class="condition"><span>' + ruleCondition.text + '</span> ' +
                    '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>');
         });
         if (strArr.length > 0) {

@@ -83,9 +83,10 @@ Ext.define('Mfw.settings.Util', {
         { text: 'Packets/Week',   value: 'PACKETS_PER_WEEK' }
     ],
 
+    // Rules Conditions definition
     conditions: [{
         type:'LIMIT_RATE',
-        name: 'Limit Rate'.t(),
+        text: 'Limit Rate'.t(),
         operators: ['<', '>'],
         field: {
             xtype: 'numberfield',
@@ -95,18 +96,18 @@ Ext.define('Mfw.settings.Util', {
             temId: 'unitField',
             name: 'rate_unit',
             label: 'Rate Unit',
+            labelAlign: 'top',
             placeholder: 'Choose rate unit ...',
             forceSelection: true,
             editable: false,
-            matchFieldWidth: false,
             // width: 220,
-            // displayTpl: '{text} [ {value} ]',
+            displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>'
             // options: this.limitRateUnits
         }
     }, {
         type:'IP_PROTOCOL',
-        name: 'IP Protocol'.t(),
+        text: 'IP Protocol'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -119,22 +120,26 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SOURCE_INTERFACE_NAME',
-        name: 'Source Interface Name'.t(),
+        category: 'Source',
+        text: 'Source Interface Name'.t(),
         operators: ['==', '!=']
     }, {
         type:'DESTINATION_INTERFACE_NAME',
-        name: 'Destination Interface Name'.t(),
+        category: 'Destination',
+        text: 'Destination Interface Name'.t(),
         operators: ['==', '!=']
     }, {
         type:'SOURCE_ADDRESS',
-        name: 'Source Address'.t(),
+        category: 'Source',
+        text: 'Source Address'.t(),
         field: {
             xtype: 'textfield',
             validators: ['ipaddress']
         }
     }, {
         type:'SOURCE_ADDRESS_V6',
-        name: 'Source Address IPv6'.t(),
+        category: 'Source',
+        text: 'Source Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -142,14 +147,16 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'DESTINATION_ADDRESS',
-        name: 'Destination Address'.t(),
+        category: 'Destination',
+        text: 'Destination Address'.t(),
         field: {
             xtype: 'textfield',
             validators: ['ipaddress']
         }
     }, {
         type:'DESTINATION_ADDRESS_V6',
-        name: 'Destination Address IPv6'.t(),
+        category: 'Destination',
+        text: 'Destination Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -157,7 +164,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SOURCE_ADDRESS_TYPE',
-        name: 'Source Address Type'.t(),
+        category: 'Source',
+        text: 'Source Address Type'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -179,7 +187,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'DESTINATION_ADDRESS_TYPE',
-        name: 'Destination Address Type'.t(),
+        category: 'Destination',
+        text: 'Destination Address Type'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -201,14 +210,16 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SOURCE_PORT',
-        name: 'Source Port'.t(),
+        category: 'Source',
+        text: 'Source Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
         }
     }, {
         type:'DESTINATION_PORT',
-        name: 'Destination Port'.t(),
+        category: 'Destination',
+        text: 'Destination Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
@@ -216,23 +227,28 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SOURCE_INTERFACE_ZONE',
-        name: 'Source Interface Zone'.t(),
+        category: 'Source',
+        text: 'Source Interface Zone'.t(),
         operators: ['==', '!=']
     }, {
         type:'DESTINATION_INTERFACE_ZONE',
-        name: 'Destination Interface Zone'.t(),
+        category: 'Destination',
+        text: 'Destination Interface Zone'.t(),
         operators: ['==', '!=']
     }, {
         type:'CLIENT_INTERFACE_ZONE',
-        name: 'Client Interface Zone'.t(),
+        category: 'Client',
+        text: 'Client Interface Zone'.t(),
         operators: ['==', '!=']
     }, {
         type:'SERVER_INTERFACE_ZONE',
-        name: 'Server Interface Zone'.t(),
+        category: 'Server',
+        text: 'Server Interface Zone'.t(),
         operators: ['==', '!=']
     }, {
         type:'CLIENT_PORT',
-        name: 'Client Port'.t(),
+        category: 'Client',
+        text: 'Client Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
@@ -240,7 +256,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SERVER_PORT',
-        name: 'Server Port'.t(),
+        category: 'Server',
+        text: 'Server Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
@@ -248,7 +265,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'LOCAL_PORT',
-        name: 'Local Port'.t(),
+        category: 'Local',
+        text: 'Local Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
@@ -256,7 +274,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'REMOTE_PORT',
-        name: 'Remote Port'.t(),
+        category: 'Remote',
+        text: 'Remote Port'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'numberfield',
@@ -264,7 +283,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'CLIENT_ADDRESS',
-        name: 'Client Address'.t(),
+        category: 'Client',
+        text: 'Client Address'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -272,7 +292,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'CLIENT_ADDRESS_V6',
-        name: 'Client Address IPv6'.t(),
+        category: 'Client',
+        text: 'Client Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -280,7 +301,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SERVER_ADDRESS',
-        name: 'Server Address'.t(),
+        category: 'Server',
+        text: 'Server Address'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -288,7 +310,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'SERVER_ADDRESS_V6',
-        name: 'Server Address IPv6'.t(),
+        category: 'Server',
+        text: 'Server Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -296,7 +319,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'LOCAL_ADDRESS',
-        name: 'Local Address'.t(),
+        category: 'Local',
+        text: 'Local Address'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -304,7 +328,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'LOCAL_ADDRESS_V6',
-        name: 'Local Address IPv6'.t(),
+        category: 'Local',
+        text: 'Local Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -312,7 +337,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'REMOTE_ADDRESS',
-        name: 'Remote Address'.t(),
+        category: 'Remote',
+        text: 'Remote Address'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -320,7 +346,8 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'REMOTE_ADDRESS_V6',
-        name: 'Remote Address IPv6'.t(),
+        category: 'Remote',
+        text: 'Remote Address IPv6'.t(),
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -328,44 +355,53 @@ Ext.define('Mfw.settings.Util', {
         }
     }, {
         type:'CLIENT_HOSTNAME',
-        name: 'Client Hostname'.t(),
+        category: 'Client',
+        text: 'Client Hostname'.t(),
         operators: ['==', '!=']
     }, {
         type:'SERVER_HOSTNAME',
-        name: 'Server Hostname'.t(),
+        category: 'Server',
+        text: 'Server Hostname'.t(),
         operators: ['==', '!=']
     }, {
         type:'LOCAL_HOSTNAME',
-        name: 'Local Hostname'.t(),
+        category: 'Local',
+        text: 'Local Hostname'.t(),
         operators: ['==', '!=']
     }, {
         type:'REMOTE_HOSTNAME',
-        name: 'Remote Hostname'.t(),
+        category: 'Remote',
+        text: 'Remote Hostname'.t(),
         operators: ['==', '!=']
     }, {
         type:'CLIENT_USERNAME',
-        name: 'Client Username'.t(),
+        category: 'Client',
+        text: 'Client Username'.t(),
         operators: ['==', '!=']
     }, {
         type:'SERVER_USERNAME',
-        name: 'Server Username'.t(),
+        category: 'Server',
+        text: 'Server Username'.t(),
         operators: ['==', '!=']
     }, {
         type:'LOCAL_USERNAME',
-        name: 'Local Username'.t(),
+        category: 'Local',
+        text: 'Local Username'.t(),
         operators: ['==', '!=']
     }, {
         type:'REMOTE_USERNAME',
-        name: 'Remote Username'.t(),
+        category: 'Remote',
+        text: 'Remote Username'.t(),
         operators: ['==', '!=']
     }, {
         type: 'CT_STATE',
-        name: 'Connection State',
+        text: 'Connection State',
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            forceSelection: true,
             editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: [
                 { text: 'Established', value: 'established' },
                 { text: 'Related', value: 'related' },

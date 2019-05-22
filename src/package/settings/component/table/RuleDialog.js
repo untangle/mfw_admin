@@ -2,23 +2,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.rule-dialog',
 
-    viewModel: {
-        data: {
-            visibleAdd: false
-        }
-    },
+    viewModel: {},
 
     config: {
         rule: null
     },
 
-    bind: {
-        title: '{action === "ADD" ? "Create New" : "Edit"} <span style="color: #777;">{ruleType}</span> Rule',
-    },
-    width: 1000,
-    height: 600,
+    width: '80%',
+    height: '80%',
+    minWidth: 500,
+    // maximized: true,
 
-    bodyPadding: '0 16',
+    bodyPadding: 0,
 
     showAnimation: {
         duration: 0
@@ -27,14 +22,23 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     layout: 'fit',
 
     items: [{
-        xtype: 'container',
-        padding: 0,
+        xtype: 'panel',
         layout: 'vbox',
-        // relative: true,
+        padding: 16,
+        docked: 'left',
+        shadow: true,
+        zIndex: 999,
+        width: '55%',
         items: [{
+            xtype: 'component',
+            bind: {
+                html: '<h1 style="margin: 0; font-weight: 400;">{action === "ADD" ? "Create New" : "Edit"} <span style="color: #777;">{ruleType}</span> Rule</h1>'
+            }
+        }, {
             xtype: 'formpanel',
             padding: 0,
             layout: 'hbox',
+            margin: '16 0',
             defaults: {
                 labelAlign: 'top'
             },
@@ -43,7 +47,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 name: 'description',
                 label: 'Description'.t(),
                 placeholder: 'Enter description ...',
-                flex: 1,
+                width: 300,
                 autoComplete: false,
                 clearable: false,
                 required: true,
@@ -66,272 +70,243 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 }
             }]
         }, {
-            xtype: 'panel',
-            layout: 'hbox',
-            flex: 1,
-            margin: '16 0 0 0',
+            xtype: 'component',
+            html: '<h2 style="font-weight: 400;">If All the following Conditions are met</h2>'
+        }, {
+            xtype: 'grid',
+            // userCls: 'c-noheaders',
+            height: 300,
+            emptyText: 'No Conditions!'.t(),
+            deferEmptyText: false,
+            rowLines: false,
+            sortable: false,
+            selectable: {
+                columns: false,
+                rows: false
+            },
+            margin: '0 16 0 0',
             padding: 0,
-            items: [{
-                xtype: 'container',
-                flex: 1,
-                layout: 'fit',
-                padding: 0,
-                items: [{
-                    xtype: 'toolbar',
-                    docked: 'top',
-                    shadow: false,
-                    bind: {
-                        shadow: '{!visibleAdd}'
-                    },
-                    padding: '0 8 0 16',
-                    zIndex: 2,
-                    items: [{
-                        xtype: 'component',
-                        html: 'Conditions',
-                        style: 'font-weight: 400;'
-                    },  '->', {
-                        xtype: 'button',
-                        iconCls: 'md-icon-add',
-                        text: 'Add',
-                        handler: 'toggleAdd',
-                        hidden: true,
-                        bind: {
-                            hidden: '{visibleAdd}'
-                        },
-                    }]
-                }, {
-                    xtype: 'formpanel',
-                    itemId: 'conditionform',
-                    docked: 'top',
-                    shadow: true,
-                    // border: true,
-                    style: 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);',
-                    padding: '0 16 16 16',
-                    zIndex: 1,
-                    layout: {
-                        type: 'hbox',
-                        align: 'bottom'
-                    },
-                    hidden: true,
-                    bind: {
-                        hidden: '{!visibleAdd}'
-                    },
-                    defaults: {
-                        labelAlign: 'top',
-                        autoComplete: false,
-                        required: true,
-                        clearable: false,
-                        keyMapEnabled: true,
-                        keyMap: {
-                            enter: {
-                                key: Ext.event.Event.ENTER,
-                                handler: 'addCondition'
-                            }
-                        }
-                    },
-                    items: [{
-                        xtype: 'toolbar',
-                        docked: 'top',
-                        shadow: false,
-                        style: 'background: transparent',
-                        items: [{
-                            xtype: 'component',
-                            style: 'font-weight: 100; font-size: 14px;',
-                            html: 'Add Condition',
-                        }, '->', {
-                            xtype: 'button',
-                            iconCls: 'md-icon-close',
-                            handler: 'toggleAdd'
-                        }]
-                    }, {
-                        xtype: 'selectfield',
-                        reference: 'conditionType',
-                        name: 'type',
-                        width: 200,
-                        label: 'Type'.t(),
-                        placeholder: 'Select type ...',
-                        // flex: 1,
-                        matchFieldWidth: false,
-                        editable: false,
-                        displayField: 'name',
-                        valueField: 'type',
-                        // displayTpl: '{name} [ {type} ]',
-                        itemTpl: '<div>{name} <span style="color: #999; font-size: 10px;">[ {type} ]</span></div>',
-                        options: Util.conditions,
-                        required: true,
-                        alignTarget: 'el',
-                        listeners: {
-                            change: 'onConditionTypeChange'
-                        }
-                    }, {
-                        xtype: 'selectfield',
-                        itemId: 'operation',
-                        name: 'op',
-                        width: 70,
-                        matchFieldWidth: false,
-                        // textAlign: 'center',
-                        margin: '0 16',
-                        label: 'Operator'.t(),
-                        editable: false,
-                        required: true,
-                        displayTpl: '{sign}',
-                        itemTpl: '<tpl>{text} {sign}</tpl>',
-                        // value: '==',
-                        hidden: true,
-                        bind: {
-                            hidden: '{!conditionType.value}'
-                        },
-                        options: [
-                            { value: '==', text: 'Equals'.t(), sign: '[ = ]' },
-                            { value: '!=', text: 'Not Equals'.t(), sign: '[ != ]' },
-                            { value: '>', text: 'Greater Than'.t(), sign: '[ > ]' },
-                            { value: '<', text: 'Less Than'.t(), sign: '[ < ]' },
-                            { value: '>=', text: 'Greater Than or Equal'.t(), sign:'[ >= ]' },
-                            { value: '<=', text: 'Less Than or Equal'.t(), sign: '[ <= ]' }
-                        ]
-                    }, {
-                        xtype: 'button',
-                        text: 'Add',
-                        ui: 'action',
-                        margin: '0 0 0 16',
-                        handler: 'addCondition',
-                        hidden: true,
-                        bind: {
-                            hidden: '{!conditionType.value}'
-                        }
-                    }],
-                    listeners: {
-                        show: function (form) {
-                            form.getFields('type').focus();
-                        },
-                        // hide: function (form) {
-                        //     form.reset(true);
-                        // }
-                    }
-                }, {
-                    xtype: 'grid',
-                    // userCls: 'c-noheaders',
-                    emptyText: 'No Conditions!'.t(),
-                    deferEmptyText: false,
-                    rowLines: false,
-                    selectable: {
-                        columns: false,
-                        rows: false
-                    },
-                    margin: 0,
-                    padding: 0,
-                    bind: '{rule.conditions}',
-                    plugins: {
-                        gridcellediting: {
-                            triggerEvent: 'tap'
-                        }
-                    },
-                    itemConfig: {
-                        viewModel: true
-                    },
-                    columns: [{
-                        text: 'Type',
-                        dataIndex: 'type',
-                        width: 250,
-                        cell: {
-                            bodyStyle: {
-                                padding: 0
-                            },
-                            encodeHtml: false
-                        },
-                        renderer: 'conditionRenderer'
-                    }, {
-                        text: 'Operator',
-                        dataIndex: 'op',
-                        width: 80,
-                        // cell: {
-                        //     tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
-                        // },
-                        // editable: true
-                    }, {
-                        text: 'Value',
-                        dataIndex: 'value',
-                        flex: 1,
-                        cell: {
-                            encodeHtml: false,
-                            // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
-                        },
-                        renderer: 'valueRenderer'
-                    }, {
-                        width: 70,
-                        align: 'center',
-                        sortable: false,
-                        hideable: false,
-                        menuDisabled: true,
-                        cell: {
-                            tools: {
-                                delete: {
-                                    iconCls: 'md-icon-delete',
-                                    handler: function (grid, info) {
-                                        info.record.drop();
-                                    }
-                                }
-                            }
-                        }
-                    }]
-                }]
+            bind: '{rule.conditions}',
+            // plugins: {
+            //     gridcellediting: {
+            //         triggerEvent: 'tap'
+            //     }
+            // },
+            itemConfig: {
+                viewModel: true
+            },
+            columns: [{
+                text: 'Type',
+                dataIndex: 'type',
+                width: 250,
+                menuDisabled: true,
+                cell: {
+                    encodeHtml: false
+                },
+                renderer: 'conditionRenderer'
             }, {
-                xtype: 'formpanel',
-                itemId: 'actionform',
-                margin: 0,
-                layout: 'vbox',
-                width: '30%',
-                docked: 'right',
-                resizable: {
-                    split: true,
-                    edges: 'west'
+                text: 'Operator',
+                dataIndex: 'op',
+                width: 200,
+                menuDisabled: true,
+                cell: {
+                    encodeHtml: false,
+                    // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
                 },
-                defaults: {
-                    labelAlign: 'top'
+                renderer: 'operatorRenderer'
+            }, {
+                text: 'Value',
+                dataIndex: 'value',
+                flex: 1,
+                menuDisabled: true,
+                cell: {
+                    encodeHtml: false,
+                    // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
                 },
-                items: [{
-                    xtype: 'toolbar',
-                    docked: 'top',
-                    shadow: false,
-                    padding: '0 8',
-                    items: [{
-                        xtype: 'component',
-                        html: 'Action',
-                        style: 'font-weight: 400;'
-                    }]
-                }, {
-                    xtype: 'selectfield',
-                    reference: 'actiontype',
-                    itemId: 'actiontype',
-                    name: 'type',
-                    label: 'Action'.t(),
-                    placeholder: 'Choose action ...',
-                    editable: false,
-                    required: true,
-                    itemTpl: '<tpl>{text}</tpl>',
-                    bind: '{rule.action.type}',
-                    listeners: {
-                        change: 'onActionTypeChange'
+                renderer: 'valueRenderer'
+            }, {
+                width: 50,
+                align: 'center',
+                sortable: false,
+                hideable: false,
+                menuDisabled: true,
+                cell: {
+                    tools: {
+                        delete: {
+                            iconCls: 'md-icon-delete',
+                            handler: function (grid, info) {
+                                info.record.drop();
+                            }
+                        }
                     }
-                }]
+                }
+            }],
+            listeners: {
+                childtap: 'onTap'
+            }
+        }, {
+            xtype: 'component',
+            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 400;">Apply the following Action</h2>'
+        }, {
+            xtype: 'formpanel',
+            itemId: 'actionform',
+            margin: 0,
+            padding: 0,
+            width: 300,
+            defaults: {
+                labelAlign: 'top'
+            },
+            items: [{
+                xtype: 'selectfield',
+                reference: 'actiontype',
+                itemId: 'actiontype',
+                name: 'type',
+                // label: 'Action'.t(),
+                placeholder: 'Choose action ...',
+                editable: false,
+                required: true,
+                itemTpl: '<tpl>{text}</tpl>',
+                bind: '{rule.action.type}',
+                listeners: {
+                    change: 'onActionTypeChange'
+                }
+            }]
+        }, {
+            xtype: 'toolbar',
+            docked: 'bottom',
+            items: ['->', {
+                text: 'Cancel',
+                margin: '0 8 0 0',
+                handler: 'onCancel'
+            }, {
+                bind: {
+                    text: '{action === "ADD" ? "Create" : "Update"}'
+                },
+                ui: 'action',
+                handler: 'onSubmit'
             }]
         }]
     }, {
-        xtype: 'toolbar',
-        docked: 'bottom',
-        items: ['->', {
-            text: 'Cancel',
-            margin: '0 8 0 0',
-            handler: 'onCancel'
+        xtype: 'container',
+        style: 'background: #F3F3F3;',
+        layout: 'fit',
+        items: [{
+            xtype: 'component',
+            docked: 'top',
+            padding: '0 16 16 16',
+            html: '<h2 style="font-weight: 100;">Available Conditions Types</h2>' +
+                  '<p>Select and set one or more Conditions to add to the Rule</p>'
         }, {
+            xtype: 'panel',
+            docked: 'left',
+            width: 250,
+            layout: 'vbox',
+            bodyStyle: 'background: #F3F3F3;',
+            items: [{
+                xtype: 'searchfield',
+                // ui: 'faded',
+                margin: '0 0 16 8',
+                placeholder: 'Find Condition Type ...'.t(),
+                listeners: {
+                    change: 'filterConditionType'
+                }
+            }, {
+                xtype: 'tree',
+                reference: 'conditions',
+                userCls: 'events-tree c-noheaders',
+                singleExpand: true,
+                // expanderFirst: false,
+                expanderOnly: false,
+                selectOnExpander: true,
+                style: 'background: #F3F3F3;',
+                flex: 1,
+                selectable: {
+                    mode: 'single',
+                    // cells: false
+                },
+                columns: [{
+                    xtype: 'treecolumn',
+                    dataIndex: 'text',
+                    flex: 1,
+                    cell: {
+                        // cellCls: 'event-key',
+                        encodeHtml: false
+                    }
+                }],
+                store: {
+                    type: 'conditions',
+                    rootVisible: false,
+                    filterer: 'bottomup'
+                },
+                listeners: {
+                    select: 'onSelect'
+                },
+            }]
+        }, {
+            xtype: 'formpanel',
+            itemId: 'conditionform',
+            padding: '0 32',
+            layout: 'vbox',
+            hidden: true,
             bind: {
-                text: '{action === "ADD" ? "Create" : "Update"}'
+                hidden: '{!conditions.selection.type}'
             },
-            ui: 'action',
-            handler: 'onSubmit'
+            bodyStyle: 'background: #F3F3F3;',
+            items: [{
+                xtype: 'component',
+                bind: {
+                    html: '<h2 style="font-weight: 400; margin: 0;">{conditions.selection.text}</h2>' +
+                          '<span style="color: #777; font-size: 10px;">{conditions.selection.type}</span>'
+                }
+            }, {
+                xtype: 'component',
+                html: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquam feugiat tellus sit amet faucibus. Nunc vel augue maximus, rhoncus nisl a, vulputate felis. Ut consequat enim tortor, eget euismod diam sodales et. Nullam nulla tortor, iaculis in vulputate eget, sagittis tristique purus. Cras viverra mi sit amet pulvinar ullamcorper. Vivamus faucibus vitae metus nec hendrerit. Cras id nibh urna. Sed id velit interdum, mollis ex blandit, viverra lorem.</p>'
+            }, {
+                xtype: 'component',
+                html: '<p><strong>Sample:</strong> IP_PROTOCOL = 2345</p>'
+            }, {
+                xtype: 'hiddenfield',
+                name: 'type',
+                bind: {
+                    value: '{conditions.selection.type}'
+                }
+            }, {
+                xtype: 'selectfield',
+                placeholder: 'Select ...',
+                name: 'op',
+                label: 'Operator'.t(),
+                labelAlign: 'top',
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '<tpl>{text} <span style="color: #999;">[ {value} ]</span></tpl>',
+                options: [
+                    { value: '==', text: 'Equals'.t(), sign: '[ = ]' },
+                    { value: '!=', text: 'Not Equals'.t(), sign: '[ != ]' },
+                    { value: '>', text: 'Greater Than'.t(), sign: '[ > ]' },
+                    { value: '<', text: 'Less Than'.t(), sign: '[ < ]' },
+                    { value: '>=', text: 'Greater Than or Equal'.t(), sign:'[ >= ]' },
+                    { value: '<=', text: 'Less Than or Equal'.t(), sign: '[ <= ]' }
+                ]
+            }, {
+                xtype: 'button',
+                text: 'Add Condition',
+                ui: 'action',
+                margin: '32 0 0 0',
+                width: 150,
+                handler: 'addCondition'
+            }]
+        }, {
+            xtype: 'component',
+            style: 'text-align: center;',
+            html: 'No Selection!',
+            margin: '120 0 0 0',
+            hidden: true,
+            bind: {
+                hidden: '{conditions.selection}'
+            }
         }]
     }],
-
     controller: {
         init: function (dialog) {
             var grid = dialog.ownerCmp,
@@ -364,54 +339,66 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             vm.set('rule', rule);
         },
 
-        toggleAdd: function () {
-            var me = this,
-                vm = me.getViewModel(),
-                visible = vm.get('visibleAdd');
-            vm.set('visibleAdd', !visible);
-        },
-
-        onConditionTypeChange: function (combo, newValue) {
+        onSelect: function (el, selection) {
             var me = this,
                 form = me.getView().down('#conditionform'),
-                existingValueField = form.getFields('value', true),
-                existingUnitField = form.getFields('rate_unit', true);
+                valueField,
+                unitField = selection.get('unitField'),
+                operators = [];
+
+            if (!selection.get('field')) {
+                selection.set('field', {
+                    xtype: 'textfield'
+                });
+            }
+
+            valueField = selection.get('field');
 
             // remove exiting value/unit fields
-            if (existingValueField) {
-                form.remove(existingValueField);
+            if (form.getFields('value')) {
+                form.remove(form.getFields('value'));
+            }
+            if (form.getFields('rate_unit')) {
+                form.remove(form.getFields('rate_unit'));
             }
 
-            if (existingUnitField) {
-                form.remove(existingUnitField);
+            // set available operators for selected condition type, and preselect first operator
+            if (selection.get('operators')) {
+                Ext.Object.each(selection.get('operators'), function (key, op) {
+                    operators.push(Util.ruleOperatorsMap[op]);
+                });
+            } else {
+                operators = Util.ruleOperators;
+            }
+            form.getFields('op').setOptions(operators).setValue(operators[0].value);
+
+            Ext.apply(selection.get('field'), {
+                // type: conditionType, // use too identify the type of the value field
+                name: 'value',
+                label: 'Value',
+                labelAlign: 'top',
+                clearable: false,
+                autoComplete: false,
+                placeholder: 'Set value ...'.t(),
+                required: true
+            });
+
+            // if values are from a collection (selectfield), preselect first value
+            if (valueField.xtype === 'selectfield') {
+                valueField.value = valueField.options[0].value;
             }
 
+            // insert value field into the form
+            form.insert(5, valueField);
 
-            if (!newValue) { return; }
-
-            // if (!newValue) {
-            //     // if (existingField) {
-            //     //     form.remove(existingField);
-            //     // }
-            //     return;
-            // }
-
-            // // remove unit field if existing
-            // if (existingUnitField) {
-            //     form.remove(existingUnitField);
-            // }
-
-            // // if existing field matches combo condition type it's fine
-            // if (existingValueField) {
-            //     if (existingValueField.type === newValue) { // keep the field
-            //         return;
-            //     } else { // remove the field
-            //         form.remove(existingValueField);
-            //     }
-            // }
-            me.setFields(newValue);
+            // insert condition field into the form
+            if (unitField) {
+                if (unitField.xtype === 'selectfield') {
+                    unitField.value = unitField.options[0].value;
+                }
+                form.insert(6, unitField);
+            }
         },
-
 
         onActionTypeChange: function (combo, value) {
             var me = this,
@@ -518,67 +505,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
         },
 
-
-
-
-        setFields: function (conditionType) {
-            /**
-             * !!! before setting the record on the form it is needed to
-             * add the proper value field to the form based on condition type
-             */
-            var me = this, condition = Ext.Array.findBy(Util.conditions, function (c) { return c.type === conditionType; }),
-                valueField, ops = [], form = me.getView().down('#conditionform');
-
-            if (!condition) {
-                console.warn(conditionType + ' condition not defined!');
-                return;
-            }
-
-            if (condition.field) {
-                // get the condition field
-                valueField = condition.field;
-            } else {
-                // use a textfield as fallback
-                valueField = { xtype: 'textfield' };
-            }
-
-            if (condition && condition.operators) {
-                Ext.Object.each(condition.operators, function (key, op) {
-                    ops.push(Util.ruleOperatorsMap[op]);
-                });
-            } else {
-                ops = Util.ruleOperators;
-            }
-            form.down('#operation').setOptions(ops);
-
-            // add exptra props to the value field
-            Ext.apply(valueField, {
-                type: conditionType, // use too identify the type of the value field
-                itemId: 'valueField',
-                name: 'value',
-                label: 'Value',
-                margin: '0 16 0 0',
-                flex: 1,
-                minWidth: 80,
-                clearable: false,
-                autoComplete: false,
-                placeholder: 'Set value ...'.t(),
-                required: true,
-                // hidden: true,
-                // bind: {
-                //     hidden: '{!conditionType.value}'
-                // },
-            });
-
-            // insert value field into the form as the third field
-            form.insert(3, valueField);
-
-            // insert condition field into the form as the fourth field
-            if (condition.unitField) {
-                form.insert(4, condition.unitField);
-            }
-        },
-
         addCondition: function () {
             var me = this,
                 vm = me.getViewModel(),
@@ -587,37 +513,92 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (!form.validate()) { return; }
             rule.conditions().add(form.getValues());
-            form.getFields('type').focus();
-            form.getFields('type').reset();
-            form.getFields('op').reset();
+            // form.getFields('op').reset();
             // form.reset(true);
         },
 
-        conditionRenderer: function (value, record) {
-            var ruleCondition;
-            ruleCondition = Util.ruleConditionsMap[record.get('type')];
-            return '<div class="condition"><span>' + ruleCondition.name + '</span>';
+        conditionRenderer: function (value) {
+            if (!Util.ruleConditionsMap[value]) {
+                console.warn('Condition ' + value + ' not defined!');
+                return '';
+            }
+            return '<strong>' + Util.ruleConditionsMap[value].text + '</strong>';
+        },
+
+        operatorRenderer: function (value) {
+            return Util.ruleOperatorsMap[value].text + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         },
 
         valueRenderer: function (value, record) {
             var ruleCondition = Util.ruleConditionsMap[record.get('type')],
-                valueRender = '<strong>' + record.get('value') + '</strong>';
+                valueRender;
 
             // todo different value render based on condition type
             if (ruleCondition.type === 'IP_PROTOCOL') {
-                if (!Globals.protocolsMap[record.get('value')]) {
+                if (!Globals.protocolsMap[value]) {
                     console.warn('Invalid IP Protocol defined as string, expected integer!');
                     return;
                 }
-                valueRender = '<strong>' + Globals.protocolsMap[record.get('value')].text +
-                              '</strong> <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
+                valueRender = Globals.protocolsMap[value].text +
+                              ' <em style="color: #999; font-style: normal;">[ ' + value + ' ]</em>';
             }
 
             if (ruleCondition.type === 'LIMIT_RATE') {
-                valueRender = '<strong>' + value + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
+                valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
             }
 
-            return valueRender;
+            return valueRender || value;
+        },
+
+        filterConditionType: function (field, value) {
+            var me = this,
+                tree = me.getView().down('tree'),
+                store = tree.getStore(),
+                root = store.getRoot();
+                // expandedNode = null;
+
+            store.clearFilter();
+
+            if (value) {
+                tree.setSingleExpand(false);
+                root.expandChildren(true);
+                store.filterBy(function (node) {
+                    var v = new RegExp(value, 'i');
+                    return node.isLeaf() ? v.test(node.get('text')) : false;
+                });
+            } else {
+                tree.setSingleExpand(true);
+                root.collapseChildren(true);
+            }
+        },
+
+
+        // not working yet, used to create inline editing
+        onTap: function (el, location) {
+            var condition = Util.ruleConditionsMap[location.record.get('type')],
+                operators = [];
+
+            if (location.column.getText() === 'Operator') {
+                if (condition.operators) {
+                    Ext.Object.each(condition.operators, function (key, op) {
+                        operators.push(Util.ruleOperatorsMap[op]);
+                    });
+                } else {
+                    operators = Util.ruleOperators;
+                }
+                location.column.setEditor({
+                    xtype: 'selectfield',
+                    editable: false,
+                    clearable: false,
+                    options: operators
+                });
+            }
+
+            if (location.column.getText() === 'Value') {
+                location.column.setEditor(condition.field);
+            }
+
+            // console.log(condition);
         },
 
         onCancel: function () {
@@ -653,7 +634,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             if (vm.get('action') === 'ADD') {
                 grid.getStore().add(rule);
             } else {
-                // rule.commit();
+                rule.commit();
             }
             me.getView().destroy();
         }
