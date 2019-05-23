@@ -204,7 +204,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             bodyStyle: 'background: #F3F3F3;',
             items: [{
                 xtype: 'searchfield',
-                // ui: 'faded',
                 margin: '0 0 16 8',
                 placeholder: 'Find Condition Type ...'.t(),
                 listeners: {
@@ -609,7 +608,15 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             if (location.column.getText() === 'Value') {
-                location.column.setEditor(condition.field);
+                if (condition.field) {
+                    location.column.setEditor(condition.field);
+                } else {
+                    location.column.setEditor({
+                        xtype: 'textfield',
+                        clearable: false,
+                        required: true
+                    });
+                }
             }
 
             // console.log(condition);
@@ -653,5 +660,4 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             me.getView().destroy();
         }
     }
-
 });
