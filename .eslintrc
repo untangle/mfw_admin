@@ -83,6 +83,7 @@
         "Exception": true,
         "WidgetsPipe": true,
         "Sync": true,
+        "Conditions": true,
         "moment": true
     }
 }

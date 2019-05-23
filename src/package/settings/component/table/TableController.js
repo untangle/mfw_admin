@@ -586,7 +586,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 default: op = '?'; break;
             }
 
-            ruleCondition = Util.ruleConditionsMap[c.get('type')];
+            ruleCondition = Conditions.map[c.get('type')];
             valueRender = c.get('value');
             // todo different value render based on condition type
             if (ruleCondition.type === 'IP_PROTOCOL') {

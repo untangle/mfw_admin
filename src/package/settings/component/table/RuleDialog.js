@@ -87,11 +87,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             margin: '0 16 0 0',
             padding: 0,
             bind: '{rule.conditions}',
-            // plugins: {
-            //     gridcellediting: {
-            //         triggerEvent: 'tap'
-            //     }
-            // },
+            plugins: {
+                gridcellediting: {
+                    triggerEvent: 'tap'
+                }
+            },
             itemConfig: {
                 viewModel: true
             },
@@ -111,7 +111,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 menuDisabled: true,
                 cell: {
                     encodeHtml: false,
-                    // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
+                    tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
                 },
                 renderer: 'operatorRenderer'
             }, {
@@ -121,7 +121,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 menuDisabled: true,
                 cell: {
                     encodeHtml: false,
-                    // tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
+                    tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
                 },
                 renderer: 'valueRenderer'
             }, {
@@ -142,7 +142,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 }
             }],
             listeners: {
-                childtap: 'onTap'
+                childmouseenter: 'mouseEnter'
             }
         }, {
             xtype: 'component',
@@ -194,7 +194,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             xtype: 'component',
             docked: 'top',
             padding: '0 16 16 16',
-            html: '<h2 style="font-weight: 100;">Available Conditions Types</h2>' +
+            html: '<h2 style="font-weight: 100;">Available Condition Types</h2>' +
                   '<p>Select and set one or more Conditions to add to the Rule</p>'
         }, {
             xtype: 'panel',
@@ -215,14 +215,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 reference: 'conditions',
                 userCls: 'events-tree c-noheaders',
                 singleExpand: true,
-                // expanderFirst: false,
                 expanderOnly: false,
                 selectOnExpander: true,
                 style: 'background: #F3F3F3;',
                 flex: 1,
                 selectable: {
-                    mode: 'single',
-                    // cells: false
+                    mode: 'single'
                 },
                 columns: [{
                     xtype: 'treecolumn',
@@ -239,7 +237,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     filterer: 'bottomup'
                 },
                 listeners: {
-                    select: 'onSelect'
+                    select: 'onConditionSelect'
                 },
             }]
         }, {
@@ -256,15 +254,17 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 xtype: 'component',
                 bind: {
                     html: '<h2 style="font-weight: 400; margin: 0;">{conditions.selection.text}</h2>' +
-                          '<span style="color: #777; font-size: 10px;">{conditions.selection.type}</span>'
+                          '<span style="color: #777; font-size: 12px;">[ {conditions.selection.type} ]</span>'
                 }
-            }, {
-                xtype: 'component',
-                html: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquam feugiat tellus sit amet faucibus. Nunc vel augue maximus, rhoncus nisl a, vulputate felis. Ut consequat enim tortor, eget euismod diam sodales et. Nullam nulla tortor, iaculis in vulputate eget, sagittis tristique purus. Cras viverra mi sit amet pulvinar ullamcorper. Vivamus faucibus vitae metus nec hendrerit. Cras id nibh urna. Sed id velit interdum, mollis ex blandit, viverra lorem.</p>'
-            }, {
-                xtype: 'component',
-                html: '<p><strong>Sample:</strong> IP_PROTOCOL = 2345</p>'
-            }, {
+            },
+            // {
+            //     xtype: 'component',
+            //     html: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquam feugiat tellus sit amet faucibus. Nunc vel augue maximus, rhoncus nisl a, vulputate felis. Ut consequat enim tortor, eget euismod diam sodales et. Nullam nulla tortor, iaculis in vulputate eget, sagittis tristique purus. Cras viverra mi sit amet pulvinar ullamcorper. Vivamus faucibus vitae metus nec hendrerit. Cras id nibh urna. Sed id velit interdum, mollis ex blandit, viverra lorem.</p>'
+            // }, {
+            //     xtype: 'component',
+            //     html: '<p><strong>Sample:</strong> IP_PROTOCOL = 2345</p>'
+            // },
+            {
                 xtype: 'hiddenfield',
                 name: 'type',
                 bind: {
@@ -339,7 +339,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             vm.set('rule', rule);
         },
 
-        onSelect: function (el, selection) {
+        onConditionSelect: function (el, selection) {
             var me = this,
                 form = me.getView().down('#conditionform'),
                 valueField,
@@ -365,10 +365,10 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // set available operators for selected condition type, and preselect first operator
             if (selection.get('operators')) {
                 Ext.Object.each(selection.get('operators'), function (key, op) {
-                    operators.push(Util.ruleOperatorsMap[op]);
+                    operators.push(Util.operatorsMap[op]);
                 });
             } else {
-                operators = Util.ruleOperators;
+                operators = Util.operators;
             }
             form.getFields('op').setOptions(operators).setValue(operators[0].value);
 
@@ -377,10 +377,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 name: 'value',
                 label: 'Value',
                 labelAlign: 'top',
+
                 clearable: false,
                 autoComplete: false,
                 placeholder: 'Set value ...'.t(),
                 required: true
+
             });
 
             // if values are from a collection (selectfield), preselect first value
@@ -389,14 +391,14 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             // insert value field into the form
-            form.insert(5, valueField);
+            form.insert(3, valueField);
 
             // insert condition field into the form
             if (unitField) {
                 if (unitField.xtype === 'selectfield') {
                     unitField.value = unitField.options[0].value;
                 }
-                form.insert(6, unitField);
+                form.insert(4, unitField);
             }
         },
 
@@ -518,23 +520,23 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         },
 
         conditionRenderer: function (value) {
-            if (!Util.ruleConditionsMap[value]) {
+            if (!Conditions.map[value]) {
                 console.warn('Condition ' + value + ' not defined!');
                 return '';
             }
-            return '<strong>' + Util.ruleConditionsMap[value].text + '</strong>';
+            return '<strong>' + Conditions.map[value].text + '</strong>';
         },
 
         operatorRenderer: function (value) {
-            return Util.ruleOperatorsMap[value].text + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+            return Util.operatorsMap[value].text + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         },
 
         valueRenderer: function (value, record) {
-            var ruleCondition = Util.ruleConditionsMap[record.get('type')],
+            var condition = Conditions.map[record.get('type')],
                 valueRender;
 
             // todo different value render based on condition type
-            if (ruleCondition.type === 'IP_PROTOCOL') {
+            if (condition.type === 'IP_PROTOCOL') {
                 if (!Globals.protocolsMap[value]) {
                     console.warn('Invalid IP Protocol defined as string, expected integer!');
                     return;
@@ -543,7 +545,15 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                               ' <em style="color: #999; font-style: normal;">[ ' + value + ' ]</em>';
             }
 
-            if (ruleCondition.type === 'LIMIT_RATE') {
+            if (condition.type === 'SOURCE_ADDRESS_TYPE' || condition.type === 'DESTINATION_ADDRESS_TYPE') {
+                valueRender = Util.addressTypesMap[value].text + ' <span style="color: #999; font-style: normal;">[ ' + value + ' ]</span>';
+            }
+
+            if (condition.type === 'CT_STATE') {
+                valueRender = Util.connectionStatesMap[value].text + ' <span style="color: #999; font-style: normal;">[ ' + value + ' ]</span>';
+            }
+
+            if (condition.type === 'LIMIT_RATE') {
                 valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
             }
 
@@ -573,23 +583,27 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         },
 
 
-        // not working yet, used to create inline editing
-        onTap: function (el, location) {
-            var condition = Util.ruleConditionsMap[location.record.get('type')],
+        /**
+         * Used to update column editor based on condition type
+         */
+        mouseEnter: function (el, location) {
+            var condition = Conditions.map[location.record.get('type')],
                 operators = [];
 
             if (location.column.getText() === 'Operator') {
                 if (condition.operators) {
                     Ext.Object.each(condition.operators, function (key, op) {
-                        operators.push(Util.ruleOperatorsMap[op]);
+                        operators.push(Util.operatorsMap[op]);
                     });
                 } else {
-                    operators = Util.ruleOperators;
+                    operators = Util.operators;
                 }
                 location.column.setEditor({
                     xtype: 'selectfield',
                     editable: false,
                     clearable: false,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                     options: operators
                 });
             }

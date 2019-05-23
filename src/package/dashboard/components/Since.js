@@ -30,25 +30,15 @@ Ext.define('Mfw.dashboard.Since', {
                 } else {
                     btnText = 'Since ' + route.since + ' hour(s)';
                 }
-                // if (route.since) {
-                //     startTime = new Date(route.since);
-                //     btnText = (!route.until ? 'Since ' : '') + Ext.Date.format(startTime, 'Y-m-d H:i A');
-                // }
                 btn.setText(btnText);
             }, me, { deep: true });
 
             // set since
             btn.getMenu().on('click', function (menu, item) {
-                // vm.set('route.since', item.value);
-                // // Mfw.app.redirectTo('dashboard?' + DashboardUtil.conditionsToQuery(vm.get('conditions')));
-                // menu.hide();
                 route = vm.get('route');
                 menu.hide();
                 route.since = item.value;
                 Mfw.app.redirectTo(DashboardUtil.routeToQuery(route));
-
-
-
             });
         }
     }

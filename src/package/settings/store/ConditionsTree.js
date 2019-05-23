@@ -4,8 +4,6 @@ Ext.define('Mfw.store.Conditions', {
     alias: 'store.conditions',
     rootVisible: false,
     folderSort: true,
-    // groupField: 'config',
-    // groupDir: 'ASC',
 
     sorters: 'text',
 
@@ -19,7 +17,7 @@ Ext.define('Mfw.store.Conditions', {
 
         me.byIdMap = {};
 
-        Ext.Array.each(Util.conditions, function (cond) {
+        Ext.Array.each(Conditions.list, function (cond) {
             var cat = cond.category || 'none';
             if (!categories[cat]) {
                 categories[cat] = [];
