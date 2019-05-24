@@ -22,7 +22,6 @@ Ext.define('Mfw.settings.view.MainController', {
         if (cmp) { cmp.destroy(); }
 
         if (route) {
-            tree.up('panel').show();
             if (Ext.String.startsWith(route, '/firewall') || Ext.String.startsWith(route, '/routing/wan-rules')) {
                 routeParts = route.split('/'),
                 prefix = routeParts[1], // "firewall" or "routing"
@@ -50,7 +49,6 @@ Ext.define('Mfw.settings.view.MainController', {
 
         } else {
             tree.getStore().getRoot().collapseChildren(true);
-            tree.up('panel').hide();
             widget = {
                 xtype: 'noselection-settings'
             };

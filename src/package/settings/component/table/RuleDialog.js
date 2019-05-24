@@ -307,8 +307,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     }],
     controller: {
         init: function (dialog) {
-            var grid = dialog.ownerCmp,
-                actions = grid.getActions(),
+            var tableGrid = dialog.ownerCmp,
+                actions = tableGrid.getActions(),
                 vm = dialog.getViewModel(),
                 rule = dialog.getRule(),
                 actionOptions = [];
@@ -316,13 +316,13 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             if (actions) {
                 // if subset of actions defined
                 Ext.Array.each(actions, function (action) {
-                    actionOptions.push(grid.actionsMap[action]);
+                    actionOptions.push(tableGrid.actionsMap[action]);
                 });
                 dialog.down('#actionform').getFields('type').setOptions(actionOptions);
             }
 
             vm.set({
-                action: !rule ? "ADD" : "EDIT",
+                action: !rule ? 'ADD' : 'EDIT',
                 ruleType: dialog.ownerCmp.ruleTitle || dialog.ownerCmp.getTitle()
             });
 
@@ -330,7 +330,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 rule = new Mfw.model.table.Rule({
                     enabled: true
                 });
-                // rule.conditions().setData([]);
             }
 
             rule.conditions().commitChanges(); // needed
