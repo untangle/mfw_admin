@@ -96,6 +96,7 @@ Ext.define('Mfw.settings.Util', {
     ],
 
     connectionStates: [
+        { text: 'New', value: 'new' },
         { text: 'Established', value: 'established' },
         { text: 'Related', value: 'related' },
         { text: 'Invalid', value: 'invalid' }
