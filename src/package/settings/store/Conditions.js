@@ -2,9 +2,346 @@ Ext.define('Mfw.settings.Conditions', {
     alternateClassName: 'Conditions',
     singleton: true,
 
-    list: [{
+    list: [
+    // SOURCE
+    {
+        type:'SOURCE_ADDRESS',
+        category: 'Source',
+        text: 'Source Address'.t(),
+        description: 'Source Address description ...',
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SOURCE_ADDRESS_V6',
+        category: 'Source',
+        text: 'Source Address IPv6'.t(),
+        description: 'Source Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SOURCE_ADDRESS_TYPE',
+        category: 'Source',
+        text: 'Source Address Type'.t(),
+        description: 'Source Address Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            forceSelection: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Util.addressTypes
+        }
+    }, {
+        type:'SOURCE_PORT',
+        category: 'Source',
+        text: 'Source Port'.t(),
+        description: 'Source Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+        }
+    }, {
+        type:'SOURCE_INTERFACE_NAME',
+        category: 'Source',
+        text: 'Source Interface Name'.t(),
+        description: 'Source Interface Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'SOURCE_INTERFACE_ZONE',
+        category: 'Source',
+        text: 'Source Interface Zone'.t(),
+        description: 'Source Interface Zone description ...',
+        operators: ['==', '!=']
+    },
+
+    // DESTINATION
+    {
+        type:'DESTINATION_ADDRESS',
+        category: 'Destination',
+        text: 'Destination Address'.t(),
+        description: 'Destination Address description ...',
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'DESTINATION_ADDRESS_V6',
+        category: 'Destination',
+        text: 'Destination Address IPv6'.t(),
+        description: 'Destination Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'DESTINATION_ADDRESS_TYPE',
+        category: 'Destination',
+        text: 'Destination Address Type'.t(),
+        description: 'Destination Address Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            forceSelection: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Util.addressTypes
+        }
+    }, {
+        type:'DESTINATION_PORT',
+        category: 'Destination',
+        text: 'Destination Port'.t(),
+        description: 'Destination Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'DESTINATION_INTERFACE_NAME',
+        category: 'Destination',
+        text: 'Destination Interface Name'.t(),
+        description: 'Destination Interface Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'DESTINATION_INTERFACE_ZONE',
+        category: 'Destination',
+        text: 'Destination Interface Zone'.t(),
+        description: 'Destination Interface Zone description ...',
+        operators: ['==', '!=']
+    },
+
+    // CLIENT
+    {
+        type:'CLIENT_ADDRESS',
+        category: 'Client',
+        text: 'Client Address'.t(),
+        description: 'Client Address description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'CLIENT_ADDRESS_V6',
+        category: 'Client',
+        text: 'Client Address IPv6'.t(),
+        description: 'Client Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'CLIENT_PORT',
+        category: 'Client',
+        text: 'Client Port'.t(),
+        description: 'Client Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'CLIENT_HOSTNAME',
+        category: 'Client',
+        text: 'Client Hostname'.t(),
+        description: 'Client Hostname description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CLIENT_USERNAME',
+        category: 'Client',
+        text: 'Client Username'.t(),
+        description: 'Client Username description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CLIENT_INTERFACE_ZONE',
+        category: 'Client',
+        text: 'Client Interface Zone'.t(),
+        description: 'Client Interface Zone description ...',
+        operators: ['==', '!=']
+    },
+
+    // SERVER
+    {
+        type:'SERVER_ADDRESS',
+        category: 'Server',
+        text: 'Server Address'.t(),
+        description: 'Server Address description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SERVER_ADDRESS_V6',
+        category: 'Server',
+        text: 'Server Address IPv6'.t(),
+        description: 'Server Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'SERVER_PORT',
+        category: 'Server',
+        text: 'Server Port'.t(),
+        description: 'Server Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'SERVER_HOSTNAME',
+        category: 'Server',
+        text: 'Server Hostname'.t(),
+        description: 'Server Hostname description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'SERVER_USERNAME',
+        category: 'Server',
+        text: 'Server Username'.t(),
+        description: 'Server Username description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'SERVER_INTERFACE_ZONE',
+        category: 'Server',
+        text: 'Server Interface Zone'.t(),
+        description: 'Server Interface Zone description ...',
+        operators: ['==', '!=']
+    },
+
+    // LOCAL
+    {
+        type:'LOCAL_ADDRESS',
+        category: 'Local',
+        text: 'Local Address'.t(),
+        description: 'Local Address description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'LOCAL_ADDRESS_V6',
+        category: 'Local',
+        text: 'Local Address IPv6'.t(),
+        description: 'Local Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'LOCAL_PORT',
+        category: 'Local',
+        text: 'Local Port'.t(),
+        description: 'Local Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'LOCAL_HOSTNAME',
+        category: 'Local',
+        text: 'Local Hostname'.t(),
+        description: 'Local Hostname description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'LOCAL_USERNAME',
+        category: 'Local',
+        text: 'Local Username'.t(),
+        description: 'Local Username description ...',
+        operators: ['==', '!=']
+    },
+
+    // REMOTE
+    {
+        type:'REMOTE_ADDRESS',
+        category: 'Remote',
+        text: 'Remote Address'.t(),
+        description: 'Remote Address description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'REMOTE_ADDRESS_V6',
+        category: 'Remote',
+        text: 'Remote Address IPv6'.t(),
+        description: 'Remote Address V6 description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'textfield',
+            validators: ['ipaddress']
+        }
+    }, {
+        type:'REMOTE_PORT',
+        category: 'Remote',
+        text: 'Remote Port'.t(),
+        description: 'Remote Port description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'numberfield',
+            validators: ['number']
+        }
+    }, {
+        type:'REMOTE_HOSTNAME',
+        category: 'Remote',
+        text: 'Remote Hostname'.t(),
+        description: 'Remote Hostname description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'REMOTE_USERNAME',
+        category: 'Remote',
+        text: 'Remote Username'.t(),
+        description: 'Remote Username description ...',
+        operators: ['==', '!=']
+    },
+
+    // OTHERS
+    {
+        type:'IP_PROTOCOL',
+        category: 'Others',
+        text: 'IP Protocol'.t(),
+        description: 'IP Protocol description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Globals.protocols
+        }
+    }, {
+        type: 'CT_STATE',
+        category: 'Others',
+        text: 'Connection State',
+        description: 'Connection State description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Util.connectionStates
+        }
+    }, {
         type:'LIMIT_RATE',
+        category: 'Others',
         text: 'Limit Rate'.t(),
+        description: 'Limit Rate description ...',
         operators: ['<', '>'],
         field: {
             xtype: 'numberfield',
@@ -22,283 +359,6 @@ Ext.define('Mfw.settings.Conditions', {
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Util.limitRateUnits
-        }
-    }, {
-        type:'IP_PROTOCOL',
-        text: 'IP Protocol'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'selectfield',
-            editable: false,
-            displayTpl: '{text} [ {value} ]',
-            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Globals.protocols
-        }
-    }, {
-        type:'SOURCE_INTERFACE_NAME',
-        category: 'Source',
-        text: 'Source Interface Name'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'DESTINATION_INTERFACE_NAME',
-        category: 'Destination',
-        text: 'Destination Interface Name'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'SOURCE_ADDRESS',
-        category: 'Source',
-        text: 'Source Address'.t(),
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'SOURCE_ADDRESS_V6',
-        category: 'Source',
-        text: 'Source Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'DESTINATION_ADDRESS',
-        category: 'Destination',
-        text: 'Destination Address'.t(),
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'DESTINATION_ADDRESS_V6',
-        category: 'Destination',
-        text: 'Destination Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'SOURCE_ADDRESS_TYPE',
-        category: 'Source',
-        text: 'Source Address Type'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'selectfield',
-            forceSelection: true,
-            editable: false,
-            displayTpl: '{text} [ {value} ]',
-            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.addressTypes
-        }
-    }, {
-        type:'DESTINATION_ADDRESS_TYPE',
-        category: 'Destination',
-        text: 'Destination Address Type'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'selectfield',
-            forceSelection: true,
-            editable: false,
-            displayTpl: '{text} [ {value} ]',
-            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.addressTypes
-        }
-    }, {
-        type:'SOURCE_PORT',
-        category: 'Source',
-        text: 'Source Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-        }
-    }, {
-        type:'DESTINATION_PORT',
-        category: 'Destination',
-        text: 'Destination Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'SOURCE_INTERFACE_ZONE',
-        category: 'Source',
-        text: 'Source Interface Zone'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'DESTINATION_INTERFACE_ZONE',
-        category: 'Destination',
-        text: 'Destination Interface Zone'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'CLIENT_INTERFACE_ZONE',
-        category: 'Client',
-        text: 'Client Interface Zone'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'SERVER_INTERFACE_ZONE',
-        category: 'Server',
-        text: 'Server Interface Zone'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'CLIENT_PORT',
-        category: 'Client',
-        text: 'Client Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'SERVER_PORT',
-        category: 'Server',
-        text: 'Server Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'LOCAL_PORT',
-        category: 'Local',
-        text: 'Local Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'REMOTE_PORT',
-        category: 'Remote',
-        text: 'Remote Port'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'numberfield',
-            validators: ['number']
-        }
-    }, {
-        type:'CLIENT_ADDRESS',
-        category: 'Client',
-        text: 'Client Address'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'CLIENT_ADDRESS_V6',
-        category: 'Client',
-        text: 'Client Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'SERVER_ADDRESS',
-        category: 'Server',
-        text: 'Server Address'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'SERVER_ADDRESS_V6',
-        category: 'Server',
-        text: 'Server Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'LOCAL_ADDRESS',
-        category: 'Local',
-        text: 'Local Address'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'LOCAL_ADDRESS_V6',
-        category: 'Local',
-        text: 'Local Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'REMOTE_ADDRESS',
-        category: 'Remote',
-        text: 'Remote Address'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'REMOTE_ADDRESS_V6',
-        category: 'Remote',
-        text: 'Remote Address IPv6'.t(),
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: ['ipaddress']
-        }
-    }, {
-        type:'CLIENT_HOSTNAME',
-        category: 'Client',
-        text: 'Client Hostname'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'SERVER_HOSTNAME',
-        category: 'Server',
-        text: 'Server Hostname'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'LOCAL_HOSTNAME',
-        category: 'Local',
-        text: 'Local Hostname'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'REMOTE_HOSTNAME',
-        category: 'Remote',
-        text: 'Remote Hostname'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'CLIENT_USERNAME',
-        category: 'Client',
-        text: 'Client Username'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'SERVER_USERNAME',
-        category: 'Server',
-        text: 'Server Username'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'LOCAL_USERNAME',
-        category: 'Local',
-        text: 'Local Username'.t(),
-        operators: ['==', '!=']
-    }, {
-        type:'REMOTE_USERNAME',
-        category: 'Remote',
-        text: 'Remote Username'.t(),
-        operators: ['==', '!=']
-    }, {
-        type: 'CT_STATE',
-        text: 'Connection State',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'selectfield',
-            editable: false,
-            displayTpl: '{text} [ {value} ]',
-            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.connectionStates
         }
     }],
 

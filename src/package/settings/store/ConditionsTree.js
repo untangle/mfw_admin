@@ -1,11 +1,11 @@
-Ext.define('Mfw.store.Conditions', {
+Ext.define('Mfw.store.ConditionsTree', {
     extend: 'Ext.data.TreeStore',
-    storeId: 'conditions',
-    alias: 'store.conditions',
+    storeId: 'conditionsTree',
+    alias: 'store.conditionsTree',
     rootVisible: false,
     folderSort: true,
 
-    sorters: 'text',
+    // sorters: 'text',
 
     constructor: function (config) {
         var me = this,

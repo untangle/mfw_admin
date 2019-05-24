@@ -211,7 +211,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 }
             }, {
                 xtype: 'tree',
-                reference: 'conditions',
+                reference: 'tree',
                 userCls: 'events-tree c-noheaders',
                 singleExpand: true,
                 expanderOnly: false,
@@ -231,7 +231,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     }
                 }],
                 store: {
-                    type: 'conditions',
+                    type: 'conditionsTree',
                     rootVisible: false,
                     filterer: 'bottomup'
                 },
@@ -246,28 +246,27 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             layout: 'vbox',
             hidden: true,
             bind: {
-                hidden: '{!conditions.selection.type}'
+                hidden: '{!tree.selection.type}'
             },
             bodyStyle: 'background: #F3F3F3;',
             items: [{
                 xtype: 'component',
                 bind: {
-                    html: '<h2 style="font-weight: 400; margin: 0;">{conditions.selection.text}</h2>' +
-                          '<span style="color: #777; font-size: 12px;">[ {conditions.selection.type} ]</span>'
+                    html: '<h2 style="font-weight: 400; margin: 0;">{tree.selection.text}</h2>' +
+                          '<span style="color: #777; font-size: 12px;">[ {tree.selection.type} ]</span>'
                 }
             },
             // {
             //     xtype: 'component',
-            //     html: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquam feugiat tellus sit amet faucibus. Nunc vel augue maximus, rhoncus nisl a, vulputate felis. Ut consequat enim tortor, eget euismod diam sodales et. Nullam nulla tortor, iaculis in vulputate eget, sagittis tristique purus. Cras viverra mi sit amet pulvinar ullamcorper. Vivamus faucibus vitae metus nec hendrerit. Cras id nibh urna. Sed id velit interdum, mollis ex blandit, viverra lorem.</p>'
-            // }, {
-            //     xtype: 'component',
-            //     html: '<p><strong>Sample:</strong> IP_PROTOCOL = 2345</p>'
+            //     bind: {
+            //         html: '<p>{tree.selection.description}</p>'
+            //     }
             // },
             {
                 xtype: 'hiddenfield',
                 name: 'type',
                 bind: {
-                    value: '{conditions.selection.type}'
+                    value: '{tree.selection.type}'
                 }
             }, {
                 xtype: 'selectfield',
@@ -302,7 +301,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             margin: '120 0 0 0',
             hidden: true,
             bind: {
-                hidden: '{conditions.selection}'
+                hidden: '{tree.selection}'
             }
         }]
     }],
@@ -372,7 +371,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             form.getFields('op').setOptions(operators).setValue(operators[0].value);
 
             Ext.apply(selection.get('field'), {
-                // type: conditionType, // use too identify the type of the value field
                 name: 'value',
                 label: 'Value',
                 labelAlign: 'top',
@@ -390,14 +388,14 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             // insert value field into the form
-            form.insert(3, valueField);
+            form.insertBefore(valueField, form.down('button'));
 
-            // insert condition field into the form
+            // insert unit field into the form
             if (unitField) {
                 if (unitField.xtype === 'selectfield') {
                     unitField.value = unitField.options[0].value;
                 }
-                form.insert(4, unitField);
+                form.insertBefore(unitField, form.down('button'));
             }
         },
 
