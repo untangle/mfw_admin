@@ -55,9 +55,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         viewModel: true, // important
     },
 
-    selectable: {
-        mode: 'single'
-    },
+    rowLines: false,
+    selectable: false,
+    itemRipple: false,
 
     plugins: {
         sortablelist: true

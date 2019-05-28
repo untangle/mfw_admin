@@ -1005,3 +1005,8 @@ hr {
 .pointer-list .x-listitem {
     cursor: pointer;
 }
+
+.x-drag-dragging {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 0, 0.5);
+}
