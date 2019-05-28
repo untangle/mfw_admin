@@ -18,7 +18,7 @@ Ext.define('Mfw.dashboard.Main', {
     items: [{
         xtype: 'dashboard-manager',
         docked: 'left',
-        width: 400,
+        width: 420,
         resizable: {
             split: true,
             edges: 'east'

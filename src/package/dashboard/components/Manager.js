@@ -62,20 +62,24 @@ Ext.define('Mfw.dashboard.Manager', {
         xtype: 'grid',
         hideHeaders: true,
         plugins: {
+            sortablelist: true,
             gridcellediting: {
                 triggerEvent: 'tap'
             }
         },
-        selectable: {
-            mode: 'single',
-            cells: false,
-            // checkbox: true,
-            allowDeselect: true,
-        },
+        selectable: false,
         store: {
             type: 'widgets'
         },
         columns: [{
+            width: 44,
+            menuDisabled: true,
+            resizable: false,
+            cell: {
+                encodeHtml: false,
+                tools: [{ cls: 'x-list-sortablehandle', iconCls: 'md-icon-drag-handle', zone: 'start', tooltip: 'Drag to Sort' }]
+            }
+        }, {
             text: 'Widget',
             sortable: false,
             hideable: false,
@@ -84,8 +88,7 @@ Ext.define('Mfw.dashboard.Manager', {
             flex: 1,
         }, {
             text: 'Interval',
-            width: 70,
-            align: 'right',
+            width: 90,
             sortable: false,
             hideable: false,
             menuDisabled: true,
@@ -120,40 +123,21 @@ Ext.define('Mfw.dashboard.Manager', {
                 }
             }
         }, {
-            text: 'Actions',
-            width: 100,
-            align: 'right',
+            width: 44,
             sortable: false,
             hideable: false,
+            resizable: false,
             menuDisabled: true,
             cell: {
                 tools: {
-                    up: {
-                        iconCls: 'md-icon-keyboard-arrow-up',
-                        tooltip: 'Move Up',
-                        zone: 'end',
-                        type: 'up',
-                        handler: 'onSort'
-                    },
-                    down: {
-                        iconCls: 'md-icon-keyboard-arrow-down',
-                        tooltip: 'Move Down',
-                        zone: 'end',
-                        type: 'down',
-                        handler: 'onSort'
-                    },
                     remove: {
                         iconCls: 'md-icon-close',
                         tooltip: 'Remove',
-                        zone: 'end',
                         handler: 'removeWidget'
                     },
                 }
             }
         }]
-        // listeners: {
-        //     select: 'onSelect'
-        // }
     }],
 
     controller: {
@@ -172,45 +156,86 @@ Ext.define('Mfw.dashboard.Manager', {
             var me = this,
                 widgetsStore = Ext.getStore('widgets');
 
-            widgetsStore.on('load', function (store) {
+            widgetsStore.on('datachanged', function (store) {
                 me.updateWidgetsComponents(store);
-            }, me);
-
-            widgetsStore.on('add', me.onWidgetAdd, me);
-            widgetsStore.on('remove', me.onWidgetRemove, me);
+            });
 
             widgetsStore.load(function (store) {
                 me.updateWidgetsMenu(store);
             });
         },
 
-        updateWidgetsComponents: function (store) {
-            var me = this, record, widgetsCmp = [],
-                widgetsContainer = me.getView().up('dashboard').down('#widgets');
 
-            widgetsContainer.removeAll();
+        /**
+         * It updates the rendered widgets components to reflect the changes made in store
+         * called on any action made on the store: load, add, remove, sort etc...
+         */
+        updateWidgetsComponents: function (store) {
+            var me = this, record, widgetsCmp = [], widgetCmp,
+                mdlIdx, // widget model index in store
+                cmpIdx, // widget component index in container
+                widgetsContainer = me.getView().up('dashboard').down('#widgets'),
+                widgetCmpConfig;
+
+            if (!store) { return; }
+
+            // widgetsContainer.removeAll();
+
+            // remove widget components which are no longer found in the store
+            widgetsContainer.items.each(function (cmp) {
+                if (!store.findRecord('_identifier', cmp.getItemId().replace('widget_', ''))) {
+                    widgetsContainer.remove(cmp);
+                }
+            });
 
             store.each(function (widget) {
+                // establish the widget component config if needed to be added
                 if (widget.get('isReport')) {
                     record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
-
                     if (!record) {
                         console.warn('There is no report matching "' + widget.get('name') + '"');
                         return;
                     }
+
+                    widgetCmpConfig = {
+                        xtype: 'widget-report',
+                        itemId: 'widget_' + widget.get('_identifier'),
+                        viewModel: {
+                            data: {
+                                widget: widget,
+                                record: record
+                            }
+                        }
+                    };
+                } else {
+                    widgetCmpConfig = {
+                        xtype: 'widget-' + widget.get('_identifier'),
+                        itemId: 'widget_' + widget.get('_identifier'),
+                        viewModel: {
+                            data: {
+                                widget: widget
+                            }
+                        }
+                    };
                 }
 
-                widgetsCmp.push({
-                    xtype: widget.get('isReport') ? 'widget-report' : ('widget-' + widget.get('_identifier')),
-                    itemId: 'widget_' + widget.get('_identifier'),
-                    viewModel: {
-                        data: {
-                            widget: widget,
-                            record: record
-                        }
-                    }
-                });
+                // find existing widget component, and if not exists add it to the container
+                widgetCmp = widgetsContainer.down('#widget_' + widget.get('_identifier'));
+                mdlIdx = store.indexOf(widget);
+                if (!widgetCmp) {
+                    Ext.Array.insert(widgetsCmp, mdlIdx, [widgetCmpConfig]);
+                }
+
+                cmpIdx = widgetsContainer.items.indexOf(widgetCmp);
+
+                // reorder widget components to match the store order
+                // the widget model store index should match the rendered widget component container index
+                if (cmpIdx >=0 && cmpIdx !== mdlIdx) {
+                    widgetsContainer.removeAt(cmpIdx);
+                    widgetsContainer.insert(mdlIdx, widgetCmpConfig);
+                }
             });
+            // add new widgets to the container
             widgetsContainer.add(widgetsCmp);
         },
 
@@ -292,82 +317,20 @@ Ext.define('Mfw.dashboard.Manager', {
             });
         },
 
-        onWidgetAdd: function (store, widgets, index) {
-            var me = this, record,
-                widget = widgets[0],
-                widgetsContainer = me.getView().up('dashboard').down('#widgets');
-
-            if (widget.get('isReport')) {
-                record = Ext.getStore('reports').findRecord('name', widget.get('name'), 0, false, true, true);
-
-                if (!record) {
-                    console.warn('There is no report matching "' + widget.get('name') + '"');
-                    return;
-                }
-
-                widgetsContainer.insert(index, {
-                    xtype: 'widget-report',
-                    itemId: 'widget_' + widget.get('_identifier'),
-                    viewModel: {
-                        data: {
-                            widget: widget,
-                            record: record
-                        }
-                    }
-                });
-            } else {
-                widgetsContainer.insert(index, {
-                    xtype: 'widget-' + widget.get('_identifier'),
-                    itemId: 'widget_' + widget.get('_identifier'),
-                    viewModel: {
-                        data: {
-                            widget: widget
-                        }
-                    }
-                });
-            }
-        },
-
         removeWidget: function (grid, info) {
             grid.getStore().remove(info.record);
         },
 
-        onWidgetRemove: function (store, widgets, index) {
-            var me = this,
-                widget = widgets[0],
-                widgetsContainer = me.getView().up('dashboard').down('#widgets'),
-                cmp = widgetsContainer.down('#widget_' + widget.get('_identifier'));
-
-            if (!cmp) {
-                console.warn('Widget compoenent not found! ' + widget.get('_identifier'));
-            }
-
-            widgetsContainer.remove(cmp);
-        },
-
-        onSort: function (grid, info) {
-            // var grid = this;
-            var store = grid.getStore(),
-                record = info.record,
-                newIndex, oldIndex = store.indexOf(record);
-            // newIndex, pos;
-            switch (info.tool.type) {
-                case 'up':    newIndex = oldIndex > 0 ? (oldIndex - 1) : oldIndex; break;
-                case 'down':  newIndex = oldIndex < store.getCount() ? (oldIndex + 1) : oldIndex; break;
-                default: break;
-            }
-
-            store.removeAt(oldIndex);
-            store.insert(newIndex, record);
-            // store.sync();
-        },
-
         // reset widgets to default
         onLoadDefaults: function () {
-            var store = Ext.getStore('widgets'),
+            var me = this,
+                store = Ext.getStore('widgets'),
                 model = store.getModel(),
                 proxy = model.getProxy(),
                 api = proxy.getApi();
+
+            // wipe all widget components
+            me.getView().up('dashboard').down('#widgets').removeAll();
 
             proxy.setApi({ read: api.read.replace('/settings/', '/defaults/') });
             // revert api to it's default values
