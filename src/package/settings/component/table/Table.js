@@ -8,23 +8,22 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 rules: []
             },
             chainNames: null
-        },
-        formulas: {
-            selectionModel: function (get) {
-                return {
-                    mode: 'multi',
-                    cells: false,
-                    // checkbox: true,
-                    drag: true,
-                    rows: get('selectedChain.editable')
-                };
-            }
         }
+        // formulas: {
+        //     selectionModel: function (get) {
+        //         return {
+        //             mode: 'multi',
+        //             cells: false,
+        //             // checkbox: true,
+        //             drag: true,
+        //             rows: get('selectedChain.editable')
+        //         };
+        //     }
+        // }
     },
 
     bind: {
-        store: '{selectedChain.rules}',
-        selectable: '{selectionModel}'
+        store: '{selectedChain.rules}'
     },
 
     controller: 'tablegrid',
@@ -54,6 +53,14 @@ Ext.define('Mfw.cmp.grid.table.Table', {
 
     itemConfig: {
         viewModel: true, // important
+    },
+
+    selectable: {
+        mode: 'single'
+    },
+
+    plugins: {
+        sortablelist: true
     },
 
     emptyText: 'No Data!'.t(),
@@ -197,6 +204,14 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     }],
 
     columns: [{
+        width: 44,
+        menuDisabled: true,
+        resizable: false,
+        cell: {
+            encodeHtml: false,
+            tools: [{ cls: 'x-list-sortablehandle', iconCls: 'md-icon-drag-handle', zone: 'start', tooltip: 'Drag to Sort' }]
+        }
+    }, {
         text: 'Id'.t(),
         dataIndex: 'ruleId',
         menuDisabled: true,
