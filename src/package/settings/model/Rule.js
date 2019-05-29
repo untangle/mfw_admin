@@ -3,7 +3,7 @@ Ext.define('Mfw.model.table.Action', {
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
-        { name: 'type', type: 'string' }, // "JUMP","GOTO","ACCEPT","REJECT","DROP","DNAT","SNAT","MASQUERADE","SET_PRIORITY"
+        { name: 'type', type: 'string' }
     ]
 
 });

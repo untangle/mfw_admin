@@ -633,6 +633,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
                 case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
                 case 'WAN_POLICY':      actionStr = ''; break;
+                case 'NEW_PORT':        actionStr = 'New Port'.t(); break;
                 default: break;
             }
             if (type === 'JUMP' || type === 'GOTO') {
@@ -649,6 +650,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
             if (type === 'WAN_POLICY') {
                 actionStr += policiesMap[action.get('policy')].text + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
+            }
+            if (type === 'NEW_PORT') {
+                actionStr += ' ' + action.get('port');
             }
         }
         return actionStr;

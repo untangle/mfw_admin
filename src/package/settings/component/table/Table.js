@@ -48,7 +48,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade'.t() },
         'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority'.t() },
         'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() },
-        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() }
+        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() },
+        'NEW_PORT': { value: 'NEW_PORT', text: 'New Port'.t() }
     },
 
     itemConfig: {

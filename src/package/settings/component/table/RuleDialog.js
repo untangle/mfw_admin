@@ -500,6 +500,25 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 return;
             }
 
+            if (value === 'NEW_PORT') {
+                if (!action) { rule.getAction().set('port', null); }
+                actionform.add({
+                    xtype: 'numberfield',
+                    itemId: 'actionValue',
+                    name: 'port',
+                    label: 'Value'.t(),
+                    placeholder: 'Set value ...',
+                    required: true,
+                    bind: '{rule.action.port}',
+                    validators: {
+                        type: 'format',
+                        message: 'Invalid port number',
+                        matcher: new RegExp('^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$')
+                    }
+                });
+                return;
+            }
+
         },
 
         addCondition: function () {
