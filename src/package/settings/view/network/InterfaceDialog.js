@@ -379,7 +379,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                     value: '{interface.v4StaticAddress}',
                                     required: '{interface.v4ConfigType === "STATIC"}'
                                 },
-                                validators: ['ipaddress']
+                                validators: 'ipv4'
                             }, {
                                 xtype: 'selectfield',
                                 name: 'v4StaticPrefix',
@@ -407,7 +407,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                 hidden: '{!interface.wan}', // ????
                                 required: '{interface.wan && interface.v4ConfigType === "STATIC"}'
                             },
-                            validators: ['presence', 'ipaddress']
+                            validators: 'ipv4'
                         }, {
                             xtype: 'containerfield',
                             layout: 'hbox',
@@ -581,7 +581,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             editor: {
                                 xtype: 'textfield',
                                 required: true,
-                                validators: ['ipaddress']
+                                validators: 'ipv4'
                             }
                         }, {
                             text: 'Netmask/Prefix'.t(),
@@ -724,14 +724,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                 xtype: 'textfield',
                                 name: 'v6StaticAddress',
                                 label: 'Address'.t(),
-                                errorLabel: 'IPv4 Static Address'.t(),
+                                errorLabel: 'IPv6 Static Address'.t(),
                                 flex: 1,
                                 required: false,
                                 bind: {
                                     value: '{interface.v6StaticAddress}',
                                     required: '{interface.v6ConfigType === "STATIC"}'
                                 },
-                                validators: ['ipaddress']
+                                validators: 'ipv6'
                             }, {
                                 xtype: 'numberfield',
                                 name: 'v6StaticPrefix',
@@ -755,7 +755,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                 hidden: '{!interface.wan}', // ????
                                 required: '{interface.wan && interface.v6ConfigType === "STATIC"}'
                             },
-                            validators: ['presence', 'ipaddress']
+                            validators: 'ipv6'
                         }, {
                             xtype: 'containerfield',
                             layout: 'hbox',
@@ -835,7 +835,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             editor: {
                                 xtype: 'textfield',
                                 required: true,
-                                validators: ['ipaddress']
+                                validators: 'ipv6'
                             }
                         }, {
                             text: 'Netmask/Prefix'.t(),
@@ -1159,7 +1159,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             editor: {
                                 xtype: 'textfield',
                                 required: true,
-                                validators: ['ipaddress']
+                                validators: 'ipv4'
                             }
                         }, {
                             text: 'Netmask/Prefix'.t(),

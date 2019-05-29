@@ -360,7 +360,7 @@ Ext.define('Mfw.Table', {
                 field = {
                     xtype: 'textfield',
                     placeholder: 'Enter address ...'.t(),
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 }; break;
             case 'client_port':
             case 'server_port':

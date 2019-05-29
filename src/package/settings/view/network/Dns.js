@@ -126,7 +126,7 @@ Ext.define('Mfw.settings.network.Dns', {
                     margin: '0 16 0 8',
                     width: 200,
                     placeholder: 'Enter address ...',
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 }, {
                     xtype: 'button',
                     text: 'Add',
@@ -209,7 +209,7 @@ Ext.define('Mfw.settings.network.Dns', {
                     xtype: 'textfield',
                     clearable: false,
                     required: true,
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 }
             }, {
                 width: 90,
@@ -345,7 +345,7 @@ Ext.define('Mfw.settings.network.Dns', {
                     margin: '0 8 0 16',
                     width: 200,
                     placeholder: 'Enter server ...',
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 }, {
                     xtype: 'button',
                     text: 'Add',
@@ -415,7 +415,7 @@ Ext.define('Mfw.settings.network.Dns', {
                     xtype: 'textfield',
                     clearable: false,
                     required: true,
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 }
             }, {
                 width: 90,

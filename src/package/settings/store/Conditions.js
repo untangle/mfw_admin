@@ -11,7 +11,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Source Address description ...',
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'SOURCE_ADDRESS_V6',
@@ -21,7 +21,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'SOURCE_ADDRESS_TYPE',
@@ -69,7 +69,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Destination Address description ...',
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'DESTINATION_ADDRESS_V6',
@@ -79,7 +79,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'DESTINATION_ADDRESS_TYPE',
@@ -128,7 +128,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'CLIENT_ADDRESS_V6',
@@ -138,7 +138,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'CLIENT_PORT',
@@ -179,7 +179,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'SERVER_ADDRESS_V6',
@@ -189,7 +189,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'SERVER_PORT',
@@ -230,7 +230,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'LOCAL_ADDRESS_V6',
@@ -240,7 +240,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'LOCAL_PORT',
@@ -275,7 +275,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv4'
         }
     }, {
         type:'REMOTE_ADDRESS_V6',
@@ -285,7 +285,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: ['ipaddress']
+            validators: 'ipv6'
         }
     }, {
         type:'REMOTE_PORT',

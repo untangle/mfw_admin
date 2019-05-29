@@ -441,7 +441,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     required: true,
                     bind: '{rule.action.dnat_address}',
                     // value: rule.get('action').dnat_address || undefined,
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 });
                 return;
             }
@@ -457,7 +457,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     required: true,
                     bind: '{rule.action.snat_address}',
                     // value: rule.get('action').snat_address || undefined,
-                    validators: ['ipaddress']
+                    validators: 'ipany'
                 });
                 return;
             }

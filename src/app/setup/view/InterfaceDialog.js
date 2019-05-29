@@ -358,7 +358,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                     value: '{interface.v4StaticAddress}',
                                     required: '{interface.v4ConfigType === "STATIC"}'
                                 },
-                                validators: ['ipaddress']
+                                validators: 'ipv4'
                             }, {
                                 xtype: 'selectfield',
                                 name: 'v4StaticPrefix',
@@ -386,7 +386,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                 hidden: '{!interface.wan}', // ????
                                 required: '{interface.wan && interface.v4ConfigType === "STATIC"}'
                             },
-                            validators: ['presence', 'ipaddress']
+                            validators: 'ipv4'
                         }, {
                             xtype: 'containerfield',
                             layout: 'hbox',
@@ -630,7 +630,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                     value: '{interface.v6StaticAddress}',
                                     required: '{interface.v6ConfigType === "STATIC"}'
                                 },
-                                validators: ['ipaddress']
+                                validators: 'ipv6'
                             }, {
                                 xtype: 'numberfield',
                                 name: 'v6StaticPrefix',
@@ -654,7 +654,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                 hidden: '{!interface.wan}', // ????
                                 required: '{interface.wan && interface.v6ConfigType === "STATIC"}'
                             },
-                            validators: ['presence', 'ipaddress']
+                            validators: 'ipv6'
                         }, {
                             xtype: 'containerfield',
                             layout: 'hbox',

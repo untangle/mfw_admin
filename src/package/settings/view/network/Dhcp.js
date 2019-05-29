@@ -121,7 +121,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 margin: '0 16 0 0',
                 width: 200,
                 placeholder: 'Enter address ...',
-                validators: ['ipaddress']
+                validators: 'ipany'
             }, {
                 xtype: 'textfield',
                 name: 'macAddress',
@@ -183,7 +183,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
         }, {
             text: 'Address'.t(),
             dataIndex: 'address',
-            width: 220,
+            width: 360,
             cell: {
                 tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
             },
@@ -192,7 +192,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 xtype: 'textfield',
                 clearable: false,
                 required: true,
-                validators: ['ipaddress']
+                validators: 'ipany'
             }
         }, {
             text: 'MAC'.t(),
