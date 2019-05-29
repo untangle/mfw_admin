@@ -278,18 +278,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             encodeHtml: false,
             bind: {
                 userCls: '{!record.enabled ? "x-disabled" : ""}'
-            },
-            tools: [{
-                xtype: 'button',
-                handler: 'selectChainFromGrid',
-                // ui: 'action',
-                style: 'font-weight: normal;',
-                bind: {
-                    record: '{record}',
-                    hidden: '{record.action.type !== "JUMP" && record.action.type !== "GOTO"}',
-                    text: '{record.action.type === "JUMP" ? "Jump To" : (record.action.type === "GOTO" ? "Go To" : "")} <b>{record.action.chain}</b>'
-                }
-            }]
+            }
         },
         renderer: 'actionRenderer'
     }],

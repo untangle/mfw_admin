@@ -2,6 +2,8 @@
 
 .x-root { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
 
+a { color: var(--base-color); }
+
 cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
 cite.nok { color: red; border-bottom: 1px red dashed; }

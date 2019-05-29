@@ -14,6 +14,10 @@
     user-select: auto;
 }
 
+a {
+    color: var(--base-color);
+}
+
 cite {
     font-style: normal;
     &.ok {
