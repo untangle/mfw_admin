@@ -44,7 +44,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Source Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'SOURCE_INTERFACE_NAME',
@@ -101,8 +102,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Destination Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
-            validators: ['number']
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'DESTINATION_INTERFACE_NAME',
@@ -146,8 +147,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Client Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
-            validators: ['number']
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'CLIENT_HOSTNAME',
@@ -197,8 +198,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Server Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
-            validators: ['number']
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'SERVER_HOSTNAME',
@@ -248,8 +249,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Local Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
-            validators: ['number']
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'LOCAL_HOSTNAME',
@@ -293,8 +294,8 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Remote Port description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'numberfield',
-            validators: ['number']
+            xtype: 'textfield',
+            validators: 'port'
         }
     }, {
         type:'REMOTE_HOSTNAME',

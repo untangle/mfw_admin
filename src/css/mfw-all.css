@@ -273,3 +273,6 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .pointer-list .x-listitem { cursor: pointer; }
 
 .x-drag-dragging { box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); background: rgba(255, 255, 0, 0.5); }
+
+.x-error-el { margin: 8px 0 !important; }
+.x-error-el .x-error-message-el { font-size: 12px; }

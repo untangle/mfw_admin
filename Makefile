@@ -35,7 +35,7 @@ SASS := $(wildcard src/sass/*.scss)
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
 APP_SETUP_SRC := $(addprefix src/app/setup/, *.js model store step view)
-APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util)
+APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util validators)
 
 # PACKAGES SOURCES
 PKG_DASHBOARD_SRC := $(addprefix src/package/dashboard/, *.js model store components widget)

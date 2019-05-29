@@ -125,15 +125,14 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 },
                 renderer: 'valueRenderer'
             }, {
-                width: 50,
-                align: 'center',
+                width: 44,
                 sortable: false,
                 hideable: false,
                 menuDisabled: true,
                 cell: {
                     tools: {
                         delete: {
-                            iconCls: 'md-icon-delete',
+                            iconCls: 'md-icon-close',
                             handler: function (grid, info) {
                                 info.record.drop();
                             }
@@ -377,8 +376,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 clearable: false,
                 autoComplete: false,
                 placeholder: 'Set value ...'.t(),
-                required: true
-
+                required: true,
+                errorTarget: 'under'
             });
 
             // if values are from a collection (selectfield), preselect first value
