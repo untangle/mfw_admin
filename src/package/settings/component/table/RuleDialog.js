@@ -349,9 +349,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             valueField = selection.get('field');
 
-            // remove all fields except operator
+            // remove all fields except type & operator
             Ext.Object.each(form.getFields(), function (key, field) {
-                if (field.getName() !== 'op') {
+                if (field.getName() !== 'op' && field.getName() !== 'type') {
                     form.remove(field);
                 }
             });
@@ -547,7 +547,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // form.reset(true);
         },
 
-        typeRenderer: function (value) {
+        typeRenderer: function (value, record) {
+            console.log(record, value);
             if (!Conditions.map[value]) {
                 console.warn('Condition ' + value + ' not defined!');
                 return '';
