@@ -300,7 +300,8 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                             bind: {
                                 value: '{interface.v4DhcpGatewayOverride}',
                                 placeholder: '{interface.v4StaticGateway}'
-                            }
+                            },
+                            validators: 'ipv4'
                         }, {
                             xtype: 'containerfield',
                             layout: 'hbox',

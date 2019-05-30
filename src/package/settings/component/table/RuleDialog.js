@@ -254,14 +254,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     html: '<h2 style="font-weight: 400; margin: 0;">{tree.selection.text}</h2>' +
                           '<span style="color: #777; font-size: 12px;">[ {tree.selection.type} ]</span>'
                 }
-            },
-            // {
-            //     xtype: 'component',
-            //     bind: {
-            //         html: '<p>{tree.selection.description}</p>'
-            //     }
-            // },
-            {
+            }, {
+                xtype: 'component',
+                bind: {
+                    html: '<p>{tree.selection.description}</p>'
+                }
+            }, {
                 xtype: 'hiddenfield',
                 name: 'type',
                 bind: {
