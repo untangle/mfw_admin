@@ -202,7 +202,7 @@ Ext.define('Mfw.Renderer', {
         msec = Number(msec);
         var sec = msec/1000;
         var millis = (msec%1000)+"";
-        while (millis.length < 3) millis = "0" + millis;
+        while (millis.length < 3) { millis = "0" + millis; }
 
         return Renderer.timeRangeSeconds(sec) + "." + millis;
     },
@@ -244,5 +244,64 @@ Ext.define('Mfw.Renderer', {
         }
         return '<b>' + value.toFixed(2) + '</b>';
     },
+
+    /**
+     * Condition value renderer based on type
+     * @param {any} value
+     */
+    conditionValue: function (val, rec) {
+        var type = rec.get('type'),
+            value = rec.get('value'),
+            valueRender = rec.get('value');
+
+        if (type === 'IP_PROTOCOL') {
+            if (Globals.protocolsMap[value]) {
+                valueRender = Globals.protocolsMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+            }
+        }
+
+        if (type === 'LIMIT_RATE') {
+            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text +
+                          ', ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+        }
+
+        if (type === 'SOURCE_INTERFACE_ZONE' ||
+            type === 'DESTINATION_INTERFACE_ZONE' ||
+            type === 'CLIENT_INTERFACE_ZONE' ||
+            type === 'SERVER_INTERFACE_ZONE') {
+            // the multiselect combobox creates a collection object as value
+            valueRender = [];
+            Ext.Object.each(rec.get('value'), function (key, intfId) {
+                if (Globals.interfacesMap[intfId]) {
+                    valueRender.push(Globals.interfacesMap[intfId] + ' <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
+                } else {
+                    // intfId not found
+                    valueRender.push('??? <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
+                }
+            });
+            valueRender = valueRender.join(' ');
+        }
+        return valueRender;
+    },
+
+
+    /**
+     * Renderer for Rules Conditions
+     * @param {Array} value
+     * @param {Model} record
+     */
+    conditionsList: function (value, record) {
+        var conditions = record.conditions(), arr = [],
+            tpl = '<div class="condition"><span>{0}</span><em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">{1}</em><strong>{2}</strong></div>';
+        if (conditions.count() === 0) {
+            return '<em>No conditions</em>';
+        }
+
+        conditions.each(function (condition) {
+            arr.push(Ext.String.format(tpl, Conditions.map[condition.get('type')].text, condition.get('op'), Renderer.conditionValue(null, condition)));
+        });
+
+        return arr.join(' ');
+    }
 
 });

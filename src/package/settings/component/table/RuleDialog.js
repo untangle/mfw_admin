@@ -103,7 +103,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 cell: {
                     encodeHtml: false
                 },
-                renderer: 'conditionRenderer'
+                renderer: 'typeRenderer'
             }, {
                 text: 'Operator',
                 dataIndex: 'op',
@@ -123,7 +123,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     encodeHtml: false,
                     tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
                 },
-                renderer: 'valueRenderer'
+                renderer: Renderer.conditionValue
             }, {
                 width: 44,
                 sortable: false,
@@ -547,7 +547,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // form.reset(true);
         },
 
-        conditionRenderer: function (value) {
+        typeRenderer: function (value) {
             if (!Conditions.map[value]) {
                 console.warn('Condition ' + value + ' not defined!');
                 return '';
@@ -557,53 +557,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
         operatorRenderer: function (value) {
             return Util.operatorsMap[value].text + ' <span style="color: #999;">[ ' + value + ' ]</span>';
-        },
-
-        valueRenderer: function (value, record) {
-            var condition = Conditions.map[record.get('type')],
-                valueRender;
-
-            // todo different value render based on condition type
-            if (condition.type === 'IP_PROTOCOL') {
-                if (!Globals.protocolsMap[value]) {
-                    console.warn('Invalid IP Protocol defined as string, expected integer!');
-                    return;
-                }
-                valueRender = Globals.protocolsMap[value].text +
-                              ' <em style="color: #999; font-style: normal;">[ ' + value + ' ]</em>';
-            }
-
-            if (condition.type === 'SOURCE_ADDRESS_TYPE' || condition.type === 'DESTINATION_ADDRESS_TYPE') {
-                valueRender = Util.addressTypesMap[value].text + ' <span style="color: #999; font-style: normal;">[ ' + value + ' ]</span>';
-            }
-
-            if (condition.type === 'CT_STATE') {
-                valueRender = Util.connectionStatesMap[value].text + ' <span style="color: #999; font-style: normal;">[ ' + value + ' ]</span>';
-            }
-
-            if (condition.type === 'LIMIT_RATE') {
-                valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text +
-                              ', ' + Util.groupSelectorsMap[record.get('group_selector')].text + '</em>';
-            }
-
-            if (condition.type === 'SOURCE_INTERFACE_ZONE' ||
-                condition.type === 'DESTINATION_INTERFACE_ZONE' ||
-                condition.type === 'CLIENT_INTERFACE_ZONE' ||
-                condition.type === 'SERVER_INTERFACE_ZONE') {
-                // the multiselect combobox creates a collection object as value
-                valueRender = [];
-                Ext.Object.each(value, function (key, intfId) {
-                    if (Globals.interfacesMap[intfId]) {
-                        valueRender.push(Globals.interfacesMap[intfId] + ' <span style="color: #999; font-style: normal;">[ ' + intfId + ' ]</span>');
-                    } else {
-                        // intfId not found
-                        valueRender.push('??? <span style="color: #999; font-style: normal;">[ ' + intfId + ' ]</span>');
-                    }
-                });
-                valueRender = valueRender.join(' ');
-            }
-
-            return valueRender || value;
         },
 
         filterConditionType: function (field, value) {

@@ -255,7 +255,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         }
     }, {
         text: 'Conditions'.t(),
-        dataIndex: 'conditions()',
+        // dataIndex: 'conditions',
         menuDisabled: true,
         flex: 1,
         cell: {
@@ -268,7 +268,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             },
             encodeHtml: false
         },
-        renderer: 'conditionRenderer'
+        renderer: Renderer.conditionsList
     }, {
         text: 'Action'.t(),
         dataIndex: 'action',
