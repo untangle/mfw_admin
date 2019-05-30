@@ -58,7 +58,27 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Interface Zone'.t(),
         description: 'Source Interface Zone description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            multiSelect: true,
+            editable: false,
+            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+            valueField: 'interfaceId',
+            queryMode: 'local',
+            store: {
+                type: 'interfaces',
+                filters: [{
+                    property: 'configType',
+                    value: 'ADDRESSED'
+                }]
+            },
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+            }
+        }
     },
 
     // DESTINATION
@@ -116,7 +136,27 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Interface Zone'.t(),
         description: 'Destination Interface Zone description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            multiSelect: true,
+            editable: false,
+            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+            valueField: 'interfaceId',
+            queryMode: 'local',
+            store: {
+                type: 'interfaces',
+                filters: [{
+                    property: 'configType',
+                    value: 'ADDRESSED'
+                }]
+            },
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+            }
+        }
     },
 
     // CLIENT
@@ -167,7 +207,27 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Interface Zone'.t(),
         description: 'Client Interface Zone description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            multiSelect: true,
+            editable: false,
+            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+            valueField: 'interfaceId',
+            queryMode: 'local',
+            store: {
+                type: 'interfaces',
+                filters: [{
+                    property: 'configType',
+                    value: 'ADDRESSED'
+                }]
+            },
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+            }
+        }
     },
 
     // SERVER
@@ -218,7 +278,27 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Interface Zone'.t(),
         description: 'Server Interface Zone description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            multiSelect: true,
+            editable: false,
+            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
+            valueField: 'interfaceId',
+            queryMode: 'local',
+            store: {
+                type: 'interfaces',
+                filters: [{
+                    property: 'configType',
+                    value: 'ADDRESSED'
+                }]
+            },
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+            }
+        }
     },
 
     // LOCAL

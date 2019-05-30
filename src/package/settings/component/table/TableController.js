@@ -588,6 +588,23 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 valueRender = '<strong>' + c.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[c.get('rate_unit')].text + '</em>';
             }
 
+            if (ruleCondition.type === 'SOURCE_INTERFACE_ZONE' ||
+                ruleCondition.type === 'DESTINATION_INTERFACE_ZONE' ||
+                ruleCondition.type === 'CLIENT_INTERFACE_ZONE' ||
+                ruleCondition.type === 'SERVER_INTERFACE_ZONE') {
+                // the multiselect combobox creates a collection object as value
+                valueRender = [];
+                Ext.Object.each(c.get('value'), function (key, intfId) {
+                    if (Globals.interfacesMap[intfId]) {
+                        valueRender.push(Globals.interfacesMap[intfId] + ' <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
+                    } else {
+                        // intfId not found
+                        valueRender.push('??? <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
+                    }
+                });
+                valueRender = valueRender.join(' ');
+            }
+
 
             strArr.push('<div class="condition"><span>' + ruleCondition.text + '</span> ' +
                    '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>');

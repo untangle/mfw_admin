@@ -285,10 +285,10 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 ]
             }, {
                 xtype: 'button',
-                text: 'Add Condition',
+                text: 'Add',
                 ui: 'action',
                 margin: '32 0 0 0',
-                width: 150,
+                width: 100,
                 handler: 'addCondition'
             }]
         }, {
@@ -376,6 +376,15 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 placeholder: 'Set value ...'.t(),
                 required: true,
                 errorTarget: 'under'
+                // listeners: {
+                //     painted: function (el) {
+                //         el.focus();
+                //     },
+                //     destroy: function (el) {
+                //         console.log('destroy');
+                //         el.clearListeners();
+                //     }
+                // }
             });
 
             // if values are from a collection (selectfield), preselect first value
@@ -523,11 +532,14 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             var me = this,
                 vm = me.getViewModel(),
                 rule = vm.get('rule'),
-                form = me.getView().down('#conditionform');
+                form = me.getView().down('#conditionform'),
+                valueField = form.getFields('value');
 
             if (!form.validate()) { return; }
             rule.conditions().add(form.getValues());
-            // form.getFields('op').reset();
+            valueField.reset();
+            valueField.setError(null);
+            valueField.focus();
             // form.reset(true);
         },
 
@@ -567,6 +579,23 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (condition.type === 'LIMIT_RATE') {
                 valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
+            }
+
+            if (condition.type === 'SOURCE_INTERFACE_ZONE' ||
+                condition.type === 'DESTINATION_INTERFACE_ZONE' ||
+                condition.type === 'CLIENT_INTERFACE_ZONE' ||
+                condition.type === 'SERVER_INTERFACE_ZONE') {
+                // the multiselect combobox creates a collection object as value
+                valueRender = [];
+                Ext.Object.each(value, function (key, intfId) {
+                    if (Globals.interfacesMap[intfId]) {
+                        valueRender.push(Globals.interfacesMap[intfId] + ' <span style="color: #999; font-style: normal;">[ ' + intfId + ' ]</span>');
+                    } else {
+                        // intfId not found
+                        valueRender.push('??? <span style="color: #999; font-style: normal;">[ ' + intfId + ' ]</span>');
+                    }
+                });
+                valueRender = valueRender.join(' ');
             }
 
             return valueRender || value;

@@ -278,3 +278,6 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 
 .x-error-el { margin: 8px 0 !important; }
 .x-error-el .x-error-message-el { font-size: 12px; }
+
+.x-chip, .x-chip:hover { border-radius: 3px; }
+.x-chip .x-close-el, .x-chip .x-close-el:hover, .x-chip:hover .x-close-el, .x-chip:hover .x-close-el:hover { background: transparent; }

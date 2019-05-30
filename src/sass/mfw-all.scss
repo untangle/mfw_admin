@@ -1021,3 +1021,11 @@ hr {
         font-size: 12px;
     }
 }
+
+.x-chip, .x-chip:hover {
+    border-radius: 3px;
+    .x-close-el, .x-close-el:hover {
+        background: transparent;
+    }
+}
+
