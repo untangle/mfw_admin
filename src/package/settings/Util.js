@@ -72,6 +72,7 @@ Ext.define('Mfw.settings.Util', {
         { value: '<=', text: 'Less Than or Equal'.t(), sign: ' <= ' }
     ],
 
+    // used in LIMIT_RATE conditions
     limitRateUnits: [
         { text: 'Bytes/Second',   value: 'BYTES_PER_SECOND' },
         { text: 'KBytes/Second',  value: 'KBYTES_PER_SECOND' },
@@ -85,21 +86,32 @@ Ext.define('Mfw.settings.Util', {
 
     addressTypes: [
         { text: 'Unspecified', value: 'unspec' },
-        { text: 'Unicast', value: 'unicast' },
-        { text: 'Local', value: 'local' },
-        { text: 'Broadcast', value: 'broadcast' },
-        { text: 'Anycast', value: 'anycast' },
-        { text: 'Multicast', value: 'multicast' },
-        { text: 'Blackhole', value: 'blackhole' },
+        { text: 'Unicast',     value: 'unicast' },
+        { text: 'Local',       value: 'local' },
+        { text: 'Broadcast',   value: 'broadcast' },
+        { text: 'Anycast',     value: 'anycast' },
+        { text: 'Multicast',   value: 'multicast' },
+        { text: 'Blackhole',   value: 'blackhole' },
         { text: 'Unreachable', value: 'unreachable' },
-        { text: 'Prohibit', value: 'prohibit' }
+        { text: 'Prohibit',    value: 'prohibit' }
     ],
 
     connectionStates: [
-        { text: 'New', value: 'new' },
+        { text: 'New',         value: 'new' },
         { text: 'Established', value: 'established' },
-        { text: 'Related', value: 'related' },
-        { text: 'Invalid', value: 'invalid' }
+        { text: 'Related',     value: 'related' },
+        { text: 'Invalid',     value: 'invalid' }
+    ],
+
+    // used in LIMIT_RATE conditions
+    groupSelectors: [
+        { text: 'IP Protocol',            value: 'IP_PROTOCOL' },
+        { text: 'Source Port',            value: 'SOURCE_PORT' },
+        { text: 'Source Address',         value: 'SOURCE_ADDRESS' },
+        { text: 'Source Address v6',      value: 'SOURCE_ADDRESS_V6' },
+        { text: 'Destination Port',       value: 'DESTINATION_PORT' },
+        { text: 'Destination Address',    value: 'DESTINATION_ADDRESS' },
+        { text: 'Destination Address v6', value: 'DESTINATION_ADDRESS_V6' },
     ],
 
     // adds timezone computation to ensure dates showing in UI are showing actual server date
@@ -119,7 +131,8 @@ Ext.define('Mfw.settings.Util', {
             operatorsMap: Ext.Array.toValueMap(this.operators, 'value'),
             limitRateUnitsMap: Ext.Array.toValueMap(this.limitRateUnits, 'value'),
             addressTypesMap: Ext.Array.toValueMap(this.addressTypes, 'value'),
-            connectionStatesMap: Ext.Array.toValueMap(this.connectionStates, 'value')
+            connectionStatesMap: Ext.Array.toValueMap(this.connectionStates, 'value'),
+            groupSelectorsMap: Ext.Array.toValueMap(this.groupSelectors, 'value')
         });
     }
 });

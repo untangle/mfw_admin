@@ -436,10 +436,22 @@ Ext.define('Mfw.settings.Conditions', {
             placeholder: 'Choose rate unit ...',
             forceSelection: true,
             editable: false,
-            // width: 220,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Util.limitRateUnits
+        },
+        groupField: {
+            xtype: 'selectfield',
+            temId: 'groupField',
+            name: 'group_selector',
+            label: 'Group Selector',
+            labelAlign: 'top',
+            placeholder: 'Choose group ...',
+            forceSelection: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Util.groupSelectors
         }
     }],
 

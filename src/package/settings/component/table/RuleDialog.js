@@ -338,6 +338,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 form = me.getView().down('#conditionform'),
                 valueField,
                 unitField = selection.get('unitField'),
+                groupField = selection.get('groupField'),
                 operators = [];
 
             if (!selection.get('field')) {
@@ -348,13 +349,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             valueField = selection.get('field');
 
-            // remove exiting value/unit fields
-            if (form.getFields('value')) {
-                form.remove(form.getFields('value'));
-            }
-            if (form.getFields('rate_unit')) {
-                form.remove(form.getFields('rate_unit'));
-            }
+            // remove all fields except operator
+            Ext.Object.each(form.getFields(), function (key, field) {
+                if (field.getName() !== 'op') {
+                    form.remove(field);
+                }
+            });
 
             // set available operators for selected condition type, and preselect first operator
             if (selection.get('operators')) {
@@ -395,12 +395,16 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // insert value field into the form
             form.insertBefore(valueField, form.down('button'));
 
-            // insert unit field into the form
+            // used for LIMIT_RATE
             if (unitField) {
-                if (unitField.xtype === 'selectfield') {
-                    unitField.value = unitField.options[0].value;
-                }
+                unitField.value = unitField.options[0].value;
                 form.insertBefore(unitField, form.down('button'));
+            }
+
+            // used for LIMIT_RATE
+            if (groupField) {
+                groupField.value = groupField.options[0].value;
+                form.insertBefore(groupField, form.down('button'));
             }
         },
 
@@ -578,7 +582,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             if (condition.type === 'LIMIT_RATE') {
-                valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text + '</em>';
+                valueRender = value + ' <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[record.get('rate_unit')].text +
+                              ', ' + Util.groupSelectorsMap[record.get('group_selector')].text + '</em>';
             }
 
             if (condition.type === 'SOURCE_INTERFACE_ZONE' ||
