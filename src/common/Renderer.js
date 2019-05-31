@@ -303,8 +303,12 @@ Ext.define('Mfw.Renderer', {
         }
 
         if (type === 'LIMIT_RATE') {
-            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text +
-                          ', ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+            if (rec.get('rate_unit')) {
+                valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text;
+            }
+            if (rec.get('group_selector')) {
+                valueRender += ', ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+            }
         }
 
         if (type === 'SOURCE_ADDRESS_TYPE' ||
