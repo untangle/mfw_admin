@@ -64,8 +64,8 @@ Ext.define('Mfw.settings.Util', {
 
 
     operators: [
-        { value: '==', text: 'Equals'.t(), sign: ' = ' },
-        { value: '!=', text: 'Not Equals'.t(), sign: ' != ' },
+        { value: '==', text: 'Is'.t(), sign: ' = ' },
+        { value: '!=', text: 'Is Not'.t(), sign: ' != ' },
         { value: '>', text: 'Greater Than'.t(), sign: ' > ' },
         { value: '<', text: 'Less Than'.t(), sign: ' < ' },
         { value: '>=', text: 'Greater Than or Equal'.t(), sign:' >= ' },

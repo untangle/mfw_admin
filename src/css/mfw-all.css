@@ -12,6 +12,7 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-fa.fa-green { color: green; }
 .x-fa.fa-blue { color: blue; }
 .x-fa.fa-orange { color: orange; }
+.x-fa.fa-gray { color: #999; }
 
 .x-subbar { background: #555; }
 .x-subbar .x-button { color: #FFF; font-weight: 400; font-size: 12px; }
@@ -70,6 +71,7 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 
 .x-statuscolumn .x-body-el { padding: 0; border-right: 1px #EEE solid; }
 
+.x-gridcell { vertical-align: top; }
 .x-gridcell.status-dirty { background: orange; }
 .x-gridcell.status-delete { background: red; }
 .x-gridcell.status-phantom { background: green; }

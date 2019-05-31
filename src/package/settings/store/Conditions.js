@@ -427,7 +427,7 @@ Ext.define('Mfw.settings.Conditions', {
         field: {
             xtype: 'numberfield',
         },
-        unitField: {
+        extraFields: [{
             xtype: 'selectfield',
             temId: 'unitField',
             name: 'rate_unit',
@@ -436,11 +436,12 @@ Ext.define('Mfw.settings.Conditions', {
             placeholder: 'Choose rate unit ...',
             forceSelection: true,
             editable: false,
+            required: true,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            errorTarget: 'under',
             options: Util.limitRateUnits
-        },
-        groupField: {
+        }, {
             xtype: 'selectfield',
             temId: 'groupField',
             name: 'group_selector',
@@ -449,10 +450,12 @@ Ext.define('Mfw.settings.Conditions', {
             placeholder: 'Choose group ...',
             forceSelection: true,
             editable: false,
+            required: true,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            errorTarget: 'under',
             options: Util.groupSelectors
-        }
+        }]
     }],
 
     constructor: function() {

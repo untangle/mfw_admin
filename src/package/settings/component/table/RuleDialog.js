@@ -32,7 +32,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         items: [{
             xtype: 'component',
             bind: {
-                html: '<h1 style="margin: 0; font-weight: 400;">{action === "ADD" ? "Create New" : "Edit"} <span style="color: #777;">{ruleType}</span> Rule</h1>'
+                html: '<h1 style="margin: 0; font-weight: 400; font-size: 24px;">{action === "ADD" ? "Create New" : "Edit"} <span style="color: #519839;">{ruleType}</span> Rule</h1>'
             }
         }, {
             xtype: 'formpanel',
@@ -71,59 +71,39 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }]
         }, {
             xtype: 'component',
-            html: '<h2 style="font-weight: 400;">If All the following Conditions are met</h2>'
+            html: '<h2 style="font-weight: 100;">If All the following Conditions are met</h2>'
         }, {
             xtype: 'grid',
-            // userCls: 'c-noheaders',
+            reference: 'grid',
+            userCls: 'c-noheaders',
             height: 300,
             emptyText: 'No Conditions!'.t(),
             deferEmptyText: false,
             rowLines: false,
             sortable: false,
+            deselectOnContainerClick: true,
             selectable: {
-                columns: false,
-                rows: false
+                mode: 'single',
+                cells: false
             },
             margin: '0 16 0 0',
             padding: 0,
             bind: '{rule.conditions}',
-            plugins: {
-                gridcellediting: {
-                    triggerEvent: 'tap'
-                }
-            },
             itemConfig: {
                 viewModel: true
             },
             columns: [{
                 text: 'Type',
                 dataIndex: 'type',
-                width: 250,
                 menuDisabled: true,
-                cell: {
-                    encodeHtml: false
-                },
-                renderer: 'typeRenderer'
-            }, {
-                text: 'Operator',
-                dataIndex: 'op',
-                width: 200,
-                menuDisabled: true,
-                cell: {
-                    encodeHtml: false,
-                    tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
-                },
-                renderer: 'operatorRenderer'
-            }, {
-                text: 'Value',
-                dataIndex: 'value',
                 flex: 1,
-                menuDisabled: true,
                 cell: {
                     encodeHtml: false,
-                    tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
+                    bodyStyle: {
+                        padding: '8px 16px'
+                    }
                 },
-                renderer: Renderer.conditionValue
+                renderer: Renderer.conditionText
             }, {
                 width: 44,
                 sortable: false,
@@ -141,11 +121,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 }
             }],
             listeners: {
-                childmouseenter: 'mouseEnter'
+                select: 'onConditionSelect'
             }
         }, {
             xtype: 'component',
-            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 400;">Apply the following Action</h2>'
+            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Apply the following Action</h2>'
         }, {
             xtype: 'formpanel',
             itemId: 'actionform',
@@ -179,7 +159,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 handler: 'onCancel'
             }, {
                 bind: {
-                    text: '{action === "ADD" ? "Create" : "Update"}'
+                    text: '{action === "ADD" ? "Create" : "Update"} Rule'
                 },
                 ui: 'action',
                 handler: 'onSubmit'
@@ -192,18 +172,22 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         items: [{
             xtype: 'component',
             docked: 'top',
-            padding: '0 16 16 16',
-            html: '<h2 style="font-weight: 100;">Available Condition Types</h2>' +
-                  '<p>Select and set one or more Conditions to add to the Rule</p>'
+            padding: 16,
+            bind: {
+                html: '<h1 style="margin: 0; font-weight: 400; font-size: 24px; color: #111;">{!grid.selection ? "Add" : "Edit"} Condition</h1>'
+            }
         }, {
             xtype: 'panel',
             docked: 'left',
             width: 250,
             layout: 'vbox',
+            manageBorders: false,
+            style: 'box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);',
+            zIndex: 10,
             bodyStyle: 'background: #F3F3F3;',
             items: [{
                 xtype: 'searchfield',
-                margin: '0 0 16 8',
+                margin: 16,
                 placeholder: 'Find Condition Type ...'.t(),
                 listeners: {
                     change: 'filterConditionType'
@@ -237,34 +221,35 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 listeners: {
                     select: 'onConditionSelect'
                 },
-            }]
+            }],
+            bind: {
+                width: '{grid.selection ? 0 : 250}'
+            }
         }, {
             xtype: 'formpanel',
             itemId: 'conditionform',
-            padding: '0 32',
+            padding: 16,
             layout: 'vbox',
             hidden: true,
             bind: {
-                hidden: '{!tree.selection.type}'
+                // record: '{record}',
+                hidden: '{!tree.selection && !grid.selection}'
             },
             bodyStyle: 'background: #F3F3F3;',
             items: [{
                 xtype: 'component',
                 bind: {
-                    html: '<h2 style="font-weight: 400; margin: 0;">{tree.selection.text}</h2>' +
-                          '<span style="color: #777; font-size: 12px;">[ {tree.selection.type} ]</span>'
+                    html: '<h2 style="font-weight: 400; margin: 0;">{condition.text}</h2>' +
+                          '<span style="color: #777; font-size: 10px; font-family: monospace;">[{condition.type}]</span>'
                 }
             }, {
                 xtype: 'component',
                 bind: {
-                    html: '<p>{tree.selection.description}</p>'
+                    html: '<p>{condition.description}</p>'
                 }
             }, {
                 xtype: 'hiddenfield',
                 name: 'type',
-                bind: {
-                    value: '{tree.selection.type}'
-                }
             }, {
                 xtype: 'selectfield',
                 placeholder: 'Select ...',
@@ -272,33 +257,47 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 label: 'Operator'.t(),
                 labelAlign: 'top',
                 editable: false,
+                maxWidth: 200,
                 required: true,
                 displayTpl: '{text} [ {value} ]',
-                itemTpl: '<tpl>{text} <span style="color: #999;">[ {value} ]</span></tpl>',
-                options: [
-                    { value: '==', text: 'Equals'.t(), sign: '[ = ]' },
-                    { value: '!=', text: 'Not Equals'.t(), sign: '[ != ]' },
-                    { value: '>', text: 'Greater Than'.t(), sign: '[ > ]' },
-                    { value: '<', text: 'Less Than'.t(), sign: '[ < ]' },
-                    { value: '>=', text: 'Greater Than or Equal'.t(), sign:'[ >= ]' },
-                    { value: '<=', text: 'Less Than or Equal'.t(), sign: '[ <= ]' }
-                ]
+                itemTpl: '<tpl>{text} <span style="color: #999;">[ {value} ]</span></tpl>'
             }, {
-                xtype: 'button',
-                text: 'Add',
-                ui: 'action',
+                xtype: 'container',
+                itemId: 'actionBtns',
                 margin: '32 0 0 0',
-                width: 100,
-                handler: 'addCondition'
+                layout: {
+                    type: 'hbox',
+                    pack: 'right'
+                },
+                items: [{
+                    xtype: 'button',
+                    text: 'Cancel',
+                    margin: '0 8 0 0',
+                    width: 100,
+                    handler: 'cancelEdit',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!grid.selection}'
+                    }
+                }, {
+                    xtype: 'button',
+                    text: 'Add',
+                    ui: 'action',
+                    width: 150,
+                    handler: 'addUpdateCondition',
+                    bind: {
+                        text: '{grid.selection ? "Update" : "Add"} Condition'
+                    }
+                }]
             }]
         }, {
             xtype: 'component',
-            style: 'text-align: center;',
-            html: 'No Selection!',
+            style: 'text-align: center; font-size: 16px;',
+            html: '<i class="x-fa fa-info-circle fa-3x fa-gray"></i><br/><p>Select a Type to add new Condition<br>or an edit an existing one!</p>',
             margin: '120 0 0 0',
             hidden: true,
             bind: {
-                hidden: '{tree.selection}'
+                hidden: '{grid.selection || tree.selection}'
             }
         }]
     }],
@@ -333,21 +332,31 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             vm.set('rule', rule);
         },
 
-        onConditionSelect: function (el, selection) {
+        onConditionSelect: function (dataview, selection) {
             var me = this,
                 form = me.getView().down('#conditionform'),
-                valueField,
-                unitField = selection.get('unitField'),
-                groupField = selection.get('groupField'),
+                tree = me.lookup('tree'),
+                // if selection from tree create new condition, otherwise it's an editing of existing condition
+                isNewCondition = dataview.isXType('tree'),
+                vm = me.getViewModel(),
+                // regardless of the new selection from tree or existing condition from grid ...
+                conditionDef = Conditions.map[selection.get('type')], // condition as defined in Conditions global
+                // set valuefield from condition definition or default to textfield
+                valueField = conditionDef.field || {
+                    xtype: 'textfield'
+                },
                 operators = [];
 
-            if (!selection.get('field')) {
-                selection.set('field', {
-                    xtype: 'textfield'
-                });
+            // deselect tree if selected
+            if (!isNewCondition) {
+                tree.setSelection(null);
+                tree.getStore().getRoot().collapseChildren();
             }
 
-            valueField = selection.get('field');
+            // add condition def to viewModel
+            vm.set({
+                condition: conditionDef
+            });
 
             // remove all fields except type & operator
             Ext.Object.each(form.getFields(), function (key, field) {
@@ -357,8 +366,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             });
 
             // set available operators for selected condition type, and preselect first operator
-            if (selection.get('operators')) {
-                Ext.Object.each(selection.get('operators'), function (key, op) {
+            if (conditionDef.operators) {
+                Ext.Array.each(conditionDef.operators, function (op) {
                     operators.push(Util.operatorsMap[op]);
                 });
             } else {
@@ -366,7 +375,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
             form.getFields('op').setOptions(operators).setValue(operators[0].value);
 
-            Ext.apply(selection.get('field'), {
+
+            // apply extra properties on valueField
+            Ext.apply(valueField, {
                 name: 'value',
                 label: 'Value',
                 labelAlign: 'top',
@@ -376,35 +387,39 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 placeholder: 'Set value ...'.t(),
                 required: true,
                 errorTarget: 'under'
-                // listeners: {
-                //     painted: function (el) {
-                //         el.focus();
-                //     },
-                //     destroy: function (el) {
-                //         console.log('destroy');
-                //         el.clearListeners();
-                //     }
-                // }
             });
 
-            // if values are from a collection (selectfield), preselect first value
-            if (valueField.xtype === 'selectfield') {
-                valueField.value = valueField.options[0].value;
+
+            if (isNewCondition) {
+                // if values are from a collection (selectfield), preselect first value
+                if (valueField.xtype === 'selectfield') {
+                    valueField.value = valueField.options[0].value;
+                }
             }
 
             // insert value field into the form
-            form.insertBefore(valueField, form.down('button'));
+            form.insertBefore(valueField, form.down('#actionBtns'));
 
-            // used for LIMIT_RATE
-            if (unitField) {
-                unitField.value = unitField.options[0].value;
-                form.insertBefore(unitField, form.down('button'));
+            // insert any extra fields (e.g. for LIMIT_RATE)
+            if (conditionDef.extraFields) {
+                Ext.Array.each(conditionDef.extraFields, function (field) {
+                    if (isNewCondition) {
+                        if (field.xtype === 'selectfield') {
+                            field.value = field.options[0].value;
+                        }
+                    }
+                    form.insertBefore(field, form.down('#actionBtns'));
+                });
             }
 
-            // used for LIMIT_RATE
-            if (groupField) {
-                groupField.value = groupField.options[0].value;
-                form.insertBefore(groupField, form.down('button'));
+            if (!isNewCondition) {
+                // if editing set the values of the selected condition
+                form.setValues(selection.getData());
+            } else {
+                // if new it's enough to set the type
+                form.setValues({
+                    type: selection.get('type')
+                });
             }
         },
 
@@ -532,23 +547,27 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
         },
 
-        addCondition: function () {
+        addUpdateCondition: function () {
             var me = this,
                 vm = me.getViewModel(),
-                rule = vm.get('rule'),
-                form = me.getView().down('#conditionform'),
-                valueField = form.getFields('value');
+                grid = me.lookup('grid'),
+                tree = me.lookup('tree'),
+                form = me.getView().down('#conditionform');
 
             if (!form.validate()) { return; }
-            rule.conditions().add(form.getValues());
-            valueField.reset();
-            valueField.setError(null);
-            valueField.focus();
-            // form.reset(true);
+
+            if (vm.get('grid.selection')) {
+                vm.get('grid.selection').set(form.getValues());
+            } else {
+                grid.getStore().add(form.getValues());
+            }
+
+            me.lookup('grid').setSelection(null);
+            tree.setSelection(null);
+            tree.getStore().getRoot().collapseChildren();
         },
 
-        typeRenderer: function (value, record) {
-            console.log(record, value);
+        typeRenderer: function (value) {
             if (!Conditions.map[value]) {
                 console.warn('Condition ' + value + ' not defined!');
                 return '';
@@ -562,10 +581,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
         filterConditionType: function (field, value) {
             var me = this,
-                tree = me.getView().down('tree'),
+                tree = me.lookup('tree'),
                 store = tree.getStore(),
                 root = store.getRoot();
-                // expandedNode = null;
 
             store.clearFilter();
 
@@ -582,45 +600,13 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
         },
 
+        cancelEdit: function () {
+            var me = this,
+                tree = me.lookup('tree');
 
-        /**
-         * Used to update column editor based on condition type
-         */
-        mouseEnter: function (el, location) {
-            var condition = Conditions.map[location.record.get('type')],
-                operators = [];
-
-            if (location.column.getText() === 'Operator') {
-                if (condition.operators) {
-                    Ext.Object.each(condition.operators, function (key, op) {
-                        operators.push(Util.operatorsMap[op]);
-                    });
-                } else {
-                    operators = Util.operators;
-                }
-                location.column.setEditor({
-                    xtype: 'selectfield',
-                    editable: false,
-                    clearable: false,
-                    displayTpl: '{text} [ {value} ]',
-                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: operators
-                });
-            }
-
-            if (location.column.getText() === 'Value') {
-                if (condition.field) {
-                    location.column.setEditor(condition.field);
-                } else {
-                    location.column.setEditor({
-                        xtype: 'textfield',
-                        clearable: false,
-                        required: true
-                    });
-                }
-            }
-
-            // console.log(condition);
+            me.lookup('grid').setSelection(null);
+            tree.setSelection(null);
+            tree.getStore().getRoot().collapseChildren();
         },
 
         onCancel: function () {

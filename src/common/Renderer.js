@@ -284,6 +284,72 @@ Ext.define('Mfw.Renderer', {
         return valueRender;
     },
 
+    /**
+     * Condition value renderer based on type
+     * @param {any} value
+     */
+    conditionText: function (val, rec) {
+        var type = rec.get('type'),
+            typeText = Conditions.map[type].text,
+            op = rec.get('op'),
+            opText = Util.operatorsMap[op].text,
+            value = rec.get('value'),
+            valueRender = rec.get('value');
+
+        if (type === 'IP_PROTOCOL') {
+            if (Globals.protocolsMap[value]) {
+                valueRender = Globals.protocolsMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+            }
+        }
+
+        if (type === 'LIMIT_RATE') {
+            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text +
+                          ', ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+        }
+
+        if (type === 'SOURCE_ADDRESS_TYPE' ||
+            type === 'DESTINATION_ADDRESS_TYPE') {
+                if (Util.addressTypesMap[value]) {
+                    valueRender = Util.addressTypesMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+                }
+        }
+
+        if (type === 'CT_STATE') {
+                if (Util.connectionStatesMap[value]) {
+                    valueRender = Util.connectionStatesMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+                }
+        }
+
+        if (type === 'SOURCE_INTERFACE_ZONE' ||
+            type === 'DESTINATION_INTERFACE_ZONE' ||
+            type === 'CLIENT_INTERFACE_ZONE' ||
+            type === 'SERVER_INTERFACE_ZONE') {
+            // the multiselect combobox creates a collection object as value
+            valueRender = [];
+            Ext.Object.each(rec.get('value'), function (key, intfId) {
+                if (Globals.interfacesMap[intfId]) {
+                    valueRender.push(Globals.interfacesMap[intfId] + '<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
+                } else {
+                    // intfId not found
+                    valueRender.push('???<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
+                }
+            });
+            valueRender = valueRender.join(', ');
+        }
+        var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
+
+        if (val) {
+            str += '<br/><span style="color: #999; font-size: 10px;">' + type + ' ' + op + ' ' + value + '</span>';
+            if (type === 'LIMIT_RATE') {
+                str += ' <span style="color: #999; font-size: 10px;">' + rec.get('rate_unit') + ', ' + rec.get('group_selector') + '</span>';
+            }
+        }
+
+        str += '</div>';
+
+        return str;
+    },
+
 
     /**
      * Renderer for Rules Conditions
@@ -291,14 +357,13 @@ Ext.define('Mfw.Renderer', {
      * @param {Model} record
      */
     conditionsList: function (value, record) {
-        var conditions = record.conditions(), arr = [],
-            tpl = '<div class="condition"><span>{0}</span><em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">{1}</em><strong>{2}</strong></div>';
+        var conditions = record.conditions(), arr = [];
         if (conditions.count() === 0) {
             return '<em>No conditions</em>';
         }
 
         conditions.each(function (condition) {
-            arr.push(Ext.String.format(tpl, Conditions.map[condition.get('type')].text, condition.get('op'), Renderer.conditionValue(null, condition)));
+            arr.push(Renderer.conditionText(null, condition));
         });
 
         return arr.join(' ');

@@ -56,10 +56,10 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         viewModel: true, // important
     },
 
-    rowLines: false,
+    rowLines: true,
     selectable: false,
     itemRipple: false,
-
+    variableHeights: true,
     plugins: {
         sortablelist: true
     },
@@ -261,10 +261,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         cell: {
             bind: {
                 userCls: '{!record.enabled ? "x-disabled" : ""}'
-            },
-            bodyStyle: {
-                // padding: 0
-                padding: '0 16px 0 0'
             },
             encodeHtml: false
         },
