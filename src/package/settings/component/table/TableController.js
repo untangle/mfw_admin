@@ -212,7 +212,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 html: tpl,
                 handler: function (item) {
                     item.up('menu').hide();
-                    Mfw.app.redirectTo(grid.getHash() + '/' + chain.get('name'));
+                    Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + chain.get('name'));
                     // me.selectChain(chain.get('name'));
                 }
             });
