@@ -189,6 +189,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         }
         vm.set('selectedChain', me.selectedChain);
         me.updateChainsMenu();
+
+        // keep the initial order of items, used to determine if records were moved around
+        me.initialIndices = me.selectedChain.rules().getData().indices;
     },
 
     /**
@@ -607,7 +610,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     },
 
     checkModified: function (cb) {
-        var isModified = false,
+        var me = this,
+            isModified = false,
             store = this.getView().getStore(),
             modified = store.getModifiedRecords(),
             added = store.getNewRecords(),
@@ -615,6 +619,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         if (modified.length > 0 || added.length > 0 || removed.length > 0) {
             isModified = true;
+        } else {
+            // compares initial indices with eventually new indices if records were moved
+            isModified = !Ext.Object.equals(me.initialIndices, store.getData().indices);
         }
         cb(isModified);
     }
