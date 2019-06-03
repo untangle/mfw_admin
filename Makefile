@@ -100,9 +100,10 @@ MOMENT_FILE := $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
 # main targets
 install: \
 	dir \
-	css \
+	css-admin \
 	js-admin \
 	html-admin \
+	css-settings \
 	js-settings \
 	html-settings \
 	html-reports \
@@ -184,7 +185,7 @@ ${REPORTS_DIR}/entries.json: $(REPORT_ENTRIES)
 
 reports-install: dir ${REPORTS_DIR}/entries.json
 
-css: $(ADMIN_DIR)/mfw-all.css
+css-admin: $(ADMIN_DIR)/mfw-all.css
 $(ADMIN_DIR)/mfw-all.css: src/css/mfw-all.css
 	$(call LOG_FUNCTION,"Building CSS")
 	@cp $^ $@
@@ -197,6 +198,11 @@ $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 html-admin: $(ADMIN_DIR)/index.html
 $(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
+	@cp $^ $@
+
+css-settings: $(SETTINGS_DIR)/mfw-all.css
+$(SETTINGS_DIR)/mfw-all.css: src/css/mfw-all.css
+	$(call LOG_FUNCTION,"Building CSS")
 	@cp $^ $@
 
 js-settings: $(SETTINGS_DIR)/mfw-settings-all.js
@@ -238,7 +244,7 @@ clean:
 
 ## development targets
 
-dev-deploy: dev-install dev-sass css dev-copy
+dev-deploy: dev-install dev-sass css-admin css-settings dev-copy
 
 dev-install: \
 	dir \
@@ -250,7 +256,8 @@ dev-install: \
 	js-setup \
 	html-setup \
 	dev-sass \
-	css \
+	css-admin \
+	css-settings \
 	cacheguard
 
 # generates the mfw-all.css

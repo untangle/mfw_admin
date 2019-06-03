@@ -8,6 +8,6 @@ Ext.define('Mfw.settings.firewall.WebFilter', {
             read: Util.api + '/settings/firewall/tables/web-filter',
             update: Util.api + '/settings/firewall/tables/web-filter'
         },
-        hash: 'settings/firewall/web-filter'
+        hash: 'firewall/web-filter'
     }
 });

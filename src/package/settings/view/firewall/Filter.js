@@ -9,6 +9,6 @@ Ext.define('Mfw.settings.firewall.Filter', {
             update: Util.api + '/settings/firewall/tables/filter'
         },
         actions: ['JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP'],
-        hash: 'settings/firewall/filter'
+        hash: 'firewall/filter'
     }
 });

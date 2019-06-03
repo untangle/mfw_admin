@@ -2,10 +2,29 @@ Ext.define('Mfw.settings.view.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.settings',
 
-    routes: {
-        'settings:query': {
-            action: 'onAction',
-            conditions: { ':query' : '(.*)' }
+    // routes: {
+
+    // },
+
+    init: function () {
+        /**
+         * Set routes based on app context
+         */
+        if (Mfw.app.context === 'admin') {
+            this.setRoutes({
+                'settings:query': {
+                    action: 'onAction',
+                    conditions: { ':query' : '(.*)' }
+                }
+            });
+        }
+        if (Mfw.app.context === 'settings') {
+            this.setRoutes({
+                ':query': {
+                    action: 'onAction',
+                    conditions: { ':query' : '(.*)' }
+                }
+            });
         }
     },
 
@@ -13,20 +32,28 @@ Ext.define('Mfw.settings.view.MainController', {
         var me = this, view = me.getView(),
             cmp = view.down('#currentSettings'),
             tree = view.down('treelist'),
-            node = tree.getStore().findNode('href', 'settings'),
+            node,
             prefix, // used for chains routing in /firewall or /routing
             routeParts, table, chain, widget;
+
+        if (route) {
+            // replace the first forward slash
+            if (route.startsWith('/')) {
+                route = route.replace('/', '');
+            }
+        }
 
         Mfw.app.viewport.setActiveItem('settings');
 
         if (cmp) { cmp.destroy(); }
 
         if (route) {
-            if (Ext.String.startsWith(route, '/firewall') || Ext.String.startsWith(route, '/routing/wan-rules')) {
+            if (route.startsWith('firewall') || route.startsWith('routing/wan-rules')) {
                 routeParts = route.split('/'),
-                prefix = routeParts[1], // "firewall" or "routing"
-                table = routeParts[2],
-                chain = routeParts[3],
+
+                prefix = routeParts[0], // "firewall" or "routing"
+                table = routeParts[1],
+                chain = routeParts[2],
 
                 widget = {
                     xtype: 'mfw-settings-' + prefix,
@@ -35,15 +62,15 @@ Ext.define('Mfw.settings.view.MainController', {
                 node = tree.getStore().findNode('href', 'settings/' + prefix);
                 if (table) {
                     widget.xtype = 'mfw-settings-' + prefix + '-' + table;
-                    node = tree.getStore().findNode('href', 'settings/' + prefix + '/' + table);
+                    node = tree.getStore().findNode('href', prefix + '/' + table);
                     if (chain) {
                         widget.chain = chain;
                     }
                 }
             } else {
-                node = tree.getStore().findNode('href', 'settings' + route);
+                node = tree.getStore().findNode('href', route);
                 widget = {
-                    xtype: 'mfw-settings' + route.replace(/\//g, '-'),
+                    xtype: 'mfw-settings-' + route.replace(/\//g, '-'),
                 };
             }
 
@@ -82,12 +109,14 @@ Ext.define('Mfw.settings.view.MainController', {
     // check if saved
     onItemClick: function (list, info) {
         var me = this,
+            route = (Mfw.app.context === 'admin' ? 'settings/' : '') + info.node.get('href'),
             isModified = false,
             win,
             currentView = me.getView().down('#currentSettings'),
             currentViewController;
 
         if (!currentView) {
+            Mfw.app.redirectTo(route);
             return;
         }
 
@@ -118,7 +147,7 @@ Ext.define('Mfw.settings.view.MainController', {
                     margin: '0 16 0 0',
                     handler: function () {
                         win.close();
-                        Mfw.app.redirectTo(info.node.get('href'));
+                        Mfw.app.redirectTo(route);
                     }
                 }, {
                     text: 'Save',
@@ -126,13 +155,13 @@ Ext.define('Mfw.settings.view.MainController', {
                     handler: function () {
                         win.close();
                         currentViewController.onSave(function () {
-                            Mfw.app.redirectTo(info.node.get('href'));
+                            Mfw.app.redirectTo(route);
                         });
                     }
                 }]
             });
         } else {
-            Mfw.app.redirectTo(info.node.get('href'));
+            Mfw.app.redirectTo(route);
         }
 
         return !isModified;

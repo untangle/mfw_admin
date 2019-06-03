@@ -175,7 +175,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         // if no name is passed it selects the first chain
         if (!name) {
             me.selectedChain = chains.first();
-            Mfw.app.redirectTo(grid.getHash() + '/' + me.selectedChain.get('name'), {
+            Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + me.selectedChain.get('name'), {
                 replace: true // !important so the history stack does not retain previous nonset chain
             });
             return;

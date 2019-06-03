@@ -21,11 +21,17 @@ Ext.define('Mfw.AppBase', {
     checkAuth: function (action) {
         var hash = window.location.hash,
             vm = Mfw.app.viewport.getViewModel();
+
         if (hash === '') {
-            Mfw.app.redirectTo('dashboard');
+            if (Mfw.app.context === 'admin') {
+                Mfw.app.redirectTo('dashboard');
+            }
+            else {
+                Mfw.app.redirectTo('network');
+            }
             action.stop();
         }
-        // console.log(action, hash);
+
         if (!Mfw.app.getAccount()) {
             if (hash !== '#auth') {
                 // set redirectTo after login
@@ -52,8 +58,7 @@ Ext.define('Mfw.AppBase', {
                     Ext.route.Router.resume();
                     Mfw.app.redirectTo('auth');
                 } else {
-
-                    if (Mfw.app._app !== 'setup') {
+                    if (Mfw.app.context === 'admin' || Mfw.app.context === 'settings') {
                         // load interfaces to create names map
                         Ext.Ajax.request({
                             url: '/api/settings/network/interfaces',
@@ -86,12 +91,15 @@ Ext.define('Mfw.AppBase', {
                                 } else {
                                     Mfw.app.tz = { displayName: 'UTC', value: 'UTC' };
                                 }
-                                Highcharts.setOptions({
-                                    time: {
-                                        timezone: Mfw.app.tz.displayName
-                                    }
-                                });
 
+                                if (Mfw.app.context === 'admin') {
+                                    // highcharts are used only in admin for now
+                                    Highcharts.setOptions({
+                                        time: {
+                                            timezone: Mfw.app.tz.displayName
+                                        }
+                                    });
+                                }
                             },
                             failure: function(response) {
                                 console.log('server-side failure with status code ' + response.status);

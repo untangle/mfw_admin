@@ -29,17 +29,25 @@
                 Ext.application({
                     extend: 'Mfw.AppBase',
                     namespace: 'Mfw',
-
+                    context: 'settings',
                     config: {
                         account: null,
                         routeAfterAuth: null
                     },
+
+                    routes: {
+                        '*': { before: 'checkAuth' },
+                    },
+
+                    stores: ['Interfaces', 'ConditionsTree'],
 
                     setViews: function () {
                         Mfw.app.viewport.add([
                             { xtype: 'mfw-nav' },
                             { xtype: 'settings' }
                         ]);
+
+                        Sync.init();
                     }
 
                 });
