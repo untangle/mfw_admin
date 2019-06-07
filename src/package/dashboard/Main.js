@@ -18,11 +18,13 @@ Ext.define('Mfw.dashboard.Main', {
     items: [{
         xtype: 'dashboard-manager',
         docked: 'left',
-        width: 420,
-        resizable: {
-            split: true,
-            edges: 'east'
-        },
+        width: 320,
+        shadow: true,
+        zIndex: 99,
+        // resizable: {
+        //     split: true,
+        //     edges: 'east'
+        // },
         hidden: true,
         bind: {
             hidden: '{!manager}'

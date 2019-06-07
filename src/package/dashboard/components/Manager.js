@@ -54,6 +54,11 @@ Ext.define('Mfw.dashboard.Manager', {
         docked: 'bottom',
         items: ['->', {
             xtype: 'button',
+            text: 'Cancel',
+            margin: '0 8 0 0',
+            handler: 'onCancel'
+        }, {
+            xtype: 'button',
             ui: 'action',
             text: 'Save',
             handler: 'onSave'
@@ -188,6 +193,11 @@ Ext.define('Mfw.dashboard.Manager', {
                 }
             });
 
+            // update queue when interval changes
+            store.getModifiedRecords().forEach(function(widget) {
+                WidgetsPipe.addFirst(widgetsContainer.down('#widget_' + widget.get('_identifier')));
+            });
+
             store.each(function (widget) {
                 // establish the widget component config if needed to be added
                 if (widget.get('isReport')) {
@@ -236,7 +246,9 @@ Ext.define('Mfw.dashboard.Manager', {
                 }
             });
             // add new widgets to the container
-            widgetsContainer.add(widgetsCmp);
+            if (widgetsCmp.length > 0) {
+                widgetsContainer.add(widgetsCmp);
+            }
         },
 
         updateWidgetsMenu: function () {
@@ -245,10 +257,6 @@ Ext.define('Mfw.dashboard.Manager', {
                 settingsBtn = me.getView().down('#settings-btn'),
                 category, menus = {}, icon;
 
-
-            // settingsBtn.getMenu().getItems().each(function (item) {
-            //     console.log(item.getUserCls());
-            // });
 
             reportsStore.each(function (record) {
                 category = record.get('category');
@@ -339,6 +347,15 @@ Ext.define('Mfw.dashboard.Manager', {
             });
         },
 
+        onCancel: function () {
+            var me = this,
+                view = me.getView();
+
+            view.down('grid').getStore().rejectChanges();
+            me.getViewModel().set('manager', false);
+            // reload widgets so any sorting is reverted to initial state
+            Ext.getStore('widgets').load();
+        },
 
         onSave: function () {
             var me = this,
