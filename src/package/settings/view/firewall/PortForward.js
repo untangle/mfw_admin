@@ -9,6 +9,6 @@ Ext.define('Mfw.settings.firewall.PortForward', {
             update: Util.api + '/settings/firewall/tables/port-forward'
         },
         hash: 'firewall/port-forward',
-        actions: ['JUMP','GOTO','ACCEPT','RETURN','DNAT','NEW_PORT']
+        actions: ['JUMP','GOTO','ACCEPT','RETURN','DNAT']
     }
 });

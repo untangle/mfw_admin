@@ -45,7 +45,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'SOURCE_INTERFACE_NAME',
@@ -123,7 +123,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'DESTINATION_INTERFACE_NAME',
@@ -188,7 +188,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'CLIENT_HOSTNAME',
@@ -259,7 +259,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'SERVER_HOSTNAME',
@@ -330,7 +330,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'LOCAL_HOSTNAME',
@@ -375,7 +375,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
-            validators: 'port'
+            validators: 'portexpression'
         }
     }, {
         type:'REMOTE_HOSTNAME',

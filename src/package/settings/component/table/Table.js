@@ -43,13 +43,12 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         'RETURN': { value: 'RETURN', text: 'Return'.t() },
         'REJECT': { value: 'REJECT', text: 'Reject'.t() },
         'DROP': { value: 'DROP', text: 'Drop'.t() },
-        'DNAT': { value: 'DNAT', text: 'Destination Address'.t() },
-        'SNAT': { value: 'SNAT', text: 'Source Address'.t() },
+        'DNAT': { value: 'DNAT', text: 'New Destination'.t() },
+        'SNAT': { value: 'SNAT', text: 'New Source'.t() },
         'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade'.t() },
         'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority'.t() },
         'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() },
-        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() },
-        'NEW_PORT': { value: 'NEW_PORT', text: 'New Port'.t() }
+        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() }
     },
 
     itemConfig: {

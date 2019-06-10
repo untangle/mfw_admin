@@ -577,13 +577,12 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 case 'RETURN':          actionStr = 'Return'.t(); break;
                 case 'REJECT':          actionStr = 'Reject'.t(); break;
                 case 'DROP':            actionStr = 'Drop'.t(); break;
-                case 'DNAT':            actionStr = 'Destination Address'.t(); break;
-                case 'SNAT':            actionStr = 'Source Address'.t(); break;
+                case 'DNAT':            actionStr = 'New Destination'.t(); break;
+                case 'SNAT':            actionStr = 'New Source'.t(); break;
                 case 'MASQUERADE':      actionStr = 'Masquerade'.t(); break;
                 case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
                 case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
                 case 'WAN_POLICY':      actionStr = ''; break;
-                case 'NEW_PORT':        actionStr = 'New Port'.t(); break;
                 default: break;
             }
             if (type === 'JUMP' || type === 'GOTO') {
@@ -601,9 +600,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             }
             if (type === 'WAN_POLICY') {
                 actionStr += policiesMap[action.get('policy')].text + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
-            }
-            if (type === 'NEW_PORT') {
-                actionStr += ' ' + action.get('port');
             }
         }
         return actionStr;

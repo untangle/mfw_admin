@@ -131,7 +131,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             itemId: 'actionform',
             margin: 0,
             padding: 0,
-            width: 300,
+            width: '50%',
             defaults: {
                 labelAlign: 'top'
             },
@@ -293,7 +293,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         }, {
             xtype: 'component',
             style: 'text-align: center; font-size: 16px;',
-            html: '<i class="x-fa fa-info-circle fa-3x fa-gray"></i><br/><p>Select a Type to add new Condition<br>or an edit an existing one!</p>',
+            html: '<i class="x-fa fa-info-circle fa-3x fa-gray"></i><br/><p>Select a Type to add new Condition<br>or select an existing one to edit!</p>',
             margin: '120 0 0 0',
             hidden: true,
             bind: {
@@ -458,16 +458,72 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (value === 'DNAT') {
                 if (!action) {rule.getAction().set('dnat_address', ''); }
-                // if (!action) { rule.setAction(Ext.create('Mfw.model.table.Action', { type: value, dnat_address: '' })); }
+
+
+                /**
+                 * dnat_address is an IPv4/IPv6 address + port number (optional)
+                 */
                 actionform.add({
-                    xtype: 'textfield',
+                    xtype: 'containerfield',
                     itemId: 'actionValue',
-                    name: 'dnat_address',
-                    label: 'Destination Address'.t(),
-                    required: true,
-                    bind: '{rule.action.dnat_address}',
-                    // value: rule.get('action').dnat_address || undefined,
-                    validators: 'ipany'
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    defaults: {
+                        labelAlign: 'top',
+                        clearable: false
+                    },
+                    items: [{
+                        label: 'hidden',
+                        xtype: 'hiddenfield',
+                        readonly: true,
+                        name: 'dnat_address',
+                        bind: '{rule.action.dnat_address}',
+                    }, {
+                        xtype: 'textfield',
+                        label: 'Address'.t(),
+                        flex: 1,
+                        required: true,
+                        validators: 'ipany'
+                    }, {
+                        xtype: 'component',
+                        html: '<strong>:</strong>',
+                        margin: '3 8'
+                    }, {
+                        xtype: 'numberfield',
+                        width: 100,
+                        label: 'Port (optional)'.t(),
+                        required: false,
+                        validators: 'port',
+                    }],
+                    listeners: {
+                        painted: function (container) {
+                            var vm = container.up('rule-dialog').getViewModel(),
+                            dnat_action = vm.get('rule.action.dnat_address'),
+                            address_field = container.down('textfield'),
+                            port_field = container.down('numberfield');
+
+                            address_field.setValue(dnat_action.split(':')[0]);
+                            port_field.setValue(dnat_action.split(':')[1]);
+
+                            address_field.on('change', function (field, value) {
+                                console.log('change');
+                                if (port_field.getValue() >= 0) {
+                                    vm.set('rule.action.dnat_address', value + ':' + port_field.getValue());
+                                } else {
+                                    vm.set('rule.action.dnat_address', value);
+                                }
+                            });
+                            port_field.on('change', function (field, value) {
+                                if (value >= 0) {
+                                    vm.set('rule.action.dnat_address', address_field.getValue() + ':' + value);
+                                } else {
+                                    vm.set('rule.action.dnat_address', address_field.getValue());
+                                }
+                            });
+                        }
+                    }
                 });
                 return;
             }
@@ -525,26 +581,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 });
                 return;
             }
-
-            if (value === 'NEW_PORT') {
-                if (!action) { rule.getAction().set('port', null); }
-                actionform.add({
-                    xtype: 'numberfield',
-                    itemId: 'actionValue',
-                    name: 'port',
-                    label: 'Value'.t(),
-                    placeholder: 'Set value ...',
-                    required: true,
-                    bind: '{rule.action.port}',
-                    validators: {
-                        type: 'format',
-                        message: 'Invalid port number',
-                        matcher: new RegExp('^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$')
-                    }
-                });
-                return;
-            }
-
         },
 
         addUpdateCondition: function () {
