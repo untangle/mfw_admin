@@ -46,9 +46,9 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         xtype: 'menuseparator',
         style: 'border-color: #555'
     }, {
-        text: 'Help'.t(),
+        text: 'Support'.t(),
         iconCls: 'x-fa fa-question-circle',
-        handler: 'showHelp'
+        handler: 'showSupport'
     }, {
         text: 'Logout'.t(),
         iconCls: 'x-fa fa-sign-out',

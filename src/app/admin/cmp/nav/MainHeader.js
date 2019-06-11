@@ -97,10 +97,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     // },
     {
         iconCls: 'x-fa fa-question-circle fa-3x',
-        tooltip: 'Help',
+        tooltip: 'Support',
         hidden: true,
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
-        handler: 'showHelp'
+        handler: 'showSupport'
     },
     {
         bind: {
@@ -156,9 +156,9 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             me.menu.show();
         },
 
-        showHelp: function () {
-            // not yet implemented
-            console.log('help');
+        showSupport: function () {
+            var hash = window.location.hash;
+            window.open(Globals.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
         }
     }
 });

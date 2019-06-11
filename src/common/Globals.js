@@ -2,6 +2,8 @@ Ext.define('Mfw.Globals', {
     alternateClassName: 'Globals',
     singleton: true,
 
+    supportUrl: 'https://support.untangle.com/hc/en-us/search?query=sd-wan+', // add the route for contextual help
+
     timezones: [
         { text: 'UTC',                            value: 'UTC' }, // default value
         { text: 'Africa/Abidjan',                 value: 'GMT0' },
