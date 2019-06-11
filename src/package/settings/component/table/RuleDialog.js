@@ -508,7 +508,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                             port_field.setValue(dnat_action.split(':')[1]);
 
                             address_field.on('change', function (field, value) {
-                                console.log('change');
                                 if (port_field.getValue() >= 0) {
                                     vm.set('rule.action.dnat_address', value + ':' + port_field.getValue());
                                 } else {

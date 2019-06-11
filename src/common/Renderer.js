@@ -286,7 +286,6 @@ Ext.define('Mfw.Renderer', {
 
     /**
      * Condition value renderer based on type
-     * @param {any} value
      */
     conditionText: function (val, rec) {
         var type = rec.get('type'),
@@ -297,9 +296,15 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            if (Globals.protocolsMap[value]) {
-                valueRender = Globals.protocolsMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
-            }
+            valueRender = [];
+            Ext.Array.each(rec.get('value'), function (val) {
+                if (Globals.protocolsMap[val]) {
+                    valueRender.push(Globals.protocolsMap[val].text + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                } else {
+                    valueRender.push('???<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                }
+            });
+            valueRender = valueRender.join(', ');
         }
 
         if (type === 'LIMIT_RATE') {
@@ -357,8 +362,6 @@ Ext.define('Mfw.Renderer', {
 
     /**
      * Renderer for Rules Conditions
-     * @param {Array} value
-     * @param {Model} record
      */
     conditionsList: function (value, record) {
         var conditions = record.conditions(), arr = [];
@@ -371,6 +374,27 @@ Ext.define('Mfw.Renderer', {
         });
 
         return arr.join(' ');
-    }
+    },
 
+    /**
+     * Renderer for Rules Conditions in Firewall summary tree
+     */
+    conditionsListTree: function (value, record) {
+        var conditions, arr = [];
+
+        if (!record.isLeaf()) {
+            return '';
+        }
+
+        conditions = record.get('conditions');
+        if (conditions.count() === 0) {
+            return '<em>No conditions</em>';
+        }
+
+        conditions.each(function (condition) {
+            arr.push(Renderer.conditionText(null, condition));
+        });
+
+        return arr.join(' ');
+    }
 });

@@ -11,6 +11,8 @@ Ext.define('Mfw.settings.view.Firewall', {
         expanderOnly: false,
         singleExpand: true,
         selectable: false,
+        variableHeights: true,
+        rowLines: true,
         itemConfig: {
             viewModel: true, // important
         },
@@ -41,22 +43,17 @@ Ext.define('Mfw.settings.view.Firewall', {
             }
         }, {
             text: 'Conditions',
-            dataIndex: 'conditions',
             cell: { encodeHtml: false },
             flex: 1,
-            renderer: 'conditionRenderer'
+            renderer: Renderer.conditionsListTree
         }, {
             text: 'Action',
             dataIndex: 'action',
             cell: { encodeHtml: false },
-            width: 200,
+            width: 300,
             renderer: 'actionRenderer'
         }]
     }],
-
-    // listeners: {
-    //     deactivate: 'onDeactivate'
-    // },
 
     controller: {
         init: function () {
@@ -135,78 +132,33 @@ Ext.define('Mfw.settings.view.Firewall', {
             me.getView().down('tree').setStore(store);
         },
 
-
-        // !!!! duplicated partially from TableController
-        conditionRenderer: function (conditions) {
-            var strArr = [], op, ruleCondition, valueRender;
-
-            if (!conditions) { return; }
-
-            conditions.each(function (c) {
-                switch (c.get('op')) {
-                    case '==': op = '='; break;
-                    case '!=': op = '&ne;'; break;
-                    case '>': op = '&gt;'; break;
-                    case '<': op = '&lt;'; break;
-                    case '>=': op = '&ge;'; break;
-                    case '<=': op = '&le;'; break;
-                    default: op = '?'; break;
-                }
-
-                ruleCondition = Conditions.map[c.get('type')];
-                valueRender = c.get('value');
-                // todo different value render based on condition type
-                if (ruleCondition.type === 'IP_PROTOCOL') {
-                    if (Globals.protocolsMap[c.get('value')]) {
-                        valueRender = Globals.protocolsMap[c.get('value')].text + ' <em style="color: #999; font-style: normal;">[' + valueRender + ']</em>';
-                    }
-                }
-
-                if (ruleCondition.type === 'LIMIT_RATE') {
-                    valueRender = '<strong>' + c.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[c.get('rate_unit')].text + '</em>';
-                }
-
-
-                strArr.push('<div class="condition"><span>' + ruleCondition.text + '</span> ' +
-                       '<em style="font-weight: bold; font-style: normal; color: #000; padding: 0 3px;">' + op + '</em> <strong>' + valueRender + '</strong></div>');
-            });
-            if (strArr.length > 0) {
-                return strArr.join('');
-            } else {
-                return '<span style="color: #999; font-style: italic; font-size: 11px; padding: 0 10px;">No Conditions!</span>';
-            }
-        },
-
-        // !!!! duplicated partially from TableController
+        // !!! duplicated partially from TableController
         actionRenderer: function (value) {
-            var me = this, grid = me.getView(),
-                action = value, type,
+            var action = value, type,
                 actionStr = 'Missing or No Action...'.t();
 
             if (!value) { return ''; }
 
-            if (grid.policies) {
-                var policiesMap = Ext.Array.toValueMap(grid.policies, 'value');
-            }
             if (action && action.type) {
                 type = action.type;
                 switch (type) {
-                    // case 'JUMP':            actionStr = 'Jump to'.t(); break;
-                    // case 'GOTO':            actionStr = 'Go to'.t(); break;
+                    case 'JUMP':            actionStr = 'Jump to'.t(); break;
+                    case 'GOTO':            actionStr = 'Go to'.t(); break;
                     case 'ACCEPT':          actionStr = 'Accept'.t(); break;
                     case 'RETURN':          actionStr = 'Return'.t(); break;
                     case 'REJECT':          actionStr = 'Reject'.t(); break;
                     case 'DROP':            actionStr = 'Drop'.t(); break;
-                    case 'DNAT':            actionStr = 'Destination Address'.t(); break;
-                    case 'SNAT':            actionStr = 'Source Address'.t(); break;
+                    case 'DNAT':            actionStr = 'New Destination'.t(); break;
+                    case 'SNAT':            actionStr = 'New Source'.t(); break;
                     case 'MASQUERADE':      actionStr = 'Masquerade'.t(); break;
                     case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
                     case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
-                    case 'WAN_POLICY':      actionStr = ''; break;
+                    // case 'WAN_POLICY':      actionStr = ''; break; // !!! does not exists in Firewall tables
                     default: break;
                 }
                 if (type === 'JUMP' || type === 'GOTO') {
-                    actionStr = '';
+                    // anchors generated by replacing in hash the current chain with the new one
+                    actionStr += ' <strong>' + action.chain + '</strong></a>';
                 }
                 if (type === 'SNAT') {
                     actionStr += ' ' + action.snat_address;
@@ -216,9 +168,6 @@ Ext.define('Mfw.settings.view.Firewall', {
                 }
                 if (type === 'SET_PRIORITY') {
                     actionStr += ' ' + action.priority;
-                }
-                if (type === 'WAN_POLICY') {
-                    actionStr += policiesMap[action.policy].text + ' <span style="color: #999;">[ policy ' + action.policy + ' ]</span> ';
                 }
             }
             return actionStr;

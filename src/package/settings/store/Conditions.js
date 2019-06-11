@@ -400,10 +400,15 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
+            multiSelect: true,
             editable: false,
-            displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Globals.protocols
+            options: Globals.protocols,
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
+            }
         }
     }, {
         type: 'CT_STATE',
