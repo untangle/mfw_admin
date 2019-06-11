@@ -390,24 +390,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             });
 
 
-            if (isNewCondition) {
-                // if values are from a collection (selectfield), preselect first value
-                if (valueField.xtype === 'selectfield') {
-                    valueField.value = valueField.options[0].value;
-                }
-            }
-
             // insert value field into the form
             form.insertBefore(valueField, form.down('#actionBtns'));
 
             // insert any extra fields (e.g. for LIMIT_RATE)
             if (conditionDef.extraFields) {
                 Ext.Array.each(conditionDef.extraFields, function (field) {
-                    if (isNewCondition) {
-                        if (field.xtype === 'selectfield') {
-                            field.value = field.options[0].value;
-                        }
-                    }
                     form.insertBefore(field, form.down('#actionBtns'));
                 });
             }
@@ -508,14 +496,14 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                             port_field.setValue(dnat_action.split(':')[1]);
 
                             address_field.on('change', function (field, value) {
-                                if (port_field.getValue() >= 0) {
+                                if (Ext.isNumber(port_field.getValue())) {
                                     vm.set('rule.action.dnat_address', value + ':' + port_field.getValue());
                                 } else {
                                     vm.set('rule.action.dnat_address', value);
                                 }
                             });
                             port_field.on('change', function (field, value) {
-                                if (value >= 0) {
+                                if (Ext.isNumber(value)) {
                                     vm.set('rule.action.dnat_address', address_field.getValue() + ':' + value);
                                 } else {
                                     vm.set('rule.action.dnat_address', address_field.getValue());

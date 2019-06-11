@@ -31,7 +31,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            forceSelection: true,
+            autoSelect: true,
             editable: false,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -109,7 +109,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            forceSelection: true,
+            autoSelect: true,
             editable: false,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -419,6 +419,7 @@ Ext.define('Mfw.settings.Conditions', {
         field: {
             xtype: 'selectfield',
             editable: false,
+            autoSelect: true,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Util.connectionStates
@@ -438,7 +439,7 @@ Ext.define('Mfw.settings.Conditions', {
             label: 'Rate Unit',
             labelAlign: 'top',
             placeholder: 'Choose rate unit ...',
-            forceSelection: true,
+            autoSelect: true,
             editable: false,
             required: true,
             displayTpl: '{text} [ {value} ]',
@@ -450,10 +451,11 @@ Ext.define('Mfw.settings.Conditions', {
             name: 'group_selector',
             label: 'Group Selector',
             labelAlign: 'top',
+            autoSelect: true,
             placeholder: 'Choose group ...',
             forceSelection: true,
             editable: false,
-            required: true,
+            // required: true,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             errorTarget: 'under',
