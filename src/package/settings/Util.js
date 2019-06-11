@@ -105,6 +105,7 @@ Ext.define('Mfw.settings.Util', {
 
     // used in LIMIT_RATE conditions
     groupSelectors: [
+        { text: 'Global',                 value: 'GLOBAL' },
         { text: 'IP Protocol',            value: 'IP_PROTOCOL' },
         { text: 'Source Port',            value: 'SOURCE_PORT' },
         { text: 'Source Address',         value: 'SOURCE_ADDRESS' },

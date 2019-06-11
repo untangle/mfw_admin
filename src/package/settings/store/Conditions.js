@@ -434,7 +434,6 @@ Ext.define('Mfw.settings.Conditions', {
         },
         extraFields: [{
             xtype: 'selectfield',
-            temId: 'unitField',
             name: 'rate_unit',
             label: 'Rate Unit',
             labelAlign: 'top',
@@ -448,7 +447,6 @@ Ext.define('Mfw.settings.Conditions', {
             options: Util.limitRateUnits
         }, {
             xtype: 'selectfield',
-            temId: 'groupField',
             name: 'group_selector',
             label: 'Group Selector',
             labelAlign: 'top',

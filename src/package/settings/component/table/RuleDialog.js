@@ -587,14 +587,15 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 vm = me.getViewModel(),
                 grid = me.lookup('grid'),
                 tree = me.lookup('tree'),
-                form = me.getView().down('#conditionform');
+                form = me.getView().down('#conditionform'),
+                values = form.getValues();
 
             if (!form.validate()) { return; }
 
             if (vm.get('grid.selection')) {
-                vm.get('grid.selection').set(form.getValues());
+                vm.get('grid.selection').set(values);
             } else {
-                grid.getStore().add(form.getValues());
+                grid.getStore().add(values);
             }
 
             me.lookup('grid').setSelection(null);
