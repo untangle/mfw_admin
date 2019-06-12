@@ -9,17 +9,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             },
             chainNames: null
         }
-        // formulas: {
-        //     selectionModel: function (get) {
-        //         return {
-        //             mode: 'multi',
-        //             cells: false,
-        //             // checkbox: true,
-        //             drag: true,
-        //             rows: get('selectedChain.editable')
-        //         };
-        //     }
-        // }
     },
 
     bind: {
@@ -125,60 +114,47 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 html: '<span style="color: #777;">' + 'Priority'.t() + ':</span> <strong>{selectedChain.priority}</strong>',
                 hidden: '{!selectedChain.base}'
             }
-        }, '->', {
-            xtype: 'component',
-            style: 'font-size: 12px;',
-            html: 'Move Rule'.t(),
-            hidden: true,
-            bind: { hidden: '{selcount !== 1}' }
-        }, {
-            xtype: 'segmentedbutton',
-            allowToggle: false,
-            margin: '0 8',
-            hidden: true,
-            bind: { hidden: '{selcount !== 1}' },
-            defaults: {
-                ui: 'default',
-                handler: 'onSort',
-            },
-            items: [{
-                iconCls: 'x-fa fa-angle-double-up',
-                tooltip: 'Move First'.t(),
-                pos: 'first'
-            }, {
-                iconCls: 'x-fa fa-angle-up',
-                tooltip: 'Move Up'.t(),
-                pos: 'up'
-            }, {
-                iconCls: 'x-fa fa-angle-down',
-                tooltip: 'Move Down'.t(),
-                pos: 'down'
-            }, {
-                iconCls: 'x-fa fa-angle-double-down',
-                tooltip: 'Move Last'.t(),
-                pos: 'last'
-            }, {
-                iconCls: 'md-icon-close',
-                tooltip: 'Cancel'.t(),
-                pos: null
-            }]
-        }, {
-            xtype: 'toolbarseparator',
-            hidden: true,
-            bind: { hidden: '{selcount !== 1}' }
-        }, {
-            text: 'New Rule'.t(),
-            // iconCls: 'md-icon-add',
-            ui: 'action',
-            hidden: true,
-            bind: { hidden: '{!selectedChain.editable}' },
-            handler: 'onNewRule'
-        }, {
-            xtype: 'toolbarseparator',
-            hidden: true,
-            bind: { hidden: '{!selectedChain.editable}' }
-        }, {
+        }, '->',
+        // {
+        //     xtype: 'component',
+        //     style: 'font-size: 12px; color: #999;',
+        //     margin: '0 8',
+        //     bind: {
+        //         html: '{displayList}'
+        //     }
+        //     // html: 'View as'
+        // }, {
+        //     iconCls: 'md-icon-format-list-bulleted',
+        //     enableToggle: true,
+        //     pressed: false,
+        //     ripple: false,
+        //     bind: {
+        //         pressed: '{displayList}',
+        //     },
+        //     tooltip: {
+        //         html: 'List'.t(),
+        //         anchor: true,
+        //         hideDelay: 0,
+        //         showDelay: 0
+        //     }
+        // }, {
+        //     iconCls: 'md-icon-short-text',
+        //     enableToggle: true,
+        //     pressed: false,
+        //     ripple: false,
+        //     bind: {
+        //         pressed: '{!displayList}',
+        //     },
+        //     tooltip: {
+        //         html: 'Sentence'.t(),
+        //         anchor: true,
+        //         hideDelay: 0,
+        //         showDelay: 0
+        //     }
+        // },
+        {
             iconCls: 'md-icon-edit',
+            // text: 'Edit Chain',
             tooltip: {
                 html: 'Edit chain'.t(),
                 anchor: true,
@@ -191,6 +167,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             handler: 'onChainOperation'
         }, {
             iconCls: 'md-icon-delete',
+            // text: 'Delete Chain',
+            margin: '0 16 0 8',
             tooltip: {
                 html: 'Delete chain'.t(),
                 anchor: true,
@@ -200,6 +178,13 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             hidden: true,
             bind: { hidden: '{!selectedChain.editable}' },
             handler: 'onDeleteChain'
+        }, {
+            text: 'New Rule'.t(),
+            // iconCls: 'md-icon-add',
+            ui: 'action',
+            hidden: true,
+            bind: { hidden: '{!selectedChain.editable}' },
+            handler: 'onNewRule'
         }]
     }],
 
@@ -254,9 +239,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         }
     }, {
         text: 'Conditions'.t(),
-        // dataIndex: 'conditions',
         menuDisabled: true,
         flex: 1,
+        hidden: true,
         cell: {
             bind: {
                 userCls: '{!record.enabled ? "x-disabled" : ""}'
@@ -269,6 +254,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         dataIndex: 'action',
         menuDisabled: true,
         width: 350,
+        hidden: true,
         cell: {
             encodeHtml: false,
             bind: {
@@ -276,6 +262,18 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             }
         },
         renderer: 'actionRenderer'
+    }, {
+        text: 'Rule',
+        menuDisabled: true,
+        flex: 1,
+        cell: {
+            style: {
+                fontSize: '14px',
+                color: '#777'
+            },
+            encodeHtml: false
+        },
+        renderer: Renderer.conditionsSentence
     }],
 
     listeners: {

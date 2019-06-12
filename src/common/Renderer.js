@@ -394,5 +394,80 @@ Ext.define('Mfw.Renderer', {
         });
 
         return arr.join(' ');
+    },
+
+    conditionsSentence: function (value, record) {
+        var conditions = record.conditions(),
+            action = record.getAction(),
+            valueRender, strArr = [],
+            sentence = 'If packet ', type;
+
+        conditions.each(function (cond) {
+            type = cond.get('type');
+
+            if (type === 'IP_PROTOCOL') {
+                valueRender = [];
+                Ext.Array.each(cond.get('value'), function (val) {
+                    if (Globals.protocolsMap[val]) {
+                        valueRender.push(Globals.protocolsMap[val].text);
+                    } else {
+                        valueRender.push(val);
+                    }
+                });
+                strArr.push('<span style="font-weight: bold; color: #333;">' +
+                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             valueRender.join(' or ') + '</span>');
+                return;
+            }
+
+            if (type === 'LIMIT_RATE') {
+                valueRender = [];
+                strArr.push('<span style="font-weight: bold; color: #333;">' +
+                             Conditions.map[type].text.toLowerCase() + ' ' +
+                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             cond.get('value') + ' ' +
+                             Util.limitRateUnitsMap[cond.get('rate_unit')].text.toLowerCase() + ' ' +
+                             ' on ' + Util.groupSelectorsMap[cond.get('group_selector')].text + '</span>');
+                return;
+            }
+
+            if (type.includes('PORT')) {
+                strArr.push('<span style="font-weight: bold; color: #333;">' +
+                             Conditions.map[type].text.toLowerCase() + ' ' +
+                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             (cond.get('value') + '').split(',').join(' or ') + '</span>');
+                return;
+            }
+
+            if (type === 'SOURCE_INTERFACE_NAME' ||
+                type === 'DESTINATION_INTERFACE_NAME' ||
+                type === 'CLIENT_HOSTNAME' ||
+                type === 'CLIENT_USERNAME' ||
+                type === 'SERVER_HOSTNAME' ||
+                type === 'SERVER_USERNAME' ||
+                type === 'LOCAL_HOSTNAME' ||
+                type === 'LOCAL_USERNAME') {
+                strArr.push('<span style="font-weight: bold; color: #333;">' +
+                             Conditions.map[type].text.toLowerCase() + ' ' +
+                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             '"' + cond.get('value') + '"</span>');
+                return;
+            }
+
+            strArr.push('<span style="font-weight: bold; color: #333;">' +
+                         Conditions.map[type].text.toLowerCase() + ' ' +
+                         Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                         cond.get('value') + '</span>');
+        });
+
+
+        if (strArr.length > 0) {
+            sentence += strArr.join(' and ')  + ', then ' + (action ? action.get('type') : '<no action set>');
+
+        } else {
+            sentence = 'For any packet ' + (action ? action.get('type') : '<em>&lt; no action set &gt;</em>');
+        }
+
+        return sentence;
     }
 });

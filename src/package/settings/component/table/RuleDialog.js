@@ -2,7 +2,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     extend: 'Ext.Dialog',
     alias: 'widget.rule-dialog',
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            sentence: ''
+        }
+    },
 
     config: {
         rule: null
@@ -71,12 +75,25 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }]
         }, {
             xtype: 'component',
+            html: '<h2 style="font-weight: 100;">Rule</h2>'
+        }, {
+            xtype: 'component',
+            style: 'font-size: 16px;',
+            padding: '0 0 16 0',
+            bind: {
+                html: '{sentence}'
+            }
+        }, {
+            xtype: 'component',
+            html: '<hr style="margin: 16px 0;"/>'
+        }, {
+            xtype: 'component',
             html: '<h2 style="font-weight: 100;">If All the following Conditions are met</h2>'
         }, {
             xtype: 'grid',
             reference: 'grid',
             userCls: 'c-noheaders',
-            height: 300,
+            height: 200,
             emptyText: 'No Conditions!'.t(),
             deferEmptyText: false,
             rowLines: false,
@@ -324,11 +341,22 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (!rule) {
                 rule = new Mfw.model.table.Rule({
-                    enabled: true
+                    enabled: true,
+                    // default action is ACCEPT for new rules
+                    action: {
+                        type: 'ACCEPT'
+                    }
                 });
             }
 
             rule.conditions().commitChanges(); // needed
+
+            // update the sentence on rule cdeep hange
+            vm.bind('{rule}', function (r) {
+                vm.set('sentence', Renderer.conditionsSentence(null, r));
+            }, this, {
+                deep: true
+            });
             vm.set('rule', rule);
         },
 
