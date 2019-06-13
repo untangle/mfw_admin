@@ -263,7 +263,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         },
         renderer: 'actionRenderer'
     }, {
-        text: 'Rule',
+        text: 'Summary',
         menuDisabled: true,
         flex: 1,
         cell: {

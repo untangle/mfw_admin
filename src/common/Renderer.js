@@ -374,28 +374,6 @@ Ext.define('Mfw.Renderer', {
         return arr.join(' ');
     },
 
-    /**
-     * Renderer for Rules Conditions in Firewall summary tree
-     */
-    conditionsListTree: function (value, record) {
-        var conditions, arr = [];
-
-        if (!record.isLeaf()) {
-            return '';
-        }
-
-        conditions = record.get('conditions');
-        if (conditions.count() === 0) {
-            return '<em>No conditions</em>';
-        }
-
-        conditions.each(function (condition) {
-            arr.push(Renderer.conditionText(null, condition));
-        });
-
-        return arr.join(' ');
-    },
-
     conditionsSentence: function (value, record) {
         var conditions = record.conditions(),
             action = record.getAction(),

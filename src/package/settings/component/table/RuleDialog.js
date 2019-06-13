@@ -75,19 +75,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }]
         }, {
             xtype: 'component',
-            html: '<h2 style="font-weight: 100;">Rule</h2>'
-        }, {
-            xtype: 'component',
-            style: 'font-size: 16px;',
-            padding: '0 0 16 0',
-            bind: {
-                html: '{sentence}'
-            }
-        }, {
-            xtype: 'component',
-            html: '<hr style="margin: 16px 0;"/>'
-        }, {
-            xtype: 'component',
             html: '<h2 style="font-weight: 100;">If All the following Conditions are met</h2>'
         }, {
             xtype: 'grid',
@@ -148,6 +135,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             itemId: 'actionform',
             margin: 0,
             padding: 0,
+            flex: 1,
             width: '50%',
             defaults: {
                 labelAlign: 'top'
@@ -167,6 +155,16 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     change: 'onActionTypeChange'
                 }
             }]
+        }, {
+            xtype: 'component',
+            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Summary</h2>'
+        }, {
+            xtype: 'component',
+            style: 'font-size: 16px;',
+            padding: '0 0 16 0',
+            bind: {
+                html: '{sentence}'
+            }
         }, {
             xtype: 'toolbar',
             docked: 'bottom',
