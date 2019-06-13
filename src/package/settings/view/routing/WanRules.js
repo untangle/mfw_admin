@@ -17,7 +17,6 @@ Ext.define('Mfw.settings.routing.WanRules', {
     },
 
     before: function(cb) {
-        var me = this;
         // load wan policies
         var policies = [];
         Ext.Ajax.request({
@@ -30,7 +29,8 @@ Ext.define('Mfw.settings.routing.WanRules', {
                         value: policy.policyId
                     });
                 });
-                me.policies = policies;
+                Util.policies = policies;
+                Util.policiesMap = Ext.Array.toValueMap(Util.policies, 'value');
                 cb();
             },
             failure: function(response) {

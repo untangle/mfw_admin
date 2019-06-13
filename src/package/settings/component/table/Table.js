@@ -261,7 +261,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
                 userCls: '{!record.enabled ? "x-disabled" : ""}'
             }
         },
-        renderer: 'actionRenderer'
+        renderer: Renderer.ruleAction
     }, {
         text: 'Summary',
         menuDisabled: true,
