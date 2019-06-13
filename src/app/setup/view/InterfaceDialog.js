@@ -291,7 +291,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                     placeholder: '{interface.v4StaticPrefix}',
                                     disabled: '{!override.checked}'
                                 },
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }]
                         }, {
                             xtype: 'textfield',
@@ -373,7 +373,7 @@ Ext.define('Mfw.setup.InterfaceDialog', {
                                     value: '{interface.v4StaticPrefix}',
                                     required: '{interface.v4ConfigType === "STATIC"}'
                                 },
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }]
                         }, {
                             xtype: 'textfield',

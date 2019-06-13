@@ -2,6 +2,8 @@ Ext.define('Mfw.AppBase', {
     extend: 'Ext.app.Application',
     name: 'Mfw',
 
+    supportUrl: 'https://support.untangle.com/hc/en-us/search?query=sd-wan+',
+
     config: {
         account: null,
         routeAfterAuth: null
@@ -67,8 +69,8 @@ Ext.define('Mfw.AppBase', {
                                 Ext.Array.each(interfaces, function (interface) {
                                     interfacesMap[interface.interfaceId] = interface.name;
                                 });
-                                Globals.interfaces = interfaces;
-                                Globals.interfacesMap = interfacesMap;
+                                Map.interfaces = interfacesMap;
+                                Map.options.interfaces = Map.toOptions(interfacesMap);
                             }
                         });
 

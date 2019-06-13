@@ -70,7 +70,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 displayTpl: '{text} [ {value} ]',
                 itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                 value: 'EQ',
-                options: Globals.operators
+                options: Map.options.routeOps
             }, {
                 xtype: 'textfield',
                 itemId: 'valueTextField',
@@ -144,11 +144,11 @@ Ext.define('Mfw.common.conditions.Dialog', {
 
             if (column.operators) {
                 Ext.Array.each(column.operators, function (op) {
-                    customOperators.push(Globals.operatorsMap[op]);
+                    customOperators.push(Map.routeOps[op]);
                 });
                 form.getFields('operator').setOptions(customOperators);
             } else {
-                form.getFields('operator').setOptions(Globals.operators);
+                form.getFields('operator').setOptions(Map.options.routeOps);
             }
 
             // add custom column value field

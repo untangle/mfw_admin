@@ -73,7 +73,6 @@
         "Ext": true,
         "Highcharts": true,
         "Mfw": true,
-        "Globals": true,
         "Util": true,
         "Data": true,
         "ReportsUtil": true,
@@ -84,6 +83,7 @@
         "WidgetsPipe": true,
         "Sync": true,
         "Conditions": true,
+        "Map": true,
         "moment": true
     }
 }

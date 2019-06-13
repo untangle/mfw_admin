@@ -91,14 +91,7 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                     required: '{chain.base}',
                     hidden: '{!chain.base}'
                 },
-                options: [
-                    { value: 'prerouting', text: 'Prerouting'.t() },
-                    { value: 'input', text: 'Input'.t() },
-                    { value: 'forward', text: 'Forward'.t() },
-                    { value: 'output', text: 'Output'.t() },
-                    { value: 'postrouting', text: 'Postrouting'.t() },
-                    { value: 'ingress', text: 'Ingress'.t() }
-                ]
+                options: Map.options.hooks
             }, {
                 xtype: 'numberfield',
                 margin: '0 0 0 16',

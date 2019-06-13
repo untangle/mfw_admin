@@ -36,12 +36,7 @@ Ext.define('Mfw.settings.routing.WanMetricDialog', {
             name: 'metric',
             required: true,
             value: 'LATENCY',
-            options: [
-                { text: 'Latency', value: 'LATENCY' },
-                { text: 'Available Bandwidth', value: 'AVAILABLE_BANDWIDTH' },
-                { text: 'Jitter', value: 'JITTER' },
-                { text: 'Packet Loss', value: 'PACKET_LOSS' }
-            ]
+            options: Map.options.wanMetrics
         }, {
             xtype: 'selectfield',
             name: 'metric_op',

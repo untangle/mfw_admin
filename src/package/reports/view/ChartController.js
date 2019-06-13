@@ -476,7 +476,7 @@ Ext.define('Mfw.reports.ChartController', {
                     if (key !== 'time_trunc') {
                         name = key;
                         if (record.get('category') === 'Interfaces') {
-                            name = Globals.interfacesMap[key] + ' [' + key + ']';
+                            name = Map.interfaces[key] + ' [' + key + ']';
                         }
                         if (!series[key]) {
                             series[key] = { name: (name !== '<nil>') ? name : 'none', data: [] };

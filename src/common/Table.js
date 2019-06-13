@@ -313,7 +313,7 @@ Ext.define('Mfw.Table', {
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: Globals.protocols
+                    options: Map.options.protocols
                 }; break;
             case 'client_interface_id':
             case 'server_interface_id':
@@ -321,10 +321,9 @@ Ext.define('Mfw.Table', {
                     xtype: 'selectfield',
                     placeholder: 'Choose interface ...'.t(),
                     editable: false,
-                    valueField: 'interfaceId',
-                    displayTpl: '{name} [ {interfaceId} ]',
-                    itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
-                    options: Globals.interfaces
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: Map.options.interfaces
                 }; break;
             case 'client_interface_type':
             case 'server_interface_type':
@@ -334,12 +333,7 @@ Ext.define('Mfw.Table', {
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: [
-                        { text: 'WAN', value: 1 },
-                        { text: 'LAN', value: 2 },
-                        { text: 'unused', value: 3 },
-                        { text: 'unset', value: 0 }
-                    ]
+                    options: Map.options.interfaceTypes
                 }; break;
             case 'client_country':
             case 'server_country':
@@ -349,7 +343,7 @@ Ext.define('Mfw.Table', {
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: Globals.countries
+                    options: Map.options.countries
                 }; break;
             case 'local_address':
             case 'remote_address':

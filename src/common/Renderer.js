@@ -20,15 +20,11 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipProtocol: function (value) {
-        var protocol = Globals.protocolsMap[value];
-        if (protocol) {
-            return protocol.text + ' <span style="color: #999;">[ ' + protocol.value + ' ]</span>';
-        }
-        return value;
+        return Map.protocols[value] ? (Map.protocols[value] + ' <span style="color: #999;">[ ' + value + ' ]</span> ') : value;
     },
 
     interface: function (value) {
-        var name = Globals.interfacesMap[value];
+        var name = Map.interfaces[value];
         if (name) {
             return name + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         }
@@ -208,12 +204,7 @@ Ext.define('Mfw.Renderer', {
     },
 
     country: function (value) {
-        var c = Globals.countriesMap[value];
-        if (c) {
-            return c.text + ' [ ' + c.value + ' ] ';
-        } else {
-            return value;
-        }
+        return Map.countries[value] ? (Map.countries[value] + ' <span style="color: #999;">[ ' + value + ' ]</span> ') : value;
     },
 
     uptime: function (value) {
@@ -255,14 +246,14 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            if (Globals.protocolsMap[value]) {
-                valueRender = Globals.protocolsMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+            if (Map.protocols[value]) {
+                valueRender = Map.protocols[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
             }
         }
 
         if (type === 'LIMIT_RATE') {
-            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text +
-                          ', ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Map.rateUnits[rec.get('rate_unit')] +
+                          ', ' + Map.groupSelectors[rec.get('group_selector')] + '</em>';
         }
 
         if (type === 'SOURCE_INTERFACE_ZONE' ||
@@ -271,13 +262,8 @@ Ext.define('Mfw.Renderer', {
             type === 'SERVER_INTERFACE_ZONE') {
             // the multiselect combobox creates a collection object as value
             valueRender = [];
-            Ext.Object.each(rec.get('value'), function (key, intfId) {
-                if (Globals.interfacesMap[intfId]) {
-                    valueRender.push(Globals.interfacesMap[intfId] + ' <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
-                } else {
-                    // intfId not found
-                    valueRender.push('??? <em style="color: #999; font-style: normal;">[ ' + intfId + ' ]</em>');
-                }
+            Ext.Object.each(rec.get('value'), function (key, val) {
+                valueRender.push((Map.interfaces[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
             });
             valueRender = valueRender.join(' ');
         }
@@ -291,39 +277,35 @@ Ext.define('Mfw.Renderer', {
         var type = rec.get('type'),
             typeText = Conditions.map[type].text,
             op = rec.get('op'),
-            opText = Util.operatorsMap[op].text,
+            opText = Map.ruleOps[op],
             value = rec.get('value'),
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
             valueRender = [];
             Ext.Array.each(rec.get('value'), function (val) {
-                if (Globals.protocolsMap[val]) {
-                    valueRender.push(Globals.protocolsMap[val].text + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                } else {
-                    valueRender.push('???<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                }
+                valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
             });
             valueRender = valueRender.join(', ');
         }
 
         if (type === 'LIMIT_RATE') {
             if (rec.get('rate_unit')) {
-                valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Util.limitRateUnitsMap[rec.get('rate_unit')].text;
+                valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Map.rateUnits[rec.get('rate_unit')];
             }
-            valueRender += ', Group: ' + Util.groupSelectorsMap[rec.get('group_selector')].text + '</em>';
+            valueRender += ', Group: ' + Map.groupSelectors[rec.get('group_selector')] + '</em>';
         }
 
         if (type === 'SOURCE_ADDRESS_TYPE' ||
             type === 'DESTINATION_ADDRESS_TYPE') {
-                if (Util.addressTypesMap[value]) {
-                    valueRender = Util.addressTypesMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+                if (Map.addressTypes[value]) {
+                    valueRender = Map.addressTypes[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
                 }
         }
 
         if (type === 'CT_STATE') {
-                if (Util.connectionStatesMap[value]) {
-                    valueRender = Util.connectionStatesMap[value].text + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+                if (Map.connStates[value]) {
+                    valueRender = Map.connStates[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
                 }
         }
 
@@ -334,12 +316,7 @@ Ext.define('Mfw.Renderer', {
             // the multiselect combobox creates a collection object as value
             valueRender = [];
             Ext.Object.each(rec.get('value'), function (key, intfId) {
-                if (Globals.interfacesMap[intfId]) {
-                    valueRender.push(Globals.interfacesMap[intfId] + '<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
-                } else {
-                    // intfId not found
-                    valueRender.push('???<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
-                }
+                valueRender.push((Map.interfaces[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
             });
             valueRender = valueRender.join(', ');
         }
@@ -378,22 +355,19 @@ Ext.define('Mfw.Renderer', {
         var conditions = record.conditions(),
             action = record.getAction(),
             valueRender, strArr = [],
-            sentence = 'If packet ', type;
+            sentence = 'IF packet ', type;
 
         conditions.each(function (cond) {
             type = cond.get('type');
+            valueRender = cond.get('value');
 
             if (type === 'IP_PROTOCOL') {
                 valueRender = [];
                 Ext.Array.each(cond.get('value'), function (val) {
-                    if (Globals.protocolsMap[val]) {
-                        valueRender.push(Globals.protocolsMap[val].text);
-                    } else {
-                        valueRender.push(val);
-                    }
+                    valueRender.push(Map.protocols[val] || val);
                 });
                 strArr.push('<span style="font-weight: bold; color: #333;">' +
-                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                              valueRender.join(' or ') + '</span>');
                 return;
             }
@@ -402,19 +376,20 @@ Ext.define('Mfw.Renderer', {
                 valueRender = [];
                 strArr.push('<span style="font-weight: bold; color: #333;">' +
                              Conditions.map[type].text.toLowerCase() + ' ' +
-                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
+                             Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                              cond.get('value') + ' ' +
-                             Util.limitRateUnitsMap[cond.get('rate_unit')].text.toLowerCase() + ' ' +
-                             ' on ' + Util.groupSelectorsMap[cond.get('group_selector')].text + '</span>');
+                             Map.rateUnits[cond.get('rate_unit')].toLowerCase() + ' ' +
+                             ' on ' + Map.groupSelectors[cond.get('group_selector')] + '</span>');
                 return;
             }
 
             if (type.includes('PORT')) {
-                strArr.push('<span style="font-weight: bold; color: #333;">' +
-                             Conditions.map[type].text.toLowerCase() + ' ' +
-                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
-                             (cond.get('value') + '').split(',').join(' or ') + '</span>');
-                return;
+                valueRender = (cond.get('value') + '').split(',').join(' or ');
+                // strArr.push('<span style="font-weight: bold; color: #333;">' +
+                //              Conditions.map[type].text.toLowerCase() + ' ' +
+                //              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                //              (cond.get('value') + '').split(',').join(' or ') + '</span>');
+                // return;
             }
 
             if (type === 'SOURCE_INTERFACE_NAME' ||
@@ -425,22 +400,35 @@ Ext.define('Mfw.Renderer', {
                 type === 'SERVER_USERNAME' ||
                 type === 'LOCAL_HOSTNAME' ||
                 type === 'LOCAL_USERNAME') {
-                strArr.push('<span style="font-weight: bold; color: #333;">' +
-                             Conditions.map[type].text.toLowerCase() + ' ' +
-                             Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
-                             '"' + cond.get('value') + '"</span>');
-                return;
+                    valueRender = '"' + cond.get('value') + '"';
+                // strArr.push('<span style="font-weight: bold; color: #333;">' +
+                //              Conditions.map[type].text.toLowerCase() + ' ' +
+                //              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                //              '"' + cond.get('value') + '"</span>');
+                // return;
+            }
+
+            if (type === 'SOURCE_INTERFACE_ZONE' ||
+                type === 'DESTINATION_INTERFACE_ZONE' ||
+                type === 'CLIENT_INTERFACE_ZONE' ||
+                type === 'SERVER_INTERFACE_ZONE') {
+                // the multiselect combobox creates a collection object as value
+                valueRender = [];
+                Ext.Array.each(cond.get('value'), function (val) {
+                    valueRender.push(Map.interfaces[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                });
+                valueRender = valueRender.join(' or ');
             }
 
             strArr.push('<span style="font-weight: bold; color: #333;">' +
                          Conditions.map[type].text.toLowerCase() + ' ' +
-                         Util.operatorsMap[cond.get('op')].text.toLowerCase() + ' ' +
-                         cond.get('value') + '</span>');
+                         Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                         valueRender + '</span>');
         });
 
 
         if (strArr.length > 0) {
-            sentence += strArr.join(' and ')  + ', then ' + (action ? Renderer.ruleAction(null, action) : '<no action set>');
+            sentence += strArr.join(' and ')  + ', THEN ' + (action ? Renderer.ruleAction(null, action) : '<no action set>');
 
         } else {
             sentence = 'For any packet ' + (action ? Renderer.ruleAction(null, action) : '<em>&lt; no action set &gt;</em>');
@@ -483,7 +471,7 @@ Ext.define('Mfw.Renderer', {
                 actionStr += ' ' + action.get('priority');
             }
             if (type === 'WAN_POLICY') {
-                actionStr += Util.policiesMap[action.get('policy')].text + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
+                actionStr += Map.policies[action.get('policy')] + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
             }
         }
         return '<span style="color: blue; font-weight: bold;">' + actionStr.toLowerCase() + '</span>';

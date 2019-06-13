@@ -62,59 +62,6 @@ Ext.define('Mfw.settings.Util', {
         link.click();
     },
 
-
-    operators: [
-        { value: '==', text: 'Is'.t(), sign: ' = ' },
-        { value: '!=', text: 'Is Not'.t(), sign: ' != ' },
-        { value: '>', text: 'Greater Than'.t(), sign: ' > ' },
-        { value: '<', text: 'Less Than'.t(), sign: ' < ' },
-        { value: '>=', text: 'Greater Than or Equal'.t(), sign:' >= ' },
-        { value: '<=', text: 'Less Than or Equal'.t(), sign: ' <= ' }
-    ],
-
-    // used in LIMIT_RATE conditions
-    limitRateUnits: [
-        { text: 'Bytes/Second',   value: 'BYTES_PER_SECOND' },
-        { text: 'KBytes/Second',  value: 'KBYTES_PER_SECOND' },
-        { text: 'MBytes/Second',  value: 'MBYTES_PER_SECOND' },
-        { text: 'Packets/Second', value: 'PACKETS_PER_SECOND' },
-        { text: 'Packets/Minute', value: 'PACKETS_PER_MINUTE' },
-        { text: 'Packets/Hour',   value: 'PACKETS_PER_HOUR' },
-        { text: 'Packets/Day',    value: 'PACKETS_PER_DAY' },
-        { text: 'Packets/Week',   value: 'PACKETS_PER_WEEK' }
-    ],
-
-    addressTypes: [
-        { text: 'Unspecified', value: 'unspec' },
-        { text: 'Unicast',     value: 'unicast' },
-        { text: 'Local',       value: 'local' },
-        { text: 'Broadcast',   value: 'broadcast' },
-        { text: 'Anycast',     value: 'anycast' },
-        { text: 'Multicast',   value: 'multicast' },
-        { text: 'Blackhole',   value: 'blackhole' },
-        { text: 'Unreachable', value: 'unreachable' },
-        { text: 'Prohibit',    value: 'prohibit' }
-    ],
-
-    connectionStates: [
-        { text: 'New',         value: 'new' },
-        { text: 'Established', value: 'established' },
-        { text: 'Related',     value: 'related' },
-        { text: 'Invalid',     value: 'invalid' }
-    ],
-
-    // used in LIMIT_RATE conditions
-    groupSelectors: [
-        { text: 'Global',                 value: 'GLOBAL' },
-        { text: 'IP Protocol',            value: 'IP_PROTOCOL' },
-        { text: 'Source Port',            value: 'SOURCE_PORT' },
-        { text: 'Source Address',         value: 'SOURCE_ADDRESS' },
-        { text: 'Source Address v6',      value: 'SOURCE_ADDRESS_V6' },
-        { text: 'Destination Port',       value: 'DESTINATION_PORT' },
-        { text: 'Destination Address',    value: 'DESTINATION_ADDRESS' },
-        { text: 'Destination Address v6', value: 'DESTINATION_ADDRESS_V6' },
-    ],
-
     // adds timezone computation to ensure dates showing in UI are showing actual server date
     serverToClientDate: function (serverDate) {
         if (!serverDate) { return null; }
@@ -125,15 +72,5 @@ Ext.define('Mfw.settings.Util', {
     clientToServerDate: function (clientDate) {
         if (!clientDate) { return null; }
         return Ext.Date.subtract(clientDate, Ext.Date.MINUTE, new Date().getTimezoneOffset() / 60000);
-    },
-
-    constructor: function() {
-        this.initConfig({
-            operatorsMap: Ext.Array.toValueMap(this.operators, 'value'),
-            limitRateUnitsMap: Ext.Array.toValueMap(this.limitRateUnits, 'value'),
-            addressTypesMap: Ext.Array.toValueMap(this.addressTypes, 'value'),
-            connectionStatesMap: Ext.Array.toValueMap(this.connectionStates, 'value'),
-            groupSelectorsMap: Ext.Array.toValueMap(this.groupSelectors, 'value')
-        });
     }
 });

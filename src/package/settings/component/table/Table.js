@@ -265,6 +265,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     }, {
         text: 'Summary',
         menuDisabled: true,
+        // hidden: true,
         flex: 1,
         cell: {
             style: {

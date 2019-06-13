@@ -35,7 +35,7 @@ Ext.define('Mfw.settings.Conditions', {
             editable: false,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.addressTypes
+            options: Map.options.addressTypes
         }
     }, {
         type:'SOURCE_PORT',
@@ -113,7 +113,7 @@ Ext.define('Mfw.settings.Conditions', {
             editable: false,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.addressTypes
+            options: Map.options.addressTypes
         }
     }, {
         type:'DESTINATION_PORT',
@@ -403,7 +403,7 @@ Ext.define('Mfw.settings.Conditions', {
             multiSelect: true,
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Globals.protocols,
+            options: Map.options.protocols,
             chipView: {
                 style: 'background: transparent',
                 selectable: false,
@@ -422,7 +422,7 @@ Ext.define('Mfw.settings.Conditions', {
             autoSelect: true,
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-            options: Util.connectionStates
+            options: Map.options.connStates
         }
     }, {
         type:'LIMIT_RATE',
@@ -445,7 +445,7 @@ Ext.define('Mfw.settings.Conditions', {
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             errorTarget: 'under',
-            options: Util.limitRateUnits
+            options: Map.options.rateUnits
         }, {
             xtype: 'selectfield',
             name: 'group_selector',
@@ -459,7 +459,7 @@ Ext.define('Mfw.settings.Conditions', {
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             errorTarget: 'under',
-            options: Util.groupSelectors
+            options: Map.options.groupSelectors
         }]
     }],
 

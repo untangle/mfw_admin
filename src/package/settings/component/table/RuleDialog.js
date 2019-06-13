@@ -394,11 +394,17 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // set available operators for selected condition type, and preselect first operator
             if (conditionDef.operators) {
                 Ext.Array.each(conditionDef.operators, function (op) {
-                    operators.push(Util.operatorsMap[op]);
+                    Ext.Array.each(Map.options.ruleOps, function (option) {
+                        if (option.value === op) {
+                            operators.push(option);
+                        }
+                    });
                 });
             } else {
-                operators = Util.operators;
+                operators = Map.options.ruleOps;
             }
+            console.log(operators);
+
             form.getFields('op').setOptions(operators).setValue(operators[0].value);
 
 
@@ -567,12 +573,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     label: 'Priority'.t(),
                     bind: '{rule.action.priority}',
                     required: true,
-                    options: [
-                        { text: 'Priority 1', value: 1 },
-                        { text: 'Priority 2', value: 2 },
-                        { text: 'Priority 3', value: 3 },
-                        { text: 'Priority 4', value: 4 }
-                    ]
+                    options: Map.options.priorities
                 });
                 return;
             }
@@ -589,7 +590,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     required: true,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: grid.policies,
+                    options: Map.options.policies,
                     bind: '{rule.action.policy}'
                 });
                 return;
@@ -626,7 +627,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         },
 
         operatorRenderer: function (value) {
-            return Util.operatorsMap[value].text + ' <span style="color: #999;">[ ' + value + ' ]</span>';
+            return Map.ruleOps[value] + ' <span style="color: #999;">[ ' + value + ' ]</span>';
         },
 
         filterConditionType: function (field, value) {

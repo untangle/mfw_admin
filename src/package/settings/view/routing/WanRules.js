@@ -18,19 +18,20 @@ Ext.define('Mfw.settings.routing.WanRules', {
 
     before: function(cb) {
         // load wan policies
-        var policies = [];
+        var policies = {};
         Ext.Ajax.request({
             url: Util.api + '/settings/wan/policies',
             success: function(response) {
                 var resp = Ext.decode(response.responseText);
                 Ext.Array.each(resp, function (policy) {
-                    policies.push({
-                        text: policy.description,
-                        value: policy.policyId
-                    });
+                    policies[policy.policyId] = policy.description;
+                    // policies.push({
+                    //     text: policy.description,
+                    //     value: policy.policyId
+                    // });
                 });
-                Util.policies = policies;
-                Util.policiesMap = Ext.Array.toValueMap(Util.policies, 'value');
+                Map.policies = policies;
+                Map.options.policies = Map.toOptions(policies);
                 cb();
             },
             failure: function(response) {

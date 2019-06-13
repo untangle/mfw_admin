@@ -46,7 +46,7 @@ Ext.define('Mfw.setup.step.Timezone', {
                 label: 'Choose timezone'.t(),
                 required: true,
                 valueField: 'text',
-                options: Globals.timezones,
+                options: Map.options.timezones,
                 listeners: {
                     painted: function (f) { f.focus(); }
                 }
@@ -106,7 +106,7 @@ Ext.define('Mfw.setup.step.Timezone', {
                 tz, tzName = form.getFields('displayName').getValue(),
                 wzCtrl = me.getView().up('setup-wizard').getController();
 
-            tz = Ext.Array.findBy(Globals.timezones, function (zone) {
+            tz = Ext.Array.findBy(Map.options.timezones, function (zone) {
                 return zone.text === tzName;
             });
 

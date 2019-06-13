@@ -44,7 +44,7 @@ Ext.define('Mfw.settings.system.Settings', {
             label: 'Timezone'.t(),
             bind: '{system.timeZone.displayName}',
             valueField: 'text',
-            options: Globals.timezones
+            options: Map.options.timezones
         }, {
             xtype: 'toolbar',
             shadow: false,
@@ -103,7 +103,7 @@ Ext.define('Mfw.settings.system.Settings', {
 
             values = form.getValues();
 
-            tz = Ext.Array.findBy(Globals.timezones, function (zone) {
+            tz = Ext.Array.findBy(Map.options.timezones, function (zone) {
                 return zone.text === values.displayName;
             });
 

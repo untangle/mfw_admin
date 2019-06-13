@@ -312,7 +312,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                     placeholder: '{interface.v4StaticPrefix}',
                                     disabled: '{!override.checked}'
                                 },
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }]
                         }, {
                             xtype: 'textfield',
@@ -394,7 +394,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                     value: '{interface.v4StaticPrefix}',
                                     required: '{interface.v4ConfigType === "STATIC"}'
                                 },
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }]
                         }, {
                             xtype: 'textfield',
@@ -590,14 +590,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             menuDisabled: true,
                             flex: 1,
                             renderer: function (value) {
-                                return Globals.prefixesMap[value].text;
+                                return Map.prefixes[value];
                             },
                             editable: true,
                             editor: {
                                 xtype: 'selectfield',
                                 editable: false,
                                 clearable: false,
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }
                         }, {
                             width: 44,
@@ -844,14 +844,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             menuDisabled: true,
                             flex: 1,
                             renderer: function (value) {
-                                return Globals.prefixesMap[value].text;
+                                return Map.prefixes[value];
                             },
                             editable: true,
                             editor: {
                                 xtype: 'selectfield',
                                 editable: false,
                                 clearable: false,
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }
                         }, {
                             width: 44,
@@ -961,7 +961,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                                 value: '{interface.dhcpPrefixOverride}',
                                 hidden: '{!interface.dhcpEnabled}',
                             },
-                            options: Globals.prefixes
+                            options: Map.options.prefixes
                         }]
                     }, {
                         xtype: 'textfield',
@@ -1168,14 +1168,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             menuDisabled: true,
                             flex: 1,
                             renderer: function (value) {
-                                return Globals.prefixesMap[value].text;
+                                return Map.prefixes[value];
                             },
                             editable: true,
                             editor: {
                                 xtype: 'selectfield',
                                 editable: false,
                                 clearable: false,
-                                options: Globals.prefixes
+                                options: Map.options.prefixes
                             }
                         }, {
                             width: 44,

@@ -158,7 +158,8 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
         showSupport: function () {
             var hash = window.location.hash;
-            window.open(Globals.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
+            console.log(Mfw.app.supportUrl);
+            window.open(Mfw.app.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
         }
     }
 });
