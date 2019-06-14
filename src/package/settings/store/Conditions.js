@@ -79,6 +79,20 @@ Ext.define('Mfw.settings.Conditions', {
                 displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
             }
         }
+    }, {
+        type:'SOURCE_INTERFACE_TYPE',
+        category: 'Source',
+        text: 'Source Interface Type'.t(),
+        description: 'Source Interface Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            autoSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.interfaceTypes
+        }
     },
 
     // DESTINATION
@@ -157,6 +171,20 @@ Ext.define('Mfw.settings.Conditions', {
                 displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
             }
         }
+    }, {
+        type:'DESTINATION_INTERFACE_TYPE',
+        category: 'Destination',
+        text: 'Destination Interface Type'.t(),
+        description: 'Destination Interface Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            autoSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.interfaceTypes
+        }
     },
 
     // CLIENT
@@ -228,6 +256,20 @@ Ext.define('Mfw.settings.Conditions', {
                 displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
             }
         }
+    }, {
+        type:'CLIENT_INTERFACE_TYPE',
+        category: 'Client',
+        text: 'Client Interface Type'.t(),
+        description: 'Client Interface Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            autoSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.interfaceTypes
+        }
     },
 
     // SERVER
@@ -298,6 +340,20 @@ Ext.define('Mfw.settings.Conditions', {
                 selectable: false,
                 displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
             }
+        }
+    }, {
+        type:'SERVER_INTERFACE_TYPE',
+        category: 'Server',
+        text: 'Server Interface Type'.t(),
+        description: 'Server Interface Type description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            autoSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.interfaceTypes
         }
     },
 

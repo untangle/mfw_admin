@@ -403,7 +403,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             } else {
                 operators = Map.options.ruleOps;
             }
-            console.log(operators);
 
             form.getFields('op').setOptions(operators).setValue(operators[0].value);
 

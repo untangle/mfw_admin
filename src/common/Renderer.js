@@ -316,10 +316,18 @@ Ext.define('Mfw.Renderer', {
             // the multiselect combobox creates a collection object as value
             valueRender = [];
             Ext.Object.each(rec.get('value'), function (key, intfId) {
-                valueRender.push((Map.interfaces[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                valueRender.push((Map.interfaces[intfId] || '???') + '<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
             });
             valueRender = valueRender.join(', ');
         }
+
+        if (type === 'SOURCE_INTERFACE_TYPE' ||
+            type === 'DESTINATION_INTERFACE_TYPE' ||
+            type === 'CLIENT_INTERFACE_TYPE' ||
+            type === 'SERVER_INTERFACE_TYPE') {
+            valueRender = Map.interfaceTypes[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+        }
+
         var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
 
         if (val) {
@@ -418,6 +426,13 @@ Ext.define('Mfw.Renderer', {
                     valueRender.push(Map.interfaces[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
                 });
                 valueRender = valueRender.join(' or ');
+            }
+
+            if (type === 'SOURCE_INTERFACE_TYPE' ||
+                type === 'DESTINATION_INTERFACE_TYPE' ||
+                type === 'CLIENT_INTERFACE_TYPE' ||
+                type === 'SERVER_INTERFACE_TYPE') {
+                valueRender = Map.interfaceTypes[cond.get('value')] + ' <em style="color: #999; font-style: normal;">[' + cond.get('value') + ']</em>';
             }
 
             strArr.push('<span style="font-weight: bold; color: #333;">' +
