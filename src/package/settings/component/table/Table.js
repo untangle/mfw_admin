@@ -44,10 +44,10 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         viewModel: true, // important
     },
 
-    rowLines: true,
+    rowLines: false,
     selectable: false,
     itemRipple: false,
-    variableHeights: true,
+    // variableHeights: true,
     plugins: {
         sortablelist: true
     },
@@ -62,11 +62,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         docked: 'top',
         padding: '0 8',
         items: [{
-            xtype: 'component',
-            html: 'Chain:',
-            style: 'font-size: 14px; color: #555;',
-            margin: '0 8'
-        }, {
             xtype: 'button',
             itemId: 'chainsmenu',
             minWidth: 200,
@@ -77,8 +72,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             menu: {
                 minWidth: 250,
                 userCls: 'x-htmlmenu chain-menu',
-                shadow: false
-                // anchor: true,
+                shadow: true,
+                anchor: true
             }
         }, {
             xtype: 'component',
@@ -197,45 +192,38 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             tools: [{ cls: 'x-list-sortablehandle', iconCls: 'md-icon-drag-handle', zone: 'start', tooltip: 'Drag to Sort' }]
         }
     }, {
+        xtype: 'checkcolumn',
+        dataIndex: 'enabled',
+        // text: 'Enabled'.t(),
+        width: 44,
+        menuDisabled: true,
+        resizable: false
+    }, {
         text: 'Id'.t(),
         dataIndex: 'ruleId',
         menuDisabled: true,
         resizable: false,
-        width: 50,
+        width: 44,
         align: 'right',
-        // hidden: true,
+        cell: {
+            encodeHtml: false,
+        },
         renderer: function (v) {
-            return ( v === 0 ) ? '#?' : '#' + v;
+            return ( v === 0 ) ? '-' : v;
         }
-    }, {
-        xtype: 'checkcolumn',
-        dataIndex: 'enabled',
-        text: 'Enabled'.t(),
-        width: 80,
-        menuDisabled: true,
-        resizable: false,
-        // width: 100,
-        // dataIndex: 'enabled',
-        // cell: {
-        //     xtype: 'widgetcell',
-        //     widget: {
-        //         xtype: 'togglefield',
-        //         margin: '0 10',
-        //         disabled: true,
-        //         bind: {
-        //             disabled: '{!selectedChain.editable}'
-        //         }
-        //     }
-        // }
     }, {
         text: 'Description'.t(),
         dataIndex: 'description',
         menuDisabled: true,
         minWidth: 400,
         cell: {
+            encodeHtml: false,
             bind: {
                 userCls: '{!record.enabled ? "x-disabled" : ""}'
             }
+        },
+        renderer: function (val, rec) {
+            return rec.get('enabled') ? ('<strong>' + val + '</strong>') : val;
         }
     }, {
         text: 'Conditions'.t(),
@@ -269,7 +257,6 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         flex: 1,
         cell: {
             style: {
-                fontSize: '14px',
                 color: '#777'
             },
             encodeHtml: false

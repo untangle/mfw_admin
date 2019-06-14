@@ -387,7 +387,7 @@ Ext.define('Mfw.Renderer', {
                              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                              cond.get('value') + ' ' +
                              Map.rateUnits[cond.get('rate_unit')].toLowerCase() + ' ' +
-                             ' on ' + Map.groupSelectors[cond.get('group_selector')] + '</span>');
+                             ' on ' + (Map.groupSelectors[cond.get('group_selector')] || 'Global') + '</span>');
                 return;
             }
 

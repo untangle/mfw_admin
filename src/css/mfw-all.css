@@ -75,7 +75,7 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .x-gridcell.status-dirty { background: orange; }
 .x-gridcell.status-delete { background: red; }
 .x-gridcell.status-phantom { background: green; }
-.x-gridcell.x-disabled { color: #999; }
+.x-gridcell.x-disabled { color: #777; }
 .x-gridcell.x-disabled .condition span { background: #CCC; }
 
 .chain .x-innerhtml div { display: inline-block; margin: 0 10px; }
@@ -283,3 +283,5 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 
 .x-chip, .x-chip:hover { border-radius: 3px; }
 .x-chip .x-close-el, .x-chip .x-close-el:hover, .x-chip:hover .x-close-el, .x-chip:hover .x-close-el:hover { background: transparent; }
+
+.x-checkcell .x-checkbox-el:focus { color: var(--base-color); }
