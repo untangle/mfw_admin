@@ -273,10 +273,8 @@ Ext.define('Mfw.settings.Map', {
     },
 
     interfaceTypes: {
-        0: 'unset',
-        1: 'WAN',
-        2: 'LAN',
-        3: 'unused'
+        "wan": 'WAN',
+        "lan": 'LAN',
     },
 
     hooks: {
