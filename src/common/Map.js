@@ -275,6 +275,7 @@ Ext.define('Mfw.settings.Map', {
     interfaceTypes: {
         "wan": 'WAN',
         "lan": 'LAN',
+        "unset": 'Unset'
     },
 
     hooks: {
