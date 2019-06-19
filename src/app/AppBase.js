@@ -61,19 +61,6 @@ Ext.define('Mfw.AppBase', {
                     Mfw.app.redirectTo('auth');
                 } else {
                     if (Mfw.app.context === 'admin' || Mfw.app.context === 'settings') {
-                        // load interfaces to create names map
-                        Ext.Ajax.request({
-                            url: '/api/settings/network/interfaces',
-                            success: function(response) {
-                                var interfaces = Ext.decode(response.responseText), interfacesMap = {};
-                                Ext.Array.each(interfaces, function (interface) {
-                                    interfacesMap[interface.interfaceId] = interface.name;
-                                });
-                                Map.interfaces = interfacesMap;
-                                Map.options.interfaces = Map.toOptions(interfacesMap);
-                            }
-                        });
-
                         Ext.Ajax.request({
                             url: '/api/settings/system',
                             success: function(response2) {
