@@ -447,6 +447,39 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!=']
     },
 
+    // CLASSIFY
+    {
+        type:'APPLICATION_ID',
+        category: 'Classify',
+        text: 'Application ID'.t(),
+        description: 'Application ID description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_NAME',
+        category: 'Classify',
+        text: 'Application Name'.t(),
+        description: 'Application Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PROTOCHAIN',
+        category: 'Classify',
+        text: 'Application Protochain'.t(),
+        description: 'Application Protochain description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_DETAIL',
+        category: 'Classify',
+        text: 'Application Detail'.t(),
+        description: 'Application Detail description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_CATEGORY',
+        category: 'Classify',
+        text: 'Application Category'.t(),
+        description: 'Application Category description ...',
+        operators: ['==', '!=']
+    },
+
     // OTHERS
     {
         type:'IP_PROTOCOL',
