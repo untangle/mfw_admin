@@ -60,7 +60,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Source Interface Zone description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             multiSelect: true,
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
@@ -152,7 +152,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Destination Interface Zone description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             multiSelect: true,
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
@@ -237,7 +237,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Client Interface Zone description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             multiSelect: true,
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
@@ -322,7 +322,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Server Interface Zone description ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'combobox',
+            xtype: 'selectfield',
             multiSelect: true,
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',

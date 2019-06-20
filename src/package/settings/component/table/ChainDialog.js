@@ -77,7 +77,7 @@ Ext.define('Mfw.cmp.grid.table.ChainDialog', {
                 clearable: false
             },
             items: [{
-                xtype: 'combobox',
+                xtype: 'selectfield',
                 width: 120,
                 name: 'hook',
                 label: 'Hook'.t(),
