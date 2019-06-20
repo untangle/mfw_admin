@@ -17,25 +17,25 @@ Ext.define('Mfw.model.table.Chain', {
         model: 'Mfw.model.table.Rule',
         name: 'rules',
         associationKey: 'rules'
-    },
-
-    proxy: {
-        type: 'ajax',
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json',
-            writeAllFields: true,
-            allowSingle: false,
-            allDataOptions: {
-                associated: true,
-                persist: true
-            },
-            transform: {
-                fn: Util.sanitize,
-                scope: this
-            }
-        }
     }
+
+    // proxy: {
+    //     type: 'ajax',
+    //     reader: {
+    //         type: 'json'
+    //     },
+    //     writer: {
+    //         type: 'json',
+    //         writeAllFields: true,
+    //         allowSingle: false,
+    //         allDataOptions: {
+    //             associated: true,
+    //             persist: true
+    //         },
+    //         transform: {
+    //             fn: Util.sanitize,
+    //             scope: this
+    //         }
+    //     }
+    // }
 });

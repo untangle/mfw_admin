@@ -192,6 +192,19 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         // keep the initial order of items, used to determine if records were moved around
         me.initialIndices = me.selectedChain.rules().getData().indices;
+
+        me.selectedChain.rules().each(function (rule) {
+            rule.conditions().commitChanges();
+            rule.getAction().commit();
+
+            rule.conditions().on('datachanged', function (cstore) {
+                if (cstore.getModifiedRecords().length > 0 ||
+                    cstore.getNewRecords().length > 0 ||
+                    cstore.getRemovedRecords().length > 0) {
+                        rule.dirty = true;
+                }
+            });
+        });
     },
 
     /**

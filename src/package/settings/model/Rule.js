@@ -18,7 +18,8 @@ Ext.define('Mfw.model.table.Rule', {
         { name: 'ruleId', type: 'integer' },
         { name: 'enabled', type: 'boolean', defaultValue: true },
         { name: 'description', type: 'string' },
-        { name: '_deleteSchedule', type: 'boolean', default: false }
+        { name: '_deleteSchedule', type: 'boolean', default: false },
+        { name: '_state', type: 'string', default: null } // NEW, REMOVED, MODIFIED, MOVED
     ],
 
     hasMany: [{
@@ -31,25 +32,25 @@ Ext.define('Mfw.model.table.Rule', {
         model: 'Mfw.model.table.Action',
         name: 'action',
         associationKey: 'action'
-    },
-
-    proxy: {
-        type: 'ajax',
-        reader: {
-            type: 'json'
-        },
-        writer: {
-            type: 'json',
-            writeAllFields: true,
-            allowSingle: false,
-            allDataOptions: {
-                associated: true,
-                persist: true
-            },
-            transform: {
-                fn: Util.sanitize,
-                scope: this
-            }
-        }
     }
+
+    // proxy: {
+    //     type: 'ajax',
+    //     reader: {
+    //         type: 'json'
+    //     },
+    //     writer: {
+    //         type: 'json',
+    //         writeAllFields: true,
+    //         allowSingle: false,
+    //         allDataOptions: {
+    //             associated: true,
+    //             persist: true
+    //         },
+    //         transform: {
+    //             fn: Util.sanitize,
+    //             scope: this
+    //         }
+    //     }
+    // }
 });

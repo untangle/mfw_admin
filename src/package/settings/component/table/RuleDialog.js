@@ -289,7 +289,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     text: 'Cancel',
                     margin: '0 8 0 0',
                     width: 100,
-                    handler: 'cancelEdit',
+                    handler: 'cancelEditCondition',
                     hidden: true,
                     bind: {
                         hidden: '{!grid.selection}'
@@ -347,7 +347,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 });
             }
 
-            rule.conditions().commitChanges(); // needed
+            // rule.conditions().commitChanges(); // needed
 
             // update the sentence on rule cdeep hange
             vm.bind('{rule}', function (r) {
@@ -446,7 +446,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             var me = this,
                 rule = me.getViewModel().get('rule'),
                 action = rule.getAction(),
-                grid = me.getView().ownerCmp,
                 actionform = me.getView().down('#actionform'),
                 actionValue = actionform.down('#actionValue');
 
@@ -650,7 +649,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
         },
 
-        cancelEdit: function () {
+        cancelEditCondition: function () {
             var me = this,
                 tree = me.lookup('tree');
 
@@ -664,9 +663,10 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 vm = me.getViewModel(),
                 rule = vm.get('rule');
 
-            rule.reject();
             rule.conditions().rejectChanges();
-            if (rule.getAction()) { rule.getAction().reject(); }
+            rule.getAction().reject();
+            rule.reject();
+
             me.getView().destroy();
         },
 
@@ -691,9 +691,9 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             // add rule
             if (vm.get('action') === 'ADD') {
                 grid.getStore().add(rule);
-            } else {
-                rule.commit();
             }
+            grid.refresh();
+
             me.getView().destroy();
         }
     }
