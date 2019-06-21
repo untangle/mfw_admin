@@ -79,6 +79,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'name',        type: 'string', allowNull: false, allowBlank: false },
         { name: 'device',      type: 'string', allowNull: true },
         { name: 'wan',         type: 'boolean', allowNull: true },
+        { name: 'qosEnabled',  type: 'boolean', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]

@@ -137,7 +137,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         },
         renderer: function (value, record) {
             if (!record.get('wan')) { return '-'; }
-            return '<strong>' + (value || '?') + '</strong> Kbps';
+            return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
         }
     }, {
         text: 'Upload',
@@ -152,7 +152,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         },
         renderer: function (value, record) {
             if (!record.get('wan')) { return '-'; }
-            return '<strong>' + (value || '?') + '</strong> Kbps';
+            return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
         }
     }]
 });

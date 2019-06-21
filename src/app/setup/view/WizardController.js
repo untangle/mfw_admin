@@ -10,7 +10,7 @@ Ext.define('Mfw.setup.WizardController', {
         'step-timezone',
         'step-interfaces',
         'step-performance',
-        'step-upgrades',
+        // 'step-upgrades',
         'step-complete'
     ],
 
@@ -78,23 +78,6 @@ Ext.define('Mfw.setup.WizardController', {
             controller.continue(function () {
                 layout.next();
                 vm.set('processing', false);
-
-                // var step = wizard.getActiveItem().xtype;
-
-                // Ext.Ajax.request({
-                //     url: window.location.origin + '/api/settings/system/setupWizard',
-                //     method: 'POST',
-                //     params: Ext.JSON.encode({
-                //         currentStep: step === 'step-complete' ? '' : step,
-                //         completed: me.completed || step === 'step-complete'
-                //     }),
-                //     success: function(response) {
-                //         var obj = Ext.decode(response.responseText);
-                //     },
-                //     failure: function(response) {
-                //         console.log('server-side failure with status code ' + response.status);
-                //     }
-                // });
             });
             return;
         }
