@@ -447,36 +447,162 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!=']
     },
 
-    // CLASSIFY
+    // APPLICATION
     {
         type:'APPLICATION_ID',
-        category: 'Classify',
+        category: 'Application',
         text: 'Application ID'.t(),
         description: 'Application ID description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_NAME',
-        category: 'Classify',
+        category: 'Application',
         text: 'Application Name'.t(),
         description: 'Application Name description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_PROTOCHAIN',
-        category: 'Classify',
+        category: 'Application',
         text: 'Application Protochain'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_DETAIL',
-        category: 'Classify',
+        category: 'Application',
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_CATEGORY',
-        category: 'Classify',
+        category: 'Application',
         text: 'Application Category'.t(),
         description: 'Application Category description ...',
+        operators: ['==', '!=']
+    },
+
+    // CERTIFICATE ISSUER
+    {
+        type:'CERT_ISSUER_CN',
+        category: 'Certificate Issuer',
+        text: 'Common Name'.t(),
+        description: 'Common Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_SN',
+        category: 'Certificate Issuer',
+        text: 'Serial Number'.t(),
+        description: 'Serial Number description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_C',
+        category: 'Certificate Issuer',
+        text: 'Country'.t(),
+        description: 'Country description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_O',
+        category: 'Certificate Issuer',
+        text: 'Organization'.t(),
+        description: 'Organication description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_OU',
+        category: 'Certificate Issuer',
+        text: 'Organizational Unit'.t(),
+        description: 'Organizational Unit description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_L',
+        category: 'Certificate Issuer',
+        text: 'Locality'.t(),
+        description: 'Locality description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_P',
+        category: 'Certificate Issuer',
+        text: 'Province'.t(),
+        description: 'Province description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_SA',
+        category: 'Certificate Issuer',
+        text: 'Street Address'.t(),
+        description: 'Street Address description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_ISSUER_PC',
+        category: 'Certificate Issuer',
+        text: 'Postal Code'.t(),
+        description: 'Postal Code description ...',
+        operators: ['==', '!=']
+    },
+
+    // CERTIFICATE SUBJECT
+    {
+        type:'CERT_SUBJECT_CN',
+        category: 'Certificate Subject',
+        text: 'Common Name'.t(),
+        description: 'Common Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_SN',
+        category: 'Certificate Subject',
+        text: 'Serial Number'.t(),
+        description: 'Serial Number description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_C',
+        category: 'Certificate Subject',
+        text: 'Country'.t(),
+        description: 'Country description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_O',
+        category: 'Certificate Subject',
+        text: 'Organization'.t(),
+        description: 'Organication description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_OU',
+        category: 'Certificate Subject',
+        text: 'Organizational Unit'.t(),
+        description: 'Organizational Unit description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_L',
+        category: 'Certificate Subject',
+        text: 'Locality'.t(),
+        description: 'Locality description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_P',
+        category: 'Certificate Subject',
+        text: 'Province'.t(),
+        description: 'Province description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_SA',
+        category: 'Certificate Subject',
+        text: 'Street Address'.t(),
+        description: 'Street Address description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_PC',
+        category: 'Certificate Subject',
+        text: 'Postal Code'.t(),
+        description: 'Postal Code description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_SAN',
+        category: 'Certificate Subject',
+        text: 'Subject Alternative Name'.t(),
+        description: 'Subject Alternative Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CERT_SUBJECT_DNS',
+        category: 'Certificate Subject',
+        text: 'All DNS Names'.t(),
+        description: 'All DNS Names description ...',
         operators: ['==', '!=']
     },
 
