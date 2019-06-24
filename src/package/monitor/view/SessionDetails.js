@@ -141,12 +141,6 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
         init: function (tree) {
             tree.getViewModel().bind('{list.selection}', function (selection) {
                 if (!selection) {
-                    // Ext.Object.each(selection.getData(), function (key, val) {
-                    //     var node = rootNode.findChild('key', key, true);
-                    //     if (node) {
-                    //         node.set('val', '');
-                    //     }
-                    // });
                     return;
                 }
 
@@ -162,7 +156,8 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         default: break;
                     }
                     if (expandKey) {
-                        key = expandKey;
+                        node = rootNode.findChild('key', expandKey, true);
+                        if (node) { node.set('val', val); }
                     }
                     node = rootNode.findChild('key', key, true);
                     if (node) { node.set('val', val); }
