@@ -498,7 +498,20 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Certificate Issuer',
         text: 'Country'.t(),
         description: 'Country description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            multiSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.countries,
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
+            }
+        }
     }, {
         type:'CERT_ISSUER_O',
         category: 'Certificate Issuer',
@@ -555,7 +568,20 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Certificate Subject',
         text: 'Country'.t(),
         description: 'Country description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            multiSelect: true,
+            editable: false,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            options: Map.options.countries,
+            chipView: {
+                style: 'background: transparent',
+                selectable: false,
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
+            }
+        }
     }, {
         type:'CERT_SUBJECT_O',
         category: 'Certificate Subject',

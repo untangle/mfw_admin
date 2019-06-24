@@ -328,6 +328,25 @@ Ext.define('Mfw.Renderer', {
             valueRender = Map.interfaceTypes[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
         }
 
+        if (type === 'CERT_ISSUER_C' ||
+            type === 'CERT_SUBJECT_C') {
+            valueRender = [];
+            Ext.Array.each(rec.get('value'), function (val) {
+                valueRender.push(Map.countries[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+            });
+            valueRender = valueRender.join(' or ');
+        }
+
+
+        if (type.startsWith('CERT_ISSUER')) {
+            typeText = 'Cert. Issuer ' + typeText;
+        }
+
+        if (type.startsWith('CERT_SUBJECT')) {
+            typeText = 'Cert. Subject ' + typeText;
+        }
+
+
         var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
 
         if (val) {
@@ -362,11 +381,12 @@ Ext.define('Mfw.Renderer', {
     conditionsSentence: function (value, record) {
         var conditions = record.conditions(),
             action = record.getAction(),
-            valueRender, strArr = [],
+            valueRender, typeRenderer, strArr = [],
             sentence = 'IF packet ', type;
 
         conditions.each(function (cond) {
             type = cond.get('type');
+            typeRenderer = Conditions.map[type].text;
             valueRender = cond.get('value');
 
             if (type === 'IP_PROTOCOL') {
@@ -435,8 +455,27 @@ Ext.define('Mfw.Renderer', {
                 valueRender = Map.interfaceTypes[cond.get('value')] + ' <em style="color: #999; font-style: normal;">[' + cond.get('value') + ']</em>';
             }
 
+            if (type === 'CERT_ISSUER_C' ||
+                type === 'CERT_SUBJECT_C') {
+                valueRender = [];
+                Ext.Array.each(cond.get('value'), function (val) {
+                    valueRender.push(Map.countries[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                });
+                valueRender = valueRender.join(' or ');
+            }
+
+
+            if (type.startsWith('CERT_ISSUER')) {
+                typeRenderer = 'Cert. Issuer ' + typeRenderer;
+            }
+
+            if (type.startsWith('CERT_SUBJECT')) {
+                typeRenderer = 'Cert. Subject ' + typeRenderer;
+            }
+
+
             strArr.push('<span style="font-weight: bold; color: #333;">' +
-                         Conditions.map[type].text.toLowerCase() + ' ' +
+                         typeRenderer.toLowerCase() + ' ' +
                          Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                          valueRender + '</span>');
         });
