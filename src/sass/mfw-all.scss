@@ -19,6 +19,11 @@ a {
     color: var(--base-color);
 }
 
+label {
+    color: #555 !important;
+    // font-weight: bold !important;
+}
+
 cite {
     font-style: normal;
     &.ok {

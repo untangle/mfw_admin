@@ -4,6 +4,8 @@
 
 a { color: var(--base-color); }
 
+label { color: #555 !important; }
+
 cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
 cite.nok { color: red; border-bottom: 1px red dashed; }

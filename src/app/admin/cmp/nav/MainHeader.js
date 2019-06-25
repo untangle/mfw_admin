@@ -107,7 +107,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         menu: {
             userCls: 'monitor-menu',
             border: false,
-            // width: 150,
+            width: 250,
             defaults: {
                 style: 'color: #FFF; font-size: 14px;',
             },
@@ -124,13 +124,13 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 handler: 'startUpgrade'
             }, {
                 xtype: 'button',
-                text: 'View Updates',
+                text: 'View Changelog',
                 handler: function (btn) {
                     btn.up('menu').hide();
                 }
             }, {
                 xtype: 'component',
-                html: '<p><strong>Automatic Upgrade is ON!</strong><br/>Self upgrade will start at 00:00 AM.</p>'
+                html: '<hr style="background: #555;"/><p>Automatic Upgrade is <strong>ON</strong><br/><br/><span style="font-size: 12px;">The upgrade process will start Saturday at 12:00 AM.</span></p>'
                       // '<a href="#settings/system/upgrade" style="color: #91e971; font-size: 14px; text-decoration: none;">Go To Settings</a>'
             }, {
                 xtype: 'button',
@@ -203,10 +203,29 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
         startUpgrade: function (btn) {
             if (btn.up('menu')) { btn.up('menu').hide(); }
-            var dialog = Mfw.app.viewport.add({
-                xtype: 'upgrade-dialog'
+
+            Ext.Msg.show({
+                title: '<i class="x-fa fa-exclamation-triangle"></i> Warning',
+                message: 'The upgrade might take a few minutes!<br/>During this period the internet connection can be lost.<br/><br/>Do you want to continue?',
+                // width: 300,
+                showAnimation: null,
+                hideAnimation: null,
+                // closeAction: 'destroy',
+                buttons: [{
+                    text: 'NO',
+                    handler: function () { this.up('messagebox').hide(); }
+                }, {
+                    text: 'YES',
+                    ui: 'action',
+                    margin: '0 0 0 16',
+                    handler: function () {
+                        var dialog = Mfw.app.viewport.add({
+                            xtype: 'upgrade-dialog'
+                        });
+                        dialog.show();
+                    }
+                }]
             });
-            dialog.show();
         }
     }
 });
