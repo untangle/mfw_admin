@@ -57,7 +57,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             margin: '16 0 8 0',
             disabled: true,
             bind: {
-                text: '{checkProgress ? "Checking ..." : "Check for Updates"}',
+                text: '{checkProgress ? "<i class=\'fa fa-spinner fa-spin fa-fw\'></i> Checking ..." : "Check for Updates"}',
                 disabled: '{checkProgress}'
             },
             handler: 'checkUpgrade'
@@ -183,10 +183,10 @@ Ext.define('Mfw.settings.system.Upgrade', {
                     ui: 'action',
                     margin: '0 0 0 16',
                     handler: function () {
-                        var dialog = Mfw.app.viewport.add({
+                        this.up('messagebox').hide();
+                        Mfw.app.viewport.add({
                             xtype: 'upgrade-dialog'
-                        });
-                        dialog.show();
+                        }).show();
                     }
                 }]
             });

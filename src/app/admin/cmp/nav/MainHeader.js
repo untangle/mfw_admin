@@ -219,10 +219,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                     ui: 'action',
                     margin: '0 0 0 16',
                     handler: function () {
-                        var dialog = Mfw.app.viewport.add({
+                        this.up('messagebox').hide();
+                        Mfw.app.viewport.add({
                             xtype: 'upgrade-dialog'
-                        });
-                        dialog.show();
+                        }).show();
                     }
                 }]
             });
