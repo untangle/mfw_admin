@@ -1,4 +1,4 @@
-:root { --base-color: #519839; --base-highlight-color: #91e971; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
+:root { --base-color: #519839; --base-highlight-color: #91e971; --base-dark-color: #3e752b; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
 
 .x-root { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
 
@@ -8,6 +8,7 @@ cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
 cite.nok { color: red; border-bottom: 1px red dashed; }
 
+.x-fa.fa-white { color: #FFF; }
 .x-fa.fa-red { color: red; }
 .x-fa.fa-green { color: green; }
 .x-fa.fa-blue { color: blue; }
@@ -39,7 +40,6 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .nav .x-button { min-height: 48px; min-width: 48px; margin-bottom: 0 !important; }
 .nav .x-button .x-inner-el { border-radius: 0; padding: 8px 24px; }
 .nav .x-button .x-text-el { text-transform: none; color: #CCC; }
-.nav .x-button .x-icon-el, .nav .x-button .x-arrow-el { color: #FFF; }
 .nav .x-button.x-pressed .x-icon-el, .nav .x-button.x-pressed .x-arrow-el, .nav .x-button.x-pressed .x-text-el, .nav .x-button.x-pressing .x-icon-el, .nav .x-button.x-pressing .x-arrow-el, .nav .x-button.x-pressing .x-text-el { color: #FFF; }
 .nav .x-button.x-pressed .x-inner-el, .nav .x-button.x-pressing .x-inner-el { background-color: #222; }
 

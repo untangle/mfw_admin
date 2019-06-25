@@ -96,29 +96,69 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
     // },
     {
-        iconCls: 'x-fa fa-question-circle fa-3x',
-        tooltip: 'Support',
+        text: 'New Upgrade!',
+        iconCls: 'x-fa fa-cloud-download fa-3x fa-orange',
+        iconAlign: 'top',
+        arrow: false,
+        menuAlign: 'tr-br?',
+        style: 'font-weight: 500; font-size: 12px;',
+        hidden: true,
+        // responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        menu: {
+            userCls: 'monitor-menu',
+            border: false,
+            // width: 150,
+            defaults: {
+                style: 'color: #FFF; font-size: 14px;',
+            },
+            padding: '8 8 16 8',
+            items: [{
+                xtype: 'component',
+                html: '<p>New version &lt;version number&gt; <br> available!</p>'
+                      // '<a href="#" style="color: #91e971; font-size: 14px; text-decoration: none;">View Changelog</a>'
+            }, {
+                xtype: 'button',
+                margin: '0 16 16 16',
+                text: 'UPGRADE NOW',
+                ui: 'action',
+                handler: 'startUpgrade'
+            }, {
+                xtype: 'button',
+                text: 'View Updates',
+                handler: function (btn) {
+                    btn.up('menu').hide();
+                }
+            }, {
+                xtype: 'component',
+                html: '<p><strong>Automatic Upgrade is ON!</strong><br/>Self upgrade will start at 00:00 AM.</p>'
+                      // '<a href="#settings/system/upgrade" style="color: #91e971; font-size: 14px; text-decoration: none;">Go To Settings</a>'
+            }, {
+                xtype: 'button',
+                text: 'Go To Settings',
+                handler: function (btn) {
+                    btn.up('menu').hide();
+                    Mfw.app.redirectTo('settings/system/upgrade');
+                }
+            }]
+        }
+    },
+    {
+        text: 'Support',
+        iconCls: 'x-fa fa-question-circle fa-3x fa-white',
+        iconAlign: 'top',
+        style: 'font-weight: 500; font-size: 12px;',
         hidden: true,
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         handler: 'showSupport'
     },
     {
-        bind: {
-            text: '{account.username}'
-        },
-        iconCls: 'x-fa fa-user-circle fa-3x',
-        iconAlign: 'right',
+        text: 'Logout',
+        iconCls: 'x-fa fa-sign-out fa-3x fa-white',
+        iconAlign: 'top',
+        style: 'font-weight: 500; font-size: 12px;',
         hidden: true,
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
-        arrow: false,
-        menu: {
-            anchor: false,
-            items: [{
-                text: 'Logout',
-                iconCls: 'x-fa fa-sign-out',
-                handler: 'logout'
-            }]
-        }
+        handler: 'logout'
     }, {
         iconCls: 'x-fa fa-bars',
         hidden: true,
@@ -158,8 +198,15 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
         showSupport: function () {
             var hash = window.location.hash;
-            console.log(Mfw.app.supportUrl);
             window.open(Mfw.app.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
+        },
+
+        startUpgrade: function (btn) {
+            if (btn.up('menu')) { btn.up('menu').hide(); }
+            var dialog = Mfw.app.viewport.add({
+                xtype: 'upgrade-dialog'
+            });
+            dialog.show();
         }
     }
 });

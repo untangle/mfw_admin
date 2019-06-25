@@ -1,6 +1,7 @@
 :root {
     --base-color: #519839; //  #555; // #5eb141
     --base-highlight-color: #91e971;
+    --base-dark-color: #3e752b; //  #555; // #5eb141
     // --highlight-color: #dfe6ea; // rgba(17, 17, 17, 0.7);
     --base-pressed-color: #dfe6ea; // #c3cfd6; // #5eb141; // 709e70;
     --accent-color: #55c32d;
@@ -52,6 +53,7 @@ cite {
 // }
 
 .x-fa {
+    &.fa-white { color: #FFF; }
     &.fa-red { color: red; }
     &.fa-green { color: green; }
     &.fa-blue { color: blue; }
@@ -142,7 +144,7 @@ cite {
         margin-bottom: 0 !important;
         .x-inner-el { border-radius: 0; padding: 8px 24px; }
         .x-text-el { text-transform: none; color: #CCC; }
-        .x-icon-el, .x-arrow-el { color: #FFF; }
+        // .x-icon-el, .x-arrow-el { color: #FFF; }
         &.x-pressed, &.x-pressing {
             .x-icon-el, .x-arrow-el, .x-text-el { color: #FFF; }
             .x-inner-el { background-color: #222; }

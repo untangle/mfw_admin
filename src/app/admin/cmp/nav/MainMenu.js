@@ -46,6 +46,11 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         xtype: 'menuseparator',
         style: 'border-color: #555'
     }, {
+        text: 'Upgrade Now!'.t(),
+        hidden: true,
+        iconCls: 'x-fa fa-cloud-download fa-orange',
+        handler: 'startUpgrade'
+    }, {
         text: 'Support'.t(),
         iconCls: 'x-fa fa-question-circle',
         handler: 'showSupport'
