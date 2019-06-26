@@ -173,16 +173,17 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
         onEdit: function (grid, info) {
             var me = this;
-            Ext.Viewport.add({
+
+            me.intfDialog = Ext.Viewport.add({
                 xtype: 'interface-dialog',
                 ownerCmp: me.getView(),
-                viewModel: {
-                    data: {
-                        interface: info.record,
-                        action: 'EDIT'
-                    }
-                }
-            }).show();
+                interface: info.record
+            });
+
+            me.intfDialog.on('destroy', function () {
+                me.intfDialog = null;
+            });
+            me.intfDialog.show();
         },
 
         refresh: function () {

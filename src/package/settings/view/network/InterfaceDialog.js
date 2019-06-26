@@ -164,61 +164,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         hidden: true,
         bind: {
             hidden: '{interface.configType !== "ADDRESSED" && interface.type !== "WIFI"}'
-        },
-        store: {
-            root: {
-                expanded: true,
-                children: [{
-                    lbl: '<strong>' + 'IPv4'.t() + '</strong>',
-                    key: 'ipv4',
-                    children: [{
-                        text: 'Aliases'.t(),
-                        key: 'ipv4aliases',
-                        leaf: true
-                    }]
-                }, {
-                    lbl: '<strong>' + 'IPv6'.t() + '</strong>',
-                    key: 'ipv6',
-                    children: [{
-                        text: 'Aliases'.t(),
-                        key: 'ipv6aliases',
-                        leaf: true
-                    }]
-                }, {
-                    lbl: '<strong>' + 'DHCP'.t() + '</strong>',
-                    key: 'dhcp',
-                    children: [{
-                        text: 'DHCP Options'.t(),
-                        key: 'dhcpoptions',
-                        leaf: true
-                    }]
-                }, {
-                    lbl: '<strong>' + 'VRRP'.t() + '</strong>',
-                    key: 'vrrp',
-                    children: [{
-                        text: 'IPv4 Aliases'.t(),
-                        key: 'vrrpv4aliases',
-                        leaf: true
-                    }]
-                }, {
-                    lbl: '<strong>' + 'WIFI'.t() + '</strong>',
-                    key: 'wifi',
-                    leaf: true
-                }, {
-                    lbl: '<strong>' + 'QoS'.t() + '</strong>',
-                    key: 'qos',
-                    leaf: true
-                }, {
-                    key: 'bridged',
-                    hidden: true,
-                    leaf: true
-                }, {
-                    key: 'disabled',
-                    hidden: true,
-                    leaf: true
-                }]
-            }
-        },
+        }
     }, {
         xtype: 'panel',
         itemId: 'card',
@@ -1330,12 +1276,21 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
     controller: {
         init: function (view) {
-            var vm = view.getViewModel(),
+            var me = this,
+                vm = view.getViewModel(),
                 treelist = view.down('treelist'),
                 intf = view.getInterface();
 
+            me.setTreeListRoot();
+
+            // !!! hidden treelist items (nodes) id done by setting the note text as an empty string
+
             vm.bind('{interface.wan}', function (isWan) {
-                treelist.getStore().findNode('key', 'qos').set('text', isWan ? '<strong>' + 'QoS' + '</strong>' : '');
+                var qosMenuItem = treelist.getStore().findNode('key', 'qos');
+
+                if (qosMenuItem) {
+                    qosMenuItem.set('text', isWan ? '<strong>' + 'QoS' + '</strong>' : '');
+                }
                 // if (isWan) {
                 //     vm.get('interface').set('v4ConfigType', 'STATIC');
                 // }
@@ -1377,6 +1332,104 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 action: intf ? 'EDIT' : 'ADD'
             });
         },
+
+
+        /**
+         * based on application type (admin or setup), there are different menus available
+         */
+        setTreeListRoot: function () {
+            var me = this,
+                treelist = me.getView().down('treelist'),
+                adminStore = {
+                    root: {
+                        expanded: true,
+                        children: [{
+                            lbl: '<strong>' + 'IPv4'.t() + '</strong>',
+                            key: 'ipv4',
+                            children: [{
+                                text: 'Aliases'.t(),
+                                key: 'ipv4aliases',
+                                leaf: true
+                            }]
+                        }, {
+                            lbl: '<strong>' + 'IPv6'.t() + '</strong>',
+                            key: 'ipv6',
+                            children: [{
+                                text: 'Aliases'.t(),
+                                key: 'ipv6aliases',
+                                leaf: true
+                            }]
+                        }, {
+                            lbl: '<strong>' + 'DHCP'.t() + '</strong>',
+                            key: 'dhcp',
+                            children: [{
+                                text: 'DHCP Options'.t(),
+                                key: 'dhcpoptions',
+                                leaf: true
+                            }]
+                        }, {
+                            lbl: '<strong>' + 'VRRP'.t() + '</strong>',
+                            key: 'vrrp',
+                            children: [{
+                                text: 'IPv4 Aliases'.t(),
+                                key: 'vrrpv4aliases',
+                                leaf: true
+                            }]
+                        }, {
+                            lbl: '<strong>' + 'WIFI'.t() + '</strong>',
+                            key: 'wifi',
+                            leaf: true
+                        }, {
+                            lbl: '<strong>' + 'QoS'.t() + '</strong>',
+                            key: 'qos',
+                            leaf: true
+                        }, {
+                            key: 'bridged',
+                            hidden: true,
+                            leaf: true
+                        }, {
+                            key: 'disabled',
+                            hidden: true,
+                            leaf: true
+                        }]
+                    }
+                },
+                setupStore = {
+                    root: {
+                        expanded: true,
+                        children: [{
+                            lbl: '<strong>' + 'IPv4'.t() + '</strong>',
+                            key: 'ipv4',
+                            leaf: true
+                        }, {
+                            lbl: '<strong>' + 'IPv6'.t() + '</strong>',
+                            key: 'ipv6',
+                            leaf: true
+                        }, {
+                            lbl: '<strong>' + 'WIFI'.t() + '</strong>',
+                            key: 'wifi',
+                            leaf: true
+                        }, {
+                            key: 'bridged',
+                            hidden: true,
+                            leaf: true
+                        }, {
+                            key: 'disabled',
+                            hidden: true,
+                            leaf: true
+                        }]
+                    }
+                };
+
+            if (Mfw.app.context === 'admin') {
+                treelist.setStore(adminStore);
+            }
+
+            if (Mfw.app.context === 'setup') {
+                treelist.setStore(setupStore);
+            }
+        },
+
 
         addV4Alias: function (btn) {
             var me = this,
