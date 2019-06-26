@@ -328,16 +328,6 @@ Ext.define('Mfw.Renderer', {
             valueRender = Map.interfaceTypes[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
         }
 
-        if (type === 'CERT_ISSUER_C' ||
-            type === 'CERT_SUBJECT_C') {
-            valueRender = [];
-            Ext.Array.each(rec.get('value'), function (val) {
-                valueRender.push(Map.countries[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-            });
-            valueRender = valueRender.join(' or ');
-        }
-
-
         if (type.startsWith('CERT_ISSUER')) {
             typeText = 'Cert. Issuer ' + typeText;
         }
@@ -455,16 +445,6 @@ Ext.define('Mfw.Renderer', {
                 valueRender = Map.interfaceTypes[cond.get('value')] + ' <em style="color: #999; font-style: normal;">[' + cond.get('value') + ']</em>';
             }
 
-            if (type === 'CERT_ISSUER_C' ||
-                type === 'CERT_SUBJECT_C') {
-                valueRender = [];
-                Ext.Array.each(cond.get('value'), function (val) {
-                    valueRender.push(Map.countries[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                });
-                valueRender = valueRender.join(' or ');
-            }
-
-
             if (type.startsWith('CERT_ISSUER')) {
                 typeRenderer = 'Cert. Issuer ' + typeRenderer;
             }
@@ -482,7 +462,7 @@ Ext.define('Mfw.Renderer', {
 
 
         if (strArr.length > 0) {
-            sentence += strArr.join(' and ')  + ', THEN ' + (action ? Renderer.ruleAction(null, action) : '<no action set>');
+            sentence += strArr.join(' and ')  + ', THEN ' + (action ? Renderer.ruleAction(null, action) : '<em>&lt; no action set &gt;</em>');
 
         } else {
             sentence = 'For any packet ' + (action ? Renderer.ruleAction(null, action) : '<em>&lt; no action set &gt;</em>');
