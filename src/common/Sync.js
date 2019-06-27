@@ -13,8 +13,7 @@ Ext.define('Mfw.Sync', {
             hideAnimation: false,
             scrollable: false,
             maxHeight: 500,
-            zIndex: 888,
-            toFrontOnShow: true,
+            alwaysOnTop: true,
             hideOnMaskTap: false,
             viewModel: {
                 data: {
@@ -27,34 +26,18 @@ Ext.define('Mfw.Sync', {
                 formulas: {
                     heading: function (get) {
                         if (get('progress')) {
-                            if (get('sync')) {
-                                return '<i class=\'fa fa-upload\'></i> &nbsp; Sync Settings ...';
-                            } else {
-                                return '<i class=\'fa fa-upload\'></i> &nbsp; Saving ...';
-                            }
+                            return '<i class=\'fa fa-upload\'></i> &nbsp; Saving ...';
                         }
                         if (get('exception')) {
-                            if (get('sync')) {
-                                return '<i class=\'fa fa-exclamation-triangle\'></i> &nbsp; Sync Settings ... failed!';
-                            } else {
-                                return '<i class=\'fa fa-exclamation-triangle\'></i> &nbsp; Failure!';
-                            }
+                            return get('errTitle');
                         }
 
                         if (get('warning')) {
-                            if (get('sync')) {
-                                return '<i class=\'fa fa-check\'></i> &nbsp; Sync Settings ... saved!';
-                            } else {
-                                return '<i class=\'fa fa-check\'></i> &nbsp; Saving ... saved!';
-                            }
+                            return '<i class=\'fa fa-check\'></i> &nbsp; Successfully saved';
                         }
 
                         if (get('success')) {
-                            if (get('sync')) {
-                                return '<i class=\'fa fa-check\'></i> &nbsp; Sync Settings ... saved!';
-                            } else {
-                                return '<i class=\'fa fa-check\'></i> &nbsp; Saving ... saved!';
-                            }
+                            return '<i class=\'fa fa-check\'></i> &nbsp; Successfully saved';
                         }
                     },
                     headingStyle: function (get) {
@@ -103,11 +86,9 @@ Ext.define('Mfw.Sync', {
                 },
                 items: [{
                     xtype: 'component',
-                    style: 'font-size: 16px;',
+                    style: 'font-size: 14px;',
                     bind: {
-                        html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
-                              '<i class="x-fa fa-exclamation-triangle fa-red"></i> Exception! <i class="x-fa fa-exclamation-triangle fa-red"></i></h2>' +
-                              '<p style="margin: 16px 0 8px 0;">{exception.summary}</p>'
+                        html: '<p><i class="x-fa fa-ban fa-red"></i> {exception.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -160,11 +141,9 @@ Ext.define('Mfw.Sync', {
                 },
                 items: [{
                     xtype: 'component',
-                    style: 'font-size: 16px;',
+                    style: 'font-size: 14px;',
                     bind: {
-                        html: '<h2 style="font-weight: 400; margin: 3px 0;">' +
-                              '<i class="x-fa fa-exclamation-triangle fa-orange"></i> Warning! <i class="x-fa fa-exclamation-triangle fa-orange"></i></h2>' +
-                              '<p style="margin: 16px 0 8px 0;">{warning.summary}</p>'
+                        html: '<p><i class="x-fa fa-exclamation-triangle fa-orange"></i> {warning.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -218,6 +197,7 @@ Ext.define('Mfw.Sync', {
                         success: false,
                         exception: false,
                         warning: false,
+                        errTitle: 'Unable to save',
                         sync: true // boolean to identify if it's a sync update
                     });
                 }
@@ -225,12 +205,13 @@ Ext.define('Mfw.Sync', {
         });
     },
 
-    progress: function () {
+    progress: function (opt) {
         this.sheet.getViewModel().set({
             progress: true,
             success: false,
             exception: false,
-            warning: false
+            warning: false,
+            errTitle: (opt && opt.errTitle) ? opt.errTitle :  'Unable to save'
         });
         this.sheet.show();
     },

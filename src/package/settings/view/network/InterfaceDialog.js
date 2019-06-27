@@ -1505,7 +1505,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 return;
             }
 
-            Sync.progress();
+            Sync.progress({
+                errTitle: 'Unable to save interfaces'
+            });
 
             interface.commit();
             interfacesStore.each(function (record) {
