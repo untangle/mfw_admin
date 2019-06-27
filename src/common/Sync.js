@@ -347,7 +347,7 @@ Ext.define('Mfw.Sync', {
 Ext.Ajax.on('requestexception', function (conn, response) {
     // avoid showing exception when checking if user is authenticated in login screen
     var url = response.request.url;
-    if ( url === '/account/status' || url === '/account/login') {
+    if ( url === '/account/status' || url === '/account/login' || url === '/api/sysupgrade') {
         return;
     }
     Sync.exception(response);

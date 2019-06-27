@@ -128,6 +128,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
         }]
     }, {
         xtype: 'formpanel',
+        enctype: 'multipart/form-data',
         items: [{
             xtype: 'toolbar',
             docked: 'top',
@@ -197,14 +198,30 @@ Ext.define('Mfw.settings.system.Upgrade', {
 
             if (!form.validate()) { return; }
 
+
+            Ext.Msg.show({
+                title: 'Uploading the upgrade image',
+                message: '<p style="text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i> Please wait ...</p>',
+                buttons: []
+            });
+
+            /**
+             * this will fail because some iframe cross origin issue returning
+             * responseText: {"success":false,"message":"Blocked a frame with origin \"http://sdwan\" from accessing a cross-origin frame."}
+             * even if the file is successfully uploaded and upgrade is done
+             */
             form.submit({
                 url: '/api/sysupgrade',
-                waitMsg: 'Upgrading...',
-                success: function(fp, o) {
-                    Ext.Msg.alert('Upgrade', 'The upgrade is in progress.');
+                method: 'POST',
+                success: function () {
+                    Ext.Msg.hide();
                 },
-                failure: function(fp, o) {
-                    Ext.Msg.alert('Error', 'The returned an error.' + ' ' + o);
+                failure: function () {
+                    // assume the upload is successful even response is failure
+                    Ext.Msg.hide();
+                    Mfw.app.viewport.add({
+                        xtype: 'upgrade-dialog'
+                    }).show();
                 }
             });
         }
