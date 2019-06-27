@@ -61,6 +61,7 @@ Ext.define('Mfw.AppBase', {
                     Mfw.app.redirectTo('auth');
                 } else {
                     if (Mfw.app.context === 'admin' || Mfw.app.context === 'settings') {
+                        Ext.getStore('interfaces').load();
                         Ext.Ajax.request({
                             url: '/api/settings/system',
                             success: function(response2) {

@@ -5,7 +5,7 @@ Ext.define('Mfw.store.Interfaces', {
     model: 'Mfw.model.Interface',
 
     // important so interfaces are loaded at startup
-    autoLoad: true,
+    // autoLoad: true,
 
     trackRemoved: false, // important so no need to post dropped records
     autoSort: false, // important so store is not sorted on record add,
