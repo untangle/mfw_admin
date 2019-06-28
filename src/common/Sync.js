@@ -26,18 +26,18 @@ Ext.define('Mfw.Sync', {
                 formulas: {
                     heading: function (get) {
                         if (get('progress')) {
-                            return '<i class=\'fa fa-upload\'></i> &nbsp; Saving ...';
+                            return '<i class=\'x-fa fa-upload\'></i> &nbsp; Saving ...';
                         }
                         if (get('exception')) {
-                            return get('errTitle');
+                            return '<i class=\'x-fa fa-ban\'> ' + get('errTitle');
                         }
 
                         if (get('warning')) {
-                            return '<i class=\'fa fa-check\'></i> &nbsp; Successfully saved';
+                            return '<i class=\'x-fa fa-check fa-orange\'></i> &nbsp; Saved with warnings';
                         }
 
                         if (get('success')) {
-                            return '<i class=\'fa fa-check\'></i> &nbsp; Successfully saved';
+                            return '<i class=\'x-fa fa-check\'></i> &nbsp; Successfully saved';
                         }
                     },
                     headingStyle: function (get) {
@@ -48,10 +48,10 @@ Ext.define('Mfw.Sync', {
                     },
                     message: function (get) {
                         if (get('progress')) {
-                            return '<p><i class="fa fa-spinner fa-spin fa-fw"></i> &nbsp; Applying changes. This may take a while! Please wait ...</p>';
+                            return '<p><i class="x-fa fa-spinner fa-spin fa-fw"></i> &nbsp; Applying changes. This may take a while! Please wait ...</p>';
                         }
                         if (get('success')) {
-                            return '<p><i class="fa fa-check-circle" style="color: #519839;"></i> &nbsp; Success!</p>';
+                            return '<p><i class="x-fa fa-check-circle" style="color: #519839;"></i> &nbsp; Success!</p>';
                         }
                     }
                 }
@@ -88,7 +88,7 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 14px;',
                     bind: {
-                        html: '<p><i class="x-fa fa-ban fa-red"></i> {exception.summary}</p>'
+                        html: '<h2 style="font-weight: 100;">Please review the following:</h2><p><i class="x-fa fa-ban fa-red"></i> {exception.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -143,7 +143,7 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 14px;',
                     bind: {
-                        html: '<p><i class="x-fa fa-exclamation-triangle fa-orange"></i> {warning.summary}</p>'
+                        html: '<h2 style="font-weight: 100;">Please review the following:</h2><p><i class="x-fa fa-exclamation-triangle fa-orange"></i> {warning.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
