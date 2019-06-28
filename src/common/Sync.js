@@ -26,18 +26,18 @@ Ext.define('Mfw.Sync', {
                 formulas: {
                     heading: function (get) {
                         if (get('progress')) {
-                            return '<i class=\'x-fa fa-upload\'></i> &nbsp; Saving ...';
+                            return 'Saving ...';
                         }
                         if (get('exception')) {
-                            return '<i class=\'x-fa fa-ban\'> ' + get('errTitle');
+                            return get('title');
                         }
 
                         if (get('warning')) {
-                            return '<i class=\'x-fa fa-check fa-orange\'></i> &nbsp; Saved with warnings';
+                            return 'Saved with warnings <i class=\'x-fa fa-exclamation-triangle\'></i>';
                         }
 
                         if (get('success')) {
-                            return '<i class=\'x-fa fa-check\'></i> &nbsp; Successfully saved';
+                            return 'Saved';
                         }
                     },
                     headingStyle: function (get) {
@@ -88,7 +88,7 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 14px;',
                     bind: {
-                        html: '<h2 style="font-weight: 100;">Please review the following:</h2><p><i class="x-fa fa-ban fa-red"></i> {exception.summary}</p>'
+                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{exception.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -143,7 +143,7 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 14px;',
                     bind: {
-                        html: '<h2 style="font-weight: 100;">Please review the following:</h2><p><i class="x-fa fa-exclamation-triangle fa-orange"></i> {warning.summary}</p>'
+                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{warning.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -197,7 +197,7 @@ Ext.define('Mfw.Sync', {
                         success: false,
                         exception: false,
                         warning: false,
-                        errTitle: 'Unable to save',
+                        title: 'Unable to perform operation',
                         sync: true // boolean to identify if it's a sync update
                     });
                 }
@@ -211,7 +211,7 @@ Ext.define('Mfw.Sync', {
             success: false,
             exception: false,
             warning: false,
-            errTitle: (opt && opt.errTitle) ? opt.errTitle :  'Unable to save'
+            title: (opt && opt.title) ? opt.title :  'Unable to perform operation'
         });
         this.sheet.show();
     },
@@ -233,7 +233,7 @@ Ext.define('Mfw.Sync', {
         }
     },
 
-    exception: function (response) {
+    exception: function (response, title) {
         var exception, summary, stack, isSync = false;
 
         // if it's a sync API call
@@ -276,7 +276,8 @@ Ext.define('Mfw.Sync', {
             success: false,
             exception: exception,
             warning: false,
-            sync: isSync
+            sync: isSync,
+            title: title || 'Unable to perform operation'
         });
         if (this.sheet.isHidden()) {
             this.sheet.show();
@@ -328,7 +329,11 @@ Ext.define('Mfw.Sync', {
 Ext.Ajax.on('requestexception', function (conn, response) {
     // avoid showing exception when checking if user is authenticated in login screen
     var url = response.request.url;
-    if ( url === '/account/status' || url === '/account/login' || url === '/api/sysupgrade') {
+
+    if ( url === '/account/status' ||
+         url === '/account/login' ||
+         url === '/api/sysupgrade' ||
+         url.startsWith('/api/status/wantest') ) {
         return;
     }
     Sync.exception(response);

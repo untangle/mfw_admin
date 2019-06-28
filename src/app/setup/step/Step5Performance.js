@@ -172,7 +172,9 @@ Ext.define('Mfw.setup.step.Performance', {
 
             // make sure interfaces store is loaded then check for wans
             if (!store.isLoaded()) {
-                store.on('load', me.checkForTest, me);
+                store.load(function () {
+                    me.checkForTest();
+                });
             } else {
                 me.checkForTest();
             }
@@ -227,7 +229,8 @@ Ext.define('Mfw.setup.step.Performance', {
                                 });
                             },
                             failure: function (err) {
-                                deferred.reject({
+                                // resolve the promise even if failed
+                                deferred.resolve({
                                     device: device,
                                     err: err.statusText
                                 });
@@ -259,9 +262,13 @@ Ext.define('Mfw.setup.step.Performance', {
 
             Ext.Deferred.parallel(fns, me)
                 .then(function (result) {
-                    var intf;
-                    console.log(result);
+                    var intf, errors = [], msg;
+
                     Ext.Array.each(result, function (res) {
+                        if (res.err) {
+                            errors.push('Unable to test <strong>' + res.device + '</strong>: <em>' + res.err + '</em>');
+                            return;
+                        }
                         intf = store.findRecord('device', res.device);
                         intf.set({
                             qosEnabled: true,
@@ -270,21 +277,28 @@ Ext.define('Mfw.setup.step.Performance', {
                             _ping: res.test.ping
                         });
                     });
-                }, function (error) {
-                    Ext.Msg.show({
-                        title: 'Performance test failed!',
-                        message: 'You can set manually the download/upload limits!',
-                        width: 400,
-                        showAnimation: null,
-                        hideAnimation: null,
-                        buttons: [{
-                            text: 'OK',
-                            handler: function () {
-                                this.up('messagebox').hide();
-                            }
-                        }]
-                    });
-                    console.warn('Wan performance test failed: ', error);
+
+                    if (errors.length > 0) {
+                        msg = errors.join('<br/>');
+                        msg += '<p style="font-weight: bold;">You can set manually the download/upload limits!</p>';
+
+                        // this message will appear only if test faild for at least a wan
+                        Ext.Msg.show({
+                            title: 'Performance test result',
+                            bodyStyle: 'font-size: 14px;',
+                            message: msg,
+                            width: 400,
+                            showAnimation: null,
+                            hideAnimation: null,
+                            buttons: [{
+                                text: 'OK',
+                                ui: 'action',
+                                handler: function () {
+                                    this.up('messagebox').hide();
+                                }
+                            }]
+                        });
+                    }
                 })
                 .always(function () {
                     vm.set('testprogress', false);

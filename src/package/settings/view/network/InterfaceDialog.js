@@ -158,7 +158,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         },
         singleExpand: true,
         expanderFirst: false,
-        expanderOnly: true,
+        expanderOnly: false,
         selectOnExpander: true,
 
         hidden: true,
@@ -1505,9 +1505,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 return;
             }
 
-            Sync.progress({
-                errTitle: 'Unable to save interfaces'
-            });
+            Sync.progress();
 
             interface.commit();
             interfacesStore.each(function (record) {

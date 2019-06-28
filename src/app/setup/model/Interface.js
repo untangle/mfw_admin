@@ -1,3 +1,13 @@
+Ext.define('Mfw.model.OpenVpnConfFile', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'encoding', type: 'string' },
+        { name: 'contents', type: 'string' }
+    ]
+});
+
 Ext.define('Mfw.model.Interface', {
     extend: 'Ext.data.Model',
     alias: 'model.interface',
@@ -98,6 +108,12 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wireguardPort',       type: 'integer', allowNull: true }
 
     ],
+
+    hasOne: [{
+        model: 'Mfw.model.OpenVpnConfFile',
+        name: 'openvpnConfFile',
+        associationKey: 'openvpnConfFile'
+    }],
 
     proxy: {
         type: 'ajax',
