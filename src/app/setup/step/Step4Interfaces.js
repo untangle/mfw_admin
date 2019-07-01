@@ -175,19 +175,12 @@ Ext.define('Mfw.setup.step.Interfaces', {
             var me = this,
                 intf = info.record;
 
-            if (intf.get('type') === 'OPENVPN') {
-                me.intfDialog = Ext.Viewport.add({
-                    xtype: 'openvpn-interface-dialog',
-                    ownerCmp: me.getView(),
-                    interface: intf
-                });
-            } else {
-                me.intfDialog = Ext.Viewport.add({
-                    xtype: 'interface-dialog',
-                    ownerCmp: me.getView(),
-                    interface: intf
-                });
-            }
+            me.intfDialog = Ext.Viewport.add({
+                xtype: 'interface-dialog',
+                ownerCmp: me.getView(),
+                interface: intf
+            });
+
             me.intfDialog.on('destroy', function () {
                 me.intfDialog = null;
             });

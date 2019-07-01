@@ -61,8 +61,7 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 APP_SETUP_ALL := src/app/AppBase.js \
 	$(shell find $(APP_COMMON_SRC) \
 				 $(APP_SETUP_SRC) -name '*.js' 2>/dev/null) \
-				 src/package/settings/view/network/InterfaceDialog.js \
-				 src/package/settings/view/network/OpenVpnInterfaceDialog.js
+				 src/package/settings/view/network/InterfaceDialog.js
 
 # All report entries
 REPORT_ENTRIES = $(shell find reports/ -type f -name '*.json')

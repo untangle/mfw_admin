@@ -89,30 +89,29 @@ Ext.define('Mfw.model.Interface', {
 
         // IPv4
         { name: 'v4ConfigType',    type: 'string', allowNull: true }, // ["STATIC","DHCP","PPPOE","DISABLED"]
+        // IPv4 STATIC
         { name: 'v4StaticAddress', type: 'string', allowNull: true },
         { name: 'v4StaticPrefix',  type: 'integer', allowNull: true }, // 1 - 32
         { name: 'v4StaticGateway', type: 'string', allowNull: true },
         { name: 'v4StaticDNS1',    type: 'string', allowNull: true },
         { name: 'v4StaticDNS2',    type: 'string', allowNull: true },
-
-        // IPv4 DHCP overrides
+        // IPv4 Auto (DHCP) overrides
         { name: 'v4DhcpAddressOverride', type: 'string', allowNull: true },
         { name: 'v4DhcpPrefixOverride',  type: 'auto', allowNull: true }, // 1 - 32
         { name: 'v4DhcpGatewayOverride', type: 'string', allowNull: true },
         { name: 'v4DhcpDNS1Override',    type: 'string', allowNull: true },
         { name: 'v4DhcpDNS2Override',    type: 'string', allowNull: true },
-
-        // PPPoE
+        // IPv4 PPPoE
         { name: 'v4PPPoEUsername',     type: 'string', allowNull: true },
         { name: 'v4PPPoEPassword',     type: 'string', allowNull: true },
         { name: 'v4PPPoEUsePeerDNS',   type: 'boolean', allowNull: true },
         { name: 'v4PPPoEOverrideDNS1', type: 'string', allowNull: true },
         { name: 'v4PPPoEOverrideDNS2', type: 'string', allowNull: true },
-
-        // hasMany v4Aliases
+        // ! hasMany v4Aliases
 
         // IPv6
         { name: 'v6ConfigType',       type: 'string', allowNull: true }, // ["DHCP","SLAAC","ASSIGN","STATIC","DISABLED"]
+        // IPv6 STATIC
         { name: 'v6StaticAddress',    type: 'string', allowNull: true },
         { name: 'v6StaticPrefix',     type: 'integer', allowNull: true }, // 1 - 128
         { name: 'v6StaticGateway',    type: 'string', allowNull: true },
@@ -120,12 +119,10 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v6StaticDNS2',       type: 'string', allowNull: true },
         { name: 'v6DhcpDNS1Override', type: 'string', allowNull: true },
         { name: 'v6DhcpDNS2Override', type: 'string', allowNull: true },
-
         // IPv6 Assign
         { name: 'v6AssignHint',   type: 'string', allowNull: true },
         { name: 'v6AssignPrefix', type: 'integer', allowNull: true }, // 1 -128
-
-        // hasMany v6Aliases
+        // ! hasMany v6Aliases
 
         { name: 'routerAdvertisements', type: 'boolean', allowNull: true },
         { name: 'bridgedTo',            type: 'integer', allowNull: true },
@@ -141,17 +138,15 @@ Ext.define('Mfw.model.Interface', {
         { name: 'dhcpGatewayOverride', type: 'string', allowNull: true },
         { name: 'dhcpPrefixOverride',  type: 'integer', allowNull: true }, // 1 - 32
         { name: 'dhcpDNSOverride',     type: 'string', allowNull: true },
-
-        // hasMany dhcpOptions
+        // ! hasMany dhcpOptions
 
         // VRRP
         { name: 'vrrpEnabled',  type: 'boolean', allowNull: true },
         { name: 'vrrpID',       type: 'integer', allowNull: true }, // 1 - 255
         { name: 'vrrpPriority', type: 'integer', allowNull: true }, // 1 - 255
+        // ! hasMany vrrpV4Aliases
 
-        // hasMany vrrpV4Aliases
-
-        // Wireless
+        // WIFI
         { name: 'wirelessSsid',       type: 'string', allowNull: true },
         { name: 'wirelessEncryption', type: 'string', allowNull: true }, // ["NONE", "WPA1", "WPA12", "WPA2"]
         { name: 'wirelessMode',       type: 'string', allowNull: true }, // ["AP", "CLIENT"]
@@ -163,13 +158,13 @@ Ext.define('Mfw.model.Interface', {
         { name: 'openvpnUsername',                type: 'string',  allowNull: true },
         { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
         { name: 'openvpnBoundInterfaceId',        type: 'string',  allowNull: true },
+        // ! hasOne openvpnConfFile
 
         // wireguard
         { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
         { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
         { name: 'wireguardPort',       type: 'integer', allowNull: true }
-
-        // hasMany wireguardPeers
+        // ! hasMany wireguardPeers
 
     ],
 

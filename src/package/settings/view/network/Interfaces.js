@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
     title: 'Interfaces'.t(),
 
     config: {
+        enableAdd: false,
         enableManualSort: false,
         disableDeleteCondition: '{record.wan && record.type === "NIC"}',
         disableCopyCondition: '{record.wan}',
