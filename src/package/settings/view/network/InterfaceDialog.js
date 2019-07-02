@@ -1757,7 +1757,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     treelist.getStore().each(function (node) {
                         if (node.get('key') === 'wifi' ||
                             node.get('key') === 'openvpnconf' ||
-                            node.get('key') === 'openvpnauth') {
+                            node.get('key') === 'openvpnauth' ||
+                            node.get('key') === 'qos' && !intf.get('wan')) {
                             node.set('text', '');
                         } else {
                             node.set('text', node.get('text') || node.get('lbl'));
