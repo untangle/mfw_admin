@@ -1587,7 +1587,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: {
                     userCls: '{openVpnInlineEdit.checked ? "editable" : ""}',
                     editable: '{openVpnInlineEdit.checked}',
-                    required: '{interface.type === "OPENVPN"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type === "OPENVPN"}'
                 }
             }]
             /**
@@ -1624,7 +1624,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 disabled: true,
                 bind: {
                     value: '{interface.openvpnUsername}',
-                    required: '{interface.openvpnUsernamePasswordEnabled}',
+                    required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
                     disabled: '{!interface.openvpnUsernamePasswordEnabled}',
                     hidden: '{!interface.openvpnUsernamePasswordEnabled}'
                 }
@@ -1636,7 +1636,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 required: false,
                 disabled: true,
                 bind: {
-                    required: '{interface.openvpnUsernamePasswordEnabled}',
+                    required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
                     disabled: '{!interface.openvpnUsernamePasswordEnabled}',
                     hidden: '{!interface.openvpnUsernamePasswordEnabled}'
                 },
@@ -1989,8 +1989,10 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             });
 
             // switch to invalid form except if it's the main top form (always visible)
-            if (invalidForm && invalidForm.getItemId() !== 'main') {
-                treelist.setSelection(treelist.getStore().findNode('key', invalidForm.getItemId()));
+            if (invalidForm) {
+                if (invalidForm.getItemId() !== 'main') {
+                    treelist.setSelection(treelist.getStore().findNode('key', invalidForm.getItemId()));
+                }
                 Ext.toast('Please fill or correct invalid fields!', 3000);
                 return;
             }
