@@ -100,8 +100,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     bind: {
         title: '{action === "ADD" ? "Create New" : "Edit"} Interface ({interface.type})',
     },
-    width: 750,
-    height: '75%',
+    width: 700,
+    height: 800,
 
     padding: 0,
 
@@ -110,10 +110,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
 
     layout: 'fit',
-
-    // defaults: {
-    //     padding: '8 16',
-    // },
 
     items: [{
         xtype: 'container',
@@ -136,7 +132,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             },
             items: [{
                 xtype: 'textfield',
-                name: 'name',
                 label: 'Interface Name',
                 placeholder: 'Enter Name ...',
                 autoComplete: false,
@@ -152,10 +147,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }]
             }, {
                 xtype: 'selectfield',
-                name: 'configType',
                 label: 'Config Type',
                 width: 150,
-                editable: false,
                 required: true,
                 bind: {
                     value: '{interface.configType}',
@@ -163,11 +156,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'selectfield',
-                name: 'bridgedTo',
                 label: 'Bridged To',
                 flex: 1,
                 placeholder: 'Select bridge ...',
-                editable: false,
                 required: false,
                 autoSelect: true,
                 hidden: true,
@@ -181,10 +172,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'selectfield',
-                name: 'openvpnBoundInterfaceId',
                 label: 'Bound to',
                 flex: 1,
-                editable: false,
                 required: true,
                 displayTpl: '{text} [ {value} ]',
                 itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -197,8 +186,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'checkbox',
-                name: 'wan',
-                // label: '&nbsp;',
                 boxLabel: 'Is WAN',
                 bodyAlign: 'start',
                 flex: 1,
@@ -220,11 +207,11 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
          */
         xtype: 'treelist',
         reference: 'treelist',
-        userCls: 'no-icons',
+        userCls: 'no-icons shrink',
         scrollable: true,
         ui: 'nav',
         docked: 'left',
-        width: 250,
+        width: 200,
         style: {
             background: '#f5f5f5'
         },
@@ -262,15 +249,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
          * - disabled
          */
         xtype: 'panel',
-        itemId: 'card',
         layout: {
             type: 'card',
             deferRender: false
-            // animation: {
-            //     duration: 150,
-            //     type: 'fade',
-            //     direction: 'horizontal'
-            // },
         },
         bind: {
             activeItem: '#{treelist.selection.key}'
@@ -289,15 +270,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             layout: 'vbox',
             items: [{
                 xtype: 'selectfield',
-                name: 'v4ConfigType',
-                reference: 'v4Config',
                 label: 'Config Type',
                 labelAlign: 'top',
-                editable: false,
+                required: true,
                 // disabled: true,
                 // hidden: true,
                 bind: {
                     value: '{interface.v4ConfigType}',
+                    required: '{interface.configType === "ADDRESSED"}'
                     // disabled: '{!interface.wan}',
                     // hidden: '{interface.type === "OPENVPN"}'
                 },
@@ -326,7 +306,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: { hidden: '{interface.v4ConfigType !== "STATIC"}' },
                 items: [{
                     xtype: 'textfield',
-                    name: 'v4StaticAddress',
                     label: 'Address',
                     errorLabel: 'IPv4 Static Address',
                     required: false,
@@ -338,9 +317,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     validators: 'ipv4'
                 }, {
                     xtype: 'selectfield',
-                    name: 'v4StaticPrefix',
                     label: 'Netmask/Prefix',
-                    editable: false,
                     clearable: false,
                     required: false,
                     bind: {
@@ -350,7 +327,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     options: Map.options.prefixes
                 }, {
                     xtype: 'textfield',
-                    name: 'v4StaticGateway',
                     label: 'Gateway',
                     errorLabel: 'IPv4 Static Gateway',
                     hidden: true,
@@ -363,7 +339,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     validators: 'ipv4'
                 }, {
                     xtype: 'textfield',
-                    name: 'v4StaticDNS1',
                     label: 'Primary DNS',
                     hidden: true,
                     bind: {
@@ -372,7 +347,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'textfield',
-                    name: 'v4StaticDNS2',
                     label: 'Secondary DNS',
                     hidden: true,
                     bind: {
@@ -399,76 +373,51 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 flex: 1,
                 margin: '8 0 0 0',
                 defaults: {
-                    labelAlign: 'top',
-                    disabled: true,
-                    hidden: true
+                    labelAlign: 'top'
                 },
                 hidden: true,
                 bind: { hidden: '{interface.v4ConfigType !== "DHCP"}' },
                 items: [{
-                    xtype: 'checkbox',
-                    reference: 'v4DhcpOverride',
-                    boxLabel: 'Override Defaults',
-                    bodyAlign: 'start',
-                    disabled: false,
-                    hidden: false
+                    xtype: 'component',
+                    margin: '16 0 8 0',
+                    html: '<span style="font-size: 14px; font-weight: 100;">Override Defaults (optional)</span>'
                 }, {
                     xtype: 'textfield',
-                    name: 'v4DhcpAddressOverride',
                     label: 'Address Override',
-                    required: false,
                     bind: {
                         value: '{interface.v4DhcpAddressOverride}',
-                        placeholder: '{interface.v4StaticAddress}',
-                        disabled: '{!v4DhcpOverride.checked}',
-                        hidden: '{!v4DhcpOverride.checked}',
-                        required: '{v4DhcpOverride.checked && interface.configType === "ADDRESSED" && interface.v4ConfigType === "DHCP"}'
+                        placeholder: '{interface.v4StaticAddress}'
                     }
                 }, {
                     xtype: 'selectfield',
-                    name: 'v4DhcpPrefixOverride',
                     label: 'Netmask Override',
-                    editable: false,
                     clearable: false,
-                    required: false,
                     bind: {
                         value: '{interface.v4DhcpPrefixOverride}',
-                        placeholder: '{v4StaticPrefixOverridePlaceholder}',
-                        disabled: '{!v4DhcpOverride.checked}',
-                        hidden: '{!v4DhcpOverride.checked}',
-                        required: '{v4DhcpOverride.checked && interface.configType === "ADDRESSED" && interface.v4ConfigType === "DHCP"}'
+                        placeholder: '{v4StaticPrefixOverridePlaceholder}'
                     },
                     options: Map.options.prefixes
                 }, {
                     xtype: 'textfield',
-                    name: 'v4DhcpGatewayOverride',
                     label: 'Gateway Override',
                     bind: {
                         value: '{interface.v4DhcpGatewayOverride}',
-                        placeholder: '{interface.v4StaticGateway}',
-                        disabled: '{!v4DhcpOverride.checked}',
-                        hidden: '{!v4DhcpOverride.checked}'
+                        placeholder: '{interface.v4StaticGateway}'
                     },
                     validators: 'ipv4'
                 }, {
                     xtype: 'textfield',
-                    name: 'v4DhcpDNS1Override',
                     label: 'Primary DNS Override',
                     bind: {
                         value: '{interface.v4DhcpDNS1Override}',
-                        placeholder: '{interface.v4StaticDNS1}',
-                        disabled: '{!v4DhcpOverride.checked}',
-                        hidden: '{!v4DhcpOverride.checked}'
+                        placeholder: '{interface.v4StaticDNS1}'
                     }
                 }, {
                     xtype: 'textfield',
-                    name: 'v4DhcpDNS2Override',
                     label: 'Secondary DNS Override',
                     bind: {
                         value: '{interface.v4DhcpDNS2Override}',
-                        placeholder: '{interface.v4StaticDNS2}',
-                        disabled: '{!v4DhcpOverride.checked}',
-                        hidden: '{!v4DhcpOverride.checked}'
+                        placeholder: '{interface.v4StaticDNS2}'
                     }
                 }]
                 /**
@@ -495,7 +444,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: { hidden: '{interface.v4ConfigType !== "PPPOE"}' },
                 items: [{
                     xtype: 'textfield',
-                    name: 'v4PPPoEUsername',
                     label: 'Username',
                     required: false,
                     clearable: false,
@@ -505,7 +453,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'passwordfield',
-                    name: 'v4PPPoEPassword',
                     label: 'Password',
                     clearable: false,
                     required: false,
@@ -519,14 +466,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }]
                 }, {
                     xtype: 'checkbox',
-                    name: 'v4PPPoEUsePeerDNS',
                     boxLabel: 'Use Peer DNS',
                     margin: '16 0 0 0',
                     bodyAlign: 'left',
                     bind: '{interface.v4PPPoEUsePeerDNS}',
                 }, {
                     xtype: 'textfield',
-                    name: 'v4PPPoEOverrideDNS1',
                     label: 'Primary DNS',
                     disabled: true,
                     hidden: true,
@@ -537,7 +482,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'textfield',
-                    name: 'v4PPPoEOverrideDNS2',
                     label: 'Secondary DNS',
                     disabled: true,
                     hidden: true,
@@ -553,7 +497,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
             }, {
                 xtype: 'checkbox',
-                name: 'natEgress',
                 boxLabel: 'NAT traffic exiting this interface (and bridged peers)',
                 bodyAlign: 'start',
                 hidden: true,
@@ -563,7 +506,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'checkbox',
-                name: 'natIngress',
                 boxLabel: 'NAT traffic coming from this interface (and bridged peers)',
                 bodyAlign: 'start',
                 hidden: true,
@@ -587,12 +529,13 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             layout: 'vbox',
             items: [{
                 xtype: 'selectfield',
-                name: 'v6ConfigType',
                 label: 'Config Type',
-                editable: false,
+                labelAlign: 'top',
+                required: true,
                 bind: {
                     value: '{interface.v6ConfigType}',
-                    options: '{ipv6ConfigTypes}'
+                    options: '{ipv6ConfigTypes}',
+                    required: '{interface.configType === "ADDRESSED"}'
                 }
             }, {
 
@@ -615,7 +558,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: { hidden: '{interface.v6ConfigType !== "STATIC"}' },
                 items: [{
                     xtype: 'textfield',
-                    name: 'v6StaticAddress',
                     label: 'Address',
                     errorLabel: 'IPv6 Static Address',
                     required: false,
@@ -627,7 +569,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     validators: 'ipv6'
                 }, {
                     xtype: 'numberfield',
-                    name: 'v6StaticPrefix',
                     label: 'Prefix Length',
                     required: false,
                     clearable: false,
@@ -637,7 +578,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'textfield',
-                    name: 'v6StaticGateway',
                     label: 'Gateway',
                     hidden: true,
                     required: false,
@@ -650,7 +590,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     validators: 'ipv6'
                 }, {
                     xtype: 'textfield',
-                    name: 'v6StaticDNS1',
                     label: 'Primary DNS',
                     hidden: true,
                     clearable: false,
@@ -660,7 +599,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'textfield',
-                    name: 'v6StaticDNS2',
                     label: 'Secondary DNS',
                     hidden: true,
                     clearable: false,
@@ -681,6 +619,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                  * - v6AssignPrefix
                  */
                 xtype: 'container',
+                flex: 1,
                 layout: 'vbox',
                 defaults: {
                     labelAlign: 'top',
@@ -689,7 +628,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: { hidden: '{interface.v6ConfigType !== "ASSIGN"}' },
                 items: [{
                     xtype: 'textfield',
-                    name: 'v6AssignHint',
                     label: 'Assign Hint',
                     errorLabel: 'IPv6 Assign Hint',
                     required: false,
@@ -701,7 +639,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }, {
                     xtype: 'numberfield',
-                    name: 'v6AssignPrefix',
                     label: 'Assign Prefix',
                     errorLabel: 'IPv6 Assign Prefix',
                     placeholder: 'Integer between 1 and 128',
@@ -728,11 +665,32 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                  * ! not defined or no more configs
                  */
                 xtype: 'container',
+                flex: 1,
                 layout: 'vbox',
                 padding: '16, 0',
                 hidden: true,
                 bind: { hidden: '{interface.v6ConfigType !== "DHCP"}' },
-                html: 'DHCP conf ...'
+                defaults: {
+                    labelAlign: 'top',
+                    clearable: false
+                },
+                items: [{
+                    xtype: 'component',
+                    margin: '16 0 8 0',
+                    html: '<span style="font-size: 14px; font-weight: 100;">Override Defaults (optional)</span>'
+                }, {
+                    xtype: 'textfield',
+                    label: 'Primary DNS Override',
+                    bind: {
+                        value: '{interface.v6DhcpDNS1Override}'
+                    }
+                }, {
+                    xtype: 'textfield',
+                    label: 'Secondary DNS Override',
+                    bind: {
+                        value: '{interface.v6DhcpDNS2Override}'
+                    }
+                }]
                 /**
                  * IPv6 DHCP config end
                  */
@@ -744,16 +702,25 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                  * ! not defined or no more configs
                  */
                 xtype: 'container',
+                flex: 1,
                 layout: 'vbox',
                 padding: '16, 0',
                 hidden: true,
-                bind: { hidden: '{interface.v6ConfigType !== "SLAAC"}' },
-                html: 'SLAAC conf ...'
+                bind: { hidden: '{interface.v6ConfigType !== "SLAAC"}' }
                 /**
                  * IPv6 SLAAC config end
                  */
 
-            }],
+            }, {
+                xtype: 'checkbox',
+                boxLabel: 'Send router advertisements',
+                bodyAlign: 'start',
+                hidden: true,
+                bind: {
+                    checked: '{interface.routerAdvertisements}',
+                    hidden: '{interface.v6ConfigType === "DISABLED"}'
+                }
+            }]
             /**
              * IPv6 settings end
              */
@@ -779,7 +746,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             },
             items: [{
                 xtype: 'checkbox',
-                name: 'dhcpEnabled',
                 boxLabel: 'Enable DHCP Serving',
                 bodyAlign: 'start',
                 bind: {
@@ -787,7 +753,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'textfield',
-                name: 'dhcpRangeStart',
                 label: 'Range Start',
                 clearable: false,
                 required: false,
@@ -799,7 +764,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'textfield',
-                name: 'dhcpRangeEnd',
                 label: 'Range End',
                 clearable: false,
                 required: false,
@@ -811,7 +775,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'numberfield',
-                name: 'dhcpLeaseDuration',
                 label: 'Lease Duration',
                 hidden: true,
                 clearable: false,
@@ -822,7 +785,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'textfield',
-                name: 'dhcpGatewayOverride',
                 label: 'Gateway Override',
                 hidden: true,
                 clearable: false,
@@ -832,7 +794,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'selectfield',
-                name: 'dhcpPrefixOverride',
                 label: 'Netmask Override',
                 hidden: true,
                 clearable: false,
@@ -843,7 +804,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 options: Map.options.prefixes
             }, {
                 xtype: 'textfield',
-                name: 'dhcpDNSOverride',
                 label: 'DNS Override',
                 labelAlign: 'top',
                 hidden: true,
@@ -873,7 +833,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             },
             items: [{
                 xtype: 'checkbox',
-                name: 'vrrpEnabled',
                 boxLabel: 'Enable VRRP',
                 bodyAlign: 'start',
                 bind: {
@@ -881,7 +840,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'numberfield',
-                name: 'vrrpID',
                 label: 'VRRP ID',
                 required: false,
                 clearable: false,
@@ -894,7 +852,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'numberfield',
-                name: 'vrrpPriority',
                 label: 'VRRP Priority',
                 required: false,
                 clearable: false,
@@ -933,7 +890,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             },
             items: [{
                 xtype: 'textfield',
-                name: 'wirelessSsid',
                 label: 'Wireless SSID',
                 clearable: false,
                 required: true,
@@ -943,7 +899,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'selectfield',
-                name: 'wirelessEncryption',
                 label: 'Wireless Encryption',
                 required: true,
                 clearable: false,
@@ -960,7 +915,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 ]
             }, {
                 xtype: 'passwordfield',
-                name: 'wirelessPassword',
                 label: 'Wireless Password',
                 required: true,
                 bind: {
@@ -973,7 +927,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }]
             }, {
                 xtype: 'selectfield',
-                name: 'wirelessMode',
                 label: 'Wireless Mode',
                 bind: '{interface.wirelessMode}',
                 autoSelect: true,
@@ -984,7 +937,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 ]
             }, {
                 xtype: 'numberfield',
-                name: 'wirelessChannel',
                 label: 'Wireless Channel',
                 clearable: false,
                 bind: '{interface.wirelessChannel}'
@@ -1010,7 +962,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             },
             items: [{
                 xtype: 'checkbox',
-                name: 'qosEnabled',
                 boxLabel: 'Enable QoS',
                 bodyAlign: 'start',
                 bind: {
@@ -1018,7 +969,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'numberfield',
-                name: 'downloadKbps',
                 label: 'Download Kbps',
                 required: false,
                 hidden: true,
@@ -1030,7 +980,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 }
             }, {
                 xtype: 'numberfield',
-                name: 'uploadKbps',
                 label: 'Upload Kbps',
                 required: false,
                 hidden: true,
@@ -1122,7 +1071,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     editable: true,
                     editor: {
                         xtype: 'selectfield',
-                        editable: false,
                         clearable: false,
                         options: Map.options.prefixes
                     }
@@ -1244,7 +1192,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     editable: true,
                     editor: {
                         xtype: 'selectfield',
-                        editable: false,
                         clearable: false,
                         options: Map.options.prefixes
                     }
@@ -1473,7 +1420,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     editable: true,
                     editor: {
                         xtype: 'selectfield',
-                        editable: false,
                         clearable: false,
                         options: Map.options.prefixes
                     }
@@ -1639,11 +1585,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
                     disabled: '{!interface.openvpnUsernamePasswordEnabled}',
                     hidden: '{!interface.openvpnUsernamePasswordEnabled}'
-                },
-                validators: [{
-                    type: 'length',
-                    min: 6
-                }]
+                }
             }]
             /**
              * OpenVPN auth credentials
@@ -1704,14 +1646,24 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                  */
                 var qosNode = treelist.getStore().findNode('key', 'qos');
                 if (qosNode) {
-                    qosNode.set('text', intf.get('wan') ? 'QoS' : '');
+                    qosNode.set('text', intf.get('wan') ? qosNode.get('lbl') : '');
+                }
+
+                var dhcpOptionsNode = treelist.getStore().findNode('key', 'dhcpoptions');
+                if (dhcpOptionsNode) {
+                    dhcpOptionsNode.set('text', intf.get('dhcpEnabled') ? dhcpOptionsNode.get('lbl') : '');
+                }
+
+                var vrrpV4AliasesNode = treelist.getStore().findNode('key', 'vrrpv4aliases');
+                if (vrrpV4AliasesNode) {
+                    vrrpV4AliasesNode.set('text', intf.get('vrrpEnabled') ? vrrpV4AliasesNode.get('lbl') : '');
                 }
 
                 if (configType === intf.get('configType')) {
                     return;
                 }
 
-                type = intf.get('type'),
+                type = intf.get('type');
                 configType = intf.get('configType');
 
                 /**
@@ -1744,10 +1696,24 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
                 if (type === 'WIFI') {
                     treelist.getStore().each(function (node) {
-                        if (node.get('key') !== 'wifi') {
-                            node.set('text', '');
-                        } else {
-                            node.set('text', node.get('lbl'));
+                        if (configType === 'ADDRESSED') {
+                            if (node.get('key') === 'openvpnconf' ||
+                                node.get('key') === 'openvpnauth' ||
+                                node.get('key') === 'qos' && !intf.get('wan') ||
+                                node.get('key') === 'dhcpoptions' && !intf.get('dhcpEnabled') ||
+                                node.get('key') === 'vrrpv4aliases' && !intf.get('vrrpEnabled')) {
+                                node.set('text', '');
+                            } else {
+                                node.set('text', node.get('text') || node.get('lbl'));
+                            }
+                            return;
+                        }
+                        if (configType === 'BRIDGED') {
+                            if (node.get('key') !== 'wifi') {
+                                node.set('text', '');
+                            } else {
+                                node.set('text', node.get('lbl'));
+                            }
                         }
                     });
                     treelist.setSelection(treelist.getStore().findNode('key', 'wifi'));
@@ -1758,7 +1724,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                         if (node.get('key') === 'wifi' ||
                             node.get('key') === 'openvpnconf' ||
                             node.get('key') === 'openvpnauth' ||
-                            node.get('key') === 'qos' && !intf.get('wan')) {
+                            node.get('key') === 'qos' && !intf.get('wan') ||
+                            node.get('key') === 'dhcpoptions' && !intf.get('dhcpEnabled') ||
+                            node.get('key') === 'vrrpv4aliases' && !intf.get('vrrpEnabled')) {
                             node.set('text', '');
                         } else {
                             node.set('text', node.get('text') || node.get('lbl'));
@@ -1801,97 +1769,36 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 adminStore = {
                     root: {
                         expanded: true,
-                        children: [{
-                            lbl: 'IPv4',
-                            key: 'ipv4',
-                            children: [{
-                                text: 'Aliases',
-                                key: 'ipv4aliases',
-                                leaf: true
-                            }]
-                        }, {
-                            lbl: 'IPv6',
-                            key: 'ipv6',
-                            children: [{
-                                text: 'Aliases',
-                                key: 'ipv6aliases',
-                                leaf: true
-                            }]
-                        }, {
-                            lbl: 'DHCP',
-                            key: 'dhcp',
-                            children: [{
-                                text: 'Options',
-                                key: 'dhcpoptions',
-                                leaf: true
-                            }]
-                        }, {
-                            lbl: 'VRRP',
-                            key: 'vrrp',
-                            children: [{
-                                text: 'IPv4 Aliases',
-                                key: 'vrrpv4aliases',
-                                leaf: true
-                            }]
-                        }, {
-                            lbl: 'WIFI',
-                            key: 'wifi',
-                            leaf: true
-                        }, {
-                            lbl: 'OpenVPN Conf',
-                            key: 'openvpnconf',
-                            leaf: true
-                        }, {
-                            lbl: 'Authentication',
-                            key: 'openvpnauth',
-                            leaf: true
-                        }, {
-                            lbl: 'QoS',
-                            key: 'qos',
-                            leaf: true
-                        }, {
-                            key: 'bridged',
-                            hidden: true,
-                            leaf: true
-                        }, {
-                            key: 'disabled',
-                            hidden: true,
-                            leaf: true
-                        }]
+                        children: [
+                            { lbl: 'IPv4', key: 'ipv4', leaf: true },
+                            { lbl: 'IPv4 Aliases', key: 'ipv4aliases', leaf: true },
+                            { lbl: 'IPv6', key: 'ipv6', leaf: true },
+                            { lbl: 'IPv6 Aliases', key: 'ipv6aliases', leaf: true },
+                            { lbl: 'DHCP', key: 'dhcp', leaf: true },
+                            { lbl: 'DHCP Options', key: 'dhcpoptions', leaf: true },
+                            { lbl: 'VRRP', key: 'vrrp', leaf: true },
+                            { lbl: 'VRRP IPv4 Aliases', key: 'vrrpv4aliases', leaf: true },
+                            { lbl: 'WIFI', key: 'wifi', leaf: true },
+                            { lbl: 'OpenVPN Conf', key: 'openvpnconf', leaf: true },
+                            { lbl: 'Authentication', key: 'openvpnauth', leaf: true },
+                            { lbl: 'QoS', key: 'qos', leaf: true },
+                            { key: 'bridged',  leaf: true },
+                            { key: 'disabled', leaf: true }
+                        ]
                     }
                 },
                 setupStore = {
                     root: {
                         expanded: true,
-                        children: [{
-                            lbl: 'IPv4',
-                            key: 'ipv4',
-                            leaf: true
-                        }, {
-                            lbl: 'IPv6',
-                            key: 'ipv6',
-                            leaf: true
-                        }, {
-                            lbl: 'WIFI',
-                            key: 'wifi',
-                            leaf: true
-                        }, {
-                            lbl: 'OpenVPN Conf',
-                            key: 'openvpnconf',
-                            leaf: true
-                        }, {
-                            lbl: 'Authentication',
-                            key: 'openvpnauth',
-                            leaf: true
-                        }, {
-                            key: 'bridged',
-                            hidden: true,
-                            leaf: true
-                        }, {
-                            key: 'disabled',
-                            hidden: true,
-                            leaf: true
-                        }]
+                        children: [
+                            { lbl: 'IPv4', key: 'ipv4', leaf: true },
+                            { lbl: 'IPv6', key: 'ipv6', leaf: true },
+                            { lbl: 'WIFI', key: 'wifi', leaf: true },
+                            { lbl: 'OpenVPN Conf', key: 'openvpnconf', leaf: true },
+                            { lbl: 'Authentication', key: 'openvpnauth', leaf: true },
+                            { key: 'bridged', leaf: true },
+                            { key: 'disabled', leaf: true }
+                        ]
                     }
                 };
 
@@ -1964,6 +1871,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             };
             reader.readAsText(file);
         },
+
 
         /**
          * for each section there is a form

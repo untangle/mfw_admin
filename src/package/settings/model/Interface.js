@@ -117,6 +117,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'v6StaticGateway',    type: 'string', allowNull: true },
         { name: 'v6StaticDNS1',       type: 'string', allowNull: true },
         { name: 'v6StaticDNS2',       type: 'string', allowNull: true },
+        // IPv6 DHCP overrides
         { name: 'v6DhcpDNS1Override', type: 'string', allowNull: true },
         { name: 'v6DhcpDNS2Override', type: 'string', allowNull: true },
         // IPv6 Assign

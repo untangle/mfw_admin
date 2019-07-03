@@ -795,6 +795,15 @@ i {
     }
 }
 
+.x-treelist.shrink {
+    .x-treelist-item-text {
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
+
 .pie {
     width: 42px;
     background: #f06;
