@@ -25,7 +25,7 @@ Ext.define('Mfw.settings.view.Main', {
         },
 
         docked: 'left',
-        width: '300',
+        width: 250,
 
         tbar: {
             shadow: true,

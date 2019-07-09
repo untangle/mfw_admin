@@ -14,7 +14,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid.table.getProxy().setApi(grid.getApi());
         }
 
-        me.chainsmenu = grid.down('#chainsmenu');
         me.decorate(); // adds menus, extra columns, buttons
 
         table.chains().on({
@@ -23,11 +22,11 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 var chain = records[0];
                 chain.rules().loadData([]); // important so the rules store is initialized
                 me.selectChain(chain.get('name'));
-                me.updateChainsMenu();
+                me.setChainsToolbar();
             },
             remove: function () {
                 me.selectChain();
-                me.updateChainsMenu();
+                me.setChainsToolbar();
             }
         });
 
@@ -67,7 +66,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     // });
 
                     me.selectChain(grid.getChain());
-                    me.updateChainsMenu();
+                    // me.setChainsToolbar();
                 },
                 callback: function () {
                     // if reset API used, revert to default API
@@ -85,8 +84,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     });
                 });
                 me.selectChain(grid.getChain());
-                me.updateChainsMenu();
-                // grid.unmask();
+                // me.setChainsToolbar();
             });
         }
     },
@@ -160,6 +158,51 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
         }
     },
 
+    setChainsToolbar: function () {
+        var me = this,
+            grid = me.getView(),
+            chainsBar = grid.down('#chainsBar'),
+            chainsMap = [],
+            chainsBtnsMap = [];
+
+        grid.table.chains().each(function (chain) {
+            chainsMap.push(chain.get('name'));
+        });
+
+        chainsBar.getItems().each(function (btn) {
+            if (!Ext.Array.contains(chainsMap, btn.getText())) {
+                btn.remove();
+            }
+            chainsBtnsMap.push(btn.getText());
+        });
+
+        grid.table.chains().each(function (chain) {
+            if (!Ext.Array.contains(chainsBtnsMap, chain.get('name'))) {
+                chainsBar.add({
+                    iconCls: 'x-fa fa-link',
+                    text: chain.get('name')
+                });
+            }
+        });
+
+        chainsBar.getItems().each(function (btn) {
+            if (btn.getText() === me.selectedChain.get('name')) {
+                btn.setUi('action');
+            } else {
+                btn.setUi('');
+            }
+        });
+    },
+
+
+    selectChainFromToolbar: function (btn) {
+        var me = this, grid = me.getView();
+        Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + btn.getText(), {
+            replace: true // !important so the history stack does not retain previous nonset chain
+        });
+    },
+
+
     /**
      * Selects a chain from table chains and fills the grid
      * @param {String} [name] The chain name.
@@ -188,7 +231,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             return;
         }
         vm.set('selectedChain', me.selectedChain);
-        me.updateChainsMenu();
+        me.setChainsToolbar();
 
         // keep the initial order of items, used to determine if records were moved around
         me.initialIndices = me.selectedChain.rules().getData().indices;
@@ -205,36 +248,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 }
             });
         });
-    },
-
-    /**
-     * Updates the chains menu
-     */
-    updateChainsMenu: function () {
-        var me = this, grid = me.getView(), menuItems = [], tpl, store = [];
-        grid.table.chains().each(function (chain) {
-            if (chain.get('name') !== me.selectedChain.get('name')) {
-                store.push({ name: chain.get('name') });
-            }
-
-            tpl = '<p>' + chain.get('name') +
-                   (chain.get('base') ? '<span class="base">BASE</span>' : '') +
-                   (!chain.get('editable') ? '<span class="readonly">READONLY</span>' : '') +
-                   '<br/><em>' + chain.get('description') + '</em></p>';
-            menuItems.push({
-                bind: {
-                    userCls: '{selectedChain.name === "' + chain.get('name') + '" ? "selected" : ""}'
-                },
-                html: tpl,
-                handler: function (item) {
-                    item.up('menu').hide();
-                    Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + chain.get('name'));
-                    // me.selectChain(chain.get('name'));
-                }
-            });
-        });
-        me.getViewModel().set('chainNames', store);
-        me.chainsmenu.getMenu().setItems(menuItems);
     },
 
     /**

@@ -26,18 +26,18 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     },
 
     actionsMap: {
-        'JUMP': { value: 'JUMP', text: 'Jump to'.t() },
-        'GOTO': { value: 'GOTO', text: 'Go to'.t() },
-        'ACCEPT': { value: 'ACCEPT', text: 'Accept'.t() },
-        'RETURN': { value: 'RETURN', text: 'Return'.t() },
-        'REJECT': { value: 'REJECT', text: 'Reject'.t() },
-        'DROP': { value: 'DROP', text: 'Drop'.t() },
-        'DNAT': { value: 'DNAT', text: 'New Destination'.t() },
-        'SNAT': { value: 'SNAT', text: 'New Source'.t() },
-        'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade'.t() },
-        'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority'.t() },
-        'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination'.t() },
-        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy'.t() }
+        'JUMP': { value: 'JUMP', text: 'Jump to' },
+        'GOTO': { value: 'GOTO', text: 'Go to' },
+        'ACCEPT': { value: 'ACCEPT', text: 'Accept' },
+        'RETURN': { value: 'RETURN', text: 'Return' },
+        'REJECT': { value: 'REJECT', text: 'Reject' },
+        'DROP': { value: 'DROP', text: 'Drop' },
+        'DNAT': { value: 'DNAT', text: 'New Destination' },
+        'SNAT': { value: 'SNAT', text: 'New Source' },
+        'MASQUERADE': { value: 'MASQUERADE', text: 'Masquerade' },
+        'SET_PRIORITY': { value: 'SET_PRIORITY', text: 'Set Priority' },
+        'WAN_DESTINATION': { value: 'WAN_DESTINATION', text: 'Wan Destination' },
+        'WAN_POLICY': { value: 'WAN_POLICY', text: 'Wan Policy' }
     },
 
     itemConfig: {
@@ -52,33 +52,42 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         sortablelist: true
     },
 
-    emptyText: 'No Data!'.t(),
+    emptyText: 'No rules defined!',
     scrollable: true,
     sortable: false,
     groupable: false,
 
     items: [{
         xtype: 'toolbar',
+        itemId: 'chainsBar',
+        docked: 'top',
+        layout: 'float',
+        padding: 0,
+        defaults: {
+            margin: 8,
+            handler: 'selectChainFromToolbar'
+        },
+        zIndex: 10,
+        items: []
+    }, {
+        xtype: 'toolbar',
         docked: 'top',
         padding: '0 8',
+        shadow: false,
+        style: 'background: transparent; border-bottom: 1px #EEE solid',
+        border: true,
         items: [{
-            xtype: 'button',
-            itemId: 'chainsmenu',
-            minWidth: 200,
-            textAlign: 'left',
-            bind: {
-                text: '{selectedChain.name}'
-            },
-            menu: {
-                minWidth: 250,
-                userCls: 'x-htmlmenu chain-menu',
-                shadow: true,
-                anchor: true
-            }
-        }, {
+            text: 'Create New Rule',
+            // iconCls: 'md-icon-add',
+            ui: 'action',
+            hidden: true,
+            bind: { hidden: '{!selectedChain.editable}' },
+            handler: 'onNewRule'
+        }, '->',
+        {
             xtype: 'component',
             userCls: 'chain-base',
-            html: 'BASE'.t(),
+            html: 'BASE',
             hidden: true,
             bind: {
                 hidden: '{!selectedChain.base}'
@@ -86,7 +95,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         }, {
             xtype: 'component',
             userCls: 'chain-editable',
-            html: 'READONLY'.t(),
+            html: 'READONLY',
             hidden: true,
             bind: {
                 hidden: '{selectedChain.editable}'
@@ -97,7 +106,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             margin: '0 0 0 16',
             hidden: true,
             bind: {
-                html: '<span style="color: #777;">' + 'Hook'.t() + ':</span> <strong>{selectedChain.hook}</strong>',
+                html: '<span style="color: #777;">' + 'Hook' + ':</span> <strong>{selectedChain.hook}</strong>',
                 hidden: '{!selectedChain.base}'
             }
         }, {
@@ -106,52 +115,22 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             margin: '0 0 0 16',
             hidden: true,
             bind: {
-                html: '<span style="color: #777;">' + 'Priority'.t() + ':</span> <strong>{selectedChain.priority}</strong>',
+                html: '<span style="color: #777;">' + 'Priority' + ':</span> <strong>{selectedChain.priority}</strong>',
                 hidden: '{!selectedChain.base}'
             }
-        }, '->',
-        // {
-        //     xtype: 'component',
-        //     style: 'font-size: 12px; color: #999;',
-        //     margin: '0 8',
-        //     bind: {
-        //         html: '{displayList}'
-        //     }
-        //     // html: 'View as'
-        // }, {
-        //     iconCls: 'md-icon-format-list-bulleted',
-        //     enableToggle: true,
-        //     pressed: false,
-        //     ripple: false,
-        //     bind: {
-        //         pressed: '{displayList}',
-        //     },
-        //     tooltip: {
-        //         html: 'List'.t(),
-        //         anchor: true,
-        //         hideDelay: 0,
-        //         showDelay: 0
-        //     }
-        // }, {
-        //     iconCls: 'md-icon-short-text',
-        //     enableToggle: true,
-        //     pressed: false,
-        //     ripple: false,
-        //     bind: {
-        //         pressed: '{!displayList}',
-        //     },
-        //     tooltip: {
-        //         html: 'Sentence'.t(),
-        //         anchor: true,
-        //         hideDelay: 0,
-        //         showDelay: 0
-        //     }
-        // },
-        {
+        }, {
+            xtype: 'toolbarseparator',
+            style: 'background: #EEE',
+            margin: '0 16 0 32',
+            hidden: true,
+            bind: {
+                hidden: '{!selectedChain.base}'
+            }
+        }, {
             iconCls: 'md-icon-edit',
             // text: 'Edit Chain',
             tooltip: {
-                html: 'Edit chain'.t(),
+                html: 'Edit Chain',
                 anchor: true,
                 hideDelay: 0,
                 showDelay: 0
@@ -163,23 +142,16 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         }, {
             iconCls: 'md-icon-delete',
             // text: 'Delete Chain',
-            margin: '0 16 0 8',
             tooltip: {
-                html: 'Delete chain'.t(),
+                html: 'Delete Chain',
                 anchor: true,
                 hideDelay: 0,
                 showDelay: 0
             },
+            margin: '0 0 0 8',
             hidden: true,
             bind: { hidden: '{!selectedChain.editable}' },
             handler: 'onDeleteChain'
-        }, {
-            text: 'New Rule'.t(),
-            // iconCls: 'md-icon-add',
-            ui: 'action',
-            hidden: true,
-            bind: { hidden: '{!selectedChain.editable}' },
-            handler: 'onNewRule'
         }]
     }],
 
@@ -194,12 +166,12 @@ Ext.define('Mfw.cmp.grid.table.Table', {
     }, {
         xtype: 'checkcolumn',
         dataIndex: 'enabled',
-        // text: 'Enabled'.t(),
+        // text: 'Enabled',
         width: 44,
         menuDisabled: true,
         resizable: false
     }, {
-        text: 'Id'.t(),
+        text: 'Id',
         dataIndex: 'ruleId',
         menuDisabled: true,
         resizable: false,
@@ -212,7 +184,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             return ( v === 0 ) ? '-' : v;
         }
     }, {
-        text: 'Description'.t(),
+        text: 'Description',
         dataIndex: 'description',
         menuDisabled: true,
         minWidth: 400,
@@ -226,7 +198,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
             return rec.get('enabled') ? ('<strong>' + val + '</strong>') : val;
         }
     }, {
-        text: 'Conditions'.t(),
+        text: 'Conditions',
         menuDisabled: true,
         flex: 1,
         hidden: true,
@@ -238,7 +210,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         },
         renderer: Renderer.conditionsList
     }, {
-        text: 'Action'.t(),
+        text: 'Action',
         dataIndex: 'action',
         menuDisabled: true,
         width: 350,
