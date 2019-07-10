@@ -1882,7 +1882,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 view = me.getView(),
                 vm = me.getViewModel(),
                 treelist = view.down('treelist'),
-                interface = vm.get('interface'),
+                intf = vm.get('interface'),
                 interfacesStore = Ext.getStore('interfaces'),
                 forms = me.getView().query('formpanel'),
                 invalidForm;
@@ -1908,25 +1908,25 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             /**
              * for OPENVPN interfaces set conf file and password if needed
              */
-            if (interface.get('type') === 'OPENVPN') {
+            if (intf.get('type') === 'OPENVPN') {
                 var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
                     encoding: 'base64',
                     contents: btoa(view.down('#openvpnConfContent').getValue())
                 });
-                interface.setOpenvpnConfFile(ovpnConfFile);
-                if (interface.get('openvpnUsernamePasswordEnabled')) {
-                    interface.set('openvpnPasswordBase64', btoa(view.down('#openvpnPassword').getValue()));
+                intf.setOpenvpnConfFile(ovpnConfFile);
+                if (intf.get('openvpnUsernamePasswordEnabled')) {
+                    intf.set('openvpnPasswordBase64', btoa(view.down('#openvpnPassword').getValue()));
                 } else {
-                    interface.set('openvpnPasswordBase64', null);
+                    intf.set('openvpnPasswordBase64', null);
                 }
             }
 
             Sync.progress();
 
             if (vm.get('action') === 'ADD') {
-                interfacesStore.add(interface);
+                interfacesStore.add(intf);
             } else {
-                interface.commit();
+                intf.commit();
             }
 
             interfacesStore.each(function (record) {

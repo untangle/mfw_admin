@@ -14,8 +14,8 @@ Ext.define('Mfw.store.Interfaces', {
         // refresh interfaces map on data change
         datachanged: function (store) {
             var interfacesMap = {};
-            store.each(function (interface) {
-                interfacesMap[interface.get('interfaceId')] = interface.get('name');
+            store.each(function (intf) {
+                interfacesMap[intf.get('interfaceId')] = intf.get('name');
             });
             Map.interfaces = interfacesMap;
             Map.options.interfaces = Map.toOptions(interfacesMap);

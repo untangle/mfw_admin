@@ -5,3 +5,4 @@ downloads/*js
 staging/
 tmp
 mfw
+*.jar

@@ -142,10 +142,9 @@ Ext.define('Mfw.reports.Util', {
                     }
                 });
             },
+
             /**
              * Gets data "recursively" till completes the time range (error from backend)
-             * @param {integer} queryId
-             * @param {function} cb
              */
             getData = function (queryId, cb3) {
                 var partialData;

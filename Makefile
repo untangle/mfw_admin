@@ -198,6 +198,11 @@ $(ADMIN_DIR)/mfw-admin-all.js: $(APP_ADMIN_ALL)
 	$(call LOG_FUNCTION,"Building Admin app")
 	@cat $^ > $@
 
+# minify target (not used in build yet)
+js-admin-min:
+	$(call LOG_FUNCTION,"Minifying Admin app")
+	@java -jar closure-compiler.jar --js ${ADMIN_DIR}/mfw-admin-all.js --js_output_file ${ADMIN_DIR}/mfw-admin-all.min.js
+
 html-admin: $(ADMIN_DIR)/index.html
 $(ADMIN_DIR)/index.html: src/app/admin/index.html
 	$(call LOG_FUNCTION,"Building Admin HTML")
