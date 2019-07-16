@@ -26,7 +26,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
         },
         items: [{
             xtype: 'component',
-            html: '<h2 style="font-weight: 100;"><i class="x-fa fa-check-circle fa-green"></i>&nbsp; The system runs the latest available version!</h2>',
+            html: '<h2 style="font-weight: 100;"><i class="x-fa fa-check-circle fa-green"></i>&nbsp; The system is running the latest version!</h2>',
             hidden: true,
             bind: {
                 hidden: '{newUpgrade}'
