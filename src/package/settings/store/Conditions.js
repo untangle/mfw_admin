@@ -61,7 +61,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            // multiSelect: true, MFW-511 FIXME
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
             valueField: 'interfaceId',
@@ -153,7 +153,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            // multiSelect: true, MFW-511 FIXME
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
             valueField: 'interfaceId',
@@ -238,7 +238,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            // multiSelect: true, MFW-511 FIXME
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
             valueField: 'interfaceId',
@@ -323,7 +323,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            // multiSelect: true, MFW-511 FIXME
             editable: false,
             itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
             valueField: 'interfaceId',
@@ -615,7 +615,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            // multiSelect: true, MFW-511 FIXME
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.protocols,
