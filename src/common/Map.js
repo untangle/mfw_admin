@@ -295,10 +295,10 @@ Ext.define('Mfw.settings.Map', {
     },
 
     priorities: {
-        1: 'Priority 1',
-        2: 'Priority 2',
-        3: 'Priority 3',
-        4: 'Priority 4'
+        1: 'Priority Voice [1]',
+        2: 'Priority Video [2]',
+        3: 'Priority Best Effort [3]',
+        4: 'Priority Bulk [4]'
     },
 
     options: {
