@@ -67,6 +67,9 @@ Ext.define('Mfw.reports.EventDetails', {
                 { key: 'certificate_subject_cn', val: '', leaf: true },
                 { key: 'certificate_subject_o', val: '', leaf: true },
                 { key: 'ssl_sni', val: '', leaf: true },
+                { key: 'wan_rule_chain', val: '', leaf: true },
+                { key: 'wan_rule_id', val: '', leaf: true },
+                { key: 'wan_policy_id', val: '', leaf: true },
                 { key: 'username', val: '', leaf: true }
                 ]
             }

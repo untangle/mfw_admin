@@ -162,8 +162,17 @@ Ext.define('Mfw.Table', {
             text: 'Certificate Subject O',
             dataIndex: 'certificate_subject_o'
         }, {
-            text: 'SNL SNI',
+            text: 'SSL SNI',
             dataIndex: 'ssl_sni'
+        }, {
+            text: 'WAN Rule Chain',
+            dataIndex: 'wan_rule_chain'
+        }, {
+            text: 'WAN Rule ID',
+            dataIndex: 'wan_rule_id'
+        }, {
+            text: 'WAN Policy ID',
+            dataIndex: 'wan_policy_id'
         }, {
             text: 'Client DNS Hint',
             dataIndex: 'client_dns_hint'

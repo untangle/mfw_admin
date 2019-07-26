@@ -54,6 +54,9 @@ Ext.define('Mfw.model.Session', {
         { name: 'server_port_new', type: 'number', allowNull: true },
 
         { name: 'ssl_sni', type: 'auto', allowNull: true },
+        { name: 'wan_rule_chain', type: 'auto', allowNull: true },
+        { name: 'wan_rule_id', type: 'auto', allowNull: true },
+        { name: 'wan_policy_id', type: 'auto', allowNull: true },
         { name: 'username', type: 'string', allowNull: true }
     ]
 });

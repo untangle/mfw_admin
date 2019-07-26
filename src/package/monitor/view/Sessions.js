@@ -384,6 +384,21 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 130,
         hidden: true
     }, {
+        text: 'WAN Rule Chain',
+        dataIndex: 'wan_rule_chain',
+        width: 130,
+        hidden: true
+    }, {
+        text: 'WAN Rule ID',
+        dataIndex: 'wan_rule_id',
+        width: 130,
+        hidden: true
+    }, {
+        text: 'WAN Policy ID',
+        dataIndex: 'wan_policy_id',
+        width: 130,
+        hidden: true
+    }, {
         text: 'WAN Policy',
         dataIndex: 'wan_policy',
         width: 135,
