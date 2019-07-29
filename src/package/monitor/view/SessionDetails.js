@@ -68,9 +68,9 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'certificate_subject_o', text: 'Subject: Organization', leaf: true },
                         { key: 'certificate_subject_p', text: 'Subject: P', leaf: true },
                         { key: 'certificate_subject_san', text: 'Subject: SAN', leaf: true },
-                        { key: 'ssl_sni', text: 'SSL SNI', leaf: true }
-                        { key: 'wan_rule_chain', text: 'WAN Rule Chain', leaf: true }
-                        { key: 'wan_rule_id', text: 'WAN Rule ID', leaf: true }
+                        { key: 'ssl_sni', text: 'SSL SNI', leaf: true },
+                        { key: 'wan_rule_chain', text: 'WAN Rule Chain', leaf: true },
+                        { key: 'wan_rule_id', text: 'WAN Rule ID', leaf: true },
                         { key: 'wan_policy_id', text: 'WAN Policy ID', leaf: true }
                     ]
                 },
