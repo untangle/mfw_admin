@@ -947,12 +947,13 @@ Ext.define('Mfw.settings.Map', {
 
 
     toOptions: function (map) {
-        var options = [];
+        var options = [], val;
         Ext.Object.each(map, function (key, value) {
+            val = isNaN(parseInt(key, 10)) ? key : parseInt(key, 10);
             if (Ext.isObject(value)) {
                 options.push(value);
             } else {
-                options.push({ text: value, value: key });
+                options.push({ text: value, value: val });
             }
         });
         return options;
