@@ -171,7 +171,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         chainsBar.getItems().each(function (btn) {
             if (!Ext.Array.contains(chainsMap, btn.getText())) {
-                btn.remove();
+                chainsBar.remove(btn);
             }
             chainsBtnsMap.push(btn.getText());
         });
