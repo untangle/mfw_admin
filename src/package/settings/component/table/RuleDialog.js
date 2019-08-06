@@ -475,9 +475,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             if (value === 'DNAT') {
-                if (!action) {rule.getAction().set('dnat_address', ''); }
-
-
+                if (!action.get('dnat_address')) {
+                    action.set({
+                        dnat_address: '',
+                        dnat_port: null
+                    });
+                }
                 /**
                  * dnat_address is an IPv4/IPv6 address + port number (optional)
                  */
