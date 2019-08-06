@@ -5,9 +5,10 @@ Ext.define('Mfw.settings.network.Interfaces', {
 
     controller: 'mfw-settings-network-interfaces',
 
-    title: 'Interfaces'.t(),
+    title: 'Interfaces',
 
     config: {
+        enableSave: false,
         enableManualSort: false,
         disableDeleteCondition: '{record.wan && record.type === "NIC"}',
         disableCopyCondition: '{record.wan}',
@@ -18,8 +19,6 @@ Ext.define('Mfw.settings.network.Interfaces', {
     plugins: {
         mastergrideditable: true
     },
-
-    sortable: false,
 
     scrollable: true,
     store: {
@@ -36,51 +35,58 @@ Ext.define('Mfw.settings.network.Interfaces', {
     },
 
     columns: [{
-        text: 'Id'.t(),
+        text: 'Id',
         dataIndex: 'interfaceId',
         align: 'right',
         width: 60,
         resizable: false,
-        sortable: false,
-        menuDisabled: true
+        menuDisabled: true,
+        hidden: true
     }, {
-        text: 'Name / Type / Device',
+        text: 'Name',
         dataIndex: 'name',
         flex: 1,
         minWidth: 150,
-        menuDisabled: true,
-        sortable: false,
+        groupable: false,
         cell: { encodeHtml: false },
         renderer: function (value, record) {
-            return '<b>' + record.get('name') + ' </b> / ' + record.get('type') + ' / ' + record.get('device');
+            return '<b>' + record.get('name') + ' </b>';
         }
     }, {
-        text: 'WAN'.t(),
+        text: 'Type',
+        dataIndex: 'type',
+        width: 100,
+        hidden: true
+    }, {
+        text: 'Device',
+        dataIndex: 'device',
+        groupable: false,
+        width: 100,
+        hidden: true
+    }, {
+        text: 'WAN',
         dataIndex: 'wan',
         align: 'center',
         resizable: false,
         menuDisabled: true,
-        sortable: false,
         width: 70,
         renderer: function (value) {
             return value ? 'WAN' : '-';
         }
     }, {
-        text: 'Config'.t(),
+        text: 'Config',
         dataIndex: 'configType',
-        menuDisabled: true,
-        sortable: false,
         minWidth: 180,
+        flex: 1,
         cell: {
             encodeHtml: false,
         },
         renderer: 'configTypeRenderer'
     }, {
-        text: 'IPv4'.t(),
-        minWidth: 200,
+        text: 'IPv4',
         dataIndex: 'v4ConfigType',
-        sortable: false,
-        menuDisabled: true,
+        minWidth: 200,
+        flex: 1,
         renderer: function (value, record) {
             if (value === 'DHCP' || value === 'PPPOE') {
                 return value;
@@ -91,11 +97,10 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return '-';
         }
     }, {
-        text: 'IPv6'.t(),
-        minWidth: 200,
+        text: 'IPv6',
         dataIndex: 'v6ConfigType',
-        sortable: false,
-        menuDisabled: true,
+        minWidth: 200,
+        flex: 1,
         renderer: function (value) {
             if (value) {
                 return value;
@@ -103,35 +108,25 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return '-';
         }
     }, {
-        text: 'MAC',
-        dataIndex: 'macaddr',
-        minWidth: 140,
-        sortable: false,
-        menuDisabled: true
-    }, {
-        xtype: 'checkcolumn',
         text: 'QoS',
-        width: 50,
         dataIndex: 'qosEnabled',
+        width: 60,
         resizable: false,
-        menuDisabled: true,
-        sortable: false,
+        align: 'center',
+        hidden: true,
         cell: {
-            hidden: true,
-            hideMode: 'visibility',
-            bind: {
-                hidden: '{!record.wan}'
-            }
+            encodeHtml: false,
+        },
+        renderer: function (value) {
+            return value ? '<i class="fa fa-check"></i>' : '-';
         }
-
     }, {
         text: 'Download',
         align: 'right',
         width: 120,
         dataIndex: 'downloadKbps',
         resizable: false,
-        menuDisabled: true,
-        sortable: false,
+        groupable: false,
         cell: {
             encodeHtml: false,
         },
@@ -145,8 +140,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         width: 120,
         dataIndex: 'uploadKbps',
         resizable: false,
-        menuDisabled: true,
-        sortable: false,
+        groupable: false,
         cell: {
             encodeHtml: false
         },
@@ -154,5 +148,34 @@ Ext.define('Mfw.settings.network.Interfaces', {
             if (!record.get('wan')) { return '-'; }
             return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
         }
+    }, {
+        text: 'NAT Egress',
+        dataIndex: 'natEgress',
+        align: 'center',
+        width: 100,
+        hidden: true,
+        cell: {
+            encodeHtml: false,
+        },
+        renderer: function (value) {
+            return value ? '<i class="fa fa-check"></i>' : '-';
+        }
+    }, {
+        text: 'NAT Ingress',
+        dataIndex: 'natIngress',
+        align: 'center',
+        width: 100,
+        hidden: true,
+        cell: {
+            encodeHtml: false,
+        },
+        renderer: function (value) {
+            return value ? '<i class="fa fa-check"></i>' : '-';
+        }
+    }, {
+        text: 'MAC',
+        dataIndex: 'macaddr',
+        width: 150,
+        hidden: true
     }]
 });

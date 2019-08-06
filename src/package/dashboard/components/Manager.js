@@ -195,7 +195,10 @@ Ext.define('Mfw.dashboard.Manager', {
 
             // update queue when interval changes
             store.getModifiedRecords().forEach(function(widget) {
-                WidgetsPipe.addFirst(widgetsContainer.down('#widget_' + widget.get('_identifier')));
+                var wgCnt = widgetsContainer.down('#widget_' + widget.get('_identifier'));
+                if (wgCnt) {
+                    WidgetsPipe.addFirst(wgCnt);
+                }
             });
 
             store.each(function (widget) {
@@ -245,6 +248,9 @@ Ext.define('Mfw.dashboard.Manager', {
                     widgetsContainer.insert(mdlIdx, widgetCmpConfig);
                 }
             });
+
+            console.log(widgetsCmp);
+
             // add new widgets to the container
             if (widgetsCmp.length > 0) {
                 widgetsContainer.add(widgetsCmp);
