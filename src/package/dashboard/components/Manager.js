@@ -249,8 +249,6 @@ Ext.define('Mfw.dashboard.Manager', {
                 }
             });
 
-            console.log(widgetsCmp);
-
             // add new widgets to the container
             if (widgetsCmp.length > 0) {
                 widgetsContainer.add(widgetsCmp);
