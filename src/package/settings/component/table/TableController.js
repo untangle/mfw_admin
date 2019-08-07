@@ -21,12 +21,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             add: function (store, records) {
                 var chain = records[0];
                 chain.rules().loadData([]); // important so the rules store is initialized
-                me.selectChain(chain.get('name'));
-                me.setChainsToolbar();
+                me.onSave(chain.get('name'));
             },
             remove: function () {
-                me.selectChain();
-                me.setChainsToolbar();
+                me.onSave();
             }
         });
 
@@ -133,7 +131,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     /**
      * Push all changes to server
      */
-    onSave: function (cb) {
+    onSave: function (name, cb) {
         var me = this,
             grid = me.getView();
 
@@ -146,6 +144,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
                     Sync.success();
+                    if (name) {
+                        Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + name, {
+                            replace: true
+                        });
+                    } else {
+                        me.selectChain();
+                    }
                 }
             });
         } else {
@@ -153,6 +158,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
                     Sync.success();
+                    if (name) {
+                        Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + name, {
+                            replace: true
+                        });
+                    } else {
+                        me.selectChain();
+                    }
                 }
             });
         }
@@ -210,10 +222,13 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
     selectChain: function (name) {
         var me = this,
             grid = me.getView(),
-            vm = me.getViewModel(),
-            chains = grid.table.chains();
+            vm = me.getViewModel();
+
             // chain = grid.table.chains().first();
             // chain;
+        if (!grid) { return; }
+
+        var chains = grid.table.chains();
 
         // if no name is passed it selects the first chain
         if (!name) {
@@ -298,7 +313,6 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     });
                     // remove the chain
                     grid.table.chains().remove(me.selectedChain);
-                    me.onSave();
                 }
             });
     },
