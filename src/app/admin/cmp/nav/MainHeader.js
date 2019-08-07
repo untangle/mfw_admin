@@ -104,6 +104,9 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         style: 'font-weight: 500; font-size: 12px;',
         hidden: true,
         // responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        bind: {
+            hidden: '{!upgradeStatus.available}'
+        },
         menu: {
             userCls: 'monitor-menu',
             border: false,
@@ -122,16 +125,31 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 text: 'UPGRADE NOW',
                 ui: 'action',
                 handler: 'startUpgrade'
-            }, {
-                xtype: 'button',
-                text: 'View Changelog',
-                handler: function (btn) {
-                    btn.up('menu').hide();
-                }
-            }, {
-                xtype: 'component',
-                html: '<hr style="background: #555;"/><p>Automatic Upgrade is <strong>ON</strong><br/><br/><span style="font-size: 12px;">The upgrade process will start Saturday at 12:00 AM.</span></p>'
-                      // '<a href="#settings/system/upgrade" style="color: #91e971; font-size: 14px; text-decoration: none;">Go To Settings</a>'
+            },
+            {
+                xtype: 'container',
+                layout: 'vbox',
+                items: [{
+                    xtype: 'component',
+                    html: '<hr style="background: #555;"/>',
+                    margin: '0 0 8 0'
+                }, {
+                    xtype: 'component',
+                    bind: {
+                        html: 'Automatic Upgrade is <strong>{autoUpgradeEnabled ? "Enabled" : "Disabled"}</strong>'
+                    }
+                }, {
+                    xtype: 'component',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!autoUpgradeEnabled}',
+                        html: '<br/><span style="font-size: 12px;">The upgrade process will start <strong>{autoUpgradeTime}</strong>.</span>'
+                    }
+                }, {
+                    xtype: 'component',
+                    margin: '8 0 0 0',
+                    html: '<hr style="background: #555;"/>'
+                }]
             }, {
                 xtype: 'button',
                 text: 'Go To Settings',
@@ -166,14 +184,65 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         handler: 'showMenu'
     }],
     listeners: {
-        // fire resize event to trigger responsive config for the hamburger menu
-        painted: function() {
-            Ext.fireEvent('resize');
-        }
+        painted: 'onPainted'
     },
 
 
     controller: {
+        onPainted: function () {
+            var me = this;
+            me.checkForUpgrades();
+            // fire resize event to trigger responsive config for the hamburger menu
+            Ext.fireEvent('resize');
+        },
+
+        checkForUpgrades: function () {
+            var me = this, vm = me.getViewModel(),
+                upgradeSettings = {
+                    enabled: true,
+                    dayOfWeek: 6,
+                    // timeOfDay: '18:20'
+                    hourOfDay: 0,
+                    minuteOfHour: 0
+                };
+
+            Ext.Ajax.request({
+                url: '/api/status/upgrade',
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText);
+                    vm.set('upgradeStatus', resp);
+                },
+                failure: function () {
+                    console.error('Unable to get data');
+                }
+            });
+
+            Ext.Ajax.request({
+                url: '/api/settings/system/autoUpgrade',
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText),
+                        weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                        upgradeTime = new Date();
+
+                    if (resp) {
+                        upgradeSettings = resp;
+                    }
+
+                    upgradeTime.setHours(upgradeSettings.hourOfDay, upgradeSettings.minuteOfHour, 0, 0);
+
+                    vm.set({
+                        autoUpgradeEnabled: upgradeSettings.enabled,
+                        autoUpgradeTime: weekDays[upgradeSettings.dayOfWeek] + ' at ' + Ext.Date.format(upgradeTime, 'h:i A')
+                    });
+                },
+                failure: function () {
+                    console.warn('Unable to get upgrade settings!');
+                }
+            });
+
+        },
+
+
         logout: function () {
             Ext.Ajax.request({
                 url: '/account/logout',

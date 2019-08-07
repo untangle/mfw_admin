@@ -18,7 +18,6 @@ Ext.define('Mfw.settings.system.Upgrade', {
 
     items: [{
         xtype: 'container',
-        hidden: true,
         padding: 16,
         layout: {
             type: 'vbox',
@@ -29,7 +28,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             html: '<h2 style="font-weight: 100;"><i class="x-fa fa-check-circle fa-green"></i>&nbsp; The system is running the latest version!</h2>',
             hidden: true,
             bind: {
-                hidden: '{newUpgrade}'
+                hidden: '{upgradeStatus.available}'
             }
         }, {
             xtype: 'container',
@@ -49,25 +48,12 @@ Ext.define('Mfw.settings.system.Upgrade', {
             }],
             hidden: true,
             bind: {
-                hidden: '{!newUpgrade}'
+                hidden: '{!upgradeStatus.available}'
             }
-        }, {
-            xtype: 'button',
-            ui: 'action',
-            margin: '16 0 8 0',
-            disabled: true,
-            bind: {
-                text: '{checkProgress ? "<i class=\'fa fa-spinner fa-spin fa-fw\'></i> Checking ..." : "Check for Updates"}',
-                disabled: '{checkProgress}'
-            },
-            handler: 'checkUpgrade'
-        }, {
-            xtype: 'component',
-            html: 'Last check: 12/12/2019 10:20:20 PM'
         }]
     }, {
         xtype: 'formpanel',
-        hidden: true,
+        itemId: 'autoUpgradeCmp',
         bodyPadding: 16,
         items: [{
             xtype: 'toolbar',
@@ -79,10 +65,11 @@ Ext.define('Mfw.settings.system.Upgrade', {
             }]
         }, {
             xtype: 'togglefield',
-            reference: 'toggle',
             boxLabel: 'Automatically Install Upgrades',
             bodyAlign: 'start',
-            value: true
+            bind: {
+                value: '{upgradeSettings.enabled}'
+            }
         }, {
             xtype: 'component',
             margin: '16 0 0 0',
@@ -95,36 +82,41 @@ Ext.define('Mfw.settings.system.Upgrade', {
                 labelAlign: 'top',
                 disabled: true,
                 bind: {
-                    disabled: '{!toggle.value}'
+                    disabled: '{!upgradeSettings.enabled}'
                 }
             },
             items: [{
                 xtype: 'selectfield',
                 label: 'Day of the Week',
                 width: 150,
-                value: 'SAT',
                 options: [
-                    { text: 'Sunday', value: 'SUN' },
-                    { text: 'Monday', value: 'MON' },
-                    { text: 'Tuesday', value: 'TUE' },
-                    { text: 'Wednesday', value: 'WED' },
-                    { text: 'Thursday', value: 'THU' },
-                    { text: 'Friday', value: 'FRI' },
-                    { text: 'Saturday', value: 'SAT' }
-                ]
+                    { text: 'Sunday', value: 0 },
+                    { text: 'Monday', value: 1 },
+                    { text: 'Tuesday', value: 2 },
+                    { text: 'Wednesday', value: 3 },
+                    { text: 'Thursday', value: 4 },
+                    { text: 'Friday', value: 5 },
+                    { text: 'Saturday', value: 6 }
+                ],
+                bind: {
+                    value: '{upgradeSettings.dayOfWeek}'
+                }
             }, {
                 xtype: 'timefield',
                 label: 'Time',
                 width: 100,
                 editable: false,
                 margin: '0 16',
-                value: '12:00 AM'
+                listeners: {
+                    change: 'onTimeChange'
+                }
             }]
         }, {
             xtype: 'button',
             ui: 'action',
             margin: '16 0',
             text: 'Save Changes',
+            handler: 'saveAutoUpgradeSettings'
         }]
     }, {
         xtype: 'formpanel',
@@ -154,16 +146,79 @@ Ext.define('Mfw.settings.system.Upgrade', {
     }],
 
     controller: {
-        checkUpgrade: function () {
-            var me = this, vm = me.getViewModel();
-            vm.set('checkProgress', true);
-            Ext.defer(function () {
-                vm.set({
-                    newUpgrade: !vm.get('newUpgrade'),
-                    checkProgress: false
-                });
-            }, 5000);
+
+        init: function (view) {
+            var vm = view.getViewModel(),
+                defaultUpgradeSettings = {
+                    enabled: true,
+                    dayOfWeek: 6,
+                    // timeOfDay: '18:20'
+                    hourOfDay: 0,
+                    minuteOfHour: 0
+                };
+
+            Ext.Ajax.request({
+                url: '/api/status/upgrade',
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText);
+                    vm.set('upgradeStatus', resp);
+                },
+                failure: function () {
+                    console.error('Unable to get data');
+                }
+            });
+
+            Ext.Ajax.request({
+                url: '/api/settings/system/autoUpgrade',
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText),
+                        timeOfDay = new Date();
+
+                    if (!resp) {
+                        vm.set('upgradeSettings', defaultUpgradeSettings);
+                        // settings.json not havinf auto upgrade settings set
+                    } else {
+                        vm.set('upgradeSettings', resp);
+                    }
+
+                    timeOfDay.setHours(vm.get('upgradeSettings.hourOfDay'), vm.get('upgradeSettings.minuteOfHour'), 0, 0);
+
+                    view.down('timefield').setValue(timeOfDay);
+                },
+                failure: function () {
+                    console.warn('Unable to get upgrade settings!');
+                }
+            });
         },
+
+        onTimeChange: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                time = me.getView().down('timefield').getValue();
+
+            vm.set('upgradeSettings.hourOfDay', time.getHours());
+            vm.set('upgradeSettings.minuteOfHour', time.getMinutes());
+        },
+
+
+        saveAutoUpgradeSettings: function () {
+            var vm = this.getViewModel();
+
+            Sync.progress();
+
+            Ext.Ajax.request({
+                url: '/api/settings/system/autoUpgrade',
+                method: 'POST',
+                params: Ext.JSON.encode(vm.get('upgradeSettings')),
+                success: function () {
+                    Sync.success();
+                },
+                failure: function(response) {
+                    console.log('server-side failure with status code ' + response.status);
+                }
+            });
+        },
+
 
         /**
          * !!! todo, duplicated from main header, needs to be general accessible
