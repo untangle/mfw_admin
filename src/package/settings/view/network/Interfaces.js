@@ -47,6 +47,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         dataIndex: 'type',
         width: 44,
         resizable: false,
+        hideable: false,
         menuDisabled: true,
         cell: { encodeHtml: false },
         renderer: function (value) {
