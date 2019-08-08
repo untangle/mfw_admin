@@ -43,6 +43,25 @@ Ext.define('Mfw.settings.network.Interfaces', {
         menuDisabled: true,
         hidden: true
     }, {
+        align: 'center',
+        dataIndex: 'type',
+        width: 44,
+        resizable: false,
+        hideable: false,
+        menuDisabled: true,
+        cell: { encodeHtml: false },
+        renderer: function (value) {
+            var svgIcon = '';
+            switch (value) {
+                case 'NIC': svgIcon = 'network-wired.svg'; break;
+                case 'WIFI': svgIcon = 'wifi.svg'; break;
+                case 'VLAN':
+                case 'OPENVPN': svgIcon = 'project-diagram.svg'; break;
+                default: svgIcon = 'signal.svg';
+            }
+            return '<img width=16 src="../static/res/icons/intf/' + svgIcon + '">';
+        }
+    }, {
         text: 'Name',
         dataIndex: 'name',
         flex: 1,

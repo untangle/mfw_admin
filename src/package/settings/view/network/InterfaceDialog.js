@@ -277,7 +277,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 // hidden: true,
                 bind: {
                     value: '{interface.v4ConfigType}',
-                    required: '{interface.configType === "ADDRESSED"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN"}'
                     // disabled: '{!interface.wan}',
                     // hidden: '{interface.type === "OPENVPN"}'
                 },
@@ -535,7 +535,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: {
                     value: '{interface.v6ConfigType}',
                     options: '{ipv6ConfigTypes}',
-                    required: '{interface.configType === "ADDRESSED"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN"}'
                 }
             }, {
 
