@@ -61,6 +61,23 @@ Ext.define('Mfw.monitor.view.Sessions', {
         minWidth: 200,
         flex: 1
     }, {
+        text: 'Predicted Application',
+        dataIndex: 'application_predicted_name',
+        width: 150,
+        hidden: true
+    }, {
+        text: 'Predicted Confidence',
+        dataIndex: 'application_predicted_confidence',
+        width: 100,
+        align: 'right',
+        hidden: true
+    }, {
+        text: 'Predicted Protocolchain',
+        dataIndex: 'application_predicted_protochain',
+        minWidth: 200,
+        flex: 1,
+        hidden: true
+    }, {
         text: 'Bypass',
         dataIndex: 'bypass_packetd',
         width: 80,

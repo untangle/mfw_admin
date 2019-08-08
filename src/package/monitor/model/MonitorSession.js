@@ -24,6 +24,10 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'application_name', type: 'string' },
         { name: 'application_protochain', type: 'string' },
 
+        { name: 'application_predicted_name', type: 'string' },
+        { name: 'application_predicted_confidence', type: 'number', allowNull: true },
+        { name: 'application_predicted_protochain', type: 'string' },
+
         { name: 'bypass_packetd', type: 'boolean', allowNull: true },
 
         { name: 'packets', type: 'number', allowNull: true },
