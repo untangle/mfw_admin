@@ -20,15 +20,35 @@ Ext.define('Mfw.setup.step.Interfaces', {
         },
 
         columns: [{
-            text: 'Name [ id ] / Type / Device',
+            align: 'center',
+            dataIndex: 'type',
+            width: 44,
+            resizable: false,
+            hideable: false,
+            menuDisabled: true,
+            cell: { encodeHtml: false },
+            renderer: function (value) {
+                var svgIcon = '';
+                switch (value) {
+                    case 'NIC': svgIcon = 'network-wired.svg'; break;
+                    case 'WIFI': svgIcon = 'wifi.svg'; break;
+                    case 'VLAN':
+                    case 'OPENVPN': svgIcon = 'project-diagram.svg'; break;
+                    default: svgIcon = 'signal.svg';
+                }
+                return '<img width=16 src="../static/res/icons/intf/' + svgIcon + '">';
+            }
+        }, {
+            text: 'Name',
             dataIndex: 'name',
             flex: 1,
             minWidth: 150,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
-            renderer: function (value, record) {
-                return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('type') + ' / ' + record.get('device');
+            renderer: function (value) {
+                return '<b>' + value + '</b>';
+                // return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('type') + ' / ' + record.get('device');
                 // if (record.get('wan')) {
                 //     return '<strong>' + value + ' (WAN) </strong>';
                 // }
@@ -41,6 +61,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
             menuDisabled: true,
             sortable: false,
             minWidth: 150,
+            flex: 1,
             cell: {
                 encodeHtml: false,
             },
@@ -48,6 +69,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
         }, {
             text: 'IPv4'.t(),
             width: 180,
+            flex: 1,
             dataIndex: 'v4ConfigType',
             sortable: false,
             menuDisabled: true,
@@ -63,6 +85,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
         }, {
             text: 'IPv6'.t(),
             width: 180,
+            flex: 1,
             dataIndex: 'v6ConfigType',
             sortable: false,
             menuDisabled: true,
@@ -72,12 +95,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 }
                 return '-';
             }
-        }, {
-            text: 'MAC',
-            dataIndex: 'macaddr',
-            minWidth: 140,
-            sortable: false,
-            menuDisabled: true
         }, {
             width: 44,
             sortable: false,
