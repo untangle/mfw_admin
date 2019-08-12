@@ -3,6 +3,39 @@ Ext.define('Mfw.settings.Conditions', {
     singleton: true,
 
     list: [
+    // APPLICATION
+    {
+        type:'APPLICATION_NAME',
+        category: 'Application',
+        text: 'Application Name'.t(),
+        description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_CATEGORY',
+        category: 'Application',
+        text: 'Application Category'.t(),
+        description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_ID',
+        category: 'Application',
+        text: 'Application ID'.t(),
+        description: 'Application ID description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PROTOCHAIN',
+        category: 'Application',
+        text: 'Application Protochain'.t(),
+        description: 'Application Protochain description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_DETAIL',
+        category: 'Application',
+        text: 'Application Detail'.t(),
+        description: 'Application Detail description ...',
+        operators: ['==', '!=']
+    },
+
     // SOURCE
     {
         type:'SOURCE_ADDRESS',
@@ -446,40 +479,6 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Remote Username description ...',
         operators: ['==', '!=']
     },
-
-    // APPLICATION
-    {
-        type:'APPLICATION_ID',
-        category: 'Application',
-        text: 'Application ID'.t(),
-        description: 'Application ID description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_NAME',
-        category: 'Application',
-        text: 'Application Name'.t(),
-        description: 'Application Name description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PROTOCHAIN',
-        category: 'Application',
-        text: 'Application Protochain'.t(),
-        description: 'Application Protochain description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_DETAIL',
-        category: 'Application',
-        text: 'Application Detail'.t(),
-        description: 'Application Detail description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_CATEGORY',
-        category: 'Application',
-        text: 'Application Category'.t(),
-        description: 'Application Category description ...',
-        operators: ['==', '!=']
-    },
-
 
     // PREDICTED
     {
