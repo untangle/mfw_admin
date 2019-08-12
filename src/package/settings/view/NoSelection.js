@@ -48,17 +48,14 @@ Ext.define('Mfw.settings.NoSelection', {
         items: [{
             xtype: 'component',
             style: 'margin: 0 0 24px 12px;',
-            html: '<h1 style="font-weight: 100;">Firewall</h1>'
+            html: '<h1 style="font-weight: 100;">Routing</h1>'
         }, {
             xtype: 'list',
             cls: 'pointer-list',
             itemTpl: '<span style="font-size: 16px;">{text}</span>',
             data: [
-                { text: 'Filter'.t(), href: 'settings/firewall/filter' },
-                { text: 'Access'.t(), href: 'settings/firewall/access' },
-                { text: 'NAT'.t(), href: 'settings/firewall/nat' },
-                { text: 'Shaping'.t(), href: 'settings/firewall/shaping' },
-                { text: 'Port Forward'.t(), href: 'settings/firewall/port-forward' },
+                { text: 'WAN Policies'.t(), href: 'settings/routing/wan-policies' },
+                { text: 'WAN Rules'.t(), href: 'settings/routing/wan-rules' }
             ],
             listeners: {
                 childtap: function (el, location) {
@@ -70,14 +67,17 @@ Ext.define('Mfw.settings.NoSelection', {
         items: [{
             xtype: 'component',
             style: 'margin: 0 0 24px 12px;',
-            html: '<h1 style="font-weight: 100;">Routing</h1>'
+            html: '<h1 style="font-weight: 100;">Firewall</h1>'
         }, {
             xtype: 'list',
             cls: 'pointer-list',
             itemTpl: '<span style="font-size: 16px;">{text}</span>',
             data: [
-                { text: 'WAN Policies'.t(), href: 'settings/routing/wan-policies' },
-                { text: 'WAN Rules'.t(), href: 'settings/routing/wan-rules' }
+                { text: 'Filter'.t(), href: 'settings/firewall/filter' },
+                { text: 'Access'.t(), href: 'settings/firewall/access' },
+                { text: 'NAT'.t(), href: 'settings/firewall/nat' },
+                { text: 'Shaping'.t(), href: 'settings/firewall/shaping' },
+                { text: 'Port Forward'.t(), href: 'settings/firewall/port-forward' },
             ],
             listeners: {
                 childtap: function (el, location) {

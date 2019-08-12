@@ -22,6 +22,15 @@ Ext.define('Mfw.store.Nav', {
                 { text: 'DNS'.t(), leaf: true, href: 'network/dns' }
             ]
         }, {
+            // Smart Routing
+            text: '<strong>' + 'Routing'.t() + '</strong>',
+            iconCls: 'tree system',
+            href: 'routing',
+            children: [
+                { text: 'WAN Policies'.t(), leaf: true, href: 'routing/wan-policies' },
+                { text: 'WAN Rules'.t(), leaf: true, href: 'routing/wan-rules' }
+            ]
+        }, {
             // Firewall
             text: '<strong>' + 'Firewall'.t() + '</strong>',
             iconCls: 'tree administration',
@@ -35,15 +44,6 @@ Ext.define('Mfw.store.Nav', {
                 // not implemented
                 // { text: 'Captive Portal'.t(), leaf: true, href: 'firewall/captive-portal' },
                 // { text: 'Web Filter'.t(), leaf: true, href: 'firewall/web-filter' }
-            ]
-        }, {
-            // Smart Routing
-            text: '<strong>' + 'Routing'.t() + '</strong>',
-            iconCls: 'tree system',
-            href: 'routing',
-            children: [
-                { text: 'WAN Policies'.t(), leaf: true, href: 'routing/wan-policies' },
-                { text: 'WAN Rules'.t(), leaf: true, href: 'routing/wan-rules' }
             ]
         }, {
             // System
