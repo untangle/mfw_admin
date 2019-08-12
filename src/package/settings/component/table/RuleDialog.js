@@ -415,7 +415,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
                 clearable: false,
                 autoComplete: false,
-                placeholder: !valueField.multiSelect ? 'Set value ...' : '',
+                placeholder: valueField.placeholder || (!valueField.multiSelect ? 'Set value ...' : ''),
                 required: true,
                 errorTarget: 'under'
             });

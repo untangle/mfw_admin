@@ -9,13 +9,36 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Name'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            placeholder: 'Select or type a value ...',
+            editable: true,
+            options: [
+                { text: 'HTTP', value: 'HTTP' },
+                { text: 'SSL', value: 'SSL' },
+                { text: 'DNS', value: 'DNS' },
+                { text: 'UDP', value: 'UDP' },
+                { text: 'Google', value: 'Google' },
+                { text: 'Facebook', value: 'Facebook' }
+            ]
+        }
     }, {
         type:'APPLICATION_CATEGORY',
         category: 'Application',
         text: 'Application Category'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'selectfield',
+            placeholder: 'Select or type a value ...',
+            editable: true,
+            options: [
+                { text: 'Web Services', value: 'Web Services' },
+                { text: 'Networking', value: 'Networking' },
+                { text: 'Messaging', value: 'Messaging' }
+            ]
+        }
     }, {
         type:'APPLICATION_ID',
         category: 'Application',
@@ -705,7 +728,6 @@ Ext.define('Mfw.settings.Conditions', {
                 Ext.apply(condition.field, {
                     clearable: false,
                     autoComplete: false,
-                    placeholder: 'Set value ...'.t(),
                     required: true
                 });
             }
