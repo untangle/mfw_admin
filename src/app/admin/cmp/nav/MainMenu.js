@@ -32,16 +32,13 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         // iconCls: 'x-fa fa-area-chart',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('reports'); }
     }, {
+        text: 'SESSIONS'.t(),
+        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('sessions'); }
+        // iconCls: 'icon-monitor sessions'
+    }, {
         text: 'SETTINGS'.t(),
         // iconCls: 'x-fa fa-cog',
         handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('settings'); }
-    }, {
-        xtype: 'menuseparator',
-        style: 'border-color: #555'
-    }, {
-        text: 'SESSIONS'.t(),
-        handler: function (btn) { btn.up('sheet').hide(); Mfw.app.redirectTo('monitor/sessions'); }
-        // iconCls: 'icon-monitor sessions'
     }, {
         xtype: 'menuseparator',
         style: 'border-color: #555'

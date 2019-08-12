@@ -23,16 +23,16 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             margin: '0 3'
         },
         items: [{
-            text: 'DASHBOARD'.t(),
+            text: 'DASHBOARD',
             ripple: false,
             // iconCls: 'x-fa fa-home',
             // iconCls: 'md-icon-dashboard',
-            handler: function () { Mfw.app.redirectTo('#dashboard'); },
+            handler: function () { Mfw.app.redirectTo('dashboard'); },
             bind: {
                 pressed: '{currentView === "dashboard"}'
             }
         }, {
-            text: 'REPORTS'.t(),
+            text: 'REPORTS',
             ripple: false,
             // iconCls: 'x-fa fa-area-chart',
             // iconCls: 'md-icon-show-chart',
@@ -41,37 +41,42 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "reports"}'
             }
         }, {
-            text: 'MONITOR'.t(),
+            // text: 'MONITOR',
+            text: 'SESSIONS',
             ripple: false,
-            arrow: false,
+            handler: function () { Mfw.app.redirectTo('sessions'); },
+            bind: {
+                pressed: '{currentView === "monitor"}'
+            }
+            // arrow: false,
             // iconCls: 'x-fa fa-desktop',
             // iconCls: 'md-icon-computer',
-            menu: {
-                userCls: 'monitor-menu',
-                border: false,
-                width: 150,
-                items: [{
-                    text: 'SESSIONS'.t(),
-                    iconCls: 'icon-monitor sessions',
-                    handler: function (item) { Mfw.app.redirectTo('monitor/sessions'); item.up('menu').hide(); }
-                }
-                // {
-                //     text: 'HOSTS'.t(),
-                //     iconCls: 'icon-monitor hosts',
-                //     handler: function (item) { Mfw.app.redirectTo('monitor/hosts'); item.up('menu').hide(); }
-                // }, {
-                //     text: 'DEVICES'.t(),
-                //     iconCls: 'icon-monitor devices',
-                //     handler: function (item) { Mfw.app.redirectTo('monitor/devices'); item.up('menu').hide(); }
-                // }, {
-                //     text: 'USERS'.t(),
-                //     iconCls: 'icon-monitor users',
-                //     handler: function (item) { Mfw.app.redirectTo('monitor/users'); item.up('menu').hide(); }
-                // }
-                ]
-            }
+            // menu: {
+            //     userCls: 'monitor-menu',
+            //     border: false,
+            //     width: 150,
+            //     items: [{
+            //         text: 'SESSIONS',
+            //         iconCls: 'icon-monitor sessions',
+            //         handler: function (item) { Mfw.app.redirectTo('monitor/sessions'); item.up('menu').hide(); }
+            //     }
+            //     // {
+            //     //     text: 'HOSTS',
+            //     //     iconCls: 'icon-monitor hosts',
+            //     //     handler: function (item) { Mfw.app.redirectTo('monitor/hosts'); item.up('menu').hide(); }
+            //     // }, {
+            //     //     text: 'DEVICES',
+            //     //     iconCls: 'icon-monitor devices',
+            //     //     handler: function (item) { Mfw.app.redirectTo('monitor/devices'); item.up('menu').hide(); }
+            //     // }, {
+            //     //     text: 'USERS',
+            //     //     iconCls: 'icon-monitor users',
+            //     //     handler: function (item) { Mfw.app.redirectTo('monitor/users'); item.up('menu').hide(); }
+            //     // }
+            //     ]
+            // }
         }, {
-            text: 'SETTINGS'.t(),
+            text: 'SETTINGS',
             ripple: false,
             // iconCls: 'x-fa fa-cog',
             // iconCls: 'md-icon-settings',

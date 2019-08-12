@@ -4,16 +4,23 @@ Ext.define('Mfw.monitor.Controller', {
 
     routes: {
         // '*': function () { },
-        'monitor/:param': {
-            // before: 'onBefore',
+        // 'monitor/:param': {
+        //     // before: 'onBefore',
+        //     action: 'onAction',
+        //     conditions: { ':param' : '(.*)' }
+        // }
+        'sessions': {
             action: 'onAction',
             conditions: { ':param' : '(.*)' }
         }
+
+
     },
 
     onAction: function (param) {
         Mfw.app.viewport.setActiveItem('monitor');
-        Mfw.app.viewport.getActiveItem().setActiveItem('monitor-' + param);
+        Mfw.app.viewport.getActiveItem().setActiveItem('monitor-sessions');
+        // Mfw.app.viewport.getActiveItem().setActiveItem('monitor-' + param);
     },
 
 
