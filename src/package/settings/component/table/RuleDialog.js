@@ -319,7 +319,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     controller: {
         init: function (dialog) {
             var tableGrid = dialog.ownerCmp,
-                actions = tableGrid.getActions(),
+                actions = tableGrid.getActions(), // possible actions for this table
+                conditions = tableGrid.getConditions(), // possible conditions for this table
                 vm = dialog.getViewModel(),
                 rule = dialog.getRule(),
                 actionOptions = [];
@@ -330,6 +331,13 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     actionOptions.push(tableGrid.actionsMap[action]);
                 });
                 dialog.down('#actionform').getFields('type').setOptions(actionOptions);
+            }
+
+            if (conditions) {
+                // display only possible conditions provided for this table
+                dialog.lookup('tree').getStore().filterBy(function (rec) {
+                    return Ext.Array.contains(conditions, rec.get('type'));
+                });
             }
 
             vm.set({

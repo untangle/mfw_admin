@@ -21,6 +21,8 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         api: null,
         // use all available actions unless a subset is specified in each Table
         actions: ['JUMP', 'GOTO', 'ACCEPT', 'REJECT', 'DROP', 'DNAT', 'SNAT', 'MASQUERADE', 'SET_PRIORITY'],
+        // use all available conditions unless a subset is specified in each Table
+        conditions: null,
         chain: null,
         hash: ''
     },
