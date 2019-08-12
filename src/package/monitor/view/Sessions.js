@@ -21,6 +21,9 @@ Ext.define('Mfw.monitor.view.Sessions', {
         mode: 'single'
     },
 
+    masked: {xtype: 'loadmask'},
+    loadingText: '',
+
     columns: [{
         text: 'Session ID',
         dataIndex: 'session_id',
@@ -474,6 +477,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
 
             if (me.tout) { clearTimeout(me.tout); }
 
+            grid.mask();
             grid.getStore().load(function () {
                 grid.getSelectable().select(grid.getStore().first());
                 vm.set('count', grid.getStore().count());
