@@ -533,7 +533,9 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             text: 'Save'.t(),
             iconCls: 'md-icon-save',
             align: 'right',
-            handler: 'onSave'
+            handler: function () {
+                me.onSave();
+            }
         }]);
 
         // g.getStore().on('beforesync', me.onBeforeSync);
