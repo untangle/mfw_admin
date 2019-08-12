@@ -36,12 +36,23 @@ Ext.define('Mfw.dashboard.widget.Report', {
             margin: '0 5 0 0',
             hidden: true,
             bind: {
-                hidden: '{widget.interval === 0}'
+                hidden: '{widget.interval === 0 || processing}'
+            }
+        }, {
+            xtype: 'component',
+            html: '<i class="fa fa-spinner fa-spin fa-fw" style="font-size: 12px; margin: 0 2px;"></i>',
+            hidden: true,
+            bind: {
+                hidden: '{!processing}'
             }
         }, {
             iconCls: 'md-icon-refresh',
             ui: 'round',
-            handler: 'reload'
+            handler: 'reload',
+            disabled: true,
+            bind: {
+                disabled: '{processing}'
+            }
         }]
     }, {
         xtype: 'component',

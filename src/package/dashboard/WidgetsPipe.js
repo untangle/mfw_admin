@@ -24,6 +24,7 @@ Ext.define('Mfw.dashboard.WidgetsPipe', {
 
         if (me.queue.length > 0 && !me.processing) {
             me.processing = true;
+            wg.getViewModel().set('processing', true);
             if (wg.tout) {clearTimeout(wg.tout); }
 
             if (widget.get('isReport')) {
@@ -51,6 +52,7 @@ Ext.define('Mfw.dashboard.WidgetsPipe', {
                     }
                     Ext.Array.removeAt(me.queue, 0);
                     me.processing = false;
+                    wg.getViewModel().set('processing', false);
                     if (me.queue.length > 0) { me.process(); }
                 });
             } else {

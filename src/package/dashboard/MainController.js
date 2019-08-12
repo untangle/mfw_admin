@@ -49,44 +49,6 @@ Ext.define('Mfw.dashboard.Controller', {
         me.getViewModel().set('route', DashboardUtil.queryToRoute(query));
     },
 
-    onWidgetSort: function (grid, context) {
-        if (!this.sortMenu) {
-            this.sortMenu = Ext.create(Ext.apply({
-                ownerCmp: grid
-            }, this.sortContextMenu));
-        }
-
-        var pos = null;
-        if (grid.getStore().indexOf(context.record) === 0) { pos = 'first'; }
-        if (grid.getStore().indexOf(context.record) === grid.getStore().getCount() - 1) { pos = 'last'; }
-
-        this.sortMenu.record = context.record;
-        this.sortMenu.getViewModel().set('pos', pos);
-        this.sortMenu.showBy(context.tool.el, 'r-l');
-    },
-
-    onWidgetRemove: function (grid, context) {
-        grid.getStore().remove(context.record);
-        // Ext.Msg.confirm('')
-    },
-
-    onWidgetMove: function (menuItem) {
-        var me = this, store = me.dialog.down('grid').getStore(),
-            record = menuItem.up('menu').record,
-            oldIndex = store.indexOf(record),
-            newIndex;
-        switch (menuItem.pos) {
-            case 'first': newIndex = 0; break;
-            case 'up':    newIndex = oldIndex - 1; break;
-            case 'down':  newIndex = oldIndex + 1; break;
-            case 'last':  newIndex = store.getCount(); break;
-            default: break;
-        }
-        store.removeAt(oldIndex);
-        store.insert(newIndex, record);
-        // console.log(oldIndex, newIndex);
-    },
-
     onMoreWidgetsInfo: function () {
         Ext.Msg.show({
             title: 'Add more widgets',

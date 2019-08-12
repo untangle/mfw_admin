@@ -162,8 +162,21 @@ Ext.define('Mfw.reports.ChartController', {
     },
 
     init: function (view) {
-        var me = this;
+        var me = this,
+            repView = view.up('report') || view.up('widget-report');
+
         view.on('painted', me.onPainted);
+
+        // remove chart series if not just refreshing an existing rendered chart
+        view.getViewModel().bind('{record}', function () {
+            var chart = me.getView().chart;
+            if (!chart) { return; }
+            repView.mask({xtype: 'loadmask'});
+            while (chart.series.length > 0) {
+                chart.series[0].remove(true);
+            }
+        });
+
     },
 
     onResize: function (view) {
@@ -194,7 +207,7 @@ Ext.define('Mfw.reports.ChartController', {
         }
 
         // hide xAxis while loading data
-        chart.update({ xAxis: { visible: false } }, true);
+        // chart.update({ xAxis: { visible: false } }, true);
 
         // remove existing since condition
         userConditions = record.userConditions();
@@ -212,11 +225,7 @@ Ext.define('Mfw.reports.ChartController', {
             value: since
         });
 
-        while (chart.series.length > 0) {
-            chart.series[0].remove(true);
-        }
-
-        view.mask({xtype: 'loadmask'});
+        // view.mask({xtype: 'loadmask'});
         chart.zoomOut();
         chart.showLoading();
         ReportsUtil.fetchReportData(record, function (data) {
@@ -228,6 +237,11 @@ Ext.define('Mfw.reports.ChartController', {
             if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
                 data.shift(); data.pop();
             }
+
+            while (chart.series.length > 0) {
+                chart.series[0].remove(true);
+            }
+
             me.setData(data);
             // me.getViewModel().set('data', data);
             if (cb) { cb(data); }
