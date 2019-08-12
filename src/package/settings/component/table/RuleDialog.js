@@ -15,7 +15,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
     width: '80%',
     height: '80%',
     minWidth: 500,
-    // maximized: true,
 
     bodyPadding: 0,
 
@@ -39,132 +38,140 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 html: '<h1 style="margin: 0; font-weight: 400; font-size: 24px;">{action === "ADD" ? "Create New" : "Edit"} <span style="color: #519839;">{ruleType}</span> Rule</h1>'
             }
         }, {
-            xtype: 'formpanel',
-            padding: 0,
-            layout: 'hbox',
-            margin: '16 0',
-            defaults: {
-                labelAlign: 'top'
-            },
+            xtype: 'container',
+            layout: 'vbox',
+            flex: 1,
+            scrollable: true,
             items: [{
-                xtype: 'textfield',
-                name: 'description',
-                label: 'Description'.t(),
-                placeholder: 'Enter description ...',
-                width: 300,
-                autoComplete: false,
-                clearable: false,
-                required: true,
-                bind: '{rule.description}',
-                listeners: {
-                    painted: function (field) {
-                        field.focus();
-                    }
-                }
-            }, {
-                xtype: 'checkboxfield',
-                name: 'enabled',
-                label: '&nbsp;',
-                boxLabel: 'Enabled'.t(),
-                bodyAlign: 'left',
-                flex: 1,
-                margin: '0 0 0 16',
-                bind: {
-                    checked: '{rule.enabled}',
-                }
-            }]
-        }, {
-            xtype: 'component',
-            html: '<h2 style="font-weight: 100;">If All the following Conditions are met</h2>'
-        }, {
-            xtype: 'grid',
-            reference: 'grid',
-            userCls: 'c-noheaders',
-            height: 200,
-            emptyText: 'No Conditions!'.t(),
-            deferEmptyText: false,
-            rowLines: false,
-            sortable: false,
-            deselectOnContainerClick: true,
-            selectable: {
-                mode: 'single',
-                cells: false
-            },
-            margin: '0 16 0 0',
-            padding: 0,
-            bind: '{rule.conditions}',
-            itemConfig: {
-                viewModel: true
-            },
-            columns: [{
-                text: 'Type',
-                dataIndex: 'type',
-                menuDisabled: true,
-                flex: 1,
-                cell: {
-                    encodeHtml: false,
-                    bodyStyle: {
-                        padding: '8px 16px'
-                    }
+                xtype: 'formpanel',
+                padding: 0,
+                layout: 'hbox',
+                margin: '16 0',
+                defaults: {
+                    labelAlign: 'top'
                 },
-                renderer: Renderer.conditionText
+                items: [{
+                    xtype: 'textfield',
+                    name: 'description',
+                    label: 'Description'.t(),
+                    placeholder: 'Enter description ...',
+                    width: 300,
+                    autoComplete: false,
+                    clearable: false,
+                    required: true,
+                    bind: '{rule.description}',
+                    listeners: {
+                        painted: function (field) {
+                            field.focus();
+                        }
+                    }
+                }, {
+                    xtype: 'checkboxfield',
+                    name: 'enabled',
+                    label: '&nbsp;',
+                    boxLabel: 'Enabled'.t(),
+                    bodyAlign: 'left',
+                    flex: 1,
+                    margin: '0 0 0 16',
+                    bind: {
+                        checked: '{rule.enabled}',
+                    }
+                }]
             }, {
-                width: 44,
+                xtype: 'component',
+                html: '<h2 style="font-weight: 100;">If All the following Conditions are met</h2>'
+            }, {
+                xtype: 'grid',
+                reference: 'grid',
+                userCls: 'c-noheaders',
+                flex: 1,
+                minHeight: 120,
+                emptyText: 'No Conditions!'.t(),
+                deferEmptyText: false,
+                rowLines: false,
                 sortable: false,
-                hideable: false,
-                menuDisabled: true,
-                cell: {
-                    tools: {
-                        delete: {
-                            iconCls: 'md-icon-close',
-                            handler: function (grid, info) {
-                                info.record.drop();
+                deselectOnContainerClick: true,
+                selectable: {
+                    mode: 'single',
+                    cells: false
+                },
+                margin: '0 16 0 0',
+                padding: 0,
+                bind: '{rule.conditions}',
+                itemConfig: {
+                    viewModel: true
+                },
+                columns: [{
+                    text: 'Type',
+                    dataIndex: 'type',
+                    menuDisabled: true,
+                    flex: 1,
+                    cell: {
+                        encodeHtml: false,
+                        bodyStyle: {
+                            padding: '8px 16px'
+                        }
+                    },
+                    renderer: Renderer.conditionText
+                }, {
+                    width: 44,
+                    sortable: false,
+                    hideable: false,
+                    menuDisabled: true,
+                    cell: {
+                        tools: {
+                            delete: {
+                                iconCls: 'md-icon-close',
+                                handler: function (grid, info) {
+                                    info.record.drop();
+                                }
                             }
                         }
                     }
-                }
-            }],
-            listeners: {
-                select: 'onConditionSelect'
-            }
-        }, {
-            xtype: 'component',
-            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Apply the following Action</h2>'
-        }, {
-            xtype: 'formpanel',
-            itemId: 'actionform',
-            margin: 0,
-            padding: 0,
-            flex: 1,
-            width: '50%',
-            defaults: {
-                labelAlign: 'top'
-            },
-            items: [{
-                xtype: 'selectfield',
-                reference: 'actiontype',
-                itemId: 'actiontype',
-                name: 'type',
-                // label: 'Action'.t(),
-                placeholder: 'Choose action ...',
-                editable: false,
-                required: true,
-                itemTpl: '<tpl>{text}</tpl>',
-                bind: '{rule.action.type}',
+                }],
                 listeners: {
-                    change: 'onActionTypeChange'
+                    select: 'onConditionSelect'
+                }
+            }, {
+                xtype: 'component',
+                html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Apply the following Action</h2>'
+            }, {
+                xtype: 'formpanel',
+                itemId: 'actionform',
+                margin: 0,
+                padding: 0,
+                // flex: 1,
+                width: '50%',
+                minHeight: 100,
+                defaults: {
+                    labelAlign: 'top'
+                },
+                items: [{
+                    xtype: 'selectfield',
+                    reference: 'actiontype',
+                    itemId: 'actiontype',
+                    name: 'type',
+                    // label: 'Action'.t(),
+                    placeholder: 'Choose action ...',
+                    editable: false,
+                    required: true,
+                    itemTpl: '<tpl>{text}</tpl>',
+                    bind: '{rule.action.type}',
+                    listeners: {
+                        change: 'onActionTypeChange'
+                    }
+                }]
+            }, {
+                xtype: 'component',
+                html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Summary</h2>'
+            }, {
+                xtype: 'component',
+                style: 'font-size: 16px;',
+                padding: '0 0 16 0',
+                bind: {
+                    html: '{sentence}'
                 }
             }]
-        }, {
-            xtype: 'component',
-            html: '<hr style="margin: 32px 0;"/><h2 style="font-weight: 100;">Summary</h2>'
-        }, {
-            xtype: 'component',
-            style: 'font-size: 16px;',
-            padding: '0 0 16 0',
-            bind: {
-                html: '{sentence}'
-            }
         }, {
             xtype: 'toolbar',
             docked: 'bottom',
