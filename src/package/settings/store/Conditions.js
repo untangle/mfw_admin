@@ -117,22 +117,13 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            // multiSelect: true, MFW-511 FIXME
+            multiSelect: true,
             editable: false,
-            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
-            valueField: 'interfaceId',
-            queryMode: 'local',
-            store: {
-                type: 'interfaces',
-                filters: [{
-                    property: 'configType',
-                    value: 'ADDRESSED'
-                }]
-            },
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             chipView: {
                 style: 'background: transparent',
                 selectable: false,
-                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
             }
         }
     }, {
@@ -209,22 +200,13 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            // multiSelect: true, MFW-511 FIXME
+            multiSelect: true,
             editable: false,
-            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
-            valueField: 'interfaceId',
-            queryMode: 'local',
-            store: {
-                type: 'interfaces',
-                filters: [{
-                    property: 'configType',
-                    value: 'ADDRESSED'
-                }]
-            },
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             chipView: {
                 style: 'background: transparent',
                 selectable: false,
-                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
             }
         }
     }, {
@@ -294,22 +276,13 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            // multiSelect: true, MFW-511 FIXME
+            multiSelect: true,
             editable: false,
-            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
-            valueField: 'interfaceId',
-            queryMode: 'local',
-            store: {
-                type: 'interfaces',
-                filters: [{
-                    property: 'configType',
-                    value: 'ADDRESSED'
-                }]
-            },
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             chipView: {
                 style: 'background: transparent',
                 selectable: false,
-                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
             }
         }
     }, {
@@ -379,22 +352,13 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            // multiSelect: true, MFW-511 FIXME
+            multiSelect: true,
             editable: false,
-            itemTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>',
-            valueField: 'interfaceId',
-            queryMode: 'local',
-            store: {
-                type: 'interfaces',
-                filters: [{
-                    property: 'configType',
-                    value: 'ADDRESSED'
-                }]
-            },
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             chipView: {
                 style: 'background: transparent',
                 selectable: false,
-                displayTpl: '{name} <span style="color: #999">[ {interfaceId} ]</span>'
+                displayTpl: '{text} <span style="color: #999">[ {value} ]</span>'
             }
         }
     }, {
@@ -659,7 +623,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            // multiSelect: true, MFW-511 FIXME
+            multiSelect: true,
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.protocols,

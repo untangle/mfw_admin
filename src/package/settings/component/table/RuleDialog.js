@@ -386,7 +386,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 valueField = conditionDef.field || {
                     xtype: 'textfield'
                 },
-                operators = [];
+                operators = [],
+                selectedCondition;
 
             // deselect tree if selected
             if (!isNewCondition) {
@@ -435,6 +436,18 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 errorTarget: 'under'
             });
 
+            if (conditionDef.type === 'SOURCE_INTERFACE_ZONE' ||
+                conditionDef.type === 'DESTINATION_INTERFACE_ZONE' ||
+                conditionDef.type === 'CLIENT_INTERFACE_ZONE' ||
+                conditionDef.type === 'SERVER_INTERFACE_ZONE') {
+                var intfOptions = [];
+                Ext.getStore('interfaces').each(function(intf) {
+                    if (intf.get('configType') === 'ADDRESSED') {
+                        intfOptions.push({ text: intf.get('name'), value: intf.get('interfaceId') });
+                    }
+                });
+                valueField.options = intfOptions;
+            }
 
             // insert value field into the form
             form.insertBefore(valueField, form.down('#actionBtns'));
@@ -448,7 +461,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
 
             if (!isNewCondition) {
                 // if editing set the values of the selected condition
-                form.setValues(selection.getData());
+                selectedCondition = selection.getData();
+                // for multiselect select fields transform the comma separated string into array of values
+                if (valueField.xtype === 'selectfield' && valueField.multiSelect) {
+                    selectedCondition.value = selectedCondition.value.split(',');
+                }
+                form.setValues(selectedCondition);
             } else {
                 // if new it's enough to set the type
                 form.setValues({
@@ -622,6 +640,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 values = form.getValues();
 
             if (!form.validate()) { return; }
+
+            // for multiselect select fields transform the array of values into a comma separated string
+            if (Ext.isArray(values.value)) {
+                values.value = values.value.join(',');
+            }
 
             if (vm.get('grid.selection')) {
                 vm.get('grid.selection').set(values);

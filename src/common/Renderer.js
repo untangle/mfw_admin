@@ -262,7 +262,7 @@ Ext.define('Mfw.Renderer', {
             type === 'SERVER_INTERFACE_ZONE') {
             // the multiselect combobox creates a collection object as value
             valueRender = [];
-            Ext.Object.each(rec.get('value'), function (key, val) {
+            Ext.Object.each(rec.get('value').split(','), function (key, val) {
                 valueRender.push((Map.interfaces[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
             });
             valueRender = valueRender.join(' ');
@@ -283,7 +283,7 @@ Ext.define('Mfw.Renderer', {
 
         if (type === 'IP_PROTOCOL') {
             valueRender = [];
-            Ext.Array.each(rec.get('value'), function (val) {
+            Ext.Array.each(rec.get('value').split(','), function (val) {
                 valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
             });
             valueRender = valueRender.join(', ');
@@ -315,7 +315,7 @@ Ext.define('Mfw.Renderer', {
             type === 'SERVER_INTERFACE_ZONE') {
             // the multiselect combobox creates a collection object as value
             valueRender = [];
-            Ext.Object.each(rec.get('value'), function (key, intfId) {
+            Ext.Object.each(rec.get('value').split(','), function (key, intfId) {
                 valueRender.push((Map.interfaces[intfId] || '???') + '<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
             });
             valueRender = valueRender.join(', ');
@@ -381,8 +381,8 @@ Ext.define('Mfw.Renderer', {
 
             if (type === 'IP_PROTOCOL') {
                 valueRender = [];
-                Ext.Array.each(cond.get('value'), function (val) {
-                    valueRender.push(Map.protocols[val] || val);
+                Ext.Array.each(cond.get('value').split(','), function (val) {
+                    valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
                 });
                 strArr.push('<span style="font-weight: bold; color: #333;">' +
                              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
@@ -432,7 +432,7 @@ Ext.define('Mfw.Renderer', {
                 type === 'SERVER_INTERFACE_ZONE') {
                 // the multiselect combobox creates a collection object as value
                 valueRender = [];
-                Ext.Array.each(cond.get('value'), function (val) {
+                Ext.Array.each(cond.get('value').split(','), function (val) {
                     valueRender.push(Map.interfaces[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
                 });
                 valueRender = valueRender.join(' or ');
