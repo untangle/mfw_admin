@@ -1,6 +1,6 @@
-Ext.define('Mfw.setup.step.WiFi', {
+Ext.define('Mfw.setup.step.Lte', {
     extend: 'Ext.Panel',
-    alias: 'widget.step-wifi',
+    alias: 'widget.step-lte',
 
     style: 'color: #555;',
 
@@ -13,7 +13,7 @@ Ext.define('Mfw.setup.step.WiFi', {
         xtype: 'component',
         width: 500,
         padding: '0 0 24 0',
-        html: '<h1 style="text-align: center;">WiFi Connection</h1><hr/>'
+        html: '<h1 style="text-align: center;">Cellular Connection</h1><hr/>'
     }, {
         xtype: 'formpanel',
         padding: 0,
@@ -41,70 +41,94 @@ Ext.define('Mfw.setup.step.WiFi', {
             items: [{
                 xtype: 'checkbox',
                 name: 'enabled',
-                boxLabel: 'Enable WiFi Connection',
+                boxLabel: 'Enable cellular data connection',
                 bodyAlign: 'start',
-                margin: '0 0 16 0',
-                checked: true
+                margin: '0 0 16 0'
             }, {
                 xtype: 'selectfield',
+                reference: 'network',
                 userCls: 'x-custom-field',
-                name: 'mode',
-                label: 'Mode',
+                name: 'network',
+                label: 'Network',
                 required: true,
                 autoSelect: true,
                 options: [
-                    { text: 'Access Point', value: 'AP' },
-                    { text: 'Client', value: 'CLIENT' }
+                    { text: 'T-Mobile', value: 'T-Mobile' },
+                    { text: 'Other', value: 'OTHER' }
                 ],
                 listeners: {
                     painted: function (f) { f.focus(); }
                 }
             }, {
-                xtype: 'numberfield',
+                xtype: 'textfield',
                 userCls: 'x-custom-field',
-                name: 'channel',
-                label: 'Channel',
+                name: 'apn',
+                label: 'APN',
                 required: true
             }, {
-                xtype: 'selectfield',
+                xtype: 'numberfield',
                 userCls: 'x-custom-field',
-                name: 'encryption',
-                label: 'Encryption',
-                required: true,
-                autoSelect: true,
-                options: [
-                    { text: 'None', value: 'NONE' },
-                    { text: 'WPA1', value: 'WPA1' },
-                    { text: 'WPA12', value: 'WPA12' },
-                    { text: 'WPA2', value: 'WPA2' }
-                ]
+                name: 'pin',
+                label: 'PIN',
+                required: false,
+                hidden: true,
+                bind: {
+                    required: '{network.value === "OTHER"}',
+                    hidden: '{network.value !== "OTHER"}'
+                }
             }, {
                 xtype: 'textfield',
                 userCls: 'x-custom-field',
-                name: 'ssid',
-                label: 'SSID',
-                required: true
+                name: 'username',
+                label: 'Username',
+                required: false,
+                hidden: true,
+                bind: {
+                    required: '{network.value === "OTHER"}',
+                    hidden: '{network.value !== "OTHER"}'
+                }
             }, {
                 xtype: 'passwordfield',
                 userCls: 'x-custom-field',
                 name: 'password',
                 label: 'Password',
-                required: true
+                required: false,
+                hidden: true,
+                bind: {
+                    required: '{network.value === "OTHER"}',
+                    hidden: '{network.value !== "OTHER"}'
+                }
             }]
+        }]
+    }, {
+        xtype: 'container',
+        width: 450,
+        margin: '36 0 0 0',
+        layout: { type: 'hbox', align: 'top', pack: 'center' },
+        items: [{
+            xtype: 'button',
+            iconCls: 'md-icon-refresh',
+            text: 'Refresh',
+            handler: 'refresh',
+            width: 120
+        }, {
+            flex: 1
         }, {
             xtype: 'component',
-            margin: '32 0 0 0',
             html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
             hidden: true,
             bind: { hidden: '{!processing}' }
         }, {
             xtype: 'button',
-            margin: '32 0 0 0',
-            width: 120,
+            width: 150,
             text: 'Continue',
             ui: 'action',
             handler: 'onContinue',
+            hidden: true,
             bind: { hidden: '{processing}' }
+        }, {
+            flex: 1,
+            margin: '0 120 0 0'
         }]
     }],
 
@@ -114,7 +138,7 @@ Ext.define('Mfw.setup.step.WiFi', {
 
     controller: {
         onActivate: function () {
-            // TODO: check for wifi interface
+            // TODO: check for LTE interface
         },
 
         onContinue: function () {
