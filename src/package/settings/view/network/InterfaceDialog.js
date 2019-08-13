@@ -932,7 +932,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 autoSelect: true,
                 clearable: false,
                 options: [
-                    { text: 'AP', value: 'AP' },
+                    { text: 'Access Point', value: 'AP' },
                     { text: 'Client', value: 'CLIENT' }
                 ]
             }, {

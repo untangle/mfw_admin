@@ -273,7 +273,7 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .layout-widget .item.wifi { border-color: #ff5e21; }
 .layout-widget .item.wifi .connector { border-left-color: #ff5e21; }
 .layout-widget .item .connector { position: absolute; width: 2px; height: 15px; left: -2px; margin-left: 50%; top: -15px; border-left: 2px var(--base-color) solid; }
-.layout-widget .item.wan { margin-top: 76px; }
+.layout-widget .item.wan { margin-top: 58px; }
 .layout-widget .item.wan .connector { bottom: -15px; top: auto; }
 
 .x-iframe .x-innerhtml { height: 100%; }

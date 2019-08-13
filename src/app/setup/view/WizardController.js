@@ -8,6 +8,7 @@ Ext.define('Mfw.setup.WizardController', {
         'step-welcome',
         'step-account',
         'step-timezone',
+        'step-wifi',
         'step-interfaces',
         'step-performance',
         // 'step-upgrades',
