@@ -53,8 +53,8 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             padding: 8,
             inline: true,
             itemTpl: '<div class="item wan">' +
-                     '<p>{name} <span style="color: #777;">[ {interfaceId} ]</span></p>' +
-                     '<span style="color: #777;">{device}</span><div class="connector"></div></div>'
+                     '<p>{name}</p>' +
+                     '<div class="connector"></div></div>'
         }, {
             xtype: 'component',
             height: 2,
@@ -66,8 +66,8 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             inline: true,
             flex: 1,
             itemTpl: '<div class="item <tpl if="bridgedTo">bridged</tpl> <tpl if="type === \'WIFI\'">wifi</tpl>">' +
-                     '<p>{name} <span style="color: #777;">[ {interfaceId} ]</span></p>' +
-                     '<span style="color: #777;">{device}</span><div class="connector"></div></div>'
+                     '<p>{name}</p>' +
+                     '<div class="connector"></div></div>'
         }]
     }], // <tpl if="this.isBaby(age)"></tpl>
     listeners: {
