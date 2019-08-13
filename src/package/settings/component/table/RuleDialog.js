@@ -483,7 +483,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     valueField: 'name',
                     bind: {
                         value: '{rule.action.chain}',
-                        store: '{chainNames}'
+                        options: '{chainsStore}'
                     }
                 });
                 return;

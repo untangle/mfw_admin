@@ -175,6 +175,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid = me.getView(),
             chainsBar = grid.down('#chainsBar'),
             chainsMap = [],
+            chainsStore = [],
             chainsBtnsMap = [];
 
         grid.table.chains().each(function (chain) {
@@ -195,6 +196,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     text: chain.get('name')
                 });
             }
+            chainsStore.push({ name: chain.get('name') });
         });
 
         chainsBar.getItems().each(function (btn) {
@@ -204,6 +206,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                 btn.setUi('');
             }
         });
+        me.getViewModel().set('chainsStore', chainsStore);
     },
 
 
