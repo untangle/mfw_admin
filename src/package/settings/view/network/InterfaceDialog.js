@@ -150,9 +150,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 label: 'Config Type',
                 width: 150,
                 required: true,
+                hidden: true,
                 bind: {
                     value: '{interface.configType}',
-                    options: '{configTypes}'
+                    options: '{configTypes}',
+                    required: '{interface.type !== "LTE"}',
+                    hidden: '{interface.type === "LTE"}'
                 }
             }, {
                 xtype: 'selectfield',
@@ -225,7 +228,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
         hidden: true,
         bind: {
-            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI") || interface.configType === "DISABLED"}'
+            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "LTE") || interface.configType === "DISABLED"}'
         }
         /**
          * setting navigation tree end
@@ -236,13 +239,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         /**
          * card layout panel holding each section with following itemIds:
          * - ipv4
-         *   - ipv4Aliases
          * - ipv6
-         *   - ipv6Aliases
          * - dhcp
-         *   - dhcpOptions
          * - vrrp
-         *   - vrrpv4aliases
          * - wifi
          * - qos
          * - bridged
@@ -277,7 +276,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 // hidden: true,
                 bind: {
                     value: '{interface.v4ConfigType}',
-                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "LTE"}'
                     // disabled: '{!interface.wan}',
                     // hidden: '{interface.type === "OPENVPN"}'
                 },
@@ -535,7 +534,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: {
                     value: '{interface.v6ConfigType}',
                     options: '{ipv6ConfigTypes}',
-                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "LTE"}'
                 }
             }, {
 
@@ -725,6 +724,87 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
              * IPv6 settings end
              */
 
+        }, {
+
+            /**
+             * LTE settings
+             * - network ???
+             * - simApn
+             * - simPin
+             * - simUsername
+             * - simPassword
+             */
+            xtype: 'formpanel',
+            itemId: 'lte',
+            validateOnSync: true,
+            layout: 'vbox',
+            defaults: {
+                clearable: false
+            },
+            items: [{
+                /// ?????
+                xtype: 'selectfield',
+                reference: 'simNetwork',
+                label: 'Network',
+                required: true,
+                autoSelect: 'true',
+                options: [
+                    { text: 'T-Mobile', value: 'T-Mobile' },
+                    { text: 'Other', value: 'OTHER' }
+                ],
+                bind: {
+                    required: '{interface.type === "LTE"}'
+                }
+            }, {
+                xtype: 'textfield',
+                label: 'APN',
+                required: true,
+                editable: false,
+                disabled: false,
+                bind: {
+                    value: '{interface.simApn}',
+                    required: '{interface.type === "LTE"}',
+                    disabled: '{simNetwork.value !== "OTHER"}'
+                }
+            }, {
+                xtype: 'numberfield',
+                label: 'PIN',
+                required: true,
+                hidden: true,
+                bind: {
+                    value: '{interface.simPin}',
+                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
+                },
+                validators: [{
+                    type: 'length',
+                    min: 4,
+                    max: 4
+                }]
+            }, {
+                xtype: 'textfield',
+                label: 'Username',
+                required: true,
+                hidden: true,
+                bind: {
+                    value: '{interface.simUsername}',
+                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
+                }
+            }, {
+                xtype: 'passwordfield',
+                label: 'Password',
+                required: true,
+                hidden: true,
+                bind: {
+                    value: '{interface.simPassword}',
+                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
+                }
+            }]
+            /**
+             * LTE settings end
+             */
         }, {
 
             /**
@@ -1735,6 +1815,17 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     treelist.setSelection(treelist.getStore().findNode('key', 'ipv4'));
                 }
 
+                if (type === 'LTE') {
+                    treelist.getStore().each(function (node) {
+                        if (node.get('key') !== 'lte') {
+                            node.set('text', '');
+                        } else {
+                            node.set('text', node.get('lbl'));
+                        }
+                    });
+                    treelist.setSelection(treelist.getStore().findNode('key', 'lte'));
+                }
+
                 if (configType === 'BRIDGED') {
                     // if (type === 'OPENVPN') {
                     //     return;
@@ -1774,6 +1865,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             { lbl: 'IPv4 Aliases', key: 'ipv4aliases', leaf: true },
                             { lbl: 'IPv6', key: 'ipv6', leaf: true },
                             { lbl: 'IPv6 Aliases', key: 'ipv6aliases', leaf: true },
+                            { lbl: 'LTE / 4G', key: 'lte', leaf: true },
                             { lbl: 'DHCP', key: 'dhcp', leaf: true },
                             { lbl: 'DHCP Options', key: 'dhcpoptions', leaf: true },
                             { lbl: 'VRRP', key: 'vrrp', leaf: true },

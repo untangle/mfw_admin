@@ -46,7 +46,7 @@ Ext.define('Mfw.setup.step.Lte', {
                 margin: '0 0 16 0'
             }, {
                 xtype: 'selectfield',
-                reference: 'network',
+                reference: 'simNetwork',
                 userCls: 'x-custom-field',
                 name: 'network',
                 label: 'Network',
@@ -62,41 +62,46 @@ Ext.define('Mfw.setup.step.Lte', {
             }, {
                 xtype: 'textfield',
                 userCls: 'x-custom-field',
-                name: 'apn',
+                name: 'simApn',
                 label: 'APN',
                 required: true
             }, {
                 xtype: 'numberfield',
                 userCls: 'x-custom-field',
-                name: 'pin',
+                name: 'simPin',
                 label: 'PIN',
                 required: false,
                 hidden: true,
                 bind: {
-                    required: '{network.value === "OTHER"}',
-                    hidden: '{network.value !== "OTHER"}'
-                }
+                    required: '{simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
+                },
+                validators: [{
+                    type: 'length',
+                    min: 4,
+                    max: 4
+                }]
             }, {
                 xtype: 'textfield',
                 userCls: 'x-custom-field',
-                name: 'username',
+                name: 'simUsername',
                 label: 'Username',
                 required: false,
                 hidden: true,
                 bind: {
-                    required: '{network.value === "OTHER"}',
-                    hidden: '{network.value !== "OTHER"}'
+                    required: '{simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
                 }
             }, {
-                xtype: 'passwordfield',
+                xtype: 'textfield',
                 userCls: 'x-custom-field',
-                name: 'password',
+                name: 'simPassword',
                 label: 'Password',
                 required: false,
                 hidden: true,
                 bind: {
-                    required: '{network.value === "OTHER"}',
-                    hidden: '{network.value !== "OTHER"}'
+                    required: '{simNetwork.value === "OTHER"}',
+                    hidden: '{simNetwork.value !== "OTHER"}'
                 }
             }]
         }]
