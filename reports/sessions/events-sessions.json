@@ -12,7 +12,6 @@
                            "server_interface_id",
                            "client_address",
                            "server_address",
-                           "client_port",
                            "server_port",
                            "application_name",
                            "application_protochain"]
