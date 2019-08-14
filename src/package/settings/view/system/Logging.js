@@ -20,9 +20,11 @@ Ext.define('Mfw.settings.system.Logging', {
                 html: 'Logread'
             }]
         }, {
-                xtype: 'component',
-                bind: {html: '{loginfo}'},
-                readOnly: true
+                xtype: 'textareafield',
+                bind: '{loginfo}',
+                grow: true,
+                height: '100%',
+                readOnly: true,
         }]
     }],
 
@@ -30,9 +32,10 @@ Ext.define('Mfw.settings.system.Logging', {
         init: function (view) {
             var vm = view.getViewModel();
             Ext.Ajax.request({
-                url: '/api/logging/logread',
+                url: '/api/logging/dmesg',
                 success: function (response) {
-                    vm.set('loginfo', Ext.decode(response.responseText));
+
+                    vm.set('loginfo',Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
                 },
                 failure: function () {
                     console.warn('Unable to get logs!');
