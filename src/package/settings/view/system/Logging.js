@@ -9,15 +9,22 @@ Ext.define('Mfw.settings.system.Logging', {
 
     items: [{
         xtype: 'container',
-        itemId: 'loginfo',
         style: 'font-size: 14px;',
         padding: 16,
         items: [{
             xtype: 'toolbar',
             docked: 'top',
             items: [{
-                xtype: 'component',
-                html: 'Logread'
+                xtype: 'button',
+                text: 'Logread',
+                handler: 'onLogtypeSelected',
+                value: 'logread'
+            },
+            {
+                xtype:'button',
+                text: 'Dmesg',
+                handler: 'onLogtypeSelected',
+                value: 'dmesg'
             }]
         }, {
                 xtype: 'textareafield',
@@ -25,20 +32,26 @@ Ext.define('Mfw.settings.system.Logging', {
                 grow: true,
                 height: '100%',
                 readOnly: true,
-        }]
+                scrollable: true,
+                listeners: {
+                    change: function(field) {
+                        // An attempt to scroll to bottom of text field after data changes, doesn't seem to work though.
+                        field.getScrollable().scrollBy(0, Infinity, false);
+                    }
+                }
+            }]
     }],
-
     controller: {
-        init: function (view) {
-            var vm = view.getViewModel();
+        onLogtypeSelected: function(btn) {
+            var currentLog = btn.getValue();
+            var vm = this.getViewModel();
             Ext.Ajax.request({
-                url: '/api/logging/dmesg',
+                url: '/api/logging/' + currentLog,
                 success: function (response) {
-
                     vm.set('loginfo',Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
                 },
-                failure: function () {
-                    console.warn('Unable to get logs!');
+                failure: function (response) {
+                    vm.set('loginfo', "Failed to load logs:\n" + Ext.decode(response.responseText).error);
                 }
             });
         }
