@@ -105,8 +105,20 @@ Ext.define('Mfw.model.Interface', {
         // wireguard
         { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
         { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
-        { name: 'wireguardPort',       type: 'integer', allowNull: true }
+        { name: 'wireguardPort',       type: 'integer', allowNull: true },
 
+        // LTE
+        { name: 'simApn', type: 'string', allowNull: true },
+        { name: 'simProfile', type: 'integer', allowNull: true },
+        { name: 'simPin', type: 'integer', allowNull: true },
+        { name: 'simDelay', type: 'integer', allowNull: true },
+        { name: 'simAuth', type: 'string', allowNull: true }, // ["NONE", "PAP", "CHAP", "BOTH"]
+        { name: 'simUsername', type: 'string', allowNull: true },
+        { name: 'simPassword', type: 'string', allowNull: true },
+        { name: 'simMode', type: 'string', allowNull: true }, // ["ALL", "LTE", "UMTS", "GSM", "CDMA", "TDSCDMA"]
+        { name: 'simPdttype', type: 'string', allowNull: true }, // ["IPV4", "IPV6", "IPV4V6"]
+        { name: 'simPlmn', type: 'integer', allowNull: true },
+        { name: 'simAutoconnect', type: 'boolean', allowNull: true }
     ],
 
     hasOne: [{
