@@ -19,7 +19,7 @@ Ext.define('Mfw.setup.step.Account', {
     }, {
         xtype: 'formpanel',
         padding: 0,
-
+        height: "100%",
         width: 300,
         layout: {
             type: 'vbox',
