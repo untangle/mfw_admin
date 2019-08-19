@@ -2,56 +2,102 @@ Ext.define('Mfw.settings.system.Logging', {
     extend: 'Ext.Panel',
     alias: 'widget.mfw-settings-system-logging',
 
-    title: 'Logging'.t(),
+    title: 'Logging',
     layout: 'fit',
 
-    viewModel: {},
+    viewModel: {
+        data: {
+            logtype: 'LOGREAD' // 'LOGREAD' or 'DMESG'
+        }
+    },
 
     items: [{
         xtype: 'container',
         style: 'font-size: 14px;',
-        padding: 16,
+        layout: 'fit',
         items: [{
             xtype: 'toolbar',
             docked: 'top',
+            shadow: false,
             items: [{
                 xtype: 'button',
+                bind: {
+                    ui: '{logtype === "LOGREAD" ? "action" : ""}'
+                },
                 text: 'Logread',
-                handler: 'onLogtypeSelected',
-                value: 'logread'
+                handler: 'switchLogType',
+                value: 'LOGREAD'
             },
             {
                 xtype:'button',
                 text: 'Dmesg',
-                handler: 'onLogtypeSelected',
-                value: 'dmesg'
+                bind: {
+                    ui: '{logtype === "DMESG" ? "action" : ""}'
+                },
+                handler: 'switchLogType',
+                value: 'DMESG',
+                margin: '0 0 0 16'
+            }, {
+                xtype: 'toolbarseparator',
+                style: 'background: #CCC',
+                margin: '0 16'
+            }, {
+                xtype:'button',
+                iconCls: 'md-icon-refresh',
+                handler: 'fetchLogs'
             }]
         }, {
-                xtype: 'textareafield',
-                bind: '{loginfo}',
-                grow: true,
-                height: '100%',
-                readOnly: true,
-                scrollable: true,
-                listeners: {
-                    change: function(field) {
-                        // An attempt to scroll to bottom of text field after data changes, doesn't seem to work though.
-                        field.getScrollable().scrollBy(0, Infinity, false);
-                    }
-                }
-            }]
+            xtype: 'component',
+            itemId: 'logger',
+            padding: 16,
+            style: 'font-family: Courier, mono-spaced; font-size: 12px; color: #333;',
+            scrollable: true,
+            bind: {
+                html: '{loginfo}'
+            }
+        }]
     }],
+
+    listeners: {
+        activate: 'onActivate'
+    },
     controller: {
-        onLogtypeSelected: function(btn) {
-            var currentLog = btn.getValue();
-            var vm = this.getViewModel();
+        onActivate: function (view) {
+            var me = this, logContainer = view.down('#logger');
+
+            // when switching from LOGREAD to DMESG, clear log container and refetch
+            this.getViewModel().bind('{logtype}', function () {
+                logContainer.setHtml('');
+                me.fetchLogs();
+            });
+        },
+
+        /**
+         * logtype switcher
+         */
+        switchLogType: function (btn) {
+            this.getViewModel().set('logtype', btn.getValue());
+        },
+
+        /**
+         * fetches the logs for the selected logtype and appends content to existing rendered logs
+         */
+        fetchLogs: function () {
+            var logContainer = this.getView().down('#logger'),
+                currentLog = logContainer.getHtml(),
+                scrollEl = logContainer.el.dom, // scrollable dom element
+                logtype = this.getViewModel().get('logtype');
+
             Ext.Ajax.request({
-                url: '/api/logging/' + currentLog,
+                url: '/api/logging/' + logtype.toLowerCase(),
                 success: function (response) {
-                    vm.set('loginfo',Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
+                    // append ar insert log result
+                    logContainer.setHtml(currentLog + Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
+                    // hopefully should scroll to bottom of log container
+                    scrollEl.scrollTop = scrollEl.scrollHeight - scrollEl.clientHeight;
                 },
-                failure: function (response) {
-                    vm.set('loginfo', "Failed to load logs:\n" + Ext.decode(response.responseText).error);
+                failure: function () {
+                    // will fallback to the generic error handler, no need to set something
                 }
             });
         }
