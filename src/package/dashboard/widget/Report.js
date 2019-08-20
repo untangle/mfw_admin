@@ -67,6 +67,12 @@ Ext.define('Mfw.dashboard.widget.Report', {
     }],
     listeners: {
         removed: function (widget) {
+            // abort ongoing async calls if removed
+            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                if (req.url.startsWith('/api/reports')) {
+                    req.abort();
+                }
+            });
             if (widget.tout) {
                 clearTimeout(widget.tout);
             }

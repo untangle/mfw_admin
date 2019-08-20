@@ -232,7 +232,10 @@ Ext.define('Mfw.reports.ChartController', {
             chart.hideLoading();
             view.unmask();
 
-            if (!Ext.isArray(data)) { return; }
+            if (!Ext.isArray(data)) {
+                if (cb) { cb(); }
+                return;
+            }
             // remove first and last data items as they are empty
             if (record.get('type') === 'SERIES' || record.get('type') === 'CATEGORIES_SERIES') {
                 data.shift(); data.pop();
@@ -467,7 +470,11 @@ Ext.define('Mfw.reports.ChartController', {
     },
 
     setData: function (data) {
-        var me = this, chart = me.getView().chart, normalizedData = [],
+        var me = this;
+
+        if (!me.getView()) { return; }
+
+        var chart = me.getView().chart, normalizedData = [],
             isWidget = me.getViewModel().get('widget') ? true : false,
             record = me.getViewModel().get('record');
         if (!chart) { return; }

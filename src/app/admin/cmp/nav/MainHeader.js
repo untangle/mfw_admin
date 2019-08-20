@@ -218,7 +218,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                     vm.set('upgradeStatus', resp);
                 },
                 failure: function () {
-                    console.error('Unable to get data');
+                    console.error('Unable to check upgrade status!');
                 }
             });
 

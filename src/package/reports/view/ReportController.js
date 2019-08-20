@@ -11,6 +11,12 @@ Ext.define('Mfw.reports.ReportController', {
 
             if (window.location.hash.indexOf('#reports') < 0) { return; }
 
+            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                if (req.url.startsWith('/api/reports')) {
+                    req.abort();
+                }
+            });
+
             var record,
                 activeItem = 'noselection-report',
                 userConditions = [],
@@ -85,6 +91,7 @@ Ext.define('Mfw.reports.ReportController', {
         }
 
         controller.loadData(function (data) {
+            if (!data) { return; }
             me.setDataGrid(dataGrid, record, data);
         });
     },

@@ -171,7 +171,8 @@ Ext.define('Mfw.reports.Util', {
                         }
                     },
                     failure: function () {
-                        console.error('Unable to fetch data for query ' + queryId);
+                        cb3();
+                        console.error('Aborted request or unable to fetch data for query ' + queryId);
                     }
                 });
             },
@@ -183,7 +184,8 @@ Ext.define('Mfw.reports.Util', {
                         // cb(data);
                     },
                     failure: function () {
-                        console.error('Unable to to close query ' + queryId);
+                        cb();
+                        console.error('Aborted request or unable to to close query ' + queryId);
                     }
                 });
             };

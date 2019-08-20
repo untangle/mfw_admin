@@ -8,18 +8,23 @@ Ext.define('Mfw.dashboard.WidgetsPipe', {
 
     add: function (widget) {
         this.queue.push(widget);
-        this.process();
+        if (!this.processing) { this.process(); }
     },
 
     addFirst: function (widget) {
         this.queue.unshift(widget);
-        this.process();
+        if (!this.processing) { this.process(); }
     },
 
     process: function () {
         var me = this, wg = me.queue[0],
-            ctrl,
-            widget = wg.getViewModel().get('widget'),
+            ctrl;
+
+        if (!wg || !wg.getViewModel()) {
+            return;
+        }
+
+        var widget = wg.getViewModel().get('widget'),
             timer = wg.down('#timer');
 
         if (me.queue.length > 0 && !me.processing) {
@@ -50,9 +55,14 @@ Ext.define('Mfw.dashboard.WidgetsPipe', {
                                     '<div class="mask" style="animation-duration: ' + widget.get('interval') + 's;"></div>' +
                                     '</div>');
                     }
+
                     Ext.Array.removeAt(me.queue, 0);
                     me.processing = false;
-                    wg.getViewModel().set('processing', false);
+
+                    if (wg && wg.getViewModel()) {
+                        wg.getViewModel().set('processing', false);
+                    }
+
                     if (me.queue.length > 0) { me.process(); }
                 });
             } else {
