@@ -44,7 +44,14 @@ Ext.define('Mfw.settings.system.Logging', {
             }, {
                 xtype:'button',
                 iconCls: 'md-icon-refresh',
-                handler: 'fetchLogs'
+                tooltip: 'Refresh',
+                handler: 'fetchLogs',
+                margin: '0 8 0 0'
+            }, {
+                xtype:'button',
+                iconCls: 'x-fa fa-floppy-o',
+                tooltip: 'Save',
+                handler: 'saveLogs'
             }]
         }, {
             xtype: 'component',
@@ -100,6 +107,18 @@ Ext.define('Mfw.settings.system.Logging', {
                     // will fallback to the generic error handler, no need to set something
                 }
             });
+        },
+
+        saveLogs: function () {
+            var log = this.getView().down('#logger').getHtml(),
+                logtype = this.getViewModel().get('logtype'),
+                time = moment.tz(Mfw.app.tz.displayName).format('DD-MM-YY-hhmmA'), // timestamp used in file name
+                link = document.createElement('a');
+
+            // create a link with log content and save to a file
+            link.setAttribute('href', 'data:text;charset=utf-8,' + log);
+            link.setAttribute('download', logtype.toLowerCase() + '_' + time + '.log');
+            link.click();
         }
     }
 
