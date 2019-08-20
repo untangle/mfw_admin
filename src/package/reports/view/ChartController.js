@@ -168,10 +168,14 @@ Ext.define('Mfw.reports.ChartController', {
         view.on('painted', me.onPainted);
 
         // remove chart series if not just refreshing an existing rendered chart
-        view.getViewModel().bind('{record}', function () {
+        view.getViewModel().bind('{record}', function (record) {
             var chart = me.getView().chart;
             if (!chart) { return; }
-            repView.mask({xtype: 'loadmask'});
+
+            if (record) {
+                repView.mask({xtype: 'loadmask'});
+            }
+
             while (chart.series.length > 0) {
                 chart.series[0].remove(true);
             }
