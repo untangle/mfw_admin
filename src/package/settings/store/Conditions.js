@@ -2047,6 +2047,24 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
         operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_NAME',
+        category: 'Application',
+        text: 'Predicted Application Name'.t(),
+        description: 'Application Name description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_PROTOCHAIN',
+        category: 'Application',
+        text: 'Predicted Protochain'.t(),
+        description: 'Predicted Protochain description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_CONFIDENCE',
+        category: 'Application',
+        text: 'Predicted Confidence'.t(),
+        description: 'Predicted Confidence description ...',
+        operators: ['==', '!=', '>', '>=', '<', '<=']
     },
 
     // SOURCE
@@ -2455,27 +2473,6 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Remote Username'.t(),
         description: 'Remote Username description ...',
         operators: ['==', '!=']
-    },
-
-    // PREDICTED
-    {
-        type:'APPLICATION_PREDICTED_NAME',
-        category: 'Predicted',
-        text: 'Predicted Application Name'.t(),
-        description: 'Application Name description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PREDICTED_PROTOCHAIN',
-        category: 'Predicted',
-        text: 'Predicted Protochain'.t(),
-        description: 'Predicted Protochain description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PREDICTED_CONFIDENCE',
-        category: 'Predicted',
-        text: 'Predicted Confidence'.t(),
-        description: 'Predicted Confidence description ...',
-        operators: ['==', '!=', '>', '>=', '<', '<=']
     },
 
     // CERTIFICATE ISSUER
