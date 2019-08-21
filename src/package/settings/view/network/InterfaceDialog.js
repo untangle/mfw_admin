@@ -101,7 +101,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         title: '{action === "ADD" ? "Create New" : "Edit"} Interface ({interface.type})',
     },
     width: 700,
-    height: 800,
+    height: 700,
+
+    responsiveConfig: { large: { maximized: false }, small: { maximized: true } },
 
     padding: 0,
 
@@ -303,6 +305,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 },
                 hidden: true,
                 bind: { hidden: '{interface.v4ConfigType !== "STATIC"}' },
+                scrollable: true,
                 items: [{
                     xtype: 'textfield',
                     label: 'Address',
@@ -376,6 +379,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 },
                 hidden: true,
                 bind: { hidden: '{interface.v4ConfigType !== "DHCP"}' },
+                scrollable: true,
                 items: [{
                     xtype: 'component',
                     margin: '16 0 8 0',
@@ -441,6 +445,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 },
                 hidden: true,
                 bind: { hidden: '{interface.v4ConfigType !== "PPPOE"}' },
+                scrollable: true,
                 items: [{
                     xtype: 'textfield',
                     label: 'Username',
