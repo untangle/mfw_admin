@@ -868,6 +868,17 @@ i {
     }
 }
 
+.mfw-logger {
+    background-color: #EFEFEF;
+    .x-underline-el { display: none; }
+    .x-input-el {
+        padding: 8px;
+        color: #555;
+        font-size: 12px;
+        font-family: "Courier New", monospace;
+    }
+}
+
 
 .x-segmentedbutton.button-tabs {
     .x-button.x-pressed {

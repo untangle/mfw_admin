@@ -237,6 +237,10 @@ i { font-style: normal; }
 .file-upload.editable { border: 1px #999 solid; }
 .file-upload.editable .x-input-el { color: #333; }
 
+.mfw-logger { background-color: #EFEFEF; }
+.mfw-logger .x-underline-el { display: none; }
+.mfw-logger .x-input-el { padding: 8px; color: #555; font-size: 12px; font-family: "Courier New", monospace; }
+
 .x-segmentedbutton.button-tabs .x-button.x-pressed { color: #FFF; }
 .x-segmentedbutton.button-tabs .x-button-segmented.x-pressing, .x-segmentedbutton.button-tabs .x-button-segmented.x-pressed { color: #FFF; }
 .x-segmentedbutton.button-tabs .x-button-segmented.x-pressing .x-inner-el, .x-segmentedbutton.button-tabs .x-button-segmented.x-pressed .x-inner-el { background-color: var(--base-color); }

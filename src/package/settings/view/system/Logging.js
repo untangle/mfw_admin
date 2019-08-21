@@ -18,7 +18,6 @@ Ext.define('Mfw.settings.system.Logging', {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
-            shadow: false,
             items: [{
                 xtype: 'button',
                 bind: {
@@ -54,14 +53,12 @@ Ext.define('Mfw.settings.system.Logging', {
                 handler: 'saveLogs'
             }]
         }, {
-            xtype: 'component',
+            // use textarea to avoid converting new-line chars into line break (<br>) tags
+            xtype: 'textareafield',
+            editable: false,
+            cls: 'mfw-logger', // custom class to style the content
             itemId: 'logger',
-            padding: 16,
-            style: 'font-family: Courier, mono-spaced; font-size: 12px; color: #333;',
-            scrollable: true,
-            bind: {
-                html: '{loginfo}'
-            }
+            value: ''
         }]
     }],
 
@@ -74,7 +71,7 @@ Ext.define('Mfw.settings.system.Logging', {
 
             // when switching from LOGREAD to DMESG, clear log container and refetch
             this.getViewModel().bind('{logtype}', function () {
-                logContainer.setHtml('');
+                logContainer.setValue('');
                 me.fetchLogs();
             });
         },
@@ -91,17 +88,17 @@ Ext.define('Mfw.settings.system.Logging', {
          */
         fetchLogs: function () {
             var logContainer = this.getView().down('#logger'),
-                currentLog = logContainer.getHtml(),
-                scrollEl = logContainer.el.dom, // scrollable dom element
+                currentLog = logContainer.getValue(),
+                scrollEl = logContainer.ariaEl.dom, // textarea dom element to scroll at bottom
                 logtype = this.getViewModel().get('logtype');
 
             Ext.Ajax.request({
                 url: '/api/logging/' + logtype.toLowerCase(),
                 success: function (response) {
-                    // append ar insert log result
-                    logContainer.setHtml(currentLog + Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
-                    // hopefully should scroll to bottom of log container
-                    scrollEl.scrollTop = scrollEl.scrollHeight - scrollEl.clientHeight;
+                    // append or insert log result
+                    logContainer.setValue(currentLog + Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
+                    // hopefully should scroll to bottom of textarea
+                    scrollEl.scrollTop = scrollEl.scrollHeight;
                 },
                 failure: function () {
                     // will fallback to the generic error handler, no need to set something
@@ -110,7 +107,7 @@ Ext.define('Mfw.settings.system.Logging', {
         },
 
         saveLogs: function () {
-            var log = this.getView().down('#logger').getHtml(),
+            var log = this.getView().down('#logger').getValue(),
                 logtype = this.getViewModel().get('logtype'),
                 time = moment.tz(Mfw.app.tz.displayName).format('DD-MM-YY-hhmmA'), // timestamp used in file name
                 link = document.createElement('a');
