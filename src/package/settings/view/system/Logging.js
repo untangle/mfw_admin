@@ -7,7 +7,7 @@ Ext.define('Mfw.settings.system.Logging', {
 
     viewModel: {
         data: {
-            logtype: 'LOGREAD' // 'LOGREAD' or 'DMESG'
+            logtype: 'logread' // 'logread' or 'dmesg'
         }
     },
 
@@ -21,20 +21,20 @@ Ext.define('Mfw.settings.system.Logging', {
             items: [{
                 xtype: 'button',
                 bind: {
-                    ui: '{logtype === "LOGREAD" ? "action" : ""}'
+                    ui: '{logtype === "logread" ? "action" : ""}'
                 },
                 text: 'Logread',
                 handler: 'switchLogType',
-                value: 'LOGREAD'
+                value: 'logread'
             },
             {
                 xtype:'button',
                 text: 'Dmesg',
                 bind: {
-                    ui: '{logtype === "DMESG" ? "action" : ""}'
+                    ui: '{logtype === "dmesg" ? "action" : ""}'
                 },
                 handler: 'switchLogType',
-                value: 'DMESG',
+                value: 'dmesg',
                 margin: '0 0 0 16'
             }, {
                 xtype: 'toolbarseparator',
@@ -63,40 +63,29 @@ Ext.define('Mfw.settings.system.Logging', {
     }],
 
     listeners: {
-        activate: 'onActivate'
+        activate: 'fetchLogs'
     },
     controller: {
-        onActivate: function (view) {
-            var me = this, logContainer = view.down('#logger');
-
-            // when switching from LOGREAD to DMESG, clear log container and refetch
-            this.getViewModel().bind('{logtype}', function () {
-                logContainer.setValue('');
-                me.fetchLogs();
-            });
-        },
-
-        /**
-         * logtype switcher
-         */
         switchLogType: function (btn) {
             this.getViewModel().set('logtype', btn.getValue());
+            this.fetchLogs();
         },
 
         /**
-         * fetches the logs for the selected logtype and appends content to existing rendered logs
+         * fetches the logs for the selected logtype
          */
         fetchLogs: function () {
             var logContainer = this.getView().down('#logger'),
-                currentLog = logContainer.getValue(),
-                scrollEl = logContainer.ariaEl.dom, // textarea dom element to scroll at bottom
-                logtype = this.getViewModel().get('logtype');
+                logType = this.getViewModel().get('logtype'),
+                scrollEl = logContainer.ariaEl.dom;
+
+            logContainer.setValue('');
 
             Ext.Ajax.request({
-                url: '/api/logging/' + logtype.toLowerCase(),
+                url: '/api/logging/' + logType,
                 success: function (response) {
-                    // append or insert log result
-                    logContainer.setValue(currentLog + Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
+                    // insert log result
+                    logContainer.setValue(Ext.util.Base64.decode(Ext.decode(response.responseText).logresults));
                     // hopefully should scroll to bottom of textarea
                     scrollEl.scrollTop = scrollEl.scrollHeight;
                 },
