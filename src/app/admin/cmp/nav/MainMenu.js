@@ -21,8 +21,8 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
     items: [{
         xtype: 'component',
         width: 100,
-        margin: 10,
-        html: '<img src="' + '/static/res/untangle-logo-w.png" style="height: 30px;"/>'
+        margin: '10 10 0 20',
+        html: '<img src="' + '/static/res/untangle-logo-w.svg" style="height: 36px;"/>'
     }, {
         text: 'DASHBOARD'.t(),
         // iconCls: 'x-fa fa-home',
