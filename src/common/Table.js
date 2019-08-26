@@ -156,14 +156,26 @@ Ext.define('Mfw.Table', {
             text: 'Application Detail',
             dataIndex: 'application_detail'
         }, {
+            text: 'Predicted Application ID',
+            dataIndex: 'application_predicted_id'
+        }, {
             text: 'Predicted Application Name',
             dataIndex: 'application_predicted_name'
         }, {
             text: 'Predicted Confidence',
             dataIndex: 'application_predicted_confidence'
         }, {
-            text: 'Predicted Protocolchain',
+            text: 'Predicted Protochain',
             dataIndex: 'application_predicted_protochain'
+        }, {
+            text: 'Predicted Productivity',
+            dataIndex: 'application_predicted_productivity'
+        }, {
+            text: 'Predicted Threat',
+            dataIndex: 'application_predicted_threat'
+        }, {
+            text: 'Predicted Category',
+            dataIndex: 'application_predicted_category'
         }, {
             text: 'Certificate Subject CN',
             dataIndex: 'certificate_subject_cn'
