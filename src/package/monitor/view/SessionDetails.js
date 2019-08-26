@@ -21,9 +21,13 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'application_detail', text: 'Detail', leaf: true },
                         { key: 'application_confidence', text: 'Confidence', leaf: true },
                         { key: 'application_protochain', text: 'Protochain', leaf: true },
+                        { key: 'application_predicted_id', text: 'Predicted ID', leaf: true },
                         { key: 'application_predicted_name', text: 'Predicted Name', leaf: true },
                         { key: 'application_predicted_confidence', text: 'Predicted Confidence', leaf: true },
-                        { key: 'application_predicted_protochain', text: 'Predicted Protochain', leaf: true }
+                        { key: 'application_predicted_protochain', text: 'Predicted Protochain', leaf: true },
+                        { key: 'application_predicted_productivity', text: 'Predicted Productivity', leaf: true },
+                        { key: 'application_predicted_threat', text: 'Predicted Threat', leaf: true },
+                        { key: 'application_predicted_category', text: 'Predicted Category', leaf: true }
                     ]
                 },
                 {

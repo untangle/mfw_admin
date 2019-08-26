@@ -64,19 +64,42 @@ Ext.define('Mfw.monitor.view.Sessions', {
         minWidth: 200,
         flex: 1
     }, {
-        text: 'Predicted Application',
+        text: 'Application Predicted ID',
+        dataIndex: 'application_predicted_id',
+        width: 150,
+        hidden: true
+    }, {
+        text: 'Application Predicted Name',
         dataIndex: 'application_predicted_name',
         width: 150,
         hidden: true
     }, {
-        text: 'Predicted Confidence',
+        text: 'Application Predicted Confidence',
         dataIndex: 'application_predicted_confidence',
         width: 100,
         align: 'right',
         hidden: true
     }, {
-        text: 'Predicted Protocolchain',
+        text: 'Application Predicted Protochain',
         dataIndex: 'application_predicted_protochain',
+        minWidth: 200,
+        flex: 1,
+        hidden: true
+    }, {
+        text: 'Application Predicted Productivity',
+        dataIndex: 'application_predicted_productivity',
+        minWidth: 200,
+        flex: 1,
+        hidden: true
+    }, {
+        text: 'Application Predicted Threat',
+        dataIndex: 'application_predicted_threat',
+        minWidth: 200,
+        flex: 1,
+        hidden: true
+    }, {
+        text: 'Application Predicted Category',
+        dataIndex: 'application_predicted_category',
         minWidth: 200,
         flex: 1,
         hidden: true
