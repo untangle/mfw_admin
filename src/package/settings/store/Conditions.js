@@ -2048,16 +2048,16 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Detail description ...',
         operators: ['==', '!=']
     }, {
+        type:'APPLICATION_PREDICTED_ID',
+        category: 'Application',
+        text: 'Predicted Application ID'.t(),
+        description: 'Predicted Application ID description ...',
+        operators: ['==', '!=']
+    }, {
         type:'APPLICATION_PREDICTED_NAME',
         category: 'Application',
         text: 'Predicted Application Name'.t(),
-        description: 'Application Name description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PREDICTED_PROTOCHAIN',
-        category: 'Application',
-        text: 'Predicted Protochain'.t(),
-        description: 'Predicted Protochain description ...',
+        description: 'Predicted Application Name description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_PREDICTED_CONFIDENCE',
@@ -2065,7 +2065,31 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Predicted Confidence'.t(),
         description: 'Predicted Confidence description ...',
         operators: ['==', '!=', '>', '>=', '<', '<=']
-    },
+    }, {
+        type:'APPLICATION_PREDICTED_PROTOCHAIN',
+        category: 'Application',
+        text: 'Predicted Protochain'.t(),
+        description: 'Predicted Protochain description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_PRODUCTIVITY',
+        category: 'Application',
+        text: 'Predicted Productivity'.t(),
+        description: 'Predicted Productivity description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_THREAT',
+        category: 'Application',
+        text: 'Predicted Threat'.t(),
+        description: 'Predicted Threat description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_PREDICTED_CATEGORY',
+        category: 'Application',
+        text: 'Predicted Category'.t(),
+        description: 'Predicted Category description ...',
+        operators: ['==', '!=']
+    }, 
 
     // SOURCE
     {
