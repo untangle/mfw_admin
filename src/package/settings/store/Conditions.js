@@ -7,7 +7,7 @@ Ext.define('Mfw.settings.Conditions', {
     {
         type:'APPLICATION_NAME',
         category: 'Application',
-        text: 'Application Name'.t(),
+        text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
         operators: ['==', '!='],
         field: {
@@ -2005,7 +2005,7 @@ Ext.define('Mfw.settings.Conditions', {
     }, {
         type:'APPLICATION_CATEGORY',
         category: 'Application',
-        text: 'Application Category'.t(),
+        text: 'Application Category (Matched)'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
         operators: ['==', '!='],
         field: {
@@ -2032,12 +2032,12 @@ Ext.define('Mfw.settings.Conditions', {
     }, {
         type:'APPLICATION_ID',
         category: 'Application',
-        text: 'Application ID'.t(),
+        text: 'Application ID (Matched)'.t(),
         description: 'Application ID description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_PROTOCHAIN',
-        category: 'Application',
+        category: 'Application (Matched)',
         text: 'Application Protochain'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!=']

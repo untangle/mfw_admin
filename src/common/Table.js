@@ -124,33 +124,33 @@ Ext.define('Mfw.Table', {
             text: 'Server Longitude',
             dataIndex: 'server_longitude'
         }, {
-            text: 'Application ID',
+            text: 'Application ID (Matched)',
             dataIndex: 'application_id'
         }, {
-            text: 'Application Name',
+            text: 'Application Name (Matched)',
             dataIndex: 'application_name',
             width: 160,
             renderer: function (name) {
                 return name || 'Unknown';
             }
         }, {
-            text: 'Application Protochain',
+            text: 'Application Protochain (Matched)',
             dataIndex: 'application_protochain',
             minWidth: 200,
             flex: 1
         }, {
-            text: 'Application Category',
+            text: 'Application Category (Matched)',
             dataIndex: 'application_category'
         }, {
-            text: 'Application Blocked',
+            text: 'Application Blocked (Matched)',
             dataIndex: 'application_blocked',
             operators: ['EQ']
         }, {
-            text: 'Application Flagged',
+            text: 'Application Flagged (Matched)',
             dataIndex: 'application_flagged',
             operators: ['EQ']
         }, {
-            text: 'Application Confidence',
+            text: 'Application Confidence (Matched)',
             dataIndex: 'application_confidence'
         }, {
             text: 'Application Detail',
