@@ -18,6 +18,10 @@
                            "server_interface_id",
                            "wan_rule_chain",
                            "wan_rule_id",
-                           "wan_policy_id"]
+                           "wan_policy_id"],
+        "columnRenames": [
+            ["Server Interface", "WAN Route"],
+            ["Server DNS Hint", "Domain Name"]
+        ]
     }
 }
