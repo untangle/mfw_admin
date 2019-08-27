@@ -58,13 +58,13 @@ Ext.define('Mfw.reports.EventDetails', {
                         { key: 'application_id', val: '', leaf: true },
                         { key: 'application_name', val: '', leaf: true },
                         { key: 'application_protochain', val: '', leaf: true },
-                        { key: 'application_predicted_id', val: '', leaf: true},
-                        { key: 'application_predicted_name', val: '', leaf: true},
-                        { key: 'application_predicted_confidence', val: '', leaf: true },
-                        { key: 'application_predicted_protochain', val: '', leaf: true },
-                        { key: 'application_predicted_productivity', val: '', leaf: true },
-                        { key: 'application_predicted_threat', val: '', leaf: true },
-                        { key: 'application_predicted_category', val: '', leaf: true }
+                        { key: 'application_id_inferred', val: '', leaf: true},
+                        { key: 'application_name_inferred', val: '', leaf: true},
+                        { key: 'application_confidence_inferred', val: '', leaf: true },
+                        { key: 'application_protochain_inferred', val: '', leaf: true },
+                        { key: 'application_productivity_inferred', val: '', leaf: true },
+                        { key: 'application_threat_inferred', val: '', leaf: true },
+                        { key: 'application_category_inferred', val: '', leaf: true }
 
                     ]
                 },

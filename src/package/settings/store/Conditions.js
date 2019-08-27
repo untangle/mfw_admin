@@ -2048,46 +2048,46 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Detail description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_ID',
+        type:'APPLICATION_ID_INFERRED',
         category: 'Application',
-        text: 'Predicted Application ID'.t(),
-        description: 'Predicted Application ID description ...',
+        text: 'Application ID (Inferred)'.t(),
+        description: 'Application ID (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_NAME',
+        type:'APPLICATION_NAME_INFERRED',
         category: 'Application',
-        text: 'Predicted Application Name'.t(),
-        description: 'Predicted Application Name description ...',
+        text: 'Application Name (Inferred)'.t(),
+        description: 'Application Name (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_CONFIDENCE',
+        type:'APPLICATION_CONFIDENCE_INFERRED',
         category: 'Application',
-        text: 'Predicted Confidence'.t(),
-        description: 'Predicted Confidence description ...',
+        text: 'Application Confidence (Inferred)'.t(),
+        description: 'Application Confidence (Inferred) description ...',
         operators: ['==', '!=', '>', '>=', '<', '<=']
     }, {
-        type:'APPLICATION_PREDICTED_PROTOCHAIN',
+        type:'APPLICATION_PROTOCHAIN_INFERRED',
         category: 'Application',
-        text: 'Predicted Protochain'.t(),
-        description: 'Predicted Protochain description ...',
+        text: 'Application Protochain (Inferred)'.t(),
+        description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_PRODUCTIVITY',
+        type:'APPLICATION_PRODUCTIVITY_INFERRED',
         category: 'Application',
-        text: 'Predicted Productivity'.t(),
-        description: 'Predicted Productivity description ...',
+        text: 'Application Productivity (Inferred)'.t(),
+        description: 'Application Productivity (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_THREAT',
+        type:'APPLICATION_THREAT_INFERRED',
         category: 'Application',
-        text: 'Predicted Threat'.t(),
-        description: 'Predicted Threat description ...',
+        text: 'Application Threat (Inferred)'.t(),
+        description: 'Application Threat (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_CATEGORY',
+        type:'APPLICATION_CATEGORY_INFERRED',
         category: 'Application',
-        text: 'Predicted Category'.t(),
-        description: 'Predicted Category description ...',
+        text: 'Application Category (Inferred)'.t(),
+        description: 'Application Category (Inferred) description ...',
         operators: ['==', '!=']
     }, 
 

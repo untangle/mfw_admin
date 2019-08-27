@@ -64,42 +64,42 @@ Ext.define('Mfw.monitor.view.Sessions', {
         minWidth: 200,
         flex: 1
     }, {
-        text: 'Application Predicted ID',
-        dataIndex: 'application_predicted_id',
+        text: 'Application ID (Inferred)',
+        dataIndex: 'application_id_inferred',
         width: 150,
         hidden: true
     }, {
-        text: 'Application Predicted Name',
-        dataIndex: 'application_predicted_name',
+        text: 'Application Name (Inferred)',
+        dataIndex: 'application_name_inferred',
         width: 150,
         hidden: true
     }, {
-        text: 'Application Predicted Confidence',
-        dataIndex: 'application_predicted_confidence',
+        text: 'Application Confidence (Inferred)',
+        dataIndex: 'application_confidence_inferred',
         width: 100,
         align: 'right',
         hidden: true
     }, {
-        text: 'Application Predicted Protochain',
-        dataIndex: 'application_predicted_protochain',
+        text: 'Application Protochain (Inferred)',
+        dataIndex: 'application_protochain_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true
     }, {
-        text: 'Application Predicted Productivity',
-        dataIndex: 'application_predicted_productivity',
+        text: 'Application Productivity (Inferred)',
+        dataIndex: 'application_productivity_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true
     }, {
-        text: 'Application Predicted Threat',
-        dataIndex: 'application_predicted_threat',
+        text: 'Application Threat (Inferred)',
+        dataIndex: 'application_threat_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true
     }, {
-        text: 'Application Predicted Category',
-        dataIndex: 'application_predicted_category',
+        text: 'Application Category (Inferred)',
+        dataIndex: 'application_category_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true
