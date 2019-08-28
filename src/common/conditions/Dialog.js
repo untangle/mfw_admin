@@ -39,9 +39,9 @@ Ext.define('Mfw.common.conditions.Dialog', {
         items: [{
             xtype: 'selectfield',
             name: 'column',
-            label: 'Select field'.t(),
+            label: 'Select field',
             labelAlign: 'top',
-            placeholder: 'Choose field'.t(),
+            placeholder: 'Choose field',
             editable: false,
             valueField: 'dataIndex',
             displayTpl: '{text} [ {dataIndex} ]',
@@ -62,9 +62,9 @@ Ext.define('Mfw.common.conditions.Dialog', {
             items: [{
                 xtype: 'selectfield',
                 name: 'operator',
-                label: 'Operator'.t(),
+                label: 'Operator',
                 labelAlign: 'top',
-                placeholder: 'Choose operator'.t(),
+                placeholder: 'Choose operator',
                 width: 180,
                 margin: '0 16 0 0',
                 displayTpl: '{text} [ {value} ]',
@@ -78,7 +78,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 clearable: false,
                 flex: 1,
                 name: 'value',
-                label: 'Value'.t(),
+                label: 'Value',
                 labelAlign: 'top',
                 placeholder: 'Enter value ...'
             }]

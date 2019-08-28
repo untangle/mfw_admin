@@ -2,15 +2,24 @@ Ext.define('Mfw.setup.step.Interfaces', {
     extend: 'Ext.Panel',
     alias: 'widget.step-interfaces',
 
-    layout: 'vbox',
+    scrollable: true,
+
+    padding: '24 0 0 0',
+
+    layout: {
+        type: 'vbox',
+        align: 'middle'
+    },
 
     items: [{
         xtype: 'component',
         padding: '0 0 24 0',
+        width: 800,
         html: '<h1 style="text-align: center;">Interfaces</h1><hr/>'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
+        width: 800,
         flex: 1,
         store: 'interfaces',
         rowLines: false,
@@ -41,22 +50,16 @@ Ext.define('Mfw.setup.step.Interfaces', {
         }, {
             text: 'Name',
             dataIndex: 'name',
-            flex: 1,
-            minWidth: 150,
+            width: 120,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
             renderer: function (value) {
                 return '<b>' + value + '</b>';
-                // return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('type') + ' / ' + record.get('device');
-                // if (record.get('wan')) {
-                //     return '<strong>' + value + ' (WAN) </strong>';
-                // }
-                // return '<strong>' + value + '</strong>';
             }
             // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
         }, {
-            text: 'Config'.t(),
+            text: 'Config',
             dataIndex: 'configType',
             menuDisabled: true,
             sortable: false,
@@ -67,7 +70,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
             },
             renderer: 'configTypeRenderer'
         }, {
-            text: 'IPv4'.t(),
+            text: 'IPv4',
             width: 180,
             flex: 1,
             dataIndex: 'v4ConfigType',
@@ -83,7 +86,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 return '-';
             }
         }, {
-            text: 'IPv6'.t(),
+            text: 'IPv6',
             width: 180,
             flex: 1,
             dataIndex: 'v6ConfigType',
@@ -111,35 +114,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 }
             }
         }]
-    }, {
-        xtype: 'container',
-        flex: 1,
-        layout: { type: 'hbox', align: 'top', pack: 'center' },
-        items: [{
-            xtype: 'button',
-            iconCls: 'md-icon-refresh',
-            text: 'Refresh',
-            handler: 'refresh',
-            width: 120
-        }, {
-            flex: 1
-        }, {
-            xtype: 'component',
-            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-            hidden: true,
-            bind: { hidden: '{!processing}' }
-        }, {
-            xtype: 'button',
-            width: 150,
-            text: 'Continue',
-            ui: 'action',
-            handler: 'onContinue',
-            hidden: true,
-            bind: { hidden: '{processing}' }
-        }, {
-            flex: 1,
-            margin: '0 120 0 0'
-        }]
     }],
     listeners: {
         activate: 'onActivate'
@@ -155,6 +129,27 @@ Ext.define('Mfw.setup.step.Interfaces', {
             ]);
         },
 
+        continue: function (cb) {
+            var store = Ext.getStore('interfaces');
+
+            // if no changes made just skip to next step
+            if (store.getModifiedRecords().length <= 0) {
+                cb();
+                return;
+            }
+
+            store.getDataSource().each(function (record) {
+                record.dirty = true;
+                record.phantom = false;
+            });
+
+            store.sync({
+                success: function () {
+                    cb();
+                }
+            });
+        },
+
         configTypeRenderer: function (value, record) {
             if (value === 'ADDRESSED') {
                 return 'Addressed';
@@ -166,26 +161,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
                 return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';
             }
-        },
-
-        onContinue: function () {
-            var me = this,
-                wzCtrl = me.getView().up('setup-wizard').getController();
-
-            me.getViewModel().set('processing', true);
-            wzCtrl.update();
-            // interfaces are updated on each editing instance
-
-            // Ext.getStore('interfaces').each(function (record) {
-            //     record.dirty = true;
-            //     record.phantom = false;
-            // });
-
-            // Ext.getStore('interfaces').sync({
-            //     success: function () {
-            //         wzCtrl.update();
-            //     }
-            // });
         },
 
         onEdit: function (grid, info) {

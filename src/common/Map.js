@@ -38,18 +38,18 @@ Ext.define('Mfw.settings.Map', {
 
     // used in dashboard/reports conditions
     routeOps: {
-        'EQ':       { text: 'Equals'.t(),           value: 'EQ', symbol: '='        },
-        'NE':       { text: 'Not Equals'.t(),       value: 'NE', symbol: '!='       },
-        'GT':       { text: 'Greater Than'.t(),     value: 'GT', symbol: '>'        },
-        'LT':       { text: 'Less Than'.t(),        value: 'LT', symbol: '<'        },
-        'GE':       { text: 'Greater or Equal'.t(), value: 'GE', symbol: '>='       },
-        'LE':       { text: 'Less or Equal'.t(),    value: 'LE', symbol: '<='       },
-        'LIKE':     { text: 'Like'.t(),           value: 'LIKE', symbol: 'like'     },
-        'NOT_LIKE': { text: 'Not Like'.t(),   value: 'NOT_LIKE', symbol: 'not like' },
-        'IS':       { text: 'Is'.t(),               value: 'IS', symbol: 'is'       },
-        'IS_NOT':   { text: 'Is Not'.t(),       value: 'IS_NOT', symbol: 'is not'   },
-        'IN':       { text: 'In'.t(),               value: 'IN', symbol: 'in'       },
-        'NOT_IN':   { text: 'Not In'.t(),       value: 'NOT_IN', symbol: 'not in'   }
+        'EQ':       { text: 'Equals',           value: 'EQ', symbol: '='        },
+        'NE':       { text: 'Not Equals',       value: 'NE', symbol: '!='       },
+        'GT':       { text: 'Greater Than',     value: 'GT', symbol: '>'        },
+        'LT':       { text: 'Less Than',        value: 'LT', symbol: '<'        },
+        'GE':       { text: 'Greater or Equal', value: 'GE', symbol: '>='       },
+        'LE':       { text: 'Less or Equal',    value: 'LE', symbol: '<='       },
+        'LIKE':     { text: 'Like',           value: 'LIKE', symbol: 'like'     },
+        'NOT_LIKE': { text: 'Not Like',   value: 'NOT_LIKE', symbol: 'not like' },
+        'IS':       { text: 'Is',               value: 'IS', symbol: 'is'       },
+        'IS_NOT':   { text: 'Is Not',       value: 'IS_NOT', symbol: 'is not'   },
+        'IN':       { text: 'In',               value: 'IN', symbol: 'in'       },
+        'NOT_IN':   { text: 'Not In',       value: 'NOT_IN', symbol: 'not in'   }
     },
 
     protocols: {

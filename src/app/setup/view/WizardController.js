@@ -4,28 +4,14 @@ Ext.define('Mfw.setup.WizardController', {
 
     completed: false,
 
-    steps: [
-        'step-welcome',
-        'step-account',
-        'step-timezone',
-        // 'step-wifi',
-        // 'step-lte',
-        'step-interfaces',
-        'step-performance',
-        // 'step-upgrades',
-        'step-complete'
-    ],
-
     init: function () {
-        var me = this,
-            wizard = this.lookup('wizard');
-
+        var me = this;
         Ext.Ajax.request({
             url: '/api/settings/system/setupWizard',
             success: function(response) {
                 var obj = Ext.decode(response.responseText);
                 me.completed = obj.completed;
-                wizard.setActiveItem(obj.currentStep || 1);
+                me.setSteps(obj.currentStep);
             },
             failure: function(response) {
                 console.log('server-side failure with status code ' + response.status);
@@ -33,57 +19,135 @@ Ext.define('Mfw.setup.WizardController', {
         });
     },
 
-
-    update: function () {
+    /**
+     * generate steps based on interfaces
+     * @param {String} currentStep
+     */
+    setSteps: function (currentStep) {
         var me = this,
             vm = me.getViewModel(),
-            wizard = me.lookup('wizard'),
-            layout = wizard.getLayout(),
-            currentStep = wizard.getActiveItem().xtype,
-            nextStep = me.steps[me.steps.indexOf(currentStep) + 1];
+            steps = ['step-welcome', 'step-system'],
+            // add an empty card on initial load
+            cardSteps = [{
+                xtype: 'container',
+                layout: 'fit'
+            }],
+            routes = {}, navItems = [],
+            wifiStep = false,
+            lteStep = false;
 
-        Ext.Ajax.request({
-            url: '/api/settings/system/setupWizard',
-            method: 'POST',
-            params: Ext.JSON.encode({
-                currentStep: nextStep === 'step-complete' ? '' : nextStep,
-                completed: me.completed || nextStep === 'step-complete'
-            }),
-            success: function() {
-                layout.next();
-                Ext.defer(function () {
-                    vm.set('processing', false);
-                }, 300);
-            },
-            failure: function(response) {
-                console.log('server-side failure with status code ' + response.status);
-            }
+        Ext.getStore('interfaces').load(function (interfaces, operation, success) {
+            Ext.Array.each(interfaces, function (intf) {
+                if (intf.get('type') === 'WWAN' && !lteStep) {
+                    steps.push('step-lte');
+                }
+                if (intf.get('type') === 'WIFI' && !wifiStep) {
+                    steps.push('step-wifi');
+                    wifiStep = true;
+                }
+            });
+
+            steps.push('step-interfaces');
+            steps.push('step-performance');
+            steps.push('step-complete');
+
+
+            // set routes for each step
+            Ext.Array.each(steps, function (step) {
+                var _step = step.replace('step-', '');
+
+                cardSteps.push({ xtype: step });
+
+                routes[_step] = 'onStep';
+
+                if (_step === 'complete') {
+                    navItems.push({
+                        xtype: 'component',
+                        margin: '0 18',
+                        html: '<i class="x-font-icon md-icon md-icon-check" style="font-size: 36px; color: #519839"></i>',
+                        hidden: true,
+                        hideMode: 'visibility',
+                        bind: {
+                            hidden: '{step !== "complete"}'
+                        }
+                    });
+                    return;
+                }
+
+                navItems.push({
+                    xtype: 'component',
+                    itemId: 'nav-' + _step,
+                    margin: '0 18',
+                    cls: 'step-link',
+                    bind: {
+                        html: '<a href="#' + _step + '">' + _step + '</a>'
+                    }
+                });
+            });
+
+            vm.set('steps', steps);
+
+            me.setRoutes(routes);
+            me.getView().add(cardSteps);
+            me.getView().down('#nav').setItems(navItems);
+
+            Mfw.app.redirectTo(currentStep || 'welcome');
+            Ext.route.Router.resume();
+
         });
     },
 
+    onStep: function () {
+        var me = this,
+            step = window.location.hash.replace('#', '');
+        me.getViewModel().set('step', step);
+
+        me.getView().down('#nav').getItems().items.forEach(function (cmp) {
+            if (cmp.getItemId() === 'nav-' + step) {
+                cmp.setUserCls('current');
+            } else {
+                cmp.setUserCls('');
+            }
+        });
+    },
 
     /**
      * Handler method when continuing to next step
      */
-    onContinue: function (btn) {
-        console.log('on_continue');
+    onContinue: function () {
         var me = this,
             vm = me.getViewModel(),
-            wizard = this.lookup('wizard'),
+            wizard = this.getView(),
             layout = wizard.getLayout(),
             currentStep = wizard.getActiveItem(),
-            controller = currentStep.getController();
+            nextStepName = layout.getNext().xtype.replace('step-', '');
 
+        vm.set('processing', true);
 
-
-        if (controller && Ext.isFunction(controller.continue)) {
-            controller.continue(function () {
-                layout.next();
-                vm.set('processing', false);
+        currentStep.getController().continue(function () {
+            // update wizard
+            Ext.Ajax.request({
+                url: '/api/settings/system/setupWizard',
+                method: 'POST',
+                params: Ext.JSON.encode({
+                    currentStep: nextStepName === 'complete' ? '' : nextStepName,
+                    completed: me.completed || nextStepName === 'complete'
+                }),
+                success: function() {
+                    layout.next();
+                },
+                failure: function(response) {
+                    console.log('server-side failure with status code ' + response.status);
+                },
+                callback: function () {
+                    Ext.defer(function () {
+                        vm.set('processing', false);
+                    }, 250);
+                }
             });
-            return;
-        }
-        layout.next();
+
+        });
+
     }
 
 });

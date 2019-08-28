@@ -18,8 +18,8 @@ Ext.define('Mfw.common.conditions.Fields', {
         xtype: 'component',
         margin: '0 16',
         style: 'color: #FFF; font-size: 12px; font-weight: normal; line-height: 32px;',
-        html: 'Conditions'.t()
-        // bind: { html: 'Conditions'.t() + ' ({conditionsCount})' }
+        html: 'Conditions'
+        // bind: { html: 'Conditions' + ' ({conditionsCount})' }
     }, {
         xtype: 'container',
         itemId: 'fieldsBtns',

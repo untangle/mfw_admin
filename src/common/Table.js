@@ -327,7 +327,7 @@ Ext.define('Mfw.Table', {
             case 'ip_protocol':
                 field = {
                     xtype: 'selectfield',
-                    placeholder: 'Choose protocol ...'.t(),
+                    placeholder: 'Choose protocol ...',
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -337,7 +337,7 @@ Ext.define('Mfw.Table', {
             case 'server_interface_id':
                 field = {
                     xtype: 'selectfield',
-                    placeholder: 'Choose interface ...'.t(),
+                    placeholder: 'Choose interface ...',
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -347,7 +347,7 @@ Ext.define('Mfw.Table', {
             case 'server_interface_type':
                 field = {
                     xtype: 'selectfield',
-                    placeholder: 'Choose type ...'.t(),
+                    placeholder: 'Choose type ...',
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -357,7 +357,7 @@ Ext.define('Mfw.Table', {
             case 'server_country':
                 field = {
                     xtype: 'selectfield',
-                    placeholder: 'Choose country ...'.t(),
+                    placeholder: 'Choose country ...',
                     editable: false,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
@@ -371,7 +371,7 @@ Ext.define('Mfw.Table', {
             case 'server_address_new':
                 field = {
                     xtype: 'textfield',
-                    placeholder: 'Enter address ...'.t(),
+                    placeholder: 'Enter address ...',
                     validators: 'ipany'
                 }; break;
             case 'client_port':
@@ -379,7 +379,7 @@ Ext.define('Mfw.Table', {
                 field = {
                     xtype: 'numberfield',
                     decimals: 0,
-                    placeholder: 'Enter port ...'.t()
+                    placeholder: 'Enter port ...'
                     // validators: [{
                     //     type: 'format',
                     //     matcher: new RegExp('^[1-9]\d*$')
@@ -399,7 +399,7 @@ Ext.define('Mfw.Table', {
             Ext.apply(field, {
                 columnName: columnName,
                 name: 'value',
-                label: 'Value'.t(),
+                label: 'Value',
                 labelAlign: 'top',
                 flex: 1,
                 clearable: false,

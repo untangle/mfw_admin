@@ -28,13 +28,17 @@ SETTINGS_DIR := $(DESTDIR)/settings
 # mfw stand-alone Reports app
 REPORTS_DIR := $(DESTDIR)/reports
 
-# SASS
-SASS := $(wildcard src/sass/*.scss)
+# SASS-ADMIN
+SASS-ADMIN := $(wildcard src/sass/*.scss)
+
+# SASS-SETUP
+SASS-SETUP := $(wildcard src/app/setup/sass/*.scss)
+
 
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
-APP_SETUP_SRC := $(addprefix src/app/setup/, *.js model store step view)
+APP_SETUP_SRC := $(addprefix src/app/setup/, Util.js model store components step view App.js)
 APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util validators)
 
 # PACKAGES SOURCES
@@ -58,8 +62,7 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 				 $(PKG_AUTH_SRC) \
 				 $(PKG_SETTINGS_SRC) -name '*.js' 2>/dev/null)
 
-APP_SETUP_ALL := src/app/AppBase.js \
-	$(shell find $(APP_COMMON_SRC) \
+APP_SETUP_ALL := $(shell find $(APP_COMMON_SRC) \
 				 $(APP_SETUP_SRC) -name '*.js' 2>/dev/null) \
 				 src/package/settings/view/network/InterfaceDialog.js
 
@@ -110,6 +113,7 @@ install: \
 	js-settings \
 	html-settings \
 	html-reports \
+	css-setup \
 	js-setup \
 	html-setup \
 	extjs-install \
@@ -223,6 +227,11 @@ $(SETTINGS_DIR)/index.html: src/app/settings/index.html
 	$(call LOG_FUNCTION,"Building Settings HTML")
 	@cp $^ $@
 
+css-setup: $(SETUP_DIR)/mfw-setup.css
+$(SETUP_DIR)/mfw-setup.css: src/css/mfw-setup.css
+	$(call LOG_FUNCTION,"Building CSS")
+	@cp $^ $@
+
 js-setup: $(SETUP_DIR)/mfw-setup-all.js
 $(SETUP_DIR)/mfw-setup-all.js: $(APP_SETUP_ALL)
 	$(call LOG_FUNCTION,"Building Setup app")
@@ -252,7 +261,7 @@ clean:
 
 ## development targets
 
-dev-deploy: dev-install dev-sass css-admin css-settings dev-copy
+dev-deploy: dev-install dev-sass-admin dev-sass-setup css-admin css-setup css-settings dev-copy
 
 dev-install: \
 	dir \
@@ -263,16 +272,25 @@ dev-install: \
 	html-reports \
 	js-setup \
 	html-setup \
-	dev-sass \
+	dev-sass-admin \
+	dev-sass-setup \
 	css-admin \
+	css-setup \
 	css-settings \
 	cacheguard
 
 # generates the mfw-all.css
-dev-sass: src/css/mfw-all.css
-src/css/mfw-all.css: $(SASS)
+dev-sass-admin: src/css/mfw-all.css
+src/css/mfw-all.css: $(SASS-ADMIN)
 	$(call LOG_FUNCTION,"Building Dev CSS")
 	cat $^ | sass --scss --style compact --sourcemap=none -s $@
+
+# generates the mfw-setup.css
+dev-sass-setup: src/css/mfw-setup.css
+src/css/mfw-setup.css: $(SASS-SETUP)
+	$(call LOG_FUNCTION,"Building Dev CSS")
+	cat $^ | sass --scss --style compact --sourcemap=none -s $@
+
 
 dev-copy:
 	@echo "****************************************"
@@ -311,7 +329,7 @@ dev-watch:
 	moment-install \
 	dev-deploy \
 	dev-install \
-	dev-sass \
+	dev-sass-admin \
 	dev-copy \
 	dev-reload \
 	dev-watch
