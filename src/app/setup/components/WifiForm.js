@@ -6,23 +6,6 @@ Ext.define('Mfw.setup.cmp.Wifi', {
         type: 'vbox'
     },
 
-    viewModel: {
-        formulas: {
-            /**
-             * helper formula to deal with interface configType
-             * if enabled the configType will be BRIDGED, DISABLED otherwise
-             */
-            configType: {
-                get: function (get) {
-                    return get('intf.configType') !== 'DISABLED';
-                },
-                set: function (value) {
-                    this.set('intf.configType', value ? 'BRIDGED' : 'DISABLED');
-                }
-            }
-        }
-    },
-
     items: [{
         xtype: 'container',
         width: 300,
@@ -47,7 +30,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             bodyAlign: 'start',
             margin: '0 0 16 0',
             bind: {
-                checked: '{configType}'
+                checked: '{intf.enabled}'
             }
         }, {
             xtype: 'selectfield',
@@ -62,7 +45,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             disabled: true,
             bind: {
                 value: '{intf.wirelessMode}',
-                disabled: '{intf.configType === "DISABLED"}'
+                disabled: '{!intf.enabled}'
             }
         }, {
             xtype: 'numberfield',
@@ -72,7 +55,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             disabled: true,
             bind: {
                 value: '{intf.wirelessChannel}',
-                disabled: '{intf.configType === "DISABLED"}'
+                disabled: '{!intf.enabled}'
             }
         }, {
             xtype: 'selectfield',
@@ -89,7 +72,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             ],
             bind: {
                 value: '{intf.wirelessEncryption}',
-                disabled: '{intf.configType === "DISABLED"}'
+                disabled: '{!intf.enabled}'
             }
         }, {
             xtype: 'textfield',
@@ -99,7 +82,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             disabled: true,
             bind: {
                 value: '{intf.wirelessSsid}',
-                disabled: '{intf.configType === "DISABLED"}'
+                disabled: '{!intf.enabled}'
             }
         }, {
             xtype: 'passwordfield',
@@ -110,7 +93,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             disabled: true,
             bind: {
                 value: '{intf.wirelessPassword}',
-                disabled: '{intf.configType === "DISABLED"}'
+                disabled: '{!intf.enabled}'
             }
         }]
     }]

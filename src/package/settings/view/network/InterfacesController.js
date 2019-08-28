@@ -38,9 +38,6 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         if (value === 'ADDRESSED') {
             return 'Addressed';
         }
-        if (value === 'DISABLED') {
-            return 'Disabled';
-        }
         if (value === 'BRIDGED') {
             var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
             return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';

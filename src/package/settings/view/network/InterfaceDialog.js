@@ -14,13 +14,11 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 // all types
                 var options = [
                     { text: 'Addressed', value: 'ADDRESSED' },
-                    { text: 'Bridged',   value: 'BRIDGED' },
-                    { text: 'Disabled',  value: 'DISABLED' }
+                    { text: 'Bridged',   value: 'BRIDGED' }
                 ];
                 if (get('interface.type') === 'OPENVPN') {
                     options = [
-                        { text: 'Addressed', value: 'ADDRESSED' },
-                        { text: 'Disabled',  value: 'DISABLED' }
+                        { text: 'Addressed', value: 'ADDRESSED' }
                     ];
                 }
                 return options;
@@ -56,14 +54,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 Ext.getStore('interfaces').each(function (intf) {
                     // interface should be ADDRESSED
                     if (intf.get('interfaceId') === get('interface.interfaceId') ||
-                        intf.get('configType') !== 'ADDRESSED') {
-                            return;
+                        intf.get('configType') === 'ADDRESSED') {
+                            interfaces.push({
+                                text: intf.get('name'),
+                                value: intf.get('interfaceId')
+                            });
                         }
-
-                    interfaces.push({
-                        text: intf.get('name'),
-                        value: intf.get('interfaceId')
-                    });
                 });
                 return interfaces;
             },
@@ -185,7 +181,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 hidden: true,
                 bind: {
                     value: '{interface.openvpnBoundInterfaceId}',
-                    hidden: '{interface.type !== "OPENVPN" || interface.configType === "DISABLED"}',
+                    hidden: '{interface.type !== "OPENVPN" || !interface.enabled}',
                     required: '{interface.type === "OPENVPN"}',
                     options: '{boundOptions}'
                 }
@@ -230,7 +226,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
         hidden: true,
         bind: {
-            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "WWAN") || interface.configType === "DISABLED"}'
+            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "WWAN") || !interface.enabled}'
         }
         /**
          * setting navigation tree end
@@ -1785,6 +1781,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             if (node.get('key') === 'openvpnconf' ||
                                 node.get('key') === 'openvpnauth' ||
                                 node.get('key') === 'qos' && !intf.get('wan') ||
+                                node.get('key') === 'lte' ||
                                 node.get('key') === 'dhcpoptions' && !intf.get('dhcpEnabled') ||
                                 node.get('key') === 'vrrpv4aliases' && !intf.get('vrrpEnabled')) {
                                 node.set('text', '');
@@ -1807,6 +1804,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 if (type === 'NIC') {
                     treelist.getStore().each(function (node) {
                         if (node.get('key') === 'wifi' ||
+                            node.get('key') === 'lte' ||
                             node.get('key') === 'openvpnconf' ||
                             node.get('key') === 'openvpnauth' ||
                             node.get('key') === 'qos' && !intf.get('wan') ||
@@ -1842,9 +1840,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }
 
-                if (configType === 'DISABLED') {
-                    treelist.setSelection(treelist.getStore().findNode('key', 'disabled'));
-                }
+                // if (configType === 'DISABLED') {
+                //     treelist.setSelection(treelist.getStore().findNode('key', 'disabled'));
+                // }
             }, me, {
                 deep: true
             });
@@ -1870,7 +1868,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             { lbl: 'IPv4 Aliases', key: 'ipv4aliases', leaf: true },
                             { lbl: 'IPv6', key: 'ipv6', leaf: true },
                             { lbl: 'IPv6 Aliases', key: 'ipv6aliases', leaf: true },
-                            { lbl: 'WWAN / 4G', key: 'lte', leaf: true },
+                            { lbl: 'LTE / 4G', key: 'lte', leaf: true },
                             { lbl: 'DHCP', key: 'dhcp', leaf: true },
                             { lbl: 'DHCP Options', key: 'dhcpoptions', leaf: true },
                             { lbl: 'VRRP', key: 'vrrp', leaf: true },

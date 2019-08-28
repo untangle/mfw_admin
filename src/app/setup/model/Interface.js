@@ -24,7 +24,8 @@ Ext.define('Mfw.model.Interface', {
         { name: 'qosEnabled',  type: 'boolean', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
-        { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
+        { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED"]
+        { name: 'enabled',     type: 'boolean', defaultValue: true },
 
         { name: 'natEgress',  type: 'boolean', allowNull: true },
         { name: 'natIngress', type: 'boolean', allowNull: true },

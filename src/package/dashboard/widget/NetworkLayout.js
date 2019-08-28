@@ -97,7 +97,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
                     var interfaces = Ext.decode(response.responseText),
                         wansStore = [], lansStore = [];
                     Ext.Array.each(interfaces, function (intf) {
-                        if (intf.configType === 'DISABLED') {
+                        if (!intf.enabled) {
                             return;
                         }
                         if (intf.wan) {
