@@ -17,7 +17,7 @@ Ext.define('Mfw.common.conditions.Controller', {
         titleBar.add([{
             xtype: 'button',
             ui: 'round action',
-            // text: 'Add'.t(),
+            // text: 'Add',
             // ui: 'action',
             iconCls: 'x-fa fa-plus',
             align: 'right',

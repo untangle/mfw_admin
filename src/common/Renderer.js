@@ -246,9 +246,7 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            if (Map.protocols[value]) {
-                valueRender = Map.protocols[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
-            }
+            valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']';
         }
 
         if (type === 'LIMIT_RATE') {
@@ -282,11 +280,12 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            valueRender = [];
-            Ext.Array.each(rec.get('value').split(','), function (val) {
-                valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-            });
-            valueRender = valueRender.join(', ');
+            // valueRender = [];
+            // Ext.Array.each(rec.get('value').split(','), function (val) {
+            //     valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+            // });
+            // valueRender = valueRender.join(', ');
+            valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']';
         }
 
         if (type === 'LIMIT_RATE') {
@@ -304,9 +303,9 @@ Ext.define('Mfw.Renderer', {
         }
 
         if (type === 'CT_STATE') {
-                if (Map.connStates[value]) {
-                    valueRender = Map.connStates[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
-                }
+            if (Map.connStates[value]) {
+                valueRender = Map.connStates[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+            }
         }
 
         if (type === 'SOURCE_INTERFACE_ZONE' ||
@@ -380,13 +379,17 @@ Ext.define('Mfw.Renderer', {
             valueRender = cond.get('value');
 
             if (type === 'IP_PROTOCOL') {
-                valueRender = [];
-                Ext.Array.each(cond.get('value').split(','), function (val) {
-                    valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                });
+                // valueRender = [];
+                // Ext.Array.each(cond.get('value').split(','), function (val) {
+                //     valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                // });
+                // strArr.push('<span style="font-weight: bold; color: #333;">' +
+                //              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                //              valueRender.join(' or ') + '</span>');
                 strArr.push('<span style="font-weight: bold; color: #333;">' +
+                             Conditions.map[type].text.toLowerCase() + ' ' +
                              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
-                             valueRender.join(' or ') + '</span>');
+                             Map.protocols[cond.get('value')] + '</span>');
                 return;
             }
 
@@ -472,22 +475,22 @@ Ext.define('Mfw.Renderer', {
     },
 
     ruleAction: function (value, action) {
-        var type, actionStr = '&lt; no action set &gt;'.t();
+        var type, actionStr = '&lt; no action set &gt;';
 
             if (action && action.get('type')) {
             type = action.get('type');
             switch (type) {
-                case 'JUMP':            actionStr = 'Jump to'.t(); break;
-                case 'GOTO':            actionStr = 'Go to'.t(); break;
-                case 'ACCEPT':          actionStr = 'Accept'.t(); break;
-                case 'RETURN':          actionStr = 'Return'.t(); break;
-                case 'REJECT':          actionStr = 'Reject'.t(); break;
-                case 'DROP':            actionStr = 'Drop'.t(); break;
-                case 'DNAT':            actionStr = 'New Destination'.t(); break;
-                case 'SNAT':            actionStr = 'New Source'.t(); break;
-                case 'MASQUERADE':      actionStr = 'Masquerade'.t(); break;
-                case 'SET_PRIORITY':    actionStr = 'Priority'.t(); break;
-                case 'WAN_DESTINATION': actionStr = 'Wan Destination'.t(); break;
+                case 'JUMP':            actionStr = 'Jump to'; break;
+                case 'GOTO':            actionStr = 'Go to'; break;
+                case 'ACCEPT':          actionStr = 'Accept'; break;
+                case 'RETURN':          actionStr = 'Return'; break;
+                case 'REJECT':          actionStr = 'Reject'; break;
+                case 'DROP':            actionStr = 'Drop'; break;
+                case 'DNAT':            actionStr = 'New Destination'; break;
+                case 'SNAT':            actionStr = 'New Source'; break;
+                case 'MASQUERADE':      actionStr = 'Masquerade'; break;
+                case 'SET_PRIORITY':    actionStr = 'Priority'; break;
+                case 'WAN_DESTINATION': actionStr = 'Wan Destination'; break;
                 case 'WAN_POLICY':      actionStr = ''; break;
                 default: break;
             }

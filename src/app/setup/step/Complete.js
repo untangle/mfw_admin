@@ -2,21 +2,12 @@ Ext.define('Mfw.setup.step.Complete', {
     extend: 'Ext.Panel',
     alias: 'widget.step-complete',
 
-    style: 'color: #555;',
+    layout: 'center',
 
-    layout: {
-        type: 'vbox',
-        align: 'middle'
-    },
+    padding: '0 0 200 0',
 
     items: [{
-        xtype: 'component',
-        width: 500,
-        padding: '0 0 24 0',
-        html: '<h1 style="text-align: center;">Done!</h1><hr/>'
-    }, {
         xtype: 'container',
-        padding: 0,
 
         layout: {
             type: 'vbox',
@@ -25,15 +16,20 @@ Ext.define('Mfw.setup.step.Complete', {
 
         items: [{
             xtype: 'component',
+            // padding: '0 0 24 0',
+            html: '<h1 style="text-align: center; font-size: 48px; font-weight: 100;">Complete!</h1>'
+        }, {
+            xtype: 'component',
             padding: '0 24',
             style: 'text-align: center;',
-            html: '<h2 style="font-weight: 100;">The Untangle Server is now configured!</h2>'
+            html: '<h2 style="font-weight: 100;">The system is now configured!</h2>'
         }, {
             xtype: 'button',
-            text: 'Open Dashboard',
+            text: 'Go to Dashboard',
             ui: 'action',
-            // width: 200,
-            margin: '16 0 0 0',
+            width: 200,
+            height: '40',
+            margin: '32 0 0 0',
             handler: function () {
                 window.location.href = '/admin';
             }

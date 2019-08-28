@@ -22,41 +22,42 @@ Ext.define('Mfw.cmp.UpgradeDialog', {
     }],
 
     listeners: {
-        show: function () {
+        show: function (view) {
 
             Ext.Ajax.request({
                 url: '/api/upgrade',
                 method: 'POST',
                 success: function () {
-                    console.log('success');
+                    // console.log('success');
                 },
                 failure: function(response) {
-                    console.log('unable to upgrade ... ' + response.status);
+                    console.log('Unable to upgrade ... ' + response.status);
+                    view.destroy();
                 }
             });
 
 
-            // var checkOnline = function () {
-            //     Ext.Ajax.request({
-            //         url: '/account/status',
-            //         timeout: 5000,
-            //         success: function (result) {
-            //             // console.log('success', result);
-            //         },
-            //         failure: function (result) {
-            //             // recheck if address unreachable or internet disconnected
-            //             if (result.status === 0) {
-            //                 Ext.defer(checkOnline, 3000);
-            //             }
+            var checkOnline = function () {
+                Ext.Ajax.request({
+                    url: '/account/status',
+                    timeout: 5000,
+                    success: function (result) {
+                        // console.log('success');
+                    },
+                    failure: function (result) {
+                        // recheck if address unreachable or internet disconnected
+                        if (result.status === 0) {
+                            Ext.defer(checkOnline, 3000);
+                        }
 
-            //             // if back online but not logged in, go to login
-            //             if (result.status === 400) {
-            //                 document.location.href = '/admin';
-            //             }
-            //         }
-            //     });
-            // };
-            // Ext.defer(checkOnline, 3000);
+                        // if back online but not logged in, go to login
+                        if (result.status === 400) {
+                            document.location.href = '/admin';
+                        }
+                    }
+                });
+            };
+            Ext.defer(checkOnline, 3000);
         }
     }
 

@@ -2,6 +2,8 @@ Ext.define('Mfw.setup.step.Performance', {
     extend: 'Ext.Panel',
     alias: 'widget.step-performance',
 
+    padding: '24 0 0 0',
+
     viewModel: {
         data: {
             testprogress: true
@@ -19,9 +21,19 @@ Ext.define('Mfw.setup.step.Performance', {
         width: 600,
         html: '<h1 style="text-align: center;">WAN Performance</h1><hr/>'
     }, {
+        xtype: 'button',
+        ui: 'action',
+        text: 'Re-Run Performance Test',
+        handler: 'runPerformanceTest',
+        hidden: true,
+        margin: '0 0 32 0',
+        bind: {
+            hidden: '{testprogress}'
+        },
+    }, {
         xtype: 'grid',
         reference: 'interfaces',
-        minWidth: 600,
+        width: 600,
         flex: 1,
         plugins: {
             gridcellediting: {
@@ -43,32 +55,48 @@ Ext.define('Mfw.setup.step.Performance', {
         },
 
         columns: [{
-            text: 'Interface Name [ id ] / device',
+            align: 'center',
+            dataIndex: 'type',
+            width: 44,
+            resizable: false,
+            hideable: false,
+            menuDisabled: true,
+            cell: { encodeHtml: false },
+            renderer: function (value) {
+                var svgIcon = '';
+                switch (value) {
+                    case 'NIC': svgIcon = 'network-wired.svg'; break;
+                    case 'WIFI': svgIcon = 'wifi.svg'; break;
+                    case 'VLAN':
+                    case 'OPENVPN': svgIcon = 'project-diagram.svg'; break;
+                    default: svgIcon = 'signal.svg';
+                }
+                return '<img width=16 src="../static/res/icons/intf/' + svgIcon + '">';
+            }
+        }, {
+            text: 'Name',
             dataIndex: 'name',
-            flex: 1,
-            minWidth: 150,
+            width: 120,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
-            renderer: function (value, record) {
-                return '<b>' + record.get('name') + ' [ ' + record.get('interfaceId') + ' ]</b> / ' + record.get('device');
+            renderer: function (value) {
+                return '<b>' + value + '</b>';
             }
         }, {
             text: 'Download',
-            align: 'right',
-            width: 120,
+            flex: 1,
             menuDisabled: true,
             dataIndex: 'downloadKbps',
             cell: {
                 encodeHtml: false,
                 tools: [{
                     cls: 'cell-edit-icon',
-                    iconCls: 'md-icon-edit',
-                    zone: 'start'
+                    iconCls: 'md-icon-edit'
                 }]
             },
             renderer: function (value) {
-                return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
+                return value ? (value/1000).toFixed(2) + ' Mbps' : '<em style="color: #777;">< not set ></em>';
             },
             editor: {
                 xtype: 'numberfield',
@@ -78,21 +106,19 @@ Ext.define('Mfw.setup.step.Performance', {
             }
         }, {
             text: 'Upload',
-            align: 'right',
-            width: 120,
+            flex: 1,
             dataIndex: 'uploadKbps',
             menuDisabled: true,
             cell: {
                 encodeHtml: false,
                 tools: [{
                     cls: 'cell-edit-icon',
-                    iconCls: 'md-icon-edit',
-                    zone: 'start'
+                    iconCls: 'md-icon-edit'
                 }]
             },
             editable: true,
             renderer: function (value) {
-                return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
+                return value ? (value/1000).toFixed(2) + ' Mbps' : '<em style="color: #777;">< not set ></em>';
             },
             editor: {
                 xtype: 'numberfield',
@@ -103,7 +129,7 @@ Ext.define('Mfw.setup.step.Performance', {
         }, {
             text: 'Ping',
             align: 'right',
-            width: 60,
+            width: 100,
             menuDisabled: true,
             dataIndex: '_ping',
             renderer: function (value) {
@@ -120,40 +146,6 @@ Ext.define('Mfw.setup.step.Performance', {
         bind: {
             hidden: '{!testprogress}'
         }
-    }, {
-        xtype: 'container',
-        width: 600,
-        flex: 1,
-        layout: { type: 'hbox', align: 'top', pack: 'center' },
-        hidden: true,
-        bind: {
-            hidden: '{testprogress}'
-        },
-        items: [{
-            xtype: 'button',
-            iconCls: 'x-fa fa-play',
-            text: 'Run Test',
-            handler: 'runPerformanceTest',
-            width: 120
-        }, {
-            flex: 1
-        }, {
-            xtype: 'component',
-            html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-            hidden: true,
-            bind: { hidden: '{!processing}' }
-        }, {
-            xtype: 'button',
-            width: 150,
-            text: 'Continue',
-            ui: 'action',
-            handler: 'onContinue',
-            hidden: true,
-            bind: { hidden: '{processing}' }
-        }, {
-            flex: 1,
-            margin: '0 120 0 0'
-        }]
     }],
     listeners: {
         activate: 'onActivate'
@@ -241,25 +233,6 @@ Ext.define('Mfw.setup.step.Performance', {
                 }
             });
 
-            // test call simulator for 'wan' device
-            // fns = [function () {
-            //     var deferred = new Ext.Deferred(); // create the Ext.Deferred object
-            //     Ext.defer(function () {
-            //         deferred.resolve({
-            //             device: 'wan',
-            //             test: {
-            //                 ping: 16,
-            //                 download: 78901,
-            //                 upload: 56489
-            //             }
-            //         });
-            //     }, 2000);
-
-            //     return deferred.promise;
-            // }];
-            // end test call simulator
-
-
             Ext.Deferred.parallel(fns, me)
                 .then(function (result) {
                     var intf, errors = [], msg;
@@ -305,10 +278,9 @@ Ext.define('Mfw.setup.step.Performance', {
                 });
         },
 
-        onContinue: function () {
+        continue: function (cb) {
             var me = this,
-                info = [],
-                wzCtrl = me.getView().up('setup-wizard').getController();
+                info = [];
 
             me.getView().down('grid').getStore().each(function (intf) {
                 if (intf.get('wan')) {
@@ -330,10 +302,9 @@ Ext.define('Mfw.setup.step.Performance', {
                 record.phantom = false;
             });
 
-            me.getViewModel().set('processing', true);
             Ext.getStore('interfaces').sync({
                 success: function () {
-                    wzCtrl.update();
+                    cb();
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');

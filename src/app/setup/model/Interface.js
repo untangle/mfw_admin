@@ -24,7 +24,8 @@ Ext.define('Mfw.model.Interface', {
         { name: 'qosEnabled',  type: 'boolean', allowNull: true },
         { name: 'hidden',      type: 'boolean', defaultValue: false },
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN"]
-        { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED","DISABLED"]
+        { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED"]
+        { name: 'enabled',     type: 'boolean', defaultValue: true },
 
         { name: 'natEgress',  type: 'boolean', allowNull: true },
         { name: 'natIngress', type: 'boolean', allowNull: true },
@@ -107,7 +108,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
         { name: 'wireguardPort',       type: 'integer', allowNull: true },
 
-        // LTE
+        // WWAN
         { name: 'simApn', type: 'string', allowNull: true },
         { name: 'simProfile', type: 'integer', allowNull: true },
         { name: 'simPin', type: 'integer', allowNull: true },
@@ -115,7 +116,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'simAuth', type: 'string', allowNull: true }, // ["NONE", "PAP", "CHAP", "BOTH"]
         { name: 'simUsername', type: 'string', allowNull: true },
         { name: 'simPassword', type: 'string', allowNull: true },
-        { name: 'simMode', type: 'string', allowNull: true }, // ["ALL", "LTE", "UMTS", "GSM", "CDMA", "TDSCDMA"]
+        { name: 'simMode', type: 'string', allowNull: true }, // ["ALL", "WWAN", "UMTS", "GSM", "CDMA", "TDSCDMA"]
         { name: 'simPdttype', type: 'string', allowNull: true }, // ["IPV4", "IPV6", "IPV4V6"]
         { name: 'simPlmn', type: 'integer', allowNull: true },
         { name: 'simAutoconnect', type: 'boolean', allowNull: true }

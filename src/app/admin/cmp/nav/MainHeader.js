@@ -166,13 +166,13 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         }
     },
     {
-        text: 'Support',
+        text: 'Help',
         iconCls: 'x-fa fa-question-circle fa-3x fa-white',
         iconAlign: 'top',
         style: 'font-weight: 500; font-size: 12px;',
         hidden: true,
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
-        handler: 'showSupport'
+        handler: 'showHelp'
     },
     {
         text: 'Logout',
@@ -270,7 +270,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             me.menu.show();
         },
 
-        showSupport: function () {
+        showHelp: function () {
             var hash = window.location.hash;
             window.open(Mfw.app.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
         },

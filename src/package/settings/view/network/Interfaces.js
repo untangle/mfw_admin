@@ -72,6 +72,15 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return '<b>' + record.get('name') + ' </b>';
         }
     }, {
+        text: 'Enabled',
+        dataIndex: 'enabled',
+        align: 'center',
+        width: 80,
+        cell: { encodeHtml: false },
+        renderer: function (value) {
+            return value ? '<i class="fa fa-check"></i>' : '-';
+        }
+    }, {
         text: 'Type',
         dataIndex: 'type',
         width: 100,

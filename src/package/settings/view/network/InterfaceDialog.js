@@ -14,13 +14,11 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 // all types
                 var options = [
                     { text: 'Addressed', value: 'ADDRESSED' },
-                    { text: 'Bridged',   value: 'BRIDGED' },
-                    { text: 'Disabled',  value: 'DISABLED' }
+                    { text: 'Bridged',   value: 'BRIDGED' }
                 ];
                 if (get('interface.type') === 'OPENVPN') {
                     options = [
-                        { text: 'Addressed', value: 'ADDRESSED' },
-                        { text: 'Disabled',  value: 'DISABLED' }
+                        { text: 'Addressed', value: 'ADDRESSED' }
                     ];
                 }
                 return options;
@@ -56,14 +54,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 Ext.getStore('interfaces').each(function (intf) {
                     // interface should be ADDRESSED
                     if (intf.get('interfaceId') === get('interface.interfaceId') ||
-                        intf.get('configType') !== 'ADDRESSED') {
-                            return;
+                        intf.get('configType') === 'ADDRESSED') {
+                            interfaces.push({
+                                text: intf.get('name'),
+                                value: intf.get('interfaceId')
+                            });
                         }
-
-                    interfaces.push({
-                        text: intf.get('name'),
-                        value: intf.get('interfaceId')
-                    });
                 });
                 return interfaces;
             },
@@ -102,7 +98,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
     width: 700,
     height: 700,
-
+    draggable: false,
     responsiveConfig: { large: { maximized: false }, small: { maximized: true } },
 
     padding: 0,
@@ -112,6 +108,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
 
     layout: 'fit',
+
+    tools: [{
+        xtype: 'togglefield',
+        bind: {
+            boxLabel: '<strong>{interface.enabled ? "Enabled" : "Disabled"}</strong>',
+            value: '{interface.enabled}'
+        }
+    }],
 
     items: [{
         xtype: 'container',
@@ -156,8 +160,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: {
                     value: '{interface.configType}',
                     options: '{configTypes}',
-                    required: '{interface.type !== "LTE"}',
-                    hidden: '{interface.type === "LTE"}'
+                    required: '{interface.type !== "WWAN"}',
+                    hidden: '{interface.type === "WWAN"}'
                 }
             }, {
                 xtype: 'selectfield',
@@ -185,7 +189,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 hidden: true,
                 bind: {
                     value: '{interface.openvpnBoundInterfaceId}',
-                    hidden: '{interface.type !== "OPENVPN" || interface.configType === "DISABLED"}',
+                    hidden: '{interface.type !== "OPENVPN" || !interface.enabled}',
                     required: '{interface.type === "OPENVPN"}',
                     options: '{boundOptions}'
                 }
@@ -230,7 +234,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
         hidden: true,
         bind: {
-            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "LTE") || interface.configType === "DISABLED"}'
+            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "WWAN")}'
         }
         /**
          * setting navigation tree end
@@ -278,7 +282,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 // hidden: true,
                 bind: {
                     value: '{interface.v4ConfigType}',
-                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "LTE"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "WWAN"}'
                     // disabled: '{!interface.wan}',
                     // hidden: '{interface.type === "OPENVPN"}'
                 },
@@ -539,7 +543,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 bind: {
                     value: '{interface.v6ConfigType}',
                     options: '{ipv6ConfigTypes}',
-                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "LTE"}'
+                    required: '{interface.configType === "ADDRESSED" && interface.type !== "OPENVPN" && interface.type !== "WWAN"}'
                 }
             }, {
 
@@ -732,7 +736,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         }, {
 
             /**
-             * LTE settings
+             * WWAN settings
              * - network ???
              * - simApn
              * - simPin
@@ -758,7 +762,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     { text: 'Other', value: 'OTHER' }
                 ],
                 bind: {
-                    required: '{interface.type === "LTE"}'
+                    required: '{interface.type === "WWAN"}'
                 }
             }, {
                 xtype: 'textfield',
@@ -768,7 +772,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 disabled: false,
                 bind: {
                     value: '{interface.simApn}',
-                    required: '{interface.type === "LTE"}',
+                    required: '{interface.type === "WWAN"}',
                     disabled: '{simNetwork.value !== "OTHER"}'
                 }
             }, {
@@ -778,7 +782,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 hidden: true,
                 bind: {
                     value: '{interface.simPin}',
-                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    required: '{interface.type === "WWAN" && simNetwork.value === "OTHER"}',
                     hidden: '{simNetwork.value !== "OTHER"}'
                 },
                 validators: [{
@@ -793,7 +797,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 hidden: true,
                 bind: {
                     value: '{interface.simUsername}',
-                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    required: '{interface.type === "WWAN" && simNetwork.value === "OTHER"}',
                     hidden: '{simNetwork.value !== "OTHER"}'
                 }
             }, {
@@ -803,12 +807,12 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 hidden: true,
                 bind: {
                     value: '{interface.simPassword}',
-                    required: '{interface.type === "LTE" && simNetwork.value === "OTHER"}',
+                    required: '{interface.type === "WWAN" && simNetwork.value === "OTHER"}',
                     hidden: '{simNetwork.value !== "OTHER"}'
                 }
             }]
             /**
-             * LTE settings end
+             * WWAN settings end
              */
         }, {
 
@@ -1785,6 +1789,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             if (node.get('key') === 'openvpnconf' ||
                                 node.get('key') === 'openvpnauth' ||
                                 node.get('key') === 'qos' && !intf.get('wan') ||
+                                node.get('key') === 'lte' ||
                                 node.get('key') === 'dhcpoptions' && !intf.get('dhcpEnabled') ||
                                 node.get('key') === 'vrrpv4aliases' && !intf.get('vrrpEnabled')) {
                                 node.set('text', '');
@@ -1807,6 +1812,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                 if (type === 'NIC') {
                     treelist.getStore().each(function (node) {
                         if (node.get('key') === 'wifi' ||
+                            node.get('key') === 'lte' ||
                             node.get('key') === 'openvpnconf' ||
                             node.get('key') === 'openvpnauth' ||
                             node.get('key') === 'qos' && !intf.get('wan') ||
@@ -1820,7 +1826,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     treelist.setSelection(treelist.getStore().findNode('key', 'ipv4'));
                 }
 
-                if (type === 'LTE') {
+                if (type === 'WWAN') {
                     treelist.getStore().each(function (node) {
                         if (node.get('key') !== 'lte') {
                             node.set('text', '');
@@ -1842,9 +1848,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     }
                 }
 
-                if (configType === 'DISABLED') {
-                    treelist.setSelection(treelist.getStore().findNode('key', 'disabled'));
-                }
+                // if (configType === 'DISABLED') {
+                //     treelist.setSelection(treelist.getStore().findNode('key', 'disabled'));
+                // }
             }, me, {
                 deep: true
             });
@@ -1999,6 +2005,15 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     treelist.setSelection(treelist.getStore().findNode('key', invalidForm.getItemId()));
                 }
                 Ext.toast('Please fill or correct invalid fields!', 3000);
+                return;
+            }
+
+            /**
+             * if in Setup Wizard just close the editor dialog
+             * all interfaces will be updated on Continue action
+             */
+            if (Mfw.app.context === 'setup') {
+                me.getView().close();
                 return;
             }
 
