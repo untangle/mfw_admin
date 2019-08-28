@@ -41,7 +41,7 @@ Ext.define('Mfw.settings.system.Settings', {
         }, {
             xtype: 'selectfield',
             name: 'displayName',
-            label: 'Timezone'.t(),
+            label: 'Time zone'.t(),
             bind: '{system.timeZone.displayName}',
             valueField: 'text',
             options: Map.options.timezones
