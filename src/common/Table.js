@@ -124,8 +124,8 @@ Ext.define('Mfw.Table', {
             text: 'Server Longitude',
             dataIndex: 'server_longitude'
         }, {
-            text: 'Application ID (Matched)',
-            dataIndex: 'application_id'
+            text: 'Application Name (Inferred)',
+            dataIndex: 'application_name_inferred'
         }, {
             text: 'Application Name (Matched)',
             dataIndex: 'application_name',
@@ -134,48 +134,48 @@ Ext.define('Mfw.Table', {
                 return name || 'Unknown';
             }
         }, {
-            text: 'Application Protochain (Matched)',
-            dataIndex: 'application_protochain',
-            minWidth: 200,
-            flex: 1
+            text: 'Application Category (Inferred)',
+            dataIndex: 'application_category_inferred'
         }, {
             text: 'Application Category (Matched)',
             dataIndex: 'application_category'
         }, {
-            text: 'Application Blocked (Matched)',
+            text: 'Application Blocked',
             dataIndex: 'application_blocked',
             operators: ['EQ']
         }, {
-            text: 'Application Flagged (Matched)',
+            text: 'Application Flagged',
             dataIndex: 'application_flagged',
             operators: ['EQ']
         }, {
-            text: 'Application Confidence (Matched)',
-            dataIndex: 'application_confidence'
-        }, {
-            text: 'Application Detail',
+            text: 'Application Detail (Matched)',
             dataIndex: 'application_detail'
         }, {
             text: 'Application ID (Inferred)',
             dataIndex: 'application_id_inferred'
         }, {
-            text: 'Application Name (Inferred)',
-            dataIndex: 'application_name_inferred'
+            text: 'Application ID (Matched)',
+            dataIndex: 'application_id'
+        }, {
+            text: 'Application Protochain (Inferred)',
+            dataIndex: 'application_protochain_inferred'
+        }, {
+            text: 'Application Protochain (Matched)',
+            dataIndex: 'application_protochain',
+            minWidth: 200,
+            flex: 1
         }, {
             text: 'Application Confidence (Inferred)',
             dataIndex: 'application_confidence_inferred'
         }, {
-            text: 'Application Protochain (Inferred)',
-            dataIndex: 'application_protochain_inferred'
+            text: 'Application Confidence (Matched)',
+            dataIndex: 'application_confidence'
         }, {
             text: 'Application Productivity (Inferred)',
             dataIndex: 'application_productivity_inferred'
         }, {
             text: 'Application Risk (Inferred)',
             dataIndex: 'application_risk_inferred'
-        }, {
-            text: 'Application Category (Inferred)',
-            dataIndex: 'application_category_inferred'
         }, {
             text: 'Certificate Subject CN',
             dataIndex: 'certificate_subject_cn'

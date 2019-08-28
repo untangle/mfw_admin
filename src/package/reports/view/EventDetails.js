@@ -50,22 +50,21 @@ Ext.define('Mfw.reports.EventDetails', {
                 }, {
                     key: 'Application',
                     children: [
-                        { key: 'application_blocked', val: '', leaf: true },
-                        { key: 'application_category', val: '', leaf: true },
-                        { key: 'application_confidence', val: '', leaf: true },
-                        { key: 'application_detail', val: '', leaf: true },
-                        { key: 'application_flagged', val: '', leaf: true },
-                        { key: 'application_id', val: '', leaf: true },
-                        { key: 'application_name', val: '', leaf: true },
-                        { key: 'application_protochain', val: '', leaf: true },
-                        { key: 'application_id_inferred', val: '', leaf: true},
                         { key: 'application_name_inferred', val: '', leaf: true},
-                        { key: 'application_confidence_inferred', val: '', leaf: true },
+                        { key: 'application_name', val: '', leaf: true },
+                        { key: 'application_category_inferred', val: '', leaf: true },
+                        { key: 'application_category', val: '', leaf: true },
+                        { key: 'application_blocked', val: '', leaf: true },
+                        { key: 'application_flagged', val: '', leaf: true },
+                        { key: 'application_detail', val: '', leaf: true },
+                        { key: 'application_id_inferred', val: '', leaf: true},
+                        { key: 'application_id', val: '', leaf: true },
                         { key: 'application_protochain_inferred', val: '', leaf: true },
+                        { key: 'application_protochain', val: '', leaf: true },
+                        { key: 'application_confidence_inferred', val: '', leaf: true },
+                        { key: 'application_confidence', val: '', leaf: true },
                         { key: 'application_productivity_inferred', val: '', leaf: true },
-                        { key: 'application_risk_inferred', val: '', leaf: true },
-                        { key: 'application_category_inferred', val: '', leaf: true }
-
+                        { key: 'application_risk_inferred', val: '', leaf: true }
                     ]
                 },
                 { key: 'local_address', val: '', leaf: true },
