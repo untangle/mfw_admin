@@ -74,7 +74,7 @@ Ext.define('Mfw.settings.Util', {
         return Ext.Date.subtract(clientDate, Ext.Date.MINUTE, new Date().getTimezoneOffset() / 60000);
     },
 
-    // getFirstPacketConditions will retrieve all condition types that have the 
+    // getFirstPacketConditions will retrieve all condition types that do not have disableOnFirstPacket == true
     getFirstPacketConditions: function() {
         return Conditions.list.filter(function(item) {return item.disableOnFirstPacket != true}).map(function(item) {return item.type});
     }
