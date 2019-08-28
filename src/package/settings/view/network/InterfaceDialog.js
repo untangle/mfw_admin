@@ -98,7 +98,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
     width: 700,
     height: 700,
-
+    draggable: false,
     responsiveConfig: { large: { maximized: false }, small: { maximized: true } },
 
     padding: 0,
@@ -108,6 +108,14 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     },
 
     layout: 'fit',
+
+    tools: [{
+        xtype: 'togglefield',
+        bind: {
+            boxLabel: '<strong>{interface.enabled ? "Enabled" : "Disabled"}</strong>',
+            value: '{interface.enabled}'
+        }
+    }],
 
     items: [{
         xtype: 'container',
@@ -226,7 +234,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
 
         hidden: true,
         bind: {
-            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "WWAN") || !interface.enabled}'
+            hidden: '{(interface.configType !== "ADDRESSED" && interface.type !== "WIFI" && interface.type !== "WWAN")}'
         }
         /**
          * setting navigation tree end
