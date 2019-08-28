@@ -2038,8 +2038,8 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_PROTOCHAIN',
-        category: 'Application (Matched)',
-        text: 'Application Protochain'.t(),
+        category: 'Application',
+        text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!=']
     }, {
