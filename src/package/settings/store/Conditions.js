@@ -5,10 +5,18 @@ Ext.define('Mfw.settings.Conditions', {
     list: [
     // APPLICATION
     {
+
+        type:'APPLICATION_NAME_INFERRED',
+        category: 'Application',
+        text: 'Application Name (Inferred)'.t(),
+        description: 'Application Name (Inferred) description ...',
+        operators: ['==', '!=']
+    }, {
         type:'APPLICATION_NAME',
         category: 'Application',
         text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
+        disableOnFirstPacket: true,
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -2004,10 +2012,17 @@ Ext.define('Mfw.settings.Conditions', {
             ]
         }
     }, {
+        type:'APPLICATION_CATEGORY_INFERRED',
+        category: 'Application',
+        text: 'Application Category (Inferred)'.t(),
+        description: 'Application Category (Inferred) description ...',
+        operators: ['==', '!=']
+    }, {
         type:'APPLICATION_CATEGORY',
         category: 'Application',
         text: 'Application Category (Matched)'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
+        disableOnFirstPacket: true,
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -2031,23 +2046,12 @@ Ext.define('Mfw.settings.Conditions', {
             ]
         }
     }, {
-        type:'APPLICATION_ID',
-        category: 'Application',
-        text: 'Application ID (Matched)'.t(),
-        description: 'Application ID description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PROTOCHAIN',
-        category: 'Application',
-        text: 'Application Protochain (Matched)'.t(),
-        description: 'Application Protochain description ...',
-        operators: ['==', '!=']
-    }, {
         type:'APPLICATION_DETAIL',
         category: 'Application',
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
     }, {
         type:'APPLICATION_ID_INFERRED',
         category: 'Application',
@@ -2055,17 +2059,12 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application ID (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_NAME_INFERRED',
+        type:'APPLICATION_ID',
         category: 'Application',
-        text: 'Application Name (Inferred)'.t(),
-        description: 'Application Name (Inferred) description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_CONFIDENCE_INFERRED',
-        category: 'Application',
-        text: 'Application Confidence (Inferred)'.t(),
-        description: 'Application Confidence (Inferred) description ...',
-        operators: ['==', '!=', '>', '>=', '<', '<=']
+        text: 'Application ID (Matched)'.t(),
+        description: 'Application ID description ...',
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
     }, {
         type:'APPLICATION_PROTOCHAIN_INFERRED',
         category: 'Application',
@@ -2073,6 +2072,19 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
+        type:'APPLICATION_PROTOCHAIN',
+        category: 'Application',
+        text: 'Application Protochain (Matched)'.t(),
+        description: 'Application Protochain description ...',
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
+    },  {
+        type:'APPLICATION_CONFIDENCE_INFERRED',
+        category: 'Application',
+        text: 'Application Confidence (Inferred)'.t(),
+        description: 'Application Confidence (Inferred) description ...',
+        operators: ['==', '!=', '>', '>=', '<', '<=']
+    },  {
         type:'APPLICATION_PRODUCTIVITY_INFERRED',
         category: 'Application',
         text: 'Application Productivity (Inferred)'.t(),
@@ -2083,12 +2095,6 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Risk (Inferred)'.t(),
         description: 'Application Risk (Inferred) description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_CATEGORY_INFERRED',
-        category: 'Application',
-        text: 'Application Category (Inferred)'.t(),
-        description: 'Application Category (Inferred) description ...',
         operators: ['==', '!=']
     }, 
 
