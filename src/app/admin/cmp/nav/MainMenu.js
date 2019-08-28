@@ -48,9 +48,9 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         iconCls: 'x-fa fa-cloud-download fa-orange',
         handler: 'startUpgrade'
     }, {
-        text: 'Support'.t(),
+        text: 'Help'.t(),
         iconCls: 'x-fa fa-question-circle',
-        handler: 'showSupport'
+        handler: 'showHelp'
     }, {
         text: 'Logout'.t(),
         iconCls: 'x-fa fa-sign-out',
