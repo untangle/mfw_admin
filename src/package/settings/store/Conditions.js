@@ -11,9 +11,10 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
         operators: ['==', '!='],
         field: {
-            xtype: 'selectfield',
+            xtype: 'combobox',
             placeholder: 'Select or type a value ...',
             editable: true,
+            typeAhead: true,
             options: [
                 { text: '050PLUS', value: '050PLUS' },
                 { text: '12306CN', value: '12306CN' },

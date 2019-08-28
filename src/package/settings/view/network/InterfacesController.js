@@ -34,6 +34,18 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         me.intfDialog.show();
     },
 
+    onDeleteRecord: function (grid, info) {
+        var me = this;
+        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            'Delete <strong>' + info.record.get('name') + '</strong> interface?',
+            function (answer) {
+                if (answer === 'yes') {
+                    info.record.drop();
+                    me.onSave(); // defind in MasterGrid
+                }
+            });
+    },
+
     configTypeRenderer: function (value, record) {
         if (value === 'ADDRESSED') {
             return 'Addressed';
