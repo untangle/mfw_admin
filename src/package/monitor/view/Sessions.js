@@ -92,8 +92,8 @@ Ext.define('Mfw.monitor.view.Sessions', {
         flex: 1,
         hidden: true
     }, {
-        text: 'Application Threat (Inferred)',
-        dataIndex: 'application_threat_inferred',
+        text: 'Application Risk (Inferred)',
+        dataIndex: 'application_risk_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true

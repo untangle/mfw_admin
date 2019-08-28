@@ -171,8 +171,8 @@ Ext.define('Mfw.Table', {
             text: 'Application Productivity (Inferred)',
             dataIndex: 'application_productivity_inferred'
         }, {
-            text: 'Application Threat (Inferred)',
-            dataIndex: 'application_threat_inferred'
+            text: 'Application Risk (Inferred)',
+            dataIndex: 'application_risk_inferred'
         }, {
             text: 'Application Category (Inferred)',
             dataIndex: 'application_category_inferred'

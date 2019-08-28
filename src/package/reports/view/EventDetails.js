@@ -63,7 +63,7 @@ Ext.define('Mfw.reports.EventDetails', {
                         { key: 'application_confidence_inferred', val: '', leaf: true },
                         { key: 'application_protochain_inferred', val: '', leaf: true },
                         { key: 'application_productivity_inferred', val: '', leaf: true },
-                        { key: 'application_threat_inferred', val: '', leaf: true },
+                        { key: 'application_risk_inferred', val: '', leaf: true },
                         { key: 'application_category_inferred', val: '', leaf: true }
 
                     ]

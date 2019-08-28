@@ -26,7 +26,7 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                         { key: 'application_confidence_inferred', text: 'Confidence (Inferred)', leaf: true },
                         { key: 'application_protochain_inferred', text: 'Protochain (Inferred)', leaf: true },
                         { key: 'application_productivity_inferred', text: 'Productivity (Inferred)', leaf: true },
-                        { key: 'application_threat_inferred', text: 'Threat (Inferred)', leaf: true },
+                        { key: 'application_risk_inferred', text: 'Risk (Inferred)', leaf: true },
                         { key: 'application_category_inferred', text: 'Category (Inferred)', leaf: true }
                     ]
                 },

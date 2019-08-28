@@ -2079,10 +2079,10 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Productivity (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_THREAT_INFERRED',
+        type:'APPLICATION_RISK_INFERRED',
         category: 'Application',
-        text: 'Application Threat (Inferred)'.t(),
-        description: 'Application Threat (Inferred) description ...',
+        text: 'Application Risk (Inferred)'.t(),
+        description: 'Application Risk (Inferred) description ...',
         operators: ['==', '!=']
     }, {
         type:'APPLICATION_CATEGORY_INFERRED',

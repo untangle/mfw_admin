@@ -29,7 +29,7 @@ Ext.define('Mfw.model.MonitorSession', {
         { name: 'application_confidence_inferred', type: 'number', allowNull: true },
         { name: 'application_protochain_inferred', type: 'string' },
         { name: 'application_productivity_inferred', type: 'string' },
-        { name: 'application_threat_inferred', type: 'string' },
+        { name: 'application_risk_inferred', type: 'string' },
         { name: 'application_category_inferred', type: 'string' },
 
 
