@@ -2610,7 +2610,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: true,
+            multiSelect: false,
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.protocols,
