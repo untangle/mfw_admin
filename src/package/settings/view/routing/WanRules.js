@@ -13,6 +13,7 @@ Ext.define('Mfw.settings.routing.WanRules', {
             update: Util.api + '/settings/wan/policy_chains'
         },
         actions: ['WAN_POLICY', 'JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP'],
+        conditions: Util.getFirstPacketConditions(),
         hash: 'routing/wan-rules'
     },
 

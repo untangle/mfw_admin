@@ -35,48 +35,71 @@ Ext.define('Mfw.monitor.view.Sessions', {
         width: 130,
         hidden: true
     }, {
-        text: 'Application Name',
+        text: 'Application Name (Inferred)',
+        dataIndex: 'application_name_inferred',
+        width: 150,
+        hidden: true
+    }, {
+        text: 'Application Name (Matched)',
         dataIndex: 'application_name',
         minWidth: 150
     }, {
-        text: 'Application Id',
+        text: 'Application Category (Inferred)',
+        dataIndex: 'application_category_inferred',
+        minWidth: 200,
+        flex: 1,
+        hidden: true
+    }, {
+        text: 'Application Category (Matched)',
+        dataIndex: 'application_category',
+        width: 150
+    }, {
+        text: 'Application ID (Inferred)',
+        dataIndex: 'application_id_inferred',
+        width: 150,
+        hidden: true
+    }, {
+        text: 'Application ID (Matched)',
         dataIndex: 'application_id',
         width: 150,
         hidden: true
     }, {
-        text: 'Application Category',
-        dataIndex: 'application_category',
-        width: 150
-    }, {
-        text: 'Application Detail',
-        dataIndex: 'application_detail',
-        width: 150,
+        text: 'Application Protochain (Inferred)',
+        dataIndex: 'application_protochain_inferred',
+        minWidth: 200,
+        flex: 1,
         hidden: true
     }, {
-        text: 'Application Confidence',
+        text: 'Application Protochain (Matched)',
+        dataIndex: 'application_protochain',
+        minWidth: 200,
+        flex: 1
+    }, {
+        text: 'Application Confidence (Inferred)',
+        dataIndex: 'application_confidence_inferred',
+        width: 100,
+        align: 'right',
+        hidden: true
+    },  {
+        text: 'Application Confidence (Matched)',
         dataIndex: 'application_confidence',
         width: 100,
         align: 'right',
         hidden: true
     }, {
-        text: 'Application Protochain',
-        dataIndex: 'application_protochain',
-        minWidth: 200,
-        flex: 1
-    }, {
-        text: 'Predicted Application',
-        dataIndex: 'application_predicted_name',
+        text: 'Application Detail (Matched)',
+        dataIndex: 'application_detail',
         width: 150,
         hidden: true
     }, {
-        text: 'Predicted Confidence',
-        dataIndex: 'application_predicted_confidence',
-        width: 100,
-        align: 'right',
+        text: 'Application Productivity (Inferred)',
+        dataIndex: 'application_productivity_inferred',
+        minWidth: 200,
+        flex: 1,
         hidden: true
     }, {
-        text: 'Predicted Protocolchain',
-        dataIndex: 'application_predicted_protochain',
+        text: 'Application Risk (Inferred)',
+        dataIndex: 'application_risk_inferred',
         minWidth: 200,
         flex: 1,
         hidden: true

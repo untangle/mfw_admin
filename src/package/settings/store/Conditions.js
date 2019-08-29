@@ -5,10 +5,18 @@ Ext.define('Mfw.settings.Conditions', {
     list: [
     // APPLICATION
     {
+
+        type:'APPLICATION_NAME_INFERRED',
+        category: 'Application',
+        text: 'Application Name (Inferred)'.t(),
+        description: 'Application Name (Inferred) description ...',
+        operators: ['==', '!=']
+    }, {
         type:'APPLICATION_NAME',
         category: 'Application',
-        text: 'Application Name'.t(),
+        text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
+        disableOnFirstPacket: true,
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -2004,10 +2012,17 @@ Ext.define('Mfw.settings.Conditions', {
             ]
         }
     }, {
+        type:'APPLICATION_CATEGORY_INFERRED',
+        category: 'Application',
+        text: 'Application Category (Inferred)'.t(),
+        description: 'Application Category (Inferred) description ...',
+        operators: ['==', '!=']
+    }, {
         type:'APPLICATION_CATEGORY',
         category: 'Application',
-        text: 'Application Category'.t(),
+        text: 'Application Category (Matched)'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
+        disableOnFirstPacket: true,
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -2031,42 +2046,57 @@ Ext.define('Mfw.settings.Conditions', {
             ]
         }
     }, {
-        type:'APPLICATION_ID',
-        category: 'Application',
-        text: 'Application ID'.t(),
-        description: 'Application ID description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PROTOCHAIN',
-        category: 'Application',
-        text: 'Application Protochain'.t(),
-        description: 'Application Protochain description ...',
-        operators: ['==', '!=']
-    }, {
         type:'APPLICATION_DETAIL',
         category: 'Application',
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
+    }, {
+        type:'APPLICATION_ID_INFERRED',
+        category: 'Application',
+        text: 'Application ID (Inferred)'.t(),
+        description: 'Application ID (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_NAME',
+        type:'APPLICATION_ID',
         category: 'Application',
-        text: 'Predicted Application Name'.t(),
-        description: 'Application Name description ...',
+        text: 'Application ID (Matched)'.t(),
+        description: 'Application ID description ...',
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
+    }, {
+        type:'APPLICATION_PROTOCHAIN_INFERRED',
+        category: 'Application',
+        text: 'Application Protochain (Inferred)'.t(),
+        description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PREDICTED_PROTOCHAIN',
+        type:'APPLICATION_PROTOCHAIN',
         category: 'Application',
-        text: 'Predicted Protochain'.t(),
-        description: 'Predicted Protochain description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'APPLICATION_PREDICTED_CONFIDENCE',
+        text: 'Application Protochain (Matched)'.t(),
+        description: 'Application Protochain description ...',
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
+    },  {
+        type:'APPLICATION_CONFIDENCE_INFERRED',
         category: 'Application',
-        text: 'Predicted Confidence'.t(),
-        description: 'Predicted Confidence description ...',
+        text: 'Application Confidence (Inferred)'.t(),
+        description: 'Application Confidence (Inferred) description ...',
         operators: ['==', '!=', '>', '>=', '<', '<=']
-    },
+    },  {
+        type:'APPLICATION_PRODUCTIVITY_INFERRED',
+        category: 'Application',
+        text: 'Application Productivity (Inferred)'.t(),
+        description: 'Application Productivity (Inferred) description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'APPLICATION_RISK_INFERRED',
+        category: 'Application',
+        text: 'Application Risk (Inferred)'.t(),
+        description: 'Application Risk (Inferred) description ...',
+        operators: ['==', '!=']
+    }, 
 
     // SOURCE
     {

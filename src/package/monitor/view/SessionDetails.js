@@ -15,15 +15,19 @@ Ext.define('Mfw.monitor.view.SessionDetails', {
                     key: 'application',
                     text: '<strong>Application</strong>',
                     children: [
-                        { key: 'application_name', text: 'Name', leaf: true },
-                        { key: 'application_id', text: 'ID', leaf: true },
-                        { key: 'application_category', text: 'Category', leaf: true },
-                        { key: 'application_detail', text: 'Detail', leaf: true },
-                        { key: 'application_confidence', text: 'Confidence', leaf: true },
-                        { key: 'application_protochain', text: 'Protochain', leaf: true },
-                        { key: 'application_predicted_name', text: 'Predicted Name', leaf: true },
-                        { key: 'application_predicted_confidence', text: 'Predicted Confidence', leaf: true },
-                        { key: 'application_predicted_protochain', text: 'Predicted Protochain', leaf: true }
+                        { key: 'application_name_inferred', text: 'Name (Inferred)', leaf: true },
+                        { key: 'application_name', text: 'Name (Matched)', leaf: true },
+                        { key: 'application_category_inferred', text: 'Category (Inferred)', leaf: true },
+                        { key: 'application_category', text: 'Category (Matched)', leaf: true },
+                        { key: 'application_detail', text: 'Detail (Matched)', leaf: true },
+                        { key: 'application_id_inferred', text: 'ID (Inferred)', leaf: true },
+                        { key: 'application_id', text: 'ID (Matched)', leaf: true },
+                        { key: 'application_protochain_inferred', text: 'Protochain (Inferred)', leaf: true },
+                        { key: 'application_protochain', text: 'Protochain (Matched)', leaf: true },
+                        { key: 'application_confidence_inferred', text: 'Confidence (Inferred)', leaf: true },
+                        { key: 'application_confidence', text: 'Confidence (Matched)', leaf: true },
+                        { key: 'application_productivity_inferred', text: 'Productivity (Inferred)', leaf: true },
+                        { key: 'application_risk_inferred', text: 'Risk (Inferred)', leaf: true },
                     ]
                 },
                 {

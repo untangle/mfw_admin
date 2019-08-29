@@ -17,9 +17,13 @@ Ext.define('Mfw.model.Session', {
         { name: 'application_name', type: 'string' },
         { name: 'application_protochain', type: 'string' },
 
-        { name: 'application_predicted_name', type: 'string' },
-        { name: 'application_predicted_confidence', type: 'number', allowNull: true },
-        { name: 'application_predicted_protochain', type: 'string' },
+        { name: 'application_id_inferred', type: 'string' },
+        { name: 'application_name_inferred', type: 'string' },
+        { name: 'application_confidence_inferred', type: 'number', allowNull: true },
+        { name: 'application_protochain_inferred', type: 'string' },
+        { name: 'application_productivity_inferred', type: 'string' },
+        { name: 'application_risk_inferred', type: 'string' },
+        { name: 'application_category_inferred', type: 'string' },
 
         { name: 'c2s_bytes', type: 'number', allowNull: true },
 
