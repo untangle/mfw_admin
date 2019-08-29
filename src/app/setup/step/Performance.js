@@ -4,12 +4,6 @@ Ext.define('Mfw.setup.step.Performance', {
 
     padding: '24 0 0 0',
 
-    viewModel: {
-        data: {
-            testprogress: true
-        }
-    },
-
     layout: {
         type: 'vbox',
         align: 'middle'
@@ -25,11 +19,7 @@ Ext.define('Mfw.setup.step.Performance', {
         ui: 'action',
         text: 'Re-Run Performance Test',
         handler: 'runPerformanceTest',
-        hidden: true,
-        margin: '0 0 32 0',
-        bind: {
-            hidden: '{testprogress}'
-        },
+        margin: '0 0 32 0'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -39,11 +29,6 @@ Ext.define('Mfw.setup.step.Performance', {
             gridcellediting: {
                 triggerEvent: 'tap'
             }
-        },
-
-        hidden: true,
-        bind: {
-            hidden: '{testprogress}'
         },
 
         store: 'interfaces',
@@ -136,16 +121,6 @@ Ext.define('Mfw.setup.step.Performance', {
                 return value ? value + ' ms' : '-';
             }
         }]
-    }, {
-        xtype: 'container',
-        style: 'text-align: center',
-        height: 400,
-        layout: 'center',
-        html: '<p>Testing WAN performance. Please wait ...</p><br/><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-        hidden: true,
-        bind: {
-            hidden: '{!testprogress}'
-        }
     }],
     listeners: {
         activate: 'onActivate'
@@ -188,8 +163,6 @@ Ext.define('Mfw.setup.step.Performance', {
 
             if (runTest) {
                 me.runPerformanceTest();
-            } else {
-                me.getViewModel().set('testprogress', false);
             }
         },
 
@@ -198,10 +171,21 @@ Ext.define('Mfw.setup.step.Performance', {
          */
         runPerformanceTest: function () {
             var me = this, fns = [],
-                vm = me.getViewModel(),
                 store = Ext.getStore('interfaces');
 
-            vm.set('testprogress', true);
+            var testMsg = Ext.create('Ext.MessageBox', {
+                title: '',
+                bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
+                message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Performing WAN test. Please wait ...</p>',
+                width: 400,
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: []
+            });
+
+            Ext.defer(function () {
+                testMsg.show();
+            }, 250);
 
             // real call
             store.each(function (wan) {
@@ -214,7 +198,13 @@ Ext.define('Mfw.setup.step.Performance', {
                             url: '/api/status/wantest/' + device,
                             timeout: 10000, // 10 seconds timeout
                             success: function (response) {
-                                var result = Ext.decode(response.responseText);
+                                // if responseText is not a decadable JSON than will return null
+                                var result = Ext.JSON.decode(response.responseText, true);
+                                if (!result) {
+                                    deferred.reject('Invalid test result!');
+                                    return;
+                                }
+
                                 deferred.resolve({
                                     device: device,
                                     test: result
@@ -272,14 +262,31 @@ Ext.define('Mfw.setup.step.Performance', {
                             }]
                         });
                     }
+                }, function (err) {
+                    Ext.Msg.show({
+                        title: 'Unable to test',
+                        bodyStyle: 'font-size: 14px; color: #333;',
+                        message: err,
+                        width: 400,
+                        showAnimation: null,
+                        hideAnimation: null,
+                        buttons: [{
+                            text: 'OK',
+                            ui: 'action',
+                            handler: function () {
+                                this.up('messagebox').hide();
+                            }
+                        }]
+                    });
                 })
                 .always(function () {
-                    vm.set('testprogress', false);
+                    testMsg.hide();
                 });
         },
 
         continue: function (cb) {
             var me = this,
+                vm = me.getViewModel(),
                 info = [];
 
             me.getView().down('grid').getStore().each(function (intf) {
@@ -294,6 +301,7 @@ Ext.define('Mfw.setup.step.Performance', {
 
             if (info.length > 0) {
                 Ext.Msg.alert('Info', info.join('<br/>'));
+                vm.set('processing', false);
                 return;
             }
 
