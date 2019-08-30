@@ -81,9 +81,9 @@ LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
 # ExtJS
-EXTJS_VERSION := 6.7.0
+EXTJS_VERSION := 7.0.0
  # the folder name inside the archive which now seems to differ
-EXTJS_FULL_VERSION := 6.7.0.161
+EXTJS_FULL_VERSION := 7.0.0.156
 EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
 EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)

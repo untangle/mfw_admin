@@ -1,22 +1,10 @@
 # leading ext-X.Y/ is implied here (see corresponding Makefile macro)
 build/ext-modern-all-debug.js
 build/ext-modern-all.js
-build/modern/theme-material/resources/font-awesome/fonts/FontAwesome.otf
-build/modern/theme-material/resources/font-awesome/fonts/fontawesome-webfont.eot
-build/modern/theme-material/resources/font-awesome/fonts/fontawesome-webfont.svg
-build/modern/theme-material/resources/font-awesome/fonts/fontawesome-webfont.ttf
-build/modern/theme-material/resources/font-awesome/fonts/fontawesome-webfont.woff
-build/modern/theme-material/resources/font-awesome/fonts/fontawesome-webfont.woff2
-build/modern/theme-material/resources/font-ext/fonts/ExtJS.eot
-build/modern/theme-material/resources/font-ext/fonts/ExtJS.svg
-build/modern/theme-material/resources/font-ext/fonts/ExtJS.ttf
-build/modern/theme-material/resources/font-ext/fonts/ExtJS.woff
+build/modern/theme-material/resources/font-awesome/fonts/*
+build/modern/theme-material/resources/font-ext/fonts/*
 build/modern/theme-material/resources/fonts/MaterialIcons-Regular.ttf
-build/modern/theme-material/resources/fonts/roboto/Roboto-Bold.ttf
-build/modern/theme-material/resources/fonts/roboto/Roboto-Italic.ttf
-build/modern/theme-material/resources/fonts/roboto/Roboto-Light.ttf
-build/modern/theme-material/resources/fonts/roboto/Roboto-Medium.ttf
-build/modern/theme-material/resources/fonts/roboto/Roboto-Regular.ttf
+build/modern/theme-material/resources/fonts/roboto/*
 build/modern/theme-material/resources/theme-material-all.css
 build/modern/theme-material/resources/theme-material-all_1.css
 build/modern/theme-material/resources/theme-material-all_2.css
