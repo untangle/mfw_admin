@@ -261,7 +261,7 @@ clean:
 
 ## development targets
 
-dev-deploy: dev-install dev-sass-admin dev-sass-setup css-admin css-setup css-settings dev-copy
+dev-deploy: dev-install dev-copy
 
 dev-install: \
 	dir \
@@ -295,7 +295,8 @@ src/css/mfw-setup.css: $(SASS-SETUP)
 dev-copy:
 	@echo "****************************************"
 	$(call LOG_FUNCTION,"Deploying to $(DEV_HOST)"$(NC))
-	@scp -r $(DESTDIR)/* root@$(DEV_HOST):$(DEV_DIR)
+	@scp -r $(DESTDIR)/admin/* root@$(DEV_HOST):$(DEV_DIR)/admin
+	@scp -r $(DESTDIR)/setup/* root@$(DEV_HOST):$(DEV_DIR)/setup
 	@echo "****************************************"
 
 dev-reload:

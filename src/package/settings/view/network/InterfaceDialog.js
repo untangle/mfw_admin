@@ -120,14 +120,13 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
     items: [{
         xtype: 'container',
         docked: 'top',
-        padding: '0 8 16 8',
         shadow: true,
         zIndex: 10,
         items: [{
             xtype: 'formpanel',
             itemId: 'main',
             validateOnSync: true,
-            padding: 0,
+            padding: '0 8 24 8',
             layout: {
                 type: 'hbox',
                 align: 'bottom'
