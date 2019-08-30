@@ -26,9 +26,28 @@ Ext.define('Mfw.setup.step.WiFi', {
 
     controller: {
         onActivate: function (view) {
-            // add wifi forms
+            var me = this,
+                store = Ext.getStore('interfaces');
+
             view.down('#forms').removeAll();
-            Ext.getStore('interfaces').each(function (intf) {
+
+            if (!store.isLoaded()) {
+                store.load(function () {
+                    me.setWiFiInterfaces();
+                });
+            } else {
+                me.setWiFiInterfaces();
+            }
+        },
+
+        // add wifi forms
+        setWiFiInterfaces: function () {
+            var me = this,
+                view = me.getView(),
+                store = Ext.getStore('interfaces');
+
+            store.clearFilter(true);
+            store.each(function (intf) {
                 if (intf.get('type') === 'WIFI') {
                     view.down('#forms').add({
                         xtype: 'wifiform',

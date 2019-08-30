@@ -4,7 +4,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     scrollable: true,
 
-    padding: '24 0 0 0',
+    padding: '32 0 0 0',
 
     layout: {
         type: 'vbox',
@@ -12,10 +12,30 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     items: [{
-        xtype: 'component',
-        padding: '0 0 24 0',
+        xtype: 'container',
         width: 800,
-        html: '<h1 style="text-align: center;">Interfaces</h1><hr/>'
+        layout: {
+            type: 'hbox',
+            align: 'middle'
+        },
+        items: [{
+            width: 120
+        }, {
+            xtype: 'component',
+            flex: 1,
+            html: '<h1 style="text-align: center; margin: 0;">Interfaces</h1>'
+        }, {
+            xtype: 'button',
+            width: 120,
+            iconCls: 'md-icon-refresh',
+            text: 'Refresh',
+            handler: 'refresh'
+        }]
+    }, {
+        xtype: 'component',
+        margin: '8 0 24 0',
+        width: 800,
+        html: '<hr/>'
     }, {
         xtype: 'grid',
         reference: 'interfaces',

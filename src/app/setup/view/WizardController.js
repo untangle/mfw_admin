@@ -4,6 +4,15 @@ Ext.define('Mfw.setup.WizardController', {
 
     completed: false,
 
+    // navigation names
+    navNames: {
+        system: 'System',
+        wifi: 'WiFi',
+        lte: 'LTE',
+        interfaces: 'Interfaces',
+        performance: 'Performance'
+    },
+
     init: function () {
         var me = this;
         Ext.Ajax.request({
@@ -36,7 +45,7 @@ Ext.define('Mfw.setup.WizardController', {
             wifiStep = false,
             lteStep = false;
 
-        Ext.getStore('interfaces').load(function (interfaces, operation, success) {
+        Ext.getStore('interfaces').load(function (interfaces) {
             Ext.Array.each(interfaces, function (intf) {
                 if (intf.get('type') === 'WWAN' && !lteStep) {
                     steps.push('step-lte');
@@ -60,17 +69,7 @@ Ext.define('Mfw.setup.WizardController', {
 
                 routes[_step] = 'onStep';
 
-                if (_step === 'complete') {
-                    navItems.push({
-                        xtype: 'component',
-                        margin: '0 18',
-                        html: '<i class="x-font-icon md-icon md-icon-check" style="font-size: 36px; color: #519839"></i>',
-                        hidden: true,
-                        hideMode: 'visibility',
-                        bind: {
-                            hidden: '{step !== "complete"}'
-                        }
-                    });
+                if (_step === 'welcome' || _step === 'complete') {
                     return;
                 }
 
@@ -80,7 +79,7 @@ Ext.define('Mfw.setup.WizardController', {
                     margin: '0 18',
                     cls: 'step-link',
                     bind: {
-                        html: '<a href="#' + _step + '">' + _step + '</a>'
+                        html: '<a href="#' + _step + '">' + me.navNames[_step] + '</a>'
                     }
                 });
             });

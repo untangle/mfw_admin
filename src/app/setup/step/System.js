@@ -7,7 +7,7 @@ Ext.define('Mfw.setup.step.System', {
         align: 'middle'
     },
 
-    padding: '24 0 0 0',
+    padding: '16 0 0 0',
 
     items: [{
         xtype: 'formpanel',

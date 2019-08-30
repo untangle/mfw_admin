@@ -51,3 +51,7 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .file-upload .x-input-el { padding: 8px; color: #777; font-family: "Courier New", sans-serif; }
 .file-upload.editable { border: 1px #999 solid; }
 .file-upload.editable .x-input-el { color: #333; }
+
+.x-togglefield .x-box-label-el { font-weight: bold; }
+.x-togglefield.off .x-thumb { background-color: #999; }
+.x-togglefield.off .x-box-label-el { color: #555 !important; }

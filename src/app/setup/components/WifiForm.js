@@ -18,20 +18,28 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             // labelTextAlign: 'right'
         },
         items: [{
-            xtype: 'component',
-            style: 'font-size: 24px;',
-            margin: '0 0 32 0',
-            bind: {
-                html: '{intf.name}'
-            }
-        }, {
-            xtype: 'checkbox',
-            boxLabel: 'Enabled',
-            bodyAlign: 'start',
+            xtype: 'container',
             margin: '0 0 16 0',
-            bind: {
-                checked: '{intf.enabled}'
-            }
+            layout: {
+                type: 'hbox',
+                align: 'middle'
+            },
+            items: [{
+                xtype: 'component',
+                style: 'font-size: 24px;',
+                bind: {
+                    html: '{intf.name}'
+                }
+            }, {
+                flex: 1
+            }, {
+                xtype: 'togglefield',
+                bind: {
+                    userCls: '{intf.enabled ? "on" : "off"}', // custom styling class
+                    boxLabel: '<strong>{intf.enabled ? "Enabled" : "Disabled"}</strong>',
+                    value: '{intf.enabled}'
+                }
+            }]
         }, {
             xtype: 'selectfield',
             userCls: 'x-custom-field',

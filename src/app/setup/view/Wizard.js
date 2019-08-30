@@ -5,7 +5,7 @@ Ext.define('Mfw.setup.Wizard', {
     layout: {
         type: 'card',
         animation: {
-            type: 'slide', // fade, slide
+            type: 'fade', // fade, slide
             // duration: 250
         },
     },
@@ -34,22 +34,14 @@ Ext.define('Mfw.setup.Wizard', {
         // shadow: false,
         layout: {
             type: 'hbox',
-            pack: 'middle'
+            pack: 'center'
         },
         style: 'background: #F5F5F5;',
         items: [{
-            xtype: 'container',
-            flex: 1,
-            layout: {
-                type: 'hbox',
-                pack: 'right'
-            },
-            items: [{
-                xtype: 'component',
-                margin: '10 16',
-                style: 'text-align: center; font-size: 14px; font-weight: 400; color: #777; line-height: 1.6;',
-                html: '<img src="/static/res/untangle-logo.svg" style="vertical-align: middle; height: 36px;"/><br/>SETUP'
-            }]
+            xtype: 'component',
+            margin: '10 16',
+            style: 'text-align: center; font-size: 14px; font-weight: 400; color: #777; line-height: 1.6;',
+            html: '<img src="/static/res/untangle-logo.svg" style="vertical-align: middle; height: 36px;"/><br/>SETUP'
         }, {
             xtype: 'component',
             margin: '0 8',
@@ -67,9 +59,6 @@ Ext.define('Mfw.setup.Wizard', {
                 pack: 'center',
                 align: 'middle'
             }
-        }, {
-            xtype: 'component',
-            flex: 1
         }]
     }, {
         xtype: 'toolbar',

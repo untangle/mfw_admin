@@ -1062,3 +1062,17 @@ hr {
 .x-checkcell .x-checkbox-el:focus {
     color: var(--base-color);
 }
+
+.x-togglefield {
+    .x-box-label-el {
+        font-weight: bold;
+    }
+    &.off {
+        .x-thumb {
+            background-color: #999;
+        }
+        .x-box-label-el {
+            color: #555 !important;
+        }
+    }
+}

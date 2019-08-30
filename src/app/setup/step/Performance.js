@@ -2,7 +2,7 @@ Ext.define('Mfw.setup.step.Performance', {
     extend: 'Ext.Panel',
     alias: 'widget.step-performance',
 
-    padding: '24 0 0 0',
+    padding: '32 0 0 0',
 
     layout: {
         type: 'vbox',
@@ -10,16 +10,30 @@ Ext.define('Mfw.setup.step.Performance', {
     },
 
     items: [{
-        xtype: 'component',
-        padding: '0 0 24 0',
+        xtype: 'container',
         width: 600,
-        html: '<h1 style="text-align: center;">WAN Performance</h1><hr/>'
+        layout: {
+            type: 'hbox',
+            align: 'middle'
+        },
+        items: [{
+            width: 140
+        }, {
+            xtype: 'component',
+            flex: 1,
+            html: '<h1 style="text-align: center; margin: 0;">WAN Performance</h1>'
+        }, {
+            xtype: 'button',
+            width: 140,
+            iconCls: 'md-icon-refresh',
+            text: 'Re-run Test',
+            handler: 'runPerformanceTest'
+        }]
     }, {
-        xtype: 'button',
-        ui: 'action',
-        text: 'Re-Run Performance Test',
-        handler: 'runPerformanceTest',
-        margin: '0 0 32 0'
+        xtype: 'component',
+        margin: '8 0 24 0',
+        width: 600,
+        html: '<hr/>'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -287,9 +301,10 @@ Ext.define('Mfw.setup.step.Performance', {
         continue: function (cb) {
             var me = this,
                 vm = me.getViewModel(),
+                store = Ext.getStore('interfaces'),
                 info = [];
 
-            me.getView().down('grid').getStore().each(function (intf) {
+            store.each(function (intf) {
                 if (intf.get('wan')) {
                     if (!intf.get('downloadKbps') || !intf.get('uploadKbps')) {
                         info.push('<p style="font-size: 14px;">Interface <strong>' + intf.get('name') + '</strong> requires download/upload limits to be set!</p>');
@@ -305,17 +320,19 @@ Ext.define('Mfw.setup.step.Performance', {
                 return;
             }
 
-            Ext.getStore('interfaces').getDataSource().each(function (record) {
+            if (store.getModifiedRecords().length <= 0) {
+                cb();
+                return;
+            }
+
+            store.getDataSource().each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });
 
-            Ext.getStore('interfaces').sync({
+            store.sync({
                 success: function () {
                     cb();
-                },
-                failure: function () {
-                    console.warn('Unable to save interfaces!');
                 }
             });
         }
