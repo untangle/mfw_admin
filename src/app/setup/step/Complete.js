@@ -4,7 +4,7 @@ Ext.define('Mfw.setup.step.Complete', {
 
     layout: 'center',
 
-    padding: '0 0 200 0',
+    padding: '0 0 100 0',
 
     items: [{
         xtype: 'container',

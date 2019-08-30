@@ -49,7 +49,7 @@ Ext.define('Mfw.Renderer', {
     },
 
     interfaceIcon: function (value, record) {
-        var icon = 'signal';
+        var icon = 'fa-signal';
         switch (record.get('type')) {
             case 'NIC': icon = 'fa-network-wired'; break;
             case 'WIFI': icon = 'fa-wifi'; break;

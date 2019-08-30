@@ -18,20 +18,28 @@ Ext.define('Mfw.setup.cmp.Lte', {
             // labelTextAlign: 'right'
         },
         items: [{
-            xtype: 'component',
-            style: 'font-size: 24px;',
-            margin: '0 0 32 0',
-            bind: {
-                html: '{intf.name}'
-            }
-        }, {
-            xtype: 'checkbox',
-            boxLabel: 'Enabled',
-            bodyAlign: 'start',
+            xtype: 'container',
             margin: '0 0 16 0',
-            bind: {
-                checked: '{intf.enabled}'
-            }
+            layout: {
+                type: 'hbox',
+                align: 'middle'
+            },
+            items: [{
+                xtype: 'component',
+                style: 'font-size: 24px;',
+                bind: {
+                    html: '{intf.name}'
+                }
+            }, {
+                flex: 1
+            }, {
+                xtype: 'togglefield',
+                bind: {
+                    userCls: '{intf.enabled ? "on" : "off"}', // custom styling class
+                    boxLabel: '<strong>{intf.enabled ? "Enabled" : "Disabled"}</strong>',
+                    value: '{intf.enabled}'
+                }
+            }]
         }, {
             xtype: 'selectfield',
             userCls: 'x-custom-field',
@@ -101,6 +109,17 @@ Ext.define('Mfw.setup.cmp.Lte', {
                 hidden: '{intf.simNetwork !== "OTHER"}',
                 disabled: '{!intf.enabled}'
             }
+        }, {
+            // sim info
+            xtype: 'component',
+            style: 'color: #555; border: 1px #CCC solid; border-radius: 5px; padding: 5px 15px;',
+            margin: '32 0 0 0',
+            html: '<p style="font-size: 14px; font-weight: 600;">SIM Details</p>' +
+                '<ul>' +
+                    '<li>IMEI: 7436489793242340504605</li>' +
+                    '<li>IMSI: 63474234025335409</li>' +
+                    '<li>ICCID: 152313039478439450454455</li>' +
+                '</ul>'
         }]
     }]
 });

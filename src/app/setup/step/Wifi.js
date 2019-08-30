@@ -7,7 +7,9 @@ Ext.define('Mfw.setup.step.WiFi', {
         align: 'middle'
     },
 
-    padding: '24 0 0 0',
+    padding: '24 0',
+
+    scrollable: true,
 
     items: [{
         xtype: 'component',

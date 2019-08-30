@@ -7,7 +7,9 @@ Ext.define('Mfw.setup.step.Lte', {
         align: 'middle'
     },
 
-    padding: '24 0 0 0',
+    padding: '24 0',
+
+    scrollable: true,
 
     items: [{
         xtype: 'component',
@@ -26,9 +28,28 @@ Ext.define('Mfw.setup.step.Lte', {
 
     controller: {
         onActivate: function (view) {
-            // add lte forms
+            var me = this,
+                store = Ext.getStore('interfaces');
+
             view.down('#forms').removeAll();
-            Ext.getStore('interfaces').each(function (intf) {
+
+            if (!store.isLoaded()) {
+                store.load(function () {
+                    me.setLteInterfaces();
+                });
+            } else {
+                me.setLteInterfaces();
+            }
+        },
+
+        // add lte forms
+        setLteInterfaces: function () {
+            var me = this,
+                view = me.getView(),
+                store = Ext.getStore('interfaces');
+
+            store.clearFilter(true);
+            store.each(function (intf) {
                 if (intf.get('type') === 'WWAN') {
                     view.down('#forms').add({
                         xtype: 'lteform',
