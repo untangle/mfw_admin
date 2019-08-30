@@ -48,6 +48,18 @@ Ext.define('Mfw.Renderer', {
         return type + ' <span style="color: #999;">[ ' + value + ' ]</span>';
     },
 
+    interfaceIcon: function (value, record) {
+        var icon = 'signal';
+        switch (record.get('type')) {
+            case 'NIC': icon = 'fa-network-wired'; break;
+            case 'WIFI': icon = 'fa-wifi'; break;
+            case 'OPENVPN':
+            case 'VLAN': icon = 'fa-project-diagram'; break;
+            default:
+        }
+        return '<i class="x-fa ' + icon + '"></i>';
+    },
+
     boolean: function (value) {
         if (value === null || value === undefined) {
             return '';
