@@ -94,46 +94,7 @@ Ext.define('Mfw.setup.Wizard', {
                 hidden: '{!processing}'
             }
         }]
-    }
-    //     {
-    //     xtype: 'panel',
-    //     itemId: 'wizard',
-    //     reference: 'wizard',
-    //     flex: 1,
-    //     // width: 900,
-    //     padding: '36 0 0 0',
-    //     layout: {
-    //         type: 'card',
-    //         // animation: null,
-    //         animation: {
-    //             type: 'fade', // slide
-    //             // duration: 250,
-    //             // direction: 'horizontal'
-    //         },
-    //     },
-
-    //     items: [
-    //     // {
-    //     //     xtype: 'container',
-    //     //     layout: 'center',
-    //     //     items: [{
-    //     //         xtype: 'component',
-    //     //         html: '<i class="fa fa-spinner fa-spin fa-2x fa-fw" style="margin-bottom: 200px;"></i>'
-    //     //     }]
-    //     // },
-    //         // { xtype: 'step-welcome' },
-    //         // { xtype: 'step-account' },
-    //         // { xtype: 'step-timezone' },
-    //         // // { xtype: 'step-wifi' },
-    //         // // { xtype: 'step-lte' },
-    //         // { xtype: 'step-interfaces' },
-    //         // { xtype: 'step-performance' },
-    //         // // { xtype: 'step-upgrades' },
-    //         // { xtype: 'step-complete' }
-    //     ]
-    // }
-    ]
-
+    }]
 });
 
 
