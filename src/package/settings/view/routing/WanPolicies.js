@@ -83,7 +83,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
             return output.join(', ');
         }
     }, {
-        text: 'Selection Criteria',
+        text: 'WAN Criterion',
         dataIndex: 'criteria',
         flex: 1,
         cell: { encodeHtml: false },
@@ -112,9 +112,18 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
                     text += ' <strong>' + c.get('metric_value') + '</strong>';
                     output.push(text);
                 }
+
+                if (c.get('type') === 'CONNECTIVITY') {
+                    text = c.get('connectivityTestType') + ' test ' +
+                           '<b>' + c.get('connectivityTestTarget') + '</b> at ' +
+                           c.get('connectivityTestInterval') + ' seconds interval, ' +
+                           ' with max ' + c.get('connectivityTestFailureThreshold') + ' failures';
+                    output.push(text);
+                }
+
             });
             if (output.length > 0) {
-                return 'Interface ' + output.join(', ');
+                return 'Interface ' + output.join('<br/>');
             }
             return '';
         }
