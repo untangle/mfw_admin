@@ -1576,7 +1576,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
         }, {
 
             /**
-             * OpenVPN config file
+             * OpenVPN config
              */
             xtype: 'formpanel',
             validateOnSync: true,
@@ -1623,62 +1623,62 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     editable: '{openVpnInlineEdit.checked}',
                     required: '{interface.configType === "ADDRESSED" && interface.type === "OPENVPN"}'
                 }
-            }]
-            /**
-             * OpenVPN config file end
-             */
-        }, {
-
-            /**
-             * OpenVPN auth credentials
-             * - openvpnUsernamePasswordEnabled
-             * - openvpnUsername
-             * - openvpnPasswordBase64
-             */
-            xtype: 'formpanel',
-            itemId: 'openvpnauth',
-            validateOnSync: true,
-            layout: 'vbox',
-            defaults: {
-                labelAlign: 'top'
-            },
-            items: [{
+            }, {
+                xtype: 'container',
+                layout: 'vbox',
+                margin: '16 0 0 0',
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'openvpnUsernamePasswordEnabled',
+                    boxLabel: 'Requires authentication',
+                    bodyAlign: 'start',
+                    bind: {
+                        checked: '{interface.openvpnUsernamePasswordEnabled}',
+                    }
+                }, {
+                    xtype: 'containerfield',
+                    layout: 'hbox',
+                    defaults: {
+                        flex: 1,
+                        labelAlign: 'top'
+                    },
+                    items: [{
+                        xtype: 'textfield',
+                        label: 'OpenVPN Username',
+                        clearable: false,
+                        required: false,
+                        disabled: true,
+                        margin: '0 16 0 0',
+                        bind: {
+                            value: '{interface.openvpnUsername}',
+                            required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
+                            disabled: '{!interface.openvpnUsernamePasswordEnabled}'
+                        }
+                    }, {
+                        xtype: 'textfield',
+                        label: 'OpenVPN Password',
+                        itemId: 'openvpnPassword',
+                        clearable: false,
+                        required: false,
+                        disabled: true,
+                        bind: {
+                            required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
+                            disabled: '{!interface.openvpnUsernamePasswordEnabled}'
+                        }
+                    }]
+                }]
+            }, {
                 xtype: 'checkbox',
-                name: 'openvpnUsernamePasswordEnabled',
-                boxLabel: 'Requires authentication',
+                boxLabel: 'NAT traffic exiting this interface (and bridged peers)',
                 bodyAlign: 'start',
+                margin: '16 0 0 0',
                 bind: {
-                    checked: '{interface.openvpnUsernamePasswordEnabled}',
-                }
-            }, {
-                xtype: 'textfield',
-                label: 'OpenVPN Username',
-                clearable: false,
-                required: false,
-                disabled: true,
-                bind: {
-                    value: '{interface.openvpnUsername}',
-                    required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
-                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
-                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
-                }
-            }, {
-                xtype: 'textfield',
-                label: 'OpenVPN Password',
-                itemId: 'openvpnPassword',
-                clearable: false,
-                required: false,
-                disabled: true,
-                bind: {
-                    required: '{interface.configType === "ADDRESSED" && interface.openvpnUsernamePasswordEnabled}',
-                    disabled: '{!interface.openvpnUsernamePasswordEnabled}',
-                    hidden: '{!interface.openvpnUsernamePasswordEnabled}'
+                    checked: '{interface.natEgress}'
                 }
             }]
             /**
-             * OpenVPN auth credentials
+             * OpenVPN config end
              */
-
         }]
     }, {
         xtype: 'toolbar',
@@ -1882,7 +1882,6 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             { lbl: 'VRRP IPv4 Aliases', key: 'vrrpv4aliases', leaf: true },
                             { lbl: 'WIFI', key: 'wifi', leaf: true },
                             { lbl: 'OpenVPN Conf', key: 'openvpnconf', leaf: true },
-                            { lbl: 'Authentication', key: 'openvpnauth', leaf: true },
                             { lbl: 'QoS', key: 'qos', leaf: true },
                             { key: 'bridged',  leaf: true },
                             { key: 'disabled', leaf: true }
@@ -1896,8 +1895,9 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             { lbl: 'IPv4', key: 'ipv4', leaf: true },
                             { lbl: 'IPv6', key: 'ipv6', leaf: true },
                             { lbl: 'WIFI', key: 'wifi', leaf: true },
+                            { lbl: 'LTE', key: 'lte', leaf: true },
                             { lbl: 'OpenVPN Conf', key: 'openvpnconf', leaf: true },
-                            { lbl: 'Authentication', key: 'openvpnauth', leaf: true },
+                            { lbl: 'QoS', key: 'qos', leaf: true },
                             { key: 'bridged', leaf: true },
                             { key: 'disabled', leaf: true }
                         ]
