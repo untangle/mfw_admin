@@ -26,7 +26,7 @@ Ext.define('Mfw.settings.Nav', {
             anchor: true,
             items: [{
                 text: 'Logout',
-                iconCls: 'x-fa fa-sign-out',
+                iconCls: 'x-fa fa-sign-out-alt',
                 handler: function () {
                     Ext.Ajax.request({
                         url: '/account/logout',

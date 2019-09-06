@@ -53,7 +53,7 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         handler: 'showHelp'
     }, {
         text: 'Logout'.t(),
-        iconCls: 'x-fa fa-sign-out',
+        iconCls: 'x-fa fa-sign-out-alt',
         handler: 'logout'
     }]
 });

@@ -176,7 +176,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
     },
     {
         text: 'Logout',
-        iconCls: 'x-fa fa-sign-out fa-3x fa-white',
+        iconCls: 'x-fa fa-sign-out-alt fa-3x fa-white',
         iconAlign: 'top',
         style: 'font-weight: 500; font-size: 12px;',
         hidden: true,
