@@ -12,10 +12,10 @@ Ext.define('Mfw.reports.NoSelection', {
             xtype: 'container',
             height: 40,
             style: 'text-align: center;',
-            html: '<i class="x-fa fa-line-chart fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
-                  '<i class="x-fa fa-area-chart fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
-                  '<i class="x-fa fa-pie-chart fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
-                  '<i class="x-fa fa-bar-chart fa-2x" style="color: #DDD; margin: 0 16px;"></i>'
+            html: '<i class="x-fa fa-chart-line fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
+                  '<i class="x-fa fa-chart-area fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
+                  '<i class="x-fa fa-chart-pie fa-2x" style="color: #DDD; margin: 0 16px;"></i>' +
+                  '<i class="x-fa fa-chart-bar fa-2x" style="color: #DDD; margin: 0 16px;"></i>'
         }, {
             xtype: 'container',
             bind: {

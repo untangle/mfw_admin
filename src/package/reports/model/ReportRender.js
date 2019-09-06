@@ -36,11 +36,11 @@ Ext.define('Mfw.model.ReportRender', {
             calculate: function (rendering) {
                 switch (rendering.type) {
                     case 'line':
-                    case 'spline': return 'fa-line-chart';
+                    case 'spline': return 'fa-chart-line';
                     case 'area':
-                    case 'areaspline': return 'fa-area-chart';
-                    case 'column': return 'fa-bar-chart';
-                    case 'pie': return 'fa-pie-chart';
+                    case 'areaspline': return 'fa-chart-area';
+                    case 'column': return 'fa-chart-bar';
+                    case 'pie': return 'fa-chart-pie';
                     default: return;
                 }
             }
