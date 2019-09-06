@@ -8,8 +8,27 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             selectedWansCount: null
         },
         formulas: {
-            multipleWanWarning: function (get) {
-                return (get('policy.type') !== 'SPECIFIC_WAN' && Ext.isNumber(get('selectedWansCount')) && get('selectedWansCount') < 2);
+            singleWanValue: function (get) {
+                var policy = get('policy');
+                if (policy.get('type') === 'SPECIFIC_WAN') {
+                    if (policy.interfaces().count() > 0) {
+                        return policy.interfaces().first().get('interfaceId');
+                    }
+                }
+            },
+
+            multipleWansValue: function (get) {
+                var policy = get('policy');
+                if (policy.get('type') !== 'SPECIFIC_WAN') {
+                    if (policy.interfaces().count() === 1 && policy.interfaces().first().get('interfaceId') === 0) {
+                        return 'ALL';
+                    } else {
+                        return 'SPECIFIC';
+                    }
+                } else {
+                    return 'ALL';
+                }
+
             }
         }
     },
@@ -39,7 +58,10 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
         xtype: 'formpanel',
         itemId: 'mainform',
 
-        layout: 'vbox',
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
         docked: 'left',
         shadow: true,
         width: 300,
@@ -83,8 +105,8 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             ]
         }, {
             xtype: 'selectfield',
-            itemId: 'singleWanSelector',
-            label: 'Select WAN',
+            itemId: 'singleWanValue',
+            label: 'WAN',
             placeholder: 'Please select ...',
             hidden: true,
             required: true,
@@ -94,6 +116,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             valueField: 'interfaceId',
             displayField: 'name',
             bind: {
+                value: '{singleWanValue}',
                 hidden: '{policy.type !== "SPECIFIC_WAN"}',
                 required: '{policy.type === "SPECIFIC_WAN"}',
                 options: '{allWans}'
@@ -133,12 +156,30 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 { text: 'Bandwidth', value: 'BANDWIDTH' }
             ]
         }, {
+            xtype: 'selectfield',
+            reference: 'wanSelection',
+            label: 'WANs',
+            placeholder: 'Please select ...',
+            value: 'ALL',
+            hidden: true,
+            required: true,
+            bind: {
+                value: '{multipleWansValue}',
+                hidden: '{policy.type === "SPECIFIC_WAN"}',
+                required: '{policy.type !== "SPECIFIC_WAN"}',
+            },
+            options: [
+                { text: 'All WANs', value: 'ALL' },
+                { text: 'Pick specific WANs', value: 'SPECIFIC' }
+            ]
+        }, {
             xtype: 'component',
             margin: '16 0 0 0',
+            style: 'color: #777;',
+            html: 'Set weight for each WAN (1 to 10000)',
             hidden: true,
             bind: {
-                hidden: '{policy.type === "SPECIFIC_WAN"}',
-                html: '<strong>Available WANs</strong> {policy.type === "BALANCE" && policy.balance_algorithm === "WEIGHTED" ? "<br/>apply weight for each WAN (1 to 10000)" : ""}',
+                hidden: '{!(policy.type === "BALANCE" && policy.balance_algorithm === "WEIGHTED" && wanSelection.value === "SPECIFIC")}',
             }
         }, {
             xtype: 'grid',
@@ -157,7 +198,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             hideMode: 'visibility',
             hidden: true,
             bind: {
-                hidden: '{policy.type === "SPECIFIC_WAN"}'
+                hidden: '{policy.type === "SPECIFIC_WAN" || wanSelection.value === "ALL"}'
             },
             columns: [{
                 xtype: 'checkcolumn',
@@ -165,11 +206,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 width: 40,
                 sortable: false,
                 resizable: false,
-                menuDisabled: true,
-                hidden: true,
-                bind: {
-                    hidden: '{policy.type === "SPECIFIC_WAN"}'
-                }
+                menuDisabled: true
             }, {
                 text: 'Interface',
                 dataIndex: 'name',
@@ -181,19 +218,18 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 cell: { encodeHtml: false }
                 // renderer: Renderer.interface
             }, {
-                text: 'Weight',
                 dataIndex: 'weight',
-                flex: 1,
                 sortable: false,
-                hideable: false,
+                flex: 1,
                 menuDisabled: true,
                 cell: {
                     encodeHtml: false,
                     tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit' }]
                 },
-                hidden: true,
+                hideMode: 'visibility', // !important so the weight column is shown properly
+                hidden: false,
                 bind: {
-                    hidden: '{policy.type !== "BALANCE" || policy.balance_algorithm !== "WEIGHTED"}'
+                    hidden: '{!(policy.type === "BALANCE" && policy.balance_algorithm === "WEIGHTED")}'
                 },
                 editable: true,
                 editor: {
@@ -210,17 +246,23 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 renderer: function (value) {
                     return value || '<em>< set weight ></em>';
                 }
-            }]
-        }, {
-            xtype: 'component',
-            html: 'Some Warning!',
-            hidden: true,
-            style: 'background: #ffeb99; border-radius: 3px; padding: 8px;',
-            bind: {
-                html: '<i class="x-fa fa-exclamation-triangle"></i> <strong>{policy.type === "BEST_OF" ? "Best WAN" : "Balance"}</strong> policy type requires more than a single wan to be selected!',
-                hidden: '{!multipleWanWarning || policy.type ==="SPECIFIC_WAN"}'
+            }],
+            listeners: {
+                show: function (grid) {
+                    grid.refresh();
+                }
             }
-        }, {
+        },
+        // {
+        //     xtype: 'component',
+        //     hidden: true,
+        //     style: 'background: #ffeb99; border-radius: 3px; padding: 8px;',
+        //     bind: {
+        //         html: '<i class="x-fa fa-exclamation-triangle"></i> <strong>{policy.type === "BEST_OF" ? "Best WAN" : "Balance"}</strong> policy type requires more than a single wan to be selected!',
+        //         hidden: '{!multipleWanWarning || policy.type ==="SPECIFIC_WAN"}'
+        //     }
+        // },
+        {
             xtype: 'toolbar',
             docked: 'bottom',
             items: [
@@ -270,7 +312,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             items: [{
                 xtype: 'component',
                 style: 'font-size: 16px;',
-                html: 'WAN Criterions'
+                html: 'WAN Criteria'
             }, {
                 flex: 1
             }, {
@@ -360,7 +402,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 }
             }],
             deferEmptyText: false,
-            emptyText: 'Some text',
+            emptyText: 'No Criteria!',
             listeners: {
                 select: 'onWanCriterionSelect'
             }
@@ -384,7 +426,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             items: [{
                 xtype: 'component',
                 style: 'font-size: 16px;',
-                html: 'Add New Criterion',
+                html: 'Add/Edit Criterion',
                 margin: '0 0 8 0'
             }, {
                 xtype: 'formpanel',
@@ -646,8 +688,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 action: view.getPolicy() ? 'EDIT' : 'ADD'
             });
 
-            // view.down('#wanCriterionsGrid').refresh();
-
             if (!interfacesStore.isLoaded()) {
                 interfacesStore.load(function () {
                     me.setWans();
@@ -656,70 +696,36 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
                 me.setWans();
             }
 
-            vm.bind('{policy.interfaces}', function (policyWans) {
-                if (policyWans.count() === 1 && policyWans.first().get('interfaceId') === 0) {
-                    Ext.Array.each(vm.get('allWans'), function (wan) {
-                        wan.checked = true;
-                    });
-                }
+            vm.bind('{policy}', function () {
+                console.log('the binding');
             });
+
         },
 
         setWans: function () {
             var me = this,
                 vm = me.getViewModel(),
                 policy = vm.get('policy'),
-                policyWans = policy.interfaces(),
+                policyWans = policy.interfaces(), wan,
                 interfacesStore = Ext.getStore('interfaces'), allWans = [];
 
             interfacesStore.each(function (intf) {
                 if (intf.get('wan')) {
+                    wan = policyWans.findRecord('interfaceId', intf.get('interfaceId')),
                     allWans.push({
                         // check interfaces which are used in this policy
-                        checked: policyWans.findRecord('interfaceId', intf.get('interfaceId')) ? true : false,
+                        checked: wan ? true : false,
                         name: intf.get('name'),
                         interfaceId: intf.get('interfaceId'),
-                        weight: 100
+                        weight: wan ? wan.get('weight') : 100
                     });
                 }
             });
 
             vm.set('allWans', allWans);
             me.getView().down('#allWansGrid').setStore({
-                data: allWans,
-                listeners: {
-                    datachanged: 'onAllWansDataChanged',
-                    scope: me
-                }
+                data: allWans
             });
-        },
-
-
-        onAllWansDataChanged: function (allWansStore) {
-            var vm = this.getViewModel(),
-                // selected wans in the all wans grid
-                selectedWans = allWansStore.query('checked', true),
-                // wans set on policy interfaces
-                policyWans = vm.get('policy').interfaces();
-
-            policyWans.removeAll(true);
-
-            // all wans selected
-            if (selectedWans.count() === allWansStore.count()) {
-                // add interfaceId = 0 meaning ALL interfaces
-                policyWans.add({
-                    interfaceId: 0
-                });
-            } else {
-                // add only checked wans
-                selectedWans.each(function (wan) {
-                    policyWans.add({
-                        interfaceId: wan.get('interfaceId'),
-                        weight: null
-                    });
-                });
-            }
-            vm.set('selectedWansCount', selectedWans.count());
         },
 
 
@@ -785,34 +791,35 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
 
             if (!mainForm.validate()) { return; }
 
-            if (policy.get('type') === 'SPECIFIC_WAN') {
-                policy.interfaces().setData([{
-                    interfaceId: dialog.down('#singleWanSelector').getValue()
-                }]);
+            /**
+             * set policy interfaces based on policy type, algorithm etc ...
+             */
+            policy.interfaces().removeAll();
+            if (policy.get('type') !== 'SPECIFIC_WAN') {
+                if (vm.get('wanSelection').value === "ALL") {
+                    policy.interfaces().add({
+                        interfaceId: 0
+                    });
+                } else {
+                    dialog.down('#allWansGrid').getStore().each(function (wan) {
+                        if (wan.get('checked')) {
+                            policy.interfaces().add({
+                                interfaceId: wan.get('interfaceId'),
+                                weight: (policy.get('balance_algorithm') === 'WEIGHTED') ? wan.get('weight') : null
+                            });
+                        }
+                    });
+                }
+            } else {
+                policy.interfaces().add({
+                    interfaceId: dialog.down('#singleWanValue').getValue(),
+                    weight: null
+                });
             }
 
-            // policy.interfaces().removeAll();
-            // if (policy.get('type') !== 'SPECIFIC_WAN') {
-            //     if (vm.get('wanSelection').value === "ALL") {
-            //         policy.interfaces().add({
-            //             interfaceId: 0
-            //         });
-            //     } else {
-            //         dialog.down('#wans').getStore().each(function (intf) {
-            //             if (intf.get('checked')) {
-            //                 policy.interfaces().add({
-            //                     interfaceId: intf.get('interfaceId'),
-            //                     weight: (policy.get('balance_algorithm') === 'WEIGHTED') ? intf.get('weight') : null
-            //                 });
-            //             }
-            //         });
-            //     }
-            // } else {
-            //     policy.interfaces().add({
-            //         interfaceId: dialog.down('#specificWanSelection').getValue(),
-            //         weight: null
-            //     });
-            // }
+
+            console.log(policy.getData(true));
+
 
             if (vm.get('action') === 'ADD') {
                 dialog.ownerCmp.getStore().add(policy);
