@@ -29,6 +29,40 @@ Ext.define('Mfw.reports.Events', {
             var me = this,
                 grid = view.down('grid');
 
+
+            // fetch wan policies/rules used in rendering
+            if (!Map.wanPolicies) {
+                var policies = {};
+                Ext.Ajax.request({
+                    url: Util.api + '/settings/wan/policies',
+                    success: function(response) {
+                        var resp = Ext.decode(response.responseText);
+                        Ext.Array.each(resp, function (policy) {
+                            policies[policy.policyId] = policy.description;
+                        });
+                        Map.wanPolicies = policies;
+                        Map.options.wanPolicies = Map.toOptions(policies);
+                    },
+                    failure: function(response) {
+                        console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            }
+
+            if (!Map.wanRules) {
+                Ext.Ajax.request({
+                    url: Util.api + '/settings/wan/policy_chains',
+                    success: function(response) {
+                        var resp = Ext.decode(response.responseText);
+                        Map.wanRules = resp;
+                    },
+                    failure: function(response) {
+                        console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            }
+
+
             // if not widget add details panel
             if (!me.getView().up('widget-report')) {
                 view.add({

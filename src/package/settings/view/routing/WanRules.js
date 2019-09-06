@@ -26,13 +26,9 @@ Ext.define('Mfw.settings.routing.WanRules', {
                 var resp = Ext.decode(response.responseText);
                 Ext.Array.each(resp, function (policy) {
                     policies[policy.policyId] = policy.description;
-                    // policies.push({
-                    //     text: policy.description,
-                    //     value: policy.policyId
-                    // });
                 });
-                Map.policies = policies;
-                Map.options.policies = Map.toOptions(policies);
+                Map.wanPolicies = policies;
+                Map.options.wanPolicies = Map.toOptions(policies);
                 cb();
             },
             failure: function(response) {

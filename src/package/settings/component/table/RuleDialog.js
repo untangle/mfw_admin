@@ -624,7 +624,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                     required: true,
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    options: Map.options.policies,
+                    options: Map.options.wanPolicies,
                     bind: '{rule.action.policy}'
                 });
                 return;

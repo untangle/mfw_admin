@@ -190,10 +190,14 @@ Ext.define('Mfw.Table', {
             dataIndex: 'wan_rule_chain'
         }, {
             text: 'WAN Rule ID',
-            dataIndex: 'wan_rule_id'
+            dataIndex: 'wan_rule_id',
+            width: 180,
+            renderer: Renderer.wanRule
         }, {
             text: 'WAN Policy ID',
-            dataIndex: 'wan_policy_id'
+            dataIndex: 'wan_policy_id',
+            width: 180,
+            renderer: Renderer.wanPolicy
         }, {
             text: 'Client DNS Hint',
             dataIndex: 'client_dns_hint'

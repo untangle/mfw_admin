@@ -527,9 +527,32 @@ Ext.define('Mfw.Renderer', {
                 actionStr += ' ' + action.get('priority');
             }
             if (type === 'WAN_POLICY') {
-                actionStr += Map.policies[action.get('policy')] + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
+                actionStr += Map.wanPolicies[action.get('policy')] + ' <span style="color: #999;">[ policy ' + action.get('policy') + ' ]</span> ';
             }
         }
         return '<span style="color: blue; font-weight: bold;">' + actionStr.toLowerCase() + '</span>';
+    },
+
+
+    wanPolicy: function (value) {
+        return Map.wanPolicies[value] || value;
+    },
+
+    wanRule: function (value, record) {
+        var chain, rule;
+        // find the proper chain
+        chain = Ext.Array.findBy(Map.wanRules, function(chain) {
+            return chain.name === record.get('wan_rule_chain');
+        });
+
+        if (!chain || !chain.rules) { return value; }
+
+        rule = Ext.Array.findBy(chain.rules, function(rule) {
+            return rule.ruleId === value;
+        });
+
+        if (!rule) { return value; }
+        return rule.description;
     }
+
 });
