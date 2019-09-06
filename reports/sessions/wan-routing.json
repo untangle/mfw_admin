@@ -12,16 +12,17 @@
     },
     "rendering": {
         "defaultColumns": ["time_stamp",
-                           "ip_protocol",
+                           "server_interface_id",
                            "client_address",
                            "server_address",
-                           "server_interface_id",
-                           "wan_rule_chain",
+                           "server_country",
+                           "application_name",
+                           "server_dns_hint",
                            "wan_rule_id",
                            "wan_policy_id"],
-        "columnRenames": [
-            ["Server Interface", "WAN Route"],
-            ["Server DNS Hint", "Domain Name"]
-        ]
+        "columnRenames": {
+            "server_interface_id": "WAN Route",
+            "server_dns_hint": "Domain Name"
+        }
     }
 }

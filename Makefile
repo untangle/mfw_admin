@@ -297,6 +297,7 @@ dev-copy:
 	$(call LOG_FUNCTION,"Deploying to $(DEV_HOST)"$(NC))
 	@scp -r $(DESTDIR)/admin/* root@$(DEV_HOST):$(DEV_DIR)/admin
 	@scp -r $(DESTDIR)/setup/* root@$(DEV_HOST):$(DEV_DIR)/setup
+	@scp -r $(DESTDIR)/reports/entries.json root@$(DEV_HOST):$(DEV_DIR)/reports
 	@echo "****************************************"
 
 dev-reload:

@@ -199,7 +199,8 @@ Ext.define('Mfw.Table', {
             dataIndex: 'client_dns_hint'
         }, {
             text: 'Server DNS Hint',
-            dataIndex: 'server_dns_hint'
+            dataIndex: 'server_dns_hint',
+            flex: 1
         }],
     },
 

@@ -49,7 +49,7 @@ Ext.define('Mfw.reports.Events', {
 
             view.getViewModel().bind('{record}', function (record) {
                 var tableNames = [],
-                    columns = [], defaultColumns;
+                    columns = [], defaultColumns, columnRenames;
 
                 grid.getStore().loadData([]);
 
@@ -61,8 +61,17 @@ Ext.define('Mfw.reports.Events', {
 
                 /**
                  * there could be a single table
-                 * or multiple tables in a JOIN, definec in tables array
+                 * or multiple tables in a JOIN, defined in tables array
                  */
+
+                // WAN Routing group by application name
+                if (record.get('name') === 'WAN Routing') {
+                    grid.getStore().setGroupField('application_name');
+                } else {
+                    grid.getStore().setGroupField(null);
+                }
+
+                columnRenames = record.getRendering().get('columnRenames');
 
                 if (record.get('tables')) {
                     tableNames = record.get('tables');
@@ -76,6 +85,11 @@ Ext.define('Mfw.reports.Events', {
                         if (!Ext.Array.findBy(columns, function (c) {
                             return column.dataIndex === c.dataIndex;
                         })) {
+                            if (columnRenames) {
+                                if (columnRenames[column.dataIndex]) {
+                                    column.text = columnRenames[column.dataIndex];
+                                }
+                            }
                             columns.push(Ext.clone(column)); // !!!! important to clone the value to not modify reference
                         }
                     });
