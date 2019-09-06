@@ -51,13 +51,24 @@ Ext.define('Mfw.setup.step.Lte', {
             store.clearFilter(true);
             store.each(function (intf) {
                 if (intf.get('type') === 'WWAN') {
-                    view.down('#forms').add({
-                        xtype: 'lteform',
-                        margin: '0 16',
-                        viewModel: {
-                            data: {
-                                intf: intf
-                            }
+
+                    Ext.Ajax.request({
+                        url: '/api/status/wwan/' + intf.get('device'),
+                        success: function (response) {
+                            var statusWwan = Ext.decode(response.responseText);
+                            // !!! TODO - currently returns empty JSON object
+                            view.down('#forms').add({
+                                xtype: 'lteform',
+                                margin: '0 16',
+                                viewModel: {
+                                    data: {
+                                        intf: intf
+                                    }
+                                }
+                            });
+                        },
+                        failure: function () {
+                            console.error('Unable to get LTE status!');
                         }
                     });
                 }

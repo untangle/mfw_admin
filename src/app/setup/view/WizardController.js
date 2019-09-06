@@ -8,7 +8,7 @@ Ext.define('Mfw.setup.WizardController', {
     navNames: {
         system: 'System',
         wifi: 'WiFi',
-        lte: 'LTE/4G',
+        lte: 'LTE',
         interfaces: 'Interfaces',
         performance: 'Performance'
     },

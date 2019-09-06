@@ -40,8 +40,7 @@ Ext.define('Mfw.setup.Wizard', {
         items: [{
             xtype: 'component',
             margin: '10 16',
-            style: 'text-align: center; font-size: 14px; font-weight: 400; color: #777; line-height: 1.6;',
-            html: '<img src="/static/res/untangle-logo.svg" style="vertical-align: middle; height: 36px;"/><br/>SETUP'
+            html: '<img src="/static/res/untangle-logo.svg" style="vertical-align: middle; height: 36px;"/>'
         }, {
             xtype: 'component',
             margin: '0 8',

@@ -1875,7 +1875,7 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                             { lbl: 'IPv4 Aliases', key: 'ipv4aliases', leaf: true },
                             { lbl: 'IPv6', key: 'ipv6', leaf: true },
                             { lbl: 'IPv6 Aliases', key: 'ipv6aliases', leaf: true },
-                            { lbl: 'LTE / 4G', key: 'lte', leaf: true },
+                            { lbl: 'LTE', key: 'lte', leaf: true },
                             { lbl: 'DHCP', key: 'dhcp', leaf: true },
                             { lbl: 'DHCP Options', key: 'dhcpoptions', leaf: true },
                             { lbl: 'VRRP', key: 'vrrp', leaf: true },

@@ -65,7 +65,7 @@ Ext.define('Mfw.setup.step.Performance', {
         }, {
             text: 'Name',
             dataIndex: 'name',
-            width: 120,
+            width: 150,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
@@ -115,16 +115,18 @@ Ext.define('Mfw.setup.step.Performance', {
                 required: true,
                 maxLength: 6
             }
-        }, {
-            text: 'Ping',
-            align: 'right',
-            width: 100,
-            menuDisabled: true,
-            dataIndex: '_ping',
-            renderer: function (value) {
-                return value ? value + ' ms' : '-';
-            }
-        }]
+        }
+        // {
+        //     text: 'Ping',
+        //     align: 'right',
+        //     width: 100,
+        //     menuDisabled: true,
+        //     dataIndex: '_ping',
+        //     renderer: function (value) {
+        //         return value ? value + ' ms' : '-';
+        //     }
+        // }
+        ]
     }],
     listeners: {
         activate: 'onActivate'
@@ -232,11 +234,11 @@ Ext.define('Mfw.setup.step.Performance', {
                     var intf, errors = [], msg;
 
                     Ext.Array.each(result, function (res) {
+                        intf = store.findRecord('device', res.device);
                         if (res.err) {
-                            errors.push('Unable to test <strong>' + res.device + '</strong>: <em>' + res.err + '</em>');
+                            errors.push('Unable to test <strong>' + intf.get('name') + '</strong>!');
                             return;
                         }
-                        intf = store.findRecord('device', res.device);
                         intf.set({
                             qosEnabled: true,
                             downloadKbps: res.test.download,
@@ -247,7 +249,7 @@ Ext.define('Mfw.setup.step.Performance', {
 
                     if (errors.length > 0) {
                         msg = errors.join('<br/>');
-                        msg += '<p style="font-weight: bold;">You can set manually the download/upload limits!</p>';
+                        msg += '<p>You can set manually the download/upload limits.</p>';
 
                         // this message will appear only if test faild for at least a wan
                         Ext.Msg.show({

@@ -56,12 +56,16 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                 disabled: '{!intf.enabled}'
             }
         }, {
-            xtype: 'numberfield',
+            xtype: 'selectfield',
             userCls: 'x-custom-field',
             label: 'Channel',
+            valueField: 'channel',
+            displayTpl: '{channel} [{frequency}]',
+            itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
             required: true,
             disabled: true,
             bind: {
+                options: '{channels}',
                 value: '{intf.wirelessChannel}',
                 disabled: '{!intf.enabled}'
             }
@@ -93,16 +97,44 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                 disabled: '{!intf.enabled}'
             }
         }, {
-            xtype: 'passwordfield',
+            xtype: 'textfield',
             userCls: 'x-custom-field',
+            inputType: 'password',
             name: 'password',
             label: 'Password',
+            triggers: {
+                reveal: {
+                    type: 'trigger',
+                    iconCls: 'x-fa fa-eye',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!intf.enabled || intf.wirelessPassword.length === 0}',
+                    },
+                    handler: function (field, trigger) {
+                        if (field.getDisabled()) {
+                            return;
+                        }
+                        var inputType = field.getInputType();
+                        if (inputType === 'password') {
+                            field.setInputType('text');
+                            trigger.setIconCls('x-fa fa-eye-slash');
+                        } else {
+                            field.setInputType('password');
+                            trigger.setIconCls('x-fa fa-eye');
+                        }
+                    }
+                }
+            },
             required: true,
             disabled: true,
             bind: {
                 value: '{intf.wirelessPassword}',
                 disabled: '{!intf.enabled}'
-            }
+            },
+            validators: [{
+                type: 'length',
+                min: 8
+            }]
         }]
     }]
 });

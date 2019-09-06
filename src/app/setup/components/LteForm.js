@@ -27,9 +27,10 @@ Ext.define('Mfw.setup.cmp.Lte', {
             items: [{
                 xtype: 'component',
                 style: 'font-size: 24px;',
-                bind: {
-                    html: '{intf.name}'
-                }
+                html: 'LTE' // hardcode the LTE name
+                // bind: {
+                //     html: '{intf.name}'
+                // }
             }, {
                 flex: 1
             }, {
@@ -99,7 +100,32 @@ Ext.define('Mfw.setup.cmp.Lte', {
         }, {
             xtype: 'textfield',
             userCls: 'x-custom-field',
+            inputType: 'password',
+            name: 'password',
             label: 'Password',
+            triggers: {
+                reveal: {
+                    type: 'trigger',
+                    iconCls: 'x-fa fa-eye',
+                    hidden: true,
+                    bind: {
+                        hidden: '{!intf.enabled || intf.simPassword.length === 0}',
+                    },
+                    handler: function (field, trigger) {
+                        if (field.getDisabled()) {
+                            return;
+                        }
+                        var inputType = field.getInputType();
+                        if (inputType === 'password') {
+                            field.setInputType('text');
+                            trigger.setIconCls('x-fa fa-eye-slash');
+                        } else {
+                            field.setInputType('password');
+                            trigger.setIconCls('x-fa fa-eye');
+                        }
+                    }
+                }
+            },
             required: false,
             hidden: true,
             disabled: true,
@@ -108,7 +134,11 @@ Ext.define('Mfw.setup.cmp.Lte', {
                 required: '{intf.simNetwork === "OTHER"}',
                 hidden: '{intf.simNetwork !== "OTHER"}',
                 disabled: '{!intf.enabled}'
-            }
+            },
+            validators: [{
+                type: 'length',
+                min: 8
+            }]
         }, {
             // sim info
             xtype: 'component',
