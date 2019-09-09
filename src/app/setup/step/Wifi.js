@@ -51,23 +51,13 @@ Ext.define('Mfw.setup.step.WiFi', {
             store.clearFilter(true);
             store.each(function (intf) {
                 if (intf.get('type') === 'WIFI') {
-                    Ext.Ajax.request({
-                        url: '/api/status/wifichannels/' + intf.get('device'),
-                        success: function (response) {
-                            var channelsResp = Ext.decode(response.responseText);
-                            view.down('#forms').add({
-                                xtype: 'wifiform',
-                                margin: '0 16',
-                                viewModel: {
-                                    data: {
-                                        intf: intf,
-                                        channels: channelsResp
-                                    }
-                                }
-                            });
-                        },
-                        failure: function () {
-                            console.error('Unable to get WiFi status!');
+                    view.down('#forms').add({
+                        xtype: 'wifiform',
+                        margin: '0 16',
+                        viewModel: {
+                            data: {
+                                intf: intf
+                            }
                         }
                     });
                 }

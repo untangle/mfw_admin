@@ -59,14 +59,25 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             xtype: 'selectfield',
             userCls: 'x-custom-field',
             label: 'Channel',
-            valueField: 'channel',
-            displayTpl: '{channel} [{frequency}]',
-            itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
+            clearable: false,
             required: true,
             disabled: true,
+            queryMode: 'remote',
+            displayTpl: '{channel} [{frequency}]',
+            itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
+            valueField: 'channel',
             bind: {
-                options: '{channels}',
                 value: '{intf.wirelessChannel}',
+                store: {
+                    autoLoad: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: '/api/status/wifichannels/{intf.device}',
+                        reader: {
+                            type: 'json'
+                        }
+                    }
+                },
                 disabled: '{!intf.enabled}'
             }
         }, {

@@ -970,7 +970,8 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
             validateOnSync: true,
             layout: 'vbox',
             defaults: {
-                labelAlign: 'top'
+                labelAlign: 'top',
+                clearable: false
             },
             disabled: true,
             bind: {
@@ -1002,12 +1003,37 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     { text: 'WPA2', value: 'WPA2' }
                 ]
             }, {
-                xtype: 'passwordfield',
-                label: 'Wireless Password',
+                xtype: 'textfield',
+                inputType: 'password',
+                label: 'Password',
+                triggers: {
+                    reveal: {
+                        type: 'trigger',
+                        iconCls: 'x-fa fa-eye',
+                        hidden: true,
+                        bind: {
+                            hidden: '{!interface.enabled || interface.wirelessPassword.length === 0}',
+                        },
+                        handler: function (field, trigger) {
+                            if (field.getDisabled()) {
+                                return;
+                            }
+                            var inputType = field.getInputType();
+                            if (inputType === 'password') {
+                                field.setInputType('text');
+                                trigger.setIconCls('x-fa fa-eye-slash');
+                            } else {
+                                field.setInputType('password');
+                                trigger.setIconCls('x-fa fa-eye');
+                            }
+                        }
+                    }
+                },
                 required: true,
+                disabled: true,
                 bind: {
                     value: '{interface.wirelessPassword}',
-                    required: '{interface.type === "WIFI"}'
+                    disabled: '{!interface.enabled}'
                 },
                 validators: [{
                     type: 'length',
@@ -1024,10 +1050,26 @@ Ext.define('Mfw.settings.network.InterfaceDialog', {
                     { text: 'Client', value: 'CLIENT' }
                 ]
             }, {
-                xtype: 'numberfield',
+                xtype: 'selectfield',
                 label: 'Wireless Channel',
                 clearable: false,
-                bind: '{interface.wirelessChannel}'
+                queryMode: 'remote',
+                displayTpl: '{channel} [{frequency}]',
+                itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
+                valueField: 'channel',
+                bind: {
+                    value: '{interface.wirelessChannel}',
+                    store: {
+                        autoLoad: true,
+                        proxy: {
+                            type: 'ajax',
+                            url: '/api/status/wifichannels/{interface.device}',
+                            reader: {
+                                type: 'json'
+                            }
+                        }
+                    }
+                }
             }]
             /**
              * WIFI settings end
