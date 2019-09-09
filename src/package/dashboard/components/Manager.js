@@ -76,6 +76,7 @@ Ext.define('Mfw.dashboard.Manager', {
         store: {
             type: 'widgets'
         },
+        viewModel: true,
         columns: [{
             width: 44,
             menuDisabled: true,
@@ -99,14 +100,14 @@ Ext.define('Mfw.dashboard.Manager', {
             menuDisabled: true,
             dataIndex: 'interval',
             renderer: function (val) {
-                return val ? val + 's' : 'manual';
+                return val ? val + 's' : 'none';
             },
             editable: true,
             editor: {
                 xtype: 'selectfield',
                 required: true,
                 options: [{
-                    text: 'manual', value: 0
+                    text: 'none', value: 0
                 }, {
                     text: '5s', value: 5
                 }, {
