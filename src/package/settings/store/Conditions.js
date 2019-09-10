@@ -2338,6 +2338,18 @@ Ext.define('Mfw.settings.Conditions', {
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.interfaceTypes
         }
+    }, {
+        type:'CLIENT_REVERSE_DNS',
+        category: 'Client',
+        text: 'Client Reverse DNS'.t(),
+        description: 'Client Reverse DNS description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'CLIENT_DNS_HINT',
+        category: 'Client',
+        text: 'Client DNS Hint'.t(),
+        description: 'Client DNS Hint description ...',
+        operators: ['==', '!=']
     },
 
     // SERVER
@@ -2414,6 +2426,18 @@ Ext.define('Mfw.settings.Conditions', {
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.interfaceTypes
         }
+    }, {
+        type:'SERVER_REVERSE_DNS',
+        category: 'Server',
+        text: 'Server Reverse DNS'.t(),
+        description: 'Server Reverse DNS description ...',
+        operators: ['==', '!=']
+    }, {
+        type:'SERVER_DNS_HINT',
+        category: 'Server',
+        text: 'Server DNS Hint'.t(),
+        description: 'Server DNS Hint description ...',
+        operators: ['==', '!=']
     },
 
     // LOCAL
