@@ -19,6 +19,8 @@ Ext.define('Mfw.model.MonitorSession', {
 
         { name: 'application_category', type: 'string' },
         { name: 'application_confidence', type: 'number', allowNull: true },
+        { name: 'application_productivity', type: 'number', allowNull: true },
+        { name: 'application_risk', type: 'number', allowNull: true },
         { name: 'application_detail', type: 'string' },
         { name: 'application_id', type: 'string' },
         { name: 'application_name', type: 'string' },

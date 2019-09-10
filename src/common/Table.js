@@ -174,8 +174,14 @@ Ext.define('Mfw.Table', {
             text: 'Application Productivity (Inferred)',
             dataIndex: 'application_productivity_inferred'
         }, {
+            text: 'Application Productivity (Matched)',
+            dataIndex: 'application_productivity'
+        }, {
             text: 'Application Risk (Inferred)',
             dataIndex: 'application_risk_inferred'
+        }, {
+            text: 'Application Risk (Matched)',
+            dataIndex: 'application_risk'
         }, {
             text: 'Certificate Subject CN',
             dataIndex: 'certificate_subject_cn'

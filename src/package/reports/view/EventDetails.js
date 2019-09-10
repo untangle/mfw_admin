@@ -64,7 +64,9 @@ Ext.define('Mfw.reports.EventDetails', {
                         { key: 'application_confidence_inferred', val: '', leaf: true },
                         { key: 'application_confidence', val: '', leaf: true },
                         { key: 'application_productivity_inferred', val: '', leaf: true },
-                        { key: 'application_risk_inferred', val: '', leaf: true }
+                        { key: 'application_productivity', val: '', leaf: true },
+                        { key: 'application_risk_inferred', val: '', leaf: true },
+                        { key: 'application_risk', val: '', leaf: true }
                     ]
                 },
                 { key: 'local_address', val: '', leaf: true },

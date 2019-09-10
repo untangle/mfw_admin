@@ -11,6 +11,8 @@ Ext.define('Mfw.model.Session', {
         { name: 'application_blocked', type: 'boolean', allowNull: true },
         { name: 'application_category', type: 'string' },
         { name: 'application_confidence', type: 'number', allowNull: true },
+        { name: 'application_productivity', type: 'number', allowNull: true },
+        { name: 'application_risk', type: 'number', allowNull: true },
         { name: 'application_detail', type: 'auto' },
         { name: 'application_flagged', type: 'boolean', allowNull: true },
         { name: 'application_id', type: 'string' },
