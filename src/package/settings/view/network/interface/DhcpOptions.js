@@ -152,7 +152,7 @@ Ext.define('Mfw.settings.interface.DhcpOptions', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.dhcpOptions().rejectChanges();
+            // intf.dhcpOptions().rejectChanges();
             me.getView().close();
         },
 
@@ -160,7 +160,7 @@ Ext.define('Mfw.settings.interface.DhcpOptions', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.dhcpOptions().commitChanges();
+            // intf.dhcpOptions().commitChanges();
             me.getView().close();
         }
     }

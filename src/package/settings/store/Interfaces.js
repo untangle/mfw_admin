@@ -20,11 +20,6 @@ Ext.define('Mfw.store.Interfaces', {
             });
             Map.interfaces = interfacesMap;
             Map.options.interfaces = Map.toOptions(interfacesMap);
-
-            if (Mfw.app.context === 'admin') {
-                this.setInterfacesNav();
-            }
-
         },
 
         load: function () {
@@ -38,53 +33,27 @@ Ext.define('Mfw.store.Interfaces', {
      * adds interfaces to the main Settings navigation under "Interfaces"
      */
     setInterfacesNav: function () {
-        var modRecs = this.getModifiedRecords(),
-            newRecs = this.getNewRecords(),
-            remRecs = this.getRemovedRecords(),
-            intfIcon = 'fa-signal', idx = 0,
+        var intfIcon = 'fa-signal', idx = 0,
             intfNode = Ext.getStore('settingsNav').findNode('href', 'network/interfaces');
 
-        if (!intfNode.hasChildNodes()) {
-            this.each(function (intf) {
-                switch (intf.get('type')) {
-                    case 'NIC': intfIcon = 'fa-network-wired'; break;
-                    case 'WIFI': intfIcon = 'fa-wifi'; break;
-                    case 'OPENVPN':
-                    case 'VLAN': intfIcon = 'fa-project-diagram'; break;
-                    default:
-                }
+        intfNode.removeAll();
 
-                intfNode.insertChild(idx, {
-                    text: '<i class="x-fa ' + intfIcon + '" style="font-size: 13px;"></i> &nbsp; ' + intf.get('name'),
-                    href: 'network/interfaces/' + intf.get('name'),
-                    leaf: true,
-                });
-                idx += 1;
+        this.each(function (intf) {
+            switch (intf.get('type')) {
+                case 'NIC': intfIcon = 'fa-network-wired'; break;
+                case 'WIFI': intfIcon = 'fa-wifi'; break;
+                case 'OPENVPN':
+                case 'VLAN': intfIcon = 'fa-project-diagram'; break;
+                default:
+            }
+
+            intfNode.insertChild(idx, {
+                text: '<i class="x-fa ' + intfIcon + '" style="font-size: 13px;"></i> &nbsp; ' + intf.get('name'),
+                href: 'network/interfaces/' + intf.get('name'),
+                leaf: true,
             });
-            return;
-        }
-
-        // console.log(modRecs);
-
-        // if (modRecs.length > 0) {
-        //     Ext.Array.each(modRecs, function (intf) {
-        //         console.log(intf.modified, intf.isModified('name'));
-        //         if (intf.isModified('name')) {
-        //             var node = Ext.getStore('settingsNav').findNode('href', 'network/interfaces/' + intf.modified.name);
-        //             console.log(node);
-        //             console.log(intf.modified.name);
-        //             node.set('text', intf.get('name'));
-        //         }
-
-        //     });
-        // }
-
-        // if (newRec.length > 0)
-        // if (newRec.length > 0 || intfNode.hasChildNodes) {
-        //     intfNode.removeAll();
-        // }
-
-
+            idx += 1;
+        });
 
     }
 });

@@ -40,7 +40,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         });
 
         me.intfDialog.on('destroy', function () {
-            me.onLoad();
+            // me.onLoad();
             me.intfDialog = null;
         });
         me.intfDialog.show();
@@ -48,30 +48,6 @@ Ext.define('Mfw.settings.network.InterfacesController', {
 
     onEditRecord: function (grid, info) {
         Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('name'));
-    },
-
-    onDeleteRecord: function (grid, info) {
-        var me = this;
-        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            'Delete <strong>' + info.record.get('name') + '</strong> interface?',
-            function (answer) {
-                if (answer === 'yes') {
-                    info.record.drop();
-                    me.onSave(); // defind in MasterGrid
-                }
-            });
-    },
-
-    onDeleteRecord: function (grid, info) {
-        var me = this;
-        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            'Delete <strong>' + info.record.get('name') + '</strong> interface?',
-            function (answer) {
-                if (answer === 'yes') {
-                    info.record.drop();
-                    me.onSave(); // defind in MasterGrid
-                }
-            });
     },
 
     onDeleteRecord: function (grid, info) {

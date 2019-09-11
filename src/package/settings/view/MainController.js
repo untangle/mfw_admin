@@ -9,19 +9,15 @@ Ext.define('Mfw.settings.view.MainController', {
         if (Mfw.app.context === 'admin') {
             this.setRoutes({
                 'settings': {
-                    //before: 'onBefore',
                     action: 'onAction'
                 },
                 'settings/:p1': {
-                    //before: 'onBefore',
                     action: 'onAction'
                 },
                 'settings/:p1/:p2': {
-                    //before: 'onBefore',
                     action: 'onAction'
                 },
                 'settings/:p1/:p2/:p3': {
-                    //before: 'onBefore',
                     action: 'onAction'
                 }
             });
@@ -162,7 +158,7 @@ Ext.define('Mfw.settings.view.MainController', {
 
         if (isModified) {
             win = Ext.Msg.show({
-                title: '<span style="font-size: 16px;">' + currentView.getTitle() + ' changes not saved!</span>',
+                title: '<span style="font-size: 16px;">' + (currentView.getTitle() || currentView._title) + ' changes not saved!</span>',
                 width: 350,
                 message: 'Save changes before continue?',
                 showAnimation: false,
@@ -178,6 +174,13 @@ Ext.define('Mfw.settings.view.MainController', {
                     ui: 'alt decline',
                     margin: '0 16 0 0',
                     handler: function () {
+                        if (Ext.isFunction(currentViewController.discardChanges)) {
+                            currentViewController.discardChanges(function () {
+                                win.close();
+                                Mfw.app.redirectTo(route);
+                            });
+                            return;
+                        }
                         win.close();
                         Mfw.app.redirectTo(route);
                     }

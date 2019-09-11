@@ -4,6 +4,8 @@ Ext.define('Mfw.settings.network.Interface', {
 
     layout: 'fit',
 
+    _title: 'Interface', // used in modified changes popup
+
     viewModel: {
         data: {
             intf: null,
@@ -139,6 +141,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     xtype: 'containerfield',
                     layout: 'hbox',
                     defaults: {
+                        labelAlign: 'top',
                         flex: 1,
                         required: false,
                         clearable: false,
@@ -147,11 +150,12 @@ Ext.define('Mfw.settings.network.Interface', {
                     items: [{
                         xtype: 'textfield',
                         label: 'Name',
+                        name: 'name',
                         placeholder: 'enter name ...',
-                        margin: '0 16 0 0',
                         required: true,
                         bind: '{intf.name}',
                         maxLength: 10,
+                        errorTarget: 'bottom',
                         validators: [{
                             type: 'format',
                             matcher: new RegExp('^[A-za-z0-9]+$'),
@@ -160,7 +164,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     }, {
                         xtype: 'selectfield',
                         label: 'Config Type',
-                        margin: '0 0 0 16',
+                        margin: '0 0 0 32',
                         hidden: true,
                         bind: {
                             value: '{intf.configType}',
@@ -450,20 +454,16 @@ Ext.define('Mfw.settings.network.Interface', {
     controller: {
         init: function (view) {
             var vm = view.getViewModel(),
-                type, enabled, configType;
+                type, configType;
 
             // set the app context "admin" or "setup"
             vm.set('setupContext', Mfw.app.context === 'setup');
 
             vm.bind('{intf}', function (intf) {
                 type = intf.get('type');
-                enabled = intf.get('enabled');
+
                 configType = intf.get('configType');
 
-                // if (!enabled) {
-                //     vm.set('cardKey', 'disabled');
-                //     return;
-                // }
                 if (configType === "BRIDGED" && type !== "WIFI") {
                     vm.set('cardKey', 'bridged');
                     return;
@@ -568,13 +568,14 @@ Ext.define('Mfw.settings.network.Interface', {
             }
         },
 
-        onSave: function (btn) {
+        onSave: function (cb) {
             var me = this,
                 view = me.getView(),
-                setupDialog = btn.up('dialog'),
+                dialog = view.up('dialog'),
 
                 vm = me.getViewModel(),
                 intf = vm.get('intf'),
+                isNew = vm.get('isNew'),
                 interfacesStore = Ext.getStore('interfaces'),
                 forms = me.getView().query('formpanel'),
                 invalidForm;
@@ -595,7 +596,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 if (invalidForm.getItemId() !== 'main') {
                     vm.set('cardKey', invalidForm.up('panel').getItemId());
                 }
-                // console.log(invalidForm.query("field{isValid()==false}"));
+
                 Ext.toast('Please fill or correct invalid fields!', 3000);
                 return;
             }
@@ -604,30 +605,19 @@ Ext.define('Mfw.settings.network.Interface', {
              * if in Setup Wizard just close the editor dialog
              * all interfaces will be updated on Continue action
              */
-            if (vm.get('setupContext') && setupDialog) {
-                setupDialog.destroy();
+            if (vm.get('setupContext') && dialog) {
+                dialog.close();
                 return;
             }
 
-            /**
-             * for OPENVPN interfaces set conf file and password if needed
-             */
-            // if (intf.get('type') === 'OPENVPN') {
-            //     var ovpnConfFile = Ext.create('Mfw.model.OpenVpnConfFile', {
-            //         encoding: 'base64',
-            //         contents: btoa(view.down('#openvpnConfContent').getValue())
-            //     });
-            //     intf.setOpenvpnConfFile(ovpnConfFile);
-            // }
-
-            if (vm.get('isNew')) {
+            if (isNew) {
                 interfacesStore.add(intf);
             } else {
                 intf.commit();
             }
 
-            if (setupDialog) {
-                setupDialog.destroy();
+            if (dialog) {
+                dialog.close();
             }
 
 
@@ -641,12 +631,69 @@ Ext.define('Mfw.settings.network.Interface', {
             interfacesStore.sync({
                 success: function () {
                     Sync.success();
-                    Mfw.app.redirectTo('settings/network/interfaces');
+                    if (isNew) {
+                        // after adding and saving new interface, reload store
+                        interfacesStore.reload();
+                    } else {
+                        // otherwise redirect to interfaces (non dialog editing)
+                        if (Ext.isFunction(cb)) { cb(); }
+                        Mfw.app.redirectTo('settings/network/interfaces');
+                    }
                 },
                 failure: function () {
                     console.warn('Unable to save interfaces!');
                 }
             });
+        },
+
+        checkModified: function (cb) {
+            var me = this,
+                isModified = false,
+                intf = me.getViewModel().get('intf');
+
+
+            if (intf.modified !== undefined &&
+                !Ext.Object.isEmpty(intf.modified)) {
+                    isModified = true;
+                }
+
+            if (intf.v4Aliases().getModifiedRecords().length > 0 ||
+                intf.v4Aliases().getNewRecords().length > 0 ||
+                intf.v4Aliases().getRemovedRecords().length > 0) {
+                isModified = true;
+            }
+
+            if (intf.v6Aliases().getModifiedRecords().length > 0 ||
+                intf.v6Aliases().getNewRecords().length > 0 ||
+                intf.v6Aliases().getRemovedRecords().length > 0) {
+                isModified = true;
+            }
+
+            if (intf.dhcpOptions().getModifiedRecords().length > 0 ||
+                intf.dhcpOptions().getNewRecords().length > 0 ||
+                intf.dhcpOptions().getRemovedRecords().length > 0) {
+                isModified = true;
+            }
+
+            if (intf.getOpenvpnConfFile() &&
+                intf.getOpenvpnConfFile().modified !== undefined &&
+                !Ext.Object.isEmpty(intf.modified)) {
+                isModified = true;
+            }
+
+            cb(isModified);
+        },
+
+        discardChanges: function (cb) {
+            var me = this,
+                intf = me.getViewModel().get('intf');
+
+            intf.reject(true);
+            intf.v4Aliases().rejectChanges();
+            intf.v6Aliases().rejectChanges();
+            intf.dhcpOptions().rejectChanges();
+            if (intf.getOpenvpnConfFile()) { intf.getOpenvpnConfFile().reject(); }
+            cb();
         }
 
     }

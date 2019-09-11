@@ -9,8 +9,6 @@ Ext.define('Mfw.settings.interface.VrrpV4Aliases', {
 
     padding: 0,
 
-    // renderTo: 'document.body',
-
     items: [{
         xtype: 'toolbar',
         style: 'font-weight: 100; font-size: 20px;',
@@ -158,7 +156,7 @@ Ext.define('Mfw.settings.interface.VrrpV4Aliases', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.vrrpV4Aliases().rejectChanges();
+            // intf.vrrpV4Aliases().rejectChanges();
             me.getView().close();
         },
 
@@ -166,7 +164,7 @@ Ext.define('Mfw.settings.interface.VrrpV4Aliases', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.vrrpV4Aliases().commitChanges();
+            // intf.vrrpV4Aliases().commitChanges();
             me.getView().close();
         }
     }

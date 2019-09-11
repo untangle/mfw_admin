@@ -162,7 +162,7 @@ Ext.define('Mfw.settings.interface.Ipv6Aliases', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.v6Aliases().rejectChanges();
+            // intf.v6Aliases().rejectChanges();
             me.getView().close();
         },
 
@@ -170,7 +170,7 @@ Ext.define('Mfw.settings.interface.Ipv6Aliases', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            intf.v6Aliases().commitChanges();
+            // intf.v6Aliases().commitChanges();
             me.getView().close();
         }
     }
