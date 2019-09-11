@@ -4,8 +4,6 @@
 
 a { color: var(--base-color); }
 
-label { color: #555 !important; }
-
 cite { font-style: normal; }
 cite.ok { border-bottom: 1px blue dashed; }
 cite.nok { color: red; border-bottom: 1px red dashed; }
@@ -88,8 +86,6 @@ cite.nok { color: red; border-bottom: 1px red dashed; }
 .chain-default { font-size: 12px; line-height: 1.2; color: #FFF; background: #555555; padding: 3px 5px; border-radius: 3px; margin: 0 8px; }
 
 .chain-editable { font-size: 12px; line-height: 1.2; color: #FFF; background: #bb283b; padding: 3px 5px; border-radius: 3px; margin: 0 8px; }
-
-.x-toast { bottom: 100px; }
 
 .condition { display: inline-block; padding: 0 0 0 16px; margin: 5px 0; }
 .condition span { font-weight: normal; background: #519839; padding: 2px 5px; border-radius: 3px; display: inline-block; color: #FFF; }
@@ -300,3 +296,5 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 
 .x-trigger { margin-right: 8px; }
 .x-trigger .x-icon-el:before { font-size: 16px; }
+
+.x-field.x-required > .x-label-el:after { font-family: sans-serif; }

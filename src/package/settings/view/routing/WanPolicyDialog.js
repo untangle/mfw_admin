@@ -699,6 +699,7 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             vm.bind('{policy}', function () {
                 console.log('the binding');
             });
+        },
 
         },
 
@@ -831,8 +832,4 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
 
             me.getView().destroy();
         }
-
-    }
-
-
 });

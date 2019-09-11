@@ -140,7 +140,7 @@ Ext.define('Mfw.reports.EventDetails', {
                 if (!selection) { return; }
 
                 var rootNode = tree.getRootNode();
-                
+
                 Ext.Object.each(selection.getData(), function (key, val) {
                     var node = rootNode.findChild('key', key, true);
                     if (node) {

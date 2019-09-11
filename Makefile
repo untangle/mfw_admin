@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= sdwan
+DEV_HOST ?= sdwanbox
 DEV_DIR ?= /www
 VERSION ?= $(shell git describe --always --long --tags --dirty)
 
@@ -38,7 +38,7 @@ SASS-SETUP := $(wildcard src/app/setup/sass/*.scss)
 # APPS SOURCES
 APP_ADMIN_SRC := $(addprefix src/app/admin/, cmp *.js)
 APP_SETTINGS_SRC := $(addprefix src/app/settings/, cmp *.js)
-APP_SETUP_SRC := $(addprefix src/app/setup/, Util.js model store components step view App.js)
+APP_SETUP_SRC := $(addprefix src/app/setup/, Util.js components step view App.js)
 APP_COMMON_SRC := $(addprefix src/common/, *js auth overrides conditions util validators)
 
 # PACKAGES SOURCES
@@ -64,7 +64,12 @@ APP_SETTINGS_ALL := src/app/AppBase.js \
 
 APP_SETUP_ALL := $(shell find $(APP_COMMON_SRC) \
 				 $(APP_SETUP_SRC) -name '*.js' 2>/dev/null) \
-				 src/package/settings/view/network/InterfaceDialog.js
+				 src/package/settings/model/Interface.js \
+				 src/package/settings/model/Account.js \
+				 src/package/settings/store/Interfaces.js \
+				 src/package/settings/store/Accounts.js \
+				 src/package/settings/view/network/interface/* \
+				 src/package/settings/view/network/Interface.js \
 
 # All report entries
 REPORT_ENTRIES = $(shell find reports/ -type f -name '*.json')

@@ -129,3 +129,7 @@ hr {
         font-size: 16px;
     }
 }
+
+.x-field.x-required > .x-label-el:after {
+    font-family: sans-serif;
+}

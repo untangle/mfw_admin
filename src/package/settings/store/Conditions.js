@@ -2072,7 +2072,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_PROTOCHAIN',
+        type:'APPLICATION_ID_INFERRED',
         category: 'Application',
         text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
@@ -2114,7 +2114,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Risk (Matched)'.t(),
         description: 'Application Risk (Matched) description ...',
         operators: ['==', '!=']
-    }, 
+    },
 
     // SOURCE
     {

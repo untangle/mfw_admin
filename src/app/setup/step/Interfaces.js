@@ -6,6 +6,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     padding: '32 0 0 0',
 
+    viewModel: {},
+
     layout: {
         type: 'vbox',
         align: 'middle'
@@ -33,9 +35,14 @@ Ext.define('Mfw.setup.step.Interfaces', {
         }]
     }, {
         xtype: 'component',
-        margin: '8 0 24 0',
+        margin: '8 0 8 0',
         width: 800,
         html: '<hr/>'
+    }, {
+        xtype: 'component',
+        margin: '0 0 24 0',
+        style: 'color: #777;',
+        html: 'select an interface to view/edit configuration'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -43,9 +50,13 @@ Ext.define('Mfw.setup.step.Interfaces', {
         flex: 1,
         store: 'interfaces',
         rowLines: false,
-        selectable: false,
+        selectable: {
+            mode: 'single'
+        },
         itemConfig: {
             viewModel: true,
+            ripple: false,
+            style: 'cursor: pointer;'
         },
 
         columns: [{
@@ -108,21 +119,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 }
                 return '-';
             }
-        }, {
-            width: 44,
-            sortable: false,
-            resizable: false,
-            menuDisabled: true,
-            cell: {
-                tools: {
-                    edit: {
-                        // bind: {
-                        //     hidden: '{record.configType !== "ADDRESSED" && record.type !== "WIFI"}'
-                        // },
-                        handler: 'onEdit',
-                    }
-                }
-            }
         }]
     }],
     listeners: {
@@ -130,6 +126,42 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
+        init: function (view) {
+            var me = this;
+
+            view.getViewModel().bind('{interfaces.selection}', function (intf) {
+                if (!intf) { return; }
+
+                me.intfDialog = Ext.Viewport.add({
+                    xtype: 'dialog',
+                    ownerCmp: me.getView(),
+                    layout: 'fit',
+                    width: 416,
+                    height: 700,
+                    padding: 0,
+
+                    showAnimation: false,
+                    hideAnimation: false,
+
+                    items: [{
+                        xtype: 'mfw-settings-network-interface',
+                        viewModel: {
+                            data: {
+                                intf: intf,
+                                isDialog: true
+                            }
+                        }
+                    }]
+                });
+
+                me.intfDialog.on('destroy', function () {
+                    me.intfDialog = null;
+                    me.lookup('interfaces').setSelection(null);
+                });
+                me.intfDialog.show();
+            });
+        },
+
         onActivate: function () {
             var store = Ext.getStore('interfaces');
             store.load();
@@ -148,7 +180,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 return;
             }
 
-            store.getDataSource().each(function (record) {
+            store.each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });
@@ -168,22 +200,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
                 return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';
             }
-        },
-
-        onEdit: function (grid, info) {
-            var me = this,
-                intf = info.record;
-
-            me.intfDialog = Ext.Viewport.add({
-                xtype: 'interface-dialog',
-                ownerCmp: me.getView(),
-                interface: intf
-            });
-
-            me.intfDialog.on('destroy', function () {
-                me.intfDialog = null;
-            });
-            me.intfDialog.show();
         },
 
         refresh: function () {

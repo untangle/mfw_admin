@@ -59,7 +59,8 @@ Ext.define('Mfw.settings.network.Interfaces', {
         groupable: false,
         cell: { encodeHtml: false },
         renderer: function (value, record) {
-            return '<b>' + record.get('name') + ' </b>';
+            // return '<b>' + record.get('name') + ' </b>';
+            return '<b><a href="#settings/network/interfaces/' + value + '">' + record.get('name') + '</a></b>';
         }
     }, {
         text: 'Enabled',

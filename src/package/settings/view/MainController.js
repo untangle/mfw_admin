@@ -2,19 +2,27 @@ Ext.define('Mfw.settings.view.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.settings',
 
-    // routes: {
-
-    // },
-
     init: function () {
         /**
          * Set routes based on app context
          */
         if (Mfw.app.context === 'admin') {
             this.setRoutes({
-                'settings:query': {
-                    action: 'onAction',
-                    conditions: { ':query' : '(.*)' }
+                'settings': {
+                    //before: 'onBefore',
+                    action: 'onAction'
+                },
+                'settings/:p1': {
+                    //before: 'onBefore',
+                    action: 'onAction'
+                },
+                'settings/:p1/:p2': {
+                    //before: 'onBefore',
+                    action: 'onAction'
+                },
+                'settings/:p1/:p2/:p3': {
+                    //before: 'onBefore',
+                    action: 'onAction'
                 }
             });
         }
@@ -28,71 +36,95 @@ Ext.define('Mfw.settings.view.MainController', {
         }
     },
 
-    onAction: function (route) {
-        var me = this, view = me.getView(),
-            cmp = view.down('#currentSettings'),
-            tree = view.down('treelist'),
-            node,
-            prefix, // used for chains routing in /firewall or /routing
-            routeParts, table, chain, widget;
+    /**
+     *
+     * @param {String} p1 - first level nav, navigation node e.g. Network, Firewall
+     * @param {String} p2 - second level nav e.g. Interfaces, or a table e.g. Filter, Access
+     * @param {String} p3 - third navigation level, a table chain or an interface name
+     */
+    onAction: function (p1, p2, p3) {
+        var me = this, mainView = me.getView(),
+            tree = mainView.down('treelist'),
+            subView = mainView.down('#currentSettings'),
+            node, intf;
 
-        if (route) {
-            // replace the first forward slash
-            if (route.startsWith('/')) {
-                route = route.replace('/', '');
-            }
-        }
+        if (subView) { subView.destroy(); subView = null; }
 
         Mfw.app.viewport.setActiveItem('settings');
 
-        if (cmp) { cmp.destroy(); }
+        // tree.getStore().findNode('href', 'network/interfaces').set('text', 'Interfaces');
 
-        if (route) {
-            if (route.startsWith('firewall') || route.startsWith('routing/wan-rules')) {
-                routeParts = route.split('/'),
-
-                prefix = routeParts[0], // "firewall" or "routing"
-                table = routeParts[1],
-                chain = routeParts[2],
-
-                widget = {
-                    xtype: 'mfw-settings-' + prefix,
-                };
-
-                node = tree.getStore().findNode('href', 'settings/' + prefix);
-                if (table) {
-                    widget.xtype = 'mfw-settings-' + prefix + '-' + table;
-                    node = tree.getStore().findNode('href', prefix + '/' + table);
-                    if (chain) {
-                        widget.chain = chain;
-                    }
-                }
-            } else {
-                node = tree.getStore().findNode('href', route);
-                widget = {
-                    xtype: 'mfw-settings-' + route.replace(/\//g, '-'),
-                };
-            }
-
-        } else {
+        // root settings view
+        if (p1 === undefined) {
             tree.getStore().getRoot().collapseChildren(true);
-            widget = {
+            tree.setSelection(null);
+            subView = {
                 xtype: 'noselection-settings'
             };
         }
-        widget.itemId = 'currentSettings';
 
-        if (Ext.ClassManager.getByAlias('widget.' + widget.xtype)) {
-            view.add(widget);
+        // first level settings view
+        if (p1 && p2 === undefined) {
+            node = tree.getStore().findNode('href', p1);
+            subView = {
+                xtype: 'mfw-settings-' + p1
+            };
+        }
+
+        if (p1 && p2) {
+            node = tree.getStore().findNode('href', p1 + '/' + p2);
+            subView = {
+                xtype: 'mfw-settings-' + p1 + '-' + p2
+            };
+
+            // if table chains
+            if (p1 === 'firewall' || (p1 === 'routing' && p2 === 'wan-rules')) {
+                if (p3) {
+                    subView.chain = p3;
+                }
+            }
+
+            // if interfaces
+            if (p1 === 'network' && p2 === 'interfaces') {
+                if (p3 !== undefined) {
+                    node = tree.getStore().findNode('href', p1 + '/' + p2 + '/' + p3);
+                    intf = Ext.getStore('interfaces').findRecord('name', p3);
+
+                    // todo, what id intf is nul ????
+
+                    if (!intf) { return; }
+
+                    subView = {
+                        xtype: 'mfw-settings-network-interface',
+                        viewModel: {
+                            data: {
+                                intf: intf
+                            }
+                        }
+                    };
+                } else {
+                    node = tree.getStore().findNode('href', p1 + '/' + p2);
+                }
+            }
+        }
+
+        subView.itemId = 'currentSettings';
+
+        if (Ext.ClassManager.getByAlias('widget.' + subView.xtype)) {
+            mainView.add(subView);
         } else {
             console.log('view does not exists');
         }
 
-
+        // select the node, required when using a direct link
         if (node) {
             tree.setSelection(node);
+            if (!node.isLeaf()) {
+                node.expand();
+            }
         }
     },
+
 
     onDeactivate: function (view) {
         var list = view.down('treelist'),

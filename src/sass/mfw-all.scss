@@ -20,7 +20,7 @@ a {
 }
 
 label {
-    color: #555 !important;
+    // color: #555 !important;
     // font-weight: bold !important;
 }
 
@@ -301,10 +301,6 @@ cite {
 }
 
 /////////////////////////////////////////////
-
-.x-toast {
-    bottom: 100px;
-}
 
 .condition {
     display: inline-block;
@@ -1083,4 +1079,9 @@ hr {
     .x-icon-el:before {
         font-size: 16px;
     }
+}
+
+
+.x-field.x-required > .x-label-el:after {
+    font-family: sans-serif;
 }

@@ -42,8 +42,8 @@ Ext.define('Mfw.model.WanPolicy', {
         { name: 'enabled', type: 'boolean', defaultValue: true },
         { name: 'description', type: 'string' },
         { name: 'type', type: 'string', defaultValue: 'SPECIFIC_WAN' }, // ["SPECIFIC_WAN", "BEST_OF", "BALANCE" ]
-        { name: 'best_of_metric', type: 'string', allowNull: true }, // [ "LOWEST_LATENCY", "HIGHEST_AVAILABLE_BANDWIDTH", "LOWEST_JITTER", "LOWEST_PACKET_LOSS" ]
-        { name: 'balance_algorithm', type: 'string', allowNull: true } // [ "WEIGHTED", "LATENCY", "AVAILABLE_BANDWIDTH", "BANDWIDTH" ]
+        { name: 'best_of_metric', type: 'string', allowNull: true, defaultValue: 'LOWEST_LATENCY' }, // [ "LOWEST_LATENCY", "HIGHEST_AVAILABLE_BANDWIDTH", "LOWEST_JITTER", "LOWEST_PACKET_LOSS" ]
+        { name: 'balance_algorithm', type: 'string', allowNull: true, defaultValue: 'WEIGHTED' } // [ "WEIGHTED", "LATENCY", "AVAILABLE_BANDWIDTH", "BANDWIDTH" ]
     ],
 
     hasMany: [{

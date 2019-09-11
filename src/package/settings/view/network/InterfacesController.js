@@ -3,11 +3,40 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     alias: 'controller.mfw-settings-network-interfaces',
 
     onAddRecord: function () {
-        var me = this;
+        var me = this,
+            intf = Ext.create('Mfw.model.Interface', {
+                type: 'OPENVPN',
+                configType: 'ADDRESSED',
+                wan: true,
+                natEgress: true,
+                openvpnBoundInterfaceId: 0,
+                openvpnUsernamePasswordEnabled: false,
+                openvpnUsername: null,
+                openvpnPasswordBase64: null
+            });
+
+        intf.setOpenvpnConfFile(Ext.create('Mfw.model.OpenVpnConfFile', {
+            encoding: 'base64',
+            contents: ''
+        }));
 
         me.intfDialog = Ext.Viewport.add({
-            xtype: 'interface-dialog',
-            ownerCmp: me.getView()
+            xtype: 'dialog',
+            ownerCmp: me.getView(),
+            layout: 'fit',
+            width: 416,
+            height: 700,
+            padding: 0,
+            items: [{
+                xtype: 'mfw-settings-network-interface',
+                viewModel: {
+                    data: {
+                        intf: intf,
+                        isNew: true,
+                        isDialog: true
+                    }
+                }
+            }]
         });
 
         me.intfDialog.on('destroy', function () {
@@ -18,20 +47,31 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     },
 
     onEditRecord: function (grid, info) {
-        var me = this,
-            intf = info.record;
+        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('name'));
+    },
 
-        me.intfDialog = Ext.Viewport.add({
-            xtype: 'interface-dialog',
-            ownerCmp: me.getView(),
-            interface: intf
-        });
+    onDeleteRecord: function (grid, info) {
+        var me = this;
+        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            'Delete <strong>' + info.record.get('name') + '</strong> interface?',
+            function (answer) {
+                if (answer === 'yes') {
+                    info.record.drop();
+                    me.onSave(); // defind in MasterGrid
+                }
+            });
+    },
 
-        me.intfDialog.on('destroy', function () {
-            me.onLoad();
-            me.intfDialog = null;
-        });
-        me.intfDialog.show();
+    onDeleteRecord: function (grid, info) {
+        var me = this;
+        Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            'Delete <strong>' + info.record.get('name') + '</strong> interface?',
+            function (answer) {
+                if (answer === 'yes') {
+                    info.record.drop();
+                    me.onSave(); // defind in MasterGrid
+                }
+            });
     },
 
     onDeleteRecord: function (grid, info) {

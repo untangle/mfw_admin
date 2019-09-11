@@ -57,11 +57,11 @@ Ext.define('Mfw.settings.view.Main', {
             expanderOnly: false,
             selectOnExpander: true,
             highlightPath: false,
-//            store: 'settings-nav',
-            store: {
-                type: 'settings-nav',
-                // autoLoad: true
-            },
+            store: 'settingsNav',
+            // store: {
+            //     type: 'settingsNav',
+            //     // autoLoad: true
+            // },
             listeners: {
                 itemclick: 'onItemClick'
             }

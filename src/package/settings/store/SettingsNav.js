@@ -2,12 +2,12 @@
  * This store holds the Settings tree navigation,
  * each setting view being contained in a Category
  */
-Ext.define('Mfw.store.Nav', {
+Ext.define('Mfw.store.SettingsNav', {
     extend: 'Ext.data.TreeStore',
-    storeId: 'settings-nav',
-    alias: 'store.settings-nav',
+    storeId: 'settingsNav',
+    alias: 'store.settingsNav',
     rootVisible: false,
-    filterer: 'bottomup',
+    // filterer: 'bottomup',
 
     root: {
         expanded: true,
@@ -17,7 +17,7 @@ Ext.define('Mfw.store.Nav', {
             iconCls: 'tree network',
             href: 'network',
             children: [
-                { text: 'Interfaces'.t(), leaf: true, href: 'network/interfaces' },
+                { text: 'Interfaces'.t(), href: 'network/interfaces', expanded: false },
                 { text: 'DHCP'.t(), leaf: true, href: 'network/dhcp' },
                 { text: 'DNS'.t(), leaf: true, href: 'network/dns' }
             ]
