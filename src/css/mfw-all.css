@@ -298,3 +298,6 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .x-trigger .x-icon-el:before { font-size: 16px; }
 
 .x-field.x-required > .x-label-el:after { font-family: sans-serif; }
+
+.x-menu { max-height: 500px; }
+.x-menu .x-menu-body-el { overflow-y: auto; }

@@ -1085,3 +1085,10 @@ hr {
 .x-field.x-required > .x-label-el:after {
     font-family: sans-serif;
 }
+
+.x-menu {
+    max-height: 500px;
+    .x-menu-body-el {
+        overflow-y: auto;
+    }
+}
