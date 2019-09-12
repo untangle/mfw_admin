@@ -5,11 +5,15 @@
     "displayOrder": 1000,
     "type": "EVENTS",
     "table": "sessions",
-    "conditions": {
+    "conditions": [{
         "column": "wan_rule_chain",
         "operator": "NE",
         "value": "0"
-    },
+    },{
+        "column": "server_interface_type",
+        "operator": "EQ",
+        "value": "1"
+    }],
     "rendering": {
         "defaultColumns": ["time_stamp",
                            "server_interface_id",
