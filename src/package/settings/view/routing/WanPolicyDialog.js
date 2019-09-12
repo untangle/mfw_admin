@@ -672,10 +672,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
         }]
     }],
 
-    // buttons: [{
-    //     text: 'OK'
-    // }],
-
     controller: {
         init: function (view) {
             var me = this,
@@ -695,12 +691,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             } else {
                 me.setWans();
             }
-
-            vm.bind('{policy}', function () {
-                console.log('the binding');
-            });
-        },
-
         },
 
         setWans: function () {
@@ -819,9 +809,6 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             }
 
 
-            console.log(policy.getData(true));
-
-
             if (vm.get('action') === 'ADD') {
                 dialog.ownerCmp.getStore().add(policy);
             } else {
@@ -832,4 +819,5 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
 
             me.getView().destroy();
         }
+    }
 });

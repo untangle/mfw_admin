@@ -535,11 +535,18 @@ Ext.define('Mfw.Renderer', {
 
 
     wanPolicy: function (value) {
+        // for -2 = Default
+        if (value === -2) { return 'Default'; }
         return Map.wanPolicies[value] || value;
     },
 
     wanRule: function (value, record) {
         var chain, rule;
+
+        // for -2 = None, -1 = Cache
+        if (value === -2) { return 'None'; }
+        if (value === -1) { return 'Cache'; }
+
         // find the proper chain
         chain = Ext.Array.findBy(Map.wanRules, function(chain) {
             return chain.name === record.get('wan_rule_chain');
