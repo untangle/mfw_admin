@@ -12,7 +12,8 @@ Ext.define('Mfw.settings.network.Interface', {
             cardKey: 'ipv4',
             setupContext: false,
             isNew: false,
-            isDialog: false
+            isDialog: false,
+            validDhcpRange: null
         },
         formulas: {
             /**
@@ -546,6 +547,58 @@ Ext.define('Mfw.settings.network.Interface', {
             vm.set('cardKey', btn.getValue());
         },
 
+
+        ipInRange: function (ip, rangeStart, rangeEnd) {
+            var i, inRange = true,
+                ipParts = ip.split('.'),
+                rangeStartParts = rangeStart.split('.'),
+                rangeEndParts = rangeEnd.split('.');
+
+            for (i = 0; i <=3; i++) {
+                if (parseInt(ipParts[i], 10) < parseInt(rangeStartParts[i], 10)) {
+                    inRange = false;
+                }
+                if (parseInt(ipParts[i], 10) > parseInt(rangeEndParts[i], 10)) {
+                    inRange = false;
+                }
+            }
+            return inRange;
+        },
+
+
+        checkDhcpRange: function (cidr, currentRangeStart, currentRangeEnd) {
+            var me = this, vm = this.getViewModel(),
+                part = cidr.split("/"), // part[0] = base address, part[1] = netmask
+                ipaddress = part[0].split('.'),
+                netmaskblocks = ['0','0','0','0'],
+                invertedNetmaskblocks,
+                validRangeStart,
+                validRangeEnd;
+
+            if(!/\d+\.\d+\.\d+\.\d+/.test(part[1])) {
+              netmaskblocks = ('1'.repeat(parseInt(part[1], 10)) + '0'.repeat(32-parseInt(part[1], 10))).match(/.{1,8}/g);
+              netmaskblocks = netmaskblocks.map(function(el) { return parseInt(el, 2); });
+            } else {
+              netmaskblocks = part[1].split('.').map(function(el) { return parseInt(el, 10); });
+            }
+
+            invertedNetmaskblocks = netmaskblocks.map(function(el) { return el ^ 255; });
+            validRangeStart = ipaddress.map(function(block, idx) { return block & netmaskblocks[idx]; });
+            validRangeEnd = validRangeStart.map(function(block, idx) { return block | invertedNetmaskblocks[idx]; });
+
+            validRangeStart = validRangeStart.join('.');
+            validRangeEnd = validRangeEnd.join('.');
+
+            if (!me.ipInRange(currentRangeStart, validRangeStart, validRangeEnd) ||
+                !me.ipInRange(currentRangeEnd, validRangeStart, validRangeEnd)) {
+                vm.set('cardKey', 'dhcp');
+                vm.set('validDhcpRange', (validRangeStart + ' - ' + validRangeEnd));
+            } else {
+                vm.set('validDhcpRange', null);
+            }
+        },
+
+
         onCancel: function (btn) {
             var me = this,
                 intf = me.getViewModel().get('intf'),
@@ -598,6 +651,26 @@ Ext.define('Mfw.settings.network.Interface', {
                 }
 
                 Ext.toast('Please fill or correct invalid fields!', 3000);
+                return;
+            }
+
+            /**
+             * check for valid DHCP range
+             */
+            if (intf.get('dhcpEnabled') &&
+                intf.get('v4StaticAddress') &&
+                intf.get('v4StaticPrefix') &&
+                intf.get('dhcpRangeStart') &&
+                intf.get('dhcpRangeEnd')) {
+                me.checkDhcpRange(
+                    intf.get('v4StaticAddress') + '/' + intf.get('v4StaticPrefix'),
+                    intf.get('dhcpRangeStart'),
+                    intf.get('dhcpRangeEnd')
+                );
+            }
+
+            // when is set means that current range is invalid
+            if (vm.get('validDhcpRange')) {
                 return;
             }
 

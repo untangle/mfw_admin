@@ -4,28 +4,38 @@ Ext.define('Mfw.settings.interface.Dhcp', {
 
     layout: 'fit',
 
+    viewModel: {},
+
     items: [{
         xtype: 'container',
         scrollable: true,
         layout: 'hbox',
         items: [{
             xtype: 'formpanel',
-            padding: '8 16 16 16',
+            padding: '2 16 16 16',
             width: 400,
             bind: {
                 flex: '{isDialog ? 1 : "auto"}'
             },
             items: [{
-                xtype: 'component',
-                style: 'font-size: 20px; font-weight: 100;',
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    align: 'middle'
+                },
                 margin: '16 0',
-                html: 'DHCP configuration'
-            }, {
-                xtype: 'togglefield',
-                boxLabel: 'Enable DHCP Serving',
-                bind: {
-                    value: '{intf.dhcpEnabled}',
-                }
+                items: [{
+                    xtype: 'component',
+                    flex: 1,
+                    style: 'font-size: 20px; font-weight: 100;',
+                    html: 'DHCP configuration'
+                }, {
+                    xtype: 'togglefield',
+                    boxLabel: '<strong>Enable DHCP Serving</strong>',
+                    bind: {
+                        value: '{intf.dhcpEnabled}',
+                    }
+                }]
             }, {
                 xtype: 'containerfield',
                 layout: 'hbox',
@@ -43,7 +53,8 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                         value: '{intf.dhcpRangeStart}',
                         required: '{intf.configType === "ADDRESSED" && intf.dhcpEnabled}',
                         disabled: '{!intf.dhcpEnabled}'
-                    }
+                    },
+                    validators: 'ipv4'
                 }, {
                     xtype: 'textfield',
                     label: 'Range End',
@@ -53,7 +64,8 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                         value: '{intf.dhcpRangeEnd}',
                         required: '{intf.configType === "ADDRESSED" && intf.dhcpEnabled}',
                         disabled: '{!intf.dhcpEnabled}'
-                    }
+                    },
+                    validators: 'ipv4'
                 }]
             }, {
                 xtype: 'numberfield',
@@ -112,10 +124,28 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                 },
                 ui: 'action',
                 handler: 'showDhcpOptions'
+            }, {
+                xtype: 'component',
+                docked: 'bottom',
+                margin: 16,
+                style: 'background: #ffe8c9; padding: 16px; border-radius: 5px;',
+                hidden: true,
+                bind: {
+                    html: '<strong>Invalid DHCP range!</strong><br/>' +
+                        'Update DHCP range to match static address <strong>{intf.v4StaticAddress}/{intf.v4StaticPrefix}</strong><br/>' +
+                        'Full valid range is <strong>{validDhcpRange}</strong>',
+                    hidden: '{!validDhcpRange}'
+                }
             }]
         }]
     }],
     controller: {
+        init: function (view) {
+            // reset range validation on enable/disable DHCP
+            view.getViewModel().bind('{intf.dhcpEnabled}', function () {
+                view.getViewModel().set('validDhcpRange', null);
+            });
+        },
         showDhcpOptions: function () {
             var me = this;
 
