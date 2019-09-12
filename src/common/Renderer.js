@@ -560,6 +560,26 @@ Ext.define('Mfw.Renderer', {
 
         if (!rule) { return value; }
         return rule.description;
+    },
+
+    ipv4: function (value, record) {
+        if (record.get('configType') !== 'ADDRESSED') {
+            return '-';
+        }
+        if (value === 'DHCP' || value === 'PPPOE') {
+            return value;
+        }
+        if (value === 'STATIC') {
+            return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
+        }
+        return '-';
+    },
+
+    ipv6: function (value, record) {
+        if (record.get('configType') !== 'ADDRESSED') {
+            return '-';
+        }
+        return value || '-';
     }
 
 });

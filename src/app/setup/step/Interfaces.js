@@ -97,15 +97,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
             dataIndex: 'v4ConfigType',
             sortable: false,
             menuDisabled: true,
-            renderer: function (value, record) {
-                if (value === 'DHCP' || value === 'PPPOE') {
-                    return value;
-                }
-                if (value === 'STATIC') {
-                    return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
-                }
-                return '-';
-            }
+            renderer: Renderer.ipv4
         }, {
             text: 'IPv6',
             width: 180,
@@ -113,12 +105,7 @@ Ext.define('Mfw.setup.step.Interfaces', {
             dataIndex: 'v6ConfigType',
             sortable: false,
             menuDisabled: true,
-            renderer: function (value) {
-                if (value) {
-                    return value;
-                }
-                return '-';
-            }
+            renderer: Renderer.ipv6
         }]
     }],
     listeners: {

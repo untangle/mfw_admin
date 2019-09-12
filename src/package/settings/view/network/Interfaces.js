@@ -106,26 +106,13 @@ Ext.define('Mfw.settings.network.Interfaces', {
         dataIndex: 'v4ConfigType',
         minWidth: 200,
         flex: 1,
-        renderer: function (value, record) {
-            if (value === 'DHCP' || value === 'PPPOE') {
-                return value;
-            }
-            if (value === 'STATIC') {
-                return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
-            }
-            return '-';
-        }
+        renderer: Renderer.ipv4
     }, {
         text: 'IPv6',
         dataIndex: 'v6ConfigType',
         minWidth: 200,
         flex: 1,
-        renderer: function (value) {
-            if (value) {
-                return value;
-            }
-            return '-';
-        }
+        renderer: Renderer.ipv6
     }, {
         text: 'QoS',
         dataIndex: 'qosEnabled',
