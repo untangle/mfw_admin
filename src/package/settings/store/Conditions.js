@@ -2124,7 +2124,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Source Address description ...',
         field: {
             xtype: 'textfield',
-            validators: 'ipv4'
+            validators: 'ipv4expression'
         }
     }, {
         type:'SOURCE_ADDRESS_V6',
@@ -2207,7 +2207,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Destination Address description ...',
         field: {
             xtype: 'textfield',
-            validators: 'ipv4'
+            validators: 'ipv4expression'
         }
     }, {
         type:'DESTINATION_ADDRESS_V6',
