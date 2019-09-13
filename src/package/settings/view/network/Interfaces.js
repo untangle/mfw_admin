@@ -63,6 +63,22 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return '<b><a href="#settings/network/interfaces/' + value + '">' + record.get('name') + '</a></b>';
         }
     }, {
+        dataIndex: '_connected',
+        align: 'center',
+        width: 44,
+        resizable: false,
+        hideable: false,
+        menuDisabled: true,
+        cell: { encodeHtml: false },
+        renderer: function (value) {
+            // unable to find a status for an interface
+            if (value === undefined) {
+                return '<i class="x-fa fa-times fa-gray"></i>';
+            }
+            var color = value ? 'fa-green' : 'fa-gray';
+            return '<i class="x-fa fa-circle ' + color + '"></i>';
+        }
+    }, {
         text: 'Enabled',
         dataIndex: 'enabled',
         align: 'center',
