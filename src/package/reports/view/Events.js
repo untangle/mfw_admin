@@ -104,13 +104,6 @@ Ext.define('Mfw.reports.Events', {
                  * or multiple tables in a JOIN, defined in tables array
                  */
 
-                // WAN Routing group by application name
-                if (record.get('name') === 'WAN Routing') {
-                    grid.getStore().setGroupField('application_name');
-                } else {
-                    grid.getStore().setGroupField(null);
-                }
-
                 columnRenames = record.getRendering().get('columnRenames');
 
                 if (record.get('tables')) {
