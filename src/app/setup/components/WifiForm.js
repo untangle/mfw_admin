@@ -91,7 +91,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             itemTpl: '{name}',
             valueField: 'mode',
             bind: {
-                value: '{intf.wirelessMode}',
+                value: '{intf.wirelessThroughput}',
                 store: {
                     autoLoad: true,
                     proxy: {

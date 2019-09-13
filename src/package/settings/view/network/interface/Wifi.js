@@ -144,7 +144,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     itemTpl: '{name}',
                     valueField: 'mode',
                     bind: {
-                        value: '{intf.wirelessMode}',
+                        value: '{intf.wirelessThroughput}',
                         required: '{intf.type === "WIFI"}',
                         store: {
                             autoLoad: '{intf.type === "WIFI"}',
