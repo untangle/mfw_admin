@@ -79,6 +79,30 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                     }
                 },
                 disabled: '{!intf.enabled}'
+        }, {
+            xtype: 'selectfield',
+            userCls: 'x-custom-field',
+            label: 'HT Mode',
+            clearable: false,
+            required: true,
+            disabled: true,
+            queryMode: 'remote',
+            displayTpl: '{name}',
+            itemTpl: '{name}',
+            valueField: 'mode',
+            bind: {
+                value: '{intf.wirelessMode}',
+                store: {
+                    autoLoad: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: '/api/status/wifimodelist/{intf.device}',
+                        reader: {
+                            type: 'json'
+                        }
+                    }
+                },
+                disabled: '{!intf.enabled}'
             }
         }, {
             xtype: 'selectfield',

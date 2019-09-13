@@ -136,6 +136,27 @@ Ext.define('Mfw.settings.interface.Wifi', {
                             }
                         }
                     }
+                }, {
+                    xtype: 'selectfield',
+                    label: 'HT Mode',
+                    queryMode: 'remote',
+                    displayTpl: '{name}',
+                    itemTpl: '{name}',
+                    valueField: 'mode',
+                    bind: {
+                        value: '{intf.wirelessChannel}',
+                        required: '{intf.type === "WIFI"}',
+                        store: {
+                            autoLoad: '{intf.type === "WIFI"}',
+                            proxy: {
+                                type: 'ajax',
+                                url: '/api/status/wifimodelist/{intf.device}',
+                                reader: {
+                                    type: 'json'
+                                }
+                            }
+                        }
+                    }
                 }]
             }]
         }]
