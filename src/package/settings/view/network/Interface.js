@@ -107,8 +107,19 @@ Ext.define('Mfw.settings.network.Interface', {
                 xtype: 'component',
                 style: 'font-weight: 100; font-size: 20px;',
                 flex: 1,
+                hidden: true,
                 bind: {
-                    html: '<strong>{intf.name}</strong> settings'
+                    html: 'Add OpenVPN interface',
+                    hidden: '{!isNew}'
+                }
+            }, {
+                xtype: 'component',
+                style: 'font-weight: 100; font-size: 20px;',
+                flex: 1,
+                hidden: true,
+                bind: {
+                    html: '<strong>{intf.name}</strong> settings',
+                    hidden: '{isNew}'
                 }
             }, {
                 xtype: 'togglefield',

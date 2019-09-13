@@ -25,8 +25,12 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             ownerCmp: me.getView(),
             layout: 'fit',
             width: 416,
-            height: 700,
+            height: Ext.getBody().getViewSize().height < 700 ? (Ext.getBody().getViewSize().height - 20) : 700,
             padding: 0,
+
+            showAnimation: false,
+            hideAnimation: false,
+
             items: [{
                 xtype: 'mfw-settings-network-interface',
                 viewModel: {

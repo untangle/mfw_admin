@@ -50,13 +50,10 @@ Ext.define('Mfw.setup.step.Interfaces', {
         flex: 1,
         store: 'interfaces',
         rowLines: false,
-        selectable: {
-            mode: 'single'
-        },
+        selectable: false,
         itemConfig: {
             viewModel: true,
-            ripple: false,
-            style: 'cursor: pointer;'
+            ripple: false
         },
 
         columns: [{
@@ -78,7 +75,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
             renderer: function (value) {
                 return '<b>' + value + '</b>';
             }
-            // responsiveConfig: { large: { hidden: false }, small: { hidden: true } },
         }, {
             text: 'Config',
             dataIndex: 'configType',
@@ -106,6 +102,18 @@ Ext.define('Mfw.setup.step.Interfaces', {
             sortable: false,
             menuDisabled: true,
             renderer: Renderer.ipv6
+        }, {
+            width: 44,
+            sortable: false,
+            resizable: false,
+            menuDisabled: true,
+            cell: {
+                tools: {
+                    edit: {
+                        handler: 'onEdit'
+                    }
+                }
+            }
         }]
     }],
     listeners: {
@@ -113,42 +121,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
     },
 
     controller: {
-        init: function (view) {
-            var me = this;
-
-            view.getViewModel().bind('{interfaces.selection}', function (intf) {
-                if (!intf) { return; }
-
-                me.intfDialog = Ext.Viewport.add({
-                    xtype: 'dialog',
-                    ownerCmp: me.getView(),
-                    layout: 'fit',
-                    width: 416,
-                    height: 700,
-                    padding: 0,
-
-                    showAnimation: false,
-                    hideAnimation: false,
-
-                    items: [{
-                        xtype: 'mfw-settings-network-interface',
-                        viewModel: {
-                            data: {
-                                intf: intf,
-                                isDialog: true
-                            }
-                        }
-                    }]
-                });
-
-                me.intfDialog.on('destroy', function () {
-                    me.intfDialog = null;
-                    me.lookup('interfaces').setSelection(null);
-                });
-                me.intfDialog.show();
-            });
-        },
-
         onActivate: function () {
             var store = Ext.getStore('interfaces');
             store.load();
@@ -156,6 +128,37 @@ Ext.define('Mfw.setup.step.Interfaces', {
             store.setFilters([
                 { property: 'hidden', value: false }
             ]);
+        },
+
+        onEdit: function (view, info) {
+            var me = this;
+
+            me.intfDialog = Ext.Viewport.add({
+                xtype: 'dialog',
+                ownerCmp: me.getView(),
+                layout: 'fit',
+                width: 416,
+                height: Ext.getBody().getViewSize().height < 700 ? (Ext.getBody().getViewSize().height - 20) : 700,
+                padding: 0,
+
+                showAnimation: false,
+                hideAnimation: false,
+
+                items: [{
+                    xtype: 'mfw-settings-network-interface',
+                    viewModel: {
+                        data: {
+                            intf: info.record,
+                            isDialog: true
+                        }
+                    }
+                }]
+            });
+
+            me.intfDialog.on('destroy', function () {
+                me.intfDialog = null;
+            });
+            me.intfDialog.show();
         },
 
         continue: function (cb) {
