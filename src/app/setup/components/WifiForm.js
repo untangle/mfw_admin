@@ -79,6 +79,7 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                     }
                 },
                 disabled: '{!intf.enabled}'
+            }
         }, {
             xtype: 'selectfield',
             userCls: 'x-custom-field',
