@@ -10,6 +10,18 @@ Ext.define('Mfw.settings.interface.Ipv4', {
 
     viewModel: {
         formulas: {
+            _ipv4ConfigTypes: function (get) {
+                // all types
+                var wanOptions = [
+                    { text: 'Auto (DHCP)', value: 'DHCP' },
+                    { text: 'Static',   value: 'STATIC' },
+                    { text: 'PPPoE',  value: 'PPPOE' }
+                ],
+                nonWanOptions = [
+                    { text: 'Static',   value: 'STATIC' },
+                ];
+                return get('intf.wan') ? wanOptions : nonWanOptions;
+            },
             _v4StaticPrefixOverridePlaceholder: function (get) {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
             }
@@ -42,15 +54,11 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 margin: '0 0 16 0',
                 bind: {
                     value: '{intf.v4ConfigType}',
+                    options: '{_ipv4ConfigTypes}',
                     required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN"}'
                     // disabled: '{!intf.wan}',
                     // hidden: '{intf.type === "OPENVPN"}'
-                },
-                options: [
-                    { text: 'Auto (DHCP)', value: 'DHCP' },
-                    { text: 'Static',   value: 'STATIC' },
-                    { text: 'PPPoE',  value: 'PPPOE' }
-                ],
+                }
             }, {
 
                 /**

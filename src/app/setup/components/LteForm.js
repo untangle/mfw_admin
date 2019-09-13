@@ -6,6 +6,23 @@ Ext.define('Mfw.setup.cmp.Lte', {
         type: 'vbox'
     },
 
+    viewModel: {
+        formulas: {
+            /**
+             * formula to set simNetwork null
+             * selectfield does not support null value options
+             */
+            _simNetwork: {
+                get: function (get) {
+                    return get('intf.simNetwork') || 'OTHER';
+                },
+                set: function (value) {
+                    this.set('intf.simNetwork', value !== "OTHER" ? value : null);
+                }
+            }
+        }
+    },
+
     items: [{
         xtype: 'container',
         width: 300,
@@ -53,7 +70,7 @@ Ext.define('Mfw.setup.cmp.Lte', {
             ],
             disabled: true,
             bind: {
-                value: '{intf.simNetwork}',
+                value: '{_simNetwork}',
                 disabled: '{!intf.enabled}'
             }
         }, {
@@ -64,7 +81,8 @@ Ext.define('Mfw.setup.cmp.Lte', {
             disabled: true,
             bind: {
                 value: '{intf.simApn}',
-                disabled: '{intf.simNetwork !== "OTHER" || !intf.enabled}'
+                required: '{intf.type === "WWAN" && intf.enabled}',
+                disabled: '{intf.simNetwork}'
             }
         }, {
             xtype: 'numberfield',
@@ -73,10 +91,11 @@ Ext.define('Mfw.setup.cmp.Lte', {
             required: false,
             hidden: true,
             disabled: true,
+            clearable: false,
             bind: {
                 value: '{intf.simPin}',
-                required: '{intf.simNetwork === "OTHER"}',
-                hidden: '{intf.simNetwork !== "OTHER"}',
+                required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             },
             validators: [{
@@ -93,8 +112,8 @@ Ext.define('Mfw.setup.cmp.Lte', {
             disabled: true,
             bind: {
                 value: '{intf.simUsername}',
-                required: '{intf.simNetwork === "OTHER"}',
-                hidden: '{intf.simNetwork !== "OTHER"}',
+                required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             }
         }, {
@@ -131,8 +150,8 @@ Ext.define('Mfw.setup.cmp.Lte', {
             disabled: true,
             bind: {
                 value: '{intf.simPassword}',
-                required: '{intf.simNetwork === "OTHER"}',
-                hidden: '{intf.simNetwork !== "OTHER"}',
+                required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             },
             validators: [{

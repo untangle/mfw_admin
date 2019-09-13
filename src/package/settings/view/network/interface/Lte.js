@@ -8,6 +8,23 @@ Ext.define('Mfw.settings.interface.Lte', {
 
     layout: 'fit',
 
+    viewModel: {
+        formulas: {
+            /**
+             * formula to set simNetwork null
+             * selectfield does not support null value options
+             */
+            _simNetwork: {
+                get: function (get) {
+                    return get('intf.simNetwork') || 'OTHER';
+                },
+                set: function (value) {
+                    this.set('intf.simNetwork', value !== "OTHER" ? value : null);
+                }
+            }
+        }
+    },
+
     items: [{
         xtype: 'container',
         scrollable: true,
@@ -42,7 +59,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                         { text: 'Other', value: 'OTHER' }
                     ],
                     bind: {
-                        value: '{intf.simNetwork}',
+                        value: '{_simNetwork}',
                         required: '{intf.type === "WWAN"}'
                     }
                 }, {
@@ -53,7 +70,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     bind: {
                         value: '{intf.simApn}',
                         required: '{intf.type === "WWAN"}',
-                        disabled: '{intf.simNetwork !== "OTHER"}'
+                        disabled: '{intf.simNetwork}'
                     }
                 }]
             }, {
@@ -61,10 +78,12 @@ Ext.define('Mfw.settings.interface.Lte', {
                 label: 'PIN',
                 width: 100,
                 hidden: true,
+                clearable: false,
+                autoComplete: false,
                 bind: {
                     value: '{intf.simPin}',
-                    required: '{intf.type === "WWAN" && intf.simNetwork === "OTHER"}',
-                    hidden: '{intf.simNetwork !== "OTHER"}'
+                    required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                    hidden: '{intf.simNetwork}'
                 },
                 validators: [{
                     type: 'length',
@@ -85,8 +104,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf.simUsername}',
-                        required: '{intf.type === "WWAN" && intf.simNetwork === "OTHER"}',
-                        hidden: '{intf.simNetwork !== "OTHER"}'
+                        required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                        hidden: '{intf.simNetwork}'
                     }
                 }, {
                     label: 'Password',
@@ -117,9 +136,13 @@ Ext.define('Mfw.settings.interface.Lte', {
                     },
                     bind: {
                         value: '{intf.simPassword}',
-                        required: '{intf.type === "WWAN" && intf.simNetwork === "OTHER"}',
-                        hidden: '{intf.simNetwork !== "OTHER"}'
-                    }
+                        required: '{intf.type === "WWAN" && !intf.simNetwork}',
+                        hidden: '{intf.simNetwork}'
+                    },
+                    validators: [{
+                        type: 'length',
+                        min: 8
+                    }]
                 }]
             }]
         }]

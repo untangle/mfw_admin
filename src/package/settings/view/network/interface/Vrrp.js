@@ -26,8 +26,9 @@ Ext.define('Mfw.settings.interface.Vrrp', {
                 html: 'VRRP options'
             }, {
                 xtype: 'togglefield',
-                boxLabel: 'Enable VRRP',
                 bind: {
+                    userCls: '{intf.vrrpEnabled ? "on" : "off"}',
+                    boxLabel: '<strong>{intf.vrrpEnabled ? "Enable VRRP" : "Disable VRRP"}</strong>',
                     value: '{intf.vrrpEnabled}'
                 }
             }, {

@@ -33,7 +33,7 @@ Ext.define('Mfw.store.Interfaces', {
      * adds interfaces to the main Settings navigation under "Interfaces"
      */
     setInterfacesNav: function () {
-        var intfIcon = 'fa-signal', idx = 0,
+        var intfIcon, idx = 0,
             intfNode = Ext.getStore('settingsNav').findNode('href', 'network/interfaces');
 
         intfNode.removeAll();
@@ -44,7 +44,7 @@ Ext.define('Mfw.store.Interfaces', {
                 case 'WIFI': intfIcon = 'fa-wifi'; break;
                 case 'OPENVPN':
                 case 'VLAN': intfIcon = 'fa-project-diagram'; break;
-                default:
+                default: intfIcon = 'fa-signal';
             }
 
             intfNode.insertChild(idx, {

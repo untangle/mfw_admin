@@ -169,15 +169,17 @@ Ext.define('Mfw.model.Interface', {
         // ! hasMany wireguardPeers
 
         // WWAN
+        { name: 'simNetwork', type: 'string', allowNull: true },
         { name: 'simApn', type: 'string', allowNull: true },
         { name: 'simProfile', type: 'integer', allowNull: true },
         { name: 'simPin', type: 'integer', allowNull: true },
         { name: 'simDelay', type: 'integer', allowNull: true },
+        { name: 'simTimeout', type: 'integer', allowNull: true },
         { name: 'simAuth', type: 'string', allowNull: true }, // ["NONE", "PAP", "CHAP", "BOTH"]
         { name: 'simUsername', type: 'string', allowNull: true },
         { name: 'simPassword', type: 'string', allowNull: true },
         { name: 'simMode', type: 'string', allowNull: true }, // ["ALL", "WWAN", "UMTS", "GSM", "CDMA", "TDSCDMA"]
-        { name: 'simPdttype', type: 'string', allowNull: true }, // ["IPV4", "IPV6", "IPV4V6"]
+        { name: 'simPdptype', type: 'string', allowNull: true }, // ["IPV4", "IPV6", "IPV4V6"]
         { name: 'simPlmn', type: 'integer', allowNull: true },
         { name: 'simAutoconnect', type: 'boolean', allowNull: true }
     ],

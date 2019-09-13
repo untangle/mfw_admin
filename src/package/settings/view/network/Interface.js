@@ -17,6 +17,36 @@ Ext.define('Mfw.settings.network.Interface', {
         },
         formulas: {
             /**
+             * conditions when toolbar and cards are hidden
+             */
+            _hiddenToolbar: function (get) {
+                return !get('intf.enabled') ||
+                    get('intf.type') === 'WWAN' ||
+                    get('intf.configType') === 'BRIDGED' ||
+                    (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED');
+            },
+            _hiddenIpv4: function (get) {
+                return get('intf.configType') !== 'ADDRESSED' ||
+                    get('intf.type') === 'OPENVPN' ||
+                    get('intf.type') === 'WWAN';
+            },
+            _hiddenIpv6: function (get) {
+                return get('intf.configType') !== 'ADDRESSED' ||
+                    get('intf.type') === 'OPENVPN' ||
+                    get('intf.type') === 'WWAN';
+            },
+            _hiddenDhcp: function (get) {
+                return get('intf.configType') !== 'ADDRESSED' ||
+                    get('intf.type') === 'OPENVPN' ||
+                    get('intf.type') === 'WWAN';
+            },
+            _hiddenQos: function (get) {
+                return !get('intf.wan') ||
+                    get('intf.type') === 'WIFI' ||
+                    get('intf.type') === 'WWAN';
+            },
+
+            /**
              * set possible interface config types based on its type (NIC, OPENVPN)
              */
             _configTypes: function (get) {
@@ -118,12 +148,13 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: '<strong>{intf.name}</strong> settings',
+                    html: '<strong>{intf.name}</strong>',
                     hidden: '{isNew}'
                 }
             }, {
                 xtype: 'togglefield',
                 bind: {
+                    userCls: '{intf.enabled ? "on" : "off"}',
                     boxLabel: '<strong>{intf.enabled ? "Enabled" : "Disabled"}</strong>',
                     value: '{intf.enabled}'
                 }
@@ -253,6 +284,7 @@ Ext.define('Mfw.settings.network.Interface', {
         }]
     }, {
         xtype: 'toolbar',
+        itemId: 'cardsToolbar',
         layout: {
             type: 'hbox',
             align: 'middle'
@@ -266,7 +298,7 @@ Ext.define('Mfw.settings.network.Interface', {
         },
         hidden: true,
         bind: {
-            hidden: '{!intf.enabled || intf.type === "WIFI" || intf.type === "WWAN" || intf.configType === "BRIDGED"}'
+            hidden: '{_hiddenToolbar}'
         },
         defaults: {
             margin: '0 3',
@@ -280,7 +312,7 @@ Ext.define('Mfw.settings.network.Interface', {
             hidden: true,
             bind: {
                 ui: '{cardKey === "ipv4" ? "action" : ""}',
-                hidden: '{intf.type !== "NIC"}'
+                hidden: '{_hiddenIpv4}'
             }
         }, {
             text: 'IPv6',
@@ -288,7 +320,7 @@ Ext.define('Mfw.settings.network.Interface', {
             hidden: true,
             bind: {
                 ui: '{cardKey === "ipv6" ? "action" : ""}',
-                hidden: '{intf.type !== "NIC"}'
+                hidden: '{_hiddenIpv6}'
             }
         }, {
             text: 'DHCP',
@@ -296,7 +328,7 @@ Ext.define('Mfw.settings.network.Interface', {
             hidden: true,
             bind: {
                 ui: '{cardKey === "dhcp" ? "action" : ""}',
-                hidden: '{intf.type !== "NIC"}'
+                hidden: '{_hiddenDhcp}'
             }
         },
         // {
@@ -338,7 +370,7 @@ Ext.define('Mfw.settings.network.Interface', {
             hidden: true,
             bind: {
                 ui: '{cardKey === "qos" ? "action" : ""}',
-                hidden: '{!intf.wan}'
+                hidden: '{_hiddenQos}'
             }
         }]
 
@@ -465,21 +497,12 @@ Ext.define('Mfw.settings.network.Interface', {
 
     controller: {
         init: function (view) {
-            var vm = view.getViewModel(),
-                type, configType;
+            var vm = view.getViewModel();
 
             // set the app context "admin" or "setup"
             vm.set('setupContext', Mfw.app.context === 'setup');
 
-            vm.bind('{intf}', function (intf) {
-                type = intf.get('type');
-
-                configType = intf.get('configType');
-
-                if (configType === "BRIDGED" && type !== "WIFI") {
-                    vm.set('cardKey', 'bridged');
-                    return;
-                }
+            vm.bind('{intf.type}', function (type) {
                 if (type === "WIFI") {
                     vm.set('cardKey', 'wifi');
                     return;
@@ -505,6 +528,11 @@ Ext.define('Mfw.settings.network.Interface', {
                  * - preselect ipv4 configType as DHCP (if not set)
                  * - preselect ipv6 configType as DISABLED (if not set)
                  */
+                if (!vm.get('intf.enabled')) {
+                    vm.set('cardKey', 'disabled');
+                    return;
+                }
+
                 if (configType === 'ADDRESSED') {
                     vm.set('cardKey', 'ipv4');
                     if (!vm.get('intf.v4ConfigType')) {
@@ -549,7 +577,6 @@ Ext.define('Mfw.settings.network.Interface', {
                     return;
                 }
             });
-
         },
 
 

@@ -292,7 +292,6 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 
 .x-togglefield .x-box-label-el { font-weight: bold; }
 .x-togglefield.off .x-thumb { background-color: #999; }
-.x-togglefield.off .x-box-label-el { color: #555 !important; }
 
 .x-trigger { margin-right: 8px; }
 .x-trigger .x-icon-el:before { font-size: 16px; }

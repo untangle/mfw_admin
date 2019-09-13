@@ -243,15 +243,18 @@ Ext.define('Mfw.Sync', {
 
         if (response.responseJson) {
             // store sync, model save
-            summary = response.responseJson.output.match(/Exception: (.*?)\n/g);
-
-            if (Ext.isArray(summary)) {
-                summary = summary[0];
-            } else {
-                summary = response.responseJson.error;
+            try {
+                summary = response.responseJson.output.match(/Exception: (.*?)\n/g);
+                if (Ext.isArray(summary)) {
+                    summary = summary[0];
+                } else {
+                    summary = response.responseJson.error;
+                }
+                summary = summary.replace('Exception: ', '');
+                stack = response.responseJson.output.replace(/\n/g, '</br>');
+            } catch (e) {
+                summary = Ext.JSON.encode(response.responseJson);
             }
-            summary = summary.replace('Exception: ', '');
-            stack = response.responseJson.output.replace(/\n/g, '</br>');
         } else {
             // ajax
             if (response.responseText) {

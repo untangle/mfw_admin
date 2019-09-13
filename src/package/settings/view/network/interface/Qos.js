@@ -6,29 +6,38 @@ Ext.define('Mfw.settings.interface.Qos', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-qos',
 
-    scrollable: true,
-
-    layout: {
-        type: 'hbox'
-    },
+    layout: 'fit',
 
     items: [{
         xtype: 'container',
         scrollable: true,
         items: [{
             xtype: 'formpanel',
-            width: 300,
+            padding: '2 16 16 16',
+            width: 400,
+            bind: {
+                flex: '{isDialog ? 1 : "auto"}'
+            },
             items: [{
-                xtype: 'component',
-                style: 'font-size: 20px; font-weight: 100;',
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    align: 'middle'
+                },
                 margin: '16 0',
-                html: 'QoS Settings'
-            }, {
-                xtype: 'togglefield',
-                boxLabel: 'Enable QoS',
-                bind: {
-                    value: '{intf.qosEnabled}',
-                }
+                items: [{
+                    xtype: 'component',
+                    flex: 1,
+                    style: 'font-size: 20px; font-weight: 100;',
+                    html: 'QoS Settings'
+                }, {
+                    xtype: 'togglefield',
+                    bind: {
+                        userCls: '{intf.qosEnabled ? "on" : "off"}',
+                        boxLabel: '<strong>{intf.qosEnabled ? "Enable QoS" : "Disable QoS"}</strong>',
+                        value: '{intf.qosEnabled}',
+                    }
+                }]
             }, {
                 xtype: 'containerfield',
                 layout: 'hbox',
