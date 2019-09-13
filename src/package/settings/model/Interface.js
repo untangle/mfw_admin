@@ -154,6 +154,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessMode',       type: 'string', allowNull: true }, // ["AP", "CLIENT"]
         { name: 'wirelessPassword',   type: 'string', allowNull: true },
         { name: 'wirelessChannel',    type: 'integer', allowNull: true },
+        { name: 'wirelessMode',       type: 'string', allowNull: true },
 
         // OpenVPN
         { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true, defaultValue: false },
