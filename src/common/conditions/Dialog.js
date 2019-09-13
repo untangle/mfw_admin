@@ -37,14 +37,14 @@ Ext.define('Mfw.common.conditions.Dialog', {
             }
         },
         items: [{
-            xtype: 'selectfield',
+            xtype: 'combobox',
             name: 'column',
-            label: 'Select field',
+            label: 'Field',
             labelAlign: 'top',
-            placeholder: 'Choose field',
-            editable: false,
+            typeAhead: true,
+            placeholder: 'choose field ...',
             valueField: 'dataIndex',
-            displayTpl: '{text} [ {dataIndex} ]',
+            displayTpl: '{text}',
             itemTpl: '{text} <span style="color: #999">[ {dataIndex} ]</span>',
             forceSelection: true,
             options: Table.allColumns,
@@ -64,7 +64,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 name: 'operator',
                 label: 'Operator',
                 labelAlign: 'top',
-                placeholder: 'Choose operator',
+                placeholder: 'choose operator ...',
                 width: 180,
                 margin: '0 16 0 0',
                 displayTpl: '{text} [ {value} ]',
@@ -80,7 +80,7 @@ Ext.define('Mfw.common.conditions.Dialog', {
                 name: 'value',
                 label: 'Value',
                 labelAlign: 'top',
-                placeholder: 'Enter value ...'
+                placeholder: 'enter value ...'
             }]
         }]
     }, {
