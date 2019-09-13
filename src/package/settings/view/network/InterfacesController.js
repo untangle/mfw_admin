@@ -5,6 +5,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     init: function (grid) {
         var me = this;
         grid.getStore().on('load', function () {
+            console.log('load');
             if (me.statusTout) {
                 clearTimeout(me.statusTout);
             }
@@ -20,7 +21,12 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             success: function (response) {
                 var status = Ext.decode(response.responseText);
 
-                if (!grid) { return; }
+                if (!grid) {
+                    if (me.statusTout) {
+                        clearTimeout(me.statusTout);
+                    }
+                    return;
+                }
 
                 // match status response with each interface
                 grid.getStore().each(function (intf) {

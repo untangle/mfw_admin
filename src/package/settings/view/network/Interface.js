@@ -556,7 +556,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     vm.set('cardKey', 'disabled');
                     return;
                 }
-                if (configType === "BRIDGED" && type !== "WIFI") {
+                if (configType === "BRIDGED" && type !== "WIFI" && type !== "WWAN") {
                     vm.set('cardKey', 'bridged');
                     return;
                 }
