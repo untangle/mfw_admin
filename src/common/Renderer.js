@@ -171,14 +171,8 @@ Ext.define('Mfw.Renderer', {
         }
     },
 
-    familyRenderer: function(family) {
-        if (family == 2) {
-            return "IPv4";
-        } else if (family == 10) {
-            return "IPv6";
-        } else {
-            return family;
-        }
+    familyRenderer: function(value) {
+        return Map.families[value] ? (Map.families[value] + ' <span style="color: #999;">[ ' + value + ' ]</span> ') : value;
     },
 
     shortenText: function (str) {
