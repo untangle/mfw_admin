@@ -31,9 +31,14 @@ Ext.define('Mfw.setup.step.Performance', {
         }]
     }, {
         xtype: 'component',
-        margin: '8 0 24 0',
+        margin: '8 0 8 0',
         width: 600,
         html: '<hr/>'
+    }, {
+        xtype: 'component',
+        margin: '0 0 24 0',
+        style: 'color: #777;',
+        html: 'tests performance of enabled WAN interfaces'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -140,6 +145,7 @@ Ext.define('Mfw.setup.step.Performance', {
             store.clearFilter(true);
             store.setFilters([
                 { property: 'hidden', value: false },
+                { property: 'enabled', value: true },
                 { property: 'wan', value: true }
             ]);
 
@@ -191,7 +197,7 @@ Ext.define('Mfw.setup.step.Performance', {
 
             Ext.defer(function () {
                 testMsg.show();
-            }, 250);
+            });
 
             // real call
             store.each(function (wan) {
