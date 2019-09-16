@@ -46,6 +46,7 @@ Ext.define('Mfw.model.Session', {
         { name: 'end_time', type: 'number' },
         { name: 'hostname', type: 'string' },
         { name: 'ip_protocol', type: 'number', allowNull: true },
+        { name: 'family', type: 'number', allowNull: true },
 
         { name: 'local_address', type: 'string' },
         { name: 'remote_address', type: 'string' },
