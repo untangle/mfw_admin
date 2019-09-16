@@ -9,6 +9,12 @@ Ext.define('Mfw.settings.interface.Lte', {
     layout: 'fit',
 
     viewModel: {
+        data: {
+            /**
+             * keep original other network APN (if set) while changing networks
+             */
+            _originalOtherApn: ''
+        },
         formulas: {
             /**
              * formula to set simNetwork null
@@ -19,7 +25,19 @@ Ext.define('Mfw.settings.interface.Lte', {
                     return get('intf.simNetwork') || 'OTHER';
                 },
                 set: function (value) {
-                    this.set('intf.simNetwork', value !== "OTHER" ? value : null);
+                    var network = Ext.Array.findBy(Map.options.simNetworks, function (item) {
+                        return item.value === value;
+                    });
+                    if (value !== 'OTHER') {
+                        this.set('intf.simNetwork', value);
+                        // set sim APN based on network
+                        if (network.apn) {
+                            this.set('intf.simApn', network.apn);
+                        }
+                    } else {
+                        this.set('intf.simNetwork', null);
+                        this.set('intf.simApn', this.get('_originalOtherApn'));
+                    }
                 }
             }
         }
@@ -66,11 +84,12 @@ Ext.define('Mfw.settings.interface.Lte', {
                     xtype: 'textfield',
                     label: 'APN',
                     margin: '0 0 0 16',
-                    editable: false,
+                    autoComplete: false,
+                    labelAlign: 'top',
                     bind: {
                         value: '{intf.simApn}',
                         required: '{intf.type === "WWAN"}',
-                        disabled: '{intf.simNetwork}'
+                        // disabled: '{intf.simNetwork}'
                     }
                 }]
             }, {
@@ -146,5 +165,21 @@ Ext.define('Mfw.settings.interface.Lte', {
                 }]
             }]
         }]
-    }]
+    }],
+
+    controller: {
+        init: function () {
+            var me = this, vm = me.getViewModel();
+
+            // single initial bind to get store apn if network is other (null)
+            vm.bind('{intf}', function (intf) {
+                if (!intf.get('simNetwork') && intf.get('simApn')) {
+                    vm.set('_originalOtherApn', intf.get('simApn'));
+                }
+            }, me, {
+                single: true
+            });
+        }
+    }
+
 });

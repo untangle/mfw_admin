@@ -940,6 +940,11 @@ Ext.define('Mfw.settings.Map', {
             { text: 'Pacific/Truk',                   value: 'TRUT-10' },
             { text: 'Pacific/Wake',                   value: 'WAKT-12' },
             { text: 'Pacific/Wallis',                 value: 'WFT-12'}
+        ],
+
+        simNetworks: [
+            { text: 'T-Mobile', value: 'T-Mobile', apn: 'fast.t-mobile.com' },
+            { text: 'Other', value: 'OTHER' }
         ]
     },
 

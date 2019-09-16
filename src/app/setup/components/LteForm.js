@@ -7,6 +7,12 @@ Ext.define('Mfw.setup.cmp.Lte', {
     },
 
     viewModel: {
+        data: {
+            /**
+             * keep original other network APN (if set) while changing networks
+             */
+            _originalOtherApn: ''
+        },
         formulas: {
             /**
              * formula to set simNetwork null
@@ -17,7 +23,19 @@ Ext.define('Mfw.setup.cmp.Lte', {
                     return get('intf.simNetwork') || 'OTHER';
                 },
                 set: function (value) {
-                    this.set('intf.simNetwork', value !== "OTHER" ? value : null);
+                    var network = Ext.Array.findBy(Map.options.simNetworks, function (item) {
+                        return item.value === value;
+                    });
+                    if (value !== 'OTHER') {
+                        this.set('intf.simNetwork', value);
+                        // set sim APN based on network
+                        if (network.apn) {
+                            this.set('intf.simApn', network.apn);
+                        }
+                    } else {
+                        this.set('intf.simNetwork', null);
+                        this.set('intf.simApn', this.get('_originalOtherApn'));
+                    }
                 }
             }
         }
@@ -64,10 +82,7 @@ Ext.define('Mfw.setup.cmp.Lte', {
             label: 'Network',
             required: true,
             autoSelect: true,
-            options: [
-                { text: 'T-Mobile', value: 'T-Mobile' },
-                { text: 'Other', value: 'OTHER' }
-            ],
+            options: Map.options.simNetworks,
             disabled: true,
             bind: {
                 value: '{_simNetwork}',
@@ -79,10 +94,11 @@ Ext.define('Mfw.setup.cmp.Lte', {
             label: 'APN',
             required: true,
             disabled: true,
+            autoComplete: false,
             bind: {
                 value: '{intf.simApn}',
                 required: '{intf.type === "WWAN" && intf.enabled}',
-                disabled: '{intf.simNetwork}'
+                disabled: '{!intf.enabled || intf.simNetwork}'
             }
         }, {
             xtype: 'numberfield',
@@ -170,7 +186,22 @@ Ext.define('Mfw.setup.cmp.Lte', {
                     '<li>ICCID: 152313039478439450454455</li>' +
                 '</ul>'
         }]
-    }]
+    }],
+
+    controller: {
+        init: function () {
+            var me = this, vm = me.getViewModel();
+
+            // single initial bind to get store apn if network is other (null)
+            vm.bind('{intf}', function (intf) {
+                if (!intf.get('simNetwork') && intf.get('simApn')) {
+                    vm.set('_originalOtherApn', intf.get('simApn'));
+                }
+            }, me, {
+                single: true
+            });
+        }
+    }
 });
 
 
