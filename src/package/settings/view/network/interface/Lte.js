@@ -11,11 +11,31 @@ Ext.define('Mfw.settings.interface.Lte', {
     viewModel: {
         data: {
             /**
+             * sim data collected from api status call api/status/wwan/:device
+             */
+            _simInfo: null,
+            /**
              * keep original other network APN (if set) while changing networks
              */
             _originalOtherApn: ''
         },
         formulas: {
+            /**
+             * SIM details message
+             */
+            _simInfoMessage: function (get) {
+                var simInfo = get('_simInfo');
+                if (!simInfo) { return; }
+                var message =
+                    '<p style="font-size: 14px; font-weight: 600;">SIM Details</p>' +
+                    '<ul>' +
+                        '<li>IMEI: ' + (simInfo['imei'] || 'n/a') +  '</li>' +
+                        '<li>IMSI: ' + (simInfo['imsi'] || 'n/a')  + '</li>' +
+                        '<li>ICCID: ' + (simInfo['iccid'] || 'n/a') +  '</li>' +
+                    '</ul>';
+                return message;
+            },
+
             /**
              * formula to set simNetwork null
              * selectfield does not support null value options
@@ -163,6 +183,14 @@ Ext.define('Mfw.settings.interface.Lte', {
                         min: 8
                     }]
                 }]
+            }, {
+                // sim info
+                xtype: 'component',
+                style: 'color: #555; border: 1px #CCC solid; border-radius: 5px; padding: 5px 15px;',
+                margin: '32 0 0 0',
+                bind: {
+                    html: '{_simInfoMessage}'
+                }
             }]
         }]
     }],
@@ -176,6 +204,18 @@ Ext.define('Mfw.settings.interface.Lte', {
                 if (!intf.get('simNetwork') && intf.get('simApn')) {
                     vm.set('_originalOtherApn', intf.get('simApn'));
                 }
+
+                // get sim info
+                Ext.Ajax.request({
+                    url: '/api/status/wwan/' + intf.get('device'),
+                    success: function (response) {
+                        var resp = Ext.decode(response.responseText);
+                        vm.set('_simInfo', resp);
+                    },
+                    failure: function () {
+                        console.error('Unable to check upgrade status!');
+                    }
+                });
             }, me, {
                 single: true
             });
