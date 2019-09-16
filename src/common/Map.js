@@ -278,6 +278,11 @@ Ext.define('Mfw.settings.Map', {
         0: 'Unset'
     },
 
+    families: {
+        2: 'IPv4',
+        10: 'IPv6',
+    },
+
     hooks: {
         'prerouting': 'Prerouting',
         'input': 'Input',
@@ -985,7 +990,7 @@ Ext.define('Mfw.settings.Map', {
         this.options.hooks = this.toOptions(this.hooks);
         this.options.priorities = this.toOptions(this.priorities);
         this.options.wanMetrics = this.toOptions(this.wanMetrics);
-
+        this.options.families = this.toOptions(this.families);
         // countries are kept in array to have proper ordering
         this.countries = this.toMap(this.options.countries);
 
