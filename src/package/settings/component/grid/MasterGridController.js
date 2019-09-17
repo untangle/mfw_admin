@@ -16,29 +16,31 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
         // g.getStore().on('beforesync', me.onBeforeSync);
 
         // add status column
-        g.insertColumn(0, {
-            width: 5,
-            minWidth: 5,
-            sortable: false,
-            hideable: false,
-            resizable: false,
-            menuDisabled: true,
-            cell: {
-                userCls: 'x-statuscolumn'
-            },
-            renderer: function (value, record, dataIndex, cell) {
-                cell.setUserCls('');
-                if (record.isDirty()) {
-                    cell.setUserCls('status-dirty');
+        if (g.getEnableStatusColumn()) {
+            g.insertColumn(0, {
+                width: 5,
+                minWidth: 5,
+                sortable: false,
+                hideable: false,
+                resizable: false,
+                menuDisabled: true,
+                cell: {
+                    userCls: 'x-statuscolumn'
+                },
+                renderer: function (value, record, dataIndex, cell) {
+                    cell.setUserCls('');
+                    if (record.isDirty()) {
+                        cell.setUserCls('status-dirty');
+                    }
+                    if (record.get('_deleteSchedule')) {
+                        cell.setUserCls('status-delete');
+                    }
+                    if (record.phantom) {
+                        cell.setUserCls('status-phantom');
+                    }
                 }
-                if (record.get('_deleteSchedule')) {
-                    cell.setUserCls('status-delete');
-                }
-                if (record.phantom) {
-                    cell.setUserCls('status-phantom');
-                }
-            }
-        });
+            });
+        }
 
         if (g.getEnableCopy() || g.getEnableEdit() || g.getEnableDelete()) {
             actionsColumn = {

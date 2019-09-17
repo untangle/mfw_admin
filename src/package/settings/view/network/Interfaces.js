@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
     title: 'Interfaces',
 
     config: {
+        enableStatusColumn: false,
         enableSave: false,
         enableManualSort: false,
         disableDeleteCondition: '{record.wan && record.type === "NIC"}',
@@ -72,7 +73,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         cell: { encodeHtml: false },
         renderer: function (value) {
             // unable to find a status for an interface
-            if (value === undefined) {
+            if (value === null) {
                 return '<i class="x-fa fa-times fa-gray"></i>';
             }
             var color = value ? 'fa-green' : 'fa-gray';

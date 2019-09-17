@@ -154,10 +154,10 @@ Ext.define('Mfw.model.Interface', {
         { name: 'wirelessMode',       type: 'string', allowNull: true }, // ["AP", "CLIENT"]
         { name: 'wirelessPassword',   type: 'string', allowNull: true },
         { name: 'wirelessChannel',    type: 'integer', allowNull: true },
-        { name: 'wirelessThroughput', type: 'string', allowNull: false, defaultValue: 'AUTO' },
+        { name: 'wirelessThroughput', type: 'string', allowNull: true },
 
         // OpenVPN
-        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true, defaultValue: false },
+        { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
         { name: 'openvpnUsername',                type: 'string',  allowNull: true },
         { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
         { name: 'openvpnBoundInterfaceId',        type: 'string',  allowNull: true },
@@ -182,7 +182,11 @@ Ext.define('Mfw.model.Interface', {
         { name: 'simMode', type: 'string', allowNull: true }, // ["ALL", "WWAN", "UMTS", "GSM", "CDMA", "TDSCDMA"]
         { name: 'simPdptype', type: 'string', allowNull: true }, // ["IPV4", "IPV6", "IPV4V6"]
         { name: 'simPlmn', type: 'integer', allowNull: true },
-        { name: 'simAutoconnect', type: 'boolean', allowNull: true }
+        { name: 'simAutoconnect', type: 'boolean', allowNull: true },
+
+        // interface status fields
+        { name: '_connected', type: 'boolean', allowNull: true }
+
     ],
 
     hasMany: [{

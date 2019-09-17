@@ -5,7 +5,6 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     init: function (grid) {
         var me = this;
         grid.getStore().on('load', function () {
-            console.log('load');
             if (me.statusTout) {
                 clearTimeout(me.statusTout);
             }
@@ -35,6 +34,8 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                     });
                     if (intfStatus) {
                         intf.set('_connected', intfStatus.connected);
+                    } else {
+                        intf.set('_connected', null);
                     }
                 });
 
@@ -120,5 +121,9 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             var bridged = Ext.getStore('interfaces').findRecord('interfaceId', record.get('bridgedTo'));
             return 'Bridged to <strong>' + (bridged ? bridged.get('name') : 'undefined') + '</strong>';
         }
-    }
+    },
+
+    // override checkoing for dirty records, not needed for interfaces grid
+    checkModified: Ext.emptyFn()
+
 });

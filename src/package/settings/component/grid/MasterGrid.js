@@ -19,6 +19,12 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
 
     config: {
         /**
+         * @cfg {Boolean} enableStatusColumn
+         * `true` display a status column highlighting dirty records
+         */
+        enableStatusColumn: true,
+
+        /**
          * @cfg {Boolean} enableAdd
          * `true` to allow user to add new records
          */
