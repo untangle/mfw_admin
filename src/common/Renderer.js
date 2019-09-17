@@ -561,7 +561,7 @@ Ext.define('Mfw.Renderer', {
             return '-';
         }
         if (value === 'DHCP' || value === 'PPPOE') {
-            return value;
+            return value + (record.get('_ip4Addr') ? (', ' + record.get('_ip4Addr').join(',')) : '');
         }
         if (value === 'STATIC') {
             return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');

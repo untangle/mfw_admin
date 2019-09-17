@@ -34,6 +34,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                     });
                     if (intfStatus) {
                         intf.set('_connected', intfStatus.connected);
+                        intf.set('_ip4Addr', intfStatus.ip4Addr);
                     } else {
                         intf.set('_connected', null);
                     }

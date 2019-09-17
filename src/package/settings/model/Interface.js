@@ -185,7 +185,8 @@ Ext.define('Mfw.model.Interface', {
         { name: 'simAutoconnect', type: 'boolean', allowNull: true },
 
         // interface status fields
-        { name: '_connected', type: 'boolean', allowNull: true }
+        { name: '_connected', type: 'boolean', allowNull: true },
+        { name: '_ip4Addr', type: 'auto', allowNull: true }
 
     ],
 
