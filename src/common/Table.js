@@ -13,6 +13,7 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Time Stamp',
             dataIndex: 'time_stamp',
+            hidden: true,
             renderer: Renderer.timeStamp,
             width: 180,
             cell: { encodeHtml: false }
