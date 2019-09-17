@@ -41,68 +41,13 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                 }
             }]
         }, {
-            xtype: 'selectfield',
+            xtype: 'textfield',
             userCls: 'x-custom-field',
-            label: 'Mode',
-            required: true,
-            autoSelect: true,
-            options: [
-                { text: 'Access Point', value: 'AP' },
-                { text: 'Client', value: 'CLIENT' }
-            ],
-            disabled: true,
-            bind: {
-                value: '{intf.wirelessMode}',
-                disabled: '{!intf.enabled}'
-            }
-        }, {
-            xtype: 'selectfield',
-            userCls: 'x-custom-field',
-            label: 'Channel',
-            clearable: false,
+            label: 'SSID',
             required: true,
             disabled: true,
-            queryMode: 'remote',
-            displayTpl: '{channel} [{frequency}]',
-            itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
-            valueField: 'channel',
             bind: {
-                value: '{intf.wirelessChannel}',
-                store: {
-                    autoLoad: true,
-                    proxy: {
-                        type: 'ajax',
-                        url: '/api/status/wifichannels/{intf.device}',
-                        reader: {
-                            type: 'json'
-                        }
-                    }
-                },
-                disabled: '{!intf.enabled}'
-            }
-        }, {
-            xtype: 'selectfield',
-            userCls: 'x-custom-field',
-            label: 'HT Mode',
-            clearable: false,
-            required: true,
-            disabled: true,
-            queryMode: 'remote',
-            displayTpl: '{name}',
-            itemTpl: '{name}',
-            valueField: 'mode',
-            bind: {
-                value: '{intf.wirelessThroughput}',
-                store: {
-                    autoLoad: true,
-                    proxy: {
-                        type: 'ajax',
-                        url: '/api/status/wifimodelist/{intf.device}',
-                        reader: {
-                            type: 'json'
-                        }
-                    }
-                },
+                value: '{intf.wirelessSsid}',
                 disabled: '{!intf.enabled}'
             }
         }, {
@@ -120,16 +65,6 @@ Ext.define('Mfw.setup.cmp.Wifi', {
             ],
             bind: {
                 value: '{intf.wirelessEncryption}',
-                disabled: '{!intf.enabled}'
-            }
-        }, {
-            xtype: 'textfield',
-            userCls: 'x-custom-field',
-            label: 'SSID',
-            required: true,
-            disabled: true,
-            bind: {
-                value: '{intf.wirelessSsid}',
                 disabled: '{!intf.enabled}'
             }
         }, {
@@ -171,6 +106,73 @@ Ext.define('Mfw.setup.cmp.Wifi', {
                 type: 'length',
                 min: 8
             }]
+        }, {
+            xtype: 'selectfield',
+            userCls: 'x-custom-field',
+            label: 'Mode',
+            required: true,
+            autoSelect: true,
+            options: [
+                { text: 'Access Point', value: 'AP' },
+                { text: 'Client', value: 'CLIENT' }
+            ],
+            disabled: true,
+            bind: {
+                value: '{intf.wirelessMode}',
+                disabled: '{!intf.enabled}'
+            }
+        }, {
+            xtype: 'selectfield',
+            userCls: 'x-custom-field',
+            label: 'Channel',
+            clearable: false,
+            required: true,
+            disabled: true,
+            forceSelection: true,
+            queryMode: 'remote',
+            displayTpl: '{channel} [{frequency}]',
+            itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
+            valueField: 'channel',
+            bind: {
+                value: '{intf.wirelessChannel}',
+                store: {
+                    autoLoad: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: '/api/status/wifichannels/{intf.device}',
+                        reader: {
+                            type: 'json'
+                        }
+                    }
+                },
+                disabled: '{!intf.enabled}'
+            }
+        }, {
+            xtype: 'selectfield',
+            userCls: 'x-custom-field',
+            label: 'HT Mode',
+            clearable: false,
+            required: true,
+            disabled: true,
+            forceSelection: true,
+            queryMode: 'remote',
+            displayTpl: '{name}',
+            itemTpl: '{name}',
+            valueField: 'mode',
+            bind: {
+                value: '{intf.wirelessThroughput}',
+                store: {
+                    autoLoad: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: '/api/status/wifimodelist/{intf.device}',
+                        reader: {
+                            type: 'json'
+                        }
+                    }
+                },
+                disabled: '{!intf.enabled}'
+            }
         }]
     }]
 });

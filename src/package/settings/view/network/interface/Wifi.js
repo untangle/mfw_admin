@@ -106,7 +106,6 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     xtype: 'selectfield',
                     label: 'Mode',
                     autoSelect: true,
-                    margin: '0 16 0 0',
                     options: [
                         { text: 'Access Point', value: 'AP' },
                         { text: 'Client', value: 'CLIENT' }
@@ -118,6 +117,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 }, {
                     xtype: 'selectfield',
                     label: 'Channel',
+                    margin: '0 16',
                     queryMode: 'remote',
                     displayTpl: '{channel} [{frequency}]',
                     itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',

@@ -88,7 +88,7 @@ Ext.define('Mfw.setup.step.WiFi', {
                 return;
             }
 
-            store.getDataSource().each(function (record) {
+            store.each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });

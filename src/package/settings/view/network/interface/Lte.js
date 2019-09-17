@@ -121,7 +121,6 @@ Ext.define('Mfw.settings.interface.Lte', {
                 autoComplete: false,
                 bind: {
                     value: '{intf.simPin}',
-                    required: '{intf.type === "WWAN" && !intf.simNetwork}',
                     hidden: '{intf.simNetwork}'
                 },
                 validators: [{
@@ -143,7 +142,6 @@ Ext.define('Mfw.settings.interface.Lte', {
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf.simUsername}',
-                        required: '{intf.type === "WWAN" && !intf.simNetwork}',
                         hidden: '{intf.simNetwork}'
                     }
                 }, {
@@ -175,7 +173,6 @@ Ext.define('Mfw.settings.interface.Lte', {
                     },
                     bind: {
                         value: '{intf.simPassword}',
-                        required: '{intf.type === "WWAN" && !intf.simNetwork}',
                         hidden: '{intf.simNetwork}'
                     },
                     validators: [{

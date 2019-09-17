@@ -124,13 +124,11 @@ Ext.define('Mfw.setup.cmp.Lte', {
             xtype: 'numberfield',
             userCls: 'x-custom-field',
             label: 'PIN',
-            required: false,
             hidden: true,
             disabled: true,
             clearable: false,
             bind: {
                 value: '{intf.simPin}',
-                required: '{intf.type === "WWAN" && !intf.simNetwork}',
                 hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             },
@@ -143,12 +141,10 @@ Ext.define('Mfw.setup.cmp.Lte', {
             xtype: 'textfield',
             userCls: 'x-custom-field',
             label: 'Username',
-            required: false,
             hidden: true,
             disabled: true,
             bind: {
                 value: '{intf.simUsername}',
-                required: '{intf.type === "WWAN" && !intf.simNetwork}',
                 hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             }
@@ -181,12 +177,10 @@ Ext.define('Mfw.setup.cmp.Lte', {
                     }
                 }
             },
-            required: false,
             hidden: true,
             disabled: true,
             bind: {
                 value: '{intf.simPassword}',
-                required: '{intf.type === "WWAN" && !intf.simNetwork}',
                 hidden: '{intf.simNetwork}',
                 disabled: '{!intf.enabled}'
             },
