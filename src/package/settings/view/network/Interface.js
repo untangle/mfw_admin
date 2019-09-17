@@ -502,37 +502,41 @@ Ext.define('Mfw.settings.network.Interface', {
             // set the app context "admin" or "setup"
             vm.set('setupContext', Mfw.app.context === 'setup');
 
-            vm.bind('{intf.type}', function (type) {
-                if (type === "WIFI") {
-                    vm.set('cardKey', 'wifi');
-                    return;
-                }
-                if (type === "WWAN") {
-                    vm.set('cardKey', 'lte');
-                    return;
-                }
-                if (type === "OPENVPN") {
-                    vm.set('cardKey', 'openvpn');
-                    return;
-                }
-                if (type === "NIC") {
-                    vm.set('cardKey', 'ipv4');
-                    return;
-                }
-            });
+            /**
+             * bind interface enabled, type, configType at once
+             * then display the proper settings based on those values
+             */
+            vm.bind(['{intf.enabled}', '{intf.type}', '{intf.configType}'], function (data) {
+                var enabled = data[0],
+                    type = data[1],
+                    configType = data[2];
 
-            vm.bind('{intf.configType}', function (configType) {
-                /**
-                 * switching to ADDRESSED config type
-                 * - select IPV4 card
-                 * - preselect ipv4 configType as DHCP (if not set)
-                 * - preselect ipv6 configType as DISABLED (if not set)
-                 */
-                if (!vm.get('intf.enabled')) {
+                if (!enabled) {
                     vm.set('cardKey', 'disabled');
                     return;
                 }
 
+                if (type === 'WWAN') {
+                    vm.set('cardKey', 'lte');
+                    return;
+                }
+
+                if (type === 'OPENVPN') {
+                    vm.set('cardKey', 'openvpn');
+                    return;
+                }
+
+                if (type === 'WIFI') {
+                    vm.set('cardKey', 'wifi');
+                    return;
+                }
+
+                if (configType === "BRIDGED") {
+                    vm.set('cardKey', 'bridged');
+                    return;
+                }
+
+                // if is NIC
                 if (configType === 'ADDRESSED') {
                     vm.set('cardKey', 'ipv4');
                     if (!vm.get('intf.v4ConfigType')) {
@@ -542,43 +546,8 @@ Ext.define('Mfw.settings.network.Interface', {
                         vm.set('intf.v6ConfigType', 'DISABLED');
                     }
                 }
-
-                if (configType === 'BRIDGED') {
-                    vm.set('cardKey', 'bridged');
-                }
-            });
-
-            vm.bind('{intf.enabled}', function (enabled) {
-                var type = vm.get('intf.type'),
-                    configType = vm.get('intf.configType');
-
-                if (!enabled) {
-                    vm.set('cardKey', 'disabled');
-                    return;
-                }
-                if (configType === "BRIDGED" && type !== "WIFI" && type !== "WWAN") {
-                    vm.set('cardKey', 'bridged');
-                    return;
-                }
-                if (type === "WIFI") {
-                    vm.set('cardKey', 'wifi');
-                    return;
-                }
-                if (type === "WWAN") {
-                    vm.set('cardKey', 'lte');
-                    return;
-                }
-                if (type === "OPENVPN") {
-                    vm.set('cardKey', 'openvpn');
-                    return;
-                }
-                if (type === "NIC") {
-                    vm.set('cardKey', 'ipv4');
-                    return;
-                }
             });
         },
-
 
         selectCard: function (btn) {
             var vm = this.getViewModel();
