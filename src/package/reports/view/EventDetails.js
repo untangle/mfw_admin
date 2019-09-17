@@ -86,6 +86,7 @@ Ext.define('Mfw.reports.EventDetails', {
                 { key: 'end_time', text: 'End Time', leaf: true },
                 { key: 'hostname', text: 'Hostname', leaf: true },
                 { key: 'ip_protocol', text: 'IP Protocol', leaf: true },
+                { key: 'family', text: 'Family', leaf: true },
                 { key: 'local_address', text: 'Local Address', leaf: true },
                 { key: 'remote_address', text: 'Remote Address', leaf: true },
                 { key: 'username', text: 'Username', leaf: true }

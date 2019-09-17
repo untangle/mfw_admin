@@ -24,7 +24,8 @@ Ext.define('Mfw.Table', {
             text: 'Family',
             dataIndex: 'family',
             hidden: true,
-            operators: ['EQ']
+            operators: ['EQ', 'NE'],
+            renderer: Renderer.Family
         }, {
             text: 'IP Protocol',
             dataIndex: 'ip_protocol',
@@ -356,6 +357,16 @@ Ext.define('Mfw.Table', {
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                     options: Map.options.protocols
                 }; break;
+            case 'family':
+                field = {
+                    xtype: 'selectfield',
+                    placeholder: 'Choose family ...',
+                    editable: false,
+                    displayTpl: '{text} [ {value} ]',
+                    itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                    options: Map.options.families
+                }
+                break;
             case 'client_interface_id':
             case 'server_interface_id':
                 field = {
