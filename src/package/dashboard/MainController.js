@@ -76,11 +76,26 @@ Ext.define('Mfw.dashboard.Controller', {
         vm.set('manager', !manager);
     },
 
+
+    onActivate: function (view) {
+        /**
+         * reports widgets refresh based on route change as they watch conditions
+         * custom widgets are generic (non conditions based) so when activating dashboard
+         * they have to be added manually to the refresh widgets queue
+         */
+        view.down('#widgets').getItems().each(function (widget) {
+            if (!widget.isXType('widget-report')) {
+                WidgetsPipe.add(widget);
+            }
+        });
+    },
+
     // pause loading widgets while not on dashboard
     onDeactivate: function (view) {
         view.down('#widgets').getItems().each(function (widget) {
             if (widget.tout) {
                 clearTimeout(widget.tout);
+                widget.tout = null;
             }
         });
     }

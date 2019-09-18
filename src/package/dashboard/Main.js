@@ -73,6 +73,7 @@ Ext.define('Mfw.dashboard.Main', {
     }],
 
     listeners: {
+        activate: 'onActivate',
         deactivate: 'onDeactivate'
     }
 });

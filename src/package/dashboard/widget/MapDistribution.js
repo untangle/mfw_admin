@@ -119,10 +119,6 @@ Ext.define('Mfw.dashboard.widget.MapDistribution', {
         },
 
         loadData: function (cb) {
-            // var sessionStore = Ext.getStore('sessions');
-            // sessionStore.load(function(records, operation, success) {
-            //     console.log(records);
-            // });
             var me = this, dataMap = {}, data = [];
             me.chart.series[0].setData([]);
             me.getView().mask({xtype: 'loadmask'});
