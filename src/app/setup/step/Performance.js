@@ -313,8 +313,8 @@ Ext.define('Mfw.setup.step.Performance', {
             });
 
             if (info.length > 0) {
-                Ext.Msg.alert('Info', info.join('<br/>'));
                 vm.set('processing', false);
+                Ext.Msg.alert('Info', info.join('<br/>'));
                 return;
             }
 
@@ -323,7 +323,7 @@ Ext.define('Mfw.setup.step.Performance', {
                 return;
             }
 
-            store.getDataSource().each(function (record) {
+            store.each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });

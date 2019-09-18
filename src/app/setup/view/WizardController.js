@@ -6,6 +6,7 @@ Ext.define('Mfw.setup.WizardController', {
 
     // navigation names
     navNames: {
+        eula: 'License',
         system: 'System',
         wifi: 'WiFi',
         lte: 'LTE',
@@ -35,7 +36,7 @@ Ext.define('Mfw.setup.WizardController', {
     setSteps: function (currentStep) {
         var me = this,
             vm = me.getViewModel(),
-            steps = ['step-welcome', 'step-system'],
+            steps = ['step-welcome', 'step-eula', 'step-system'],
             // add an empty card on initial load
             cardSteps = [{
                 xtype: 'container',
@@ -115,38 +116,54 @@ Ext.define('Mfw.setup.WizardController', {
      */
     onContinue: function () {
         var me = this,
+            currentStep = this.getView().getActiveItem();
+
+        if (currentStep.getController() && Ext.isFunction(currentStep.getController().continue)) {
+            // process the step action
+            currentStep.getController().continue(function () {
+                me.updateWizard();
+            });
+        } else {
+            // or just move to next step
+            me.updateWizard();
+        }
+
+    },
+
+    updateWizard: function () {
+        var me = this,
             vm = me.getViewModel(),
             wizard = this.getView(),
             layout = wizard.getLayout(),
-            currentStep = wizard.getActiveItem(),
             nextStepName = layout.getNext().xtype.replace('step-', '');
 
         vm.set('processing', true);
 
-        currentStep.getController().continue(function () {
-            // update wizard
-            Ext.Ajax.request({
-                url: '/api/settings/system/setupWizard',
-                method: 'POST',
-                params: Ext.JSON.encode({
-                    currentStep: nextStepName === 'complete' ? '' : nextStepName,
-                    completed: me.completed || nextStepName === 'complete'
-                }),
-                success: function() {
-                    layout.next();
-                },
-                failure: function(response) {
-                    console.log('server-side failure with status code ' + response.status);
-                },
-                callback: function () {
-                    Ext.defer(function () {
-                        vm.set('processing', false);
-                    }, 250);
-                }
-            });
-
+        // update wizard
+        Ext.Ajax.request({
+            url: '/api/settings/system/setupWizard',
+            method: 'POST',
+            params: Ext.JSON.encode({
+                currentStep: nextStepName === 'complete' ? '' : nextStepName,
+                completed: me.completed || nextStepName === 'complete'
+            }),
+            success: function() {
+                layout.next();
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            },
+            callback: function () {
+                // Ext.defer(function () {
+                    vm.set('processing', false);
+                // }, 250);
+            }
         });
+    },
 
+    // called from EULA step
+    onDisagree: function () {
+        Mfw.app.redirectTo('welcome');
     }
 
 });

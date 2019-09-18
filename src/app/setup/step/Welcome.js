@@ -23,11 +23,5 @@ Ext.define('Mfw.setup.step.Welcome', {
             html: '<h1 style="font-size: 32px;">Thanks for choosing Untangle!</h1>' +
                 '<p style="font-size: 16px; margin-top: 32px;">A wizard will guide you through the initial setup<br/>and configuration of the Server.</p>'
         }]
-    }],
-
-    controller: {
-        continue: function (cb) {
-            cb();
-        }
-    }
+    }]
 });

@@ -5,7 +5,7 @@ Ext.define('Mfw.setup.Wizard', {
     layout: {
         type: 'card',
         animation: {
-            type: 'fade', // fade, slide
+            // type: 'fade', // fade, slide
             // duration: 250
         },
     },
@@ -70,7 +70,7 @@ Ext.define('Mfw.setup.Wizard', {
         },
         hidden: true,
         bind: {
-            hidden: '{step === "complete"}'
+            hidden: '{step === "eula" || step === "complete"}'
         },
         items: [{
             xtype: 'button',
