@@ -557,11 +557,17 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipv4: function (value, record) {
+        var status = record.get('_status');
+
         if (record.get('configType') !== 'ADDRESSED') {
             return '-';
         }
         if (value === 'DHCP' || value === 'PPPOE') {
-            return value + (record.get('_ip4Addr') ? (', ' + record.get('_ip4Addr').join(',')) : '');
+            if (status && status.ip4Addr) {
+                return value + ', ' + status.ip4Addr.join(',');
+            } else {
+                return value;
+            }
         }
         if (value === 'STATIC') {
             return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');

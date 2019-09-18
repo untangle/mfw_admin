@@ -184,9 +184,11 @@ Ext.define('Mfw.model.Interface', {
         { name: 'simPlmn', type: 'integer', allowNull: true },
         { name: 'simAutoconnect', type: 'boolean', allowNull: true },
 
-        // interface status fields
-        { name: '_connected', type: 'boolean', allowNull: true },
-        { name: '_ip4Addr', type: 'auto', allowNull: true }
+        /**
+         * object filled with interface status props
+         * !!! persist flag as false avoids making record dirty !!!
+         */
+        { name: '_status', type: 'auto', allowNull: true, persist: false }
 
     ],
 

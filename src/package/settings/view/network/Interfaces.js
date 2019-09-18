@@ -64,20 +64,19 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return '<b><a href="#settings/network/interfaces/' + value + '">' + record.get('name') + '</a></b>';
         }
     }, {
-        dataIndex: '_connected',
+        dataIndex: '_status',
         align: 'center',
         width: 44,
         resizable: false,
         hideable: false,
         menuDisabled: true,
         cell: { encodeHtml: false },
-        renderer: function (value) {
+        renderer: function (status) {
             // unable to find a status for an interface
-            if (value === null) {
+            if (!status) {
                 return '<i class="x-fa fa-times fa-gray"></i>';
             }
-            var color = value ? 'fa-green' : 'fa-gray';
-            return '<i class="x-fa fa-circle ' + color + '"></i>';
+            return '<i class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>';
         }
     }, {
         text: 'Enabled',
