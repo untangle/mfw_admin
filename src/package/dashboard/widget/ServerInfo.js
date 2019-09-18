@@ -125,8 +125,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     hardware = result[2];
                     build = result[3];
 
-                    html = '<table>' +
-                           '<tr><td>Board: </td><td>' + (Map.boards[hardware.boardName] || hardware.boardName) + '</td></tr>' +
+                    html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
+                           '<tr><td style="width: 100px;">Board: </td><td>' + (Map.boards[hardware.boardName] || hardware.boardName) + '</td></tr>' +
                            '<tr><td>Build: </td><td>' + build.pretty_name + '</td></tr>' +
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
