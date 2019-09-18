@@ -77,7 +77,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
                 if (i.get('interfaceId') === 0) {
                     output.push('All WANs' + (weighted ? ' (evenly weighted)' : ''));
                 } else {
-                    output.push('<b>' + Map.interfaces[i.get('interfaceId')] + '</b>' + (weighted ? '/' + i.get('weight') : ''));
+                    output.push('<b>' + Map.interfaces[i.get('interfaceId')] + '</b>' + (record.get('type') == 'BALANCE' && weighted ? '/' + i.get('weight') : ''));
                 }
             });
             return output.join(', ');
