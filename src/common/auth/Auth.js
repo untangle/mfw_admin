@@ -18,7 +18,7 @@ Ext.define('Mfw.Auth', {
         docked: 'top',
         margin: '24 0 0 0',
         style: 'text-align: center;',
-        html: '<img src="/static/res/untangle-logo.svg" style="vertical-align: middle; margin-right: 16px; height: 64px;"/>'
+        html: '<img src="/static/res/untangle-logo.svg" style="height: 64px;"/>'
     }, {
         xtype: 'component',
         width: 500,
