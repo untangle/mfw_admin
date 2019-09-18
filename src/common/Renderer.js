@@ -60,6 +60,14 @@ Ext.define('Mfw.Renderer', {
         return '<i class="x-fa ' + icon + '"></i>';
     },
 
+    intfStatusConnected: function (status) {
+        if (!status) {
+            // interface has non identifiable status
+            return '<i class="x-fa fa-times fa-gray"></i>';
+        }
+        return '<i style="font-size: 11px;" class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>';
+    },
+
     boolean: function (value) {
         if (value === null || value === undefined) {
             return '';

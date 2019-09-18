@@ -76,6 +76,15 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 return '<b>' + value + '</b>';
             }
         }, {
+            dataIndex: '_status',
+            align: 'center',
+            width: 44,
+            resizable: false,
+            hideable: false,
+            menuDisabled: true,
+            cell: { encodeHtml: false },
+            renderer: Renderer.intfStatusConnected
+        }, {
             text: 'Config',
             dataIndex: 'configType',
             menuDisabled: true,

@@ -21,6 +21,8 @@ Ext.define('Mfw.settings.network.Interfaces', {
         mastergrideditable: true
     },
 
+    selectable: false,
+
     scrollable: true,
     store: {
         type: 'interfaces',
@@ -71,13 +73,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         hideable: false,
         menuDisabled: true,
         cell: { encodeHtml: false },
-        renderer: function (status) {
-            // unable to find a status for an interface
-            if (!status) {
-                return '<i class="x-fa fa-times fa-gray"></i>';
-            }
-            return '<i class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>';
-        }
+        renderer: Renderer.intfStatusConnected
     }, {
         text: 'Enabled',
         dataIndex: 'enabled',

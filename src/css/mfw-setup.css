@@ -1,5 +1,12 @@
 :root { --base-color: #519839; --base-highlight-color: #91e971; --base-dark-color: #3e752b; --base-pressed-color: #dfe6ea; --base-focused-color: #568047; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
 
+.x-fa.fa-white { color: #FFF; }
+.x-fa.fa-red { color: red; }
+.x-fa.fa-green { color: green; }
+.x-fa.fa-blue { color: blue; }
+.x-fa.fa-orange { color: orange; }
+.x-fa.fa-gray { color: #999; }
+
 .step-link a { font-weight: 100; font-size: 20px; color: #777; text-decoration: none; }
 .step-link a:hover { color: #333; }
 .step-link.current a { color: var(--base-color); }

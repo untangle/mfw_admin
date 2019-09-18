@@ -7,6 +7,16 @@
     --accent-color: #55c32d;
     --accent-light-color: #cef1c1;
 }
+
+.x-fa {
+    &.fa-white { color: #FFF; }
+    &.fa-red { color: red; }
+    &.fa-green { color: green; }
+    &.fa-blue { color: blue; }
+    &.fa-orange { color: orange; }
+    &.fa-gray { color: #999; }
+}
+
 .step-link {
     a {
         font-weight: 100;

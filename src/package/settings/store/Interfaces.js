@@ -26,6 +26,7 @@ Ext.define('Mfw.store.Interfaces', {
             if (Mfw.app.context === 'admin') {
                 this.setInterfacesNav();
             }
+            this.getStatus();
         }
     },
 
@@ -54,6 +55,28 @@ Ext.define('Mfw.store.Interfaces', {
             });
             idx += 1;
         });
+    },
 
+    getStatus: function () {
+        var store = this;
+        Ext.Ajax.request({
+            url: '/api/status/interfaces/all',
+            success: function (response) {
+                var status = Ext.decode(response.responseText);
+
+                // match status response with each interface
+                store.each(function (intf) {
+                    var intfStatus = Ext.Array.findBy(status, function (s) {
+                        return s.device === intf.get('device');
+                    });
+                    if (intfStatus) {
+                        intf.set('_status', intfStatus);
+                    }
+                });
+            },
+            failure: function () {
+                console.error('Unable to get interfaces status!');
+            }
+        });
     }
 });
