@@ -318,10 +318,15 @@ Ext.define('Mfw.setup.step.Performance', {
                 return;
             }
 
-            if (store.getModifiedRecords().length <= 0) {
+            if (store.getModifiedRecords().length === 0) {
                 cb();
                 return;
             }
+
+            /**
+             * very important to clear filters otherwise it saves only wans
+             */
+            store.clearFilter(true);
 
             store.each(function (record) {
                 record.dirty = true;

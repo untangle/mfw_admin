@@ -174,10 +174,15 @@ Ext.define('Mfw.setup.step.Interfaces', {
             var store = Ext.getStore('interfaces');
 
             // if no changes made just skip to next step
-            if (store.getModifiedRecords().length <= 0) {
+            if (store.getModifiedRecords().length === 0) {
                 cb();
                 return;
             }
+
+            /**
+             * very important to clear filters otherwise it saves only filtered records
+             */
+            store.clearFilter(true);
 
             store.each(function (record) {
                 record.dirty = true;

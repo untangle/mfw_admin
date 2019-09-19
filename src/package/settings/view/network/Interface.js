@@ -703,6 +703,11 @@ Ext.define('Mfw.settings.network.Interface', {
 
             Sync.progress();
 
+            /**
+             * very important to clear filters otherwise it saves filtered records
+             */
+            interfacesStore.clearFilter(true);
+
             interfacesStore.each(function (record) {
                 record.dirty = true;
                 record.phantom = false;

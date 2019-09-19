@@ -116,8 +116,10 @@ Ext.define('Mfw.setup.WizardController', {
      */
     onContinue: function () {
         var me = this,
+            vm = me.getViewModel(),
             currentStep = this.getView().getActiveItem();
 
+        vm.set('processing', true);
         if (currentStep.getController() && Ext.isFunction(currentStep.getController().continue)) {
             // process the step action
             currentStep.getController().continue(function () {
