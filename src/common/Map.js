@@ -544,8 +544,8 @@ Ext.define('Mfw.settings.Map', {
             { value: 'EH', text: 'WESTERN SAHARA' },
             { value: 'YE', text: 'YEMEN' },
             { value: 'ZW', text: 'ZIMBABWE' },
-            { value: 'XL', text: 'Local'},
-            { value: 'XU', text: 'Undefined'}
+            { value: 'XL', text: 'LOCAL'},
+            { value: 'XU', text: 'UNDEFINED'}
         ],
 
         timezones: [
