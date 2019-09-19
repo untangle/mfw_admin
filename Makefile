@@ -121,6 +121,7 @@ install: \
 	css-setup \
 	js-setup \
 	html-setup \
+	eula-setup \
 	extjs-install \
 	highcharts-install \
 	moment-install \
@@ -247,6 +248,11 @@ $(SETUP_DIR)/index.html: src/app/setup/index.html
 	$(call LOG_FUNCTION,"Building Setup HTML")
 	@cp $^ $@
 
+eula-setup: $(SETUP_DIR)/eula.html
+$(SETUP_DIR)/eula.html: src/app/setup/eula.html
+	$(call LOG_FUNCTION,"Building Setup EULA")
+	@cp $^ $@
+
 html-reports: $(REPORTS_DIR)/index.html
 $(REPORTS_DIR)/index.html: src/app/reports/index.html
 	$(call LOG_FUNCTION,"Building Reports HTML")
@@ -277,6 +283,7 @@ dev-install: \
 	html-reports \
 	js-setup \
 	html-setup \
+	eula-setup \
 	dev-sass-admin \
 	dev-sass-setup \
 	css-admin \
@@ -324,6 +331,7 @@ dev-watch:
 	html-reports \
 	js-setup \
 	html-setup \
+	eula-setup \
 	cacheguard \
 	resources \
 	extjs-download \
