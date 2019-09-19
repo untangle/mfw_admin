@@ -450,12 +450,13 @@ Ext.define('Mfw.Table', {
 
         Ext.Array.each(me.names, function (name) {
             Ext.Array.each(me[name].columns, function (column) {
+                if(!column.hidden) { 
                 if (!Ext.Array.findBy(allColumns, function (c) {
                     return c.dataIndex === column.dataIndex;
                 })) {
                     allColumns.push(column);
                 }
-            });
+            }});
         });
 
         this.initConfig({
