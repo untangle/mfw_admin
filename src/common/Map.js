@@ -543,7 +543,9 @@ Ext.define('Mfw.settings.Map', {
             { value: 'WF', text: 'WALLIS AND FUTUNA' },
             { value: 'EH', text: 'WESTERN SAHARA' },
             { value: 'YE', text: 'YEMEN' },
-            { value: 'ZW', text: 'ZIMBABWE' }
+            { value: 'ZW', text: 'ZIMBABWE' },
+            { value: 'XL', text: 'Local'},
+            { value: 'XU', text: 'Undefined'}
         ],
 
         timezones: [
