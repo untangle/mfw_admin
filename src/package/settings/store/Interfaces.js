@@ -13,7 +13,8 @@ Ext.define('Mfw.store.Interfaces', {
     listeners: {
         // refresh interfaces map on data change
         datachanged: function (store) {
-            var interfacesMap = {};
+            // initialize map with unset and local values
+            var interfacesMap = {'0':'unset', '255':'local'};
 
             store.each(function (intf) {
                 interfacesMap[intf.get('interfaceId')] = intf.get('name');
