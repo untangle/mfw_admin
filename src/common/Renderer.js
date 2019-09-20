@@ -61,11 +61,22 @@ Ext.define('Mfw.Renderer', {
     },
 
     intfStatusConnected: function (status) {
+        var qtip = '<div data-qtip="{0}" \
+                    data-qalign="' + (Mfw.app.context === 'setup' ? 't-b?' : 'r-l?') + '" \
+                    data-qshowDelay="0" \
+                    data-qhideDelay="0" \
+                    data-qdismissDelay="0" \
+                    data-qanchor="true" \
+                    style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"></div>';
+
         if (!status) {
             // interface has non identifiable status
-            return '<i class="x-fa fa-times fa-gray"></i>';
+            return '-' + Ext.String.format(qtip, 'no status');
         }
-        return '<i style="font-size: 11px;" class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>';
+        return '<i style="font-size: 11px;" class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>' +
+                Ext.String.format(qtip, status.connected === true ?
+                    '<span style=\'color: green;\'>connected</span>' :
+                    '<span style=\'color: red;\'>disconnected</span>');
     },
 
     boolean: function (value) {
@@ -221,26 +232,14 @@ Ext.define('Mfw.Renderer', {
         return Map.countries[value] ? (Map.countries[value] + ' <span style="color: #999;">[ ' + value + ' ]</span> ') : value;
     },
 
-    uptime: function (value) {
-        var numyears = Math.floor(value / 31536000),
-            numdays = Math.floor((value % 31536000) / 86400),
-            numhours = Math.floor(((value % 31536000) % 86400) / 3600),
-            numminutes = Math.floor((((value % 31536000) % 86400) % 3600) / 60),
-            uptime = '';
+    uptime: function (secs) {
+        var minutes = Math.floor(secs/60),
+            hours = Math.floor(minutes/60);
 
-        if (numyears > 0) {
-            uptime += numyears + 'y ';
-        }
-        if (numdays > 0) {
-            uptime += numdays + 'd ';
-        }
-        if (numhours > 0) {
-            uptime += numhours + 'h ';
-        }
-        if (numminutes > 0) {
-            uptime += numminutes + 'm';
-        }
-        return uptime;
+        secs = Math.round(secs)%60;
+        minutes = minutes%60;
+
+        return hours + 'h ' + minutes + 'm ' + secs + 's';
     },
 
     round: function(value) {

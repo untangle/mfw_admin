@@ -67,10 +67,12 @@ Ext.define('Mfw.settings.network.Interfaces', {
         }
     }, {
         dataIndex: '_status',
+        text: 'Status',
         align: 'center',
-        width: 44,
+        width: 80,
         resizable: false,
         hideable: false,
+        sortable: false,
         menuDisabled: true,
         cell: { encodeHtml: false },
         renderer: Renderer.intfStatusConnected
@@ -79,6 +81,10 @@ Ext.define('Mfw.settings.network.Interfaces', {
         dataIndex: 'enabled',
         align: 'center',
         width: 80,
+        resizable: false,
+        hideable: false,
+        sortable: false,
+        menuDisabled: true,
         cell: { encodeHtml: false },
         renderer: function (value) {
             return value ? '<i class="fa fa-check"></i>' : '-';
@@ -99,8 +105,10 @@ Ext.define('Mfw.settings.network.Interfaces', {
         dataIndex: 'wan',
         align: 'center',
         resizable: false,
+        hideable: false,
+        sortable: false,
         menuDisabled: true,
-        width: 70,
+        width: 80,
         renderer: function (value) {
             return value ? 'WAN' : '-';
         }
@@ -137,34 +145,6 @@ Ext.define('Mfw.settings.network.Interfaces', {
         },
         renderer: function (value) {
             return value ? '<i class="fa fa-check"></i>' : '-';
-        }
-    }, {
-        text: 'Download',
-        align: 'right',
-        width: 120,
-        dataIndex: 'downloadKbps',
-        resizable: false,
-        groupable: false,
-        cell: {
-            encodeHtml: false,
-        },
-        renderer: function (value, record) {
-            if (!record.get('wan')) { return '-'; }
-            return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
-        }
-    }, {
-        text: 'Upload',
-        align: 'right',
-        width: 120,
-        dataIndex: 'uploadKbps',
-        resizable: false,
-        groupable: false,
-        cell: {
-            encodeHtml: false
-        },
-        renderer: function (value, record) {
-            if (!record.get('wan')) { return '-'; }
-            return value ? '<strong>' + (value/1000).toFixed(2) + ' Mbps</strong>' : '<em style="color: #777;">< not set ></em>';
         }
     }, {
         text: 'NAT Egress',
