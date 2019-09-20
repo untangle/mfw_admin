@@ -45,7 +45,18 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Category (Inferred)'.t(),
         description: 'Application Category (Inferred) description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            placeholder: 'Select or type a value ...',
+            editable: true,
+            typeAhead: true,
+            anyMatch: true,
+            store: 'applicationCategories',
+            queryMode: 'local',
+            valueField: 'value',
+            displayField: 'text',              
+        }
     }, {
         type:'APPLICATION_CATEGORY',
         category: 'Application',
@@ -54,25 +65,15 @@ Ext.define('Mfw.settings.Conditions', {
         disableOnFirstPacket: true,
         operators: ['==', '!='],
         field: {
-            xtype: 'selectfield',
+            xtype: 'combobox',
             placeholder: 'Select or type a value ...',
             editable: true,
-            options: [
-                { text: 'Collaboration', value: 'Collaboration' },
-                { text: 'Database', value: 'Database' },
-                { text: 'File Transfer', value: 'File Transfer' },
-                { text: 'Games', value: 'Games' },
-                { text: 'Mail', value: 'Mail' },
-                { text: 'Messaging', value: 'Messaging' },
-                { text: 'Network Monitoring', value: 'Network Monitoring' },
-                { text: 'Networking', value: 'Networking' },
-                { text: 'Proxy', value: 'Proxy' },
-                { text: 'Remote Access', value: 'Remote Access' },
-                { text: 'Social Networking', value: 'Social Networking' },
-                { text: 'Streaming Media', value: 'Streaming Media' },
-                { text: 'VPN and Tunneling', value: 'VPN and Tunneling' },
-                { text: 'Web Services', value: 'Web Services' }
-            ]
+            typeAhead: true,
+            anyMatch: true,
+            store: 'applicationCategories',
+            queryMode: 'local',
+            valueField: 'value',
+            displayField: 'text',              
         }
     }, {
         type:'APPLICATION_DETAIL',
