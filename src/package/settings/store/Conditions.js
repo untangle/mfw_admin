@@ -2089,7 +2089,8 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Confidence (Matched)'.t(),
         description: 'Application Confidence (Matched) description ...',
-        operators: ['==', '!=', '>', '>=', '<', '<=']
+        operators: ['==', '!=', '>', '>=', '<', '<='],
+        disableOnFirstPacket: true,
     },  {
         type:'APPLICATION_PRODUCTIVITY_INFERRED',
         category: 'Application',
@@ -2101,7 +2102,8 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Productivity (Matched)'.t(),
         description: 'Application Productivity (Matched) description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        disableOnFirstPacket: true,
     }, {
         type:'APPLICATION_RISK_INFERRED',
         category: 'Application',
@@ -2113,7 +2115,8 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Risk (Matched)'.t(),
         description: 'Application Risk (Matched) description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        disableOnFirstPacket: true,
     },
 
     // SOURCE
