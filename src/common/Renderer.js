@@ -60,7 +60,8 @@ Ext.define('Mfw.Renderer', {
         return '<i class="x-fa ' + icon + '"></i>';
     },
 
-    intfStatusConnected: function (status) {
+    intfStatusConnected: function (status, intf) {
+        var connected = null;
         var qtip = '<div data-qtip="{0}" \
                     data-qalign="' + (Mfw.app.context === 'setup' ? 't-b?' : 'r-l?') + '" \
                     data-qshowDelay="0" \
@@ -70,11 +71,18 @@ Ext.define('Mfw.Renderer', {
                     style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"></div>';
 
         if (!status) {
-            // interface has non identifiable status
-            return '-' + Ext.String.format(qtip, 'no status');
+            if (intf.get('enabled') && (intf.get('type') === 'WIFI' || intf.get('type') === 'WWAN')) {
+                connected = true;
+            } else {
+                // interface has non identifiable status
+                return '-' + Ext.String.format(qtip, 'no status');
+            }
+        } else {
+            connected = status.connected;
         }
-        return '<i style="font-size: 11px;" class="x-fa fa-circle ' + (status.connected === true ? 'fa-green' : 'fa-gray') + '"></i>' +
-                Ext.String.format(qtip, status.connected === true ?
+
+        return '<i style="font-size: 11px;" class="x-fa fa-circle ' + (connected === true ? 'fa-green' : 'fa-gray') + '"></i>' +
+                Ext.String.format(qtip, connected === true ?
                     '<span style=\'color: green;\'>connected</span>' :
                     '<span style=\'color: red;\'>disconnected</span>');
     },
