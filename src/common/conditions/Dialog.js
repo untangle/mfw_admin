@@ -42,6 +42,8 @@ Ext.define('Mfw.common.conditions.Dialog', {
             label: 'Field',
             labelAlign: 'top',
             typeAhead: true,
+            anyMatch: true,
+            queryMode: 'local',
             placeholder: 'choose field ...',
             valueField: 'dataIndex',
             displayTpl: '{text}',
