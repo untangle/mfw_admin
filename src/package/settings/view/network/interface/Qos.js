@@ -43,25 +43,27 @@ Ext.define('Mfw.settings.interface.Qos', {
                 layout: 'hbox',
                 defaults: {
                     xtype: 'numberfield',
+                    placeholder: 'enter Mbps',
                     flex: 1,
                     labelAlign: 'top',
                     required: false,
                     clearable: false,
-                    autoComplete: false
+                    autoComplete: false,
+                    decimals: 3
                 },
                 items: [{
-                    label: 'Download Kbps',
+                    label: 'Download Mbps',
                     margin: '0 16 0 0',
                     bind: {
-                        value: '{intf.downloadKbps}',
+                        value: '{intf._downloadMbps}',
                         required: '{intf.qosEnabled}',
                         disabled: '{!intf.qosEnabled}'
                     }
                 }, {
-                    label: 'Upload Kbps',
+                    label: 'Upload Mbps',
                     margin: '0 0 0 16',
                     bind: {
-                        value: '{intf.uploadKbps}',
+                        value: '{intf._uploadMbps}',
                         required: '{intf.qosEnabled}',
                         disabled: '{!intf.qosEnabled}'
                     }
@@ -109,7 +111,7 @@ Ext.define('Mfw.settings.interface.Qos', {
                     if (!result) { return; }
                     intf.set('downloadKbps', result.download);
                     intf.set('uploadKbps', result.upload);
-                    testMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' performance test result<br/><br/><strong>download:</strong> ' + result.download + 'Kbps, <strong>upload:</strong> ' + result.upload + 'Kbps');
+                    testMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' performance test result<br/><br/><strong>download:</strong> ' + result.download/1000 + 'Mbps, <strong>upload:</strong> ' + result.upload/1000 + 'Mbps');
                 },
                 failure: function () {
                     testMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to test ' + intf.get('name') + '!</p>');

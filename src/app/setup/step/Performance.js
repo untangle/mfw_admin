@@ -11,7 +11,7 @@ Ext.define('Mfw.setup.step.Performance', {
 
     items: [{
         xtype: 'container',
-        width: 600,
+        width: 800,
         layout: {
             type: 'hbox',
             align: 'middle'
@@ -32,7 +32,7 @@ Ext.define('Mfw.setup.step.Performance', {
     }, {
         xtype: 'component',
         margin: '8 0 8 0',
-        width: 600,
+        width: 800,
         html: '<hr/>'
     }, {
         xtype: 'component',
@@ -42,7 +42,7 @@ Ext.define('Mfw.setup.step.Performance', {
     }, {
         xtype: 'grid',
         reference: 'interfaces',
-        width: 600,
+        width: 800,
         flex: 1,
         plugins: {
             gridcellediting: {
@@ -70,7 +70,8 @@ Ext.define('Mfw.setup.step.Performance', {
         }, {
             text: 'Name',
             dataIndex: 'name',
-            width: 150,
+            flex: 1,
+            minWidth: 200,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
@@ -78,10 +79,10 @@ Ext.define('Mfw.setup.step.Performance', {
                 return '<b>' + value + '</b>';
             }
         }, {
-            text: 'Download',
+            text: 'QoS Download Speed (Mbps)',
             flex: 1,
             menuDisabled: true,
-            dataIndex: 'downloadKbps',
+            dataIndex: '_downloadMbps',
             cell: {
                 encodeHtml: false,
                 tools: [{
@@ -90,18 +91,19 @@ Ext.define('Mfw.setup.step.Performance', {
                 }]
             },
             renderer: function (value) {
-                return value ? (value/1000).toFixed(2) + ' Mbps' : '<em style="color: #777;">< not set ></em>';
+                return value ? (value + ' Mbps') : '<em style="color: #777;">< not set ></em>';
             },
             editor: {
                 xtype: 'numberfield',
+                placeholder: 'enter Mbps',
                 clearable: false,
                 required: true,
-                maxLength: 6
+                decimals: 3
             }
         }, {
-            text: 'Upload',
+            text: 'QoS Upload Speed (Mbps)',
             flex: 1,
-            dataIndex: 'uploadKbps',
+            dataIndex: '_uploadMbps',
             menuDisabled: true,
             cell: {
                 encodeHtml: false,
@@ -110,15 +112,15 @@ Ext.define('Mfw.setup.step.Performance', {
                     iconCls: 'md-icon-edit'
                 }]
             },
-            editable: true,
             renderer: function (value) {
-                return value ? (value/1000).toFixed(2) + ' Mbps' : '<em style="color: #777;">< not set ></em>';
+                return value ? (value + ' Mbps') : '<em style="color: #777;">< not set ></em>';
             },
             editor: {
                 xtype: 'numberfield',
+                placeholder: 'enter Mbps',
                 clearable: false,
                 required: true,
-                maxLength: 6
+                decimals: 3
             }
         }
         // {

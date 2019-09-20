@@ -188,7 +188,21 @@ Ext.define('Mfw.model.Interface', {
          * object filled with interface status props
          * !!! persist flag as false avoids making record dirty !!!
          */
-        { name: '_status', type: 'auto', allowNull: true, persist: false }
+        { name: '_status', type: 'auto', allowNull: true, persist: false },
+
+        /**
+         * helper fields to convert Kbps to Mbps
+         */
+        { name: '_downloadMbps', type: 'number', allowNull: true, persist: false,
+            calculate: function (data) {
+                return data.downloadKbps ? data.downloadKbps/1000 : null;
+            }
+        },
+        { name: '_uploadMbps', type: 'number', allowNull: true, persist: false,
+            calculate: function (data) {
+                return data.uploadKbps ? data.uploadKbps/1000 : null;
+            }
+        },
 
     ],
 
@@ -241,6 +255,21 @@ Ext.define('Mfw.model.Interface', {
                 fn: Util.sanitize,
                 scope: this
             }
+        }
+    },
+
+    /**
+     * Converts downloadKbps, uploadKbps from Mbps into Kbps
+     * @param {String} fieldName
+     * @param {Float} value
+     */
+    set: function(fieldName, value) {
+        this.callParent(arguments);
+        if (fieldName === '_downloadMbps') {
+            this.set('downloadKbps', value * 1000);
+        }
+        if (fieldName === '_uploadMbps') {
+            this.set('uploadKbps', value * 1000);
         }
     }
 });
