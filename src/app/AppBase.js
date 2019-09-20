@@ -67,14 +67,14 @@ Ext.define('Mfw.AppBase', {
                             success: function(response2) {
                                 var decoded = Ext.decode(response2.responseText);
 
-                                if (!decoded.setupWizard.completed) {
-                                    window.location.href = '/setup';
-                                    return;
-                                } else {
-                                    Mfw.app.setAccount(Ext.decode(response1.responseText));
-                                    Mfw.app.setViews();
-                                    Ext.route.Router.resume();
-                                }
+                                // if (!decoded.setupWizard.completed) {
+                                //     window.location.href = '/setup';
+                                //     return;
+                                // } else {
+                                //     Mfw.app.setAccount(Ext.decode(response1.responseText));
+                                //     Mfw.app.setViews();
+                                //     Ext.route.Router.resume();
+                                // }
 
                                 if (decoded.timeZone) {
                                     Mfw.app.tz = decoded.timeZone;
@@ -90,6 +90,10 @@ Ext.define('Mfw.AppBase', {
                                         }
                                     });
                                 }
+
+                                Mfw.app.setAccount(Ext.decode(response1.responseText));
+                                Mfw.app.setViews();
+                                Ext.route.Router.resume();
                             },
                             failure: function(response) {
                                 console.log('server-side failure with status code ' + response.status);
