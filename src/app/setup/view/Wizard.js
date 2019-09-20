@@ -2,17 +2,14 @@ Ext.define('Mfw.setup.Wizard', {
     extend: 'Ext.Panel',
     alias: 'widget.setup-wizard',
 
-    layout: {
-        type: 'card',
-        animation: {
-            // type: 'fade', // fade, slide
-            // duration: 250
-        },
-    },
+    layout: 'card',
     viewModel: {
         data: {
             steps: [],
-            processing: false
+            wifiStep: false,
+            lteStep: false,
+            processing: false,
+            wizardStatus: null
         }
     },
 
@@ -57,7 +54,62 @@ Ext.define('Mfw.setup.Wizard', {
                 type: 'hbox',
                 pack: 'center',
                 align: 'middle'
-            }
+            },
+            hidden: true,
+            bind: {
+                hidden: '{!wizardStatus}'
+            },
+            defaults: {
+                xtype: 'component',
+                margin: '0 16'
+            },
+            items: [{
+                itemId: 'nav-eula',
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>License</span>" : "<a href=#eula>License</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "eula" ? "current" : ""}'
+                }
+            }, {
+                itemId: 'nav-system',
+                cls: 'step-nonlink',
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>System</span>" : "<a href=#system>System</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "system" ? "current" : ""}'
+                }
+            }, {
+                itemId: 'nav-wifi',
+                cls: 'step-nonlink',
+                hidden: true,
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>WiFi</span>" : "<a href=#wifi>WiFi</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "wifi" ? "current" : ""}',
+                    hidden: '{!wifiStep}'
+                }
+            }, {
+                itemId: 'nav-lte',
+                cls: 'step-nonlink',
+                hidden: true,
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>LTE</span>" : "<a href=#lte>LTE</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "lte" ? "current" : ""}',
+                    hidden: '{!lteStep}'
+                }
+            }, {
+                itemId: 'nav-interfaces',
+                cls: 'step-nonlink',
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>Interfaces</span>" : "<a href=#interfaces>Interfaces</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "interfaces" ? "current" : ""}'
+                }
+            }, {
+                itemId: 'nav-performance',
+                cls: 'step-nonlink',
+                html: '<span>Performance</span>',
+                bind: {
+                    html: '{!wizardStatus.completed ? "<span>Performance</span>" : "<a href=#performance>Performance</a>"}',
+                    cls: '{!wizardStatus.completed ? "step-nonlink" : "step-link" } {step === "performance" ? "current" : ""}'
+                }
+            }]
         }]
     }, {
         xtype: 'toolbar',
@@ -70,7 +122,7 @@ Ext.define('Mfw.setup.Wizard', {
         },
         hidden: true,
         bind: {
-            hidden: '{step === "eula" || step === "complete"}'
+            hidden: '{(step === "eula" && !wizardStatus.completed) || step === "complete"}'
         },
         items: [{
             xtype: 'button',

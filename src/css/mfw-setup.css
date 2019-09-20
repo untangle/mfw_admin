@@ -9,7 +9,10 @@
 
 .step-link a { font-weight: 100; font-size: 20px; color: #777; text-decoration: none; }
 .step-link a:hover { color: #333; }
-.step-link.current a { color: var(--base-color); }
+.step-link.current a { color: #000; border-bottom: 2px #555 solid; }
+
+.step-nonlink span { font-weight: 100; font-size: 20px; color: #777; }
+.step-nonlink.current span { color: #000; border-bottom: 2px #555 solid; }
 
 .x-label-text-el, .x-box-label-el { font-weight: 600; }
 

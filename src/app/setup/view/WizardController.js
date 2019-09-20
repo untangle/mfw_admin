@@ -2,26 +2,15 @@ Ext.define('Mfw.setup.WizardController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.wizard',
 
-    completed: false,
-
-    // navigation names
-    navNames: {
-        eula: 'License',
-        system: 'System',
-        wifi: 'WiFi',
-        lte: 'LTE',
-        interfaces: 'Interfaces',
-        performance: 'Performance'
-    },
-
-    init: function () {
+    init: function (wizard) {
         var me = this;
         Ext.Ajax.request({
             url: '/api/settings/system/setupWizard',
             success: function(response) {
-                var obj = Ext.decode(response.responseText);
-                me.completed = obj.completed;
-                me.setSteps(obj.currentStep);
+                var resp = Ext.decode(response.responseText);
+                wizard.getViewModel().set('wizardStatus', resp);
+                // wizard.getViewModel().set('wizardStatus.completed', true);
+                me.setSteps();
             },
             failure: function(response) {
                 console.log('server-side failure with status code ' + response.status);
@@ -30,85 +19,58 @@ Ext.define('Mfw.setup.WizardController', {
     },
 
     /**
-     * generate steps based on interfaces
-     * @param {String} currentStep
+     * adds the steps views based on interfaces
      */
-    setSteps: function (currentStep) {
+    setSteps: function () {
         var me = this,
             vm = me.getViewModel(),
-            steps = ['step-welcome', 'step-eula', 'step-system'],
+            steps = ['welcome', 'eula', 'system'],
             // add an empty card on initial load
             cardSteps = [{
                 xtype: 'container',
                 layout: 'fit'
             }],
-            routes = {}, navItems = [],
+            routes = {},
             wifiStep = false,
             lteStep = false;
 
         Ext.getStore('interfaces').load(function (interfaces) {
             Ext.Array.each(interfaces, function (intf) {
                 if (intf.get('type') === 'WWAN' && !lteStep) {
-                    steps.push('step-lte');
+                    steps.push('lte');
+                    lteStep = true;
+                    vm.set('lteStep', true);
                 }
                 if (intf.get('type') === 'WIFI' && !wifiStep) {
-                    steps.push('step-wifi');
+                    steps.push('wifi');
                     wifiStep = true;
+                    vm.set('wifiStep', true);
                 }
             });
 
-            steps.push('step-interfaces');
-            steps.push('step-performance');
-            steps.push('step-complete');
-
+            steps.push('interfaces');
+            steps.push('performance');
+            steps.push('complete');
 
             // set routes for each step
             Ext.Array.each(steps, function (step) {
-                var _step = step.replace('step-', '');
-
-                cardSteps.push({ xtype: step });
-
-                routes[_step] = 'onStep';
-
-                if (_step === 'welcome' || _step === 'complete') {
-                    return;
-                }
-
-                navItems.push({
-                    xtype: 'component',
-                    itemId: 'nav-' + _step,
-                    margin: '0 18',
-                    cls: 'step-link',
-                    bind: {
-                        html: '<a href="#' + _step + '">' + me.navNames[_step] + '</a>'
-                    }
-                });
+                cardSteps.push({ xtype: 'step-' + step });
+                routes[step] = 'onStep';
             });
 
             vm.set('steps', steps);
 
             me.setRoutes(routes);
             me.getView().add(cardSteps);
-            me.getView().down('#nav').setItems(navItems);
-
-            Mfw.app.redirectTo(currentStep || 'welcome');
+            Mfw.app.redirectTo(vm.get('wizardStatus.currentStep') || 'welcome');
             Ext.route.Router.resume();
-
         });
     },
 
     onStep: function () {
         var me = this,
-            step = window.location.hash.replace('#', '');
+        step = window.location.hash.replace('#', '');
         me.getViewModel().set('step', step);
-
-        me.getView().down('#nav').getItems().items.forEach(function (cmp) {
-            if (cmp.getItemId() === 'nav-' + step) {
-                cmp.setUserCls('current');
-            } else {
-                cmp.setUserCls('');
-            }
-        });
     },
 
     /**
@@ -137,7 +99,9 @@ Ext.define('Mfw.setup.WizardController', {
             vm = me.getViewModel(),
             wizard = this.getView(),
             layout = wizard.getLayout(),
-            nextStepName = layout.getNext().xtype.replace('step-', '');
+            nextStepName = layout.getNext().xtype.replace('step-', ''),
+            currentStep = nextStepName === 'complete' ? '' : nextStepName,
+            completed = vm.get('wizardStatus.completed') || (nextStepName === 'complete');
 
         vm.set('processing', true);
 
@@ -146,26 +110,19 @@ Ext.define('Mfw.setup.WizardController', {
             url: '/api/settings/system/setupWizard',
             method: 'POST',
             params: Ext.JSON.encode({
-                currentStep: nextStepName === 'complete' ? '' : nextStepName,
-                completed: me.completed || nextStepName === 'complete'
+                currentStep: currentStep,
+                completed: completed
             }),
             success: function() {
-                layout.next();
+                Mfw.app.redirectTo(nextStepName);
             },
             failure: function(response) {
                 console.log('server-side failure with status code ' + response.status);
             },
             callback: function () {
-                // Ext.defer(function () {
-                    vm.set('processing', false);
-                // }, 250);
+                vm.set('processing', false);
             }
         });
-    },
-
-    // called from EULA step
-    onDisagree: function () {
-        Mfw.app.redirectTo('welcome');
     }
 
 });

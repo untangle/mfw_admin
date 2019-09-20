@@ -50,6 +50,10 @@ Ext.define('Mfw.setup.step.Eula', {
                 xtype: 'button',
                 margin: 8
             },
+            hidden: true,
+            bind: {
+                hidden: '{wizardStatus.completed}'
+            },
             items: [{
                 text: 'Disagree',
                 handler: 'onDisagree'
@@ -81,6 +85,12 @@ Ext.define('Mfw.setup.step.Eula', {
 
         onContinue: function () {
             this.getView().up('setup-wizard').getController().updateWizard();
+        },
+
+        // called from EULA step
+        onDisagree: function () {
+            Mfw.app.redirectTo('welcome');
         }
+
     }
 });
