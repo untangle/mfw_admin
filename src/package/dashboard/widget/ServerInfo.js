@@ -41,6 +41,11 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         removed: function (widget) {
             if (widget.tout) {
                 clearTimeout(widget.tout);
+                widget.tout = null;
+            }
+            if (widget.uptimeInterval) {
+                clearInterval(widget.uptimeInterval);
+                widget.uptimeInterval = null;
             }
         }
     },
@@ -52,7 +57,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         },
 
         getInfo: function () {
-            var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+            var deferred = new Ext.Deferred();
 
             Ext.Ajax.request({
                 url: '/api/settings/system',
@@ -68,7 +73,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         },
 
         getSystem: function () {
-            var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+            var deferred = new Ext.Deferred();
 
             Ext.Ajax.request({
                 url: '/api/status/system',
@@ -84,7 +89,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         },
 
         getHardware: function () {
-            var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+            var deferred = new Ext.Deferred();
 
             Ext.Ajax.request({
                 url: '/api/status/hardware',
@@ -116,7 +121,19 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
         },
 
         loadData: function (cb) {
-            var me = this, info, system, hardware, build, html = '';
+            var me = this,
+                widget = me.getView(),
+                info,
+                system,
+                hardware,
+                build,
+                html = '';
+
+            if (widget.uptimeInterval) {
+                clearInterval(widget.uptimeInterval);
+                widget.uptimeInterval = null;
+            }
+
             me.getView().mask({xtype: 'loadmask'});
             Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild], me)
                 .then(function (result) {
@@ -131,11 +148,15 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            '<tr><td>Time zone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
-                           '<tr><td>Up Time: </td><td>' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
+                           '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
+
+                    // start uptime counter
+                    me.setUptime(Math.round(system.uptime.total));
+
                     if (cb) { cb(); }
                 }, function (error) {
                     console.warn('Unable to get info: ', error);
@@ -143,6 +164,19 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 .always(function () {
                     me.getView().unmask();
                 });
+        },
+
+        setUptime: function (initialUptime) {
+            var me = this, widget = me.getView();
+
+            document.getElementById('uptime').innerHTML = Renderer.uptime(initialUptime);
+            me.initialUptime = initialUptime;
+
+            if (!widget.uptimeInterval) {
+                widget.uptimeInterval = setInterval(function () {
+                    me.setUptime(me.initialUptime + 1);
+                }, 1000);
+            }
         },
 
         reload: function () {
