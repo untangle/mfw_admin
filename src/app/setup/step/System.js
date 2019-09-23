@@ -220,6 +220,7 @@ Ext.define('Mfw.setup.step.System', {
                 cb();
             }, function (err) {
                 console.warn(err);
+                vm.set('processing', false);
             });
         }
     }

@@ -96,6 +96,9 @@ Ext.define('Mfw.setup.step.WiFi', {
             store.sync({
                 success: function () {
                     cb();
+                },
+                callback: function () {
+                    vm.set('processing', false);
                 }
             });
         }

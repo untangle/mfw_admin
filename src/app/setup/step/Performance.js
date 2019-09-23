@@ -338,6 +338,9 @@ Ext.define('Mfw.setup.step.Performance', {
             store.sync({
                 success: function () {
                     cb();
+                },
+                callback: function () {
+                    vm.set('processing', false);
                 }
             });
         }

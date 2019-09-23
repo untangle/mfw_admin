@@ -172,7 +172,9 @@ Ext.define('Mfw.setup.step.Interfaces', {
         },
 
         continue: function (cb) {
-            var store = Ext.getStore('interfaces');
+            var me = this,
+                vm = me.getViewModel(),
+                store = Ext.getStore('interfaces');
 
             // if no changes made just skip to next step
             if (store.getModifiedRecords().length === 0) {
@@ -193,6 +195,9 @@ Ext.define('Mfw.setup.step.Interfaces', {
             store.sync({
                 success: function () {
                     cb();
+                },
+                callback: function () {
+                    vm.set('processing', false);
                 }
             });
         },
