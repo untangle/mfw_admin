@@ -194,7 +194,18 @@ Ext.define('Mfw.setup.step.Performance', {
                 width: 400,
                 showAnimation: null,
                 hideAnimation: null,
-                buttons: []
+                buttons: [{
+                    text: 'Cancel',
+                    ui: 'action',
+                    margin: '16 0 0 0',
+                    handler: function () {
+                        Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                            if (req.url.startsWith('/api/status/wantest')) {
+                                req.abort();
+                            }
+                        });
+                    }
+                }]
             });
 
             Ext.defer(function () {
@@ -224,11 +235,15 @@ Ext.define('Mfw.setup.step.Performance', {
                                     test: result
                                 });
                             },
-                            failure: function (err) {
+                            failure: function (response) {
                                 // resolve the promise even if failed
+                                if (response.aborted) {
+                                    deferred.resolve();
+                                    return;
+                                }
                                 deferred.resolve({
                                     device: device,
-                                    err: err.statusText
+                                    err: response.statusText
                                 });
                             }
                         });

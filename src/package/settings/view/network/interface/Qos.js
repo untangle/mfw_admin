@@ -95,7 +95,18 @@ Ext.define('Mfw.settings.interface.Qos', {
                     width: 400,
                     showAnimation: null,
                     hideAnimation: null,
-                    buttons: []
+                    buttons: [{
+                        text: 'Cancel',
+                        ui: 'action',
+                        margin: '16 0 0 0',
+                        handler: function () {
+                            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                                if (req.url.startsWith('/api/status/wantest')) {
+                                    req.abort();
+                                }
+                            });
+                        }
+                    }]
                 });
 
             if (!device) { return; }
@@ -113,7 +124,11 @@ Ext.define('Mfw.settings.interface.Qos', {
                     intf.set('uploadKbps', result.upload);
                     testMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' performance test result<br/><br/><strong>download:</strong> ' + result.download/1000 + 'Mbps, <strong>upload:</strong> ' + result.upload/1000 + 'Mbps');
                 },
-                failure: function () {
+                failure: function (response) {
+                    if (response.aborted) {
+                        testMsg.hide();
+                        return;
+                    }
                     testMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to test ' + intf.get('name') + '!</p>');
                 },
                 callback: function () {
