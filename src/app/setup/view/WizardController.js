@@ -24,7 +24,7 @@ Ext.define('Mfw.setup.WizardController', {
     setSteps: function () {
         var me = this,
             vm = me.getViewModel(),
-            steps = ['welcome', 'eula', 'system'],
+            steps = ['welcome', 'eula', 'system', 'lte', 'wifi', 'interfaces', 'performance', 'complete'],
             // add an empty card on initial load
             cardSteps = [{
                 xtype: 'container',
@@ -37,29 +37,28 @@ Ext.define('Mfw.setup.WizardController', {
         Ext.getStore('interfaces').load(function (interfaces) {
             Ext.Array.each(interfaces, function (intf) {
                 if (intf.get('type') === 'WWAN' && !lteStep) {
-                    steps.push('lte');
                     lteStep = true;
                     vm.set('lteStep', true);
                 }
                 if (intf.get('type') === 'WIFI' && !wifiStep) {
-                    steps.push('wifi');
                     wifiStep = true;
                     vm.set('wifiStep', true);
                 }
             });
 
-            steps.push('interfaces');
-            steps.push('performance');
-            steps.push('complete');
-
-            // set routes for each step
+            /**
+             * add each step view and route
+             * prevent adding lte & wifi if not present
+             */
             Ext.Array.each(steps, function (step) {
+                if ((step === 'lte' && !lteStep) ||
+                    (step === 'wifi' && !wifiStep)
+                ) { return; }
                 cardSteps.push({ xtype: 'step-' + step });
                 routes[step] = 'onStep';
             });
 
             vm.set('steps', steps);
-
             me.setRoutes(routes);
             me.getView().add(cardSteps);
             Mfw.app.redirectTo(vm.get('wizardStatus.currentStep') || 'welcome');
@@ -110,11 +109,15 @@ Ext.define('Mfw.setup.WizardController', {
             url: '/api/settings/system/setupWizard',
             method: 'POST',
             params: Ext.JSON.encode({
-                currentStep: currentStep,
-                completed: completed
+                completed: completed,
+                currentStep: currentStep
             }),
             success: function() {
                 Mfw.app.redirectTo(nextStepName);
+                vm.set('wizardStatus', {
+                    completed: completed,
+                    currentStep: currentStep
+                });
             },
             failure: function(response) {
                 console.log('server-side failure with status code ' + response.status);

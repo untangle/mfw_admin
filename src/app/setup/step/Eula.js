@@ -52,7 +52,7 @@ Ext.define('Mfw.setup.step.Eula', {
             },
             hidden: true,
             bind: {
-                hidden: '{wizardStatus.completed}'
+                hidden: '{wizardStatus.completed || currentStepIndex > 1}'
             },
             items: [{
                 text: 'Disagree',

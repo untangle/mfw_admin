@@ -255,7 +255,7 @@ Ext.define('Mfw.Sync', {
                     buttons: [{
                         text: 'OK',
                         ui: 'action',
-                        handler: function (btn) {
+                        handler: function () {
                             // reloading document will redirect to auth
                             document.location.reload();
                         }
@@ -274,7 +274,6 @@ Ext.define('Mfw.Sync', {
         }
 
         if (response.responseJson) {
-            // store sync, model save
             try {
                 summary = response.responseJson.output.match(/Exception: (.*?)\n/g);
                 if (Ext.isArray(summary)) {
@@ -288,10 +287,11 @@ Ext.define('Mfw.Sync', {
                 summary = Ext.JSON.encode(response.responseJson);
             }
         } else {
-            // ajax
             if (response.responseText) {
                 try {
-                    summary = Ext.JSON.decode(response.responseText, true).error;
+                    var resp = Ext.JSON.decode(response.responseText, true);
+                    summary = resp.error;
+                    stack = resp.output.replace(/\n/g, '</br>');
                 } catch(e) {
                     summary = response.responseText;
                 }
@@ -299,6 +299,7 @@ Ext.define('Mfw.Sync', {
                 return;
             }
         }
+
         exception = {
             status: response.status,
             statusText: response.statusText,
