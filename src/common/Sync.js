@@ -236,6 +236,38 @@ Ext.define('Mfw.Sync', {
     exception: function (response, title) {
         var exception, summary, stack, isSync = false;
 
+        // auth fail
+        if (response.status === 403) {
+            // avoid displaying the exception bottom sheet
+            this.sheet.hide();
+
+            /**
+             * display auth fail message box
+             * prevent showing more than a single dialog in case of multiple calls exceptions
+             */
+            if (!this.authExceptionDialog) {
+                this.authExceptionDialog = Ext.create('Ext.MessageBox', {
+                    title: 'Authentication failed',
+                    message: 'Session has expired. Please login.',
+                    width: 300,
+                    showAnimation: null,
+                    hideAnimation: null,
+                    buttons: [{
+                        text: 'OK',
+                        ui: 'action',
+                        handler: function (btn) {
+                            // reloading document will redirect to auth
+                            document.location.reload();
+                        }
+                    }]
+                }).show();
+                this.authExceptionDialog.show();
+            }
+            return;
+        }
+
+
+
         // if it's a sync API call
         if (response.request.url.includes('/api/settings')) {
             isSync = true;
