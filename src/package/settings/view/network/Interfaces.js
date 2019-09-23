@@ -175,5 +175,16 @@ Ext.define('Mfw.settings.network.Interfaces', {
         dataIndex: 'macaddr',
         width: 150,
         hidden: true
+    }, {
+        dataIndex: '_status',
+        text: 'Download / Upload Rate',
+        minWidth: 180,
+        flex: 1,
+        resizable: true,
+        hideable: false,
+        sortable: false,
+        menuDisabled: true,
+        cell: { encodeHtml: false },
+        renderer: Renderer.intfStatusRates
     }]
 });

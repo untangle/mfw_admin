@@ -87,6 +87,19 @@ Ext.define('Mfw.Renderer', {
                     '<span style=\'color: red;\'>disconnected</span>');
     },
 
+    intfStatusRates: function (status) {
+        var download, upload;
+
+        if (!status) {
+            return '-';
+        }
+
+        download = '<i class="x-fa fa-arrow-down fa-gray"></i> ' + (status.rxByteRate / 1000) + ' Kbps';
+        upload = '<i class="x-fa fa-arrow-up fa-gray"></i> ' + (status.txByteRate / 1000) + ' Kbps';
+
+        return download + ' &nbsp; / &nbsp; ' + upload;
+    },
+
     boolean: function (value) {
         if (value === null || value === undefined) {
             return '';
