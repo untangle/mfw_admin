@@ -77,7 +77,7 @@ Ext.define('Mfw.reports.Events', {
                     },
                     layout: 'fit',
                     items: [{
-                        xtype: 'event-details',
+                        xtype: 'session-details',
                     }],
                     hidden: true,
                     bind: {

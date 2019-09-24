@@ -494,13 +494,14 @@ Ext.define('Mfw.monitor.view.Sessions', {
         },
         layout: 'fit',
         items: [{
-            xtype: 'monitor-session-details',
+            xtype: 'session-details',
+            monitor: true
         }]
     }],
 
     listeners: {
         activate: 'onActivate',
-        deactivate: 'onDeactivate'
+        // deactivate: 'onDeactivate'
     },
 
     controller: {

@@ -1,8 +1,9 @@
 /**
- * Helper class to set EVENTS reports details view
+ * Helper class to set EVENTS reports ans Sessions monitor details view
+ * Nodes with monitor true flag are displayed only in Session Monitor
  */
-Ext.define('Mfw.reports.ReportsTreeStore', {
-    alternateClassName: 'ReportsTreeStore',
+Ext.define('Mfw.SessionDetails', {
+    alternateClassName: 'SessionDetails',
     singleton: true,
 
     table: {
@@ -12,20 +13,20 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
                 text: '<strong>Application</strong>',
                 children: [
                     { key: 'application_name', text: 'Name' },
-                    { key: 'application_name_inferred', text: 'Name (Inferred)' },
+                    { key: 'application_name_inferred', text: 'Name (inferred)' },
                     { key: 'application_category', text: 'Category' },
-                    { key: 'application_category_inferred', text: 'Category (Inferred)' },
+                    { key: 'application_category_inferred', text: 'Category (inferred)' },
                     { key: 'application_id', text: 'ID' },
-                    { key: 'application_id_inferred', text: 'ID (Inferred)' },
+                    { key: 'application_id_inferred', text: 'ID (inferred)' },
                     { key: 'application_protochain', text: 'Protochain' },
-                    { key: 'application_protochain_inferred', text: 'Protochain (Inferred)' },
+                    { key: 'application_protochain_inferred', text: 'Protochain (inferred)' },
                     { key: 'application_confidence', text: 'Confidence' },
-                    { key: 'application_confidence_inferred', text: 'Confidence' },
+                    { key: 'application_confidence_inferred', text: 'Confidence (inferred)' },
                     { key: 'application_productivity', text: 'Productivity' },
-                    { key: 'application_productivity_inferred', text: 'Productivity (Inferred)' },
+                    { key: 'application_productivity_inferred', text: 'Productivity (inferred)' },
                     { key: 'application_risk', text: 'Risk' },
-                    { key: 'application_risk_inferred', text: 'Risk (Inferred)' },
-                    { key: 'application_detail', text: 'Detail (Matched)' },
+                    { key: 'application_risk_inferred', text: 'Risk (inferred)' },
+                    { key: 'application_detail', text: 'Detail' },
                     { key: 'application_blocked', text: 'Blocked', renderer: Renderer.boolean },
                     { key: 'application_flagged', text: 'Flagged', renderer: Renderer.boolean }
                 ]
@@ -44,7 +45,8 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
                     { key: 'client_hops', text: 'Hops' },
                     { key: 'client_country', text: 'Country', renderer: Renderer.country },
                     { key: 'client_latitude', text: 'Latitude' },
-                    { key: 'client_longitude', text: 'Longitude' }
+                    { key: 'client_longitude', text: 'Longitude' },
+                    { key: 'client_reverse_dns', text: 'Reverse DNS' } // only on Sessions Monitor ?
                 ]
             }, {
                 key: 'server',
@@ -60,37 +62,64 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
                     { key: 'server_hops', text: 'Hops' },
                     { key: 'server_country', text: 'Country', renderer: Renderer.country },
                     { key: 'server_latitude', text: 'Latitude' },
-                    { key: 'server_longitude', text: 'Longitude' }
+                    { key: 'server_longitude', text: 'Longitude' },
+                    { key: 'server_reverse_dns', text: 'Reverse DNS' } // only on Sessions Monitor ?
                 ]
             },
             {
                 key: 'certificate',
                 text: '<strong>Certificate</strong>',
                 children: [
-                    { key: 'certificate_subject_cn', text: 'Subject: Common Name' },
-                    { key: 'certificate_subject_o', text: 'Subject: Organization' },
+                    { key: 'certificate_subject_cn', text: 'Sbj. Common Name' },
+                    { key: 'certificate_subject_sn', text: 'Sbj. Serial Number', monitor: true },
+                    { key: 'certificate_subject_c', text: 'Sbj. Country', monitor: true },
+                    { key: 'certificate_subject_o', text: 'Sbj. Organization' },
+                    { key: 'certificate_subject_ou', text: 'Sbj. Organizational Unit', monitor: true },
+                    { key: 'certificate_subject_l', text: 'Sbj. Locality', monitor: true },
+                    { key: 'certificate_subject_p', text: 'Sbj. Province', monitor: true },
+                    { key: 'certificate_subject_sa', text: 'Sbj. Street Address', monitor: true },
+                    { key: 'certificate_subject_pc', text: 'Sbj. Postal Code', monitor: true },
+                    { key: 'certificate_subject_san', text: 'Sbj. DNS Names', monitor: true },
+
+                    { key: 'certificate_issuer_cn', text: 'Iss. Common Name', monitor: true },
+                    { key: 'certificate_issuer_sn', text: 'Iss. Serial Number', monitor: true },
+                    { key: 'certificate_issuer_c', text: 'Iss. Country', monitor: true },
+                    { key: 'certificate_issuer_o', text: 'Iss. Organization', monitor: true },
+                    { key: 'certificate_issuer_ou', text: 'Iss. Organizational Unit', monitor: true },
+                    { key: 'certificate_issuer_l', text: 'Iss. Locality', monitor: true },
+                    { key: 'certificate_issuer_p', text: 'Iss. Province', monitor: true },
+                    { key: 'certificate_issuer_sa', text: 'Iss. Street Address', monitor: true },
+                    { key: 'certificate_issuer_pc', text: 'Iss. Postal Code', monitor: true },
+
                     { key: 'ssl_sni', text: 'SSL SNI' },
                     { key: 'wan_rule_chain', text: 'WAN Rule Chain' },
                     { key: 'wan_rule_id', text: 'WAN Rule ID', renderer: Renderer.wanRule },
                     { key: 'wan_policy_id', text: 'WAN Policy ID', renderer: Renderer.wanPolicy }
                 ]
             },
-            { key: 'session_id', text: 'Session ID' },
-            { key: 'time_stamp', text: 'Timestamp' },
-            { key: 'end_time', text: 'End Time' },
-            { key: 'hostname', text: 'Hostname' },
-            { key: 'ip_protocol', text: 'IP Protocol', renderer: Renderer.ipProtocol },
-            { key: 'family', text: 'Family', renderer: Renderer.familyRenderer },
-            { key: 'local_address', text: 'Local Address' },
-            { key: 'remote_address', text: 'Remote Address' },
-            { key: 'username', text: 'Username' }
+            { key: 'session_id', text: '<strong>Session ID</strong>' },
+            { key: 'time_stamp', text: '<strong>Timestamp</strong>' },
+            { key: 'end_time', text: '<strong>End Time</strong>' },
+            { key: 'hostname', text: '<strong>Hostname</strong>' },
+            { key: 'ip_protocol', text: '<strong>IP Protocol</strong>', renderer: Renderer.ipProtocol },
+            { key: 'family', text: '<strong>Family</strong>', renderer: Renderer.familyRenderer },
+            { key: 'local_address', text: '<strong>Local Address</strong>' },
+            { key: 'remote_address', text: '<strong>Remote Address</strong>' },
+            { key: 'username', text: '<strong>Username</strong>' },
+            { key: 'conntrack_id', text: '<strong><u>Conntrack ID</u></strong>', monitor: true },
+            { key: 'tcp_state', text: '<strong><u>TCP State</u></strong>', monitor: true, renderer: Renderer.tcpStateRenderer },
+            { key: 'bypass_packetd', text: '<strong><u>Bypass PacketD</u></strong>', monitor: true, renderer: Renderer.boolean },
+            { key: 'timeout_seconds', text: '<strong><u>Timeout</u></strong>', monitor: true, renderer: Renderer.timeRangeSeconds },
+            { key: 'age_milliseconds', text: '<strong><u>Age</u></strong>', monitor: true, renderer: Renderer.timeRangeMilliseconds },
+            { key: 'mark', text: '<strong><u>Mark</u></strong>', monitor: true, renderer: Renderer.hex },
+
         ],
 
         session_stats: [
             {
                 key: 'session_stats',
                 text: '<strong>Session Stats</strong>',
-                expanded: true,
+                // expanded: true,
                 children: [
                     // session_is ommited
                     // time_stamp ommited
@@ -108,6 +137,12 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
                     { key: 'server_packet_rate', text: 'Server Packet Rate', renderer: Renderer.packetsSecRenderer }
                 ]
             }
+        ],
+
+
+        // extra columns used in sessions monitor
+        sessions_monitor: [
+
         ],
 
 
@@ -184,42 +219,61 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
 
     create: function (report) {
         var me = this,
-            // a array with a single table or multiple tables joined
-            tables = report.get('tables') || [report.get('table')],
+            monitor = false,
+            tables,
             children = [], // root children to be set on the store
             renames, // any renamed columns
             idx; // where to insert a non-leaf child
 
-        if (report.getRendering()) {
+
+        if (!report) {
+            // the Sessions monitor view
+            monitor = true;
+            tables = ['sessions', 'session_stats'];
+        } else {
+            tables = report.get('tables') || [report.get('table')];
+        }
+
+        if (report && report.getRendering()) {
             renames = report.getRendering().get('columnRenames');
+        } else {
+            renames = null;
         }
 
         Ext.Array.each(tables, function (table) {
-            Ext.Array.each(me.table[table], function (child) {
+            Ext.Array.each(me.table[table], function (firstLevelNode) {
                 // set different name for the keys if defined so in report rendering
-                if (renames) {
-                    if (renames[child.key]) {
-                        child.text = '<strong>' + renames[child.key] + '</strong>';
-                    }
+                if (renames && renames[firstLevelNode.key]) {
+                    firstLevelNode.altText = '<strong>' + renames[firstLevelNode.key] + '</strong>';
+                } else {
+                    firstLevelNode.altText = null;
                 }
 
                 // first level child without other children
-
-                if (!child.children) {
-                    child.leaf = true;
-                    children.push(child);
+                if (!firstLevelNode.children) {
+                    firstLevelNode.leaf = true;
+                    if (!monitor && firstLevelNode.monitor) {
+                        return;
+                    }
+                    children.push(firstLevelNode);
                     return;
                 }
 
-                // first level child with children
+                // if in EVENTS reports remove sessions monitor only fields
+                if (!monitor) {
+                    firstLevelNode.children = Ext.Array.filter(firstLevelNode.children, function (c) {
+                        return !c.monitor;
+                    });
+                }
 
-                Ext.Array.each(child.children, function (c) {
-                    c.leaf = true;
+                // first level child with children
+                Ext.Array.each(firstLevelNode.children, function (secondLevelNode) {
+                    secondLevelNode.leaf = true;
                     // set different name for the leaf key if defined
-                    if (renames) {
-                        if (renames[c.key]) {
-                            c.text = '<strong>' + renames[c.key] + '</strong>';
-                        }
+                    if (renames && renames[secondLevelNode.key]) {
+                        secondLevelNode.altText = '<strong>' + renames[secondLevelNode.key] + '</strong>';
+                    } else {
+                        secondLevelNode.altText = null;
                     }
                 });
 
@@ -230,9 +284,9 @@ Ext.define('Mfw.reports.ReportsTreeStore', {
                     })
                 );
                 if (idx >= 1) {
-                    Ext.Array.insert(children, idx, [child]);
+                    Ext.Array.insert(children, idx, [firstLevelNode]);
                 } else {
-                    children.push(child);
+                    children.push(firstLevelNode);
                 }
             });
         });

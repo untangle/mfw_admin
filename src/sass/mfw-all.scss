@@ -692,13 +692,14 @@ i {
         display: none;
     }
     .x-gridcell-body-el {
-        padding: 5px 0;
+        font-size: 11px;
+        padding: 2px 0;
     }
     .x-listitem {
-        background-color: #F3F3F3;
+        // background-color: #F3F3F3;
     }
     .event-key {
-        color: #555;
+        color: #333;
         font-weight: 400;
     }
 }

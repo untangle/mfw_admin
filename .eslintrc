@@ -76,6 +76,7 @@
         "Util": true,
         "Data": true,
         "ReportsUtil": true,
+        "SessionDetails": true,
         "DashboardUtil": true,
         "Table": true,
         "Renderer": true,

@@ -186,9 +186,8 @@ i { font-style: normal; }
 .mfw-widget.widget-pies { flex-basis: 400px; flex-grow: 1; }
 
 .events-tree .x-treecell .x-icon-el { display: none; }
-.events-tree .x-gridcell-body-el { padding: 5px 0; }
-.events-tree .x-listitem { background-color: #F3F3F3; }
-.events-tree .event-key { color: #555; font-weight: 400; }
+.events-tree .x-gridcell-body-el { font-size: 11px; padding: 2px 0; }
+.events-tree .event-key { color: #333; font-weight: 400; }
 
 .wrapper { position: relative; background: #FFF; }
 

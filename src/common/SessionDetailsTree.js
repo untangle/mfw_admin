@@ -1,10 +1,21 @@
-Ext.define('Mfw.reports.EventDetails', {
+Ext.define('Mfw.SessionDetailsTree', {
     extend: 'Ext.grid.Tree',
-    alias: 'widget.event-details',
+    alias: 'widget.session-details',
     viewModel: {},
     expanderOnly: false,
-    userCls: 'events-tree',
+    userCls: 'c-noheaders events-tree',
     selectable: false,
+
+    hideHeaders: true,
+
+    items: [{
+        xtype: 'component',
+        docked: 'top',
+        padding: '0 16',
+        margin: '0 0 8 0',
+        style: 'line-height: 40px; font-size: 16px; border-bottom: 1px #EEE solid;',
+        html: 'Session Details'
+    }],
 
     columns: [{
         xtype: 'treecolumn',
@@ -14,6 +25,9 @@ Ext.define('Mfw.reports.EventDetails', {
         cell: {
             cellCls: 'event-key',
             encodeHtml: false
+        },
+        renderer: function (value, record) {
+            return record.get('altText') || value;
         }
     }, {
         xtype: 'column',
@@ -32,7 +46,9 @@ Ext.define('Mfw.reports.EventDetails', {
 
     controller: {
         init: function (tree) {
-            // tree.getStore().create();
+            if (tree.monitor) {
+                tree.setStore(SessionDetails.create());
+            }
 
             /**
              * when report binds set the Event Details key/value pairs tree
@@ -42,7 +58,7 @@ Ext.define('Mfw.reports.EventDetails', {
              */
             tree.getViewModel().bind('{record}', function (record) {
                 if (!record) { return; }
-                tree.setStore(ReportsTreeStore.create(record));
+                tree.setStore(SessionDetails.create(record));
             });
 
             tree.getViewModel().bind('{list.selection}', function (selection) {
