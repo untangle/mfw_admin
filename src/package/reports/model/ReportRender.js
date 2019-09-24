@@ -28,6 +28,7 @@ Ext.define('Mfw.model.ReportRender', {
 
         { name: 'slicesNumber', type: 'integer', defaultValue: 10 },
         { name: 'defaultColumns', type: 'auto' }, // array of columns
+        { name: 'columnRenames', type: 'auto' }, // object with different names for the columns
 
         { name: 'textString', type: 'string' }, // The user-defined string for a text report
 

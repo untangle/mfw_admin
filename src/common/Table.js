@@ -208,10 +208,13 @@ Ext.define('Mfw.Table', {
             renderer: Renderer.wanPolicy
         }, {
             text: 'Client DNS Hint',
-            dataIndex: 'client_dns_hint'
+            dataIndex: 'client_dns_hint',
+            minWidth: 200,
+            flex: 1
         }, {
             text: 'Server DNS Hint',
             dataIndex: 'server_dns_hint',
+            minWidth: 200,
             flex: 1
         }],
     },
@@ -366,7 +369,7 @@ Ext.define('Mfw.Table', {
                     displayTpl: '{text} [ {value} ]',
                     itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                     options: Map.options.families
-                }
+                };
                 break;
             case 'client_interface_id':
             case 'server_interface_id':
@@ -475,7 +478,7 @@ Ext.define('Mfw.Table', {
 
         Ext.Array.each(me.names, function (name) {
             Ext.Array.each(me[name].columns, function (column) {
-                if(!column.hidden) { 
+                if(!column.hidden) {
                 if (!Ext.Array.findBy(allColumns, function (c) {
                     return c.dataIndex === column.dataIndex;
                 })) {

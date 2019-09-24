@@ -65,7 +65,7 @@ Ext.define('Mfw.reports.Events', {
 
             // if not widget add details panel
             if (!me.getView().up('widget-report')) {
-                view.add(                {
+                view.add({
                     xtype: 'panel',
                     docked: 'right',
                     width: 450,
