@@ -8,8 +8,10 @@ Ext.define('Mfw.setup.WizardController', {
             url: '/api/settings/system/setupWizard',
             success: function(response) {
                 var resp = Ext.decode(response.responseText);
-                wizard.getViewModel().set('wizardStatus', resp);
-                // wizard.getViewModel().set('wizardStatus.completed', true);
+                wizard.getViewModel().set('wizardStatus', {
+                    completed: resp.completed || false,
+                    currentStep: resp.currentStep || ''
+                });
                 me.setSteps();
             },
             failure: function(response) {
