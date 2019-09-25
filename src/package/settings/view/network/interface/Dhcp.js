@@ -31,11 +31,9 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     html: 'DHCP configuration'
                 }, {
                     xtype: 'togglefield',
-                    boxLabel: '<strong>Enable DHCP Serving</strong>',
-                    bind: {
-                        userCls: '{intf.dhcpEnabled ? "on" : "off"}',
-                        value: '{intf.dhcpEnabled}',
-                    }
+                    activeBoxLabel: 'Enable DHCP Serving',
+                    inactiveBoxLabel: 'Disabled DHCP Serving',
+                    bind: '{intf.dhcpEnabled}'
                 }]
             }, {
                 xtype: 'containerfield',

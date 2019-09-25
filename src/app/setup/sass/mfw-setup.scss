@@ -126,13 +126,12 @@ hr {
 
 
 .x-togglefield {
+    cursor: pointer;
     .x-box-label-el {
         font-weight: bold;
     }
-    &.off {
-        .x-thumb {
-            background-color: #999;
-        }
+    &.x-toggle-off .x-thumb {
+        background-color: #999;
     }
 }
 

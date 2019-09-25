@@ -32,11 +32,9 @@ Ext.define('Mfw.settings.interface.Qos', {
                     html: 'QoS Settings'
                 }, {
                     xtype: 'togglefield',
-                    bind: {
-                        userCls: '{intf.qosEnabled ? "on" : "off"}',
-                        boxLabel: '<strong>{intf.qosEnabled ? "Enable QoS" : "Disable QoS"}</strong>',
-                        value: '{intf.qosEnabled}',
-                    }
+                    activeBoxLabel: 'Enable QoS',
+                    inactiveBoxLabel: 'Disabled QoS',
+                    bind: '{intf.qosEnabled}'
                 }]
             }, {
                 xtype: 'containerfield',

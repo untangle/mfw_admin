@@ -82,10 +82,9 @@ Ext.define('Mfw.settings.routing.WanPolicyDialog', {
             }
         }, {
             xtype: 'togglefield',
-            bind: {
-                boxLabel: '<strong>{policy.enabled ? "Enabled" : "Disabled"}</strong>',
-                value: '{policy.enabled}'
-            }
+            activeBoxLabel: 'Enabled',
+            inactiveBoxLabel: 'Disabled',
+            bind: '{policy.enabled}'
         }, {
             xtype: 'textfield',
             label: 'Description',

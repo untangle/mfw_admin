@@ -153,11 +153,9 @@ Ext.define('Mfw.settings.network.Interface', {
                 }
             }, {
                 xtype: 'togglefield',
-                bind: {
-                    userCls: '{intf.enabled ? "on" : "off"}',
-                    boxLabel: '<strong>{intf.enabled ? "Enabled" : "Disabled"}</strong>',
-                    value: '{intf.enabled}'
-                }
+                activeBoxLabel: 'Enabled',
+                inactiveBoxLabel: 'Disabled',
+                bind: '{intf.enabled}'
             }]
         }, {
             xtype: 'container',

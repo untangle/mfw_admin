@@ -67,8 +67,8 @@ Ext.define('Mfw.reports.TimeRangeDialog', {
             }]
         }, {
             xtype: 'togglefield',
-            boxLabel: 'Until'.t(),
-            boxLabelAlign: 'before',
+            activeBoxLabel: 'Until',
+            inactiveBoxLabel: 'Until Now',
             reference: 'untilTgl'
         }, {
             xtype: 'containerfield',

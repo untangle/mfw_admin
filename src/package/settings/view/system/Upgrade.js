@@ -65,11 +65,9 @@ Ext.define('Mfw.settings.system.Upgrade', {
             }]
         }, {
             xtype: 'togglefield',
-            boxLabel: 'Automatically Install Upgrades',
-            bodyAlign: 'start',
-            bind: {
-                value: '{upgradeSettings.enabled}'
-            }
+            activeBoxLabel: 'Automatically install upgrades',
+            inactiveBoxLabel: 'Do not install upgrades automatically',
+            bind: '{upgradeSettings.enabled}'
         }, {
             xtype: 'component',
             margin: '16 0 0 0',

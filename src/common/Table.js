@@ -427,8 +427,8 @@ Ext.define('Mfw.Table', {
             case 'application_flagged':
             field = {
                 xtype: 'togglefield',
-                boxLabel: 'Yes',
-                bodyAlign: 'start'
+                activeBoxLabel: 'True',
+                inactiveBoxLabel: 'False'
             }; break;
             case 'application_name':
             case 'application_name_inferred':

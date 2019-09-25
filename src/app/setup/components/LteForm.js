@@ -90,11 +90,9 @@ Ext.define('Mfw.setup.cmp.Lte', {
                 flex: 1
             }, {
                 xtype: 'togglefield',
-                bind: {
-                    userCls: '{intf.enabled ? "on" : "off"}', // custom styling class
-                    boxLabel: '<strong>{intf.enabled ? "Enabled" : "Disabled"}</strong>',
-                    value: '{intf.enabled}'
-                }
+                activeBoxLabel: 'Enabled',
+                inactiveBoxLabel: 'Disabled',
+                bind: '{intf.enabled}'
             }]
         }, {
             xtype: 'selectfield',
