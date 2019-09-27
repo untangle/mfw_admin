@@ -99,12 +99,12 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 layout: 'hbox',
                 defaults: {
                     clearable: false,
-                    required: false,
-                    flex: 1
+                    required: false
                 },
                 items: [{
                     xtype: 'selectfield',
                     label: 'Mode',
+                    width: 110,
                     autoSelect: true,
                     options: [
                         { text: 'Access Point', value: 'AP' },
@@ -118,6 +118,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     xtype: 'selectfield',
                     label: 'Channel',
                     margin: '0 16',
+                    width: 140,
                     queryMode: 'remote',
                     displayTpl: '{channel} [{frequency}]',
                     itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
@@ -139,9 +140,9 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 }, {
                     xtype: 'selectfield',
                     label: 'HT Mode',
+                    flex: 1,
                     queryMode: 'remote',
-                    displayTpl: '{name}',
-                    itemTpl: '{name}',
+                    displayField: 'name',
                     valueField: 'mode',
                     bind: {
                         value: '{intf.wirelessThroughput}',
