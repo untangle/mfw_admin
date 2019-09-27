@@ -25,16 +25,19 @@ Ext.define('Mfw.setup.step.Eula', {
         }, {
             xtype: 'component',
             style: 'text-align: center;',
-            html: '<p style="font-weight: bold;">To continue installing and using this software, you must agree to the terms of the software license agreement. Please review the whole license agreement by scrolling through to the end of the agreement.</p>'
+            html: '<p>To continue installing and using this software, you must agree to the terms of the software license agreement. Please review the whole license agreement by scrolling through to the end of the agreement.</p>'
         }, {
-            xtype: 'component',
-            itemId: 'eula',
-            margin: '16 0',
-            padding: '8 16',
-            scrollable: true,
-            maxHeight: 300,
-            style: 'background: #FFF; border-radius: 3px; border: 1px #EEE solid;'
-
+            xtype: 'container',
+            style: 'background: #FFF; border-radius: 3px; border: 1px #EEE solid; line-height: 0;',
+            html: '<iframe id="eula-src" style="border: none; width: 100%; height: 350px;"></iframe>',
+            // mask container until eula content is loaded
+            masked: {
+                xtype: 'loadmask',
+                message: 'Loading ...'
+            },
+            listeners: {
+                painted: 'onPainted'
+            }
         }, {
             xtype: 'component',
             style: 'text-align: center;',
@@ -66,21 +69,37 @@ Ext.define('Mfw.setup.step.Eula', {
     }],
 
     controller: {
-        init: function (view) {
+        /**
+         * check connection on painted event to make sure that iframe was rendered
+         * and found in DOM (is not null)
+         * online check consists in trying to load a small image form a known reliable location
+         * on success load remote EULA
+         * otherwise fallback on local EULA
+         */
+        onPainted: function (cmp) {
+            var remoteEulaSrc = 'https://develop.untangle.com/legal',
+                localEulaSrc = '/setup/eula.html',
+                iframe = document.getElementById('eula-src'),
+                img = new Image(0,0); // 0 width and height
 
-            /**
-             * initially it should fetch a remote eula if possible (not implemented)
-             * otherwise load locally stored eula
-             */
-            Ext.Ajax.request({
-                url: '/setup/eula.html',
-                success: function (response) {
-                    view.down('#eula').setHtml(response.responseText);
-                },
-                failure: function () {
-                    console.error('EULA not found!');
-                }
+            // todo: find a better image url to test
+            img.src = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png';
+
+            img.addEventListener('load', function () {
+                iframe.src = remoteEulaSrc;
             });
+            img.addEventListener('error', function () {
+                iframe.src = localEulaSrc;
+            });
+
+            // unmask eula container and remove image after license content loaded
+            iframe.addEventListener('load', function () {
+                cmp.unmask();
+                img.parentNode.removeChild(img);
+            });
+
+            // append the test image wich will trigger the load/error events
+            document.body.appendChild(img);
         },
 
         onContinue: function () {
