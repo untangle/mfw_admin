@@ -211,7 +211,7 @@ Ext.define('Mfw.settings.network.Interface', {
                             value: '{intf.configType}',
                             options: '{_configTypes}',
                             required: '{intf.type !== "WWAN"}',
-                            hidden: '{intf.type === "WIFI" || intf.type === "WWAN" || intf.type === "OPENVPN"}'
+                            hidden: '{intf.type === "WWAN" || intf.type === "OPENVPN"}'
                         }
                     }]
                 }, {
