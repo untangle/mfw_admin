@@ -131,23 +131,28 @@ install: \
 
 extjs-download: $(EXTJS_FILE)
 $(EXTJS_FILE):
+	$(call LOG_FUNCTION, "Downloading $(EXTJS_URL)...")
 	wget -q -O $@ $(EXTJS_URL)
 
 highcharts-download: $(HIGHCHARTS_FILE)
 $(HIGHCHARTS_FILE):
+	$(call LOG_FUNCTION, "Downloading $(HIGHCHARTS_URL)...")
 	wget -q -O $@ $(HIGHCHARTS_URL)
 
 highcharts-map-module-download: $(DOWNLOADS_DIR)/map.js
 $(DOWNLOADS_DIR)/map.js:
+	$(call LOG_FUNCTION, "Downloading $(HIGHCHARTS_MAP_MODULE_URL)...")
 	wget -q -O $@ $(HIGHCHARTS_MAP_MODULE_URL)
 
 highcharts-map-data-download: $(DOWNLOADS_DIR)/world.js
 $(DOWNLOADS_DIR)/world.js:
+	$(call LOG_FUNCTION, "Downloading $(HIGHCHARTS_MAP_DATA_URL)...")
 	wget -q -O $@ $(HIGHCHARTS_MAP_DATA_URL)
 
 
 moment-download: $(MOMENT_FILE)
 $(MOMENT_FILE):
+	$(call LOG_FUNCTION, "Downloading $(MOMENT_URL)...")
 	wget -q -O $@ $(MOMENT_URL)
 
 downloads: \
@@ -268,7 +273,7 @@ cacheguard: dir
 	@find $(DESTDIR) -type f | xargs sed -i -e 's/<CACHEGUARD>/version='$(VERSION)'/g'
 
 clean:
-	rm -fr $(DESTDIR) $(STAGING_DIR)
+	rm -fr $(DESTDIR) $(STAGING_DIR) $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE) $(DOWNLOADS_DIR)/$(HIGHCHARTS_ARCHIVE) $(DOWNLOADS_DIR)/map.js $(DOWNLOADS_DIR)/world.js $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
 
 ## development targets
 
