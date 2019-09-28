@@ -98,7 +98,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     ],
                     bind: {
                         value: '{_simNetwork}',
-                        required: '{intf.type === "WWAN"}'
+                        required: '{intf.type === "WWAN"}',
+                        disabled: '{intf.type !== "WWAN"}'
                     }
                 }, {
                     xtype: 'textfield',
@@ -109,7 +110,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     bind: {
                         value: '{intf.simApn}',
                         required: '{intf.type === "WWAN"}',
-                        // disabled: '{intf.simNetwork}'
+                        disabled: '{intf.type !== "WWAN"}'
                     }
                 }]
             }, {
@@ -121,7 +122,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                 autoComplete: false,
                 bind: {
                     value: '{intf.simPin}',
-                    hidden: '{intf.simNetwork}'
+                    hidden: '{intf.simNetwork}',
+                    disabled: '{intf.type !== "WWAN"}'
                 },
                 validators: [{
                     type: 'length',
@@ -142,7 +144,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf.simUsername}',
-                        hidden: '{intf.simNetwork}'
+                        hidden: '{intf.simNetwork}',
+                        disabled: '{intf.type !== "WWAN"}'
                     }
                 }, {
                     label: 'Password',
@@ -173,7 +176,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     },
                     bind: {
                         value: '{intf.simPassword}',
-                        hidden: '{intf.simNetwork}'
+                        hidden: '{intf.simNetwork}',
+                        disabled: '{intf.type !== "WWAN"}'
                     },
                     validators: [{
                         type: 'length',

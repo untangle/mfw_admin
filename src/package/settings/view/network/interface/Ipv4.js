@@ -49,15 +49,11 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 // label: '<b>IPv4 Config Type</b>',
                 labelAlign: 'top',
                 required: true,
-                // disabled: true,
-                // hidden: true,
                 margin: '0 0 16 0',
                 bind: {
                     value: '{intf.v4ConfigType}',
                     options: '{_ipv4ConfigTypes}',
                     required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN"}'
-                    // disabled: '{!intf.wan}',
-                    // hidden: '{intf.type === "OPENVPN"}'
                 }
             }, {
 
@@ -93,7 +89,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 16 0 0',
                         bind: {
                             value: '{intf.v4DhcpAddressOverride}',
-                            placeholder: '{intf.v4StaticAddress}'
+                            placeholder: '{intf.v4StaticAddress}',
+                            disabled: '{intf.v4ConfigType !== "DHCP"}'
                         },
                         validators: 'ipv4'
                     }, {
@@ -102,7 +99,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 0 0 16',
                         bind: {
                             value: '{intf.v4DhcpPrefixOverride}',
-                            placeholder: '{_v4StaticPrefixOverridePlaceholder}'
+                            placeholder: '{_v4StaticPrefixOverridePlaceholder}',
+                            disabled: '{intf.v4ConfigType !== "DHCP"}'
                         },
                         options: Map.options.prefixes
                     }]
@@ -129,7 +127,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 16 0 0',
                         bind: {
                             value: '{intf.v4DhcpDNS1Override}',
-                            placeholder: '{intf.v4StaticDNS1}'
+                            placeholder: '{intf.v4StaticDNS1}',
+                            disabled: '{intf.v4ConfigType !== "DHCP"}'
                         }
                     }, {
                         xtype: 'textfield',
@@ -138,7 +137,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 0 0 16',
                         bind: {
                             value: '{intf.v4DhcpDNS2Override}',
-                            placeholder: '{intf.v4StaticDNS2}'
+                            placeholder: '{intf.v4StaticDNS2}',
+                            disabled: '{intf.v4ConfigType !== "DHCP"}'
                         }
 
                     }]
@@ -177,7 +177,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 16 0 0',
                         bind: {
                             value: '{intf.v4StaticAddress}',
-                            required: '{intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}'
+                            required: '{intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}',
+                            disabled: '{intf.v4ConfigType !== "STATIC"}'
                         },
                         validators: 'ipv4'
                     }, {
@@ -186,7 +187,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 0 0 16',
                         bind: {
                             value: '{intf.v4StaticPrefix}',
-                            required: '{intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}'
+                            required: '{intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}',
+                            disabled: '{intf.v4ConfigType !== "STATIC"}'
                         },
                         options: Map.options.prefixes
                     }]
@@ -199,7 +201,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     bind: {
                         value: '{intf.v4StaticGateway}',
                         hidden: '{!intf.wan}', // ????
-                        required: '{intf.wan && intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}'
+                        disabled: '{intf.v4ConfigType !== "STATIC"}'
                     },
                     validators: 'ipv4'
                 }, {
@@ -218,14 +220,19 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         label: 'Primary DNS',
                         flex: 1,
                         margin: '0 16 0 0',
-                        bind: '{intf.v4StaticDNS1}'
+                        bind: {
+                            value: '{intf.v4StaticDNS1}',
+                            disabled: '{intf.v4ConfigType !== "STATIC"}'
+                        }
                     }, {
                         xtype: 'textfield',
                         label: 'Secondary DNS',
                         flex: 1,
                         margin: '0 0 0 16',
-                        bind: '{intf.v4StaticDNS2}'
-
+                        bind: {
+                            value: '{intf.v4StaticDNS2}',
+                            disabled: '{intf.v4ConfigType !== "STATIC"}'
+                        }
                     }]
                 }]
                 /**
@@ -263,7 +270,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 16 0 0',
                         bind: {
                             value: '{intf.v4PPPoEUsername}',
-                            required: '{intf.v4ConfigType === "PPPOE"}'
+                            required: '{intf.v4ConfigType === "PPPOE"}',
+                            disabled: '{intf.v4ConfigType !== "PPPOE"}'
                         }
                     }, {
                         xtype: 'textfield',
@@ -295,7 +303,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         },
                         bind: {
                             value: '{intf.v4PPPoEPassword}',
-                            required: '{intf.v4ConfigType === "PPPOE"}'
+                            required: '{intf.v4ConfigType === "PPPOE"}',
+                            disabled: '{intf.v4ConfigType !== "PPPOE"}'
                         },
                         validators: [{
                             type: 'length',
@@ -324,8 +333,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 16 0 0',
                         bind: {
                             value: '{intf.v4PPPoEOverrideDNS1}',
-                            disabled: '{intf.v4PPPoEUsePeerDNS}',
-                            required: '{intf.v4ConfigType === "PPPOE" && !intf.v4PPPoEUsePeerDNS}'
+                            disabled: '{intf.v4ConfigType !== "PPPOE" || intf.v4PPPoEUsePeerDNS}',
+                            required: '{intf.v4ConfigType === "PPPOE" && !intf.v4PPPoEUsePeerDNS}',
                         }
                     }, {
                         xtype: 'textfield',
@@ -334,7 +343,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         margin: '0 0 0 16',
                         bind: {
                             value: '{intf.v4PPPoEOverrideDNS2}',
-                            disabled: '{intf.v4PPPoEUsePeerDNS}',
+                            disabled: '{intf.v4ConfigType !== "PPPOE" || intf.v4PPPoEUsePeerDNS}',
                             required: '{intf.v4ConfigType === "PPPOE" && !intf.v4PPPoEUsePeerDNS}'
                         }
                     }]

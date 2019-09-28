@@ -88,7 +88,8 @@ Ext.define('Mfw.settings.interface.OpenVpn', {
                     userCls: '{openVpnInlineEdit.checked ? "editable" : ""}',
                     height: '{isDialog ? 130 : 200}',
                     editable: '{openVpnInlineEdit.checked}',
-                    required: '{intf.configType === "ADDRESSED" && intf.type === "OPENVPN"}'
+                    required: '{intf.configType === "ADDRESSED" && intf.type === "OPENVPN"}',
+                    disabled: '{intf.type !== "OPENVPN"}'
                 }
             }, {
                 xtype: 'checkbox',
@@ -115,7 +116,7 @@ Ext.define('Mfw.settings.interface.OpenVpn', {
                     bind: {
                         value: '{intf.openvpnUsername}',
                         required: '{intf.configType === "ADDRESSED" && intf.openvpnUsernamePasswordEnabled}',
-                        disabled: '{!intf.openvpnUsernamePasswordEnabled}'
+                        disabled: '{intf.type !== "OPENVPN" || !intf.openvpnUsernamePasswordEnabled}'
                     }
                 }, {
                     label: 'Password',
@@ -147,7 +148,7 @@ Ext.define('Mfw.settings.interface.OpenVpn', {
                     bind: {
                         value: '{_openVpnPass}',
                         required: '{intf.configType === "ADDRESSED" && intf.openvpnUsernamePasswordEnabled}',
-                        disabled: '{!intf.openvpnUsernamePasswordEnabled}'
+                        disabled: '{intf.type !== "OPENVPN" || !intf.openvpnUsernamePasswordEnabled}'
                     }
                 }]
             }]

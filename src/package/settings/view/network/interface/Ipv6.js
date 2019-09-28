@@ -96,7 +96,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         margin: '0 32 0 0',
                         bind: {
                             value: '{intf.v6StaticAddress}',
-                            required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}'
+                            required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}',
+                            disabled: '{intf.v6ConfigType !== "STATIC"}'
                         },
                         validators: 'ipv6'
                     }, {
@@ -106,7 +107,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         width: 100,
                         bind: {
                             value: '{intf.v6StaticPrefix}',
-                            required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}'
+                            required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}',
+                            disabled: '{intf.v6ConfigType !== "STATIC"}'
                         }
                     }]
                 }, {
@@ -118,7 +120,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                     bind: {
                         value: '{intf.v6StaticGateway}',
                         hidden: '{!intf.wan}', // ????
-                        required: '{intf.wan && intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}'
+                        required: '{intf.wan && intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}',
+                        disabled: '{intf.v6ConfigType !== "STATIC"}'
                     },
                     validators: 'ipv6'
                 }, {
@@ -138,7 +141,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         flex: 1,
                         bind: {
                             value: '{intf.v6StaticDNS1}',
-                            hidden: '{!intf.wan}'
+                            hidden: '{!intf.wan}',
+                            disabled: '{intf.v6ConfigType !== "STATIC"}'
                         }
                     }, {
                         xtype: 'textfield',
@@ -147,7 +151,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         flex: 1,
                         bind: {
                             value: '{intf.v6StaticDNS2}',
-                            hidden: '{!intf.wan}'
+                            hidden: '{!intf.wan}',
+                            disabled: '{intf.v6ConfigType !== "STATIC"}'
                         }
                     }]
                 }]
@@ -180,7 +185,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                     margin: '0 32 0 0',
                     bind: {
                         value: '{intf.v6AssignHint}',
-                        required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "ASSIGN"}'
+                        required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "ASSIGN"}',
+                        disabled: '{intf.v6ConfigType !== "ASSIGN"}'
                     }
                 }, {
                     xtype: 'numberfield',
@@ -193,7 +199,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                     allowBlank: true,
                     bind: {
                         value: '{intf.v6AssignPrefix}',
-                        required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "ASSIGN"}'
+                        required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "ASSIGN"}',
+                        disabled: '{intf.v6ConfigType !== "ASSIGN"}'
                     }
                 }]
                 /**
@@ -232,7 +239,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         flex: 1,
                         margin: '0 16 0 0',
                         bind: {
-                            value: '{intf.v6DhcpDNS1Override}'
+                            value: '{intf.v6DhcpDNS1Override}',
+                            disabled: '{intf.v6ConfigType !== "DHCP"}'
                         }
                     }, {
                         xtype: 'textfield',
@@ -240,7 +248,8 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                         flex: 1,
                         margin: '0 0 0 16',
                         bind: {
-                            value: '{intf.v6DhcpDNS2Override}'
+                            value: '{intf.v6DhcpDNS2Override}',
+                            disabled: '{intf.v6ConfigType !== "DHCP"}'
                         }
                     }]
                 }]
@@ -279,7 +288,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                 hidden: true,
                 bind: {
                     text: 'IPv6 Aliases ({intf.v6Aliases.count || "none"})',
-                    hidden: '{setupContext}'
+                    hidden: '{setupContext || intf.v6ConfigType === "DISABLED"}'
                 },
                 ui: 'action',
                 handler: 'showIpv6Aliases'

@@ -31,7 +31,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 required: true,
                 bind: {
                     value: '{intf.wirelessSsid}',
-                    required: '{intf.type === "WIFI"}'
+                    required: '{intf.type === "WIFI"}',
+                    disabled: '{intf.type !== "WIFI"}'
                 }
             }, {
                 xtype: 'containerfield',
@@ -48,7 +49,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf.wirelessEncryption}',
-                        required: '{intf.type === "WIFI"}'
+                        required: '{intf.type === "WIFI"}',
+                        disabled: '{intf.type !== "WIFI"}'
                     },
                     options: [
                         { text: 'None', value: 'NONE' },
@@ -87,7 +89,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     bind: {
                         value: '{intf.wirelessPassword}',
                         required: '{intf.type === "WIFI"}',
-                        hidden: '{intf.wirelessEncryption === "NONE"}'
+                        hidden: '{intf.wirelessEncryption === "NONE"}',
+                        disabled: '{intf.type !== "WIFI"}'
                     },
                     validators: [{
                         type: 'length',
@@ -112,7 +115,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     ],
                     bind: {
                         value: '{intf.wirelessMode}',
-                        required: '{intf.type === "WIFI"}'
+                        required: '{intf.type === "WIFI"}',
+                        disabled: '{intf.type !== "WIFI"}'
                     }
                 }, {
                     xtype: 'selectfield',
@@ -126,6 +130,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     bind: {
                         value: '{intf.wirelessChannel}',
                         required: '{intf.type === "WIFI"}',
+                        disabled: '{intf.type !== "WIFI"}',
                         store: {
                             autoLoad: '{intf.type === "WIFI"}',
                             proxy: {
@@ -147,6 +152,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     bind: {
                         value: '{intf.wirelessThroughput}',
                         required: '{intf.type === "WIFI"}',
+                        disabled: '{intf.type !== "WIFI"}',
                         store: {
                             autoLoad: '{intf.type === "WIFI"}',
                             proxy: {
