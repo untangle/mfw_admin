@@ -201,6 +201,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     bind: {
                         value: '{intf.v4StaticGateway}',
                         hidden: '{!intf.wan}', // ????
+                        required: '{intf.wan && intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}',
                         disabled: '{intf.v4ConfigType !== "STATIC"}'
                     },
                     validators: 'ipv4'
