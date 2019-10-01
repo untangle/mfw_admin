@@ -215,8 +215,10 @@ Ext.define('Mfw.settings.view.MainController', {
             tree.setSingleExpand(false);
             root.expandChildren(true);
             store.filterBy(function (node) {
-                var v = new RegExp(value, 'i');
-                return node.isLeaf() ? v.test(node.get('text')) : false;
+                if (!node.isLeaf()) {
+                    return true;
+                }
+                return RegExp(value, 'i').test(node.get('text'));
             });
         } else {
             tree.setSingleExpand(true);
