@@ -38,7 +38,8 @@ Ext.define('Mfw.settings.network.Interface', {
             _hiddenDhcp: function (get) {
                 return get('intf.configType') !== 'ADDRESSED' ||
                     get('intf.type') === 'OPENVPN' ||
-                    get('intf.type') === 'WWAN';
+                    get('intf.type') === 'WWAN' ||
+                    get('intf.wan');
             },
             _hiddenQos: function (get) {
                 return !get('intf.wan') ||

@@ -33,7 +33,10 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     xtype: 'togglefield',
                     activeBoxLabel: 'Enable DHCP Serving',
                     inactiveBoxLabel: 'Disabled DHCP Serving',
-                    bind: '{intf.dhcpEnabled}'
+                    bind: {
+                        value: '{intf.dhcpEnabled}',
+                        disabled: '{intf.wan}'
+                    }
                 }]
             }, {
                 xtype: 'containerfield',
@@ -51,7 +54,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     bind: {
                         value: '{intf.dhcpRangeStart}',
                         required: '{intf.configType === "ADDRESSED" && intf.dhcpEnabled}',
-                        disabled: '{!intf.dhcpEnabled}'
+                        disabled: '{!intf.dhcpEnabled || intf.wan}'
                     },
                     validators: 'ipv4'
                 }, {
@@ -62,7 +65,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     bind: {
                         value: '{intf.dhcpRangeEnd}',
                         required: '{intf.configType === "ADDRESSED" && intf.dhcpEnabled}',
-                        disabled: '{!intf.dhcpEnabled}'
+                        disabled: '{!intf.dhcpEnabled || intf.wan}'
                     },
                     validators: 'ipv4'
                 }]
@@ -74,7 +77,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                 width: 100,
                 bind: {
                     value: '{intf.dhcpLeaseDuration}',
-                    disabled: '{!intf.dhcpEnabled}'
+                    disabled: '{!intf.dhcpEnabled || intf.wan}'
                 }
             }, {
                 xtype: 'containerfield',
@@ -91,7 +94,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf.dhcpGatewayOverride}',
-                        disabled: '{!intf.dhcpEnabled}'
+                        disabled: '{!intf.dhcpEnabled || intf.wan}'
                     }
                 }, {
                     xtype: 'selectfield',
@@ -99,7 +102,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                     margin: '0 0 0 16',
                     bind: {
                         value: '{intf.dhcpPrefixOverride}',
-                        disabled: '{!intf.dhcpEnabled}',
+                        disabled: '{!intf.dhcpEnabled || intf.wan}',
                     },
                     options: Map.options.prefixes
                 }]
@@ -109,7 +112,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                 disabled: true,
                 bind: {
                     value: '{intf.dhcpDNSOverride}',
-                    disabled: '{!intf.dhcpEnabled}'
+                    disabled: '{!intf.dhcpEnabled || intf.wan}'
                 }
             }, {
                 xtype: 'button',
@@ -119,7 +122,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                 bind: {
                     text: 'DHCP Options ({intf.dhcpOptions.count || "none"})',
                     hidden: '{setupContext}',
-                    disabled: '{!intf.dhcpEnabled}'
+                    disabled: '{!intf.dhcpEnabled || intf.wan}'
                 },
                 ui: 'action',
                 handler: 'showDhcpOptions'
