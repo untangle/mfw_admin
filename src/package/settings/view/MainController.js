@@ -115,6 +115,8 @@ Ext.define('Mfw.settings.view.MainController', {
         // select the node, required when using a direct link
         if (node) {
             tree.setSelection(node);
+            // used to revert after clear filtering
+            me.currenNode = node;
             if (!node.isLeaf()) {
                 node.expand();
             }
@@ -214,15 +216,49 @@ Ext.define('Mfw.settings.view.MainController', {
         if (value) {
             tree.setSingleExpand(false);
             root.expandChildren(true);
-            store.filterBy(function (node) {
+
+            root.cascade(function (node) {
+                var filter = RegExp(value, 'i').test(node.get('key') || node.get('text'));
                 if (!node.isLeaf()) {
-                    return true;
+                    // first level node with children
+                    if (filter) {
+                        node.set('filter', filter);
+                    } else {
+                        node.eachChild(function (child) {
+                            if (!child.isLeaf()) {
+                                // second level node with children
+                                child.eachChild(function (schild) {
+                                    if (!filter) {
+                                        filter = RegExp(value, 'i').test(schild.get('key') || schild.get('text'));
+                                    }
+                                });
+                                child.set('filter', filter);
+                            } else {
+                                if (!filter) {
+                                    filter = RegExp(value, 'i').test(child.get('key') || child.get('text'));
+                                }
+                            }
+                            node.set('filter', filter);
+                        });
+                        node.set('filter', filter);
+                    }
+                } else {
+                    node.set('filter', filter);
                 }
-                return RegExp(value, 'i').test(node.get('text'));
+            });
+            store.filterBy(function (node) {
+                return node.get('filter');
             });
         } else {
             tree.setSingleExpand(true);
             root.collapseChildren(true);
+
+            if (me.currenNode) {
+                tree.setSelection(me.currenNode);
+                if (!me.currenNode.isLeaf()) {
+                    me.currenNode.expand();
+                }
+            }
         }
     },
 

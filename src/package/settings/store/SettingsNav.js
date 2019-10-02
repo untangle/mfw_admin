@@ -12,8 +12,9 @@ Ext.define('Mfw.store.SettingsNav', {
     root: {
         expanded: true,
         children: [{
-            // Netwotk
+            // Network
             text: '<strong>' + 'Network'.t() + '</strong>',
+            key: 'network',
             iconCls: 'tree network',
             href: 'network',
             children: [
@@ -24,6 +25,7 @@ Ext.define('Mfw.store.SettingsNav', {
         }, {
             // Smart Routing
             text: '<strong>' + 'Routing'.t() + '</strong>',
+            key: 'routing',
             iconCls: 'tree system',
             href: 'routing',
             children: [
@@ -33,6 +35,7 @@ Ext.define('Mfw.store.SettingsNav', {
         }, {
             // Firewall
             text: '<strong>' + 'Firewall'.t() + '</strong>',
+            key: 'firewall',
             iconCls: 'tree administration',
             href: 'firewall',
             children: [
@@ -48,6 +51,7 @@ Ext.define('Mfw.store.SettingsNav', {
         }, {
             // System
             text: '<strong>' + 'System'.t() + '</strong>',
+            key: 'system',
             iconCls: 'tree system',
             href: 'system',
             children: [

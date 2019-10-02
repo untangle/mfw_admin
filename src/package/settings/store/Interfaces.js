@@ -51,6 +51,7 @@ Ext.define('Mfw.store.Interfaces', {
 
             intfNode.insertChild(idx, {
                 text: '<i class="x-fa ' + intfIcon + '" style="font-size: 13px;"></i> &nbsp; ' + intf.get('name'),
+                key: intf.get('name'),
                 href: 'network/interfaces/' + intf.get('name'),
                 leaf: true,
             });
