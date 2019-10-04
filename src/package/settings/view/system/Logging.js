@@ -42,13 +42,15 @@ Ext.define('Mfw.settings.system.Logging', {
                 margin: '0 16'
             }, {
                 xtype:'button',
+                text: 'Reload',
                 iconCls: 'md-icon-refresh',
                 tooltip: 'Refresh',
                 handler: 'fetchLogs',
                 margin: '0 8 0 0'
             }, {
                 xtype:'button',
-                iconCls: 'x-fa fa-floppy-o',
+                text: 'Save',
+                iconCls: 'x-fa fa-save',
                 tooltip: 'Save',
                 handler: 'saveLogs'
             }]
