@@ -136,7 +136,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             // labelAlign: 'top'
         }, {
             xtype: 'button',
-            text: 'Upload',
+            text: 'Upgrade',
             margin: '16 0 0 0',
             ui: 'action',
             handler: 'onSubmit'
