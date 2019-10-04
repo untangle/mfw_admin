@@ -272,8 +272,10 @@ cacheguard: dir
 	$(call LOG_FUNCTION,"Versioning with $(VERSION)")
 	@find $(DESTDIR) -type f | xargs sed -i -e 's/<CACHEGUARD>/version='$(VERSION)'/g'
 
-clean:
-	rm -fr $(DESTDIR) $(STAGING_DIR) $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE) $(DOWNLOADS_DIR)/$(HIGHCHARTS_ARCHIVE) $(DOWNLOADS_DIR)/map.js $(DOWNLOADS_DIR)/world.js $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
+clean: clean-download
+	rm -fr $(DESTDIR) $(STAGING_DIR)
+clean-download: 
+	rm -fr $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE) $(DOWNLOADS_DIR)/$(HIGHCHARTS_ARCHIVE) $(DOWNLOADS_DIR)/map.js $(DOWNLOADS_DIR)/world.js $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
 
 ## development targets
 
@@ -347,6 +349,8 @@ dev-watch:
 	extjs-install \
 	highcharts-install \
 	moment-install \
+	clean \
+	clean-download \
 	dev-deploy \
 	dev-install \
 	dev-sass-admin \
