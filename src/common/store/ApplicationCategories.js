@@ -1,3 +1,12 @@
+/**
+ * This list of categories can be generated from protolist.csv in the classd
+ * repository with the following csvtool syntax:
+ *
+ * csvtool format "          { text: '%(5)', value: '%(5)' },\n" protolist.csv | sort | uniq
+ *
+ * Remember to remove the Category / Category entry that is created from
+ * the column name header from the first line of the file.
+*/
 Ext.define('Mfw.store.ApplicationCategories', {
     extend: 'Ext.data.Store',
     storeId: 'applicationCategories',

@@ -1,3 +1,12 @@
+/**
+ * This list of names can be generated from protolist.csv in the classd
+ * repository with the following csvtool syntax:
+ *
+ * csvtool format "          { text: '%(1)', value: '%(1)' },\n" protolist.csv | sort
+ *
+ * Remember to remove the GUID / GUID entry that is created from
+ * the column name header from the first line of the file.
+*/
 Ext.define('Mfw.store.ApplicationNames', {
     extend: 'Ext.data.Store',
     storeId: 'applicationNames',
