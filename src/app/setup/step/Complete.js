@@ -35,4 +35,10 @@ Ext.define('Mfw.setup.step.Complete', {
             }
         }]
     }],
+    listeners: {
+        activate: function () {
+            // MFW-691 - clear interfaces filters only after showing this step
+            Ext.getStore('interfaces').clearFilter();
+        }
+    }
 });

@@ -182,12 +182,8 @@ Ext.define('Mfw.setup.step.Interfaces', {
                 return;
             }
 
-            /**
-             * very important to clear filters otherwise it saves only filtered records
-             */
-            store.clearFilter(true);
-
-            store.each(function (record) {
+            // important, oterwise non-dirty records won't be included in sync
+            store.getDataSource().each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });

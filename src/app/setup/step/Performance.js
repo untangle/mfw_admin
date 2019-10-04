@@ -342,10 +342,13 @@ Ext.define('Mfw.setup.step.Performance', {
 
             /**
              * very important to clear filters otherwise it saves only wans
+             * store.clearFilter(); (deprecated and not useful)
+             *
+             * MFW-691
+             * use getDataSource() instead to return unfiltered collection
+             * and clear filter only after advancing to next step
              */
-            store.clearFilter(true);
-
-            store.each(function (record) {
+            store.getDataSource().each(function (record) {
                 record.dirty = true;
                 record.phantom = false;
             });
