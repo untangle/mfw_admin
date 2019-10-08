@@ -966,60 +966,71 @@ hr {
 
 .layout-widget {
     .separator {
-        background: #999;
-    }
-
-    .x-dataview-body-el {
-        white-space: nowrap;
-        text-align: center;
+        background: var(--base-color);
+        border-radius: 10px;
     }
 
     .item {
         position: relative;
         background: #f5f5f5;
         box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
-        margin: 5px;
-        padding: 8px;
+        margin: 0 5px;
+        padding: 10px;
         border-radius: 5px;
-        text-align: center;
-        border: 2px var(--base-color) solid;
+        text-align: left;
+        border: 1px var(--base-color) solid;
+        display: none;
+        min-width: 100px;
         p {
             margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        &.bridged {
-            border-style: dotted;
-            .connector {
-                border-left-style: dotted;
+            &.ip {
+                font-size: 11px;
             }
-        }
-
-        &.wifi {
-            border-color: #ff5e21;
-            .connector {
-                border-left-color: #ff5e21;
+            &.rate {
+                font-size: 11px;
+                color: #555;
+                line-height: 1.2;
+                margin-top: 5px;
+                text-align: left;
             }
         }
 
         .connector {
             position: absolute;
-            width: 2px;
-            height: 15px;
-            left: -2px;
+            width: 30px;
+            text-align: center;
+            height: 28px;
             margin-left: 50%;
-            top: -15px;
-            border-left: 2px var(--base-color) solid;
+            top: -28px;
+            left: -15px;
+            font-size: 20px;
+            color: var(--base-color);
+            line-height: 28px;
             // background: var(--base-color);
+            &.connected {
+                border-left-style: solid;
+                border-left-color: var(--base-color);
+            }
         }
 
         &.wan {
-            margin-top: 76px;
             .connector {
-                bottom: -15px;
+                bottom: -28px;
                 top: auto;
             }
+        }
+    }
+    .wans {
+        .item.wan {
+            display: block;
+        }
+    }
+    .nonwans {
+        .item {
+            display: block;
+        }
+        .wan {
+            display: none;
         }
     }
 }
@@ -1102,3 +1113,12 @@ hr {
 //         }
 //     }
 // }
+
+
+
+
+
+
+.widget-interface {
+    border: 1px #EEE solid;
+}

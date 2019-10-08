@@ -13,6 +13,8 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
     layout: 'vbox',
     minWidth: 600,
 
+    padding: '0 16 8 16',
+
     items: [{
         xtype: 'toolbar',
         style: { background: 'transparent' },
@@ -41,35 +43,54 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
     }, {
         xtype: 'container',
         flex: 1,
-        // margin: 16,
         layout: {
-            type: 'vbox'
+            type: 'vbox',
+            align: 'center'
         },
         cls: 'layout-widget',
         items: [{
-            xtype: 'dataview',
-            itemId: 'wans',
+            xtype: 'container',
             flex: 1,
-            padding: 8,
-            inline: true,
-            itemTpl: '<div class="item wan">' +
-                     '<p>{name}</p>' +
-                     '<div class="connector"></div></div>'
+            layout: {
+                type: 'hbox',
+                align: 'bottom'
+            },
+            items: [{
+                xtype: 'dataview',
+                itemId: 'wans',
+                cls: 'wans',
+                store: 'interfaces',
+                flex: 1,
+                inline: true,
+                ripple: false,
+                layout: 'hbox',
+                padding: '5 0 28 0'
+            }]
         }, {
             xtype: 'component',
-            height: 2,
+            width: '100%',
+            height: 5,
             cls: 'separator'
         }, {
-            xtype: 'dataview',
-            itemId: 'lans',
-            padding: 8,
-            inline: true,
+            xtype: 'container',
             flex: 1,
-            itemTpl: '<div class="item <tpl if="bridgedTo">bridged</tpl> <tpl if="type === \'WIFI\'">wifi</tpl>">' +
-                     '<p>{name}</p>' +
-                     '<div class="connector"></div></div>'
+            layout: {
+                type: 'hbox',
+                align: 'top'
+            },
+            items: [{
+                xtype: 'dataview',
+                itemId: 'lans',
+                cls: 'nonwans',
+                store: 'interfaces',
+                flex: 1,
+                inline: true,
+                ripple: false,
+                layout: 'hbox',
+                padding: '28 0 5 0'
+            }]
         }]
-    }], // <tpl if="this.isBaby(age)"></tpl>
+    }],
     listeners: {
         removed: function (widget) {
             if (widget.tout) {
@@ -82,42 +103,40 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
         init: function (widget) {
             widget.tout = null;
             WidgetsPipe.add(widget);
+
+            Ext.Array.each(widget.query('dataview'), function (view) {
+                view.setItemTpl(
+                    '<div class="item <tpl if="wan">wan</tpl>">' +
+                    '<p>{_icon} <a href="#settings/network/interfaces/{name}"><b>{name}</b></a> - {device}</p>' +
+                    '<tpl if="_status"><p class="ip">{_status.ip4Addr}</p></tpl>' +
+                    '<p class="rate">' +
+                    '<i class="x-fa fa-arrow-down fa-gray"></i> <tpl if="_status"><b>{_status.rxByteRate/1000}</b><tpl else> 0 </tpl> Kbps<br/>' +
+                    '<i class="x-fa fa-arrow-up fa-gray"></i> <tpl if="_status"><b>{_status.txByteRate/1000}</b><tpl else> 0 </tpl> Kbps' +
+                    '</p>' +
+                    '<div class="connector">' +
+                       '<tpl if="_status">' +
+                           '<tpl if="_status.connected">' +
+                                '<i class="fas fa-exchange-alt fa-rotate-90"></i>' +
+                                '<tpl else>' +
+                                '<i class="fas fa-ban" style="color: tomato;"></i>' +
+                            '</tpl>' +
+                        '<tpl else>' +
+                        '<i class="fas fa-ban" style="color: tomato;"></i>' +
+                       '</tpl>' +
+                    '</div>' +
+                    '</div>'
+                );
+            });
         },
 
+
+        /**
+         * in this case load data just refreshes the interfaces status
+         * reload interfaces has to be done manually from refresh button
+         */
         loadData: function (cb) {
-            var me = this,
-                wans = me.getView().down('#wans'),
-                lans = me.getView().down('#lans');
-
-            me.getView().mask({xtype: 'loadmask'});
-
-            Ext.Ajax.request({
-                url: '/api/settings/network/interfaces',
-                success: function (response) {
-                    var interfaces = Ext.decode(response.responseText),
-                        wansStore = [], lansStore = [];
-                    Ext.Array.each(interfaces, function (intf) {
-                        if (!intf.enabled) {
-                            return;
-                        }
-                        if (intf.wan) {
-                            wansStore.push(intf);
-                        } else {
-                            lansStore.push(intf);
-                        }
-                    });
-
-                    wans.setStore(wansStore);
-                    lans.setStore(lansStore);
-                    if (cb) { cb(); }
-                },
-                failure: function () {
-                    console.error('Unable to get data');
-                },
-                callback: function () {
-                    me.getView().unmask();
-                }
-            });
+            Ext.getStore('interfaces').getStatus();
+            if (cb) { cb(); }
         },
 
         reload: function () {

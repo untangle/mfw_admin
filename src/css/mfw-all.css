@@ -263,17 +263,17 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .cpu-widget p span { font-size: 12px; color: #999; }
 .cpu-widget.oldval { color: #999; }
 
-.layout-widget .separator { background: #999; }
-.layout-widget .x-dataview-body-el { white-space: nowrap; text-align: center; }
-.layout-widget .item { position: relative; background: #f5f5f5; box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1); margin: 5px; padding: 8px; border-radius: 5px; text-align: center; border: 2px var(--base-color) solid; }
-.layout-widget .item p { margin: 0; font-size: 14px; font-weight: 600; }
-.layout-widget .item.bridged { border-style: dotted; }
-.layout-widget .item.bridged .connector { border-left-style: dotted; }
-.layout-widget .item.wifi { border-color: #ff5e21; }
-.layout-widget .item.wifi .connector { border-left-color: #ff5e21; }
-.layout-widget .item .connector { position: absolute; width: 2px; height: 15px; left: -2px; margin-left: 50%; top: -15px; border-left: 2px var(--base-color) solid; }
-.layout-widget .item.wan { margin-top: 76px; }
-.layout-widget .item.wan .connector { bottom: -15px; top: auto; }
+.layout-widget .separator { background: var(--base-color); border-radius: 10px; }
+.layout-widget .item { position: relative; background: #f5f5f5; box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1); margin: 0 5px; padding: 10px; border-radius: 5px; text-align: left; border: 1px var(--base-color) solid; display: none; min-width: 100px; }
+.layout-widget .item p { margin: 0; }
+.layout-widget .item p.ip { font-size: 11px; }
+.layout-widget .item p.rate { font-size: 11px; color: #555; line-height: 1.2; margin-top: 5px; text-align: left; }
+.layout-widget .item .connector { position: absolute; width: 30px; text-align: center; height: 28px; margin-left: 50%; top: -28px; left: -15px; font-size: 20px; color: var(--base-color); line-height: 28px; }
+.layout-widget .item .connector.connected { border-left-style: solid; border-left-color: var(--base-color); }
+.layout-widget .item.wan .connector { bottom: -28px; top: auto; }
+.layout-widget .wans .item.wan { display: block; }
+.layout-widget .nonwans .item { display: block; }
+.layout-widget .nonwans .wan { display: none; }
 
 .x-iframe .x-innerhtml { height: 100%; }
 
@@ -300,3 +300,5 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 
 .x-menu { max-height: 500px; }
 .x-menu .x-menu-body-el { overflow-y: auto; }
+
+.widget-interface { border: 1px #EEE solid; }
