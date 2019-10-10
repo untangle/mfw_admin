@@ -102,13 +102,14 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 layout: 'hbox',
                 defaults: {
                     clearable: false,
-                    required: false
+                    required: false,
+                    flex: 1
                 },
                 items: [{
                     xtype: 'selectfield',
                     label: 'Mode',
-                    width: 110,
                     autoSelect: true,
+                    margin: '0 16 0 0',
                     options: [
                         { text: 'Access Point', value: 'AP' },
                         { text: 'Client', value: 'CLIENT' }
@@ -121,8 +122,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 }, {
                     xtype: 'selectfield',
                     label: 'Channel',
-                    margin: '0 16',
-                    width: 140,
+                    margin: '0 0 0 16',
                     queryMode: 'remote',
                     displayTpl: '{channel} [{frequency}]',
                     itemTpl: '{channel} <span style="color: #999">[{frequency}]</span>',
@@ -142,10 +142,19 @@ Ext.define('Mfw.settings.interface.Wifi', {
                             }
                         }
                     }
-                }, {
+                }]
+            }, {
+                xtype: 'containerfield',
+                layout: 'hbox',
+                defaults: {
+                    clearable: false,
+                    required: false,
+                    flex: 1
+                },
+                items: [{
                     xtype: 'selectfield',
                     label: 'HT Mode',
-                    flex: 1,
+                    margin: '0 32 0 0',
                     queryMode: 'remote',
                     displayField: 'name',
                     valueField: 'mode',
@@ -164,6 +173,9 @@ Ext.define('Mfw.settings.interface.Wifi', {
                             }
                         }
                     }
+                }, {
+                    xtype: 'component',
+                    flex: 1
                 }]
             }]
         }]
