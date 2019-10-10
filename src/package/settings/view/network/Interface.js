@@ -72,7 +72,8 @@ Ext.define('Mfw.settings.network.Interface', {
                 Ext.getStore('interfaces').each(function (intf) {
                     // interface should be ADDRESSED
                     if (intf.get('interfaceId') === get('intf.interfaceId') ||
-                        intf.get('configType') !== 'ADDRESSED') {
+                        // MFW-702, do not show WANs in list of bridged to interfaces options
+                        intf.get('configType') !== 'ADDRESSED' || intf.get('wan')) {
                             return;
                         }
 
@@ -226,7 +227,8 @@ Ext.define('Mfw.settings.network.Interface', {
                     // itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                     bind: {
                         value: '{intf.bridgedTo}',
-                        hidden: '{intf.configType !== "BRIDGED" || intf.type === "WIFI" || intf.type === "WWAN"}',
+                        // MFW-703, show bridged to for WiFi interfaces
+                        hidden: '{intf.configType !== "BRIDGED" || intf.type === "WWAN"}',
                         required: '{intf.configType === "BRIDGED"}',
                         options: '{_bridgedOptions}'
                     }
