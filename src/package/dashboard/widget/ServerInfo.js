@@ -6,6 +6,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
     cls: 'mfw-widget',
     layout: 'vbox',
 
+    maxWidth: 320,
+
     items: [{
         xtype: 'toolbar',
         style: { background: 'transparent' },

@@ -26,12 +26,12 @@ Ext.define('Mfw.dashboard.Manager', {
                             handler: 'addGeneralWidget'
                         },
                         items: [
-                            { text: 'Server Info'.t() },
-                            { text: 'CPU Load'.t() },
-                            // { text: 'Network Info'.t() },
-                            { text: 'Network Layout'.t() },
-                            { text: 'Map Distribution'.t() },
-                            // { text: 'Notifications'.t() }
+                            { text: 'Server Info' },
+                            { text: 'CPU Load' },
+                            // { text: 'Network Info' },
+                            { text: 'Network Layout' },
+                            { text: 'Map Distribution' }
+                            // { text: 'Notifications' }
                         ]
                     }
                 }, '-',
@@ -65,7 +65,6 @@ Ext.define('Mfw.dashboard.Manager', {
         }]
     }, {
         xtype: 'grid',
-        hideHeaders: true,
         plugins: {
             sortablelist: true,
             gridcellediting: {
@@ -73,10 +72,7 @@ Ext.define('Mfw.dashboard.Manager', {
             }
         },
         selectable: false,
-        store: {
-            type: 'widgets'
-        },
-        viewModel: true,
+        store: 'widgets',
         columns: [{
             width: 44,
             menuDisabled: true,
@@ -99,26 +95,26 @@ Ext.define('Mfw.dashboard.Manager', {
             hideable: false,
             menuDisabled: true,
             dataIndex: 'interval',
-            renderer: function (val) {
+            cell: {
+                encodeHtml: false
+            },
+            renderer: function (val, record) {
+                if (record.get('_identifier') === 'cpu-load') {
+                    return '<em>5s</em>';
+                }
                 return val ? val + 's' : 'none';
             },
-            editable: true,
             editor: {
                 xtype: 'selectfield',
                 required: true,
-                options: [{
-                    text: 'none', value: 0
-                }, {
-                    text: '5s', value: 5
-                }, {
-                    text: '10s', value: 10
-                }, {
-                    text: '20s', value: 20
-                }, {
-                    text: '30s', value: 30
-                }, {
-                    text: '60s', value: 60
-                }],
+                options: [
+                    { text: 'none', value: 0 },
+                    { text: '5s',   value: 5 },
+                    { text: '10s',  value: 10 },
+                    { text: '20s',  value: 20 },
+                    { text: '30s',  value: 30 },
+                    { text: '60s',  value: 60 }
+                ],
                 listeners: {
                     focus: function (el) {
                         el.getPicker().show();
@@ -143,7 +139,15 @@ Ext.define('Mfw.dashboard.Manager', {
                     },
                 }
             }
-        }]
+        }],
+        listeners: {
+            // disable editing interval for CPU Load widget
+            beforeedit: function (grid, location) {
+                if (location.record.get('_identifier') === 'cpu-load') {
+                    return false;
+                }
+            }
+        }
     }],
 
     controller: {
@@ -166,8 +170,8 @@ Ext.define('Mfw.dashboard.Manager', {
                 me.updateWidgetsComponents(store);
             });
 
-            widgetsStore.load(function (store) {
-                me.updateWidgetsMenu(store);
+            widgetsStore.load(function (records) {
+                me.updateWidgetsMenu(records);
             });
         },
 
@@ -316,16 +320,23 @@ Ext.define('Mfw.dashboard.Manager', {
         },
 
         addGeneralWidget: function (menuItem) {
-            if (Ext.getStore('widgets').findRecord('name', menuItem.getText(), 0, false, true, true)) {
+            var name = menuItem.getText(),
+                interval = 0;
+
+            if (Ext.getStore('widgets').findRecord('name', name, 0, false, true, true)) {
                 Ext.Msg.alert('Info', 'Widget already in Dashboard!', Ext.emptyFn);
                 return;
             }
 
             menuItem.up('menu').hide();
 
+            if (name === 'Network Layout') {
+                interval = 10;
+            }
+
             Ext.getStore('widgets').add({
-                name: menuItem.getText(),
-                interval: 0, // default interval 30s
+                name: name,
+                interval: interval,
                 isReport: false
             });
         },

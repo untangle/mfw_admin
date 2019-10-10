@@ -11,7 +11,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
     margin: 8,
     cls: 'mfw-widget',
     layout: 'vbox',
-    minWidth: 600,
+    minWidth: 500,
 
     padding: '0 16 8 16',
 
