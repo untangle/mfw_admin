@@ -185,6 +185,9 @@ i { font-style: normal; }
 .mfw-widget.widget-series { flex-basis: 600px; flex-grow: 2; }
 .mfw-widget.widget-pies { flex-basis: 400px; flex-grow: 1; }
 
+.widget-events .x-gridcell-body-el { padding: 3px 6px; font-size: 11px; }
+.widget-events .x-gridcolumn-title-wrap-el { padding: 6px; font-size: 11px; }
+
 .events-tree .x-treecell .x-icon-el { display: none; }
 .events-tree .x-gridcell-body-el { font-size: 11px; padding: 2px 0; }
 .events-tree .event-key { color: #333; font-weight: 400; }
@@ -268,9 +271,10 @@ hr { border: 0; height: 1px; background: #EEE; background-image: linear-gradient
 .layout-widget .item p { margin: 0; }
 .layout-widget .item p.ip { font-size: 11px; }
 .layout-widget .item p.rate { font-size: 11px; color: #555; line-height: 1.2; margin-top: 5px; text-align: left; }
-.layout-widget .item .connector { position: absolute; width: 30px; text-align: center; height: 28px; margin-left: 50%; top: -28px; left: -15px; font-size: 20px; color: var(--base-color); line-height: 28px; }
-.layout-widget .item .connector.connected { border-left-style: solid; border-left-color: var(--base-color); }
-.layout-widget .item.wan .connector { bottom: -28px; top: auto; }
+.layout-widget .item .connector { position: absolute; width: 3px; background: var(--base-color); height: 24px; margin-left: 50%; top: -24px; left: -1px; font-size: 20px; color: var(--base-color); }
+.layout-widget .item.wan .connector { bottom: -24px; top: auto; }
+.layout-widget .item .status { position: absolute; right: 3px; top: 3px; height: 10px; line-height: 10px; }
+.layout-widget .item .status i { font-size: 10px; }
 .layout-widget .wans .item.wan { display: block; }
 .layout-widget .nonwans .item { display: block; }
 .layout-widget .nonwans .wan { display: none; }

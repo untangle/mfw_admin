@@ -687,6 +687,18 @@ i {
     }
 }
 
+.widget-events {
+    .x-gridcell-body-el {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+    .x-gridcolumn-title-wrap-el {
+        padding: 6px;
+        font-size: 11px;
+    }
+}
+
+
 .events-tree {
     .x-treecell .x-icon-el {
         display: none;
@@ -997,28 +1009,34 @@ hr {
 
         .connector {
             position: absolute;
-            width: 30px;
-            text-align: center;
-            height: 28px;
+            width: 3px;
+            background: var(--base-color);
+            height: 24px;
             margin-left: 50%;
-            top: -28px;
-            left: -15px;
+            top: -24px;
+            left: -1px;
             font-size: 20px;
             color: var(--base-color);
-            line-height: 28px;
-            // background: var(--base-color);
-            &.connected {
-                border-left-style: solid;
-                border-left-color: var(--base-color);
-            }
         }
 
         &.wan {
             .connector {
-                bottom: -28px;
+                bottom: -24px;
                 top: auto;
             }
         }
+
+        .status {
+            position: absolute;
+            right: 3px;
+            top: 3px;
+            height: 10px;
+            line-height: 10px;
+            i {
+                font-size: 10px;
+            }
+        }
+
     }
     .wans {
         .item.wan {

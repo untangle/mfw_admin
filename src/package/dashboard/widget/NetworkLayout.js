@@ -64,7 +64,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
                 inline: true,
                 ripple: false,
                 layout: 'hbox',
-                padding: '5 0 28 0'
+                padding: '5 0 23 0'
             }]
         }, {
             xtype: 'component',
@@ -87,7 +87,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
                 inline: true,
                 ripple: false,
                 layout: 'hbox',
-                padding: '28 0 5 0'
+                padding: '23 0 5 0'
             }]
         }]
     }],
@@ -107,22 +107,27 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             Ext.Array.each(widget.query('dataview'), function (view) {
                 view.setItemTpl(
                     '<div class="item <tpl if="wan">wan</tpl>">' +
-                    '<p>{_icon} <a href="#settings/network/interfaces/{name}"><b>{name}</b></a> - {device}</p>' +
+                    '<p>{_icon} &nbsp; <a href="#settings/network/interfaces/{name}"><b>{name}</b></a></p>' +
                     '<tpl if="_status"><p class="ip">{_status.ip4Addr}</p></tpl>' +
                     '<p class="rate">' +
                     '<i class="x-fa fa-arrow-down fa-gray"></i> <tpl if="_status"><b>{_status.rxByteRate/1000}</b><tpl else> 0 </tpl> Kbps<br/>' +
                     '<i class="x-fa fa-arrow-up fa-gray"></i> <tpl if="_status"><b>{_status.txByteRate/1000}</b><tpl else> 0 </tpl> Kbps' +
                     '</p>' +
-                    '<div class="connector">' +
-                       '<tpl if="_status">' +
-                           '<tpl if="_status.connected">' +
-                                '<i class="fas fa-exchange-alt fa-rotate-90"></i>' +
-                                '<tpl else>' +
-                                '<i class="fas fa-ban" style="color: tomato;"></i>' +
-                            '</tpl>' +
+                    '<div class="connector"></div>' +
+                    '<div class="status">' +
+                    '<tpl if="_status">' +
+                        '<tpl if="_status.connected">' +
+                            '<i class="x-fa fa-circle fa-green"></i>' +
                         '<tpl else>' +
-                        '<i class="fas fa-ban" style="color: tomato;"></i>' +
-                       '</tpl>' +
+                            '<i class="x-fa fa-circle fa-gray"></i>' +
+                        '</tpl>' +
+                    '<tpl else>' +
+                        '<tpl if="type === \'WIFI\' || type === \'WWAN\'">' +
+                            '<i class="x-fa fa-circle fa-green"></i>' +
+                        '<tpl else>' +
+                            '<i class="x-fa fa-minus fa-gray"></i>' +
+                        '</tpl>' +
+                    '</tpl>' +
                     '</div>' +
                     '</div>'
                 );
