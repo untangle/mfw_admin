@@ -84,7 +84,7 @@ Ext.define('Mfw.dashboard.Controller', {
          * they have to be added manually to the refresh widgets queue
          */
         view.down('#widgets').getItems().each(function (widget) {
-            if (!widget.isXType('widget-report')) {
+            if (!widget.isXType('widget-report') || !widget.isXType('widget-cpu-load')) {
                 WidgetsPipe.add(widget);
             }
         });

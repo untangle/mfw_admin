@@ -155,7 +155,7 @@ Ext.define('Mfw.dashboard.widget.CpuLoad', {
                     },
                     series: {
                         pointStart: Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.MINUTE, 1).getTime(),
-                        pointInterval: 6 * 1000,
+                        pointInterval: 5 * 1000,
                         point: {
                             events: {
                                 mouseOver: function () {
@@ -183,7 +183,7 @@ Ext.define('Mfw.dashboard.widget.CpuLoad', {
                     visible: false
                 }]
             });
-            me.loadData();
+            me.loadSystemData();
         },
 
         onDisplayChange: function (btn, value) {
@@ -222,7 +222,7 @@ Ext.define('Mfw.dashboard.widget.CpuLoad', {
             });
         },
 
-        loadData: function () {
+        loadSystemData: function () {
             var me = this, widget = me.getView();
 
             if (!me.chart) { return; }
@@ -252,7 +252,7 @@ Ext.define('Mfw.dashboard.widget.CpuLoad', {
                     me.setCurrent();
 
                     widget.timeout = setTimeout(function() {
-                        me.loadData();
+                        me.loadSystemData();
                     }, 5000);
                 },
                 failure: function () {
