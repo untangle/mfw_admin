@@ -75,7 +75,7 @@ Ext.define('Mfw.Renderer', {
                 connected = true;
             } else {
                 // interface has non identifiable status
-                return '-' + Ext.String.format(qtip, 'no status');
+                return '<i style="font-size: 11px;" class="x-fa fa-minus fa-gray"></i>' + Ext.String.format(qtip, 'no status');
             }
         } else {
             connected = status.connected;
