@@ -585,22 +585,19 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipv4: function (value, record) {
-        var status = record.get('_status');
-
-        if (record.get('configType') !== 'ADDRESSED') {
+        var status = record.get('_status'),
+            confType = record.get('v4ConfigType'),
+            strout = [];
+        if (confType) {
+            strout.push(confType);
+        }
+        if (status && status.ip4Addr) {
+            strout.push(status.ip4Addr.join(','));
+        }
+        if (strout.length === 0) {
             return '-';
         }
-        if (value === 'DHCP' || value === 'PPPOE') {
-            if (status && status.ip4Addr) {
-                return value + ', ' + status.ip4Addr.join(',');
-            } else {
-                return value;
-            }
-        }
-        if (value === 'STATIC') {
-            return 'STATIC, ' + record.get('v4StaticAddress') + '/' + record.get('v4StaticPrefix');
-        }
-        return '-';
+        return strout.join(', ');
     },
 
     ipv6: function (value, record) {

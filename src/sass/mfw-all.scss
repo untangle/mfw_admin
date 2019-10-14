@@ -985,13 +985,13 @@ hr {
     .item {
         position: relative;
         background: #f5f5f5;
-        box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         margin: 0 5px;
-        padding: 10px;
-        border-radius: 5px;
+        padding: 8px;
+        border-radius: 3px;
         text-align: left;
         border: 1px var(--base-color) solid;
-        display: none;
+        display: block;
         min-width: 100px;
         p {
             margin: 0;
@@ -1001,8 +1001,8 @@ hr {
             &.rate {
                 font-size: 11px;
                 color: #555;
-                line-height: 1.2;
-                margin-top: 5px;
+                line-height: 1;
+                margin-top: 3px;
                 text-align: left;
             }
         }
@@ -1028,27 +1028,13 @@ hr {
 
         .status {
             position: absolute;
-            right: 3px;
-            top: 3px;
+            right: 5px;
+            top: 5px;
             height: 10px;
             line-height: 10px;
             i {
                 font-size: 10px;
             }
-        }
-
-    }
-    .wans {
-        .item.wan {
-            display: block;
-        }
-    }
-    .nonwans {
-        .item {
-            display: block;
-        }
-        .wan {
-            display: none;
         }
     }
 }
