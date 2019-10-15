@@ -190,6 +190,7 @@ i { font-style: normal; }
 
 .events-tree .x-treecell .x-icon-el { display: none; }
 .events-tree .x-gridcell-body-el { font-size: 11px; padding: 2px 0; }
+.events-tree .x-listitem { background-color: transparent; }
 .events-tree .event-key { color: #333; font-weight: 400; }
 
 .wrapper { position: relative; background: #FFF; }
