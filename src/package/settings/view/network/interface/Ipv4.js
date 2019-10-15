@@ -416,7 +416,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             var device = this.getViewModel().get("intf.device");
 
             Ext.Ajax.request({
-                url: '/api/releasedhcp/' + device,
+                url: '/api/renewdhcp/' + device,
                 method: 'POST',
                 success: function () {
                     //Refresh the IP Address fields with new IP
