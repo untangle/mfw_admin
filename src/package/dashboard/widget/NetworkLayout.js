@@ -73,7 +73,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             cls: 'separator'
         }, {
             xtype: 'container',
-            width: '100%',
+            maxWidth: '100%',
             layout: 'fit',
             flex: 1,
             items: [{

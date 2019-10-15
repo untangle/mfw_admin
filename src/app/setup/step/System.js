@@ -28,7 +28,7 @@ Ext.define('Mfw.setup.step.System', {
         }, {
             xtype: 'component',
             style: 'font-size: 14px;',
-            html: 'Choose a new password for the admin account'
+            html: 'Choose a new password for the <strong>admin</strong> account'
         }, {
             xtype: 'passwordfield',
             userCls: 'x-custom-field',

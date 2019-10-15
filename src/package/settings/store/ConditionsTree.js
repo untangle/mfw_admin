@@ -19,6 +19,15 @@ Ext.define('Mfw.store.ConditionsTree', {
 
         Ext.Array.each(Conditions.list, function (cond) {
             var cat = cond.category || 'none';
+
+            /**
+             * if implemented is undefined or true, means the condition is backend supported,
+             * otherwise (false) it will not be shown in UI
+             */
+            if (cond.implemented === false) {
+                return;
+            }
+
             if (!categories[cat]) {
                 categories[cat] = [];
             }

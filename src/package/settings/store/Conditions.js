@@ -1,3 +1,20 @@
+/**
+ * List of all possible Rules conditions
+ *
+ * Condition definition
+ * - type:                 condition type
+ * - implemented:          boolean if condition has backend support
+ *                         true or undefined (not set at all) - it has support (show in UI)
+ *                         false - it does not have backend support (do not show in UI)
+ * - category:             a UI only defined category name used to create a tree of conditions
+ * - text:                 the human readable condition name
+ * - description:          a helper text which tells the user what condition is for and which values are valid
+ * - operators:            array of possible operators to be used for the condition ['!=','<','<=','==','>', '>=']
+ * - field:                the field used to edit the condition value; by default (if not defined) it's a simple textfield
+ * - extraFields:          some conditions (like LIMT_RATE) require more than a single value field so extra fields are added
+ * - disableOnFirstPacket: bool to skip conditions which in some circumstances are disabled on first packet
+ *                         see package/settings/Util.js -> getFirstPacketConditions()
+ * */
 Ext.define('Mfw.settings.Conditions', {
     alternateClassName: 'Conditions',
     singleton: true,
@@ -7,6 +24,8 @@ Ext.define('Mfw.settings.Conditions', {
     {
 
         type:'APPLICATION_NAME_INFERRED',
+        // use false to hide this condition in UI if backend is not supporting it yet
+        implemented: true,
         category: 'Application',
         text: 'Application Name (Inferred)'.t(),
         description: 'Application Name (Inferred) description ...',
@@ -55,7 +74,7 @@ Ext.define('Mfw.settings.Conditions', {
             store: 'applicationCategories',
             queryMode: 'local',
             valueField: 'value',
-            displayField: 'text',              
+            displayField: 'text',
         }
     }, {
         type:'APPLICATION_CATEGORY',
@@ -73,7 +92,7 @@ Ext.define('Mfw.settings.Conditions', {
             store: 'applicationCategories',
             queryMode: 'local',
             valueField: 'value',
-            displayField: 'text',              
+            displayField: 'text',
         }
     }, {
         type:'APPLICATION_DETAIL',
