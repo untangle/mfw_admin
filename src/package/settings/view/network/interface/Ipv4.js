@@ -397,6 +397,38 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 ownerCmp: me.getView()
             });
             me.aliasesDialog.show();
+        },
+        onIpRelease: function() {
+
+            //Get the device from VM (is there an easier way to retrieve this?)
+            var device = this.getViewModel().linkData.intf.data.device;
+
+            Ext.Ajax.request({
+                url: '/api/releasedhcp/' + device,
+                method: 'POST',
+                success: function () {
+                    //Refresh the IP Address fields (clear out)
+                },
+                failure: function(response) {
+                    console.log('Unable to release IP for ' + device + '... Error: ' + response.status);
+                }
+            });
+        },
+        onIpRenew: function() {
+
+            //Get the device from VM (is there an easier way to retrieve this?)
+            var device = this.getViewModel().linkData.intf.data.device;
+
+            Ext.Ajax.request({
+                url: '/api/releasedhcp/' + device,
+                method: 'POST',
+                success: function () {
+                    //Refresh the IP Address fields with new IP
+                },
+                failure: function(response) {
+                    console.log('Unable to renew IP for ' + device + '... Error: ' + response.status);
+                }
+            });
         }
     }
 
