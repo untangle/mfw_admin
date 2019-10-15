@@ -104,6 +104,29 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         },
                         options: Map.options.prefixes
                     }]
+                },  {
+                        xtype: 'containerfield',
+                        layout: 'hbox',
+                        defaults: {
+                            flex: 1,
+                            required: false,
+                            clearable: false
+                        },
+                        items: [
+                                {
+                                    xtype: 'button',
+                                    text: 'Release'.t(),
+                                    ui: 'action',
+                                    handler: 'onIpRelease',
+                                    margin: '0 16 0 0'
+                                }, {
+                                    xtype: 'button',
+                                    text: 'Renew'.t(),
+                                    ui: 'action',
+                                    handler: 'onIpRenew',
+                                    margin: '0 16 0 0'
+                                }
+                            ]
                 }, {
                     xtype: 'textfield',
                     label: 'Gateway Override',
