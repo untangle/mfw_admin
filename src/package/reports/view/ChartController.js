@@ -363,7 +363,7 @@ Ext.define('Mfw.reports.ChartController', {
                         var str = '<span style="color: ' + this.color + '; font-size: 16px;">\u25A0</span>' +
                                   '<span style="font-weight: bold;">' + Renderer.shortenText(this.series.name) + '</span>';
                         if (record.get('units') === 'bytes' || record.get('units') === 'bytes/s') {
-                            str += '&rarr; ' + Renderer.bytesRenderer(this.y) + record.get('units');
+                            str += '&rarr; ' + Renderer.bytesRenderer(this.y);
                         } else {
                             str += '&rarr; <b>' + this.y + '</b> ' + (record.get('units') || '');
                         }

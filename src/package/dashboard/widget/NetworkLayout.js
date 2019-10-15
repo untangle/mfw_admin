@@ -13,7 +13,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
     layout: 'vbox',
     minWidth: 500,
 
-    padding: '0 16 8 16',
+    padding: 0,
 
     items: [{
         xtype: 'toolbar',
@@ -51,19 +51,19 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
         items: [{
             xtype: 'container',
             flex: 1,
-            layout: {
-                type: 'hbox',
-                align: 'bottom'
-            },
+            layout: 'fit',
             items: [{
                 xtype: 'dataview',
                 itemId: 'wans',
                 cls: 'wans',
-                store: 'interfaces',
+                // store: 'interfaces',
                 flex: 1,
-                inline: true,
+                // inline: true,
                 ripple: false,
-                layout: 'hbox',
+                layout: {
+                    type: 'hbox',
+                    align: 'bottom'
+                },
                 padding: '5 0 23 0'
             }]
         }, {
@@ -73,20 +73,21 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             cls: 'separator'
         }, {
             xtype: 'container',
+            width: '100%',
+            layout: 'fit',
             flex: 1,
-            layout: {
-                type: 'hbox',
-                align: 'top'
-            },
             items: [{
                 xtype: 'dataview',
-                itemId: 'lans',
+                itemId: 'nonwans',
                 cls: 'nonwans',
-                store: 'interfaces',
+                // store: 'interfaces',
                 flex: 1,
                 inline: true,
                 ripple: false,
-                layout: 'hbox',
+                layout: {
+                    type: 'hbox',
+                    align: 'top'
+                },
                 padding: '23 0 5 0'
             }]
         }]
@@ -101,6 +102,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
 
     controller: {
         init: function (widget) {
+            var me = this;
             widget.tout = null;
             WidgetsPipe.add(widget);
 
@@ -132,8 +134,35 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
                     '</div>'
                 );
             });
+
+            if (!Ext.getStore('interfaces').isLoaded()) {
+                me.reload();
+            } else {
+                me.setInterfaces();
+            }
+
         },
 
+        setInterfaces: function () {
+            var me = this,
+                wans = [],
+                nonwans = [],
+                widget = me.getView();
+
+            Ext.getStore('interfaces').each(function (intf) {
+                if (intf.get('hidden') || !intf.get('enabled')) {
+                    return;
+                }
+                if (intf.get('wan')) {
+                    wans.push(intf);
+                } else {
+                    nonwans.push(intf);
+                }
+            });
+            widget.down('#wans').setStore(wans);
+            widget.down('#nonwans').setStore(nonwans);
+            WidgetsPipe.addFirst(widget);
+        },
 
         /**
          * in this case load data just refreshes the interfaces status
@@ -144,9 +173,12 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             if (cb) { cb(); }
         },
 
+        // on reload set the widget wans/nonwans based on interfaces
         reload: function () {
-            var me = this, widget = me.getView();
-            WidgetsPipe.addFirst(widget);
+            var me = this;
+            Ext.getStore('interfaces').load(function () {
+                me.setInterfaces();
+            });
         }
     }
 });
