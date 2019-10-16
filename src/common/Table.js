@@ -118,7 +118,11 @@ Ext.define('Mfw.Table', {
             dataIndex: 'client_longitude'
         }, {
             text: 'Server Country',
-            dataIndex: 'server_country'
+            dataIndex: 'server_country',
+            width: 120,
+            renderer: function (val) {
+                return Map.countries[val] || val;
+            }
         }, {
             text: 'Server Latitude',
             dataIndex: 'server_latitude'
@@ -127,13 +131,17 @@ Ext.define('Mfw.Table', {
             dataIndex: 'server_longitude'
         }, {
             text: 'Application Name (Inferred)',
-            dataIndex: 'application_name_inferred'
+            dataIndex: 'application_name_inferred',
+            width: 200,
+            renderer: function (val) {
+                return val || 'Unknown';
+            }
         }, {
             text: 'Application Name (Matched)',
             dataIndex: 'application_name',
-            width: 160,
-            renderer: function (name) {
-                return name || 'Unknown';
+            width: 200,
+            renderer: function (val) {
+                return val || 'Unknown';
             }
         }, {
             text: 'Application Category (Inferred)',

@@ -20,7 +20,7 @@
                            "client_address",
                            "server_address",
                            "server_country",
-                           "application_name",
+                           "application_name_inferred",
                            "server_dns_hint",
                            "wan_rule_id",
                            "wan_policy_id"],
