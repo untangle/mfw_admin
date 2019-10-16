@@ -9,6 +9,13 @@
         <link rel="shortcut icon" href="/static/res/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/static/res/favicon.ico" type="image/x-icon">
 
+        <script>
+            // TODO remove it or implement it, kept for backward compatibility
+            String.prototype.t = function() {
+                return this.valueOf();
+            };
+        </script>
+
         <!-- Ext JS -->
         <script src="/static/res/lib/ext/ext-modern-all-debug.js"></script>
         <script src="/static/res/lib/ext/modern/theme-material/theme-material.js"></script>

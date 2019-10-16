@@ -82,20 +82,20 @@ Ext.define('Mfw.setup.Wizard', {
                     userCls: '{step === "system" ? "current" : ""}'
                 }
             }, {
-                itemId: 'nav-wifi',
-                hidden: true,
-                bind: {
-                    html: '<a {(wizardStatus.completed || currentStepIndex >= 3) ? "href=#wifi" : ""}>WiFi</a>',
-                    userCls: '{step === "wifi" ? "current" : ""}',
-                    hidden: '{!wifiStep}'
-                }
-            }, {
                 itemId: 'nav-lte',
                 hidden: true,
                 bind: {
-                    html: '<a {(wizardStatus.completed || currentStepIndex >= 4) ? "href=#lte" : ""}>LTE</a>',
+                    html: '<a {(wizardStatus.completed || currentStepIndex >= 3) ? "href=#lte" : ""}>LTE</a>',
                     userCls: '{step === "lte" ? "current" : ""}',
                     hidden: '{!lteStep}'
+                }
+            }, {
+                itemId: 'nav-wifi',
+                hidden: true,
+                bind: {
+                    html: '<a {(wizardStatus.completed || currentStepIndex >= 4) ? "href=#wifi" : ""}>WiFi</a>',
+                    userCls: '{step === "wifi" ? "current" : ""}',
+                    hidden: '{!wifiStep}'
                 }
             }, {
                 itemId: 'nav-interfaces',
