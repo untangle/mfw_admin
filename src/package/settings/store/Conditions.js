@@ -367,12 +367,14 @@ Ext.define('Mfw.settings.Conditions', {
         }
     }, {
         type:'CLIENT_HOSTNAME',
+        implemented: false,
         category: 'Client',
         text: 'Client Hostname'.t(),
         description: 'Client Hostname description ...',
         operators: ['==', '!=']
     }, {
         type:'CLIENT_USERNAME',
+        implemented: false,
         category: 'Client',
         text: 'Client Username'.t(),
         description: 'Client Username description ...',
@@ -455,12 +457,14 @@ Ext.define('Mfw.settings.Conditions', {
         }
     }, {
         type:'SERVER_HOSTNAME',
+        implemented: false,
         category: 'Server',
         text: 'Server Hostname'.t(),
         description: 'Server Hostname description ...',
         operators: ['==', '!=']
     }, {
         type:'SERVER_USERNAME',
+        implemented: false,
         category: 'Server',
         text: 'Server Username'.t(),
         description: 'Server Username description ...',
