@@ -586,9 +586,16 @@ Ext.define('Mfw.Renderer', {
 
     ipv4: function (value, record) {
         var status = record.get('_status'),
-            confType = record.get('v4ConfigType'),
+            confType = record.get('configType'),
+            v4ConfType = record.get('v4ConfigType'),
             strout = [];
-        if (confType) {
+
+            // MFW-471 - for bridged interfaces return no config
+        if (confType === 'BRIDGED') {
+            return '-';
+        }
+
+        if (v4ConfType) {
             strout.push(confType);
         }
         if (status && status.ip4Addr) {
@@ -601,7 +608,8 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipv6: function (value, record) {
-        if (record.get('configType') !== 'ADDRESSED') {
+        var confType = record.get('configType');
+        if (confType === 'BRIDGED') {
             return '-';
         }
         return value || '-';
