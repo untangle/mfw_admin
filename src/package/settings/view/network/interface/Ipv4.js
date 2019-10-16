@@ -104,6 +104,29 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         },
                         options: Map.options.prefixes
                     }]
+                },  {
+                        xtype: 'containerfield',
+                        layout: 'hbox',
+                        defaults: {
+                            flex: 1,
+                            required: false,
+                            clearable: false
+                        },
+                        items: [
+                                {
+                                    xtype: 'button',
+                                    text: 'Release'.t(),
+                                    ui: 'action',
+                                    handler: 'onIpRelease',
+                                    margin: '0 16 0 0'
+                                }, {
+                                    xtype: 'button',
+                                    text: 'Renew'.t(),
+                                    ui: 'action',
+                                    handler: 'onIpRenew',
+                                    margin: '0 16 0 0'
+                                }
+                            ]
                 }, {
                     xtype: 'textfield',
                     label: 'Gateway Override',
@@ -374,6 +397,34 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 ownerCmp: me.getView()
             });
             me.aliasesDialog.show();
+        },
+        onIpRelease: function() {
+            var device = this.getViewModel().get("intf.device");
+
+            Ext.Ajax.request({
+                url: '/api/releasedhcp/' + device,
+                method: 'POST',
+                success: function () {
+                    //Refresh the IP Address fields (clear out)
+                },
+                failure: function(response) {
+                    console.log('Unable to release IP for ' + device + '... Error: ' + response.status);
+                }
+            });
+        },
+        onIpRenew: function() {
+            var device = this.getViewModel().get("intf.device");
+
+            Ext.Ajax.request({
+                url: '/api/renewdhcp/' + device,
+                method: 'POST',
+                success: function () {
+                    //Refresh the IP Address fields with new IP
+                },
+                failure: function(response) {
+                    console.log('Unable to renew IP for ' + device + '... Error: ' + response.status);
+                }
+            });
         }
     }
 

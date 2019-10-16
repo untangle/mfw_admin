@@ -11,6 +11,12 @@ Ext.define('Mfw.setup.step.Eula', {
 
     scrollable: true,
 
+    viewModel: {
+        data: {
+            eulaLoaded: false
+        }
+    },
+
     items: [{
         xtype: 'container',
         width: 600,
@@ -55,7 +61,7 @@ Ext.define('Mfw.setup.step.Eula', {
             },
             hidden: true,
             bind: {
-                hidden: '{wizardStatus.completed || currentStepIndex > 1}'
+                hidden: '{!eulaLoaded || wizardStatus.completed || currentStepIndex > 1}'
             },
             items: [{
                 text: 'Disagree',
@@ -77,10 +83,17 @@ Ext.define('Mfw.setup.step.Eula', {
          * otherwise fallback on local EULA
          */
         onPainted: function (cmp) {
-            var remoteEulaSrc = 'https://develop.untangle.com/legal',
+            var vm = this.getViewModel(),
+                remoteEulaSrc = 'https://develop.untangle.com/legal',
                 localEulaSrc = '/setup/eula.html',
                 iframe = document.getElementById('eula-src'),
                 img = new Image(0,0); // 0 width and height
+
+            // if eula already loaded no connection check required
+            if (iframe.src) {
+                vm.set('eulaLoaded', true);
+                return;
+            }
 
             // todo: find a better image url to test
             img.src = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png';
@@ -92,12 +105,12 @@ Ext.define('Mfw.setup.step.Eula', {
                 iframe.src = localEulaSrc;
             });
 
-            // unmask eula container and remove image after license content loaded
+            // unmask eula container, remove image and show agreement buttons after license content loaded
             iframe.addEventListener('load', function () {
-                cmp.unmask();
                 img.parentNode.removeChild(img);
+                cmp.unmask();
+                vm.set('eulaLoaded', true);
             });
-
             // append the test image wich will trigger the load/error events
             document.body.appendChild(img);
         },
