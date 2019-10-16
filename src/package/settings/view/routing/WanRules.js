@@ -35,5 +35,19 @@ Ext.define('Mfw.settings.routing.WanRules', {
                 console.log('server-side failure with status code ' + response.status);
             }
         });
+    },
+
+    // MFW 715 - update rules map after saving
+    afterSave: function () {
+        Ext.Ajax.request({
+            url: Util.api + '/settings/wan/policy_chains',
+            success: function(response) {
+                var resp = Ext.decode(response.responseText);
+                Map.wanRules = resp;
+            },
+            failure: function(response) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
     }
 });

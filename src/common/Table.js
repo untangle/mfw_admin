@@ -51,7 +51,7 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Server Interface',
             dataIndex: 'server_interface_id',
-            minWidth: 150,
+            width: 100,
             renderer: Renderer.interface,
             cell: { encodeHtml: false },
             operators: ['EQ', 'NE']
@@ -207,12 +207,14 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'WAN Rule ID',
             dataIndex: 'wan_rule_id',
-            width: 180,
+            cell: { encodeHtml: false },
+            width: 200,
             renderer: Renderer.wanRule
         }, {
             text: 'WAN Policy ID',
             dataIndex: 'wan_policy_id',
-            width: 180,
+            cell: { encodeHtml: false },
+            width: 200,
             renderer: Renderer.wanPolicy
         }, {
             text: 'Client DNS Hint',

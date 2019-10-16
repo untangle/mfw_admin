@@ -559,7 +559,7 @@ Ext.define('Mfw.Renderer', {
     wanPolicy: function (value) {
         // for -2 = Default
         if (value === -2) { return 'Default'; }
-        return Map.wanPolicies[value] || value;
+        return (Map.wanPolicies[value] + ' <span style="color: #999">[ ' + value + ' ]</span>') || value;
     },
 
     wanRule: function (value, record) {
@@ -581,7 +581,7 @@ Ext.define('Mfw.Renderer', {
         });
 
         if (!rule) { return value; }
-        return rule.description;
+        return rule.description + ' <span style="color: #999">[ ' + value + ' ]</span>';
     },
 
     ipv4: function (value, record) {

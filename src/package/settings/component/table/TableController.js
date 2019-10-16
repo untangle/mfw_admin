@@ -143,6 +143,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid.table.chains().sync({
                 success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.onLoad(); }
+
+                    // MFW-715 - used for updating rules map after Wan Rules are changed
+                    if (grid.afterSave) { grid.afterSave(); }
+
                     Sync.success();
                     if (name) {
                         Mfw.app.redirectTo((Mfw.app.context === 'admin' ? 'settings/' : '') + grid.getHash() + '/' + name, {
