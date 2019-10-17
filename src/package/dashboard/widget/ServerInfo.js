@@ -166,7 +166,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     if (!license || license.list.length === 0) {
                         licenseRow = '<tr><td></td><td style="color: red;">Not licensed</td></tr>';
                     } else {
-                        licenseRow = '<tr><td>Licensed for: </td><td>' + license.list[0].seats + ' seats</td></tr>';
+                        licenseRow = '<tr><td>Licensed for: </td><td>' + license.list[0].seats + ' Mbps</td></tr>';
                     }
 
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
