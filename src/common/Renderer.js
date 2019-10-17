@@ -559,7 +559,7 @@ Ext.define('Mfw.Renderer', {
     wanPolicy: function (value) {
         // for -2 = Default
         if (value === -2) { return 'Default'; }
-        return Map.wanPolicies[value] || value;
+        return (Map.wanPolicies[value] + ' <span style="color: #999">[ ' + value + ' ]</span>') || value;
     },
 
     wanRule: function (value, record) {
@@ -581,14 +581,21 @@ Ext.define('Mfw.Renderer', {
         });
 
         if (!rule) { return value; }
-        return rule.description;
+        return rule.description + ' <span style="color: #999">[ ' + value + ' ]</span>';
     },
 
     ipv4: function (value, record) {
         var status = record.get('_status'),
-            confType = record.get('v4ConfigType'),
+            confType = record.get('configType'),
+            v4ConfType = record.get('v4ConfigType'),
             strout = [];
-        if (confType) {
+
+            // MFW-471 - for bridged interfaces return no config
+        if (confType === 'BRIDGED') {
+            return '-';
+        }
+
+        if (v4ConfType) {
             strout.push(confType);
         }
         if (status && status.ip4Addr) {
@@ -601,7 +608,8 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipv6: function (value, record) {
-        if (record.get('configType') !== 'ADDRESSED') {
+        var confType = record.get('configType');
+        if (confType === 'BRIDGED') {
             return '-';
         }
         return value || '-';

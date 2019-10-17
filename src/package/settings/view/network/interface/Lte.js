@@ -92,10 +92,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     label: 'Network',
                     autoSelect: 'true',
                     margin: '0 16 0 0',
-                    options: [
-                        { text: 'T-Mobile', value: 'T-Mobile' },
-                        { text: 'Other', value: 'OTHER' }
-                    ],
+                    options: Map.options.simNetworks,
                     bind: {
                         value: '{_simNetwork}',
                         required: '{intf.type === "WWAN"}',
@@ -110,7 +107,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     bind: {
                         value: '{intf.simApn}',
                         required: '{intf.type === "WWAN"}',
-                        disabled: '{intf.type !== "WWAN"}'
+                        disabled: '{intf.type !== "WWAN" || intf.simNetwork}'
                     }
                 }]
             }, {

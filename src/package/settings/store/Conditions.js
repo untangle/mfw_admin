@@ -367,12 +367,14 @@ Ext.define('Mfw.settings.Conditions', {
         }
     }, {
         type:'CLIENT_HOSTNAME',
+        implemented: false,
         category: 'Client',
         text: 'Client Hostname'.t(),
         description: 'Client Hostname description ...',
         operators: ['==', '!=']
     }, {
         type:'CLIENT_USERNAME',
+        implemented: false,
         category: 'Client',
         text: 'Client Username'.t(),
         description: 'Client Username description ...',
@@ -455,12 +457,14 @@ Ext.define('Mfw.settings.Conditions', {
         }
     }, {
         type:'SERVER_HOSTNAME',
+        implemented: false,
         category: 'Server',
         text: 'Server Hostname'.t(),
         description: 'Server Hostname description ...',
         operators: ['==', '!=']
     }, {
         type:'SERVER_USERNAME',
+        implemented: false,
         category: 'Server',
         text: 'Server Username'.t(),
         description: 'Server Username description ...',
@@ -507,96 +511,6 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server DNS Hint'.t(),
         description: 'Server DNS Hint description ...',
-        operators: ['==', '!=']
-    },
-
-    // LOCAL
-    {
-        type:'LOCAL_ADDRESS',
-        category: 'Local',
-        text: 'Local Address'.t(),
-        description: 'Local Address description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'ipv4expression'
-        }
-    }, {
-        type:'LOCAL_ADDRESS_V6',
-        category: 'Local',
-        text: 'Local Address IPv6'.t(),
-        description: 'Local Address V6 description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'ipv6expression'
-        }
-    }, {
-        type:'LOCAL_PORT',
-        category: 'Local',
-        text: 'Local Port'.t(),
-        description: 'Local Port description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'portexpression'
-        }
-    }, {
-        type:'LOCAL_HOSTNAME',
-        category: 'Local',
-        text: 'Local Hostname'.t(),
-        description: 'Local Hostname description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'LOCAL_USERNAME',
-        category: 'Local',
-        text: 'Local Username'.t(),
-        description: 'Local Username description ...',
-        operators: ['==', '!=']
-    },
-
-    // REMOTE
-    {
-        type:'REMOTE_ADDRESS',
-        category: 'Remote',
-        text: 'Remote Address'.t(),
-        description: 'Remote Address description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'ipv4expression'
-        }
-    }, {
-        type:'REMOTE_ADDRESS_V6',
-        category: 'Remote',
-        text: 'Remote Address IPv6'.t(),
-        description: 'Remote Address V6 description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'ipv6expression'
-        }
-    }, {
-        type:'REMOTE_PORT',
-        category: 'Remote',
-        text: 'Remote Port'.t(),
-        description: 'Remote Port description ...',
-        operators: ['==', '!='],
-        field: {
-            xtype: 'textfield',
-            validators: 'portexpression'
-        }
-    }, {
-        type:'REMOTE_HOSTNAME',
-        category: 'Remote',
-        text: 'Remote Hostname'.t(),
-        description: 'Remote Hostname description ...',
-        operators: ['==', '!=']
-    }, {
-        type:'REMOTE_USERNAME',
-        category: 'Remote',
-        text: 'Remote Username'.t(),
-        description: 'Remote Username description ...',
         operators: ['==', '!=']
     },
 
