@@ -398,7 +398,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             renewMsg = Ext.create('Ext.MessageBox', {
                 title: '',
                 bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
-                message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Renewing IP for ' + intf.get('name') + '. Please wait ...</p>',
+                message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + intf.get('name') + '. Please wait ...</p>',
                 width: 400,
                 showAnimation: null,
                 hideAnimation: null,
@@ -425,7 +425,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 method: 'POST',
                 success: function () {
                     //Refresh the IP Address fields (clear out)
-                    renewMsg.setMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>' + intf.get('name') + ' IP Addres has been released...<br/><br/>');
+                    renewMsg.setMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>' + intf.get('name') + ' IP Address has been released...<br/><br/>');
                 },
                 failure: function (response) {
                     if (response.aborted) {
@@ -433,8 +433,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         return;
                     }
                     renewMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to release ip address for ' + intf.get('name') + '!</p>');
-                },
-                callback: function () {
                     renewMsg.setButtons([{
                         text: 'Close',
                         ui: 'action',
@@ -443,33 +441,38 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                             renewMsg.hide();
                         }
                     }]);
+                
+                },
+                callback: function () {
+                    //Call renew in the callback method
+                    Ext.Ajax.request({
+                        url: '/api/renewdhcp/' + device,
+                        method: 'POST',
+                        success: function () {
+                            renewMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' IP has been renewed.<br/><br/>');
+                        },
+                        failure: function (response) {
+                            if (response.aborted) {
+                                renewMsg.hide();
+                                return;
+                            }
+                            renewMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to renew IP Address for ' + intf.get('name') + '!</p>');
+                        },
+                        callback: function () {
+                            renewMsg.setButtons([{
+                                text: 'Close',
+                                ui: 'action',
+                                margin: '16 0 8 0',
+                                handler: function () {
+                                    renewMsg.hide();
+                                }
+                            }]);
+                        }
+                    });
                 }
                 });
 
-            Ext.Ajax.request({
-                url: '/api/renewdhcp/' + device,
-                method: 'POST',
-                success: function () {
-                    renewMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' IP has been renewed.<br/><br/>');
-                },
-                failure: function (response) {
-                    if (response.aborted) {
-                        renewMsg.hide();
-                        return;
-                    }
-                    renewMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to renew ip address for ' + intf.get('name') + '!</p>');
-                },
-                callback: function () {
-                    renewMsg.setButtons([{
-                        text: 'Close',
-                        ui: 'action',
-                        margin: '16 0 8 0',
-                        handler: function () {
-                            renewMsg.hide();
-                        }
-                    }]);
-                }
-            });
+           
         }
     }
 
