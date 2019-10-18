@@ -236,6 +236,12 @@ Ext.define('Mfw.Sync', {
     exception: function (response, title) {
         var exception, summary, stack, isSync = false;
 
+        // do not show error if license file non existent
+        if (response.status === 500 && response.request.url.includes('/api/status/license')) {
+            console.warn('License not found!');
+            return;
+        }
+
         // auth fail
         if (response.status === 403) {
             // avoid displaying the exception bottom sheet

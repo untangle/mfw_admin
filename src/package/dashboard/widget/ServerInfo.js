@@ -132,7 +132,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     deferred.resolve(license);
                 },
                 failure: function () {
-                    deferred.reject('Unable to get license!');
+                    // resolve even if error
+                    deferred.resolve(null);
                 }
             });
             return deferred.promise;
