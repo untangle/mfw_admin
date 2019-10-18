@@ -115,6 +115,8 @@ i { font-style: normal; }
 
 .invalid-cell::after { content: ''; position: absolute; left: 1px; right: 1px; bottom: 0; height: 2px; border-top: 2px #F95821 solid; }
 
+.x-treelist-nav .x-treelist-item-icon { font-size: 16px; }
+
 .reports-tree .x-treelist-item-expandable .x-treelist-item-text { margin-left: 5px; }
 .reports-tree .x-treelist-item-leaf .x-treelist-item-text { margin-left: 0; font-size: 14px; }
 .reports-tree .x-treelist-item-leaf .x-treelist-item-wrap { margin-left: 0 !important; }

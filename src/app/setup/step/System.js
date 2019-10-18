@@ -36,7 +36,16 @@ Ext.define('Mfw.setup.step.System', {
             itemId: 'password',
             name: 'password',
             label: 'Password',
-            required: true
+            required: true,
+            validators: [{
+                type: 'length',
+                min: 4
+            }, function (value) {
+                if (/\s/.test(value)) {
+                    return 'Spaces not allowed';
+                }
+                return true;
+            }]
         }, {
             xtype: 'passwordfield',
             userCls: 'x-custom-field',

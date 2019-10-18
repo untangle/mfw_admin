@@ -50,6 +50,10 @@ Ext.define('Mfw.AppBase', {
         Ext.Ajax.request({
             url: '/account/status',
             success: function (response1) {
+                if (response1.responseText === 'null') {
+                    console.error('Unable to get account status!');
+                    return;
+                }
                 var resp = Ext.decode(response1.responseText);
 
                 if (resp.error) {

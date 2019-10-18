@@ -15,7 +15,6 @@ Ext.define('Mfw.store.SettingsNav', {
             // Network
             text: '<strong>' + 'Network'.t() + '</strong>',
             key: 'network',
-            iconCls: 'tree network',
             href: 'network',
             children: [
                 { text: 'Interfaces'.t(), href: 'network/interfaces', expanded: false },
@@ -26,7 +25,6 @@ Ext.define('Mfw.store.SettingsNav', {
             // Smart Routing
             text: '<strong>' + 'Routing'.t() + '</strong>',
             key: 'routing',
-            iconCls: 'tree system',
             href: 'routing',
             children: [
                 { text: 'WAN Policies'.t(), leaf: true, href: 'routing/wan-policies' },
@@ -36,7 +34,6 @@ Ext.define('Mfw.store.SettingsNav', {
             // Firewall
             text: '<strong>' + 'Firewall'.t() + '</strong>',
             key: 'firewall',
-            iconCls: 'tree administration',
             href: 'firewall',
             children: [
                 { text: 'Filter'.t(), leaf: true, href: 'firewall/filter' },
@@ -52,13 +49,13 @@ Ext.define('Mfw.store.SettingsNav', {
             // System
             text: '<strong>' + 'System'.t() + '</strong>',
             key: 'system',
-            iconCls: 'tree system',
             href: 'system',
             children: [
                 { text: 'Settings'.t(), leaf: true, href: 'system/settings' },
-                { text: 'Accounts'.t(), leaf: true, href: 'system/accounts' },
+                // { text: 'Accounts'.t(), leaf: true, href: 'system/accounts' },
                 { text: 'Upgrade'.t(), leaf: true, href: 'system/upgrade' },
                 { text: 'Logging'.t(), leaf: true, href: 'system/logging' },
+                // { text: 'License'.t(), leaf: true, href: 'system/license' },
                 { text: 'About'.t(), leaf: true, href: 'system/about' }
             ]
         }]

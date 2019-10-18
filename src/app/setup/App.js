@@ -8,6 +8,11 @@ Ext.define('Mfw.Setup', {
         Ext.Ajax.request({
             url: '/account/status',
             success: function (response) {
+                if (response.responseText === 'null') {
+                    console.error('Unable to get account status!');
+                    return;
+                }
+
                 var resp = Ext.decode(response.responseText);
 
                 if (resp.error) {
