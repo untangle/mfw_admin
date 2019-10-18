@@ -122,6 +122,22 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             return deferred.promise;
         },
 
+        getLicense: function () {
+            var deferred = new Ext.Deferred(); // create the Ext.Deferred object
+
+            Ext.Ajax.request({
+                url: '/api/status/license',
+                success: function (response) {
+                    var license = Ext.decode(response.responseText);
+                    deferred.resolve(license);
+                },
+                failure: function () {
+                    deferred.reject('Unable to get license!');
+                }
+            });
+            return deferred.promise;
+        },
+
         loadData: function (cb) {
             var me = this,
                 widget = me.getView(),
@@ -129,6 +145,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 system,
                 hardware,
                 build,
+                license,
+                licenseRow,
                 html = '';
 
             if (widget.uptimeInterval) {
@@ -137,12 +155,19 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             }
 
             me.getView().mask({xtype: 'loadmask'});
-            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild], me)
+            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild, me.getLicense], me)
                 .then(function (result) {
                     info = result[0];
                     system = result[1];
                     hardware = result[2];
                     build = result[3];
+                    license = result[4];
+
+                    if (!license || license.list.length === 0) {
+                        licenseRow = '<tr><td></td><td style="color: red;">Not licensed</td></tr>';
+                    } else {
+                        licenseRow = '<tr><td>Licensed for: </td><td>' + license.list[0].seats + ' Mbps</td></tr>';
+                    }
 
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
                            '<tr><td style="width: 100px;">Board: </td><td>' + (Map.boards[hardware.boardName] || hardware.boardName) + '</td></tr>' +
@@ -153,6 +178,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
+                           licenseRow +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
 
