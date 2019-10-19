@@ -428,6 +428,12 @@ i {
     border-top: 2px #F95821 solid;
 }
 
+.x-treelist-nav .x-treelist-item-icon {
+    font-size: 16px;
+}
+
+
+// TODO: remove below if not used
 .reports-tree {
     .x-treelist-item-expandable {
         .x-treelist-item-text {

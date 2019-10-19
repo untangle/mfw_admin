@@ -19,16 +19,18 @@ Ext.define('Mfw.settings.view.Main', {
         layout: 'fit',
         xtype: 'panel',
         zIndex: 999,
-        resizable: {
-            split: true,
-            edges: 'east'
-        },
+        // resizable: {
+        //     split: true,
+        //     edges: 'east'
+        // },
+
+        shadow: true,
 
         docked: 'left',
         width: 250,
 
         tbar: {
-            shadow: true,
+            shadow: false,
             items: [{
                 xtype: 'searchfield',
                 ui: 'faded',
@@ -58,10 +60,6 @@ Ext.define('Mfw.settings.view.Main', {
             selectOnExpander: true,
             highlightPath: false,
             store: 'settingsNav',
-            // store: {
-            //     type: 'settingsNav',
-            //     // autoLoad: true
-            // },
             listeners: {
                 itemclick: 'onItemClick'
             }

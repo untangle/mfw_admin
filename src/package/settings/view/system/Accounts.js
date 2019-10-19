@@ -1,11 +1,14 @@
+/**
+ * this is not used anymore yet
+ */
 Ext.define('Mfw.settings.system.Accounts', {
 
     extend: 'Mfw.cmp.grid.MasterGrid',
-    alias: 'widget.mfw-settings-system-accounts',
+    alias: 'widget.mfw-settings-system-accounts-not-implemented',
 
     controller: 'mfw-settings-system-accounts_controller',
 
-    title: 'Acounts'.t(),
+    title: 'Accounts'.t(),
 
     viewModel: {
         data: {
