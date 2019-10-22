@@ -6,3 +6,11 @@ staging/
 tmp
 mfw
 *.jar
+.built
+.built_check
+.configured_*
+.prepared
+.quilt_checked
+.source_dir
+.pkgdir/
+ipkg-x86_64/
