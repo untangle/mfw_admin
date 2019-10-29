@@ -122,7 +122,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             return deferred.promise;
         },
 
-        getLicense: function () {
+        readLicense: function () {
             var deferred = new Ext.Deferred(); // create the Ext.Deferred object
 
             Ext.Ajax.request({
@@ -156,7 +156,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             }
 
             me.getView().mask({xtype: 'loadmask'});
-            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild, me.getLicense], me)
+            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild, me.readLicense], me)
                 .then(function (result) {
                     info = result[0];
                     system = result[1];
@@ -167,7 +167,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     if (!license || license.list.length === 0) {
                         licenseText = '<span style="color: red;">Not licensed</span>';
                     } else {
-                        licenseText = license.list[0].seats + ' Mbps';
+                        var seats = license.list[0].seats;
+                        licenseText = (seats === 1000000 ? 'Unlimited' : seats + ' Mbps');
                     }
 
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
@@ -179,7 +180,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
-                           '<tr><td>Licensed for: </td><td>' + licenseText + '</td></tr>' +
+                           '<tr><td>License: </td><td>' + licenseText + '</td></tr>' +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
 
