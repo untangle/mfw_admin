@@ -164,18 +164,11 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     build = result[3];
                     license = result[4];
 
-                    // if (!license) {
-                    //     license = {
-                    //         list: [{
-                    //             seats: 50
-                    //         }]
-                    //     };
-                    // }
-
                     if (!license || license.list.length === 0) {
                         licenseText = '<span style="color: red;">Not licensed</span>';
                     } else {
-                        licenseText = license.list[0].seats + ' Mbps';
+                        var seats = license.list[0].seats;
+                        licenseText = (seats === 1000000 ? 'Unlimited' : seats + ' Mbps');
                     }
 
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
@@ -187,7 +180,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
-                           '<tr><td>Licensed for: </td><td>' + licenseText + '</td></tr>' +
+                           '<tr><td>License: </td><td>' + licenseText + '</td></tr>' +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
 
