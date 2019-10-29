@@ -122,7 +122,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             return deferred.promise;
         },
 
-        getLicense: function () {
+        readLicense: function () {
             var deferred = new Ext.Deferred(); // create the Ext.Deferred object
 
             Ext.Ajax.request({
@@ -156,13 +156,21 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
             }
 
             me.getView().mask({xtype: 'loadmask'});
-            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild, me.getLicense], me)
+            Ext.Deferred.sequence([me.getInfo, me.getSystem, me.getHardware, me.getBuild, me.readLicense], me)
                 .then(function (result) {
                     info = result[0];
                     system = result[1];
                     hardware = result[2];
                     build = result[3];
                     license = result[4];
+
+                    // if (!license) {
+                    //     license = {
+                    //         list: [{
+                    //             seats: 50
+                    //         }]
+                    //     };
+                    // }
 
                     if (!license || license.list.length === 0) {
                         licenseText = '<span style="color: red;">Not licensed</span>';
