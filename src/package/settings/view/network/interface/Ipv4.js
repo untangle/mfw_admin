@@ -26,12 +26,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
             },
             addressReady: function (get) {
-                var test = get('intf').get('_status').ip4Addr;
-
-                if(test.length > 0)
-                    return false
-
-                return true
+               console.log("Checking if ip addr is populated...")
+               return true
             }
         }
     },
@@ -431,13 +427,56 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             me.aliasesDialog.show();
         },
-        onRenewIp: function() {
-            var intf = this.getViewModel().get('intf'),
-            device = intf.get('device'),
-            renewMsg = Ext.create('Ext.MessageBox', {
+        releaseDhcp: function (device) {
+            var deferred = new Ext.Deferred();
+            Ext.Ajax.request({
+                url: '/api/releasedhcp/' + device,
+                method: 'POST',
+                success: function () {
+                    deferred.resolve();
+                },
+                failure: function () {
+                    deferred.reject('Unable to release IP address!');
+                }
+            });
+            return deferred.promise;
+        },
+        renewDhcp: function (device) {
+            var deferred = new Ext.Deferred();
+            Ext.Ajax.request({
+                url: '/api/renewdhcp/' + device,
+                method: 'POST',
+                success: function (response) {
+                    deferred.resolve();
+                },
+                failure: function () {
+                    deferred.reject('Unable to renew IP address!');
+                }
+            });
+            return deferred.promise;
+        },
+
+        getNewStatus: function (device) {
+            var deferred = new Ext.Deferred();
+            Ext.Ajax.request({
+                url: '/api/status/interfaces/' + device,
+                success: function (response) {
+                    var status = Ext.decode(response.responseText);
+                    // response status is an array with 1 element
+                    deferred.resolve(status[0]);
+                },
+                failure: function () {
+                    deferred.reject('Unable to get interfaces status!');
+                }
+            });
+            return deferred.promise;
+        },
+
+        createMessage: function(newMessLiteral) {
+            return Ext.create('Ext.MessageBox', {
                 title: '',
                 bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
-                message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + intf.get('name') + '. Please wait ...</p>',
+                message: newMessLiteral,
                 width: 400,
                 showAnimation: null,
                 hideAnimation: null,
@@ -454,64 +493,45 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     }
                 }]
             });
+        },
 
-            if (!device) { return; }
+        updateMessage: function(oldMessObj, newMessLiteral, enableCloseOption) {
+            oldMessObj.setMessage(newMessLiteral)
 
-            renewMsg.show();
-
-            Ext.Ajax.request({
-                url: '/api/releasedhcp/' + device,
-                method: 'POST',
-                success: function () {
-                    renewMsg.setMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>' + intf.get('name') + ' IP Address has been released...<br/><br/>');
-                },
-                failure: function (response) {
-                    if (response.aborted) {
-                        renewMsg.hide();
-                        return;
+            if (enableCloseOption) {
+                oldMessObj.setButtons([{
+                    text: 'Close',
+                    ui: 'action', 
+                    margin: '16 0 8 0 ',
+                    handler: function() {
+                        oldMessObj.hide();
                     }
-                    renewMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to release ip address for ' + intf.get('name') + '!</p>');
-                    renewMsg.setButtons([{
-                        text: 'Close',
-                        ui: 'action',
-                        margin: '16 0 8 0',
-                        handler: function () {
-                            renewMsg.hide();
-                        }
-                    }]);
-                
-                },
-                callback: function () {
-                    //Call renew in the callback method
-                    Ext.Ajax.request({
-                        url: '/api/renewdhcp/' + device,
-                        method: 'POST',
-                        success: function () {
-                            renewMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' IP has been renewed.<br/><br/>');
-                        },
-                        failure: function (response) {
-                            if (response.aborted) {
-                                renewMsg.hide();
-                                return;
-                            }
-                            renewMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to renew IP Address for ' + intf.get('name') + '!</p>');
-                        },
-                        callback: function () {
-                            renewMsg.setButtons([{
-                                text: 'Close',
-                                ui: 'action',
-                                margin: '16 0 8 0',
-                                handler: function () {
-                                    renewMsg.hide();
-                                }
-                            }]);
-                        }
-                    });
-                }
-                });
+                }])
+            }
+        },
 
-           
+        onRenew: function () {
+            var me = this,
+                device = me.getViewModel().get('intf.device');
+
+            // TODO: show loading message
+            this.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + intf.get('name') + '. Please wait ...</p>')
+            
+            Ext.Deferred.sequence([
+                me.releaseDhcp(device),
+                me.renewDhcp(device),
+              //  me.getNewStatus(device) //-- probably needed to fetch updated status
+            ], me)
+            .then(function (result) {
+                var release = result[0],
+                    renew = result[1],
+                    newStatus = result[2];
+
+                console.log(newStatus);
+
+            }, function (error) {
+                console.error(error);
+            })
         }
     }
-
 });
