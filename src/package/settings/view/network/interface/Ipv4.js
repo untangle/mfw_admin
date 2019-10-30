@@ -73,6 +73,36 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                  * - v4DhcpDNS1Override
                  * - v4DhcpDNS2Override
                  */
+                xtype: 'containerfield',
+                layout: 'hbox',
+                defaults: {
+                    flex: 1,
+                    required: false,
+                    clearable: false
+                },
+                items: [{
+                    xtype: 'textfield',
+                    label: 'Address',
+                    margin: '0 16 0 0',
+                    bind: {
+                        value: '{intf._status.ip4Addr[0]}',
+                        disabled: '{intf.v4ConfigType !== "DHCP"}'
+                    },
+                    handler: function (field, trigger) {
+                        console.log("Loading ip4 field...");
+                        console.log(this.getViewModel().get('intf').get('_status').ip4Addr[0]);
+                    },
+                    validators: 'ipv4'
+                }, {
+                    xtype: 'selectfield',
+                    label: 'Netmask/Prefix',
+                    margin: '0 0 0 16',
+                    bind: {
+                        disabled: '{intf.v4ConfigType !== "DHCP"}'
+                    },
+                    options: Map.options.prefixes
+                }]
+            }, {
                 xtype: 'container',
                 layout: 'vbox',
                 flex: 1,
