@@ -126,6 +126,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                                     text: 'Renew IP'.t(),
                                     ui: 'action',
                                     handler: 'onRenewIp',
+                                    disabled: '{addressReady}',
                                     margin: '0 0 0 0'
                                 }
                             ]
