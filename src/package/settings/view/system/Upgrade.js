@@ -72,7 +72,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             xtype: 'component',
             margin: '16 0 0 0',
             style: 'font-size: 14px;',
-            html: 'Select day and time when automatically upgrade should start'
+            html: 'Select the day and time to upgrade automatically'
         }, {
             xtype: 'containerfield',
             layout: 'hbox',
