@@ -24,6 +24,14 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             },
             _v4StaticPrefixOverridePlaceholder: function (get) {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
+            },
+            addressReady: function (get) {
+                var test = get('intf').get('_status').ip4Addr;
+
+                if(test.length > 0)
+                    return false
+
+                return true
             }
         }
     },
