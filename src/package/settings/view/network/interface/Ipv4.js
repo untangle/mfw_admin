@@ -463,7 +463,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 url: '/api/releasedhcp/' + device,
                 method: 'POST',
                 success: function () {
-                    //Refresh the IP Address fields (clear out)
                     renewMsg.setMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>' + intf.get('name') + ' IP Address has been released...<br/><br/>');
                 },
                 failure: function (response) {
