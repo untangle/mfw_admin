@@ -84,10 +84,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         value: '{intf._status.ip4Addr[0]}',
                         disabled: '{intf.v4ConfigType !== "DHCP"}'
                     },
-                    handler: function (field, trigger) {
-                        console.log("Loading ip4 field...");
-                        console.log(this.getViewModel().get('intf').get('_status').ip4Addr[0]);
-                    },
                     validators: 'ipv4'
                 }, {
                     xtype: 'selectfield',
@@ -515,7 +511,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 device = me.getViewModel().get('intf.device');
 
             // TODO: show loading message
-            this.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + intf.get('name') + '. Please wait ...</p>')
+            this.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
             
             Ext.Deferred.sequence([
                 me.releaseDhcp(device),
