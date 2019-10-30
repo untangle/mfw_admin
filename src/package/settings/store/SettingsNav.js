@@ -55,7 +55,7 @@ Ext.define('Mfw.store.SettingsNav', {
                 // { text: 'Accounts'.t(), leaf: true, href: 'system/accounts' },
                 { text: 'Upgrade'.t(), leaf: true, href: 'system/upgrade' },
                 { text: 'Logging'.t(), leaf: true, href: 'system/logging' },
-                // { text: 'License'.t(), leaf: true, href: 'system/license' },
+                { text: 'License'.t(), leaf: true, href: 'system/license' },
                 { text: 'About'.t(), leaf: true, href: 'system/about' }
             ]
         }]
