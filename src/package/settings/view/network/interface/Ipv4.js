@@ -60,6 +60,34 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN"}'
                 }
             }, {
+                xtype: 'container',
+                padding: '0 0 16 0',
+                layout: {
+                    type: 'hbox',
+                    align: 'middle'
+                },
+                hidden: true,
+                bind: {
+                    hidden: '{intf.v4ConfigType !== "DHCP"}'
+                },
+                items: [{
+                    xtype: 'component',
+                    flex: 1,
+                    bind: {
+                        html: 'Current address: <strong>{intf._status.ip4Addr.0}</strong>'
+                    }
+                }, {
+                    xtype: 'button',
+                    ui: 'action',
+                    text: 'Renew IP',
+                    handler: 'onRenew',
+                    // optional (hide renew button in setup context)
+                    // hidden: true,
+                    // bind: {
+                    //     hidden: '{setupContext}'
+                    // }
+                }]
+            }, {
 
                 /**
                  * IPv4 Auto (DHCP) defaults override
@@ -134,24 +162,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                         },
                         options: Map.options.prefixes
                     }]
-                },  {
-                        xtype: 'containerfield',
-                        layout: 'hbox',
-                        defaults: {
-                            flex: 1,
-                            required: false,
-                            clearable: false
-                        },
-                        items: [
-                                {
-                                    xtype: 'button',
-                                    text: 'Renew IP'.t(),
-                                    ui: 'action',
-                                    handler: 'onReleaseRenew',
-                                    disabled: false,
-                                    margin: '0 0 0 0'
-                                }
-                            ]
                 }, {
                     xtype: 'textfield',
                     label: 'Gateway Override',
@@ -435,7 +445,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to release IP address!');
                 }
             });
-            return deferred.promise();
+            return deferred.promise;
         },
         renewDhcp: function (device) {
             var deferred = new Ext.Deferred();
@@ -449,7 +459,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to renew IP address!');
                 }
             });
-            return deferred.promise();
+            return deferred.promise;
         },
 
         getNewStatus: function (device) {
@@ -465,11 +475,11 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to get interfaces status!');
                 }
             });
-            return deferred.promise();
+            return deferred.promise;
         },
 
-        createMessage: function (newMessLiteral) {
-            var msgBox = Ext.create('Ext.MessageBox', {
+        createMessage: function(newMessLiteral) {
+            return Ext.create('Ext.MessageBox', {
                 title: '',
                 bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
                 message: newMessLiteral,
@@ -489,32 +499,30 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     }
                 }]
             });
-
-            return msgBox;
         },
 
-        updateMessage: function (oldMessObj, newMessLiteral, enableCloseOption) {
+        updateMessage: function(oldMessObj, newMessLiteral, enableCloseOption) {
             oldMessObj.setMessage(newMessLiteral)
 
             if (enableCloseOption) {
                 oldMessObj.setButtons([{
                     text: 'Close',
-                    ui: 'action',
+                    ui: 'action', 
                     margin: '16 0 8 0 ',
-                    handler: function () {
+                    handler: function() {
                         oldMessObj.hide();
                     }
                 }])
             }
         },
 
-        onReleaseRenew: function () {
+        onRenew: function () {
             var me = this,
                 device = me.getViewModel().get('intf.device');
 
             // TODO: show loading message
-            //me.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
-
+            me.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
+            
             Ext.Deferred.sequence([
                 me.releaseDhcp(device),
                 me.renewDhcp(device),
