@@ -66,17 +66,7 @@ Ext.define('Mfw.dashboard.widget.Report', {
         },
     }],
     listeners: {
-        removed: function (widget) {
-            // abort ongoing async calls if removed
-            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
-                if (req.url.startsWith('/api/reports')) {
-                    req.abort();
-                }
-            });
-            if (widget.tout) {
-                clearTimeout(widget.tout);
-            }
-        }
+        removed: 'onRemoved'
     },
 
     controller: {
@@ -134,19 +124,28 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 viewModel.set('record', record);
 
                 WidgetsPipe.add(widget);
-
-                // me.loadData();
             }, me, { deep: true });
-
-            // THIS BINDING is causing loading the data twice for each widget which is not OK
-            // viewModel.bind('{widget.interval}', function (intv) {
-            //     me.loadData();
-            // });
         },
 
         reload: function () {
             var me = this;
             WidgetsPipe.add(me.getView());
+        },
+
+        onRemoved: function (widget) {
+            // abort ongoing async calls if removed
+            var reportName = widget.getViewModel().get('record.name');
+
+            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                if (req.url.startsWith('/api/reports') && req.reportName === reportName) {
+                    // Ext.defer(function () {
+                        req.abort();
+                    // }, 200);
+                }
+            });
+            if (widget.tout) {
+                clearTimeout(widget.tout);
+            }
         }
     }
 
