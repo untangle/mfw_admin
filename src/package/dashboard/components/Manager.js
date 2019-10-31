@@ -198,14 +198,6 @@ Ext.define('Mfw.dashboard.Manager', {
                 }
             });
 
-            // update queue when interval changes
-            store.getModifiedRecords().forEach(function(widget) {
-                var wgCnt = widgetsContainer.down('#widget_' + widget.get('_identifier'));
-                if (wgCnt) {
-                    WidgetsPipe.addFirst(wgCnt);
-                }
-            });
-
             store.each(function (widget) {
                 // establish the widget component config if needed to be added
                 if (widget.get('isReport')) {
