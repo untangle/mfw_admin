@@ -25,7 +25,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             _v4StaticPrefixOverridePlaceholder: function (get) {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
             },
-            addressReady: function (get) {
+            _addressReady: function (get) {
                console.log("Checking if ip addr is populated...");
                return true;
             }
@@ -97,32 +97,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                  * - v4DhcpDNS1Override
                  * - v4DhcpDNS2Override
                  */
-                xtype: 'containerfield',
-                layout: 'hbox',
-                defaults: {
-                    flex: 1,
-                    required: false,
-                    clearable: false
-                },
-                items: [{
-                    xtype: 'textfield',
-                    label: 'Address',
-                    margin: '0 16 0 0',
-                    bind: {
-                        value: '{intf._status.ip4Addr[0]}',
-                        disabled: '{intf.v4ConfigType !== "DHCP"}'
-                    },
-                    validators: 'ipv4'
-                }, {
-                    xtype: 'selectfield',
-                    label: 'Netmask/Prefix',
-                    margin: '0 0 0 16',
-                    bind: {
-                        disabled: '{intf.v4ConfigType !== "DHCP"}'
-                    },
-                    options: Map.options.prefixes
-                }]
-            }, {
                 xtype: 'container',
                 layout: 'vbox',
                 flex: 1,
@@ -433,111 +407,64 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             me.aliasesDialog.show();
         },
+        getNewStatus: function (device) {
+            console.log("Getting new status: " + device);
+            Ext.Ajax.request({
+                url: '/api/status/interfaces/' + device,
+                async: false,
+                success: function (response) {
+                    // response status is an array with 1 element, does this need to go back into vm?
+                    return response.responseText;
+                },
+                failure: function () {
+                    console.log("Unable to get interface status!")
+                    return null
+                }
+            });
+            return null;
+        },
         releaseDhcp: function (device) {
-            var deferred = new Ext.Deferred();
+            console.log("Releasing device: " + device);
             Ext.Ajax.request({
                 url: '/api/releasedhcp/' + device,
                 method: 'POST',
+                async: false,
                 success: function () {
-                    deferred.resolve();
+                    return true;
                 },
                 failure: function () {
-                    deferred.reject('Unable to release IP address!');
+                    return false;
                 }
             });
-            return deferred.promise;
+            return false;
         },
         renewDhcp: function (device) {
-            var deferred = new Ext.Deferred();
+            console.log("Renewing device: " + device);
             Ext.Ajax.request({
                 url: '/api/renewdhcp/' + device,
                 method: 'POST',
+                async: false,
                 success: function (response) {
-                    deferred.resolve();
+                    return true;
                 },
                 failure: function () {
-                    deferred.reject('Unable to renew IP address!');
+                    return false;
                 }
             });
-            return deferred.promise;
-        },
-
-        getNewStatus: function (device) {
-            var deferred = new Ext.Deferred();
-            Ext.Ajax.request({
-                url: '/api/status/interfaces/' + device,
-                success: function (response) {
-                    var status = Ext.decode(response.responseText);
-                    // response status is an array with 1 element
-                    deferred.resolve(status[0]);
-                },
-                failure: function () {
-                    deferred.reject('Unable to get interfaces status!');
-                }
-            });
-            return deferred.promise;
-        },
-
-        createMessage: function(newMessLiteral) {
-            return Ext.create('Ext.MessageBox', {
-                title: '',
-                bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
-                message: newMessLiteral,
-                width: 400,
-                showAnimation: null,
-                hideAnimation: null,
-                buttons: [{
-                    text: 'Cancel',
-                    ui: 'action',
-                    margin: '16 0 0 0',
-                    handler: function () {
-                        Ext.Object.each(Ext.Ajax.requests, function (key, req) {
-                            if (req.url.startsWith('/api/releasedhcp/') || req.url.startsWith('/api/renewdhcp')) {
-                                req.abort();
-                            }
-                        });
-                    }
-                }]
-            });
-        },
-
-        updateMessage: function(oldMessObj, newMessLiteral, enableCloseOption) {
-            oldMessObj.setMessage(newMessLiteral)
-
-            if (enableCloseOption) {
-                oldMessObj.setButtons([{
-                    text: 'Close',
-                    ui: 'action', 
-                    margin: '16 0 8 0 ',
-                    handler: function() {
-                        oldMessObj.hide();
-                    }
-                }])
-            }
+            return false;
         },
 
         onRenew: function () {
             var me = this,
-                device = me.getViewModel().get('intf.device');
+                interface = me.getViewModel().get('intf');
 
             // TODO: show loading message
-            me.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
-            
-            Ext.Deferred.sequence([
-                me.releaseDhcp(device),
-                me.renewDhcp(device),
-                me.getNewStatus(device) //-- probably needed to fetch updated status
-            ], me)
-            .then(function (result) {
-                var release = result[0],
-                    renew = result[1],
-                    newStatus = result[2];
+            me.renewDhcp(interface.get('device'));
 
-                console.log(newStatus);
+            var newStatus = me.getNewStatus(interface.get('device'));
 
-            }, function (error) {
-                console.error(error);
-            })
+            console.log(newStatus);
+
         }
     }
 });
