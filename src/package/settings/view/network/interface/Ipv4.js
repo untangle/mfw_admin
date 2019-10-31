@@ -26,8 +26,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
             },
             addressReady: function (get) {
-               console.log("Checking if ip addr is populated...")
-               return true
+               console.log("Checking if ip addr is populated...");
+               return true;
             }
         }
     },
@@ -147,8 +147,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                                     xtype: 'button',
                                     text: 'Renew IP'.t(),
                                     ui: 'action',
-                                    handler: 'onRenewIp',
-                                    disabled: '{addressReady}',
+                                    handler: 'onReleaseRenew',
+                                    disabled: false,
                                     margin: '0 0 0 0'
                                 }
                             ]
@@ -435,7 +435,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to release IP address!');
                 }
             });
-            return deferred.promise;
+            return deferred.promise();
         },
         renewDhcp: function (device) {
             var deferred = new Ext.Deferred();
@@ -449,7 +449,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to renew IP address!');
                 }
             });
-            return deferred.promise;
+            return deferred.promise();
         },
 
         getNewStatus: function (device) {
@@ -465,11 +465,11 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     deferred.reject('Unable to get interfaces status!');
                 }
             });
-            return deferred.promise;
+            return deferred.promise();
         },
 
-        createMessage: function(newMessLiteral) {
-            return Ext.create('Ext.MessageBox', {
+        createMessage: function (newMessLiteral) {
+            var msgBox = Ext.create('Ext.MessageBox', {
                 title: '',
                 bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
                 message: newMessLiteral,
@@ -489,34 +489,36 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     }
                 }]
             });
+
+            return msgBox;
         },
 
-        updateMessage: function(oldMessObj, newMessLiteral, enableCloseOption) {
+        updateMessage: function (oldMessObj, newMessLiteral, enableCloseOption) {
             oldMessObj.setMessage(newMessLiteral)
 
             if (enableCloseOption) {
                 oldMessObj.setButtons([{
                     text: 'Close',
-                    ui: 'action', 
+                    ui: 'action',
                     margin: '16 0 8 0 ',
-                    handler: function() {
+                    handler: function () {
                         oldMessObj.hide();
                     }
                 }])
             }
         },
 
-        onRenew: function () {
+        onReleaseRenew: function () {
             var me = this,
                 device = me.getViewModel().get('intf.device');
 
             // TODO: show loading message
-            this.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
-            
+            //me.createMessage('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + device.get('name') + '. Please wait ...</p>')
+
             Ext.Deferred.sequence([
                 me.releaseDhcp(device),
                 me.renewDhcp(device),
-              //  me.getNewStatus(device) //-- probably needed to fetch updated status
+                me.getNewStatus(device) //-- probably needed to fetch updated status
             ], me)
             .then(function (result) {
                 var release = result[0],
