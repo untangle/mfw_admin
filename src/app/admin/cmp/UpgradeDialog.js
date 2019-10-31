@@ -23,20 +23,9 @@ Ext.define('Mfw.cmp.UpgradeDialog', {
 
     listeners: {
         show: function (view) {
-
-            Ext.Ajax.request({
-                url: '/api/upgrade',
-                method: 'POST',
-                success: function () {
-                    // console.log('success');
-                },
-                failure: function(response) {
-                    console.log('Unable to upgrade ... ' + response.status);
-                    view.destroy();
-                }
-            });
-
-
+            /**
+             * checks and waits for the system to be back online after upgrade
+             */
             var checkOnline = function () {
                 Ext.Ajax.request({
                     url: '/account/status',

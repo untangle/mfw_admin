@@ -247,31 +247,58 @@ Ext.define('Mfw.settings.system.Upgrade', {
         },
 
         onSubmit: function (btn) {
-            var form = btn.up('formpanel');
+            var form = btn.up('formpanel'),
+                uploadMsg = '<p style="text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i> Uploading upgrade image ...</p>',
+                errorMsg = '<p style="text-align: center;"><i class="fa fa-exclamation-triangle" style="color: red;"></i> {0}</p>';
 
             if (!form.validate()) { return; }
 
-
-            Ext.Msg.show({
-                title: 'Uploading the upgrade image',
-                message: '<p style="text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i> Please wait ...</p>',
-                buttons: []
+            var msg = Ext.create('Ext.MessageBox', {
+                bodyStyle: 'font-size: 14px; color: #333; padding: 32px 16px 0 16px;',
+                message: uploadMsg,
+                width: 360,
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'Close',
+                    ui: 'action',
+                    hidden: true,
+                    handler: function () {
+                        msg.close();
+                        form.down('filefield').reset();
+                    }
+                }]
             });
+            msg.show();
+
 
             /**
-             * this will fail because some iframe cross origin issue returning
-             * responseText: {"success":false,"message":"Blocked a frame with origin \"http://sdwan\" from accessing a cross-origin frame."}
-             * even if the file is successfully uploaded and upgrade is done
+             * uploads the image file
+             * which triggers upgrade process if the file is valid
              */
             form.submit({
                 url: '/api/sysupgrade',
                 method: 'POST',
-                success: function () {
-                    Ext.Msg.hide();
+                success: function (form, result) {
+                    // display errors received from backend
+                    if (result.error) {
+                        msg.setMessage(Ext.String.format(errorMsg, result.error));
+                        msg.down('button').setHidden(false);
+                        return;
+                    }
+                    // otherwise show pending upgrade
+                    msg.hide();
+                    Mfw.app.viewport.add({
+                        xtype: 'upgrade-dialog'
+                    }).show();
                 },
-                failure: function () {
-                    // assume the upload is successful even response is failure
-                    Ext.Msg.hide();
+                failure: function (form, result) {
+                    /**
+                     * this is an actual success upload, after which upgrade process starts
+                     * the servers returns:
+                     * {"success":false,"message":"Blocked a frame with origin \"http://e3\" from accessing a cross-origin frame."}
+                     */
+                    msg.hide();
                     Mfw.app.viewport.add({
                         xtype: 'upgrade-dialog'
                     }).show();
