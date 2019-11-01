@@ -126,19 +126,19 @@ Ext.define('Mfw.reports.Util', {
 
     fetchReportData: function (report, cb) {
         var data = [],
+            reportName = report.getData(true).name, // to identify request based on report
+
             createQuery = function (report, cb2) {
                 Ext.Ajax.request({
                     url: '/api/reports/create_query',
+                    reportName: reportName,
                     params: Ext.JSON.encode(report.getData(true)),
                     success: function(response) {
-                        // get data
                         var queryId = Ext.decode(response.responseText);
                         cb2(queryId);
-                        // ReportsUtil.fetch2(queryId, 0);
                     },
                     failure: function () {
                         cb2();
-                        // console.error('Unable to create query!');
                     }
                 });
             },
@@ -150,6 +150,7 @@ Ext.define('Mfw.reports.Util', {
                 var partialData;
                 Ext.Ajax.request({
                     url: '/api/reports/get_data/' + queryId,
+                    reportName: reportName,
                     success: function (response) {
                         partialData = Ext.decode(response.responseText);
 
@@ -179,6 +180,7 @@ Ext.define('Mfw.reports.Util', {
             closeQuery = function (queryId) {
                 Ext.Ajax.request({
                     url: '/api/reports/close_query/' + queryId,
+                    reportName: reportName,
                     method: 'POST',
                     success: function () {
                         // cb(data);

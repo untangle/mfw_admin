@@ -95,25 +95,27 @@ Ext.define('Mfw.reports.Main', {
                     listeners: {
                         change: 'filterReports'
                     }
-                }, {
-                    // iconCls: 'md-icon-import-export',
-                    iconCls: 'x-fa fa-upload',
-                    tooltip: 'Export Reports',
-                    ui: 'round',
-                    arrow: false,
-                    handler: 'exportReports'
-                    // menuAlign: 'tr-br?',
-                    // menu: {
-                    //     items: [{
-                    //         text: 'Export',
-                    //         iconCls: 'x-fa fa-upload',
-                    //         handler: 'exportReports'
-                    //     }, {
-                    //         text: 'Import (not implemented)',
-                    //         iconCls: 'x-fa fa-download'
-                    //     }]
-                    // }
-                }]
+                },
+                // {
+                //     // iconCls: 'md-icon-import-export',
+                //     iconCls: 'x-fa fa-upload',
+                //     tooltip: 'Export Reports',
+                //     ui: 'round',
+                //     arrow: false,
+                //     handler: 'exportReports'
+                //     // menuAlign: 'tr-br?',
+                //     // menu: {
+                //     //     items: [{
+                //     //         text: 'Export',
+                //     //         iconCls: 'x-fa fa-upload',
+                //     //         handler: 'exportReports'
+                //     //     }, {
+                //     //         text: 'Import (not implemented)',
+                //     //         iconCls: 'x-fa fa-download'
+                //     //     }]
+                //     // }
+                // }
+                ]
             }
         }, {
             xtype: 'report'
