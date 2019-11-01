@@ -84,7 +84,7 @@ Ext.define('Mfw.setup.step.Eula', {
          */
         onPainted: function (cmp) {
             var vm = this.getViewModel(),
-                remoteEulaSrc = 'https://develop.untangle.com/legal',
+                remoteEulaSrc = 'https://www.untangle.com/legal',
                 localEulaSrc = '/setup/eula.html',
                 iframe = document.getElementById('eula-src'),
                 img = new Image(0,0); // 0 width and height
