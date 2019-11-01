@@ -15,7 +15,7 @@ Ext.define('Mfw.settings.system.License', {
         items: [{
             xtype: 'component',
             style: 'color: red',
-            html: 'Not lincensed!',
+            html: 'Not licensed!',
             padding: 8,
             hidden: true,
             bind: {

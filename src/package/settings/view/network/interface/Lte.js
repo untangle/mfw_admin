@@ -93,7 +93,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     label: 'Network',
                     margin: '0 16 0 0',
                     options: Map.options.simNetworks,
-                    placeholder: 'Select a network ...',
+                    placeholder: 'Select network provider ...',
                     forceSelection: true,
                     bind: {
                         value: '{_simNetwork}',
