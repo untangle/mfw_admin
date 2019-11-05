@@ -25,10 +25,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             _v4StaticPrefixOverridePlaceholder: function (get) {
                 return Map.prefixes[get('intf.v4StaticPrefix')];
             },
-            _addressReady: function (get) {
-               console.log("Checking if ip addr is populated...");
-               return true;
-            }
         }
     },
 
@@ -81,11 +77,9 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     ui: 'action',
                     text: 'Renew IP',
                     handler: 'onRenew',
-                    // optional (hide renew button in setup context)
-                    // hidden: true,
-                    // bind: {
-                    //     hidden: '{setupContext}'
-                    // }
+                    bind: {
+                        disabled: '{intf.v4ConfigType !== "DHCP"}'
+                    }
                 }]
             }, {
 
@@ -397,6 +391,9 @@ Ext.define('Mfw.settings.interface.Ipv4', {
         }]
     }],
     controller: {
+        /**
+         * showIpv4Aliases generates a dialog box that shows the ipv4aliases editor
+         */
         showIpv4Aliases: function () {
             var me = this;
             me.aliasesDialog = Ext.Viewport.add({
@@ -407,6 +404,10 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             me.aliasesDialog.show();
         },
+        /**
+         * getStatus will get the status of a specific interface or device
+         * @param device (string) - the device name to be passed to the interfaces API call
+         */
         getStatus: function (device) {
             var statusResponse = null;
             Ext.Ajax.request({
@@ -420,6 +421,10 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             return statusResponse;
         },
+        /**
+         * releaseDhcp will send a DHCP release on the device specified
+         * @param device (string) - the device name to be passed to the release DHCP API call
+         */
         releaseDhcp: function (device) {
             var releaseResult = false;
             Ext.Ajax.request({
@@ -434,6 +439,10 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             return releaseResult;
         },
+        /**
+         * renewDhcp will send a DHCP renew on the device specified
+         * @param device (string) - the device name to be passed to the renew DHCP API call
+         */
         renewDhcp: function (device) {
             var renewResult = false;
             Ext.Ajax.request({
@@ -448,6 +457,10 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             return renewResult;
         },
+        /**
+         * displayMessageBox will display a message box with text passed in to the parameter
+         * @param messageText (string) - the message text to display when being run
+         */
         displayMessageBox: function(messageText) {
             var displayMessage = Ext.create('Ext.MessageBox', {
                 title: '',
@@ -476,6 +489,12 @@ Ext.define('Mfw.settings.interface.Ipv4', {
 
             return displayMessage;
         },
+        /**
+         * updateMessageBox will update a currently displayed message box with text that is passed in
+         * @param oldMessObj - the message object to update
+         * @param newMessageText (string) - the message text to display
+         * @param showClose (boolean) - whether or not to display the close button
+         */
         updateMessageBox: function(oldMessObj, newMessageText, showClose) {
             oldMessObj.setMessage(newMessageText);
 
@@ -489,6 +508,9 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     }
                 }])};
         },
+        /**
+         * onRenew is a button handler that is called when the Renew IP button is pressed
+         */
         onRenew: function () {
             var me = this,
                 interface = me.getViewModel().get('intf');
