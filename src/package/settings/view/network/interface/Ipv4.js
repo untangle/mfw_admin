@@ -78,7 +78,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     text: 'Renew IP',
                     handler: 'onRenew',
                     bind: {
-                        disabled: '{intf.v4ConfigType !== "DHCP"}'
+                        disabled: '{intf.addressSource !== "dhcp" || intf.addressSource !== dhcpv6}'
                     }
                 }]
             }, {
