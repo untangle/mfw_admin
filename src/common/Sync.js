@@ -87,8 +87,16 @@ Ext.define('Mfw.Sync', {
                 items: [{
                     xtype: 'component',
                     style: 'font-size: 14px;',
+                    hidden: true,
                     bind: {
-                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{exception.summary}</p>'
+                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2>',
+                        hidden: '{!stack}'
+                    }
+                }, {
+                    xtype: 'component',
+                    style: 'font-size: 14px;',
+                    bind: {
+                        html: '<p>{exception.summary}</p>',
                     }
                 }, {
                     xtype: 'container',
@@ -297,7 +305,9 @@ Ext.define('Mfw.Sync', {
                 try {
                     var resp = Ext.JSON.decode(response.responseText, true);
                     summary = resp.error;
-                    stack = resp.output.replace(/\n/g, '</br>');
+                    if (resp.output) {
+                        stack = resp.output.replace(/\n/g, '</br>');
+                    }
                 } catch(e) {
                     summary = response.responseText;
                 }
