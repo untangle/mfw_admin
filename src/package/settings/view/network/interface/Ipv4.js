@@ -407,64 +407,107 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             });
             me.aliasesDialog.show();
         },
-        getNewStatus: function (device) {
-            console.log("Getting new status: " + device);
+        getStatus: function (device) {
+            var statusResponse = null;
             Ext.Ajax.request({
                 url: '/api/status/interfaces/' + device,
                 async: false,
                 success: function (response) {
-                    // response status is an array with 1 element, does this need to go back into vm?
-                    return response.responseText;
+                    statusResponse = response.responseText;
                 },
                 failure: function () {
-                    console.log("Unable to get interface status!")
-                    return null
                 }
             });
-            return null;
+            return statusResponse;
         },
         releaseDhcp: function (device) {
-            console.log("Releasing device: " + device);
+            var releaseResult = false;
             Ext.Ajax.request({
                 url: '/api/releasedhcp/' + device,
                 method: 'POST',
                 async: false,
                 success: function () {
-                    return true;
+                    releaseResult = true;
                 },
                 failure: function () {
-                    return false;
                 }
             });
-            return false;
+            return releaseResult;
         },
         renewDhcp: function (device) {
-            console.log("Renewing device: " + device);
+            var renewResult = false;
             Ext.Ajax.request({
                 url: '/api/renewdhcp/' + device,
                 method: 'POST',
                 async: false,
                 success: function (response) {
-                    return true;
+                    renewResult = true;
                 },
                 failure: function () {
-                    return false;
                 }
             });
-            return false;
+            return renewResult;
         },
+        displayMessageBox: function(messageText) {
+            var displayMessage = Ext.create('Ext.MessageBox', {
+                title: '',
+                bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
+                message: messageText,
+                width: 400,
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'Cancel',
+                    ui: 'action',
+                    margin: '16 0 0 0',
+                    handler: function () {
+                        Ext.Object.each(Ext.Ajax.requests, function (key, req) {
+                            if (req.url.startsWith('/api/releasedhcp/') || req.url.startsWith('/api/renewdhcp')) {
+                                req.abort();
+                            }
+                        });
 
+                        this.hide();
+                    }
+                }]
+            });
+
+            displayMessage.show();
+
+            return displayMessage;
+        },
+        updateMessageBox: function(oldMessObj, newMessageText, showClose) {
+            oldMessObj.setMessage(newMessageText);
+
+            if (showClose) {
+                oldMessObj.setButtons([{
+                    text: 'Close',
+                    ui: 'action', 
+                    margin: '16 0 8 0 ',
+                    handler: function() {
+                        oldMessObj.hide();
+                    }
+                }])};
+        },
         onRenew: function () {
             var me = this,
                 interface = me.getViewModel().get('intf');
 
-            // TODO: show loading message
-            me.renewDhcp(interface.get('device'));
+            var msgBox = me.displayMessageBox('<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Attempting to renew IP for ' + interface.get('name') + '. Please wait ...</p>');
+           
+            var renewResult = me.renewDhcp(interface.get('device'));
 
-            var newStatus = me.getNewStatus(interface.get('device'));
+            if(renewResult) {
+                var newStatus = me.getStatus(interface.get('device'));
 
-            console.log(newStatus);
-
+                if(newStatus != null) {
+                    me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">' + interface.get('name') + ' IP has been renewed.<br/><br/>', true);
+                } else {
+                    me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">Unable to get new interface status for ' + interface.get('name') + '!</p>', true);
+                }
+            } else {
+                me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">Unable to renew IP Address for ' + interface.get('name') + '!</p>', true);
+            }
         }
     }
 });
