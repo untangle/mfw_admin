@@ -84,7 +84,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'type',        type: 'string' }, // ["NIC","VLAN","WIFI","OPENVPN","WIREGUARD","WWAN"]
         { name: 'configType',  type: 'string' }, // ["ADDRESSED","BRIDGED"]
         { name: 'enabled',     type: 'boolean', defaultValue: true },
-        { name: 'addressSource', type: 'string', allowNull: true },
 
         { name: 'natEgress',  type: 'boolean', allowNull: true },
         { name: 'natIngress', type: 'boolean', allowNull: true },
