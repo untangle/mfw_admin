@@ -9,7 +9,7 @@
     "queryCategories": {
         "groupColumn": "interface_id",
         "aggregationFunction": "sum",
-        "aggregationValue": "ping_timeout/60",
+        "aggregationValue": "ping_timeout",
         "limit": 10
     },
     "querySeries": {
