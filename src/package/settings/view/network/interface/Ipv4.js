@@ -405,23 +405,6 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             me.aliasesDialog.show();
         },
         /**
-         * getStatus will get the status of a specific interface or device
-         * @param device (string) - the device name to be passed to the interfaces API call
-         */
-        getStatus: function (device) {
-            var statusResponse = null;
-            Ext.Ajax.request({
-                url: '/api/status/interfaces/' + device,
-                async: false,
-                success: function (response) {
-                    statusResponse = response.responseText;
-                },
-                failure: function () {
-                }
-            });
-            return statusResponse;
-        },
-        /**
          * releaseDhcp will send a DHCP release on the device specified
          * @param device (string) - the device name to be passed to the release DHCP API call
          */
@@ -520,13 +503,9 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             var renewResult = me.renewDhcp(interface.get('device'));
 
             if(renewResult) {
-                var newStatus = me.getStatus(interface.get('device'));
-
-                if(newStatus != null) {
-                    me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">' + interface.get('name') + ' IP has been renewed.<br/><br/>', true);
-                } else {
-                    me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">Unable to get new interface status for ' + interface.get('name') + '!</p>', true);
-                }
+                // if renew is successful, then reload the store data
+                me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">' + interface.get('name') + ' IP has been renewed.<br/><br/>', true);
+                Ext.getStore('interfaces').load();
             } else {
                 me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">Unable to renew IP Address for ' + interface.get('name') + '!</p>', true);
             }
