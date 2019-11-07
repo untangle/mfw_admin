@@ -505,7 +505,8 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             if(renewResult) {
                 // if renew is successful, then reload the store data
                 me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">' + interface.get('name') + ' IP has been renewed.<br/><br/>', true);
-                Ext.getStore('interfaces').load();
+                Ext.getStore('interfaces').reload();
+
             } else {
                 me.updateMessageBox(msgBox, '<p style="margin: 0; text-align: center;">Unable to renew IP Address for ' + interface.get('name') + '!</p>', true);
             }
