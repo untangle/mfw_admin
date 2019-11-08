@@ -109,6 +109,12 @@ Ext.define('Mfw.settings.interface.Qos', {
 
             if (!device) { return; }
 
+            // MFW-681, QoS settings must be saved before running performance test
+            if (intf.isModified('qosEnabled') && intf.get('qosEnabled') === true) {
+                Ext.Msg.alert('Info', 'Enabling QoS requires settings to be saved before testing the performance!', Ext.emptyFn);
+                return;
+            }
+
             testMsg.show();
 
             Ext.Ajax.request({
