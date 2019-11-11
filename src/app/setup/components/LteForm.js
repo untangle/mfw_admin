@@ -197,29 +197,44 @@ Ext.define('Mfw.setup.cmp.Lte', {
         }]
     }],
 
+    listeners: {
+        painted: 'onPainted'
+    },
+
     controller: {
-        init: function () {
-            var me = this, vm = me.getViewModel();
+        /**
+         * commented out as we only support T-Mobile for now
+         * todo: enable it when other networks will be available
+         */
+        // init: function () {
+        //     var me = this, vm = me.getViewModel();
+        //     vm.bind('{intf}', function (intf) {
+        //         if (!intf.get('simNetwork') && intf.get('simApn')) {
+        //             vm.set('_originalOtherApn', intf.get('simApn'));
+        //         }
+        //     }, me, {
+        //         single: true
+        //     });
+        // },
 
-            // single initial bind to get store apn if network is other (null)
-            vm.bind('{intf}', function (intf) {
-                if (!intf.get('simNetwork') && intf.get('simApn')) {
-                    vm.set('_originalOtherApn', intf.get('simApn'));
+        // MFW-789 - call wwan sim info only when LTE form is rendered
+        onPainted: function () {
+            var me = this,
+                intf = me.getViewModel().get('intf'),
+                device;
+
+            if (!intf) { return; }
+
+            device = intf.get('device');
+            Ext.Ajax.request({
+                url: '/api/status/wwan/' + device,
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText);
+                    vm.set('_simInfo', resp);
+                },
+                failure: function () {
+                    console.warn('Unable to get SIM info for device: ' + device);
                 }
-
-                // get sim info
-                Ext.Ajax.request({
-                    url: '/api/status/wwan/' + intf.get('device'),
-                    success: function (response) {
-                        var resp = Ext.decode(response.responseText);
-                        vm.set('_simInfo', resp);
-                    },
-                    failure: function () {
-                        console.error('Unable to check upgrade status!');
-                    }
-                });
-            }, me, {
-                single: true
             });
         }
     }
