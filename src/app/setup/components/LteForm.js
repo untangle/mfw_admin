@@ -191,50 +191,40 @@ Ext.define('Mfw.setup.cmp.Lte', {
             xtype: 'component',
             style: 'color: #555; border: 1px #CCC solid; border-radius: 5px; padding: 5px 15px;',
             margin: '32 0 0 0',
+            hidden: true,
             bind: {
-                html: '{_simInfoMessage}'
+                html: '{_simInfoMessage}',
+                hidden: '{!_simInfo}'
             }
         }]
     }],
-
-    listeners: {
-        painted: 'onPainted'
-    },
-
     controller: {
-        /**
-         * commented out as we only support T-Mobile for now
-         * todo: enable it when other networks will be available
-         */
-        // init: function () {
-        //     var me = this, vm = me.getViewModel();
-        //     vm.bind('{intf}', function (intf) {
-        //         if (!intf.get('simNetwork') && intf.get('simApn')) {
-        //             vm.set('_originalOtherApn', intf.get('simApn'));
-        //         }
-        //     }, me, {
-        //         single: true
-        //     });
-        // },
 
-        // MFW-789 - call wwan sim info only when LTE form is rendered
-        onPainted: function () {
-            var me = this,
-                intf = me.getViewModel().get('intf'),
-                device;
+        init: function () {
+            var me = this, vm = me.getViewModel(), device;
+            vm.bind('{intf}', function (intf) {
+                // MFW-789 - additional setting/status only if WWAN interface
+                if (intf.get('type') === 'WWAN') {
+                    if (!intf.get('simNetwork') && intf.get('simApn')) {
+                        vm.set('_originalOtherApn', intf.get('simApn'));
+                    }
+                    device = intf.get('device');
 
-            if (!intf) { return; }
+                    if (!device) { return; }
 
-            device = intf.get('device');
-            Ext.Ajax.request({
-                url: '/api/status/wwan/' + device,
-                success: function (response) {
-                    var resp = Ext.decode(response.responseText);
-                    vm.set('_simInfo', resp);
-                },
-                failure: function () {
-                    console.warn('Unable to get SIM info for device: ' + device);
+                    Ext.Ajax.request({
+                        url: '/api/status/wwan/' + device,
+                        success: function (response) {
+                            var resp = Ext.decode(response.responseText);
+                            vm.set('_simInfo', resp);
+                        },
+                        failure: function () {
+                            console.warn('Unable to get SIM info for device: ' + device);
+                        }
+                    });
                 }
+            }, me, {
+                single: true
             });
         }
     }
