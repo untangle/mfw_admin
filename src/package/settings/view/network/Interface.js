@@ -22,6 +22,7 @@ Ext.define('Mfw.settings.network.Interface', {
             _hiddenToolbar: function (get) {
                 return !get('intf.enabled') ||
                     get('intf.type') === 'WWAN' ||
+                    get('intf.type') === 'OPENVPN' ||
                     get('intf.configType') === 'BRIDGED' ||
                     (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED');
             },
@@ -44,7 +45,10 @@ Ext.define('Mfw.settings.network.Interface', {
             _hiddenQos: function (get) {
                 return !get('intf.wan') ||
                     get('intf.type') === 'WIFI' ||
-                    get('intf.type') === 'WWAN';
+                    get('intf.type') === 'WWAN' ||
+                    get('intf.type') === 'OPENVPN' ||
+                    get('intf.type') === 'WIREGUARD' ||
+                    get('intf.type') === 'VLAN';
             },
 
             /**

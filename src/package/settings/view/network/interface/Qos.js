@@ -84,7 +84,8 @@ Ext.define('Mfw.settings.interface.Qos', {
 
     controller: {
         onTestPerformance: function () {
-            var intf = this.getViewModel().get('intf'),
+            var vm = this.getViewModel(),
+                intf = vm.get('intf'),
                 device = intf.get('device'),
                 testMsg = Ext.create('Ext.MessageBox', {
                     title: '',
@@ -109,8 +110,8 @@ Ext.define('Mfw.settings.interface.Qos', {
 
             if (!device) { return; }
 
-            // MFW-681, QoS settings must be saved before running performance test
-            if (intf.isModified('qosEnabled') && intf.get('qosEnabled') === true) {
+            // MFW-681, allow testing performance only if interface was already saved
+            if (vm.get('isNew')) {
                 Ext.Msg.alert('Info', 'Enabling QoS requires settings to be saved before testing the performance!', Ext.emptyFn);
                 return;
             }

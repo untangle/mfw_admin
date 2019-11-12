@@ -11,7 +11,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
         editor: 'wan-policy-dialog'
     },
 
-    sortable: false,
+    sortable: true,
 
     store: {
         model: 'Mfw.model.WanPolicy'
@@ -21,22 +21,29 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
 
     columns: [{
         xtype: 'checkcolumn',
-        // text: 'Enabled',
         width: 40,
-        dataIndex: 'enabled'
+        dataIndex: 'enabled',
+        sortable: false,
+        hideable: false,
+        resizable: false,
+        menuDisabled: true,
+        groupable: false
     }, {
         text: 'Policy Id',
         dataIndex: 'policyId',
         align: 'right',
-        width: 80
+        width: 80,
+        groupable: false
     }, {
         text: 'Description',
         dataIndex: 'description',
-        width: 200
+        width: 200,
+        groupable: false
     }, {
         text: 'Type',
         dataIndex: 'type',
         width: 300,
+        groupable: false,
         cell: { encodeHtml: false },
         renderer: function (value, record) {
             var str;
@@ -70,6 +77,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
         dataIndex: 'interfaces',
         flex: 1,
         cell: { encodeHtml: false },
+        groupable: false,
         renderer: function (value, record) {
             var output = [],
                 weighted = record.get('balance_algorithm') === 'WEIGHTED';
@@ -87,6 +95,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
         dataIndex: 'criteria',
         flex: 1,
         cell: { encodeHtml: false },
+        groupable: false,
         renderer: function (value, record) {
             var output = [], text;
             record.criteria().each(function (c) {

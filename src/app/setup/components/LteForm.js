@@ -191,33 +191,38 @@ Ext.define('Mfw.setup.cmp.Lte', {
             xtype: 'component',
             style: 'color: #555; border: 1px #CCC solid; border-radius: 5px; padding: 5px 15px;',
             margin: '32 0 0 0',
+            hidden: true,
             bind: {
-                html: '{_simInfoMessage}'
+                html: '{_simInfoMessage}',
+                hidden: '{!_simInfo}'
             }
         }]
     }],
-
     controller: {
+
         init: function () {
-            var me = this, vm = me.getViewModel();
-
-            // single initial bind to get store apn if network is other (null)
+            var me = this, vm = me.getViewModel(), device;
             vm.bind('{intf}', function (intf) {
-                if (!intf.get('simNetwork') && intf.get('simApn')) {
-                    vm.set('_originalOtherApn', intf.get('simApn'));
-                }
-
-                // get sim info
-                Ext.Ajax.request({
-                    url: '/api/status/wwan/' + intf.get('device'),
-                    success: function (response) {
-                        var resp = Ext.decode(response.responseText);
-                        vm.set('_simInfo', resp);
-                    },
-                    failure: function () {
-                        console.error('Unable to check upgrade status!');
+                // MFW-789 - additional setting/status only if WWAN interface
+                if (intf.get('type') === 'WWAN') {
+                    if (!intf.get('simNetwork') && intf.get('simApn')) {
+                        vm.set('_originalOtherApn', intf.get('simApn'));
                     }
-                });
+                    device = intf.get('device');
+
+                    if (!device) { return; }
+
+                    Ext.Ajax.request({
+                        url: '/api/status/wwan/' + device,
+                        success: function (response) {
+                            var resp = Ext.decode(response.responseText);
+                            vm.set('_simInfo', resp);
+                        },
+                        failure: function () {
+                            console.warn('Unable to get SIM info for device: ' + device);
+                        }
+                    });
+                }
             }, me, {
                 single: true
             });
