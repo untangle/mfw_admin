@@ -91,7 +91,7 @@ Ext.define('Mfw.setup.step.Performance', {
                 }]
             },
             renderer: function (value) {
-                return value ? (value + ' Mbps') : '<em style="color: #777;">< not set ></em>';
+                return value ? (value + ' Mbps') : '<em style="color: #777;">type value</em>';
             },
             editor: {
                 xtype: 'numberfield',
@@ -113,7 +113,7 @@ Ext.define('Mfw.setup.step.Performance', {
                 }]
             },
             renderer: function (value) {
-                return value ? (value + ' Mbps') : '<em style="color: #777;">< not set ></em>';
+                return value ? (value + ' Mbps') : '<em style="color: #777;">type value</em>';
             },
             editor: {
                 xtype: 'numberfield',
@@ -122,18 +122,7 @@ Ext.define('Mfw.setup.step.Performance', {
                 required: true,
                 decimals: 3
             }
-        }
-        // {
-        //     text: 'Ping',
-        //     align: 'right',
-        //     width: 100,
-        //     menuDisabled: true,
-        //     dataIndex: '_ping',
-        //     renderer: function (value) {
-        //         return value ? value + ' ms' : '-';
-        //     }
-        // }
-        ]
+        }]
     }],
     listeners: {
         activate: 'onActivate'
@@ -181,136 +170,24 @@ Ext.define('Mfw.setup.step.Performance', {
         },
 
         /**
-         * actual test which runs simultaneously on all wans
+         * initiate performance test on each interface
          */
         runPerformanceTest: function () {
-            var me = this, fns = [],
+            var me = this
                 store = Ext.getStore('interfaces');
+                interfaces = [];
 
-            var testMsg = Ext.create('Ext.MessageBox', {
-                title: '',
-                bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
-                message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Performing WAN test. Please wait ...</p>',
-                width: 400,
-                showAnimation: null,
-                hideAnimation: null,
-                buttons: [{
-                    text: 'Cancel',
-                    ui: 'action',
-                    margin: '16 0 0 0',
-                    handler: function () {
-                        Ext.Object.each(Ext.Ajax.requests, function (key, req) {
-                            if (req.url.startsWith('/api/status/wantest')) {
-                                req.abort();
-                            }
-                        });
-                    }
-                }]
-            });
-
-            Ext.defer(function () {
-                testMsg.show();
-            });
-
-            // real call
             store.each(function (wan) {
-                // is wan but it needs to have static address set
                 if (wan.get('wan')) {
-                    fns.push(function () {
-                        var deferred = new Ext.Deferred(),
-                            device = wan.get('device');
-                        Ext.Ajax.request({
-                            url: '/api/status/wantest/' + device,
-                            timeout: 10000, // 10 seconds timeout
-                            success: function (response) {
-                                // if responseText is not a decadable JSON than will return null
-                                var result = Ext.JSON.decode(response.responseText, true);
-                                if (!result) {
-                                    deferred.reject('Invalid test result!');
-                                    return;
-                                }
-
-                                deferred.resolve({
-                                    device: device,
-                                    test: result
-                                });
-                            },
-                            failure: function (response) {
-                                // resolve the promise even if failed
-                                if (response.aborted) {
-                                    deferred.resolve();
-                                    return;
-                                }
-                                deferred.resolve({
-                                    device: device,
-                                    err: response.statusText
-                                });
-                            }
-                        });
-                        return deferred.promise;
-                    });
+                    interfaces.push(wan);
                 }
             });
 
-            Ext.Deferred.parallel(fns, me)
-                .then(function (result) {
-                    var intf, errors = [], msg;
-
-                    Ext.Array.each(result, function (res) {
-                        intf = store.findRecord('device', res.device);
-                        if (res.err) {
-                            errors.push('Unable to test <strong>' + intf.get('name') + '</strong>!');
-                            return;
-                        }
-                        intf.set({
-                            qosEnabled: true,
-                            downloadKbps: res.test.download,
-                            uploadKbps: res.test.upload,
-                            _ping: res.test.ping
-                        });
-                    });
-
-                    if (errors.length > 0) {
-                        msg = errors.join('<br/>');
-                        msg += '<p>You can set manually the download/upload limits.</p>';
-
-                        // this message will appear only if test faild for at least a wan
-                        Ext.Msg.show({
-                            title: 'Performance test result',
-                            bodyStyle: 'font-size: 14px;',
-                            message: msg,
-                            width: 400,
-                            showAnimation: null,
-                            hideAnimation: null,
-                            buttons: [{
-                                text: 'OK',
-                                ui: 'action',
-                                handler: function () {
-                                    this.up('messagebox').hide();
-                                }
-                            }]
-                        });
-                    }
-                }, function (err) {
-                    Ext.Msg.show({
-                        title: 'Unable to test',
-                        bodyStyle: 'font-size: 14px; color: #333;',
-                        message: err,
-                        width: 400,
-                        showAnimation: null,
-                        hideAnimation: null,
-                        buttons: [{
-                            text: 'OK',
-                            ui: 'action',
-                            handler: function () {
-                                this.up('messagebox').hide();
-                            }
-                        }]
-                    });
-                })
-                .always(function () {
-                    testMsg.hide();
-                });
+            // use performance dialog
+            Ext.Viewport.add({
+                xtype: 'performance-dialog',
+                interfaces: interfaces
+            }).show();
         },
 
         continue: function (cb) {

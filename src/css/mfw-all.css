@@ -1,4 +1,4 @@
-:root { --base-color: #519839; --base-highlight-color: #91e971; --base-dark-color: #3e752b; --base-pressed-color: #dfe6ea; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
+:root { --base-color: #519839; --base-highlight-color: #91e971; --base-dark-color: #3e752b; --base-pressed-color: #dfe6ea; --base-light-color: #cef1c1; --accent-color: #55c32d; --accent-light-color: #cef1c1; }
 
 .x-root { -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; user-select: auto; }
 
