@@ -1,6 +1,5 @@
 /**
  * QoS options
- * shown only if interface is WAN
  */
 Ext.define('Mfw.settings.interface.Qos', {
     extend: 'Ext.Panel',
@@ -71,7 +70,7 @@ Ext.define('Mfw.settings.interface.Qos', {
                 text: 'Test Performance',
                 ui: 'action',
                 margin: '32 0 0 0',
-                handler: 'onTestPerformance',
+                handler: 'runPerformanceTest',
                 hidden: true,
                 disabled: true,
                 bind: {
@@ -83,70 +82,16 @@ Ext.define('Mfw.settings.interface.Qos', {
     }],
 
     controller: {
-        onTestPerformance: function () {
-            var vm = this.getViewModel(),
-                intf = vm.get('intf'),
-                device = intf.get('device'),
-                testMsg = Ext.create('Ext.MessageBox', {
-                    title: '',
-                    bodyStyle: 'font-size: 14px; color: #333; padding: 0;',
-                    message: '<p style="margin: 0; text-align: center;"><i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/>Testing performance of ' + intf.get('name') + '. Please wait ...</p>',
-                    width: 400,
-                    showAnimation: null,
-                    hideAnimation: null,
-                    buttons: [{
-                        text: 'Cancel',
-                        ui: 'action',
-                        margin: '16 0 0 0',
-                        handler: function () {
-                            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
-                                if (req.url.startsWith('/api/status/wantest')) {
-                                    req.abort();
-                                }
-                            });
-                        }
-                    }]
-                });
+        runPerformanceTest: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                intf = vm.get('intf');
 
-            if (!device) { return; }
-
-            // MFW-681, allow testing performance only if interface was already saved
-            if (vm.get('isNew')) {
-                Ext.Msg.alert('Info', 'Enabling QoS requires settings to be saved before testing the performance!', Ext.emptyFn);
-                return;
-            }
-
-            testMsg.show();
-
-            Ext.Ajax.request({
-                url: '/api/status/wantest/' + device,
-                timeout: 10000, // 10 seconds timeout
-                success: function (response) {
-                    // if responseText is not a decadable JSON than will return null
-                    var result = Ext.JSON.decode(response.responseText, true);
-                    if (!result) { return; }
-                    intf.set('downloadKbps', result.download);
-                    intf.set('uploadKbps', result.upload);
-                    testMsg.setMessage('<p style="margin: 0; text-align: center;">' + intf.get('name') + ' performance test result<br/><br/><strong>download:</strong> ' + result.download/1000 + 'Mbps, <strong>upload:</strong> ' + result.upload/1000 + 'Mbps');
-                },
-                failure: function (response) {
-                    if (response.aborted) {
-                        testMsg.hide();
-                        return;
-                    }
-                    testMsg.setMessage('<p style="margin: 0; text-align: center;">Unable to test ' + intf.get('name') + '!</p>');
-                },
-                callback: function () {
-                    testMsg.setButtons([{
-                        text: 'Close',
-                        ui: 'action',
-                        margin: '16 0 8 0',
-                        handler: function () {
-                            testMsg.hide();
-                        }
-                    }]);
-                }
-            });
+            // use performance dialog
+            Ext.Viewport.add({
+                xtype: 'performance-dialog',
+                interfaces: [intf]
+            }).show();
         }
     }
 });
