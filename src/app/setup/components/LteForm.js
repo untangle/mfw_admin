@@ -40,7 +40,7 @@ Ext.define('Mfw.setup.cmp.Lte', {
              */
             _simNetwork: {
                 get: function (get) {
-                    return get('intf.simNetwork') || 'OTHER';
+                    return get('intf.simNetwork');
                 },
                 set: function (value) {
                     var network = Ext.Array.findBy(Map.options.simNetworks, function (item) {
@@ -99,8 +99,8 @@ Ext.define('Mfw.setup.cmp.Lte', {
             userCls: 'x-custom-field',
             label: 'Network',
             required: true,
-            autoSelect: true,
             options: Map.options.simNetworks,
+            placeholder: 'Select network provider ...',
             disabled: true,
             bind: {
                 value: '{_simNetwork}',
@@ -118,75 +118,77 @@ Ext.define('Mfw.setup.cmp.Lte', {
                 required: '{intf.type === "WWAN" && intf.enabled}',
                 disabled: '{!intf.enabled || intf.simNetwork}'
             }
-        }, {
-            xtype: 'numberfield',
-            userCls: 'x-custom-field',
-            label: 'PIN',
-            hidden: true,
-            disabled: true,
-            clearable: false,
-            bind: {
-                value: '{intf.simPin}',
-                hidden: '{intf.simNetwork}',
-                disabled: '{!intf.enabled}'
-            },
-            validators: [{
-                type: 'length',
-                min: 4,
-                max: 4
-            }]
-        }, {
-            xtype: 'textfield',
-            userCls: 'x-custom-field',
-            label: 'Username',
-            hidden: true,
-            disabled: true,
-            bind: {
-                value: '{intf.simUsername}',
-                hidden: '{intf.simNetwork}',
-                disabled: '{!intf.enabled}'
-            }
-        }, {
-            xtype: 'textfield',
-            userCls: 'x-custom-field',
-            inputType: 'password',
-            name: 'password',
-            label: 'Password',
-            triggers: {
-                reveal: {
-                    type: 'trigger',
-                    iconCls: 'x-fa fa-eye',
-                    hidden: true,
-                    bind: {
-                        hidden: '{!intf.enabled || intf.simPassword.length === 0}',
-                    },
-                    handler: function (field, trigger) {
-                        if (field.getDisabled()) {
-                            return;
-                        }
-                        var inputType = field.getInputType();
-                        if (inputType === 'password') {
-                            field.setInputType('text');
-                            trigger.setIconCls('x-fa fa-eye-slash');
-                        } else {
-                            field.setInputType('password');
-                            trigger.setIconCls('x-fa fa-eye');
-                        }
-                    }
-                }
-            },
-            hidden: true,
-            disabled: true,
-            bind: {
-                value: '{intf.simPassword}',
-                hidden: '{intf.simNetwork}',
-                disabled: '{!intf.enabled}'
-            },
-            validators: [{
-                type: 'length',
-                min: 8
-            }]
-        }, {
+        },
+        // {
+        //     xtype: 'numberfield',
+        //     userCls: 'x-custom-field',
+        //     label: 'PIN',
+        //     hidden: true,
+        //     disabled: true,
+        //     clearable: false,
+        //     bind: {
+        //         value: '{intf.simPin}',
+        //         hidden: '{intf.simNetwork}',
+        //         disabled: '{!intf.enabled}'
+        //     },
+        //     validators: [{
+        //         type: 'length',
+        //         min: 4,
+        //         max: 4
+        //     }]
+        // }, {
+        //     xtype: 'textfield',
+        //     userCls: 'x-custom-field',
+        //     label: 'Username',
+        //     hidden: true,
+        //     disabled: true,
+        //     bind: {
+        //         value: '{intf.simUsername}',
+        //         hidden: '{intf.simNetwork}',
+        //         disabled: '{!intf.enabled}'
+        //     }
+        // }, {
+        //     xtype: 'textfield',
+        //     userCls: 'x-custom-field',
+        //     inputType: 'password',
+        //     name: 'password',
+        //     label: 'Password',
+        //     triggers: {
+        //         reveal: {
+        //             type: 'trigger',
+        //             iconCls: 'x-fa fa-eye',
+        //             hidden: true,
+        //             bind: {
+        //                 hidden: '{!intf.enabled || intf.simPassword.length === 0}',
+        //             },
+        //             handler: function (field, trigger) {
+        //                 if (field.getDisabled()) {
+        //                     return;
+        //                 }
+        //                 var inputType = field.getInputType();
+        //                 if (inputType === 'password') {
+        //                     field.setInputType('text');
+        //                     trigger.setIconCls('x-fa fa-eye-slash');
+        //                 } else {
+        //                     field.setInputType('password');
+        //                     trigger.setIconCls('x-fa fa-eye');
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     hidden: true,
+        //     disabled: true,
+        //     bind: {
+        //         value: '{intf.simPassword}',
+        //         hidden: '{intf.simNetwork}',
+        //         disabled: '{!intf.enabled}'
+        //     },
+        //     validators: [{
+        //         type: 'length',
+        //         min: 8
+        //     }]
+        // },
+        {
             // sim info
             xtype: 'component',
             style: 'color: #555; border: 1px #CCC solid; border-radius: 5px; padding: 5px 15px;',
