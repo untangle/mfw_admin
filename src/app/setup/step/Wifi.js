@@ -20,6 +20,12 @@ Ext.define('Mfw.setup.step.WiFi', {
         xtype: 'container',
         itemId: 'forms',
         layout: 'hbox'
+    }, {
+        xtype: 'component',
+        width: 400,
+        margin: '32 0 0 0',
+        html: '<p style="margin: 8px 0;"><i class="x-fa fa-exclamation-triangle fa-yellow"></i> <strong>Caution when making changes!</strong></p>' +
+              '<p style="margin: 0;">If you are connecting wirelessly you will need to update the WiFi settings of your device and all other devices connecting to this wireless network.</p>'
     }],
 
     listeners: {

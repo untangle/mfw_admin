@@ -27,6 +27,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
             }, {
                 xtype: 'textfield',
                 label: 'SSID',
+                name: 'wirelessSsid',
+                labelAlign: 'top',
                 clearable: false,
                 required: true,
                 bind: {
@@ -40,13 +42,15 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 defaults: {
                     required: false,
                     clearable: false,
+                    labelAlign: 'top',
                     flex: 1
                 },
                 items: [{
                     xtype: 'selectfield',
                     label: 'Encryption',
-                    autoSelect: true,
+                    name: 'wirelessEncryption',
                     margin: '0 16 0 0',
+                    placeholder: 'Select ...',
                     bind: {
                         value: '{intf.wirelessEncryption}',
                         required: '{intf.type === "WIFI"}',
@@ -61,6 +65,7 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 }, {
                     xtype: 'textfield',
                     label: 'Password',
+                    name: 'wirelessPassword',
                     inputType: 'password',
                     margin: '0 0 0 16',
                     triggers: {
@@ -103,12 +108,14 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 defaults: {
                     clearable: false,
                     required: false,
+                    labelAlign: 'top',
                     flex: 1
                 },
                 items: [{
                     xtype: 'selectfield',
                     label: 'Mode',
-                    autoSelect: true,
+                    name: 'wirelessMode',
+                    placeholder: 'Select ...',
                     margin: '0 16 0 0',
                     options: [
                         { text: 'Access Point', value: 'AP' },
@@ -122,6 +129,8 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 }, {
                     xtype: 'selectfield',
                     label: 'Channel',
+                    name: 'wirelessChannel',
+                    placeholder: 'Select ...',
                     margin: '0 0 0 16',
                     queryMode: 'remote',
                     displayTpl: '{channel} [{frequency}]',
@@ -149,11 +158,14 @@ Ext.define('Mfw.settings.interface.Wifi', {
                 defaults: {
                     clearable: false,
                     required: false,
+                    labelAlign: 'top',
                     flex: 1
                 },
                 items: [{
                     xtype: 'selectfield',
                     label: 'HT Mode',
+                    name: 'wirelessThroughput',
+                    placeholder: 'Select ...',
                     margin: '0 32 0 0',
                     queryMode: 'remote',
                     displayField: 'name',
@@ -177,6 +189,15 @@ Ext.define('Mfw.settings.interface.Wifi', {
                     xtype: 'component',
                     flex: 1
                 }]
+            }, {
+                xtype: 'component',
+                margin: '32 0 0 0',
+                html: '<p style="margin: 8px 0;"><i class="x-fa fa-exclamation-triangle fa-yellow"></i> <strong>Caution when making changes!</strong></p>' +
+                      '<p style="margin: 0;">If you are connecting wirelessly you will need to update the WiFi settings of your device and all other devices connecting to this wireless network.</p>',
+                hidden: true,
+                bind: {
+                    hidden: '{!wifiWarning}'
+                }
             }]
         }]
     }]

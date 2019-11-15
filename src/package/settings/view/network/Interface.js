@@ -13,7 +13,8 @@ Ext.define('Mfw.settings.network.Interface', {
             setupContext: false,
             isNew: false,
             isDialog: false,
-            validDhcpRange: null
+            validDhcpRange: null,
+            wifiWarning: false
         },
         formulas: {
             /**
@@ -502,7 +503,7 @@ Ext.define('Mfw.settings.network.Interface', {
 
     controller: {
         init: function (view) {
-            var vm = view.getViewModel();
+            var me = this, vm = view.getViewModel();
 
             // set the app context "admin" or "setup"
             vm.set('setupContext', Mfw.app.context === 'setup');
@@ -533,6 +534,7 @@ Ext.define('Mfw.settings.network.Interface', {
 
                 if (type === 'WIFI') {
                     vm.set('cardKey', 'wifi');
+                    me.detectWiFiChanges();
                     return;
                 }
 
@@ -558,6 +560,35 @@ Ext.define('Mfw.settings.network.Interface', {
             var vm = this.getViewModel();
             vm.set('cardKey', btn.getValue());
         },
+
+        /**
+         * MFW-670 show caution warning when changing WiFi settings
+         */
+        detectWiFiChanges: function () {
+            var me = this,
+                vm = me.getViewModel(),
+                wifiForm = me.getView().down('interface-wifi formpanel'),
+
+                // on change method for wireless fields
+                changeFn = function (field, _new, _old) {
+                    if (_old !== null && !vm.get('wifiWarning')) {
+                        vm.set('wifiWarning', true);
+
+                        // remove on change event after first change detected
+                        Ext.Object.each(wifiForm.getFields(), function (key, field) {
+                            if (key === 'null') { return; }
+                            field.un('change', changeFn);
+                        });
+                    }
+                }
+
+            // attach on change event
+            Ext.Object.each(wifiForm.getFields(), function (key, field) {
+                if (key === 'null') { return; } // ! null key is string
+                field.on('change', changeFn);
+            });
+        },
+
 
 
         ipInRange: function (ip, rangeStart, rangeEnd) {
