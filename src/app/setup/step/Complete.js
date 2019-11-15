@@ -31,7 +31,35 @@ Ext.define('Mfw.setup.step.Complete', {
             height: '40',
             margin: '32 0 0 0',
             handler: function () {
-                window.location.href = '/admin';
+    
+                //Setup now runs as the 'setup' session user, log it out once setup is done, then login with admin user from store data
+                Ext.Ajax.request({
+                    url: '/account/logout',
+                    success: function () {
+                        var accountsStore = Ext.getStore('accounts'), 
+                            adminAccount = accountsStore.findRecord('username', 'admin');
+
+                        if(adminAccount) {
+                            //Success - login with admin and redirect to dashboard
+                            Ext.Ajax.request({
+                                url: '/account/login',
+                                method: 'POST',
+                                params: {username: adminAccount.get('username'), password: adminAccount.get('passwordCleartext')},
+                                success: function () {
+                                    window.location.href = '/admin';
+                                },
+                                failure: function() {
+                                    window.location.href = '/admin#auth';
+                                }
+                            });
+                        }
+                        window.location.href = '/admin#auth';
+
+                    },
+                    failure: function () {
+                        window.location.href = '/admin#auth';
+                     }
+                 });
             }
         }]
     }],
