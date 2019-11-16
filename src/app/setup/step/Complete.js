@@ -36,25 +36,7 @@ Ext.define('Mfw.setup.step.Complete', {
                 Ext.Ajax.request({
                     url: '/account/logout',
                     success: function () {
-                        var accountsStore = Ext.getStore('accounts'), 
-                            adminAccount = accountsStore.findRecord('username', 'admin');
-
-                        if(adminAccount) {
-                            //Success - login with admin and redirect to dashboard
-                            Ext.Ajax.request({
-                                url: '/account/login',
-                                method: 'POST',
-                                params: {username: adminAccount.get('username'), password: adminAccount.get('passwordCleartext')},
-                                success: function () {
-                                    window.location.href = '/admin';
-                                },
-                                failure: function() {
-                                    window.location.href = '/admin#auth';
-                                }
-                            });
-                        }
                         window.location.href = '/admin#auth';
-
                     },
                     failure: function () {
                         window.location.href = '/admin#auth';
