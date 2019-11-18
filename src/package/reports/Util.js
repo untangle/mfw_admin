@@ -132,7 +132,7 @@ Ext.define('Mfw.reports.Util', {
                 Ext.Ajax.request({
                     url: '/api/reports/create_query',
                     reportName: reportName,
-                    params: Ext.JSON.encode(report.getData(true)),
+                    params: Ext.JSON.encode(Util.sanitize(report.getData(true))),
                     success: function(response) {
                         var queryId = Ext.decode(response.responseText);
                         cb2(queryId);
