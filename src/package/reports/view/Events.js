@@ -162,11 +162,14 @@ Ext.define('Mfw.reports.Events', {
                 userConditions.removeAt(sinceCondition);
             }
 
-            // add updated since
+            /**
+             * MFW-792 - get events from newest to oldest
+             * !! TODO: this removes the utility of since, figure out what to do with that
+             */
             record.userConditions().add({
                 column: 'time_stamp',
-                operator: 'GT',
-                value: since
+                operator: 'LT',
+                value: moment().tz(Mfw.app.tz.displayName).valueOf()
             });
 
             /**
