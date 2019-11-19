@@ -112,8 +112,8 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
                     '<p>{_icon} &nbsp; <a href="#settings/network/interfaces/{name}"><b>{name}</b></a></p>' +
                     '<tpl if="_status"><p class="ip">{_status.ip4Addr}</p></tpl>' +
                     '<p class="rate">' +
-                    '<i class="x-fa fa-arrow-down fa-gray"></i> <tpl if="_status"><b>{_status.rxByteRate/1000}</b><tpl else> 0 </tpl> KBps<br/>' +
-                    '<i class="x-fa fa-arrow-up fa-gray"></i> <tpl if="_status"><b>{_status.txByteRate/1000}</b><tpl else> 0 </tpl> KBps' +
+                    '<i class="x-fa fa-arrow-down fa-gray"></i> <tpl if="_status"><b>{_status.txByteRate/1000}</b><tpl else> 0 </tpl> KBps<br/>' +
+                    '<i class="x-fa fa-arrow-up fa-gray"></i> <tpl if="_status"><b>{_status.rxByteRate/1000}</b><tpl else> 0 </tpl> KBps' +
                     '</p>' +
                     '<div class="connector"></div>' +
                     '<div class="status">' +

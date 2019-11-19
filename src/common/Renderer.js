@@ -94,8 +94,8 @@ Ext.define('Mfw.Renderer', {
             return '-';
         }
 
-        download = '<i class="x-fa fa-arrow-down fa-gray"></i> ' + (status.rxByteRate / 1000) + ' Kbps';
-        upload = '<i class="x-fa fa-arrow-up fa-gray"></i> ' + (status.txByteRate / 1000) + ' Kbps';
+        download = '<i class="x-fa fa-arrow-down fa-gray"></i> ' + (status.txByteRate / 1000) + ' Kbps';
+        upload = '<i class="x-fa fa-arrow-up fa-gray"></i> ' + (status.rxByteRate / 1000) + ' Kbps';
 
         return download + ' &nbsp; / &nbsp; ' + upload;
     },
