@@ -87,17 +87,30 @@ Ext.define('Mfw.Renderer', {
                     '<span style=\'color: red;\'>disconnected</span>');
     },
 
-    intfStatusRates: function (status) {
-        var download, upload;
+    intfStatusRates: function (status, intf) {
+        var down, up, downStr, upStr;
 
         if (!status) {
             return '-';
         }
 
-        download = '<i class="x-fa fa-arrow-down fa-gray"></i> ' + (status.txByteRate / 1000) + ' Kbps';
-        upload = '<i class="x-fa fa-arrow-up fa-gray"></i> ' + (status.rxByteRate / 1000) + ' Kbps';
+        /**
+         * MFW-798
+         * WAN: rx = down, tx = up
+         * nonWAN: rx = up, tx = down
+         */
+        if (intf.get('wan')) {
+            down = status.rxByteRate / 1000;
+            up = status.txByteRate / 1000;
+        } else {
+            down = status.txByteRate / 1000;
+            up = status.rxByteRate / 1000;
+        }
 
-        return download + ' &nbsp; / &nbsp; ' + upload;
+        downStr = '<i class="x-fa fa-arrow-down fa-gray"></i> ' + down + ' Kbps';
+        upStr = '<i class="x-fa fa-arrow-up fa-gray"></i> ' + up + ' Kbps';
+
+        return downStr + ' &nbsp; / &nbsp; ' + upStr;
     },
 
     boolean: function (value) {
