@@ -143,6 +143,7 @@ Ext.define('Mfw.reports.Events', {
 
         loadData: function (cb) {
             var me = this,
+                isWidget = false,
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
                 record = viewModel.get('record'),
@@ -152,25 +153,33 @@ Ext.define('Mfw.reports.Events', {
             if (!record) { return; }
 
             view.down('grid').getStore().loadData([]);
-
-            // remove existing since condition
-            userConditions = record.userConditions();
-            sinceCondition = userConditions.findBy(function (c) {
-                return c.get('column') === 'time_stamp' && c.get('operator') === 'GT';
-            });
-            if (sinceCondition >= 0) {
-                userConditions.removeAt(sinceCondition);
+            if (me.getView().up('widget-report')) {
+                isWidget = true;
             }
 
+            userConditions = record.userConditions();
+
             /**
-             * MFW-792 - get events from newest to oldest
-             * !! TODO: this removes the utility of since, figure out what to do with that
+             * MFW-809 - removed time_stamp conditions from reports
+             * will fetch latest max 3000 records
+             *
+             * keep stil greater than condition for widgets, where it makes sense
              */
-            record.userConditions().add({
-                column: 'time_stamp',
-                operator: 'LT',
-                value: moment().tz(Mfw.app.tz.displayName).valueOf()
-            });
+            if (isWidget) {
+                // remove condition if exists
+                sinceCondition = userConditions.findBy(function (c) {
+                    return c.get('column') === 'time_stamp' && c.get('operator') === 'GT';
+                });
+                if (sinceCondition >= 0) {
+                    userConditions.removeAt(sinceCondition);
+                }
+                // add new greater than condition
+                record.userConditions().add({
+                    column: 'time_stamp',
+                    operator: 'GT',
+                    value: since
+                });
+            }
 
             /**
              * data is an array of objects {column_name: value}

@@ -30,16 +30,14 @@ Ext.define('Mfw.reports.Main', {
         userCls: 'x-subbar',
         shadow: false,
         padding: 8,
-        // padding: 0, // to remove left spacing
         docked: 'top',
+        /**
+         * MFW-798
+         * removed timeframe selection for reports
+         */
         items: [{
-            xtype: 'time-range'
-            }, {
-                xtype: 'toolbarseparator',
-            }, {
-                xtype: 'conditions-fields'
-            }
-        ]
+            xtype: 'conditions-fields'
+        }]
     }, {
         xtype: 'panel',
         docked: 'left',
