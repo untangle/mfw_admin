@@ -14,10 +14,15 @@ Ext.define('Mfw.reports.Main', {
         data: {
             record: null,
             data: null,
+
+            sinceHours: 24, // default graphs timeframe 24h
+            sinceText: '1 day ago',
+
             globalFilter: '',
             recordsTotal: null,
             recordsFiltered: null,
-            eventsMaxRows: 1000, // default 1000 events
+            eventsMaxRows: 3000, // default 3000 events
+
             route: {
                 cat: null, // report category
                 rep: null, // report name
@@ -36,68 +41,76 @@ Ext.define('Mfw.reports.Main', {
         padding: 8,
         docked: 'top',
         /**
-         * MFW-798 - removed timeframe selection for reports
-         * MFW-818 - added limits for number of events shown
+         * MFW-818
+         * - added limits for EVENTS reports
+         * - added timeframe for non EVENTS reprts (graphs)
          */
         items: [{
-            xtype: 'container',
-            layout: {
-                type: 'hbox',
-                align: 'middle'
-            },
+            xtype: 'button',
             hidden: true,
             bind: {
+                text: 'Since: {sinceText}',
+                hidden: '{record.type === "EVENTS"}'
+            },
+            menu: {
+                indented: false,
+                mouseLeaveDelay: 0,
+                defaults: {
+                    handler: 'setSinceLimit',
+                },
+                items: [
+                    { text: '6h ago', value: 6 },
+                    { text: '12h ago', value: 12 },
+                    { text: '1 day ago', value: 24 },
+                    { text: '2 days ago', value: 48 },
+                    { text: 'a week ago', value: 24 * 7 }
+                ]
+            }
+        }, {
+            xtype: 'button',
+            hidden: true,
+            bind: {
+                text: 'Limit: {eventsMaxRows} events',
                 hidden: '{record.type !== "EVENTS"}'
             },
-            items: [{
-                xtype: 'button',
-                bind: {
-                    text: 'Limit: {eventsMaxRows} events'
+            menu: {
+                indented: false,
+                mouseLeaveDelay: 0,
+                defaults: {
+                    handler: 'setEventsLimit',
                 },
-                menu: {
-                    indented: false,
-                    mouseLeaveDelay: 0,
-                    // width: 150,
-                    defaults: {
-                        handler: 'setEventsLimit',
-                    },
-                    items: [
-                        { text: '1000 events', value: 1000 },
-                        { text: '3000 events', value: 3000 },
-                        { text: '5000 events', value: 5000 },
-                        { text: '10000 events', value: 10000 },
-                        { xtype: 'menuseparator' },
-                        {
-                            xtype: 'numberfield',
-                            // label: 'Custom limit:',
-                            // labelAlign: 'top',
-                            width: 150,
-                            clearable: false,
-                            placeholder: 'enter limit and hit <Enter>',
-                            minValue: 1,
-                            maxValue: 100000,
-                            keyMapEnabled: true,
-                            keyMap: {
-                                enter: {
-                                    key: Ext.event.Event.ENTER,
-                                    handler: 'setCustomEventsLimit'
-                                }
-                            },
-                            listeners: {
-                                hide: function (menu) {
-                                    menu.down('numberfield').setValue('');
-                                }
+                items: [
+                    { text: '1000 events', value: 1000 },
+                    { text: '3000 events', value: 3000 },
+                    { text: '5000 events', value: 5000 },
+                    { text: '10000 events', value: 10000 },
+                    { xtype: 'menuseparator' },
+                    {
+                        xtype: 'numberfield',
+                        // label: 'Custom limit:',
+                        // labelAlign: 'top',
+                        width: 150,
+                        clearable: false,
+                        placeholder: 'enter limit and hit <Enter>',
+                        minValue: 1,
+                        maxValue: 100000,
+                        keyMapEnabled: true,
+                        keyMap: {
+                            enter: {
+                                key: Ext.event.Event.ENTER,
+                                handler: 'setCustomEventsLimit'
+                            }
+                        },
+                        listeners: {
+                            hide: function (menu) {
+                                menu.down('numberfield').setValue('');
                             }
                         }
-                    ]
-                }
-            }]
-        }, {
-            xtype: 'toolbarseparator',
-            hidden: true,
-            bind: {
-                hidden: '{record.type !== "EVENTS"}'
+                    }
+                ]
             }
+        }, {
+            xtype: 'toolbarseparator'
         }, {
             xtype: 'conditions-fields'
         }, '->', {

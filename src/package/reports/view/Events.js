@@ -101,8 +101,6 @@ Ext.define('Mfw.reports.Events', {
                 grid.getStore().loadData([]);
 
                 if (!record || record.get('type') !== 'EVENTS') {
-                    // clear data
-                    grid.getStore().loadData([]);
                     return;
                 }
 

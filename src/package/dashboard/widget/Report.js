@@ -88,22 +88,11 @@ Ext.define('Mfw.dashboard.widget.Report', {
             }
 
             viewModel.bind('{route}', function (route) {
-                var conditionSince, userConditions = [], invalidConditions = [];
+                var userConditions = [], invalidConditions = [];
 
                 // avoid dasboard activity if not on Dashboard
                 if (!Mfw.app.viewport.getActiveItem().isXType('dashboard')) { return; }
 
-                if (route.since) {
-                    conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, route.since);
-                } else {
-                    conditionSince = Ext.Date.subtract(Util.serverToClientDate(new Date()), Ext.Date.HOUR, 1);
-                }
-
-                userConditions.push({
-                    column: 'time_stamp',
-                    operator: 'GT',
-                    value: conditionSince.getTime()
-                });
                 Ext.Array.each(route.conditions, function (cond) {
                     if (record._validColumns.indexOf(cond.column) < 0) {
                         if (invalidConditions.indexOf(cond.column) < 0) {
@@ -119,9 +108,15 @@ Ext.define('Mfw.dashboard.widget.Report', {
                 } else {
                     viewModel.set('invalidConditionsWarning', null);
                 }
-
                 record.userConditions().loadData(userConditions);
-                viewModel.set('record', record);
+
+                /**
+                 * sinceHours is now set on viewModel
+                 */
+                viewModel.set({
+                    record: record,
+                    sinceHours: route.since
+                });
 
                 WidgetsPipe.add(widget);
             }, me, { deep: true });

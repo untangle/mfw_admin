@@ -168,6 +168,16 @@ Ext.define('Mfw.reports.Controller', {
         link.click();
     },
 
+
+    setSinceLimit: function (cmp) {
+        var me = this;
+        me.getViewModel().set({
+            sinceHours: cmp.value,
+            sinceText: cmp.getText()
+        });
+        cmp.up('menu').hide();
+    },
+
     /**
      * Sets predefined EVENTS limit
      */
@@ -190,7 +200,6 @@ Ext.define('Mfw.reports.Controller', {
         field.blur();
         field.up('menu').hide();
     },
-
 
     /**
      * Set new global filter term in view model
