@@ -11,23 +11,30 @@ Ext.define('Mfw.reports.Events', {
         reference: 'list',
         deferEmptyText: false,
         emptyText: 'No Data!',
-        // plugins: {
-        //     gridfilters: true
-        // },
-        // bind: '{events}'
+        plugins: {
+            gridfilters: true
+        },
         store: {
             model: 'Mfw.model.Session',
             sorters: [{
                 property: 'time_stamp',
                 direction: 'DESC'
             }]
+        },
+        listeners: {
+            columnshow: 'updateVisibleColumnKeys',
+            columnhide: 'updateVisibleColumnKeys'
         }
     }],
 
     controller: {
         init: function (view) {
             var me = this,
-                grid = view.down('grid');
+                vm = view.getViewModel(),
+                grid = view.down('grid'),
+                store = grid.getStore();
+
+            me.isWidget = view.up('widget-report') ? true : false;
 
 
             // fetch wan policies/rules used in rendering
@@ -64,7 +71,7 @@ Ext.define('Mfw.reports.Events', {
 
 
             // if not widget add details panel
-            if (!me.getView().up('widget-report')) {
+            if (!me.isWidget) {
                 view.add({
                     xtype: 'panel',
                     docked: 'right',
@@ -87,7 +94,7 @@ Ext.define('Mfw.reports.Events', {
             }
 
 
-            view.getViewModel().bind('{record}', function (record) {
+            vm.bind('{record}', function (record) {
                 var tableNames = [],
                     columns = [], defaultColumns, columnRenames;
 
@@ -138,24 +145,38 @@ Ext.define('Mfw.reports.Events', {
                     }
                 }
                 grid.setColumns(columns);
+
+                if (!me.isWidget) {
+                    me.updateVisibleColumnKeys();
+                }
             });
+
+
+            if (!me.isWidget) {
+                // when global filter term is changed apply filter
+                vm.bind('{globalFilter}', function (term) {
+                    me.applyGlobalFilter(term);
+                })
+
+                // set the number of filtered records
+                store.on('filterchange', function () {
+                    vm.set('recordsFiltered', store.count());
+                });
+            }
         },
 
         loadData: function (cb) {
             var me = this,
-                isWidget = false,
+                vm = me.getViewModel(),
                 view = me.getView().up('report') || me.getView().up('widget-report'),
-                viewModel = me.getViewModel(),
-                record = viewModel.get('record'),
+                store = view.down('grid').getStore(),
+                record = vm.get('record'),
                 since = ReportsUtil.computeSince(me.getViewModel().get('route')),
                 userConditions, sinceCondition;
 
             if (!record) { return; }
 
             view.down('grid').getStore().loadData([]);
-            if (me.getView().up('widget-report')) {
-                isWidget = true;
-            }
 
             userConditions = record.userConditions();
 
@@ -165,7 +186,7 @@ Ext.define('Mfw.reports.Events', {
              *
              * keep stil greater than condition for widgets, where it makes sense
              */
-            if (isWidget) {
+            if (me.isWidget) {
                 // remove condition if exists
                 sinceCondition = userConditions.findBy(function (c) {
                     return c.get('column') === 'time_stamp' && c.get('operator') === 'GT';
@@ -181,18 +202,104 @@ Ext.define('Mfw.reports.Events', {
                 });
             }
 
+            view.mask({xtype: 'loadmask'});
+
+            // reset total and filtered counters
+            if (!me.isWidget) {
+                vm.set({
+                    recordsTotal: 0,
+                    recordsFiltered: 0
+                });
+            }
             /**
              * data is an array of objects {column_name: value}
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
-            view.mask({xtype: 'loadmask'});
             ReportsUtil.fetchReportData(record, function (data) {
                 view.unmask();
                 if (data === 'error') { return; }
-                view.down('grid').getStore().loadData(data);
+                store.loadData(data);
+
+                if (!me.isWidget) {
+                    // set new total count
+                    vm.set('recordsTotal', data.length);
+                    // apply global filter using pre existing value if set
+                    me.applyGlobalFilter(vm.get('globalFilter'));
+                }
                 if (cb) { cb(); }
             });
+        },
+
+
+        /**
+         * Creates a list of visible columns used along with global filtering
+         * When a column is hidden/shown the columns list is updated and the global filter triggers
+         */
+        updateVisibleColumnKeys: function () {
+            var me = this;
+            if (me.isWidget) { return; }
+
+            var view = me.getView(),
+                vm = me.getViewModel(),
+                grid = me.getView().down('grid');
+                visibleColumns = grid.getColumns(function (c) { return !c.getHidden(); }),
+                columnsKeys = [];
+
+            Ext.Array.each(visibleColumns, function (col) {
+                columnsKeys.push(col.getDataIndex());
+            });
+            // store visible columns in the controller scope
+            me.visibleColumnsKeys = columnsKeys;
+            me.applyGlobalFilter(vm.get('globalFilter'));
+        },
+
+
+        /**
+         * Finds all the records matching at least a column value with the filter term
+         * All column values are converted to string/lowercase before match test
+         * @param {string} term
+         */
+        applyGlobalFilter: function (term) {
+            var me = this,
+                view = me.getView(),
+                eventsGrid = view.down('grid'),
+                eventsStore = eventsGrid.getStore();
+
+            if (!eventsGrid) { return; }
+
+            /**
+             * use the Filer class to attach an id to it so
+             * it does not interfere with other filters in the grid
+             */
+            var globalFilter = new Ext.util.Filter({
+                id: 'global',
+                filterFn: function (rec) {
+                    var match = false;
+                    /**
+                     * iterate each column and find a possible match
+                     * match "true" will show the record, hide otherwise
+                     */
+                    me.visibleColumnsKeys.forEach(function (key) {
+                        var value = rec.get(key);
+                        if (!value || match) { return }
+
+                        if (value.toString().toLowerCase().indexOf(term.toLowerCase()) >= 0) {
+                            match = true;
+                        }
+                    });
+                    return match;
+                }
+            });
+
+            /**
+             * even the filter is added it will actually update the filter with id "global"
+             * as specified above
+             */
+            eventsStore.getFilters().add(globalFilter);
+
+            // update the filtered records counter
+            me.getViewModel().set('recordsFilters', eventsStore.count());
         }
     }
 

@@ -96,6 +96,8 @@ Ext.define('Mfw.reports.Controller', {
 
         // depress data btn which also hides the data grid
         view.down('#dataBtn').setPressed(false);
+        // reset global filter when leaving Reports
+        view.down('searchfield').setValue('');
     },
 
     onSelectionChange: function (list, node) {
@@ -163,6 +165,14 @@ Ext.define('Mfw.reports.Controller', {
         link.setAttribute('href', out);
         link.setAttribute('download', 'reports.json');
         link.click();
-    }
+    },
 
+    /**
+     * Set new global filter term in view model
+     * This will trigger the filtering on the Events grid
+     */
+    onGlobalFilterChange: function (field, value) {
+        var me = this;
+        me.getViewModel().set('globalFilter', value);
+    }
 });

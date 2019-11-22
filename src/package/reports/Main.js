@@ -14,6 +14,9 @@ Ext.define('Mfw.reports.Main', {
         data: {
             record: null,
             data: null,
+            globalFilter: '',
+            recordsTotal: null,
+            recordsFiltered: null,
             route: {
                 cat: null, // report category
                 rep: null, // report name
@@ -37,6 +40,32 @@ Ext.define('Mfw.reports.Main', {
          */
         items: [{
             xtype: 'conditions-fields'
+        }, '->', {
+            xtype: 'container',
+            layout: {
+                type: 'hbox',
+                align: 'middle'
+            },
+            hidden: true,
+            bind: {
+                hidden: '{record.type !== "EVENTS"}'
+            },
+            items: [{
+                xtype: 'component',
+                style: 'font-size: 12px; color: #FFF; font-weight: 100;',
+                margin: '0 16 0 0',
+                bind: {
+                    html: 'showing <b>{recordsFiltered}</b> of <b>{recordsTotal}</b>'
+                }
+            }, {
+                xtype: 'searchfield',
+                ui: 'alt',
+                placeholder: 'global filter',
+                width: 240,
+                listeners: {
+                    change: 'onGlobalFilterChange'
+                }
+            }]
         }]
     }, {
         xtype: 'panel',
