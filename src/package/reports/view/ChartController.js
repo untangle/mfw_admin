@@ -232,7 +232,7 @@ Ext.define('Mfw.reports.ChartController', {
         // view.mask({xtype: 'loadmask'});
         chart.zoomOut();
         chart.showLoading();
-        ReportsUtil.fetchReportData(record, function (data) {
+        ReportsUtil.fetchReportData(record, null, function (data) {
             chart.hideLoading();
             view.unmask();
 

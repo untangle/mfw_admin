@@ -124,7 +124,7 @@ Ext.define('Mfw.reports.Util', {
     },
 
 
-    fetchReportData: function (report, cb) {
+    fetchReportData: function (report, limit, cb) {
         var data = [],
             reportName = report.getData(true).name, // to identify request based on report
 
@@ -154,19 +154,28 @@ Ext.define('Mfw.reports.Util', {
                     success: function (response) {
                         partialData = Ext.decode(response.responseText);
 
-                        /**
-                         * ! for EVENTS reports limit the data length to max 3000 records
-                         * ! until some real paging will be available
-                         */
-                        if (report.get('type') === 'EVENTS' && data.length >= 2000) {
-                            Ext.Array.push(data, partialData);
-                            cb3();
-                            return;
-                        }
-
                         if (!partialData.error) {
                             Ext.Array.push(data, partialData);
-                            getData(queryId, cb3);
+
+                            /**
+                             * apply limit on EVENTS reports
+                             */
+                            if (report.get('type') === 'EVENTS' && Ext.isNumber(limit)) {
+                                if (data.length < limit) {
+                                    getData(queryId, cb3);
+                                } else {
+                                    /**
+                                     * the API fetches batches of 1000 records
+                                     * to respect the custom limit, records above the limit are removed
+                                     */
+                                    if (data.length > limit) {
+                                        Ext.Array.removeAt(data, limit, data.length);
+                                    }
+                                    cb3();
+                                }
+                            } else {
+                                getData(queryId, cb3);
+                            }
                         } else {
                             cb3();
                         }

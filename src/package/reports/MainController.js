@@ -145,6 +145,7 @@ Ext.define('Mfw.reports.Controller', {
         }
     },
 
+    // not used
     exportReports: function () {
         var out, arr = [], data, link;
 
@@ -166,6 +167,30 @@ Ext.define('Mfw.reports.Controller', {
         link.setAttribute('download', 'reports.json');
         link.click();
     },
+
+    /**
+     * Sets predefined EVENTS limit
+     */
+    setEventsLimit: function (cmp) {
+        var me = this;
+        me.getViewModel().set('eventsMaxRows', cmp.value);
+        cmp.up('menu').hide();
+    },
+
+    /**
+     * Sets a custom EVENTS limit
+     */
+    setCustomEventsLimit: function (evt, field) {
+        var me = this;
+        if (!field.isValid() || !field.getValue()) {
+            return;
+        }
+        me.getViewModel().set('eventsMaxRows', field.getValue());
+        field.setValue('');
+        field.blur();
+        field.up('menu').hide();
+    },
+
 
     /**
      * Set new global filter term in view model

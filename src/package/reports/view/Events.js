@@ -153,6 +153,11 @@ Ext.define('Mfw.reports.Events', {
 
 
             if (!me.isWidget) {
+                // when limit events number changed reload data
+                vm.bind('{eventsMaxRows}', function (limit) {
+                    me.loadData();
+                })
+
                 // when global filter term is changed apply filter
                 vm.bind('{globalFilter}', function (term) {
                     me.applyGlobalFilter(term);
@@ -172,6 +177,7 @@ Ext.define('Mfw.reports.Events', {
                 store = view.down('grid').getStore(),
                 record = vm.get('record'),
                 since = ReportsUtil.computeSince(me.getViewModel().get('route')),
+                limit = vm.get('eventsMaxRows'),
                 userConditions, sinceCondition;
 
             if (!record) { return; }
@@ -216,7 +222,7 @@ Ext.define('Mfw.reports.Events', {
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
-            ReportsUtil.fetchReportData(record, function (data) {
+            ReportsUtil.fetchReportData(record, limit, function (data) {
                 view.unmask();
                 if (data === 'error') { return; }
                 store.loadData(data);
@@ -242,7 +248,7 @@ Ext.define('Mfw.reports.Events', {
 
             var view = me.getView(),
                 vm = me.getViewModel(),
-                grid = me.getView().down('grid');
+                grid = me.getView().down('grid'),
                 visibleColumns = grid.getColumns(function (c) { return !c.getHidden(); }),
                 columnsKeys = [];
 

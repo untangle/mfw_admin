@@ -49,7 +49,7 @@ Ext.define('Mfw.reports.Text', {
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
-            ReportsUtil.fetchReportData(record, function (data) {
+            ReportsUtil.fetchReportData(record, null, function (data) {
                 var args = [];
 
                 view.unmask();
