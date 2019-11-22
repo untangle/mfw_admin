@@ -286,7 +286,7 @@ Ext.define('Mfw.reports.Events', {
                      */
                     me.visibleColumnsKeys.forEach(function (key) {
                         var value = rec.get(key);
-                        if (!value || match) { return }
+                        if (key === 'time_stamp' || !value || match) { return; }
 
                         if (value.toString().toLowerCase().indexOf(term.toLowerCase()) >= 0) {
                             match = true;

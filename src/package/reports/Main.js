@@ -50,7 +50,7 @@ Ext.define('Mfw.reports.Main', {
             hidden: true,
             bind: {
                 text: 'Since: {sinceText}',
-                hidden: '{record.type === "EVENTS"}'
+                hidden: '{!record || record.type === "EVENTS"}'
             },
             menu: {
                 indented: false,
@@ -71,7 +71,7 @@ Ext.define('Mfw.reports.Main', {
             hidden: true,
             bind: {
                 text: 'Limit: {eventsMaxRows} events',
-                hidden: '{record.type !== "EVENTS"}'
+                hidden: '{!record || record.type !== "EVENTS"}'
             },
             menu: {
                 indented: false,
@@ -110,7 +110,11 @@ Ext.define('Mfw.reports.Main', {
                 ]
             }
         }, {
-            xtype: 'toolbarseparator'
+            xtype: 'toolbarseparator',
+            hidden: true,
+            bind: {
+                hidden: '{!record}'
+            }
         }, {
             xtype: 'conditions-fields'
         }, '->', {

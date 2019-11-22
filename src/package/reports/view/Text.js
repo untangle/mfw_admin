@@ -38,7 +38,8 @@ Ext.define('Mfw.reports.Text', {
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
                 record = viewModel.get('record'),
-                since = ReportsUtil.computeSince(me.getViewModel().get('route')),
+                tz = moment().tz(Mfw.app.tz.displayName),
+                sinceHours = me.getViewModel().get('sinceHours'),
                 userConditions, sinceCondition;
 
             if (!record) { return; }
@@ -56,7 +57,7 @@ Ext.define('Mfw.reports.Text', {
             record.userConditions().add({
                 column: 'time_stamp',
                 operator: 'GT',
-                value: since
+                value: tz.subtract(sinceHours, 'hour').valueOf()
             });
 
             view.mask({xtype: 'loadmask'});
