@@ -177,6 +177,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            '<tr><td>Time zone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
+                           '<tr><td>Current Time: </td><td>' + system.system_clock + '</td></tr>' +
                            '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
