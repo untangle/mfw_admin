@@ -163,12 +163,13 @@ Ext.define('Mfw.reports.ChartController', {
 
     init: function (view) {
         var me = this,
+            vm = me.getViewModel(),
             repView = view.up('report') || view.up('widget-report');
 
         view.on('painted', me.onPainted);
 
         // remove chart series if not just refreshing an existing rendered chart
-        view.getViewModel().bind('{record}', function (record) {
+        vm.bind('{record}', function (record) {
             var chart = me.getView().chart;
             if (!chart) { return; }
 
@@ -181,6 +182,19 @@ Ext.define('Mfw.reports.ChartController', {
             }
         });
 
+        /**
+         * reload report data when sinceHours changed
+         */
+        vm.bind('{sinceHours}', function (since) {
+            var chart = me.getView().chart,
+                record = vm.get('record');
+
+            if (!chart || !record) { return; }
+            if (record.get('type') === 'TEXT' || record.get('type') === 'EVENTS') {
+                return;
+            }
+            me.loadData();
+        });
     },
 
     onResize: function (view) {
@@ -192,11 +206,7 @@ Ext.define('Mfw.reports.ChartController', {
     loadData: function (cb) {
         var me = this,
             record = me.getViewModel().get('record'),
-            view = me.getView().up('report') || me.getView().up('widget-report'),
-            chart = me.getView().chart,
-            since = ReportsUtil.computeSince(me.getViewModel().get('route')),
-            userConditions, sinceCondition;
-
+            chart = me.getView().chart;
         if (!record) { return; }
 
         /**
@@ -210,8 +220,10 @@ Ext.define('Mfw.reports.ChartController', {
             return;
         }
 
-        // hide xAxis while loading data
-        // chart.update({ xAxis: { visible: false } }, true);
+        var view = me.getView().up('report') || me.getView().up('widget-report'),
+            tz = moment().tz(Mfw.app.tz.displayName),
+            sinceHours = me.getViewModel().get('sinceHours'),
+            userConditions, sinceCondition;
 
         // remove existing since condition
         userConditions = record.userConditions();
@@ -226,13 +238,13 @@ Ext.define('Mfw.reports.ChartController', {
         record.userConditions().add({
             column: 'time_stamp',
             operator: 'GT',
-            value: since
+            value: tz.subtract(sinceHours, 'hour').valueOf()
         });
 
         // view.mask({xtype: 'loadmask'});
         chart.zoomOut();
         chart.showLoading();
-        ReportsUtil.fetchReportData(record, function (data) {
+        ReportsUtil.fetchReportData(record, null, function (data) {
             chart.hideLoading();
             view.unmask();
 

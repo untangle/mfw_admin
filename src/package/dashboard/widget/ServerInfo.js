@@ -45,9 +45,9 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 clearTimeout(widget.tout);
                 widget.tout = null;
             }
-            if (widget.uptimeInterval) {
-                clearInterval(widget.uptimeInterval);
-                widget.uptimeInterval = null;
+            if (widget.timeIntervals) {
+                clearInterval(widget.timeIntervals);
+                widget.timeIntervals = null;
             }
         }
     },
@@ -150,9 +150,9 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 licenseText,
                 html = '';
 
-            if (widget.uptimeInterval) {
-                clearInterval(widget.uptimeInterval);
-                widget.uptimeInterval = null;
+            if (widget.timeIntervals) {
+                clearInterval(widget.timeIntervals);
+                widget.timeIntervals = null;
             }
 
             me.getView().mask({xtype: 'loadmask'});
@@ -177,16 +177,21 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            '<tr><td>Time zone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
-                           '<tr><td>Current Time: </td><td>' + system.system_clock + '</td></tr>' +
-                           '<tr><td>Up Time: </td><td id="uptime">' + Renderer.uptime(system.uptime.total) + '</td></tr>' +
+                           '<tr><td>System Time: </td><td id="clock"></td></tr>' +
+                           '<tr><td>Up Time: </td><td id="uptime"></td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
                            '<tr><td>Memory: </td><td>' + parseInt(system.meminfo.mem_total/1000, 10) + 'M</td></tr>' +
                            '<tr><td>License: </td><td>' + licenseText + '</td></tr>' +
                            '</table>';
                     me.getView().down('#data').setHtml(html);
 
-                    // start uptime counter
-                    me.setUptime(Math.round(system.uptime.total));
+
+                    /**
+                     * set time intervals for clock and uptime
+                     * use offset to display the real server time in it's timezone
+                     */
+                    var offset = moment(system.system_clock).utcOffset();
+                    me.setIntervals(moment(system.system_clock).utcOffset(offset), Math.round(system.uptime.total));
 
                     if (cb) { cb(); }
                 }, function (error) {
@@ -197,15 +202,18 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 });
         },
 
-        setUptime: function (initialUptime) {
+
+        setIntervals: function (clock, uptime) {
             var me = this, widget = me.getView();
+            document.getElementById('clock').innerHTML = clock.format('ddd, D MMM YYYY hh:mm:ss A');
+            document.getElementById('uptime').innerHTML = Renderer.uptime(uptime);
 
-            document.getElementById('uptime').innerHTML = Renderer.uptime(initialUptime);
-            me.initialUptime = initialUptime;
+            me.clock = clock;
+            me.uptime = uptime;
 
-            if (!widget.uptimeInterval) {
-                widget.uptimeInterval = setInterval(function () {
-                    me.setUptime(me.initialUptime + 1);
+            if (!widget.timeIntervals) {
+                widget.timeIntervals = setInterval(function () {
+                    me.setIntervals(me.clock.add(1, 'second'), me.uptime + 1);
                 }, 1000);
             }
         },

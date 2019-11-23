@@ -96,6 +96,8 @@ Ext.define('Mfw.reports.Controller', {
 
         // depress data btn which also hides the data grid
         view.down('#dataBtn').setPressed(false);
+        // reset global filter when leaving Reports
+        view.down('searchfield').setValue('');
     },
 
     onSelectionChange: function (list, node) {
@@ -143,6 +145,7 @@ Ext.define('Mfw.reports.Controller', {
         }
     },
 
+    // not used
     exportReports: function () {
         var out, arr = [], data, link;
 
@@ -163,6 +166,47 @@ Ext.define('Mfw.reports.Controller', {
         link.setAttribute('href', out);
         link.setAttribute('download', 'reports.json');
         link.click();
-    }
+    },
 
+
+    setSinceLimit: function (cmp) {
+        var me = this;
+        me.getViewModel().set({
+            sinceHours: cmp.value,
+            sinceText: cmp.getText()
+        });
+        cmp.up('menu').hide();
+    },
+
+    /**
+     * Sets predefined EVENTS limit
+     */
+    setEventsLimit: function (cmp) {
+        var me = this;
+        me.getViewModel().set('eventsMaxRows', cmp.value);
+        cmp.up('menu').hide();
+    },
+
+    /**
+     * Sets a custom EVENTS limit
+     */
+    setCustomEventsLimit: function (evt, field) {
+        var me = this;
+        if (!field.isValid() || !field.getValue()) {
+            return;
+        }
+        me.getViewModel().set('eventsMaxRows', field.getValue());
+        field.setValue('');
+        field.blur();
+        field.up('menu').hide();
+    },
+
+    /**
+     * Set new global filter term in view model
+     * This will trigger the filtering on the Events grid
+     */
+    onGlobalFilterChange: function (field, value) {
+        var me = this;
+        me.getViewModel().set('globalFilter', value);
+    }
 });

@@ -17,12 +17,29 @@ Ext.define('Mfw.reports.Text', {
     }],
 
     controller: {
+        init: function () {
+            var me = this,
+                vm = me.getViewModel();
+
+            /**
+             * reload report data when sinceHours changed
+             */
+            vm.bind('{sinceHours}', function (since) {
+                var record = vm.get('record');
+                if (!record || record.get('type') !== 'TEXT') {
+                    return;
+                }
+                me.loadData();
+            });
+        },
+
         loadData: function (cb) {
             var me = this,
                 view = me.getView().up('report') || me.getView().up('widget-report'),
                 viewModel = me.getViewModel(),
                 record = viewModel.get('record'),
-                since = ReportsUtil.computeSince(me.getViewModel().get('route')),
+                tz = moment().tz(Mfw.app.tz.displayName),
+                sinceHours = me.getViewModel().get('sinceHours'),
                 userConditions, sinceCondition;
 
             if (!record) { return; }
@@ -40,7 +57,7 @@ Ext.define('Mfw.reports.Text', {
             record.userConditions().add({
                 column: 'time_stamp',
                 operator: 'GT',
-                value: since
+                value: tz.subtract(sinceHours, 'hour').valueOf()
             });
 
             view.mask({xtype: 'loadmask'});
@@ -49,7 +66,7 @@ Ext.define('Mfw.reports.Text', {
              * textString is defined in report rendering settings like:
              * text ... {0}... {1} end text
              */
-            ReportsUtil.fetchReportData(record, function (data) {
+            ReportsUtil.fetchReportData(record, null, function (data) {
                 var args = [];
 
                 view.unmask();
