@@ -4,7 +4,6 @@ Ext.define('Mfw.reports.Util', {
 
     routeToQuery: function (route) {
         var query = 'reports?';
-        // var hash = Ext.Object.fromQueryString(window.location.hash.replace('#reports?', '')), route = 'reports?';
 
         if (route.cat) { query += 'cat=' + route.cat; }
         if (route.rep) { query += '&rep=' + route.rep; }
@@ -26,7 +25,7 @@ Ext.define('Mfw.reports.Util', {
         }
 
         Ext.Array.each(route.conditions, function(condition) {
-            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + '$' + condition.value;
+            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + '$' + encodeURIComponent(condition.value);
         });
 
         return query;
@@ -42,9 +41,6 @@ Ext.define('Mfw.reports.Util', {
             conditions: []
         };
 
-        // if (query[0] === '?') {
-        //     query = query.substr(1);
-        // }
         if (!query) { return; }
         var queryObj = Ext.Object.fromQueryString(query);
 
