@@ -125,10 +125,19 @@ Ext.define('Mfw.reports.Events', {
                         })) {
                             if (columnRenames) {
                                 if (columnRenames[column.dataIndex]) {
+                                    /**
+                                     * store original column text to be able to revert its value
+                                     * if no column renames
+                                     */
+                                    column.originalText = column.text;
                                     column.text = columnRenames[column.dataIndex];
+                                } else {
+                                    column.text = column.originalText || column.text;
                                 }
+                            } else {
+                                column.text = column.originalText || column.text;
                             }
-                            columns.push(Ext.clone(column)); // !!!! important to clone the value to not modify reference
+                            columns.push(column);
                         }
                     });
                 });
