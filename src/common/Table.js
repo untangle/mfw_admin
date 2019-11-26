@@ -51,7 +51,7 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Server Interface',
             dataIndex: 'server_interface_id',
-            width: 100,
+            width: 150,
             renderer: Renderer.interface,
             cell: { encodeHtml: false },
             operators: ['EQ', 'NE']

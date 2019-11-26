@@ -45,6 +45,14 @@ Ext.define('Mfw.reports.Report', {
                 hidden: '{record.type === "TEXT" || record.type === "EVENTS"}'
             }
         }, {
+            text: 'Clear filters',
+            handler: 'clearFilters',
+            hidden: true,
+            margin: '0 8 0 0 ',
+            bind: {
+                hidden: '{record.type !== "EVENTS" || recordsFiltered === recordsTotal}'
+            },
+        }, {
             text: 'Refresh',
             ui: 'action',
             handler: 'loadData',
