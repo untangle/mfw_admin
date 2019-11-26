@@ -508,9 +508,14 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     renewingIp: false,
                     renewMsg: success ? successMsg : errorMsg
                 });
+
+
                 // on success reload interfaces && their status
                 if (success) {
-                    Ext.getStore('interfaces').reload();
+                    // MFW-790 - add a small timeout before fetching status after IP renew
+                    Ext.defer(function () {
+                        Ext.getStore('interfaces').getStatus();
+                    }, 3000);
                 }
             })
         },

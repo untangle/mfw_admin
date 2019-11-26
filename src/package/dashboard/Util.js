@@ -33,7 +33,7 @@ Ext.define('Mfw.dashboard.Util', {
             query += 'since=1';
         }
         Ext.Array.each(route.conditions, function(condition) {
-            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + '$' + condition.value;
+            query += '&' + condition.column + '=' + condition.operator.toLowerCase() + '$' + encodeURIComponent(condition.value);
         });
         return query;
     },
