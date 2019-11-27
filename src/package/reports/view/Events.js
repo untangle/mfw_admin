@@ -14,6 +14,36 @@ Ext.define('Mfw.reports.Events', {
         plugins: {
             gridfilters: true
         },
+        items: [{
+            xtype: 'menu',
+            anchor: true,
+            mouseLeaveDelay: 0,
+            minWidth: 200,
+            defaults: {
+                handler: 'contextMenuHandler'
+            },
+            contextData: null,
+            items: [{
+                xtype: 'component',
+                style: 'font-size: 14px; font-weight: bold;',
+                // html: location.column.getText() + ' = ' + cell.getRawValue()
+            }, {
+                xtype: 'menuseparator'
+            }, {
+                text: 'Add as query condition',
+                action: 'query'
+            }, {
+                text: 'Add as filter',
+                action: 'filter'
+            }, {
+                xtype: 'menuseparator'
+            }, {
+                text: 'Cancel'
+            }],
+            listeners: {
+                hide: 'hideContextMenu'
+            }
+        }],
         store: {
             model: 'Mfw.model.Session',
             sorters: [{
@@ -23,7 +53,8 @@ Ext.define('Mfw.reports.Events', {
         },
         listeners: {
             columnshow: 'updateVisibleColumnKeys',
-            columnhide: 'updateVisibleColumnKeys'
+            columnhide: 'updateVisibleColumnKeys',
+            childcontextmenu: 'showContextMenu'
         }
     }],
 
@@ -313,7 +344,71 @@ Ext.define('Mfw.reports.Events', {
 
             // update the filtered records counter
             me.getViewModel().set('recordsFilters', eventsStore.count());
-        }
-    }
+        },
 
+        showContextMenu: function (grid, location) {
+            var me = this;
+            if (me.isWidget) { return; }
+
+            var cell = location.cell,
+                value = cell.getValue(),
+                event = location.event,
+                menu = grid.down('menu');
+
+            menu.down('component').setHtml(location.column.getText() + ' = ' + cell.getRawValue());
+            menu.contextData = {
+                column: location.column.getDataIndex(),
+                operator: Ext.isString(value) ? 'LIKE' : 'EQ',
+                value: Ext.isString(value) ? ('%' + value + '%') : value
+            };
+            menu.showBy(cell);
+            event.stopEvent();
+        },
+
+        contextMenuHandler: function (item) {
+            var me = this,
+                vm = me.getViewModel(),
+                grid = me.getView().down('grid'),
+                route = vm.get('route')
+                data = item.up('menu').contextData;
+
+            if (item.action === 'query') {
+                route.conditions.push(data);
+                Mfw.app.redirectTo(ReportsUtil.routeToQuery(route));
+            }
+            if (item.action === 'filter') {
+                var activeFilters = grid.getPlugin('gridfilters').getActiveFilter();
+                grid.getPlugin('gridfilters').setActiveFilter(null);
+
+                if (!Ext.isArray(activeFilters)) {
+                    activeFilters = [];
+                }
+
+                var existingFilter = Ext.Array.findBy(activeFilters, function(filter) {
+                    return filter.property === data.column
+                });
+
+                if (existingFilter) {
+                    existingFilter = {
+                        property: data.column,
+                        operator: data.operator === 'LIKE' ? 'like' : '==',
+                        value: data.operator === 'LIKE' ? data.value.replace(/%/g, '') : data.value
+                    }
+                } else {
+                    activeFilters.push({
+                        property: data.column,
+                        operator: data.operator === 'LIKE' ? 'like' : '==',
+                        value: data.operator === 'LIKE' ? data.value.replace(/%/g, '') : data.value
+                    })
+                }
+                grid.getPlugin('gridfilters').setActiveFilter(activeFilters);
+            }
+            item.up('menu').hide();
+        },
+
+        hideContextMenu: function (menu) {
+            menu.contextData = null
+        },
+
+    }
 });

@@ -48,7 +48,7 @@ Ext.define('Mfw.Sync', {
                     },
                     message: function (get) {
                         if (get('progress')) {
-                            return '<p><i class="x-fa fa-spinner fa-spin fa-fw"></i> &nbsp; Applying changes. This may take a while! Please wait ...</p>';
+                            return '<p><i class="fa fa-spinner fa-spin fa-fw"></i> &nbsp; Applying changes. This may take a while! Please wait ...</p>';
                         }
                         if (get('success')) {
                             return '<p><i class="x-fa fa-check-circle" style="color: #519839;"></i> &nbsp; Success!</p>';

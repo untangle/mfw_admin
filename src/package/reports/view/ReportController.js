@@ -270,5 +270,17 @@ Ext.define('Mfw.reports.ReportController', {
         } else {
             console.warn('Unable to add Condition!');
         }
+    },
+
+    clearFilters: function () {
+        var me = this;
+
+        if (me.getView().down('events-report')) {
+            var grid = me.getView().down('events-report > grid');
+            // remove gridfilters plugin fiter
+            grid.getPlugin('gridfilters').setActiveFilter(null);
+            // remove global filter
+            me.getViewModel().set('globalFilter', '');
+        }
     }
 });
