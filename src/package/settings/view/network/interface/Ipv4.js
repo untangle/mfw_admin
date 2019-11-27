@@ -78,22 +78,11 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     flex: 1,
                     items: [{
                         xtype: 'component',
-                        style: 'line-height: 1;',
                         bind: {
-                            html: 'Current address: <strong>{intf._status.ip4Addr.0}</strong>'
+                            html: 'Current address: <strong>{renewingIp ? "<i class=\'fa fa-spinner fa-spin fa-fw\'></i> renewing ..." : "<strong>" + intf._status.ip4Addr.0 + "</strong>"}'
                         }
                     }, {
-                        // message shown while renewing API call pending
-                        xtype: 'component',
-                        style: 'line-height: 1.2; color: #555; font-size: 11px;',
-                        html: '<i class="fa fa-spinner fa-spin fa-fw"></i> renewing IP ...',
-                        hidden: true,
-                        bind: {
-                            hidden: '{!renewingIp}',
-                        }
-                    }, {
-                        // message shown after renewing API call finishes
-                        // can be a success, error or cancel type of message
+                        // error message shown after renewing API call finishes
                         xtype: 'component',
                         style: 'line-height: 1.2; font-size: 11px;',
                         hidden: true,
@@ -108,17 +97,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     handler: 'onRenew',
                     text: 'Renew IP',
                     bind: {
-                        disabled: '{!(intf._status.addressSource.0 === "dhcp" || intf._status.addressSource.1 === "dhcp") || renewMsg}',
-                        hidden: '{renewingIp}'
-                    }
-                }, {
-                    xtype: 'button',
-                    ui: 'action',
-                    handler: 'onRenewCancel',
-                    text: 'Cancel',
-                    hidden: true,
-                    bind: {
-                        hidden: '{!renewingIp}',
+                        disabled: '{!(intf._status.addressSource.0 === "dhcp" || intf._status.addressSource.1 === "dhcp") || renewingIp}',
                     }
                 }]
             }, {
@@ -438,7 +417,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 if (msg !== null) {
                     Ext.defer(function () {
                         vm.set('renewMsg', null);
-                    }, 3000)
+                    }, 3000);
                 }
             });
         },
@@ -499,41 +478,59 @@ Ext.define('Mfw.settings.interface.Ipv4', {
             var me = this,
                 vm = me.getViewModel(),
                 intf = vm.get('intf'),
-                successMsg = '<span style="color: #519839;"><i class="fa fa-check"></i> IP has been renewed</span>',
                 errorMsg = '<span style="color: #c62828;"><i class="fa fa-exclamation-triangle"></i> Unable to renew IP address</span>';
 
             vm.set('renewingIp', true);
             me.renewDhcp(intf.get('device'), function (success) {
-                vm.set({
-                    renewingIp: false,
-                    renewMsg: success ? successMsg : errorMsg
-                });
-
-
                 // on success reload interfaces && their status
                 if (success) {
                     // MFW-790 - add a small timeout before fetching status after IP renew
                     Ext.defer(function () {
-                        Ext.getStore('interfaces').getStatus();
-                    }, 3000);
+                        me.refreshStatus(intf.get('device'), 0);
+                    }, 3000, me);
+                } else {
+                    vm.set({
+                        renewingIp: false,
+                        renewMsg: errorMsg
+                    });
                 }
             })
         },
 
-        // handler to cancel any ongoing renew API calls
-        onRenewCancel: function (btn) {
+        /**
+         * try 5 times to refresh status until new IP appears
+         */
+        refreshStatus: function (device, count) {
             var me = this,
-                vm = me.getViewModel();
-            vm.set({
-                renewingIp: false,
-                renewMsg: 'Renew IP process canceled'
-            });
-            Ext.Object.each(Ext.Ajax.requests, function (key, req) {
-                if (req.url.startsWith('/api/releasedhcp/') || req.url.startsWith('/api/renewdhcp')) {
-                    req.abort();
-                }
-            });
-        }
+                vm = me.getViewModel(),
+                errorMsg = '<span style="color: #c62828;"><i class="fa fa-exclamation-triangle"></i> Unable to renew IP address</span>';
+                store = Ext.getStore('interfaces');
 
+            Ext.defer(function () {
+                if (count === 5) {
+                    vm.set({
+                        renewingIp: false,
+                        renewMsg: errorMsg
+                    });
+                    return;
+                }
+                store.getStatus(function () {
+                    store.each(function (intf) {
+                        if (intf.get('device') === device) {
+                            var status = intf.get('_status');
+                            if (!status.ip4Addr) {
+                                count++;
+                                me.refreshStatus(device, count);
+                            } else {
+                                vm.set({
+                                    renewingIp: false,
+                                    renewMsg: null
+                                });
+                            }
+                        }
+                    });
+                });
+            }, 1000, me);
+        }
     }
 });

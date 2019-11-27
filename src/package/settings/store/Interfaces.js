@@ -59,7 +59,12 @@ Ext.define('Mfw.store.Interfaces', {
         });
     },
 
-    getStatus: function () {
+
+    /**
+     * Get status for all interfaces/devices
+     * @param {Function} cb - callback used when renewing IP address
+     */
+    getStatus: function (cb) {
         var store = this;
         Ext.Ajax.request({
             url: '/api/status/interfaces/all',
@@ -75,6 +80,7 @@ Ext.define('Mfw.store.Interfaces', {
                         intf.set('_status', intfStatus);
                     }
                 });
+                if (cb) { cb(); }
             },
             failure: function () {
                 console.error('Unable to get interfaces status!');
