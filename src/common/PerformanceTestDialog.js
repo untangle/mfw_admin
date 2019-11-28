@@ -151,11 +151,12 @@ Ext.define('Mfw.PerformanceTestDialog', {
 
             /**
              * the actual API request which initiate the test
+             * the call should take around 30 seconds
+             * but not being certain let it finish beyond 30 seconds progress bar limit
              */
             me._request = Ext.Ajax.request({
                 url: '/api/status/wantest/' + device,
-                // MFW-780 - increase timeout with 2 seconds to avoid aborting request too soon
-                timeout: 32000, // 32 seconds timeout
+                timeout: 60000, // full minute timeout for the call
                 success: function (response) {
                     var result = Ext.JSON.decode(response.responseText, true);
                     me._result[device] = {
