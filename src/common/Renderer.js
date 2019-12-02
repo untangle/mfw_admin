@@ -557,6 +557,9 @@ Ext.define('Mfw.Renderer', {
             }
             if (type === 'DNAT') {
                 actionStr += ' ' + action.get('dnat_address');
+                if (action.get('dnat_port')) {
+                     actionStr += ':' + action.get('dnat_port');
+                }
             }
             if (type === 'SET_PRIORITY') {
                 actionStr += ' ' + action.get('priority');

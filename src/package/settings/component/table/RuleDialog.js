@@ -514,6 +514,11 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         dnat_port: null
                     });
                 }
+                if (!action.get('dnat_port')) {
+                    action.set({
+                        dnat_port: null
+                    });
+                }
                 /**
                  * dnat_address is an IPv4/IPv6 address + port number (optional)
                  */
@@ -529,16 +534,12 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         clearable: false
                     },
                     items: [{
-                        label: 'hidden',
-                        xtype: 'hiddenfield',
-                        readonly: true,
-                        name: 'dnat_address',
-                        bind: '{rule.action.dnat_address}',
-                    }, {
                         xtype: 'textfield',
+                        name: 'dnat_address',
                         label: 'Address'.t(),
                         flex: 1,
                         required: true,
+                        bind: '{rule.action.dnat_address}',
                         validators: 'ipany'
                     }, {
                         xtype: 'component',
@@ -546,37 +547,13 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                         margin: '3 8'
                     }, {
                         xtype: 'numberfield',
+                        name: 'dnat_port',
                         width: 100,
                         label: 'Port (optional)'.t(),
                         required: false,
+                        bind: '{rule.action.dnat_port}',
                         validators: 'port',
-                    }],
-                    listeners: {
-                        painted: function (container) {
-                            var vm = container.up('rule-dialog').getViewModel(),
-                            dnat_action = vm.get('rule.action.dnat_address'),
-                            address_field = container.down('textfield'),
-                            port_field = container.down('numberfield');
-
-                            address_field.setValue(dnat_action.split(':')[0]);
-                            port_field.setValue(dnat_action.split(':')[1]);
-
-                            address_field.on('change', function (field, value) {
-                                if (Ext.isNumber(port_field.getValue())) {
-                                    vm.set('rule.action.dnat_address', value + ':' + port_field.getValue());
-                                } else {
-                                    vm.set('rule.action.dnat_address', value);
-                                }
-                            });
-                            port_field.on('change', function (field, value) {
-                                if (Ext.isNumber(value)) {
-                                    vm.set('rule.action.dnat_address', address_field.getValue() + ':' + value);
-                                } else {
-                                    vm.set('rule.action.dnat_address', address_field.getValue());
-                                }
-                            });
-                        }
-                    }
+                    }]
                 });
                 return;
             }
