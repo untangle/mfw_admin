@@ -440,15 +440,15 @@ Ext.define('Mfw.Table', {
                 activeBoxLabel: 'True',
                 inactiveBoxLabel: 'False'
             }; break;
-            case 'application_name':
-            case 'application_name_inferred':
+            case 'application_id':
+            case 'application_id_inferred':
             field = {
                 xtype: 'combobox',
                 placeholder: 'Select or type a value ...',
                 editable: true,
                 typeAhead: true,
                 anyMatch: true,
-                store: 'applicationNames',
+                store: 'applicationIds',
                 queryMode: 'local',
                 valueField: 'value',
                 displayField: 'text'
