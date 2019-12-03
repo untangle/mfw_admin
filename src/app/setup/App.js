@@ -43,6 +43,12 @@ Ext.define('Mfw.Setup', {
     launch: function() {
         Ext.route.Router.suspend();
         Mfw.app.checkStatus();
+
+        // supress swipe gesture to avoid unintended show of the exceptions sheet
+        Mfw.app.viewport.onEdgeSwipeStart = function (e) {
+            e.stopPropagation();
+        }
+
         Sync.init();
     }
 });
