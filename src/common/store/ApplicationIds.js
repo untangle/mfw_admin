@@ -1,5 +1,5 @@
 /**
- * This list of names can be generated from protolist.csv in the classd
+ * This list of IDs can be generated from protolist.csv in the classd
  * repository with the following csvtool syntax:
  *
  * csvtool format "          { text: '%(1)', value: '%(1)' },\n" protolist.csv | sort
@@ -7,11 +7,11 @@
  * Remember to remove the GUID / GUID entry that is created from
  * the column name header from the first line of the file.
 */
-Ext.define('Mfw.store.ApplicationNames', {
+Ext.define('Mfw.store.ApplicationIds', {
     extend: 'Ext.data.Store',
-    storeId: 'applicationNames',
-    alias: 'store.applicationNames',
-    data: 
+    storeId: 'applicationIds',
+    alias: 'store.applicationIds',
+    data:
     [
         { text: '050PLUS', value: '050PLUS' },
         { text: '12306CN', value: '12306CN' },

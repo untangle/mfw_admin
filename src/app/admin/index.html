@@ -54,7 +54,7 @@
                         '*': { before: 'checkAuth' },
                     },
 
-                    stores: ['Widgets', 'Reports', 'ReportsNav', 'Files', 'Interfaces', 'ConditionsTree', 'SettingsNav', 'ApplicationNames','ApplicationCategories'],
+                    stores: ['Widgets', 'Reports', 'ReportsNav', 'Files', 'Interfaces', 'ConditionsTree', 'SettingsNav', 'ApplicationIds', 'ApplicationCategories'],
 
                     viewport: {
                         // reference: 'viewport',
@@ -75,6 +75,10 @@
                     },
 
                     setViews: function () {
+                        // supress swipe gesture to avoid unintended show of the exceptions sheet
+                        Mfw.app.viewport.onEdgeSwipeStart = function (e) {
+                            e.stopPropagation();
+                        }
                         Mfw.app.viewport.add([
                             { xtype: 'mfw-header' },
                             { xtype: 'dashboard' },
