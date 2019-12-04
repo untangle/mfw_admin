@@ -126,8 +126,14 @@ Ext.define('Mfw.PerformanceTestDialog', {
                 vm = me.getViewModel(),
                 progress;
 
+            if (me._interval) {
+                Ext.uninterval(me._interval);
+            }
 
-            vm.set('device', device);
+            vm.set({
+                device: device,
+                progress: 0
+            });
 
             /**
              * progress bar updates every 0.1 secons for 30 seconds max
@@ -143,7 +149,8 @@ Ext.define('Mfw.PerformanceTestDialog', {
                     progress = vm.get('progress');
                     progress += 100/30000;
                     if (progress > 1) {
-                        progress = 0;
+                        progress = 1;
+                        Ext.uninterval(me._interval);
                     }
                     vm.set('progress', progress);
                 }
@@ -164,36 +171,22 @@ Ext.define('Mfw.PerformanceTestDialog', {
                         success: true,
                         result: result
                     }
-                    /**
-                     * reinitiate test
-                     * if no interfaces to test left it wil show results
-                     */
-                    me.startTest();
                 },
                 failure: function (response) {
                     var result = Ext.JSON.decode(response.responseText, true);
-
-                    // if aborted skip tyesting more wans
-                    if (response.aborted) {
-                        return;
-                    };
 
                     me._result[device] = {
                         tested: true,
                         success: false,
                         result: result
                     }
-                    /**
-                     * reinitiate test
-                     * if no interfaces to test left it wil show results
-                     */
-                    me.startTest();
                 },
                 callback: function () {
-                    // when call is completed set progress to 100%
-                    vm.set('progress', 1);
-                    // and clear progress interval
-                    if (me._interval) (Ext.uninterval(me._interval));
+                    /**
+                     * reinitiate test
+                     * if no interfaces to test left it will show results
+                     */
+                    me.startTest();
                 }
             });
         },
@@ -233,6 +226,10 @@ Ext.define('Mfw.PerformanceTestDialog', {
              */
             if (me._request && !me._request.completed) {
                 me._request.abort();
+            }
+
+            if (me._interval) {
+                Ext.uninterval(me._interval);
             }
 
             // destroy the dialog on cancel/close
