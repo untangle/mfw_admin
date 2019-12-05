@@ -38,7 +38,7 @@ Ext.define('Mfw.setup.step.Performance', {
         xtype: 'component',
         margin: '0 0 24 0',
         style: 'color: #777;',
-        html: 'tests performance of enabled WAN interfaces'
+        html: 'test performance of connected WAN interfaces'
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -70,14 +70,23 @@ Ext.define('Mfw.setup.step.Performance', {
         }, {
             text: 'Name',
             dataIndex: 'name',
-            flex: 1,
-            minWidth: 200,
+            width: 120,
             menuDisabled: true,
             sortable: false,
             cell: { encodeHtml: false },
             renderer: function (value) {
                 return '<b>' + value + '</b>';
             }
+        }, {
+            text: 'Status',
+            dataIndex: '_status',
+            align: 'center',
+            width: 80,
+            resizable: false,
+            hideable: false,
+            menuDisabled: true,
+            cell: { encodeHtml: false },
+            renderer: Renderer.intfStatusConnected
         }, {
             text: 'QoS Download Speed (Mbps)',
             flex: 1,
@@ -137,7 +146,13 @@ Ext.define('Mfw.setup.step.Performance', {
             store.setFilters([
                 { property: 'hidden', value: false },
                 { property: 'enabled', value: true },
-                { property: 'wan', value: true }
+                { property: 'wan', value: true },
+                // add extra filter to test only connected wans
+                new Ext.util.Filter({
+                    filterFn: function(intf) {
+                        return intf.get('_status').connected;
+                    }
+                })
             ]);
 
             // make sure interfaces store is loaded then check for wans
@@ -231,11 +246,9 @@ Ext.define('Mfw.setup.step.Performance', {
             });
 
             store.sync({
-                success: function () {
-                    cb();
-                },
+                // callback regardless of success/failure
                 callback: function () {
-                    vm.set('processing', false);
+                    cb();
                 }
             });
         }

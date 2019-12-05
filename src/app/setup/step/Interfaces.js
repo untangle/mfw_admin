@@ -6,8 +6,6 @@ Ext.define('Mfw.setup.step.Interfaces', {
 
     padding: '32 0 0 0',
 
-    viewModel: {},
-
     layout: {
         type: 'vbox',
         align: 'middle'
@@ -189,11 +187,9 @@ Ext.define('Mfw.setup.step.Interfaces', {
             });
 
             store.sync({
-                success: function () {
-                    cb();
-                },
+                // callback regardless of success/failure
                 callback: function () {
-                    vm.set('processing', false);
+                    cb();
                 }
             });
         },
