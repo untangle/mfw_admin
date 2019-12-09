@@ -48,12 +48,16 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         iconCls: 'x-fa fa-cloud-download fa-orange',
         handler: 'startUpgrade'
     }, {
+        text: 'Suggest Idea'.t(),
+        iconCls: 'x-fa fa-lightbulb fa-white',
+        handler: 'showSuggest'
+    }, {
         text: 'Help'.t(),
-        iconCls: 'x-fa fa-question-circle',
+        iconCls: 'x-fa fa-question-circle fa-white',
         handler: 'showHelp'
     }, {
         text: 'Logout'.t(),
-        iconCls: 'x-fa fa-sign-out-alt',
+        iconCls: 'x-fa fa-sign-out-alt fa-white',
         handler: 'logout'
     }]
 });

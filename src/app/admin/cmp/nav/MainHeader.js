@@ -164,8 +164,15 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 }
             }]
         }
-    },
-    {
+    }, {
+        text: 'Suggest Idea',
+        iconCls: 'x-fa fa-lightbulb fa-3x fa-white',
+        iconAlign: 'top',
+        style: 'font-weight: 500; font-size: 12px;',
+        hidden: true,
+        responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
+        handler: 'showSuggest'
+    }, {
         text: 'Help',
         iconCls: 'x-fa fa-question-circle fa-3x fa-white',
         iconAlign: 'top',
@@ -173,8 +180,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         hidden: true,
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         handler: 'showHelp'
-    },
-    {
+    }, {
         text: 'Logout',
         iconCls: 'x-fa fa-sign-out-alt fa-3x fa-white',
         iconAlign: 'top',
@@ -183,7 +189,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         handler: 'logout'
     }, {
-        iconCls: 'x-fa fa-bars',
+        iconCls: 'x-fa fa-bars fa-white',
         hidden: true,
         responsiveConfig: { large: { hidden: true, }, small: { hidden: false } },
         handler: 'showMenu'
@@ -273,6 +279,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         showHelp: function () {
             var hash = window.location.hash;
             window.open(Mfw.app.supportUrl + hash.replace('#', '').replace(/\//g, '+').split('?')[0]);
+        },
+
+        showSuggest: function () {
+            window.open(Mfw.app.feedbackUrl);
         },
 
         startUpgrade: function (btn) {
