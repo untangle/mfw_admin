@@ -19,6 +19,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
     items: [{
         xtype: 'container',
         padding: 16,
+        minHeight: 100,
         layout: {
             type: 'vbox',
             align: 'left'
@@ -132,8 +133,9 @@ Ext.define('Mfw.settings.system.Upgrade', {
             width: 400,
             name: 'file',
             required: true,
-            label: 'Choose File'.t(),
-            // labelAlign: 'top'
+            multiple: false,
+            accept: '.img.gz, *.*',
+            label: 'Choose File'.t()
         }, {
             xtype: 'button',
             text: 'Upgrade',
