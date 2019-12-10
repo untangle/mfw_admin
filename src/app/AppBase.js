@@ -3,7 +3,7 @@ Ext.define('Mfw.AppBase', {
     name: 'Mfw',
 
     supportUrl: 'https://support.untangle.com/hc/en-us/search?query=sd-wan+',
-    feedbackUrl: 'https://feedback.untangle.com/',
+    feedbackUrl: 'https://untanglesdwanrouter.featureupvote.com/',
 
     config: {
         account: null,

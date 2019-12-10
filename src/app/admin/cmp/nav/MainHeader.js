@@ -14,7 +14,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         responsiveConfig: { large: { margin: '5 26 0 10', }, small: { margin: '5 26 0 0', } }
     }, {
         xtype: 'container',
-        flex: 1,
+        flex: 2,
         layout: 'hbox',
         defaultType: 'button',
         responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
@@ -85,22 +85,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 pressed: '{currentView === "settings"}'
             }
         }]
-    }, '->',
-    // {
-    //     xtype: 'component',
-    //     style: 'color: #91e971; font-size: 12px; font-weight: 400; font-family: "Roboto"',
-    //     listeners: {
-    //         painted: function (el) {
-    //             var location = Mfw.app.tz.displayName;
-    //             el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
-    //             setInterval(function () {
-    //                 el.setHtml(location.replace(/_/g, ' ') + ', ' + moment().tz(Mfw.app.tz.displayName).format('hh:mm A'));
-    //             }, 1000 * 60);
-    //         }
-    //     }
-
-    // },
-    {
+    }, '->', {
         text: 'New Upgrade!',
         iconCls: 'x-fa fa-cloud-download fa-3x fa-orange',
         iconAlign: 'top',
