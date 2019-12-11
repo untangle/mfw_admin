@@ -8,7 +8,8 @@ Ext.define('Mfw.settings.system.Upgrade', {
         data: {
             system: null,
             checkProgress: false,
-            newUpgrade: false
+            newUpgrade: false,
+            validImageFile: null
         }
     },
 
@@ -134,14 +135,26 @@ Ext.define('Mfw.settings.system.Upgrade', {
             name: 'file',
             required: true,
             multiple: false,
-            accept: '.img.gz, *.*',
-            label: 'Choose File'.t()
+            accept: '.img.gz',
+            label: 'Choose File'.t(),
+            listeners: {
+                change: 'onFileChange'
+            }
+        }, {
+            xtype: 'component',
+            bind: {
+                html: '{validImageFile === false ? "Image file must be *.img.gz" : ""}'
+            }
         }, {
             xtype: 'button',
             text: 'Upgrade',
             margin: '16 0 0 0',
             ui: 'action',
-            handler: 'onSubmit'
+            handler: 'onSubmit',
+            disabled: true,
+            bind: {
+                disabled: '{!validImageFile}'
+            }
         }]
     }],
 
@@ -189,6 +202,11 @@ Ext.define('Mfw.settings.system.Upgrade', {
                     console.warn('Unable to get upgrade settings!');
                 }
             });
+        },
+
+        onFileChange: function (field, value) {
+            var me = this;
+            me.getViewModel().set('validImageFile', Ext.String.endsWith(value, '.img.gz'));
         },
 
         onTimeChange: function () {
