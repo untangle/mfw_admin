@@ -321,6 +321,17 @@ Ext.define('Mfw.settings.Conditions', {
             }
         }
     }, {
+        type:'DESTINED_LOCAL',
+        implemented: true,
+        category: 'Destination',
+        text: 'Destined Local'.t(),
+        description: 'Destined Local description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'displayfield',
+            value: 'True'
+        }
+    }, {
         type:'DESTINATION_INTERFACE_TYPE',
         category: 'Destination',
         text: 'Destination Interface Type'.t(),
