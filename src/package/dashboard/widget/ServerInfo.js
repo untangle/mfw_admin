@@ -179,7 +179,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                            '<tr><td>Build: </td><td>' + shortBuildVersion + '</td></tr>' +
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
-                           '<tr><td>Time zone: </td><td>' + info.timeZone.displayName + '</td></tr>' +
+                           // if setup was never run, timeZone might not be defined and it's assumed as UTC
+                           '<tr><td>Time zone: </td><td>' + (info.timeZone ? info.timeZone.displayName : 'UTC') + '</td></tr>' +
                            '<tr><td>System Time: </td><td id="clock"></td></tr>' +
                            '<tr><td>Up Time: </td><td id="uptime"></td></tr>' +
                            '<tr><td>CPU(s): </td><td>' + hardware.cpuinfo.processors[0].model_name + '</td></tr>' +
@@ -191,10 +192,12 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
 
                     /**
                      * set time intervals for clock and uptime
-                     * use offset to display the real server time in it's timezone
+                     * !!! important
+                     * system date command might be inconsistent with what is displayed in dashboard
+                     * because the system timezone seems to be inconsistent with timezone set in settings.json
+                     * the below fix is forcing in the UI the timezone found in settings.json
                      */
-                    var offset = moment(system.system_clock).utcOffset();
-                    me.setIntervals(moment(system.system_clock).utcOffset(offset), Math.round(system.uptime.total));
+                    me.setIntervals(moment(system.system_clock).tz(Mfw.app.tz.displayName), Math.round(system.uptime.total));
 
                     if (cb) { cb(); }
                 }, function (error) {
