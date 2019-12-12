@@ -299,6 +299,7 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Client Country',
         dataIndex: 'client_country',
+        cell: { encodeHtml: false },
         width: 150,
         hidden: true,
         renderer: Renderer.country
@@ -355,7 +356,8 @@ Ext.define('Mfw.monitor.view.Sessions', {
     }, {
         text: 'Server Country',
         dataIndex: 'server_country',
-        width: 100,
+        cell: { encodeHtml: false },
+        width: 150,
         hidden: true,
         renderer: Renderer.country
     }, {
