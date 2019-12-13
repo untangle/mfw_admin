@@ -5,6 +5,9 @@
     "displayOrder": 1000,
     "type": "EVENTS",
     "table": "sessions",
+    "queryEvents": {
+        "limit": 3000
+    },
     "conditions": [{
         "column": "wan_rule_chain",
         "operator": "NE",
