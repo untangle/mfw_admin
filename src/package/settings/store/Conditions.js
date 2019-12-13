@@ -300,13 +300,15 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Interface Name'.t(),
         description: 'Destination Interface Name description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        disableOnFirstPacket: true
     }, {
         type:'DESTINATION_INTERFACE_ZONE',
         category: 'Destination',
         text: 'Destination Interface Zone'.t(),
         description: 'Destination Interface Zone description ...',
         operators: ['==', '!='],
+        disableOnFirstPacket: true,
         field: {
             xtype: 'selectfield',
             multiSelect: true,
@@ -319,11 +321,23 @@ Ext.define('Mfw.settings.Conditions', {
             }
         }
     }, {
+        type:'DESTINED_LOCAL',
+        implemented: true,
+        category: 'Destination',
+        text: 'Destined Local'.t(),
+        description: 'Destined Local description ...',
+        operators: ['==', '!='],
+        field: {
+            xtype: 'displayfield',
+            value: 'True'
+        }
+    }, {
         type:'DESTINATION_INTERFACE_TYPE',
         category: 'Destination',
         text: 'Destination Interface Type'.t(),
         description: 'Destination Interface Type description ...',
         operators: ['==', '!='],
+        disableOnFirstPacket: true,
         field: {
             xtype: 'selectfield',
             autoSelect: true,

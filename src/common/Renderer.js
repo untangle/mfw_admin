@@ -382,6 +382,9 @@ Ext.define('Mfw.Renderer', {
             typeText = 'Cert. Subject ' + typeText;
         }
 
+        if (type === 'DESTINED_LOCAL') {
+            valueRender = 'True'
+        }
 
         var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
 
@@ -503,6 +506,9 @@ Ext.define('Mfw.Renderer', {
                 typeRenderer = 'Cert. Subject ' + typeRenderer;
             }
 
+            if (type === 'DESTINED_LOCAL') {
+                valueRender = 'True'
+            }
 
             strArr.push('<span style="font-weight: bold; color: #333;">' +
                          typeRenderer.toLowerCase() + ' ' +
