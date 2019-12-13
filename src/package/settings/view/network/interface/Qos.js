@@ -7,6 +7,12 @@ Ext.define('Mfw.settings.interface.Qos', {
 
     layout: 'fit',
 
+    viewModel: {
+        data: {
+            performanceTestEnabled: false
+        }
+    },
+
     items: [{
         xtype: 'container',
         scrollable: true,
@@ -74,14 +80,40 @@ Ext.define('Mfw.settings.interface.Qos', {
                 hidden: true,
                 disabled: true,
                 bind: {
-                    hidden: '{setupContext}',
+                    hidden: '{setupContext || !performanceTestEnabled}',
                     disabled: '{!intf.qosEnabled}'
                 }
             }]
         }]
     }],
+    listeners: {
+        activate: 'onActivate',
+    },
 
     controller: {
+        onActivate: function (view) {
+            var vm = view.getViewModel();
+
+            /**
+             * MFW-846 - check board name
+             * if not E3 show performance test options
+             */
+            Ext.Ajax.request({
+                url: '/api/status/hardware',
+                success: function (response) {
+                    var hardware = Ext.decode(response.responseText),
+                        boardName = hardware.boardName;
+
+                    if (boardName && boardName.indexOf('E3') < 0) {
+                        vm.set('performanceTestEnabled', true);
+                    }
+                },
+                failure: function () {
+                    vm.set('performanceTestEnabled', true);
+                }
+            });
+        },
+
         runPerformanceTest: function () {
             var me = this,
                 vm = me.getViewModel(),

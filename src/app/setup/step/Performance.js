@@ -9,6 +9,12 @@ Ext.define('Mfw.setup.step.Performance', {
         align: 'middle'
     },
 
+    viewModel: {
+        data: {
+            performanceTestEnabled: false
+        }
+    },
+
     items: [{
         xtype: 'container',
         width: 800,
@@ -27,7 +33,12 @@ Ext.define('Mfw.setup.step.Performance', {
             width: 140,
             iconCls: 'md-icon-refresh',
             text: 'Re-run Test',
-            handler: 'runPerformanceTest'
+            handler: 'runPerformanceTest',
+            hidden: true,
+            hideMode: 'visibility',
+            bind: {
+                hidden: '{!performanceTestEnabled}'
+            }
         }]
     }, {
         xtype: 'component',
@@ -38,7 +49,9 @@ Ext.define('Mfw.setup.step.Performance', {
         xtype: 'component',
         margin: '0 0 24 0',
         style: 'color: #777;',
-        html: 'test performance of connected WAN interfaces'
+        bind: {
+            html: '{performanceTestEnabled ? "test" : "set"} performance of connected WAN interfaces'
+        }
     }, {
         xtype: 'grid',
         reference: 'interfaces',
@@ -154,6 +167,32 @@ Ext.define('Mfw.setup.step.Performance', {
                     }
                 })
             ]);
+
+            /**
+             * MFW-846 - check board name
+             * if not E3 show performance test options
+             */
+            Ext.Ajax.request({
+                url: '/api/status/hardware',
+                success: function (response) {
+                    var hardware = Ext.decode(response.responseText),
+                        boardName = hardware.boardName;
+
+                    if (boardName && boardName.indexOf('E3') < 0) {
+                        me.enablePerformanceUI();
+                    }
+                },
+                failure: function () {
+                    me.enablePerformanceUI();
+                }
+            });
+        },
+
+        enablePerformanceUI: function () {
+            var me = this,
+                store = Ext.getStore('interfaces');
+
+            me.getViewModel().set('performanceTestEnabled', true);
 
             // make sure interfaces store is loaded then check for wans
             if (!store.isLoaded()) {
