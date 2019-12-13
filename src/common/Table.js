@@ -109,7 +109,12 @@ Ext.define('Mfw.Table', {
             width: 100
         }, {
             text: 'Client Country',
-            dataIndex: 'client_country'
+            dataIndex: 'client_country',
+            cell: { encodeHtml: false },
+            width: 120,
+            renderer: function (val) {
+                return Map.countries[val] || val;
+            }
         }, {
             text: 'Client Latitude',
             dataIndex: 'client_latitude'
@@ -119,6 +124,7 @@ Ext.define('Mfw.Table', {
         }, {
             text: 'Server Country',
             dataIndex: 'server_country',
+            cell: { encodeHtml: false },
             width: 120,
             renderer: function (val) {
                 return Map.countries[val] || val;

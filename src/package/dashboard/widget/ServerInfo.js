@@ -148,6 +148,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                 build,
                 license,
                 licenseText,
+                shortBuildVersion,
                 html = '';
 
             if (widget.timeIntervals) {
@@ -164,6 +165,8 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                     build = result[3];
                     license = result[4];
 
+                    shortBuildVersion = build.pretty_name.split('-')[0];
+
                     if (!license || license.list.length === 0) {
                         licenseText = '<span style="color: red;">Not licensed</span>';
                     } else {
@@ -173,7 +176,7 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
 
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
                            '<tr><td style="width: 100px;">Board: </td><td>' + (Map.boards[hardware.boardName] || hardware.boardName) + '</td></tr>' +
-                           '<tr><td>Build: </td><td>' + build.pretty_name + '</td></tr>' +
+                           '<tr><td>Build: </td><td>' + shortBuildVersion + '</td></tr>' +
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
                            // if setup was never run, timeZone might not be defined and it's assumed as UTC

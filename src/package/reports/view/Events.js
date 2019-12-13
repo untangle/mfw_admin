@@ -126,7 +126,8 @@ Ext.define('Mfw.reports.Events', {
 
 
             vm.bind('{record}', function (record) {
-                var tableNames = [],
+                var hc = grid.getHeaderContainer(),
+                    tableNames = [],
                     columns = [], defaultColumns, columnRenames;
 
                 grid.getStore().loadData([]);
@@ -134,6 +135,14 @@ Ext.define('Mfw.reports.Events', {
                 if (!record || record.get('type') !== 'EVENTS') {
                     return;
                 }
+
+                /**
+                 * MFW-837
+                 * use headercontainer to add remove columns
+                 * important when removing to avoid destroying them because it will
+                 * cause column menu not having Columns show/hode options
+                 */
+                hc.removeAll(false, false);
 
                 /**
                  * there could be a single table
@@ -182,7 +191,14 @@ Ext.define('Mfw.reports.Events', {
                         });
                     }
                 }
-                grid.setColumns(columns);
+
+                // disable column menu if it's widget
+                Ext.Array.each(columns, function (col) {
+                    col.menuDisabled = me.isWidget;
+                });
+
+                // add columns
+                hc.add(columns);
 
                 if (!me.isWidget) {
                     me.updateVisibleColumnKeys();
@@ -285,16 +301,14 @@ Ext.define('Mfw.reports.Events', {
          * When a column is hidden/shown the columns list is updated and the global filter triggers
          */
         updateVisibleColumnKeys: function () {
-            var me = this;
+            var me = this,
+                columnsKeys = [],
+                vm = me.getViewModel(),
+                hc = me.getView().down('grid').getHeaderContainer();
+
             if (me.isWidget) { return; }
 
-            var view = me.getView(),
-                vm = me.getViewModel(),
-                grid = me.getView().down('grid'),
-                visibleColumns = grid.getColumns(function (c) { return !c.getHidden(); }),
-                columnsKeys = [];
-
-            Ext.Array.each(visibleColumns, function (col) {
+            Ext.Array.each(hc.getVisibleColumns(), function (col) {
                 columnsKeys.push(col.getDataIndex());
             });
             // store visible columns in the controller scope
