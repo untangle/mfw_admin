@@ -8,6 +8,7 @@ Ext.define('Mfw.settings.firewall.Nat', {
             read: Util.api + '/settings/firewall/tables/nat',
             update: Util.api + '/settings/firewall/tables/nat'
         },
+        defaultAction: 'MASQUERADE',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','SNAT','MASQUERADE'],
         hash: 'firewall/nat',
         conditions: Util.getFirstPacketConditions()

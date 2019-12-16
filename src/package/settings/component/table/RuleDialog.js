@@ -327,6 +327,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
         init: function (dialog) {
             var tableGrid = dialog.ownerCmp,
                 actions = tableGrid.getActions(), // possible actions for this table
+                defaultAction = tableGrid.getDefaultAction(), // the default action for this table
                 conditions = tableGrid.getConditions(), // possible conditions for this table
                 vm = dialog.getViewModel(),
                 rule = dialog.getRule(),
@@ -355,9 +356,8 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             if (!rule) {
                 rule = new Mfw.model.table.Rule({
                     enabled: true,
-                    // default action is ACCEPT for new rules
                     action: {
-                        type: 'ACCEPT'
+                        type: defaultAction
                     }
                 });
             }
@@ -508,17 +508,6 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             }
 
             if (value === 'DNAT') {
-                if (!action.get('dnat_address')) {
-                    action.set({
-                        dnat_address: '',
-                        dnat_port: null
-                    });
-                }
-                if (!action.get('dnat_port')) {
-                    action.set({
-                        dnat_port: null
-                    });
-                }
                 /**
                  * dnat_address is an IPv4/IPv6 address + port number (optional)
                  */
