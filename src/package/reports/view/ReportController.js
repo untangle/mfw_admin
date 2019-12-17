@@ -273,14 +273,19 @@ Ext.define('Mfw.reports.ReportController', {
     },
 
     clearFilters: function () {
-        var me = this;
+        var me = this,
+            filterField = me.getView().up('reports').down('searchfield');
 
         if (me.getView().down('events-report')) {
             var grid = me.getView().down('events-report > grid');
             // remove gridfilters plugin fiter
             grid.getPlugin('gridfilters').setActiveFilter(null);
-            // remove global filter
-            me.getViewModel().set('globalFilter', '');
         }
+
+        if (filterField) {
+            // clear global filter
+            filterField.setValue('');
+        }
+
     }
 });
