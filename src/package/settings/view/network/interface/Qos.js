@@ -104,7 +104,8 @@ Ext.define('Mfw.settings.interface.Qos', {
                     var hardware = Ext.decode(response.responseText),
                         boardName = hardware.boardName;
 
-                    if (boardName && boardName.indexOf('E3') < 0) {
+                    // enable performance testing if not E3
+                    if (boardName && !boardName.match(/e3/i)) {
                         vm.set('performanceTestEnabled', true);
                     }
                 },
