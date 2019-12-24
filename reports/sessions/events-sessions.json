@@ -5,6 +5,9 @@
     "displayOrder": 1000,
     "type": "EVENTS",
     "table": "sessions",
+    "queryEvents": {
+        "limit": 3000
+},
     "rendering": {
         "defaultColumns": ["time_stamp",
                            "ip_protocol",

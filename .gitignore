@@ -14,3 +14,4 @@ mfw
 .source_dir
 .pkgdir/
 ipkg-x86_64/
+ipkg-aarch64_cortex-a53/

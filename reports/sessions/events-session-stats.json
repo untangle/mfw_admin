@@ -6,6 +6,9 @@
     "type": "EVENTS",
     "table": "session_stats left join sessions using (session_id)",
     "tables": ["sessions", "session_stats"],
+    "queryEvents": {
+        "limit": 3000
+    },
     "columnDisambiguation": [{
         "columnName": "time_stamp",
         "newColumnName": "session_stats.time_stamp"

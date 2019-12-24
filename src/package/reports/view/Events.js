@@ -269,7 +269,11 @@ Ext.define('Mfw.reports.Events', {
                 vm.set({
                     recordsTotal: 0,
                     recordsFiltered: 0
-                });
+                });                
+                
+                //Pass the limit into the LIMIT param for events
+                record.data.queryEvents.limit = limit;
+
             }
             /**
              * data is an array of objects {column_name: value}
