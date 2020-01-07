@@ -132,6 +132,28 @@ Ext.define('Mfw.settings.system.Settings', {
             ui: 'action',
             handler: 'onUpdatePassword'
         }]
+
+    }, {
+        xtype: 'formpanel',
+        layout: 'vbox',
+        width: 300,
+        padding: 0,
+        defaults: {
+            labelAlign: 'top',
+            clearable: false,
+            required: true
+        },
+        items: [{
+            xtype: 'component',
+            margin: '16 0 0 0',
+            html: '<h2 style="font-weight: 400;">Factory Reset</h2><p>Reset all settings to original factory defaults</p>'
+        }],
+        buttons: [{
+            text: 'Reset',
+            ui: 'action',
+            handler: 'onFactoryReset'
+        }]
+
     }],
 
     // buttons: {
@@ -269,7 +291,28 @@ Ext.define('Mfw.settings.system.Settings', {
                     }
                 });
             });
-        }
-    }
+        },
 
+        onFactoryReset: function (btn) {
+            Ext.Msg.confirm('Confirmation', 'Are you sure you want to reset all settings to the original factory defaults?', function(btnText){
+                if (btnText !== "yes") {
+                    return
+                }
+                Ext.Ajax.request({
+                    url: '/api/factory-reset',
+                    method: 'POST',
+                    success: function () {
+                        Ext.Msg.alert('Factory Reset', 'All settings have been set to factory defaults')
+                    },
+                    failure: function(response) {
+                        Ext.Msg.alert('Operation Failed', response.responseText, function(){
+                            window.location.reload();
+                        });
+                    }
+                });
+
+            });
+        }
+
+    }
 });
