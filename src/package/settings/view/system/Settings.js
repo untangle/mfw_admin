@@ -294,15 +294,16 @@ Ext.define('Mfw.settings.system.Settings', {
         },
 
         onFactoryReset: function (btn) {
+            heading = 'WARNING! Please read before proceeding!'
             message = ''
-            message += 'If you proceed, all settings will be reset to the original factory defaults!'
+            message += 'If you continue, all settings will be reset to the original factory defaults!'
             message += '<BR><BR>'
             message += 'This will reset ALL settings including currently configured network devices which may interrupt'
             message += '<BR>'
             message += 'any wired or wireless connection you are currently using to manage this device.'
             message += '<BR><BR>'
             message += '<STRONG>ARE YOU SURE YOU WANT TO PROCEED WITH THE FACTORY RESET?</STRONG>'
-            Ext.Msg.confirm('WARNING! Please read before proceeding!', message, function(btnText){
+            Ext.Msg.confirm(heading, message, function(btnText){
                 if (btnText !== "yes") {
                     return
                 }
