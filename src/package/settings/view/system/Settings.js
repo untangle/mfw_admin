@@ -132,6 +132,28 @@ Ext.define('Mfw.settings.system.Settings', {
             ui: 'action',
             handler: 'onUpdatePassword'
         }]
+
+    }, {
+        xtype: 'formpanel',
+        layout: 'vbox',
+        width: 300,
+        padding: 0,
+        defaults: {
+            labelAlign: 'top',
+            clearable: false,
+            required: true
+        },
+        items: [{
+            xtype: 'component',
+            margin: '16 0 0 0',
+            html: '<h2 style="font-weight: 400;">Factory Reset</h2><p>Reset all settings to original factory defaults</p>'
+        }],
+        buttons: [{
+            text: 'Reset',
+            ui: 'action',
+            handler: 'onFactoryReset'
+        }]
+
     }],
 
     // buttons: {
@@ -269,7 +291,37 @@ Ext.define('Mfw.settings.system.Settings', {
                     }
                 });
             });
-        }
-    }
+        },
 
+        onFactoryReset: function (btn) {
+            heading = 'WARNING! Please read before proceeding!'
+            message = ''
+            message += 'If you continue, all settings will be reset to the original factory defaults!'
+            message += '<BR><BR>'
+            message += 'This will reset ALL settings including currently configured network devices which may interrupt'
+            message += '<BR>'
+            message += 'any wired or wireless connection you are currently using to manage this device.'
+            message += '<BR><BR>'
+            message += '<STRONG>ARE YOU SURE YOU WANT TO PROCEED WITH THE FACTORY RESET?</STRONG>'
+            Ext.Msg.confirm(heading, message, function(btnText){
+                if (btnText !== "yes") {
+                    return
+                }
+                Ext.Ajax.request({
+                    url: '/api/factory-reset',
+                    method: 'POST',
+                    success: function () {
+                        Ext.Msg.alert('Factory Reset', 'All settings have been set to factory defaults')
+                    },
+                    failure: function(response) {
+                        Ext.Msg.alert('Operation Failed', response.responseText, function(){
+                            window.location.reload();
+                        });
+                    }
+                });
+
+            });
+        }
+
+    }
 });
