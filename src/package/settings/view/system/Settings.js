@@ -294,6 +294,8 @@ Ext.define('Mfw.settings.system.Settings', {
         },
 
         onFactoryReset: function (btn) {
+            var me = this;
+
             heading = 'WARNING! Please read before proceeding!'
             message = ''
             message += 'If you continue, all settings will be reset to the original factory defaults!'
@@ -303,23 +305,68 @@ Ext.define('Mfw.settings.system.Settings', {
             message += 'any wired or wireless connection you are currently using to manage this device.'
             message += '<BR><BR>'
             message += '<STRONG>ARE YOU SURE YOU WANT TO PROCEED WITH THE FACTORY RESET?</STRONG>'
-            Ext.Msg.confirm(heading, message, function(btnText){
-                if (btnText !== "yes") {
-                    return
-                }
-                Ext.Ajax.request({
-                    url: '/api/factory-reset',
-                    method: 'POST',
-                    success: function () {
-                        Ext.Msg.alert('Factory Reset', 'All settings have been set to factory defaults')
-                    },
-                    failure: function(response) {
-                        Ext.Msg.alert('Operation Failed', response.responseText, function(){
-                            window.location.reload();
+
+
+            Ext.Msg.show({
+                title: heading,
+                message: message,
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'NO',
+                    ui: 'action',
+                    handler: function () { this.up('messagebox').hide(); }
+                }, {
+                    text: 'YES',
+                    margin: '0 0 0 16',
+                    handler: function () {
+                        var dialog = this.up('messagebox');
+                        dialog.setButtons([]);
+                        dialog.down('toolbar').add({
+                            xtype: 'component',
+                            html: 'please wait ... <i class="fa fa-spinner fa-spin fa-fw"></i>'
+                        });
+                        Ext.Ajax.request({
+                            url: '/api/factory-reset',
+                            method: 'POST',
+                            success: function () {
+                                dialog.hide();
+                                me.onFactoryResetSuccess();
+                            },
+                            failure: function(response) {
+                                Ext.Msg.alert('Operation Failed', response.responseText, function(){
+                                    window.location.reload();
+                                });
+                            }
                         });
                     }
-                });
+                }]
+            });
+        },
 
+        /**
+         * Show success alert after factory reset completed
+         */
+        onFactoryResetSuccess: function () {
+            Ext.Msg.show({
+                title: 'Factory Reset',
+                message: 'All settings have been set to factory defaults!',
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'Continue',
+                    ui: 'action',
+                    handler: function () {
+                        Ext.Ajax.request({
+                            url: '/account/logout',
+                            callback: function () {
+                                Mfw.app.setAccount(null);
+                                Mfw.app.redirectTo('auth');
+                                document.location.reload();
+                            }
+                        });
+                    }
+                }]
             });
         }
 
