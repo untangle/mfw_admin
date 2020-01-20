@@ -357,12 +357,12 @@ Ext.define('Mfw.settings.system.Settings', {
                     text: 'Continue',
                     ui: 'action',
                     handler: function () {
+                        // logout user and redirect to setup wizard
                         Ext.Ajax.request({
                             url: '/account/logout',
                             callback: function () {
                                 Mfw.app.setAccount(null);
-                                Mfw.app.redirectTo('auth');
-                                document.location.reload();
+                                document.location.href = '/setup/';
                             }
                         });
                     }
