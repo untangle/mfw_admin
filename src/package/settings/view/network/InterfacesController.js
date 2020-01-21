@@ -3,22 +3,22 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     alias: 'controller.mfw-settings-network-interfaces',
 
     onAddRecord: function () {
-        var me = this,
-            intf = Ext.create('Mfw.model.Interface', {
-                type: 'OPENVPN',
-                configType: 'ADDRESSED',
-                wan: true,
-                natEgress: true,
-                openvpnBoundInterfaceId: 0,
-                openvpnUsernamePasswordEnabled: false,
-                openvpnUsername: null,
-                openvpnPasswordBase64: null
-            });
+        var me = this;
+        //     intf = Ext.create('Mfw.model.Interface', {
+        //         type: 'OPENVPN',
+        //         configType: 'ADDRESSED',
+        //         wan: true,
+        //         natEgress: true,
+        //         openvpnBoundInterfaceId: 0,
+        //         openvpnUsernamePasswordEnabled: false,
+        //         openvpnUsername: null,
+        //         openvpnPasswordBase64: null
+        //     });
 
-        intf.setOpenvpnConfFile(Ext.create('Mfw.model.OpenVpnConfFile', {
-            encoding: 'base64',
-            contents: ''
-        }));
+        // intf.setOpenvpnConfFile(Ext.create('Mfw.model.OpenVpnConfFile', {
+        //     encoding: 'base64',
+        //     contents: ''
+        // }));
 
         me.intfDialog = Ext.Viewport.add({
             xtype: 'dialog',
@@ -35,7 +35,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 xtype: 'mfw-settings-network-interface',
                 viewModel: {
                     data: {
-                        intf: intf,
+                        // intf: intf,
                         isNew: true,
                         isDialog: true
                     }
@@ -76,7 +76,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         }
     },
 
-    // override checkoing for dirty records, not needed for interfaces grid
+    // override checking for dirty records, not needed for interfaces grid
     checkModified: Ext.emptyFn()
 
 });

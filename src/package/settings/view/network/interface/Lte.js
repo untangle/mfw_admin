@@ -203,6 +203,11 @@ Ext.define('Mfw.settings.interface.Lte', {
         init: function () {
             var me = this, vm = me.getViewModel(), device;
             vm.bind('{intf}', function (intf) {
+                // MFW-494 - in case it's new interface does not exist
+                if (!intf) {
+                    return;
+                }
+
                 // MFW-789 - additional setting/status only if WWAN interface
                 if (intf.get('type') === 'WWAN') {
                     if (!intf.get('simNetwork') && intf.get('simApn')) {
