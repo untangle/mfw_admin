@@ -21,8 +21,7 @@ Ext.define('Mfw.settings.network.Interface', {
              * conditions when toolbar and cards are hidden
              */
             _hiddenToolbar: function (get) {
-                return !get('intf.enabled') ||
-                    get('intf.type') === 'WWAN' ||
+                return get('intf.type') === 'WWAN' ||
                     get('intf.type') === 'OPENVPN' ||
                     get('intf.configType') === 'BRIDGED' ||
                     (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED');
@@ -140,7 +139,8 @@ Ext.define('Mfw.settings.network.Interface', {
                 width: '{isDialog ? "auto" : 400}',
             },
             layout: {
-                type: 'vbox',
+                type: 'hbox',
+                align: 'middle'
             },
             items: [{
                 xtype: 'component',
@@ -148,7 +148,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: '<strong>{intf.name}</strong>',
+                    html: '<strong>{intf.name}</strong> {!intf.enabled ? "(disabled)" : ""}',
                     hidden: '{isNew}'
                 }
             }, {
@@ -157,42 +157,46 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: '<strong>Add interface</strong>',
+                    html: '<strong>Add Interface</strong>',
                     hidden: '{!isNew}'
                 }
             }, {
-                xtype: 'selectfield',
-                label: 'Select Interface Type',
-                labelAlign: 'top',
-                flex: 1,
-                required: true,
-                clearable: false,
-                options: [
-                    { text: 'OpenVPN', value: 'OPENVPN' },
-                    { text: 'Wireguard', value: 'WIREGUARD' }
-                ],
+                xtype: 'togglefield',
+                activeBoxLabel: 'Enabled',
+                inactiveBoxLabel: 'Disabled',
                 hidden: true,
+                hideMode: 'visibility',
                 bind: {
-                    hidden: '{!isNew}'
-                },
-                listeners: {
-                    change: 'onSelectNewInterface'
-                },
-            },
-            // {
-            //     xtype: 'togglefield',
-            //     activeBoxLabel: 'Enabled',
-            //     inactiveBoxLabel: 'Disabled',
-            //     bind: '{intf.enabled}'
-            // }
+                    value: '{intf.enabled}',
+                    hidden: '{!intf}'
+                }
+
+            }
         ]
+        }, {
+            xtype: 'selectfield',
+            label: 'Select Interface Type',
+            margin: '0 16',
+            labelAlign: 'top',
+            flex: 1,
+            required: true,
+            clearable: false,
+            options: [
+                { text: 'OpenVPN', value: 'OPENVPN' },
+                { text: 'Wireguard', value: 'WIREGUARD' }
+            ],
+            hidden: true,
+            bind: {
+                hidden: '{!isNew}'
+            },
+            listeners: {
+                change: 'onSelectNewInterface'
+            }
         }, {
             xtype: 'container',
             padding: '0 8 16 8',
-            hidden: true,
             bind: {
-                width: '{isDialog ? "auto" : 400}',
-                hidden: '{!intf.enabled}'
+                width: '{isDialog ? "auto" : 400}'
             },
             items: [{
                 xtype: 'formpanel',
@@ -209,10 +213,12 @@ Ext.define('Mfw.settings.network.Interface', {
                 },
                 items: [{
                     xtype: 'containerfield',
-                    layout: 'hbox',
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
                     defaults: {
                         labelAlign: 'top',
-                        flex: 1,
                         required: false,
                         clearable: false,
                         autoComplete: false
@@ -221,9 +227,14 @@ Ext.define('Mfw.settings.network.Interface', {
                         xtype: 'textfield',
                         label: 'Name',
                         name: 'name',
+                        flex: 1,
                         placeholder: 'enter name ...',
                         required: true,
-                        bind: '{intf.name}',
+                        hidden: true,
+                        bind: {
+                            value: '{intf.name}',
+                            hidden: '{!intf.type}'
+                        },
                         maxLength: 10,
                         errorTarget: 'bottom',
                         validators: [{
@@ -236,6 +247,7 @@ Ext.define('Mfw.settings.network.Interface', {
                         label: 'Config Type',
                         margin: '0 0 0 32',
                         hidden: true,
+                        flex: 1,
                         bind: {
                             value: '{intf.configType}',
                             options: '{_configTypes}',
@@ -267,7 +279,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     bind: {
                         options: '{_boundOptions}',
                         value: '{intf.openvpnBoundInterfaceId}',
-                        hidden: '{intf.type !== "OPENVPN" || intf.configType === "DISABLED"}',
+                        hidden: '{intf.type !== "OPENVPN"}',
                         required: '{intf.type === "OPENVPN"}',
                     }
                 }, {
@@ -278,7 +290,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     bind: {
                         options: '{_boundOptions}',
                         value: '{intf.wireguardBoundInterfaceId}',
-                        hidden: '{intf.type !== "WIREGUARD" || intf.configType === "DISABLED"}',
+                        hidden: '{intf.type !== "WIREGUARD"}',
                         required: '{intf.type === "WIREGUARD"}',
                     }
                 }, {
@@ -506,7 +518,7 @@ Ext.define('Mfw.settings.network.Interface', {
             items: [{
                 xtype: 'component',
                 bind: {
-                    html: '<h1 style="font-weight: 100; font-size: 20px;">Please select an interface</h1>'
+                    html: '<h1 style="font-weight: 100; font-size: 20px;">Please select interface type</h1>'
                 }
             }]
         }]
@@ -563,18 +575,14 @@ Ext.define('Mfw.settings.network.Interface', {
              * bind interface enabled, type, configType at once
              * then display the proper settings based on those values
              */
-            vm.bind(['{intf.enabled}', '{intf.type}', '{intf.configType}'], function (data) {
+            vm.bind(['{intf.type}', '{intf.configType}'], function (data) {
+                var type = data[0],
+                    configType = data[1];
 
-                console.log('aaaaa');
-
-                var enabled = data[0],
-                    type = data[1],
-                    configType = data[2];
-
-                if (!enabled) {
-                    vm.set('cardKey', 'disabled');
-                    return;
-                }
+                // if (!enabled) {
+                //     vm.set('cardKey', 'disabled');
+                //     return;
+                // }
 
                 if (type === 'WWAN') {
                     vm.set('cardKey', 'lte');
@@ -749,6 +757,13 @@ Ext.define('Mfw.settings.network.Interface', {
                 intf = me.getViewModel().get('intf'),
                 dialog = btn.up('dialog');
 
+            if (!intf) {
+                if (dialog) {
+                    dialog.destroy();
+                }
+                return;
+            }
+
             // reject any changes made on cancel
 
             intf.v4Aliases().rejectChanges();
@@ -777,6 +792,12 @@ Ext.define('Mfw.settings.network.Interface', {
                 interfacesStore = Ext.getStore('interfaces'),
                 forms = me.getView().query('formpanel'),
                 invalidForm;
+
+
+            if (!intf) {
+                Ext.toast('No interface type selected!', 3000);
+                return;
+            }
 
             // find any invalid form
             Ext.Array.each(forms, function (form) {
