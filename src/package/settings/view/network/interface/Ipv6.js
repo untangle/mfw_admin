@@ -58,7 +58,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                 bind: {
                     value: '{intf.v6ConfigType}',
                     options: '{_ipv6ConfigTypes}',
-                    required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN"}'
+                    required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN" && intf.type !== "WIREGUARD"}'
                 }
             }, {
 

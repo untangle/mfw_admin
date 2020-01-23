@@ -167,6 +167,28 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             });
         }
 
+        if (g.getEnableAddInterface()) {
+            toolbarActions.push({
+                text: 'Add Interface'.t(),
+                iconCls: 'md-icon-keyboard-arrow-down',
+                align: 'right',
+                arrow: false,
+                menuAlign: 'tr-br?',
+                stretchMenu: true,
+                menu: {
+                    items: [{
+                        text: 'OpenVPN',
+                        type: 'OPENVPN',
+                        handler: 'onAddInterface'
+                    },{
+                        text: 'Wireguard',
+                        type: 'WIREGUARD',
+                        handler: 'onAddInterface'
+                    }]
+                }
+            });
+        }
+
         if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
             toolbarMenu = {
                 xtype: 'button',

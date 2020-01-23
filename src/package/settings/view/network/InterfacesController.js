@@ -2,23 +2,36 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     extend: 'Mfw.cmp.grid.MasterGridController',
     alias: 'controller.mfw-settings-network-interfaces',
 
-    onAddRecord: function () {
-        var me = this;
-        //     intf = Ext.create('Mfw.model.Interface', {
-        //         type: 'OPENVPN',
-        //         configType: 'ADDRESSED',
-        //         wan: true,
-        //         natEgress: true,
-        //         openvpnBoundInterfaceId: 0,
-        //         openvpnUsernamePasswordEnabled: false,
-        //         openvpnUsername: null,
-        //         openvpnPasswordBase64: null
-        //     });
+    onAddInterface: function (mItem) {
+        var me = this, type = mItem.type, newIntf;
 
-        // intf.setOpenvpnConfFile(Ext.create('Mfw.model.OpenVpnConfFile', {
-        //     encoding: 'base64',
-        //     contents: ''
-        // }));
+        if (type === 'OPENVPN') {
+            newIntf = Ext.create('Mfw.model.Interface', {
+                type: 'OPENVPN',
+                configType: 'ADDRESSED',
+                wan: true,
+                natEgress: true,
+                openvpnBoundInterfaceId: 0,
+                openvpnUsernamePasswordEnabled: false,
+                openvpnUsername: null,
+                openvpnPasswordBase64: null
+            });
+
+            newIntf.setOpenvpnConfFile(Ext.create('Mfw.model.OpenVpnConfFile', {
+                encoding: 'base64',
+                contents: ''
+            }));
+        }
+
+        if (type === "WIREGUARD") {
+            newIntf = Ext.create('Mfw.model.Interface', {
+                type: 'WIREGUARD',
+                configType: 'ADDRESSED',
+                wan: true,
+                natEgress: true,
+                wireguardBoundInterfaceId: 0,
+            });
+        }
 
         me.intfDialog = Ext.Viewport.add({
             xtype: 'dialog',
@@ -35,7 +48,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 xtype: 'mfw-settings-network-interface',
                 viewModel: {
                     data: {
-                        // intf: intf,
+                        intf: newIntf,
                         isNew: true,
                         isDialog: true
                     }

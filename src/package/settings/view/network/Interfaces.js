@@ -8,6 +8,8 @@ Ext.define('Mfw.settings.network.Interfaces', {
     title: 'Interfaces',
 
     config: {
+        enableAdd: false,
+        enableAddInterface: true,
         enableStatusColumn: false,
         enableSave: false,
         enableManualSort: false,
