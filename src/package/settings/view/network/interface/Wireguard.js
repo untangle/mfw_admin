@@ -9,6 +9,20 @@ Ext.define('Mfw.settings.interface.Wireguard', {
     viewModel: {
         data: {
             activeCard: 'wg-conf'
+        },
+        formulas: {
+            /**
+             * helper to convert the IPs string to array
+             */
+            _wireguardAddresses: {
+                get: function (get) {
+                    if (!get('intf.wireguardAddresses')) { return ''; }
+                    return get('intf.wireguardAddresses').join(',');
+                },
+                set: function (value) {
+                    this.set('intf.wireguardAddresses', value ? value.replace(/\s/g,'').split(',') : null);
+                }
+            }
         }
     },
 
@@ -34,6 +48,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
         }]
     }, {
         xtype: 'container',
+        width: 416, // keep same aspect when adding or editing
         flex: 1,
         layout: {
             type: 'card',
@@ -46,7 +61,6 @@ Ext.define('Mfw.settings.interface.Wireguard', {
         items: [{
             xtype: 'formpanel',
             itemId: 'wg-conf',
-            padding: '8 16 16 16',
             width: 400,
             bind: {
                 flex: '{isDialog ? 1 : "auto"}'
@@ -64,7 +78,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                 },
                 items: [{
                     xtype: 'textfield',
-                    name: 'wireguardAddress',
+                    name: 'wireguardAddresses',
                     label: 'Address',
                     placeholder: 'enter address ...',
                     clearable: false,
@@ -72,11 +86,11 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                     labelAlign: 'top',
                     flex: 1,
                     bind: {
-                        value: '{intf.wireguardAddresses}',
+                        value: '{_wireguardAddresses}',
                         required: '{intf.type === "WIREGUARD"}',
-                        disabled: '{!intf.type === "WIREGUARD"}'
+                        disabled: '{intf.type !== "WIREGUARD"}'
                     },
-                    validators: 'ipv4'
+                    validators: 'ipv4expression'
                 }, {
                     xtype: 'numberfield',
                     name: 'wireguardPort',
@@ -90,7 +104,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                     bind: {
                         value: '{intf.wireguardPort}',
                         required: '{intf.type === "WIREGUARD"}',
-                        disabled: '{!intf.type === "WIREGUARD"}'
+                        disabled: '{intf.type !== "WIREGUARD"}'
                     },
                     validators: 'port',
                 }]
@@ -224,16 +238,43 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                     handler: 'generatePublicKey'
                 }]
             }, {
-                xtype: 'textareafield',
+                xtype: 'textfield',
                 name: 'allowedIps',
                 label: 'Allowed IPs (comma separated values)',
-                maxRows: 2,
+                // maxRows: 2,
                 placeholder: 'e.g. 1.2.3.4/32',
                 clearable: false,
                 labelAlign: 'top',
                 bind: {
                     required: '{activeCard === "wg-peer"}'
-                }
+                },
+                validators: 'ipv4expression'
+            }, {
+                xtype: 'containerfield',
+                layout: {
+                    type: 'hbox',
+                },
+                items: [{
+                    xtype: 'textfield',
+                    flex: 1,
+                    name: 'host',
+                    label: 'Host',
+                    labelAlign: 'top',
+                    placeholder: 'enter host ...',
+                    clearable: false,
+                    focusable: false,
+                }, {
+                    xtype: 'numberfield',
+                    name: 'port',
+                    width: 100,
+                    margin: '0 0 0 32',
+                    label: 'Port',
+                    labelAlign: 'top',
+                    clearable: false,
+                    autoComplete: false,
+                    placeholder: 'enter port ...',
+                    validators: 'port'
+                }]
             }, {
                 xtype: 'container',
                 layout: {
@@ -285,14 +326,19 @@ Ext.define('Mfw.settings.interface.Wireguard', {
         },
 
         onAddPeer: function (btn) {
-            var me = this, form = btn.up('formpanel')
-            vm = me.getViewModel(), intf = vm.get('intf');
+            var me = this, form = btn.up('formpanel'),
+            vm = me.getViewModel(), intf = vm.get('intf'),
+            values = form.getValues();
 
             if (!form.validate()) {
                 Ext.toast('Please fill or correct invalid fields!', 3000);
                 return;
             }
-            intf.wireguardPeers().add(form.getValues());
+
+            // transform ips string into array
+            values['allowedIps'] = values['allowedIps'].replace(/\s/g,'').split(',');
+
+            intf.wireguardPeers().add(values);
             form.reset(true);
             me.getViewModel().set('activeCard', 'wg-peers');
         },

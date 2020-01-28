@@ -216,7 +216,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                 xtype: 'container',
                 flex: 1,
                 layout: 'vbox',
-                padding: '16, 0',
+                padding: '16 0',
                 hidden: true,
                 bind: { hidden: '{intf.v6ConfigType !== "DHCP"}' },
                 defaults: {
