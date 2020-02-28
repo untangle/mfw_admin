@@ -52,7 +52,46 @@ Ext.define('Mfw.settings.interface.Qos', {
                     required: false,
                     clearable: false,
                     autoComplete: false,
-                    decimals: 3
+                    decimals: 3,
+                    validators: function(val) {
+                        var licInfo = null,
+                         qosAlert = this.up().up().up().down('#qosAlert');
+
+                        console.log("Finding QOS alert:");
+                        console.log(qosAlert);
+
+                        Ext.Ajax.request({
+                            async: false,
+                            url: '/api/status/license',
+                            success: function (response) {
+                                licInfo = Ext.decode(response.responseText);
+                            },
+                            failure: function () {
+                                return true;
+                            }
+                        });
+
+
+                        if(licInfo && licInfo.list.length > 0) {
+                            var licSeats = licInfo.list[0].seats;
+
+                            console.log("Seats:");
+                            console.log(licSeats);
+
+                            console.log("Current val:");
+                            console.log(val);
+
+                            if(!(val >= licSeats - 50 && val <= licSeats + 50)) {
+                                console.log("Display qos alert");
+                                qosAlert.show();
+                            } else {
+                                qosAlert.hide();
+                            }
+                        }
+
+                        return true;
+
+                    }
                 },
                 items: [{
                     label: 'Download Mbps',
@@ -71,6 +110,12 @@ Ext.define('Mfw.settings.interface.Qos', {
                         disabled: '{!intf.qosEnabled}'
                     }
                 }]
+            }, {
+                xtype: 'label',
+                itemId: 'qosAlert',
+                html: 'QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing',
+                margin: '32 0 0 0',
+                hidden: true
             }, {
                 xtype: 'button',
                 text: 'Test Performance',
