@@ -156,7 +156,6 @@ Ext.define('Mfw.settings.interface.Qos', {
 
             // If no License Info exists, call the status/license API to get the license data
             if(!licInfo) {
-                console.log("Calling license info API...");
                 Ext.Ajax.request({
                     async: false,
                     url: '/api/status/license',
