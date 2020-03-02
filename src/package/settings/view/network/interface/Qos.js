@@ -170,28 +170,36 @@ Ext.define('Mfw.settings.interface.Qos', {
                 vm.set('licenseInfo', licInfo)
             }
 
-            var qosAlert = v.down('#qosAlert'),
-                dlMbps = v.down('#qosDl').getValue(),
-                ulMbps = v.down('#qosUl').getValue(),
-                seats = licInfo.list[0].seats,
-                perfEnabled = vm.get('performanceTestEnabled');
+            if(licInfo) {
+                var qosAlert = v.down('#qosAlert'),
+                    dlMbps = v.down('#qosDl').getValue(),
+                    ulMbps = v.down('#qosUl').getValue(),
+                    seats = licInfo.list[0].seats,
+                    perfEnabled = vm.get('performanceTestEnabled');
 
-            // if Test Performance is disabled, then we want to display a different button
-            if(perfEnabled) {
-                qosAlert.setHtml('QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing');
-            } else {
-                qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
-            }
-
-            // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
-            if(seats) {
-                var upperLic = seats + 50,
-                    lowerLic = seats - 50;
-
-                if(!(dlMbps >= lowerLic && dlMbps <= upperLic) || !(ulMbps >= lowerLic && ulMbps <= upperLic)) {
-                    qosAlert.show();
+                // if Test Performance is disabled, then we want to display a different button
+                if(perfEnabled) {
+                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing');
                 } else {
-                    qosAlert.hide();
+                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
+                }
+
+                // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
+                if(seats) {
+                    var upperLic = seats + 50,
+                        lowerLic = seats - 50;
+
+                    if(!(dlMbps >= lowerLic && dlMbps <= upperLic) || !(ulMbps >= lowerLic && ulMbps <= upperLic)) {
+                        qosAlert.show();
+                    } else {
+                        qosAlert.hide();
+                    }
+                }
+            } else {
+                var qosAlert = v.down('#qosAlert');
+                if (qosAlert) {
+                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
+                    qosAlert.show();
                 }
             }
 
