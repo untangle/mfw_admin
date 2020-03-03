@@ -175,13 +175,14 @@ Ext.define('Mfw.settings.interface.Qos', {
                     dlMbps = v.down('#qosDl').getValue(),
                     ulMbps = v.down('#qosUl').getValue(),
                     seats = licInfo.list[0].seats,
-                    perfEnabled = vm.get('performanceTestEnabled');
+                    perfEnabled = vm.get('performanceTestEnabled'),
+                    setupContext = vm.get('setupContext');
 
                 // if Test Performance is disabled, then we want to display a different button
-                if(perfEnabled) {
-                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing');
-                } else {
+                if(setupContext || !perfEnabled) {
                     qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
+                } else {
+                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing');
                 }
 
                 // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
