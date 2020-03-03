@@ -25,20 +25,14 @@ Ext.define('Mfw.CommonUtil', {
             vm = me.getViewModel(),
             license = vm.get('license');
 
-            console.log("VM License:");
-            console.log(license);
-
         if(license) {
             return license;
         }
 
-        console.log("Getting license...");
 
         Ext.Ajax.request({
             url: '/api/status/license',
             success: function (response) {
-                console.log("license response:");
-                console.log(response);
                 var licenseData = Ext.decode(response.responseText),
                     license;
 
