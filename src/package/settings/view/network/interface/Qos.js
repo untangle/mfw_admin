@@ -9,8 +9,7 @@ Ext.define('Mfw.settings.interface.Qos', {
 
     viewModel: {
         data: {
-            performanceTestEnabled: false,
-            licenseInfo: null
+            performanceTestEnabled: false
         }
     },
 
@@ -31,7 +30,8 @@ Ext.define('Mfw.settings.interface.Qos', {
                     align: 'middle'
                 },
                 margin: '16 0',
-                items: [{
+                items: [  
+                {
                     xtype: 'component',
                     flex: 1,
                     style: 'font-size: 20px; font-weight: 100;',
@@ -40,9 +40,21 @@ Ext.define('Mfw.settings.interface.Qos', {
                     xtype: 'togglefield',
                     activeBoxLabel: 'Enable QoS',
                     inactiveBoxLabel: 'Disabled QoS',
-                    bind: '{intf.qosEnabled}'
+                    bind: {
+                        value: '{intf.qosEnabled}',
+                        disabled: '{!license}'
+                    }
                 }]
             }, {
+                xtype: 'component',
+                style: 'color: red',
+                html: 'QOS is Disabled when unlicensed.',
+                padding: 8,
+                hidden: true,
+                bind: {
+                    hidden: '{license}'
+                }
+            },  {
                 xtype: 'containerfield',
                 layout: 'hbox',
                 defaults: {
@@ -55,9 +67,24 @@ Ext.define('Mfw.settings.interface.Qos', {
                     autoComplete: false,
                     decimals: 3,
                     validators: function(val) {
-                        return this.up().up().up().up().up().getController().validateQos();
+                        var licInfo = CommonUtil.readLicense(this.up().up().up().up().up());
 
-                    }
+                        if (licInfo) {
+                            // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
+                            if(licInfo.seats) {
+                                console.log(licInfo);
+
+                                //Unlimited can return whatever
+                                if(licInfo.seatsReadable === 'Unlimited' ) {return true;}
+
+                                // Invalidate form when value is above license
+                                if (val > licInfo.seats) {
+                                    return "QOS exceeds license limit.";
+                                }
+                            }
+                        }
+                       return true;
+                   }
                 },
                 items: [{
                     label: 'Download Mbps',
@@ -81,9 +108,12 @@ Ext.define('Mfw.settings.interface.Qos', {
             }, {
                 xtype: 'label',
                 itemId: 'qosAlert',
-                html: '',
+                html: 'QoS is most effective when configured based on your actual network performance',
+                bind: {
+                    hidden: '{!intf.qosEnabled}',
+                    html: "QoS is most effective when configured based on your actual network performance, which will be up to the appliance license limit of {license.seatsReadable}"
+                },
                 margin: '32 0 0 0',
-                hidden: true
             }, {
                 xtype: 'button',
                 text: 'Test Performance',
@@ -101,6 +131,7 @@ Ext.define('Mfw.settings.interface.Qos', {
     }],
     listeners: {
         initialize: 'onInit',
+        afterRender: 'onAfterRender'
     },
 
     controller: {
@@ -126,6 +157,9 @@ Ext.define('Mfw.settings.interface.Qos', {
                     vm.set('performanceTestEnabled', true);
                 }
             });
+
+            // Get the license into the VM
+            CommonUtil.readLicense(this);
         },
 
         runPerformanceTest: function () {
@@ -138,73 +172,6 @@ Ext.define('Mfw.settings.interface.Qos', {
                 xtype: 'performance-dialog',
                 interfaces: [intf]
             }).show();
-        },
-
-        /**
-         * validateQos validates current Qos settings and will display a message if the user has configured QOS outside of the accepted license range.
-         * 
-         * This function is not only a Validator because we also need to access View Model data for the License Info, as well as the PerformanceTestEnabled data.
-         * 
-         */
-
-        validateQos: function() {
-            var me = this,
-                vm = me.getViewModel(),
-                v = me.getView(),
-                licInfo = vm.get('licenseInfo');
-
-
-            // If no License Info exists, call the status/license API to get the license data
-            if(!licInfo) {
-                Ext.Ajax.request({
-                    async: false,
-                    url: '/api/status/license',
-                    success: function (response) {
-                        licInfo = Ext.decode(response.responseText);
-                    },
-                    failure: function () {
-                        return true;
-                    }
-                });
-
-                vm.set('licenseInfo', licInfo)
-            }
-
-            if(licInfo) {
-                var qosAlert = v.down('#qosAlert'),
-                    dlMbps = v.down('#qosDl').getValue(),
-                    ulMbps = v.down('#qosUl').getValue(),
-                    seats = licInfo.list[0].seats,
-                    perfEnabled = vm.get('performanceTestEnabled'),
-                    setupContext = vm.get('setupContext');
-
-                // if Test Performance is disabled, then we want to display a different button
-                if(setupContext || !perfEnabled) {
-                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
-                } else {
-                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance. Use the Test Performance button to find out how your network is performing');
-                }
-
-                // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
-                if(seats) {
-                    var upperLic = seats + 50,
-                        lowerLic = seats - 50;
-
-                    if(!(dlMbps >= lowerLic && dlMbps <= upperLic) || !(ulMbps >= lowerLic && ulMbps <= upperLic)) {
-                        qosAlert.show();
-                    } else {
-                        qosAlert.hide();
-                    }
-                }
-            } else {
-                var qosAlert = v.down('#qosAlert');
-                if (qosAlert) {
-                    qosAlert.setHtml('QoS is most effective when configured based on your actual network performance.');
-                    qosAlert.show();
-                }
-            }
-
-            return true;
         }
     }
 });
