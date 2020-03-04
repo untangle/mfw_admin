@@ -72,9 +72,8 @@ Ext.define('Mfw.settings.interface.Qos', {
                         if (licInfo) {
                             // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
                             if(licInfo.seats) {
-                                console.log(licInfo);
 
-                                //Unlimited can return whatever
+                                //Unlimited can input whatever
                                 if(licInfo.seatsReadable === 'Unlimited' ) {return true;}
 
                                 // Invalidate form when value is above license
@@ -88,7 +87,6 @@ Ext.define('Mfw.settings.interface.Qos', {
                 },
                 items: [{
                     label: 'Download Mbps',
-                    itemId: 'qosDl',
                     margin: '0 16 0 0',
                     bind: {
                         value: '{intf._downloadMbps}',
@@ -97,7 +95,6 @@ Ext.define('Mfw.settings.interface.Qos', {
                     }
                 }, {
                     label: 'Upload Mbps',
-                    itemId: 'qosUl',
                     margin: '0 0 0 16',
                     bind: {
                         value: '{intf._uploadMbps}',
@@ -130,8 +127,7 @@ Ext.define('Mfw.settings.interface.Qos', {
         }]
     }],
     listeners: {
-        initialize: 'onInit',
-        afterRender: 'onAfterRender'
+        initialize: 'onInit'
     },
 
     controller: {
