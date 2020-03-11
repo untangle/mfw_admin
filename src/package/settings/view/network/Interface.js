@@ -46,7 +46,6 @@ Ext.define('Mfw.settings.network.Interface', {
             _hiddenQos: function (get) {
                 return !get('intf.wan') ||
                     get('intf.type') === 'WIFI' ||
-                    get('intf.type') === 'WWAN' ||
                     get('intf.type') === 'OPENVPN' ||
                     get('intf.type') === 'WIREGUARD' ||
                     get('intf.type') === 'VLAN';
