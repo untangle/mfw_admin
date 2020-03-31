@@ -6,3 +6,4 @@ services:
       dockerfile: Dockerfile.build
     volumes:
       - ./:/home/mfw/admin
+      - ./:/tmp
