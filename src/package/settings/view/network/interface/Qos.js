@@ -30,7 +30,8 @@ Ext.define('Mfw.settings.interface.Qos', {
                     align: 'middle'
                 },
                 margin: '16 0',
-                items: [{
+                items: [  
+                {
                     xtype: 'component',
                     flex: 1,
                     style: 'font-size: 20px; font-weight: 100;',
@@ -39,9 +40,21 @@ Ext.define('Mfw.settings.interface.Qos', {
                     xtype: 'togglefield',
                     activeBoxLabel: 'Enable QoS',
                     inactiveBoxLabel: 'Disabled QoS',
-                    bind: '{intf.qosEnabled}'
+                    bind: {
+                        value: '{intf.qosEnabled}',
+                        disabled: '{!license}'
+                    }
                 }]
             }, {
+                xtype: 'component',
+                style: 'color: red',
+                html: 'QOS is Disabled when unlicensed.',
+                padding: 8,
+                hidden: true,
+                bind: {
+                    hidden: '{license}'
+                }
+            },  {
                 xtype: 'containerfield',
                 layout: 'hbox',
                 defaults: {
@@ -52,7 +65,25 @@ Ext.define('Mfw.settings.interface.Qos', {
                     required: false,
                     clearable: false,
                     autoComplete: false,
-                    decimals: 3
+                    decimals: 3,
+                    validators: function(val) {
+                        var licInfo = CommonUtil.readLicense(this.up().up().up().up().up());
+
+                        if (licInfo) {
+                            // If seats exists on the license, then we want to toggle the message depending on the QOS settings.
+                            if(licInfo.seats) {
+
+                                //Unlimited can input whatever
+                                if(licInfo.seatsReadable === 'Unlimited' ) {return true;}
+
+                                // Invalidate form when value is above license
+                                if (val > licInfo.seats) {
+                                    return "QOS exceeds license limit.";
+                                }
+                            }
+                        }
+                       return true;
+                   }
                 },
                 items: [{
                     label: 'Download Mbps',
@@ -72,6 +103,15 @@ Ext.define('Mfw.settings.interface.Qos', {
                     }
                 }]
             }, {
+                xtype: 'label',
+                itemId: 'qosAlert',
+                html: 'QoS is most effective when configured based on your actual network performance',
+                bind: {
+                    hidden: '{!intf.qosEnabled}',
+                    html: "QoS is most effective when configured based on your actual network performance, which will be up to the appliance license limit of {license.seatsReadable}"
+                },
+                margin: '32 0 0 0',
+            }, {
                 xtype: 'button',
                 text: 'Test Performance',
                 ui: 'action',
@@ -87,11 +127,11 @@ Ext.define('Mfw.settings.interface.Qos', {
         }]
     }],
     listeners: {
-        activate: 'onActivate',
+        initialize: 'onInit'
     },
 
     controller: {
-        onActivate: function (view) {
+        onInit: function (view) {
             var vm = view.getViewModel();
 
             /**
@@ -113,6 +153,9 @@ Ext.define('Mfw.settings.interface.Qos', {
                     vm.set('performanceTestEnabled', true);
                 }
             });
+
+            // Get the license into the VM
+            CommonUtil.readLicense(this);
         },
 
         runPerformanceTest: function () {

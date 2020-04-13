@@ -28,7 +28,7 @@ Ext.define('Mfw.settings.system.License', {
                 hidden: '{!license}',
                 html: '<table cellspacing=10>' +
                 '<tr><td>Type: </td><td>{license.type}</td></tr>' +
-                '<tr><td>Throughput: </td><td>{license.seats}</td></tr>' +
+                '<tr><td>Throughput: </td><td>{license.seatsReadable}</td></tr>' +
                 '<tr><td>Start: </td><td>{license.start}</td></tr>' +
                 '<tr><td>End: </td><td>{license.end}</td></tr>' +
                 // '<tr><td>Key: </td><td>{license.key} (v{license.keyVersion})</td></tr>' +
@@ -53,69 +53,7 @@ Ext.define('Mfw.settings.system.License', {
     controller: {
         init: function () {
             // read the license.json
-            this.readLicense();
-        },
-
-        /**
-         * reads the /etc/config/license.json
-         * license should contain following
-         * UID: "65f18ab6-120e-42eb-bcf0-1af9d4c5433f",
-         * type: "Subscription",
-         * end: 1572678000,
-         * start: 1570913303,
-         * seats: 50,
-         * displayName: "SD-WAN Throughput",
-         * key: "6b3cd781dead369b693d3adc6bb4bf95",
-         * keyVersion: 1,
-         * name: "untangle-node-throughput"
-         */
-        readLicense: function () {
-            var me = this,
-                vm = me.getViewModel();
-
-            Ext.Ajax.request({
-                url: '/api/status/license',
-                success: function (response) {
-                    var licenseData = Ext.decode(response.responseText),
-                        license;
-
-                    // not licensed
-                    if (!licenseData || licenseData.list.length === 0) {
-                        vm.set('license', null);
-                        return;
-                    }
-
-                    // take the first license info from the list
-                    license = licenseData.list[0];
-
-                    // format start/end dates
-                    if (license.start) {
-                        license.start = Ext.Date.format(new Date(license.start * 1000), 'F j, Y');
-                    } else {
-                        license.start = '<em>not set</em>';
-                    }
-
-                    if (license.end) {
-                        license.end = Ext.Date.format(new Date(license.end * 1000), 'F j, Y');
-                    } else {
-                        license.end = '<em>not set</em>';
-                    }
-
-                    // format throughput
-                    if (license.seats === 1000000) {
-                        license.seats = 'Unlimited'
-                    } else {
-                        license.seats = license.seats + ' Mbps'
-                    }
-
-                    vm.set('license', license);
-
-                },
-                failure: function () {
-                    // if licese.json not found (unable to read)
-                    vm.set('license', null);
-                }
-            });
+            CommonUtil.readLicense(this);
         },
 
         /**
@@ -139,7 +77,7 @@ Ext.define('Mfw.settings.system.License', {
                 method: 'POST',
                 success: function () {
                     fetchingBox.hide();
-                    me.readLicense();
+                    CommonUtil.readLicense(me);
                 },
                 failure: function(response) {
                     fetchingBox.hide();

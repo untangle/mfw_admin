@@ -7,6 +7,7 @@ RUN apt-get install -y make
 RUN apt-get install -y wget
 RUN apt-get install -y unzip
 RUN apt-get install -y ruby-sass
+RUN apt-get install -y git
 
 ENV SRC=/home/mfw/admin
 RUN mkdir -p ${SRC}

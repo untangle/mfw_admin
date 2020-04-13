@@ -19,7 +19,8 @@ Ext.define('Mfw.store.SettingsNav', {
             children: [
                 { text: 'Interfaces'.t(), href: 'network/interfaces', expanded: false },
                 { text: 'DHCP'.t(), leaf: true, href: 'network/dhcp' },
-                { text: 'DNS'.t(), leaf: true, href: 'network/dns' }
+                { text: 'DNS'.t(), leaf: true, href: 'network/dns' },
+                { text: 'Routing Table'.t(), leaf: true, href: 'network/routing' }
             ]
         }, {
             // Smart Routing
