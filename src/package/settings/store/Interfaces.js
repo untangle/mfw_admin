@@ -45,6 +45,7 @@ Ext.define('Mfw.store.Interfaces', {
                 case 'NIC': intfIcon = 'fa-network-wired'; break;
                 case 'WIFI': intfIcon = 'fa-wifi'; break;
                 case 'OPENVPN':
+                case 'WIREGUARD':
                 case 'VLAN': intfIcon = 'fa-project-diagram'; break;
                 default: intfIcon = 'fa-signal';
             }

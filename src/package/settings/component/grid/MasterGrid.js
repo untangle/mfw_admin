@@ -31,6 +31,13 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         enableAdd: true,
 
         /**
+         * @cfg {Boolean} enableAddInterface
+         * `true` to allow user to add new interfaces
+         * used only by Interfaces view
+         */
+        enableAddInterface: false,
+
+        /**
          * @cfg {Boolean} enableEdit
          * `true` to allow user to edit any record, `false` to disable editing
          */

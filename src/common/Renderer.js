@@ -54,6 +54,7 @@ Ext.define('Mfw.Renderer', {
             case 'NIC': icon = 'fa-network-wired'; break;
             case 'WIFI': icon = 'fa-wifi'; break;
             case 'OPENVPN':
+            case 'WIREGUARD':
             case 'VLAN': icon = 'fa-project-diagram'; break;
             default:
         }

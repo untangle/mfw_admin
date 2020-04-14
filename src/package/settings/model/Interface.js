@@ -233,14 +233,16 @@ Ext.define('Mfw.model.Interface', {
         name: 'dhcpOptions',
         associationKey: 'dhcpOptions'
     }, {
-        model: 'Mfw.model.v4Alias',
-        name: 'vrrpV4Aliases',
-        associationKey: 'vrrpV4Aliases'
-    }, {
-        model: 'Mfw.model.wireguardPeer',
+        model: 'Mfw.model.WireguardPeer',
         name: 'wireguardPeers',
         associationKey: 'wireguardPeers'
-    }],
+    }
+    // {
+    //     model: 'Mfw.model.v4Alias',
+    //     name: 'vrrpV4Aliases',
+    //     associationKey: 'vrrpV4Aliases'
+    // }
+    ],
 
     hasOne: [{
         model: 'Mfw.model.OpenVpnConfFile',
