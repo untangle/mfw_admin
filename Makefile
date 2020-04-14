@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= e3
+DEV_HOST ?= sdwan
 DEV_DIR ?= /www
 VERSION ?= $(shell git describe --always --long --tags --dirty)
 

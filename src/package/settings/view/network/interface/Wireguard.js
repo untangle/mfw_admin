@@ -238,6 +238,29 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                     handler: 'generatePublicKey'
                 }]
             }, {
+                xtype: 'containerfield',
+                layout: {
+                    type: 'hbox',
+                    align: 'bottom'
+                },
+                items: [{
+                    xtype: 'textfield',
+                    name: 'presharedKey',
+                    label: 'Preshared Key',
+                    editable: false,
+                    placeholder: 'generate key ...',
+                    clearable: false,
+                    focusable: false,
+                    labelAlign: 'top',
+                    flex: 1
+                }, {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-sync',
+                    ui: 'round',
+                    margin: '0 0 0 16',
+                    handler: 'generatePresharedKey'
+                }]
+            }, {
                 xtype: 'textfield',
                 name: 'allowedIps',
                 label: 'Allowed IPs (comma separated values)',
@@ -363,17 +386,31 @@ Ext.define('Mfw.settings.interface.Wireguard', {
         },
 
         /**
-         * generates the peer publik key
+         * generates the peer public key
          */
         generatePublicKey: function (btn) {
             var me = this, form = btn.up('formpanel');
             /**
              * just for demo generate a key
-             * needs to be generated on the backend using wg genkey
+             * needs to be generated on the backend using wg pubkey
              */
             var key = btoa(Math.random().toFixed(32).substr(2));
             form.getFields('publicKey').setValue(key)
+        },
+
+        /**
+         * generates the peer preshared key
+         */
+        generatePresharedKey: function (btn) {
+            var me = this, form = btn.up('formpanel');
+            /**
+             * just for demo generate a key
+             * needs to be generated on the backend using wg genpsk
+             */
+            var key = btoa(Math.random().toFixed(32).substr(2));
+            form.getFields('presharedKey').setValue(key)
         }
+
 
     }
 });
