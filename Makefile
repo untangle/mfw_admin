@@ -2,7 +2,7 @@
 
 DESTDIR ?= /tmp/mfw
 DEV ?= false
-DEV_HOST ?= sdwanbox
+DEV_HOST ?= sdwan
 DEV_DIR ?= /www
 VERSION ?= $(shell git describe --always --long --tags --dirty)
 
@@ -274,7 +274,7 @@ cacheguard: dir
 
 clean: clean-download
 	rm -fr $(DESTDIR) $(STAGING_DIR)
-clean-download: 
+clean-download:
 	rm -fr $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE) $(DOWNLOADS_DIR)/$(HIGHCHARTS_ARCHIVE) $(DOWNLOADS_DIR)/map.js $(DOWNLOADS_DIR)/world.js $(DOWNLOADS_DIR)/$(MOMENT_ARCHIVE)
 
 ## development targets
