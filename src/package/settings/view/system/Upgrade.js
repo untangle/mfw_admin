@@ -135,7 +135,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             name: 'file',
             required: true,
             multiple: false,
-            accept: '.img.gz',
+            accept: '.img.gz, .img',
             label: 'Choose File'.t(),
             listeners: {
                 change: 'onFileChange'
@@ -143,7 +143,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
         }, {
             xtype: 'component',
             bind: {
-                html: '{validImageFile === false ? "Image file must be *.img.gz" : ""}'
+                html: '{validImageFile === false ? "Image file must be *" + imageFileExtension : ""}'
             }
         }, {
             xtype: 'button',
@@ -202,11 +202,32 @@ Ext.define('Mfw.settings.system.Upgrade', {
                     console.warn('Unable to get upgrade settings!');
                 }
             });
+
+            Ext.Ajax.request({
+                url: '/api/status/hardware',
+                success: function (response) {
+                    var hardware = Ext.decode(response.responseText),
+                        boardName = hardware.boardName;
+
+                    vm.set('imageFileExtension', '.img.gz');
+
+                    // linksys boxes require .img files, not .img.gz
+                    if (boardName && boardName.match(/linksys/i)) {
+                        vm.set('imageFileExtension', '.img');
+                    }
+                },
+                failure: function () {
+                    vm.set('imageFileExtension', '.img.gz');
+                }
+            });
         },
 
         onFileChange: function (field, value) {
-            var me = this;
-            me.getViewModel().set('validImageFile', Ext.String.endsWith(value, '.img.gz'));
+            var me = this,
+                vm = me.getViewModel(),
+                extension = vm.get('imageFileExtension');
+
+            me.getViewModel().set('validImageFile', Ext.String.endsWith(value, String(extension)));
         },
 
         onTimeChange: function () {
