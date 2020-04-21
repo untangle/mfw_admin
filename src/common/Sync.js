@@ -312,6 +312,17 @@ Ext.define('Mfw.Sync', {
                     summary = response.responseText;
                 }
             } else {
+                // Aborted responses can return the [Object object] error here
+                if(response.aborted) {
+                    return;
+                }
+
+                // Response status of 0 means the server has disconnected gracefully, send them to login screen
+                if(response.status == 0) {
+                    CommonUtil.showReauthRequired(this);
+                    return;
+                }
+
                 return;
             }
         }

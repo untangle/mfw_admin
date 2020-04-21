@@ -76,4 +76,37 @@ Ext.define('Mfw.CommonUtil', {
             }
         });
     },
+
+    /**
+     * showReauthRequired will display an expired session message box and reload the page when accepted
+     * 
+     * @param {*} caller 
+     */
+    showReauthRequired: function(caller) {
+        // avoid displaying the exception bottom sheet
+        caller.sheet.hide();
+
+        /**
+         * display auth fail message box
+         * prevent showing more than a single dialog in case of multiple calls exceptions
+         */
+        if (!caller.authExceptionDialog) {
+           caller.authExceptionDialog = Ext.create('Ext.MessageBox', {
+                title: 'Authentication failed',
+                message: 'Session has expired. Please login.',
+                width: 300,
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'OK',
+                    ui: 'action',
+                    handler: function () {
+                        // reloading document will redirect to auth
+                        document.location.reload();
+                    }
+                }]
+            }).show();
+            caller.authExceptionDialog.show();
+        }
+   }, 
 });
