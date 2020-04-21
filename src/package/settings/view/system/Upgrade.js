@@ -320,6 +320,10 @@ Ext.define('Mfw.settings.system.Upgrade', {
             form.submit({
                 url: '/api/sysupgrade',
                 method: 'POST',
+                // Set the timout for 6 minutes (60 MB file on 1.5Mbps connection)
+                // when uploading an img.gz over encrypted connections (vpn, ssl)
+                // they can sometimes fail due to the timeout
+                timeout: 360000,
                 success: function (form, result) {
                     // display errors received from backend
                     if (result.error) {
