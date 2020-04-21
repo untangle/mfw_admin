@@ -87,7 +87,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         }]
     }, '->', {
         text: 'New Upgrade!',
-        iconCls: 'x-fa fa-cloud-download fa-3x fa-orange',
+        iconCls: 'x-fa fa-download fa-3x fa-orange',
         iconAlign: 'top',
         arrow: false,
         menuAlign: 'tr-br?',
@@ -107,14 +107,16 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             padding: '8 8 16 8',
             items: [{
                 xtype: 'component',
-                html: '<p>New version &lt;version number&gt; <br> available!</p>'
+                // todo: add version number which currently is empty when calling /api/status/upgrade
+                html: '<p>New version available!</p>'
                       // '<a href="#" style="color: #91e971; font-size: 14px; text-decoration: none;">View Changelog</a>'
             }, {
                 xtype: 'button',
                 margin: '0 16 16 16',
                 text: 'UPGRADE NOW',
                 ui: 'action',
-                handler: 'startUpgrade'
+                // refactored startUpgrade as actually it shows a warning message
+                handler: 'showUpgradeWarning'
             },
             {
                 xtype: 'container',
@@ -270,7 +272,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
             window.open(Mfw.app.feedbackUrl);
         },
 
-        startUpgrade: function (btn) {
+        showUpgradeWarning: function (btn) {
             if (btn.up('menu')) { btn.up('menu').hide(); }
 
             Ext.Msg.show({
@@ -287,11 +289,29 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                     text: 'YES',
                     ui: 'action',
                     margin: '0 0 0 16',
-                    handler: function () {
-                        this.up('messagebox').hide();
-                        Mfw.app.viewport.add({
-                            xtype: 'upgrade-dialog'
-                        }).show();
+                    handler: function (btn) {
+                        /**
+                         * Upgrade via 'Upgrade Now' button
+                         * when new version available
+                        */
+                        btn.up('messagebox').mask();
+                        Ext.Ajax.request({
+                            url: '/api/upgrade',
+                            method: 'POST',
+                            success: function (response) {
+                                btn.up('messagebox').hide();
+                                Mfw.app.viewport.add({
+                                    xtype: 'upgrade-pending'
+                                }).show();
+                            },
+                            failure: function () {
+                                // do the same as the upgrade may have been triggered
+                                btn.up('messagebox').hide();
+                                Mfw.app.viewport.add({
+                                    xtype: 'upgrade-pending'
+                                }).show();
+                            }
+                        });
                     }
                 }]
             });

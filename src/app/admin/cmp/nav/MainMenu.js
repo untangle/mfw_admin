@@ -46,7 +46,7 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
         text: 'Upgrade Now!'.t(),
         hidden: true,
         iconCls: 'x-fa fa-cloud-download fa-orange',
-        handler: 'startUpgrade'
+        handler: 'showUpgradeWarning'
     }, {
         text: 'Suggest Idea'.t(),
         iconCls: 'x-fa fa-lightbulb fa-white',
