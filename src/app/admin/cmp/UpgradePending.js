@@ -1,6 +1,10 @@
-Ext.define('Mfw.cmp.UpgradeDialog', {
+/**
+ * This view covers the UI while upgrade process is pending
+ * Usually the machine restarts and UI is refreshed when done
+ */
+Ext.define('Mfw.cmp.UpgradePending', {
     extend: 'Ext.Dialog',
-    alias: 'widget.upgrade-dialog',
+    alias: 'widget.upgrade-pending',
 
     maximized: true,
     closable: false,
@@ -31,7 +35,7 @@ Ext.define('Mfw.cmp.UpgradeDialog', {
                     url: '/account/status',
                     timeout: 5000,
                     success: function (result) {
-                        // console.log('success');
+                        document.location.href = '/admin';
                     },
                     failure: function (result) {
                         // recheck if address unreachable or internet disconnected
