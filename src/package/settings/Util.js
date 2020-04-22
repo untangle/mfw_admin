@@ -3,8 +3,6 @@ Ext.define('Mfw.settings.Util', {
     singleton: true,
 
     api: window.location.origin + '/api',
-    // api: 'http://192.168.101.233/api',
-
 
     /**
      * Called recursively to transform/sanitize data sent back to server
@@ -77,5 +75,39 @@ Ext.define('Mfw.settings.Util', {
     // getFirstPacketConditions will retrieve all condition types that do not have disableOnFirstPacket == true
     getFirstPacketConditions: function() {
         return Conditions.list.filter(function(item) {return item.disableOnFirstPacket != true; }).map(function(item) {return item.type; });
+    },
+
+    /**
+     * Method used to show the upgrade warning alert
+     * which will trigger the upgrade process (if YES chosen)
+     * used in System/Upgrade view and main header upgrade menu
+     */
+    upgradeNow: function() {
+        Ext.Msg.show({
+            title: '<i class="x-fa fa-exclamation-triangle"></i> Warning',
+            message: 'The upgrade might take a few minutes!<br/>During this period the internet connection can be lost.<br/><br/>Do you want to continue?',
+            showAnimation: null,
+            hideAnimation: null,
+            buttons: [{
+                text: 'NO',
+                handler: function () { this.up('messagebox').hide(); }
+            }, {
+                text: 'YES',
+                ui: 'action',
+                margin: '0 0 0 16',
+                handler: function (btn) {
+                    btn.up('messagebox').hide();
+
+                    /**
+                     * show the MANUAL upgrade pending view
+                     * the upgrade call is made in pending view
+                     */
+                    Mfw.app.viewport.add({
+                        xtype: 'upgrade-pending',
+                        type: 'MANUAL'
+                    }).show();
+                }
+            }]
+        });
     }
 });

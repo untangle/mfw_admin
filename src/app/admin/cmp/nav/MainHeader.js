@@ -95,7 +95,7 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
         hidden: true,
         // responsiveConfig: { large: { hidden: false, }, small: { hidden: true } },
         bind: {
-            hidden: '{!upgradeStatus.available}'
+            hidden: '{!upgradeCheck.available}'
         },
         menu: {
             userCls: 'monitor-menu',
@@ -115,8 +115,10 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                 margin: '0 16 16 16',
                 text: 'UPGRADE NOW',
                 ui: 'action',
-                // refactored startUpgrade as actually it shows a warning message
-                handler: 'showUpgradeWarning'
+                handler: function (btn) {
+                    btn.up('menu').hide();
+                    Util.upgradeNow();
+                }
             },
             {
                 xtype: 'container',
@@ -204,14 +206,18 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
                     minuteOfHour: 0
                 };
 
+            /**
+             * Check for upgrades just once when the app loads,
+             * this will be available at app level through viewmodel
+            */
             Ext.Ajax.request({
                 url: '/api/status/upgrade',
                 success: function (response) {
                     var resp = Ext.decode(response.responseText);
-                    vm.set('upgradeStatus', resp);
+                    vm.set('upgradeCheck', resp);
                 },
                 failure: function () {
-                    console.error('Unable to check upgrade status!');
+                    console.error('Unable to get data');
                 }
             });
 
@@ -270,51 +276,6 @@ Ext.define('Mfw.cmp.nav.MainHeader', {
 
         showSuggest: function () {
             window.open(Mfw.app.feedbackUrl);
-        },
-
-        showUpgradeWarning: function (btn) {
-            if (btn.up('menu')) { btn.up('menu').hide(); }
-
-            Ext.Msg.show({
-                title: '<i class="x-fa fa-exclamation-triangle"></i> Warning',
-                message: 'The upgrade might take a few minutes!<br/>During this period the internet connection can be lost.<br/><br/>Do you want to continue?',
-                // width: 300,
-                showAnimation: null,
-                hideAnimation: null,
-                // closeAction: 'destroy',
-                buttons: [{
-                    text: 'NO',
-                    handler: function () { this.up('messagebox').hide(); }
-                }, {
-                    text: 'YES',
-                    ui: 'action',
-                    margin: '0 0 0 16',
-                    handler: function (btn) {
-                        /**
-                         * Upgrade via 'Upgrade Now' button
-                         * when new version available
-                        */
-                        btn.up('messagebox').mask();
-                        Ext.Ajax.request({
-                            url: '/api/upgrade',
-                            method: 'POST',
-                            success: function (response) {
-                                btn.up('messagebox').hide();
-                                Mfw.app.viewport.add({
-                                    xtype: 'upgrade-pending'
-                                }).show();
-                            },
-                            failure: function () {
-                                // do the same as the upgrade may have been triggered
-                                btn.up('messagebox').hide();
-                                Mfw.app.viewport.add({
-                                    xtype: 'upgrade-pending'
-                                }).show();
-                            }
-                        });
-                    }
-                }]
-            });
         }
     }
 });
