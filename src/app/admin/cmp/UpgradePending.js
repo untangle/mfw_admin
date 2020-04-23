@@ -11,6 +11,15 @@ Ext.define('Mfw.cmp.UpgradePending', {
 
     layout: 'center',
 
+    config: {
+        /**
+         * type is used to know which type of upgrade is performed
+         * FILEUPLOAD - user uploads an upgrade image
+         * MANUAL - user triggers the upgrade after the online upgrade availability check
+         */
+        type: 'FILEUPLOAD' // FILEUPLOAD or MANUAL
+    },
+
     items: [{
         xtype: 'container',
         layout: {
@@ -33,7 +42,7 @@ Ext.define('Mfw.cmp.UpgradePending', {
             var checkOnline = function () {
                 Ext.Ajax.request({
                     url: '/account/status',
-                    timeout: 5000,
+                    timeout: 3000,
                     success: function (result) {
                         document.location.href = '/admin';
                     },
@@ -50,7 +59,30 @@ Ext.define('Mfw.cmp.UpgradePending', {
                     }
                 });
             };
-            Ext.defer(checkOnline, 3000);
+
+            if (view.getType() === 'MANUAL') {
+                /**
+                 * MANUAL trigger upgrade
+                 * check for online availability only after the callbacks
+                 *
+                 * the upgrade will trigger system reboot and the call might hang
+                 * the entire app will be refreshed when back online
+                 */
+                Ext.Ajax.request({
+                    url: '/api/upgrade',
+                    method: 'POST',
+                    success: function() {
+                        Ext.defer(checkOnline, 3000);
+                    },
+                    failure: function () {
+                        Ext.defer(checkOnline, 3000);
+                    }
+
+                });
+            } else {
+                // FILEUPLOAD upgrade
+                Ext.defer(checkOnline, 3000);
+            }
         }
     }
 

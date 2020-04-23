@@ -19,21 +19,21 @@ Ext.define('Mfw.settings.system.Upgrade', {
 
     items: [{
         xtype: 'container',
-        padding: 16,
-        minHeight: 100,
         layout: {
             type: 'vbox',
             align: 'left'
         },
         items: [{
             xtype: 'component',
-            html: '<h2 style="font-weight: 100;"><i class="x-fa fa-check-circle fa-green"></i>&nbsp; The system is running the latest version!</h2>',
+            padding: 16,
+            html: '<h2 style="font-weight: 100; margin: 0;"><i class="x-fa fa-check-circle fa-green"></i>&nbsp; The system is running the latest version!</h2>',
             hidden: true,
             bind: {
-                hidden: '{upgradeStatus.available}'
+                hidden: '{upgradeCheck.available}'
             }
         }, {
             xtype: 'container',
+            padding: 16,
             layout: {
                 type: 'hbox',
                 align: 'middle'
@@ -46,11 +46,13 @@ Ext.define('Mfw.settings.system.Upgrade', {
                 ui: 'action',
                 margin: '0 0 0 16',
                 text: 'UPGRADE NOW',
-                handler: 'showUpgradeWarning'
+                handler: function() {
+                    Util.upgradeNow();
+                }
             }],
             hidden: true,
             bind: {
-                hidden: '{!upgradeStatus.available}'
+                hidden: '{!upgradeCheck.available}'
             }
         }]
     }, {
@@ -171,17 +173,6 @@ Ext.define('Mfw.settings.system.Upgrade', {
                 };
 
             Ext.Ajax.request({
-                url: '/api/status/upgrade',
-                success: function (response) {
-                    var resp = Ext.decode(response.responseText);
-                    vm.set('upgradeStatus', resp);
-                },
-                failure: function () {
-                    console.error('Unable to get data');
-                }
-            });
-
-            Ext.Ajax.request({
                 url: '/api/settings/system/autoUpgrade',
                 success: function (response) {
                     var resp = Ext.decode(response.responseText),
@@ -258,53 +249,6 @@ Ext.define('Mfw.settings.system.Upgrade', {
             });
         },
 
-
-        /**
-         * !!! todo, duplicated from main header, needs to be general accessible
-         */
-        showUpgradeWarning: function () {
-            Ext.Msg.show({
-                title: '<i class="x-fa fa-exclamation-triangle"></i> Warning',
-                message: 'The upgrade might take a few minutes!<br/>During this period the internet connection can be lost.<br/><br/>Do you want to continue?',
-                // width: 300,
-                showAnimation: null,
-                hideAnimation: null,
-                // closeAction: 'destroy',
-                buttons: [{
-                    text: 'NO',
-                    handler: function () { this.up('messagebox').hide(); }
-                }, {
-                    text: 'YES',
-                    ui: 'action',
-                    margin: '0 0 0 16',
-                    handler: function (btn) {
-                        /**
-                         * Upgrade via 'Upgrade Now' button
-                         * when new version available
-                        */
-                        btn.up('messagebox').mask();
-                        Ext.Ajax.request({
-                            url: '/api/upgrade',
-                            method: 'POST',
-                            success: function (response) {
-                                btn.up('messagebox').hide();
-                                Mfw.app.viewport.add({
-                                    xtype: 'upgrade-pending'
-                                }).show();
-                            },
-                            failure: function () {
-                                // do the same as the upgrade may have been triggered
-                                btn.up('messagebox').hide();
-                                Mfw.app.viewport.add({
-                                    xtype: 'upgrade-pending'
-                                }).show();
-                            }
-                        });
-                    }
-                }]
-            });
-        },
-
         /**
          * Upgrade via file upload
          * @param {*} btn
@@ -356,7 +300,8 @@ Ext.define('Mfw.settings.system.Upgrade', {
                     // otherwise show pending upgrade
                     msg.hide();
                     Mfw.app.viewport.add({
-                        xtype: 'upgrade-pending'
+                        xtype: 'upgrade-pending',
+                        type: 'FILEUPLOAD'
                     }).show();
                 },
                 failure: function (form, result) {
@@ -367,7 +312,8 @@ Ext.define('Mfw.settings.system.Upgrade', {
                      */
                     msg.hide();
                     Mfw.app.viewport.add({
-                        xtype: 'upgrade-pending'
+                        xtype: 'upgrade-pending',
+                        type: 'FILEUPLOAD'
                     }).show();
                 }
             });

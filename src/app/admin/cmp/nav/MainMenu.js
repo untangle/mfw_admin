@@ -6,7 +6,6 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
 
     cls: 'nav',
 
-    // padding: 10,
     defaults: {
         width: 200,
         xtype: 'button',
@@ -42,11 +41,6 @@ Ext.define('Mfw.cmp.nav.MainMenu', {
     }, {
         xtype: 'menuseparator',
         style: 'border-color: #555'
-    }, {
-        text: 'Upgrade Now!'.t(),
-        hidden: true,
-        iconCls: 'x-fa fa-cloud-download fa-orange',
-        handler: 'showUpgradeWarning'
     }, {
         text: 'Suggest Idea'.t(),
         iconCls: 'x-fa fa-lightbulb fa-white',
