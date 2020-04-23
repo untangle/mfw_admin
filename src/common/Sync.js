@@ -252,31 +252,7 @@ Ext.define('Mfw.Sync', {
 
         // auth fail
         if (response.status === 403) {
-            // avoid displaying the exception bottom sheet
-            this.sheet.hide();
-
-            /**
-             * display auth fail message box
-             * prevent showing more than a single dialog in case of multiple calls exceptions
-             */
-            if (!this.authExceptionDialog) {
-                this.authExceptionDialog = Ext.create('Ext.MessageBox', {
-                    title: 'Authentication failed',
-                    message: 'Session has expired. Please login.',
-                    width: 300,
-                    showAnimation: null,
-                    hideAnimation: null,
-                    buttons: [{
-                        text: 'OK',
-                        ui: 'action',
-                        handler: function () {
-                            // reloading document will redirect to auth
-                            document.location.reload();
-                        }
-                    }]
-                }).show();
-                this.authExceptionDialog.show();
-            }
+            CommonUtil.showReauthRequired(this);
             return;
         }
 
@@ -312,6 +288,17 @@ Ext.define('Mfw.Sync', {
                     summary = response.responseText;
                 }
             } else {
+                // Aborted responses can return the [Object object] error here
+                if(response.aborted) {
+                    return;
+                }
+
+                // Response status of 0 means the server has disconnected gracefully, send them to login screen
+                if(response.status == 0) {
+                    CommonUtil.showReauthRequired(this);
+                    return;
+                }
+
                 return;
             }
         }
