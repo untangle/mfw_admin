@@ -26,6 +26,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
         }
     },
 
+    scrollable: true,
     layout: 'vbox',
 
     items: [{
@@ -196,6 +197,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         xtype: 'textfield',
                         flex: 1,
                         label: 'Hostname (endpoint)',
+                        value: peer.get('host'),
                         labelAlign: 'top',
                         placeholder: 'enter hostname ...',
                         clearable: false,
@@ -210,6 +212,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         width: 100,
                         margin: '0 0 0 32',
                         label: 'Port',
+                        value: peer.get('port'),
                         labelAlign: 'top',
                         clearable: false,
                         autoComplete: false,
@@ -217,7 +220,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         validators: 'port',
                         listeners: {
                             change: function (field, value) {
-                                peers.getAt(idx).set('host', value);
+                                peers.getAt(idx).set('port', value);
                             }
                         }
                     }]
