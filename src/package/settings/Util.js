@@ -109,5 +109,30 @@ Ext.define('Mfw.settings.Util', {
                 }
             }]
         });
+    },
+
+    /**
+     * Method used to check if the system is online by calling the account status
+     * Used when upgrading/rebooting the system
+     */
+    checkOnlineStatus: function () {
+        Ext.Ajax.request({
+            url: '/account/status',
+            timeout: 3000,
+            success: function (result) {
+                document.location.href = '/admin';
+            },
+            failure: function (result) {
+                // recheck if address unreachable or internet disconnected
+                if (result.status === 0) {
+                    Ext.defer(Util.checkOnlineStatus, 3000);
+                }
+
+                // if back online but not logged in, go to login
+                if (result.status === 400) {
+                    document.location.href = '/admin';
+                }
+            }
+        });
     }
 });
