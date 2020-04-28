@@ -174,8 +174,15 @@ Ext.define('Mfw.dashboard.widget.ServerInfo', {
                         licenseText = (seats === 1000000 ? 'Unlimited' : seats + ' Mbps');
                     }
 
+                    var boardName = Map.boards[hardware.boardName] || hardware.boardName;
+
+                    // MFW-839 - hide undesired board name ('to-be-filled-by-o-e-m-to-be-filled-by-o-e-m')
+                    if (boardName.includes('to-be-filled')) {
+                        boardName = '-';
+                    }
+
                     html = '<table style="font-size: 12px;" cellspacing="0" cellpadding="0">' +
-                           '<tr><td style="width: 100px;">Board: </td><td>' + (Map.boards[hardware.boardName] || hardware.boardName) + '</td></tr>' +
+                           '<tr><td style="width: 100px;">Board: </td><td>' + boardName + '</td></tr>' +
                            '<tr><td>Build: </td><td>' + shortBuildVersion + '</td></tr>' +
                            '<tr><td>Host: </td><td>' + info.hostName + '</td></tr>' +
                            '<tr><td>Domain: </td><td>' + info.domainName + '</td></tr>' +
