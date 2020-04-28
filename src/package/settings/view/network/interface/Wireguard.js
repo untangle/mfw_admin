@@ -89,7 +89,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             }]
         }, {
             xtype: 'container',
-            margin: '32 0 16 0',
+            margin: '16 0 4 0',
             layout: {
                 type: 'hbox',
                 align: 'middle'
@@ -99,33 +99,33 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                 xtype: 'component',
                 flex: 1,
                 style: 'font-weight: 100; font-size: 20px;',
-                html: 'Peers'
+                bind: {
+                    html: '{intf.wan ? "Peer" : "Peers"}'
+                }
+
             }, {
                 xtype: 'button',
+                ui: 'action',
                 text: 'Add Peer',
-                handler: 'addPeer'
+                handler: 'addPeer',
+                hidden: true,
+                hideMode: 'visibility',
+                bind: {
+                    hidden: '{intf.wan}'
+                }
             }]
         }, {
+            xtype: 'component',
+            html: 'WAN wireguard interface, has a single peer.<br/>Non WAN interface can have multiple peers'
+        }, {
             xtype: 'container',
+            margin: '8 0 0 0',
             itemId: 'wg-peers'
         }]
     }],
 
     controller: {
         init: function (view) {
-            var vm = view.getViewModel(),
-                intf = vm.get('intf');
-
-
-
-            /**
-             * when creating a new wireguard interface
-             * pre-generate the private key
-             */
-            if (vm.get('isNew')) {
-                var privateKey = btoa(Math.random().toFixed(32).substr(2));
-                intf.set('wireguardPrivateKey', privateKey);
-            }
             this.updatePeers();
         },
 
@@ -171,7 +171,8 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         iconCls: 'md-icon-clear',
                         tooltip: 'Remove Peer',
                         idx: idx,
-                        handler: 'removePeer'
+                        handler: 'removePeer',
+                        hidden: peers.count() <= 1
                     }]
                 }, {
                     xtype: 'textfield',
@@ -217,7 +218,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         clearable: false,
                         autoComplete: false,
                         placeholder: 'enter port ...',
-                        validators: 'port',
+                        // validators: 'port',
                         listeners: {
                             change: function (field, value) {
                                 peers.getAt(idx).set('port', value);
@@ -227,7 +228,8 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                 }, {
                     xtype: 'component',
                     margin: '16 0',
-                    html: '<hr />'
+                    html: '<hr />',
+                    hidden: peers.count() <= 1
                 }]
             }
         },
