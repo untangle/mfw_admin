@@ -8,7 +8,8 @@ Ext.define('Mfw.settings.interface.Wireguard', {
 
     viewModel: {
         data: {
-            activeCard: 'wg-conf'
+            activeCard: 'wg-conf',
+            wireguardPublicKey: ''
         },
         formulas: {
             /**
@@ -41,17 +42,12 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             style: 'font-weight: 100; font-size: 20px;',
             html: 'Interface'
         }, {
-            /**
-             * wg private key
-             * TODO: this might be replaced with public key (which is not in config)
-             * but found in status (e.g. wg show <device>)
-             * an extra api call /api/status/wireguard/<intf_name> needs to be implemented
-             */
+            // wg public key retreived by an extra status call
             xtype: 'component',
             margin: '0 0 10 0',
             bind: {
-                html: '<span style="color: rgba(17, 17, 17, 0.54)">Private key</span> <br/>' +
-                      '<span style="color: #555; font-family: monospace; font-weight: bold;">{intf.wireguardPrivateKey || "-"}</span>',
+                html: '<span style="color: rgba(17, 17, 17, 0.54)">Public key</span> <br/>' +
+                      '<span style="color: #555; font-family: monospace; font-weight: bold;">{wireguardPublicKey || "-"}</span>',
             }
         }, {
             xtype: 'containerfield',
@@ -127,7 +123,22 @@ Ext.define('Mfw.settings.interface.Wireguard', {
     controller: {
         init: function (view) {
             var me = this,
-                vm = view.getViewModel();
+                vm = view.getViewModel(),
+                intf = vm.get('intf');
+
+            /**
+             * for existing interfaces
+             * get the public key (which is not in interface settings)
+             */
+            if (!vm.get('isNew')) {
+                Ext.Ajax.request({
+                    url: '/api/status/wireguardPublicKey/' + intf.get('device'),
+                    success: function (response) {
+                        var resp = Ext.decode(response.responseText);
+                        vm.set('wireguardPublicKey', resp.publicKey);
+                    }
+                });
+            }
 
             // update UI if interface is WAN or non-WAN
             vm.bind('{intf.wan}', function (value) {
