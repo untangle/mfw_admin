@@ -771,6 +771,38 @@ Ext.define('Mfw.settings.network.Interface', {
                 return;
             }
 
+            /**
+             * Wireguard interface pre save alterations
+             */
+            if (intf.get('type') === 'WIREGUARD') {
+                var peers = intf.wireguardPeers();
+
+                // if WAN interface, remove extra peers and keep only the first one
+                if (intf.get('wan')) {
+                    peers.removeAt(1, peers.count() - 1);
+                }
+
+                /**
+                 * !!! this should be handled by backend
+                 * generate the keys using a dummy random number if they are not set
+                 * (usually when creating new interface or adding a new peer)
+                 * currenly backend throws erros if interface private key or peer public key are not set
+                 */
+                if (!intf.get('wireguardPrivateKey')) {
+                    intf.set('wireguardPrivateKey', btoa(Math.random().toFixed(32).substr(2)))
+                }
+                peers.each(function(peer) {
+                    peer.set('publicKey', btoa(Math.random().toFixed(32).substr(2)));
+                })
+
+                /**
+                 * interface device is required
+                 * this also might be set on the backend and not UI
+                 * will set it for now to match interface name
+                 */
+                intf.set('device', intf.get('name'));
+            }
+
             if (isNew) {
                 interfacesStore.add(intf);
             } else {
