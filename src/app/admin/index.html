@@ -41,6 +41,19 @@
 
         <script>
             Ext.onReady(function () {
+                // MFW-582 - prepend hostame in document title
+                Ext.Ajax.request({
+                    url: '/api/settings/system',
+                    success: function (response) {
+                        var info = Ext.decode(response.responseText);
+                        if (info.hostName) {
+                            document.title = info.hostName + ' | Untangle SD-WAN Router'
+                        }
+                    },
+                    failure: function () {
+                        console.error('Unable to get info!');
+                    }
+                });
                 Ext.application({
                     extend: 'Mfw.AppBase',
                     namespace: 'Mfw',

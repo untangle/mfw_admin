@@ -42,13 +42,16 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             html: 'Interface'
         }, {
             /**
-             * wg private key, generated on creation
-             * cannot be change once created
+             * wg private key
+             * TODO: this might be replaced with public key (which is not in config)
+             * but found in status (e.g. wg show <device>)
+             * an extra api call /api/status/wireguard/<intf_name> needs to be implemented
              */
             xtype: 'component',
             margin: '0 0 10 0',
             bind: {
-                html: '<span style="color: rgba(17, 17, 17, 0.54)">Private key</span> <br/> <span style="color: #555; font-family: monospace; font-weight: bold;">{intf.wireguardPrivateKey}</span>'
+                html: '<span style="color: rgba(17, 17, 17, 0.54)">Private key</span> <br/>' +
+                      '<span style="color: #555; font-family: monospace; font-weight: bold;">{intf.wireguardPrivateKey || "-"}</span>',
             }
         }, {
             xtype: 'containerfield',
@@ -115,9 +118,6 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                 }
             }]
         }, {
-            xtype: 'component',
-            html: 'WAN wireguard interface, has a single peer.<br/>Non WAN interface can have multiple peers'
-        }, {
             xtype: 'container',
             margin: '8 0 0 0',
             itemId: 'wg-peers'
@@ -126,7 +126,13 @@ Ext.define('Mfw.settings.interface.Wireguard', {
 
     controller: {
         init: function (view) {
-            this.updatePeers();
+            var me = this,
+                vm = view.getViewModel();
+
+            // update UI if interface is WAN or non-WAN
+            vm.bind('{intf.wan}', function (value) {
+                me.updatePeers();
+            });
         },
 
         updatePeers: function () {
@@ -150,10 +156,14 @@ Ext.define('Mfw.settings.interface.Wireguard', {
          */
         peerCmp: function (peer, idx) {
             var me = this,
-                peers = me.getViewModel().get('intf').wireguardPeers();
+                vm = me.getViewModel(),
+                intf = vm.get('intf'),
+                peers = intf.wireguardPeers();
 
             return {
                 xtype: 'container',
+                // if it's wan, keep visible only the first peer
+                hidden: intf.get('wan') && idx > 0,
                 items: [{
                     xtype: 'container',
                     margin: '0 0 16 0',
@@ -162,10 +172,13 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                         align: 'top'
                     },
                     items: [{
+                        /**
+                         * peer public key
+                         */
                         xtype: 'component',
                         flex: 1,
-                        html: '<span style="color: rgba(17, 17, 17, 0.54)">Public key</span> <br/> <span style="color: #777; font-family: monospace; font-weight: bold;">' + peer.get('publicKey') + '</span> <br/>' +
-                              '<span style="color: rgba(17, 17, 17, 0.54)">Preshared key</span> <br/> <span style="color: #777; font-family: monospace; font-weight: bold;">' + peer.get('presharedKey') + '</span>'
+                        html: '<span style="color: rgba(17, 17, 17, 0.54)">Public key</span> <br/> ' +
+                            '<span style="color: #777; font-family: monospace; font-weight: bold;">' + (peer.get('publicKey') ? peer.get('publicKey') : '-') + '</span>'
                     }, {
                         xtype: 'button',
                         iconCls: 'md-icon-clear',
@@ -242,16 +255,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
                 vm = me.getViewModel(),
                 peers = vm.get('intf').wireguardPeers()
 
-            /**
-             * the keys should be generated from backend and cannot be changed
-             * once created
-             */
-            var publicKey = btoa(Math.random().toFixed(32).substr(2)),
-                presharedKey = btoa(Math.random().toFixed(32).substr(2));
-
             peers.add({
-                publicKey: publicKey,
-                presharedKey: presharedKey,
                 allowedIps: [], // default - matches all IPv4 addresses
                 host: '',
                 port: ''
