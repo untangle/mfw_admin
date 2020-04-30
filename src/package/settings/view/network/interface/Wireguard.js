@@ -130,7 +130,7 @@ Ext.define('Mfw.settings.interface.Wireguard', {
              * for existing interfaces
              * get the public key (which is not in interface settings)
              */
-            if (!vm.get('isNew')) {
+            if (intf.get('type') === 'WIREGUARD' && !vm.get('isNew')) {
                 Ext.Ajax.request({
                     url: '/api/status/wireguardPublicKey/' + intf.get('device'),
                     success: function (response) {
