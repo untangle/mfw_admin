@@ -43,7 +43,7 @@ Ext.define('Mfw.settings.system.Settings', {
             options: Map.options.timezones
         }],
         buttons: [{
-            text: 'Save',
+            text: 'Update',
             ui: 'action',
             handler: 'onSave'
         }]
