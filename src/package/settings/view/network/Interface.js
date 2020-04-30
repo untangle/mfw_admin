@@ -4,7 +4,26 @@ Ext.define('Mfw.settings.network.Interface', {
 
     layout: 'fit',
 
-    _title: 'Interface', // used in modified changes popup
+    header: {
+        padding: '0 8 0 16'
+    },
+
+    title: 'Interface',
+
+    tools: [{
+        xtype: 'button',
+        text: 'Cancel',
+        cls: 'btn-tool',
+        handler: 'onCancel'
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{isNew ? "Create" : "Save"}',
+        },
+        cls: 'btn-tool',
+        iconCls: 'md-icon-save',
+        handler: 'onSave'
+    }],
 
     viewModel: {
         data: {
@@ -500,42 +519,6 @@ Ext.define('Mfw.settings.network.Interface', {
                 }
             }]
         }]
-    }, {
-        // toolbar shown in ADMIN context
-        xtype: 'toolbar',
-        docked: 'bottom',
-        hidden: true,
-        bind: {
-            hidden: '{isDialog}'
-        },
-        items: [{
-            text: 'Save',
-            iconCls: 'md-icon-save',
-            ui: 'action',
-            handler: 'onSave'
-        }]
-    }, {
-        // toolbar shown in SETUP context
-        xtype: 'toolbar',
-        docked: 'bottom',
-        hidden: true,
-        bind: {
-            hidden: '{!isDialog}'
-        },
-        items: [{
-            xtype: 'component',
-            flex: 1
-        }, {
-            text: 'Cancel',
-            margin: '0 16 0 0',
-            handler: 'onCancel'
-        }, {
-            bind: {
-                text: '{isNew ? "Create" : "Update"}',
-            },
-            ui: 'action',
-            handler: 'onSave'
-        }]
     }],
 
     controller: {
@@ -705,7 +688,11 @@ Ext.define('Mfw.settings.network.Interface', {
             intf.reject();
 
             if (dialog) {
+                // if in a dialog just close it
                 dialog.destroy();
+            } else {
+                // if in admin editor redirect to interfaces grid
+                Mfw.app.redirectTo('settings/network/interfaces');
             }
         },
 
