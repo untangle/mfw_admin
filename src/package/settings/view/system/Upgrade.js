@@ -137,7 +137,7 @@ Ext.define('Mfw.settings.system.Upgrade', {
             name: 'file',
             required: true,
             multiple: false,
-            accept: '.img.gz, .img',
+            accept: '.img.gz, .img, .gz',
             label: 'Choose File'.t(),
             listeners: {
                 change: 'onFileChange'
