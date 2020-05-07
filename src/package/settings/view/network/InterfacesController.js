@@ -28,19 +28,26 @@ Ext.define('Mfw.settings.network.InterfacesController', {
              * when creating a new wireguard interface is WAN by defalt meaning:
              * - interface port defaults to 51820
              * - has only a single peer having Allowed IPv4 to default '0.0.0.0/0'
+             * IMPORTANT!
+             * the wireguardPrivateKey and peer publicKey should be handled on backend
              */
             newIntf = Ext.create('Mfw.model.Interface', {
-                name: 'wg0', // set a default name
                 type: 'WIREGUARD',
                 configType: 'ADDRESSED',
                 wan: true,
                 natEgress: true,
+                wireguardPrivateKey: btoa(Math.random().toFixed(32).substr(2)),
                 wireguardAddresses: [],
                 wireguardPort: 51820
             });
 
-            // add the default peer to the interface
+            /**
+             * IMPORTANT!
+             * the peer should be handled in backend
+             * kept to avoid current exceptions if ommited
+             */
             newIntf.wireguardPeers().add({
+                publicKey: btoa(Math.random().toFixed(32).substr(2)),
                 allowedIps: ['0.0.0.0/0'] // catch-all IPv4 addresses
             })
         }
