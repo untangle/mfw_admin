@@ -8,17 +8,20 @@ Ext.define('Mfw.settings.network.Interface', {
         padding: '0 8 0 16'
     },
 
-    title: 'Interface',
+    bind: {
+        title: '{isNew ? "Add" : "Edit"} Interface',
+    },
 
     tools: [{
         xtype: 'button',
         text: 'Cancel',
+        iconCls: 'x-fa fa-times',
         cls: 'btn-tool',
         handler: 'onCancel'
     }, {
         xtype: 'button',
         bind: {
-            text: '{isNew ? "Create" : "Save"}',
+            text: '{isNew ? "Add" : "Save"}',
         },
         cls: 'btn-tool',
         iconCls: 'md-icon-save',
@@ -300,9 +303,11 @@ Ext.define('Mfw.settings.network.Interface', {
                         bodyAlign: 'start',
                         margin: '0 32 0 0',
                         hidden: true,
+                        disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.configType !== "ADDRESSED"}'
+                            hidden: '{intf.configType !== "ADDRESSED"}',
+                            disabled: '{intf.type === "WIREGUARD"}'
                         }
                     }, {
                         xtype: 'checkbox',
@@ -764,30 +769,13 @@ Ext.define('Mfw.settings.network.Interface', {
             if (intf.get('type') === 'WIREGUARD') {
                 var peers = intf.wireguardPeers();
 
-                // if WAN interface, remove extra peers and keep only the first one
-                if (intf.get('wan')) {
-                    peers.removeAt(1, peers.count() - 1);
-                }
-
                 /**
-                 * !!! this should be handled by backend
-                 * generate the keys using a dummy random number if they are not set
-                 * (usually when creating new interface or adding a new peer)
-                 * currenly backend throws erros if interface private key or peer public key are not set
+                 * IMPORTANT!
+                 * device prop might be handled on backend
                  */
-                if (!intf.get('wireguardPrivateKey')) {
-                    intf.set('wireguardPrivateKey', btoa(Math.random().toFixed(32).substr(2)))
+                if (!intf.get('device')) {
+                    intf.set('device', intf.get('name'));
                 }
-                peers.each(function(peer) {
-                    peer.set('publicKey', btoa(Math.random().toFixed(32).substr(2)));
-                })
-
-                /**
-                 * interface device is required
-                 * this also might be set on the backend and not UI
-                 * will set it for now to match interface name
-                 */
-                intf.set('device', intf.get('name'));
             }
 
             if (isNew) {
@@ -826,6 +814,8 @@ Ext.define('Mfw.settings.network.Interface', {
                     }
                 },
                 failure: function () {
+                    // interfaces store have to be reloaded on sync failure too
+                    interfacesStore.reload();
                     console.warn('Unable to save interfaces!');
                 }
             });
