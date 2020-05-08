@@ -179,7 +179,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: 'New {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "Wireguard" : "" } Interface',
+                    html: 'Add {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "WireGuard" : "" } Interface',
                     hidden: '{!isNew}'
                 }
             }, {
@@ -253,6 +253,39 @@ Ext.define('Mfw.settings.network.Interface', {
                             hidden: '{intf.type === "WWAN" || intf.type === "OPENVPN" || intf.type === "WIREGUARD"}'
                         }
                     }]
+                }, {
+                    // WireGuard public key
+                    xtype: 'container',
+                    margin: 8,
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    hidden: true,
+                    bind: {
+                        hidden: '{intf.type !== "WIREGUARD"}'
+                    },
+                    items: [{
+                        /**
+                         * the key is dummy generated in UI
+                         * it should be retreived via an API status call (see MFW-940)
+                         */
+                        xtype: 'component',
+                        flex: 1,
+                        bind: {
+                            html: '<div style="color: rgba(17, 17, 17, 0.54)">Public key</div>' +
+                                '<div style="color: #555; margin-top: 8px;">' +
+                                '{isNew ? "(Public key can be viewed after creating the interface)" : "' + btoa(Math.random().toFixed(32).substr(2)) + '"}'
+                                + '</div>',
+                        }
+                    },
+                    // copy to clipboard hidden until the public key feature will be in place
+                    // {
+                    //     xtype: 'button',
+                    //     iconCls: 'x-far fa-copy',
+                    //     tooltip: 'Copy to Clipboard'
+                    // }
+                ]
                 }, {
                     xtype: 'selectfield',
                     label: 'Bridged To',
@@ -761,21 +794,6 @@ Ext.define('Mfw.settings.network.Interface', {
             if (vm.get('setupContext') && dialog) {
                 dialog.close();
                 return;
-            }
-
-            /**
-             * Wireguard interface pre save alterations
-             */
-            if (intf.get('type') === 'WIREGUARD') {
-                var peers = intf.wireguardPeers();
-
-                /**
-                 * IMPORTANT!
-                 * device prop might be handled on backend
-                 */
-                if (!intf.get('device')) {
-                    intf.set('device', intf.get('name'));
-                }
             }
 
             if (isNew) {
