@@ -1,34 +1,16 @@
 /**
- * Wireguard interface options
+ * WireGuard interface options
  * shown only if interface type is WIREGUARD
  */
-Ext.define('Mfw.settings.interface.Wireguard', {
+Ext.define('Mfw.settings.interface.WireGuard', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-wireguard',
 
     viewModel: {
         data: {
             activeCard: 'wg-conf',
-            /**
-             * IMPORTANT!!!
-             * this wireguardPublicKey should be retrieved from intf status or settings
-             * to be removed later
-             */
-            wireguardPublicKey: btoa(Math.random().toFixed(32).substr(2))
-        },
-        formulas: {
-            /**
-             * helper to convert the interface addresses string to array
-             */
-            _wireguardAddresses: {
-                get: function (get) {
-                    if (!get('intf.wireguardAddresses')) { return ''; }
-                    return get('intf.wireguardAddresses').join(',');
-                },
-                set: function (value) {
-                    this.set('intf.wireguardAddresses', value ? value.replace(/\s/g,'').split(',') : null);
-                }
-            }
+            // the first peer of wg interface, populated on init
+            peer: null
         }
     },
 
@@ -42,72 +24,79 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             flex: '{isDialog ? 1 : "auto"}'
         },
         items: [{
+            xtype: 'component',
+            padding: '16 0',
+            style: 'font-weight: 100; font-size: 20px;',
+            html: 'VPN Tunnel Configuration'
+        }, {
             xtype: 'textfield',
-            name: 'wireguardAddresses',
-            label: 'Address',
+            name: 'host',
+            label: 'Remote endpoint address',
             placeholder: 'enter address ...',
             clearable: false,
             autoComplete: false,
             labelAlign: 'top',
             flex: 1,
             bind: {
-                value: '{_wireguardAddresses}',
+                value: '{peer.host}',
                 required: '{intf.type === "WIREGUARD"}',
                 disabled: '{intf.type !== "WIREGUARD"}'
-            },
-            validators: 'ipv4expression'
+            }
         }, {
-            xtype: 'numberfield',
-            name: 'wireguardPort',
-            width: 150,
-            label: 'Wireguard Listen Port',
+            xtype: 'textfield',
+            name: 'publicKey',
+            label: 'Remote endpoint public key',
             labelAlign: 'top',
             clearable: false,
             autoComplete: false,
-            placeholder: 'enter port ...',
+            placeholder: 'enter public key ...',
+            flex: 1,
             bind: {
-                value: '{intf.wireguardPort}',
+                value: '{peer.publicKey}',
                 required: '{intf.type === "WIREGUARD"}',
                 disabled: '{intf.type !== "WIREGUARD"}'
             },
-            validators: 'port',
-        }, {
-            xtype: 'component',
-            margin: '16 0',
-            html: '<span style="color: rgba(17, 17, 17, 0.54)">Allowed IPs</span> <br/>' +
-                '<span style="color: #555; "><strong>0.0.0.0/0</strong> (allow all IPv4 addresses)</span>',
-        }, {
-            xtype: 'container',
-            layout: {
-                type: 'hbox',
-                align: 'bottom'
-            },
-            margin: '0 0 10 0',
-            hidden: true,
-            bind: {
-                hidden: '{isNew}'
-            },
-            items: [{
-                // wg public key
-                xtype: 'component',
-                flex: 1,
-                bind: {
-                    html: '<span style="color: rgba(17, 17, 17, 0.54)">Public key</span> <br/>' +
-                        '<span style="color: #555; font-family: monospace;">{wireguardPublicKey}</span>',
+            validators: [function (val) {
+                if (val.length !== 44 || val.indexOf(' ') >= 0) {
+                    return 'Invalid base64 key value'
                 }
-            }, {
-                xtype: 'button',
-                iconCls: 'x-far fa-copy',
-                tooltip: 'Copy to Clipboard',
-                handler: 'copyToClipboardHandler'
+                return true;
             }]
         }]
     }],
 
     controller: {
-        copyToClipboardHandler: function () {
-            var str = this.getViewModel().get('wireguardPublicKey');
-            Util.copyToClipboard(str);
+        init: function (view) {
+            var vm = view.getViewModel(),
+                intf = vm.get('intf');
+
+            /**
+             * because bindings cannot handle arrays
+             * set a new bind on the unique first wireguard interface peer
+             */
+            vm.set('peer', intf.wireguardPeers().first());
+
+            /**
+             * because wireguard backend requires intf 'device' to be set
+             * just gave it the same value as the name
+             * only when creating a new interface!
+             */
+            if (vm.get('isNew')) {
+                vm.bind('{intf.name}', function(name) {
+                    intf.set('device', name);
+                });
+            }
+
+            /**
+             * attempt not to show field errors on form initialization
+             * as the user hasn't done any input yet
+             * - requires fields to have a "name"
+             * - it should be done after the initial binding occurs (which triggers change event)
+             * - it still requires a small delay to be effective
+             */
+            vm.bind('{intf}', function() {
+                Ext.defer(function () { view.down('formpanel').clearErrors(); }, 50);
+            });
         }
     }
 });

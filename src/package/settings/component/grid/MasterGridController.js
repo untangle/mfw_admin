@@ -181,7 +181,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                         type: 'OPENVPN',
                         handler: 'onAddInterface'
                     },{
-                        text: 'Wireguard VPN',
+                        text: 'WireGuard VPN',
                         type: 'WIREGUARD',
                         handler: 'onAddInterface'
                     }]
