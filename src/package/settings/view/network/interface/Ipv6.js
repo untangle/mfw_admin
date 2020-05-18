@@ -296,7 +296,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                     margin: '16 16',
                     bind: {
                         checked: '{intf.v6RelayEnabled}',
-                        hidden: '{intf.v6ConfigType === "DISABLED"}'
+                        hidden: '{!intf.wan || intf.v6ConfigType === "DISABLED"}'
                     }
                 } ]
             }, {
