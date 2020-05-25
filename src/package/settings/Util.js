@@ -134,5 +134,24 @@ Ext.define('Mfw.settings.Util', {
                 }
             }
         });
+    },
+
+    /**
+     * generic method to copy a string to clipboard
+     * @param {String} str
+     */
+    copyToClipboard: function (str) {
+        // uses a hidden textarea element
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        // this executes the actual copy
+        document.execCommand('copy');
+        // remove the textarea helper
+        document.body.removeChild(el);
     }
 });

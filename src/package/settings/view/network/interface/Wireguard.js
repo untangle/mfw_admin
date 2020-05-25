@@ -1,36 +1,25 @@
 /**
- * Wireguard interface options
+ * WireGuard interface options
  * shown only if interface type is WIREGUARD
  */
-Ext.define('Mfw.settings.interface.Wireguard', {
+Ext.define('Mfw.settings.interface.WireGuard', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-wireguard',
 
     viewModel: {
         data: {
-            activeCard: 'wg-conf'
-        },
-        formulas: {
-            /**
-             * helper to convert the interface addresses string to array
-             */
-            _wireguardAddresses: {
-                get: function (get) {
-                    if (!get('intf.wireguardAddresses')) { return ''; }
-                    return get('intf.wireguardAddresses').join(',');
-                },
-                set: function (value) {
-                    this.set('intf.wireguardAddresses', value ? value.replace(/\s/g,'').split(',') : null);
-                }
-            }
+            activeCard: 'wg-conf',
+            // the first peer of wg interface, populated on init
+            peer: null
         }
     },
 
+    scrollable: true,
     layout: 'vbox',
 
     items: [{
         xtype: 'formpanel',
-        width: 416,
+        width: 400,
         bind: {
             flex: '{isDialog ? 1 : "auto"}'
         },
@@ -38,75 +27,41 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             xtype: 'component',
             padding: '16 0',
             style: 'font-weight: 100; font-size: 20px;',
-            html: 'Interface'
+            html: 'VPN Tunnel Configuration'
         }, {
-            /**
-             * wg private key, generated on creation
-             * cannot be change once created
-             */
-            xtype: 'component',
-            margin: '0 0 10 0',
+            xtype: 'textfield',
+            name: 'host',
+            label: 'Remote endpoint address',
+            placeholder: 'enter address ...',
+            clearable: false,
+            autoComplete: false,
+            labelAlign: 'top',
+            flex: 1,
             bind: {
-                html: '<span style="color: rgba(17, 17, 17, 0.54)">Private key</span> <br/> <span style="color: #555; font-family: monospace; font-weight: bold;">{intf.wireguardPrivateKey}</span>'
+                value: '{peer.host}',
+                required: '{intf.type === "WIREGUARD"}',
+                disabled: '{intf.type !== "WIREGUARD"}'
             }
         }, {
-            xtype: 'containerfield',
-            layout: {
-                type: 'hbox',
+            xtype: 'textfield',
+            name: 'publicKey',
+            label: 'Remote endpoint public key',
+            labelAlign: 'top',
+            clearable: false,
+            autoComplete: false,
+            placeholder: 'enter public key ...',
+            flex: 1,
+            bind: {
+                value: '{peer.publicKey}',
+                required: '{intf.type === "WIREGUARD"}',
+                disabled: '{intf.type !== "WIREGUARD"}'
             },
-            items: [{
-                xtype: 'textfield',
-                name: 'wireguardAddresses',
-                label: 'Address',
-                placeholder: 'enter address ...',
-                clearable: false,
-                autoComplete: false,
-                labelAlign: 'top',
-                flex: 1,
-                bind: {
-                    value: '{_wireguardAddresses}',
-                    required: '{intf.type === "WIREGUARD"}',
-                    disabled: '{intf.type !== "WIREGUARD"}'
-                },
-                validators: 'ipv4expression'
-            }, {
-                xtype: 'numberfield',
-                name: 'wireguardPort',
-                width: 100,
-                margin: '0 0 0 32',
-                label: 'Listen Port',
-                labelAlign: 'top',
-                clearable: false,
-                autoComplete: false,
-                placeholder: 'enter port ...',
-                bind: {
-                    value: '{intf.wireguardPort}',
-                    required: '{intf.type === "WIREGUARD"}',
-                    disabled: '{intf.type !== "WIREGUARD"}'
-                },
-                validators: 'port',
+            validators: [function (val) {
+                if (val.length !== 44 || val.indexOf(' ') >= 0) {
+                    return 'Invalid base64 key value'
+                }
+                return true;
             }]
-        }, {
-            xtype: 'container',
-            margin: '32 0 16 0',
-            layout: {
-                type: 'hbox',
-                align: 'middle'
-            },
-
-            items: [{
-                xtype: 'component',
-                flex: 1,
-                style: 'font-weight: 100; font-size: 20px;',
-                html: 'Peers'
-            }, {
-                xtype: 'button',
-                text: 'Add Peer',
-                handler: 'addPeer'
-            }]
-        }, {
-            xtype: 'container',
-            itemId: 'wg-peers'
         }]
     }],
 
@@ -115,158 +70,33 @@ Ext.define('Mfw.settings.interface.Wireguard', {
             var vm = view.getViewModel(),
                 intf = vm.get('intf');
 
-
+            /**
+             * because bindings cannot handle arrays
+             * set a new bind on the unique first wireguard interface peer
+             */
+            vm.set('peer', intf.wireguardPeers().first());
 
             /**
-             * when creating a new wireguard interface
-             * pre-generate the private key
+             * because wireguard backend requires intf 'device' to be set
+             * just gave it the same value as the name
+             * only when creating a new interface!
              */
             if (vm.get('isNew')) {
-                var privateKey = btoa(Math.random().toFixed(32).substr(2));
-                intf.set('wireguardPrivateKey', privateKey);
+                vm.bind('{intf.name}', function(name) {
+                    intf.set('device', name);
+                });
             }
-            this.updatePeers();
-        },
-
-        updatePeers: function () {
-            var me = this,
-                vm = me.getViewModel(),
-                peers = vm.get('intf').wireguardPeers();
-
-            me.getView().down('#wg-peers').removeAll()
-
-            peers.each(function (peer, idx) {
-                me.getView().down('#wg-peers').add(me.peerCmp(peer, idx));
-            })
-        },
-
-        /**
-         * Creates editable peer component
-         * It won't handle bindings so any change will triger a manual update
-         * of underlaying viewmodel peer
-         * @param {*} peer
-         * @param {*} idx
-         */
-        peerCmp: function (peer, idx) {
-            var me = this,
-                peers = me.getViewModel().get('intf').wireguardPeers();
-
-            return {
-                xtype: 'container',
-                items: [{
-                    xtype: 'container',
-                    margin: '0 0 16 0',
-                    layout: {
-                        type: 'hbox',
-                        align: 'top'
-                    },
-                    items: [{
-                        xtype: 'component',
-                        flex: 1,
-                        html: '<span style="color: rgba(17, 17, 17, 0.54)">Public key</span> <br/> <span style="color: #777; font-family: monospace; font-weight: bold;">' + peer.get('publicKey') + '</span> <br/>' +
-                              '<span style="color: rgba(17, 17, 17, 0.54)">Preshared key</span> <br/> <span style="color: #777; font-family: monospace; font-weight: bold;">' + peer.get('presharedKey') + '</span>'
-                    }, {
-                        xtype: 'button',
-                        iconCls: 'md-icon-clear',
-                        tooltip: 'Remove Peer',
-                        idx: idx,
-                        handler: 'removePeer'
-                    }]
-                }, {
-                    xtype: 'textfield',
-                    label: 'Allowed IPs (comma-separated list of CIDR addresses)',
-                    value: peer.get('allowedIps'),
-                    // maxRows: 2,
-                    placeholder: 'e.g. 1.2.3.4/32',
-                    clearable: false,
-                    labelAlign: 'top',
-                    validators: 'ipv4expression',
-                    listeners: {
-                        change: function (field, value) {
-                            // transform comma-separated string to array
-                            peers.getAt(idx).set('allowedIps', value.replace(/\s/g, '').split(','));
-                        }
-                    }
-                }, {
-                    xtype: 'containerfield',
-                    layout: {
-                        type: 'hbox',
-                    },
-                    items: [{
-                        xtype: 'textfield',
-                        flex: 1,
-                        label: 'Hostname (endpoint)',
-                        labelAlign: 'top',
-                        placeholder: 'enter hostname ...',
-                        clearable: false,
-                        autoComplete: false,
-                        listeners: {
-                            change: function (field, value) {
-                                peers.getAt(idx).set('host', value);
-                            }
-                        }
-                    }, {
-                        xtype: 'numberfield',
-                        width: 100,
-                        margin: '0 0 0 32',
-                        label: 'Port',
-                        labelAlign: 'top',
-                        clearable: false,
-                        autoComplete: false,
-                        placeholder: 'enter port ...',
-                        validators: 'port',
-                        listeners: {
-                            change: function (field, value) {
-                                peers.getAt(idx).set('host', value);
-                            }
-                        }
-                    }]
-                }, {
-                    xtype: 'component',
-                    margin: '16 0',
-                    html: '<hr />'
-                }]
-            }
-        },
-
-        /**
-         * adds a new peer
-         */
-        addPeer: function () {
-            var me = this,
-                vm = me.getViewModel(),
-                peers = vm.get('intf').wireguardPeers()
 
             /**
-             * the keys should be generated from backend and cannot be changed
-             * once created
+             * attempt not to show field errors on form initialization
+             * as the user hasn't done any input yet
+             * - requires fields to have a "name"
+             * - it should be done after the initial binding occurs (which triggers change event)
+             * - it still requires a small delay to be effective
              */
-            var publicKey = btoa(Math.random().toFixed(32).substr(2)),
-                presharedKey = btoa(Math.random().toFixed(32).substr(2));
-
-            peers.add({
-                publicKey: publicKey,
-                presharedKey: presharedKey,
-                allowedIps: [], // default - matches all IPv4 addresses
-                host: '',
-                port: ''
-            })
-
-            // update the peers to keep consistent indexes
-            me.updatePeers();
-        },
-
-        /**
-         * removes existing peer
-         * @param {*} btn
-         */
-        removePeer: function (btn) {
-            var me = this,
-                peers = me.getViewModel().get('intf').wireguardPeers()
-
-            peers.removeAt(btn.idx);
-            // update the peers to keep consistent indexes
-            me.updatePeers();
+            vm.bind('{intf}', function() {
+                Ext.defer(function () { view.down('formpanel').clearErrors(); }, 50);
+            });
         }
     }
 });

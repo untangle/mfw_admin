@@ -4,7 +4,29 @@ Ext.define('Mfw.settings.network.Interface', {
 
     layout: 'fit',
 
-    _title: 'Interface', // used in modified changes popup
+    header: {
+        padding: '0 8 0 16'
+    },
+
+    bind: {
+        title: '{isNew ? "Add" : "Edit"} Interface',
+    },
+
+    tools: [{
+        xtype: 'button',
+        text: 'Cancel',
+        iconCls: 'x-fa fa-times',
+        cls: 'btn-tool',
+        handler: 'onCancel'
+    }, {
+        xtype: 'button',
+        bind: {
+            text: '{isNew ? "Add" : "Save"}',
+        },
+        cls: 'btn-tool',
+        iconCls: 'md-icon-save',
+        handler: 'onSave'
+    }],
 
     viewModel: {
         data: {
@@ -157,7 +179,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: 'New {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "Wireguard" : "" } Interface',
+                    html: 'Add {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "WireGuard" : "" } Interface',
                     hidden: '{!isNew}'
                 }
             }, {
@@ -232,6 +254,39 @@ Ext.define('Mfw.settings.network.Interface', {
                         }
                     }]
                 }, {
+                    // WireGuard public key
+                    xtype: 'container',
+                    margin: 8,
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    hidden: true,
+                    bind: {
+                        hidden: '{intf.type !== "WIREGUARD"}'
+                    },
+                    items: [{
+                        /**
+                         * the key is dummy generated in UI
+                         * it should be retreived via an API status call (see MFW-940)
+                         */
+                        xtype: 'component',
+                        flex: 1,
+                        bind: {
+                            html: '<div style="color: rgba(17, 17, 17, 0.54)">Public key</div>' +
+                                '<div style="color: #555; margin-top: 8px;">' +
+                                '{isNew ? "(Public key can be viewed after creating the interface)" : "' + btoa(Math.random().toFixed(32).substr(2)) + '"}'
+                                + '</div>',
+                        }
+                    },
+                    // copy to clipboard hidden until the public key feature will be in place
+                    // {
+                    //     xtype: 'button',
+                    //     iconCls: 'x-far fa-copy',
+                    //     tooltip: 'Copy to Clipboard'
+                    // }
+                ]
+                }, {
                     xtype: 'selectfield',
                     label: 'Bridged To',
                     placeholder: 'Select bridge ...',
@@ -281,9 +336,11 @@ Ext.define('Mfw.settings.network.Interface', {
                         bodyAlign: 'start',
                         margin: '0 32 0 0',
                         hidden: true,
+                        disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.configType !== "ADDRESSED"}'
+                            hidden: '{intf.configType !== "ADDRESSED"}',
+                            disabled: '{intf.type === "WIREGUARD"}'
                         }
                     }, {
                         xtype: 'checkbox',
@@ -500,42 +557,6 @@ Ext.define('Mfw.settings.network.Interface', {
                 }
             }]
         }]
-    }, {
-        // toolbar shown in ADMIN context
-        xtype: 'toolbar',
-        docked: 'bottom',
-        hidden: true,
-        bind: {
-            hidden: '{isDialog}'
-        },
-        items: [{
-            text: 'Save',
-            iconCls: 'md-icon-save',
-            ui: 'action',
-            handler: 'onSave'
-        }]
-    }, {
-        // toolbar shown in SETUP context
-        xtype: 'toolbar',
-        docked: 'bottom',
-        hidden: true,
-        bind: {
-            hidden: '{!isDialog}'
-        },
-        items: [{
-            xtype: 'component',
-            flex: 1
-        }, {
-            text: 'Cancel',
-            margin: '0 16 0 0',
-            handler: 'onCancel'
-        }, {
-            bind: {
-                text: '{isNew ? "Create" : "Update"}',
-            },
-            ui: 'action',
-            handler: 'onSave'
-        }]
     }],
 
     controller: {
@@ -705,7 +726,11 @@ Ext.define('Mfw.settings.network.Interface', {
             intf.reject();
 
             if (dialog) {
+                // if in a dialog just close it
                 dialog.destroy();
+            } else {
+                // if in admin editor redirect to interfaces grid
+                Mfw.app.redirectTo('settings/network/interfaces');
             }
         },
 
@@ -807,6 +832,8 @@ Ext.define('Mfw.settings.network.Interface', {
                     }
                 },
                 failure: function () {
+                    // interfaces store have to be reloaded on sync failure too
+                    interfacesStore.reload();
                     console.warn('Unable to save interfaces!');
                 }
             });

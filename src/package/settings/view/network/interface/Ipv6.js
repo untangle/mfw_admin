@@ -273,16 +273,32 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                  * IPv6 SLAAC config end
                  */
 
-            }, {
-                xtype: 'checkbox',
-                boxLabel: '<strong>Send router advertisements</strong>',
+            }, {                    
+                xtype: 'containerfield',
                 bodyAlign: 'start',
-                margin: '16 0',
-                hidden: true,
-                bind: {
-                    checked: '{intf.routerAdvertisements}',
-                    hidden: '{intf.v6ConfigType === "DISABLED"}'
-                }
+                layout: 'hbox',
+                defaults: {
+                    clearable: false
+                },
+                items: [{
+                    xtype: 'checkbox',
+                    boxLabel: '<strong>Send router advertisements</strong>',
+                    hidden: true,
+                    margin: '16 0',
+                    bind: {
+                        checked: '{intf.routerAdvertisements}',
+                        hidden: '{intf.v6ConfigType === "DISABLED"}'
+                    }
+                }, {
+                    xtype: 'checkbox',
+                    boxLabel: '<strong>DHCPv6 Relay</strong>',
+                    hidden: true,
+                    margin: '16 16',
+                    bind: {
+                        checked: '{intf.v6RelayEnabled}',
+                        hidden: '{!intf.wan || intf.v6ConfigType === "DISABLED"}'
+                    }
+                } ]
             }, {
                 xtype: 'button',
                 hidden: true,
