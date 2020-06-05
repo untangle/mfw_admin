@@ -454,10 +454,10 @@ Ext.define('Mfw.Table', {
                 editable: true,
                 typeAhead: true,
                 anyMatch: true,
-                store: 'applicationIds',
+                store: 'classifyapplications',
                 queryMode: 'local',
-                valueField: 'value',
-                displayField: 'text'
+                valueField: 'guid',
+                displayField: 'guid'
             }; break;
             case 'application_category':
             case 'application_category_inferred':
@@ -467,9 +467,9 @@ Ext.define('Mfw.Table', {
                     editable: true,
                     typeAhead: true,
                     anyMatch: true,
-                    store: 'applicationCategories',
+                    store: 'classifycategories',
                     queryMode: 'local',
-                    valueField: 'value',
+                    valueField: 'text',
                     displayField: 'text'
                 }; break;
             default: break;
