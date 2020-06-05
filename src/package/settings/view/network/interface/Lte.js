@@ -92,6 +92,7 @@ Ext.define('Mfw.settings.interface.Lte', {
                     xtype: 'selectfield',
                     label: 'Network',
                     margin: '0 16 0 0',
+                    maxWidth: '150',
                     options: Map.options.simNetworks,
                     placeholder: 'Select network provider ...',
                     forceSelection: true,
@@ -109,7 +110,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     bind: {
                         value: '{intf.simApn}',
                         required: '{intf.type === "WWAN"}',
-                        disabled: '{intf.type !== "WWAN" || intf.simNetwork}'
+                        disabled: '{intf.type !== "WWAN" || intf.simNetwork}',
+                        hidden: '{intf.simApn === "any"}'
                     }
                 }]
             },
