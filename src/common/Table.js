@@ -469,8 +469,21 @@ Ext.define('Mfw.Table', {
                     anyMatch: true,
                     store: 'classifycategories',
                     queryMode: 'local',
-                    valueField: 'text',
-                    displayField: 'text'
+                    valueField: 'name',
+                    displayField: 'name'
+                }; break;
+            case 'application_name':
+            case 'application_name_inferred':
+                field = {
+                    xtype: 'combobox',
+                    placeholder: 'Select or type a value ...',
+                    editable: true,
+                    typeAhead: true,
+                    anyMatch: true,
+                    store: 'classifyapplications',
+                    queryMode: 'local',
+                    valueField: 'name',
+                    displayField: 'name'
                 }; break;
             default: break;
         }
