@@ -100,17 +100,6 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
         operators: ['==', '!='],
-        field: {
-            xtype: 'combobox',
-            placeholder: 'Select or type a value ...',
-            editable: true,
-            typeAhead: true,
-            anyMatch: true,
-            store: 'classifyapplications',
-            queryMode: 'local',
-            valueField: 'description',
-            displayField: 'description'
-        },
         disableOnFirstPacket: true
     }, {
         type:'APPLICATION_ID_INFERRED',
