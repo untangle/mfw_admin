@@ -154,23 +154,12 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_ID_INFERRED',
+        type:'APPLICATION_PROTOCHAIN',
         category: 'Application',
         text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
-        field: {
-            xtype: 'combobox',
-            placeholder: 'Select or type a value ...',
-            editable: true,
-            typeAhead: true,
-            anyMatch: true,
-            store: 'classifyapplications',
-            queryMode: 'local',
-            valueField: 'guid',
-            displayField: 'guid'
-        }
+        disableOnFirstPacket: true
     },  {
         type:'APPLICATION_CONFIDENCE_INFERRED',
         category: 'Application',
