@@ -151,6 +151,12 @@ Ext.define('Mfw.settings.interface.OpenVpn', {
                         disabled: '{intf.type !== "OPENVPN" || !intf.openvpnUsernamePasswordEnabled}'
                     }
                 }]
+            }, {
+                xtype: 'checkbox',
+                boxLabel: '<strong>Use Peer DNS</strong>',
+                margin: '16 0 0 0',
+                bodyAlign: 'left',
+                bind: '{intf.openvpnPeerDns}',
             }]
         }]
     }],
