@@ -29,14 +29,36 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Name (Inferred)'.t(),
         description: 'Application Name (Inferred) description ...',
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            placeholder: 'Select or type a value ...',
+            editable: true,
+            typeAhead: true,
+            anyMatch: true,
+            store: 'classifyapplications',
+            queryMode: 'local',
+            valueField: 'name',
+            displayField: 'name'
+        }
     }, {
         type:'APPLICATION_NAME',
         category: 'Application',
         text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
         disableOnFirstPacket: true,
-        operators: ['==', '!=']
+        operators: ['==', '!='],
+        field: {
+            xtype: 'combobox',
+            placeholder: 'Select or type a value ...',
+            editable: true,
+            typeAhead: true,
+            anyMatch: true,
+            store: 'classifyapplications',
+            queryMode: 'local',
+            valueField: 'name',
+            displayField: 'name'
+        }
     }, {
         type:'APPLICATION_CATEGORY_INFERRED',
         category: 'Application',
@@ -49,10 +71,10 @@ Ext.define('Mfw.settings.Conditions', {
             editable: true,
             typeAhead: true,
             anyMatch: true,
-            store: 'applicationCategories',
+            store: 'classifycategories',
             queryMode: 'local',
-            valueField: 'value',
-            displayField: 'text',
+            valueField: 'name',
+            displayField: 'name',
         }
     }, {
         type:'APPLICATION_CATEGORY',
@@ -67,10 +89,10 @@ Ext.define('Mfw.settings.Conditions', {
             editable: true,
             typeAhead: true,
             anyMatch: true,
-            store: 'applicationCategories',
+            store: 'classifycategories',
             queryMode: 'local',
-            valueField: 'value',
-            displayField: 'text',
+            valueField: 'name',
+            displayField: 'name',
         }
     }, {
         type:'APPLICATION_DETAIL',
@@ -91,10 +113,10 @@ Ext.define('Mfw.settings.Conditions', {
             editable: true,
             typeAhead: true,
             anyMatch: true,
-            store: 'applicationIds',
+            store: 'classifyapplications',
             queryMode: 'local',
-            valueField: 'value',
-            displayField: 'text'
+            valueField: 'guid',
+            displayField: 'guid'
         }
     }, {
         type:'APPLICATION_ID',
@@ -109,10 +131,10 @@ Ext.define('Mfw.settings.Conditions', {
             editable: true,
             typeAhead: true,
             anyMatch: true,
-            store: 'applicationIds',
+            store: 'classifyapplications',
             queryMode: 'local',
-            valueField: 'value',
-            displayField: 'text'
+            valueField: 'guid',
+            displayField: 'guid'
         }
     }, {
         type:'APPLICATION_PROTOCHAIN_INFERRED',
@@ -121,7 +143,7 @@ Ext.define('Mfw.settings.Conditions', {
         description: 'Application Protochain (Inferred) description ...',
         operators: ['==', '!=']
     }, {
-        type:'APPLICATION_ID_INFERRED',
+        type:'APPLICATION_PROTOCHAIN',
         category: 'Application',
         text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
