@@ -32,6 +32,7 @@ Ext.define('Mfw.settings.routing.WanPolicies', {
         text: 'Policy Id',
         dataIndex: 'policyId',
         align: 'right',
+        hidden: true,
         width: 80,
         groupable: false
     }, {

@@ -176,6 +176,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         text: 'Id',
         dataIndex: 'ruleId',
         menuDisabled: true,
+        hidden: true,
         resizable: false,
         width: 44,
         align: 'right',
