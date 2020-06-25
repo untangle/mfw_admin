@@ -9,7 +9,7 @@ Ext.define('Ext.data.validator.PortExpression', {
 
     validate: function (value) {
         var matcher = new RegExp('^([0-9-, ]+)$'), // generic matcher
-            portMatcher = new RegExp('^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$'),
+            portMatcher = new RegExp('^()([1-9]|[1-5]?[0-9]{2,4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$'),
             message,
             range;
 
