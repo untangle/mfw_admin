@@ -631,11 +631,25 @@ Ext.define('Mfw.Renderer', {
     },
 
     ipv6: function (value, record) {
-        var confType = record.get('configType');
+        var status = record.get('_status'),
+            confType = record.get('configType'),
+            v6ConfType = record.get('v6ConfigType'),
+            strout = [];
+
         if (confType === 'BRIDGED') {
             return '-';
         }
-        return value || '-';
+
+        if (v6ConfType) {
+            strout.push(confType);
+        }
+        if (status && status.ip6Addr) {
+            strout.push(status.ip6Addr.join(','));
+        }
+        if (strout.length === 0) {
+            return '-';
+        }
+        return strout.join(', ');
     }
 
 });
