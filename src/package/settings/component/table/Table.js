@@ -54,6 +54,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         sortablelist: true
     },
 
+    rowNumbers: {
+        text: 'Order'
+    },
     emptyText: 'No rules defined!',
     scrollable: true,
     sortable: false,
@@ -176,6 +179,7 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         text: 'Id',
         dataIndex: 'ruleId',
         menuDisabled: true,
+        hidden: true,
         resizable: false,
         width: 44,
         align: 'right',
