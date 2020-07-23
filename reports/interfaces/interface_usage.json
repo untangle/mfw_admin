@@ -15,6 +15,11 @@
     "querySeries": {
         "timeIntervalSeconds": 60
     },
+    "conditions": [{
+        "column": "is_wan",
+        "operator": "EQ",
+        "value": "1"
+    }],
     "rendering": {
         "type": "spline",
         "lineWidth": 2,
