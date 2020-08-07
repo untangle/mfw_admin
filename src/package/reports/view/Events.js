@@ -14,6 +14,15 @@ Ext.define('Mfw.reports.Events', {
         plugins: {
             gridfilters: true
         },
+        groupHeader: {
+            xtype: 'itemheader',
+            tpl: '{html} ({count})',
+            // try yo put expand/collapse icon on the left side (not working)
+            toolDefaults: {
+                xtype: 'tool',
+                zone: 'start'
+            },
+        },
         items: [{
             xtype: 'menu',
             anchor: true,
@@ -269,8 +278,8 @@ Ext.define('Mfw.reports.Events', {
                 vm.set({
                     recordsTotal: 0,
                     recordsFiltered: 0
-                });                
-                
+                });
+
                 //Pass the limit into the LIMIT param for events
                 record.data.queryEvents.limit = limit;
 
@@ -367,6 +376,8 @@ Ext.define('Mfw.reports.Events', {
         showContextMenu: function (grid, location) {
             var me = this;
             if (me.isWidget) { return; }
+            // do not show context menu on group headers
+            if (!location.cell) { return; }
 
             var cell = location.cell,
                 value = cell.getValue(),

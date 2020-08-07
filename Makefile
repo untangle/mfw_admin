@@ -86,9 +86,10 @@ LIST_FILES_FUNCTION = $(shell grep -vE '^\#' $(1) | while read line ; do echo -n
 UNZIP_SUBSET_FUNCTION = @unzip -o $(1) $(call LIST_FILES_FUNCTION,$(2)) -d $(3)
 
 # ExtJS
-EXTJS_VERSION := 7.0.0
+EXTJS_VERSION := 7.2.0
  # the folder name inside the archive which now seems to differ
-EXTJS_FULL_VERSION := 7.0.0.156
+ # deprecated as it's not the case for version 7.2.0
+ # EXTJS_FULL_VERSION := 7.0.0.156
 EXTJS_ARCHIVE := ext-$(EXTJS_VERSION).zip
 EXTJS_URL := $(RESOURCES_BASE_URL)/$(EXTJS_ARCHIVE)
 EXTJS_FILE := $(DOWNLOADS_DIR)/$(EXTJS_ARCHIVE)
@@ -178,7 +179,7 @@ moment-stage: $(MOMENT_FILE)
 	@unzip -o $(MOMENT_FILE) -d $(STAGING_DIR)/moment
 
 extjs-install: extjs-stage dir
-	cp -r $(STAGING_DIR)/ext-$(EXTJS_FULL_VERSION)/build $(STATIC_DIR)/res/lib/ext
+	cp -r $(STAGING_DIR)/ext-$(EXTJS_VERSION)/build $(STATIC_DIR)/res/lib/ext
 
 highcharts-install: highcharts-stage highcharts-map-module-stage highcharts-map-data-stage dir
 	cp -r $(STAGING_DIR)/code $(STATIC_DIR)/res/lib/highcharts
