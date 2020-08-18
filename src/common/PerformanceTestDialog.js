@@ -90,7 +90,7 @@ Ext.define('Mfw.PerformanceTestDialog', {
             // object holding test results for each device/interface
             me._result = {};
             Ext.Array.each(view.getInterfaces(), function (intf) {
-                me._result[intf.get('device')] = {
+                me._result[intf.get('l3device')] = {
                     tested: false,
                     success: null,
                     result: null
