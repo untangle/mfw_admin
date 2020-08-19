@@ -90,7 +90,10 @@ Ext.define('Mfw.PerformanceTestDialog', {
             // object holding test results for each device/interface
             me._result = {};
             Ext.Array.each(view.getInterfaces(), function (intf) {
-                me._result[intf.get('l3device')] = {
+
+                // Use the L3 Device from the status API for passing to the test
+                me._result[intf.get('device')] = {
+                    testingDevice: intf.get('_status').l3device,
                     tested: false,
                     success: null,
                     result: null
@@ -108,19 +111,20 @@ Ext.define('Mfw.PerformanceTestDialog', {
             // cycle to all testable interfaces and until none is left
             Ext.Object.each(me._result, function(key, value) {
                 if (!value.tested && !device) {
-                    device = key;
+                    name = key;
+                    device = value.testingDevice;
                 }
             });
             if (device) {
                 // if a device not tested, start testing
-                me.runTestForDevice(device);
+                me.runTestForDevice(name, device);
             } else {
                 // all devices tested, process results
                 me.processResult();
             }
         },
 
-        runTestForDevice: function (device) {
+        runTestForDevice: function (name, device) {
             var me = this,
                 view = me.getView(),
                 vm = me.getViewModel(),
@@ -131,7 +135,7 @@ Ext.define('Mfw.PerformanceTestDialog', {
             }
 
             vm.set({
-                device: device,
+                device: name,
                 progress: 0
             });
 
@@ -166,7 +170,8 @@ Ext.define('Mfw.PerformanceTestDialog', {
                 timeout: 60000, // full minute timeout for the call
                 success: function (response) {
                     var result = Ext.JSON.decode(response.responseText, true);
-                    me._result[device] = {
+                    me._result[name] = {
+                        testingDevice: device,
                         tested: true,
                         success: true,
                         result: result
@@ -175,7 +180,8 @@ Ext.define('Mfw.PerformanceTestDialog', {
                 failure: function (response) {
                     var result = Ext.JSON.decode(response.responseText, true);
 
-                    me._result[device] = {
+                    me._result[name] = {
+                        testingDevice: device,
                         tested: true,
                         success: false,
                         result: result
