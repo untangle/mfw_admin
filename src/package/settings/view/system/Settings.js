@@ -154,6 +154,32 @@ Ext.define('Mfw.settings.system.Settings', {
             handler: 'onFactoryReset'
         }]
 
+    }, {
+        xtype: 'formpanel',
+        layout: 'vbox',
+        width: 300,
+        padding: 0,
+        defaults: {
+            labelAlign: 'top',
+            clearable: false,
+            required: true
+        },
+        items: [{
+            xtype: 'component',
+            margin: '16 0 0 0',
+            html: '<h2 style="font-weight: 400;">Reboot/Shutdown</h2>'
+        }],
+        buttons: [{
+            text: 'Reboot',
+            ui: 'action',
+            margin: '0 16 0 0',
+            handler: 'onReboot'
+        }, {
+            text: 'Shutdown',
+            ui: 'decline alt',
+            handler: 'onShutdown'
+        }]
+
     }],
 
     // buttons: {
@@ -363,6 +389,73 @@ Ext.define('Mfw.settings.system.Settings', {
                             callback: function () {
                                 Mfw.app.setAccount(null);
                                 document.location.href = '/setup/';
+                            }
+                        });
+                    }
+                }]
+            });
+        },
+
+        /**
+         * Reboots the system
+         * It will wait until it's back online
+         */
+        onReboot: function () {
+            Ext.Msg.show({
+                title: 'Reboot',
+                width: 450,
+                message: 'Are you sure you want to reboot system now?',
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'Cancel',
+                    handler: function () { this.up('messagebox').hide(); }
+                }, {
+                    text: 'YES',
+                    ui: 'action',
+                    margin: '0 0 0 16',
+                    handler: function () {
+                        var dialog = this.up('messagebox');
+                        dialog.down('toolbar').hide();
+                        dialog.setMessage('Please wait! System is rebooting ... <i class="fa fa-spinner fa-spin fa-fw"></i><br/><br/><br/>');
+                        Ext.Ajax.request({
+                            url: '/api/reboot',
+                            method: 'POST',
+                            success: function () {
+                                // defer a few seconds the online check after reboot initiated
+                                Ext.defer(Util.checkOnlineStatus, 3000);
+                            }
+                        });
+                    }
+                }]
+            });
+        },
+
+        /**
+         * Shutsdown the system
+         */
+        onShutdown: function () {
+            Ext.Msg.show({
+                title: 'Shutdown',
+                width: 450,
+                message: 'Are you sure you want to shutdown system now?',
+                showAnimation: null,
+                hideAnimation: null,
+                buttons: [{
+                    text: 'Cancel',
+                    handler: function () { this.up('messagebox').hide(); }
+                }, {
+                    text: 'YES',
+                    ui: 'action',
+                    margin: '0 0 0 16',
+                    handler: function () {
+                        var dialog = this.up('messagebox');
+                        Ext.Ajax.request({
+                            url: '/api/shutdown',
+                            method: 'POST',
+                            success: function () {
+                                dialog.down('toolbar').hide();
+                                dialog.setMessage('Shutdown procedure initiated. You may close this browser! <br/><br/><br/>');
                             }
                         });
                     }
