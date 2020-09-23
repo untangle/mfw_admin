@@ -5,6 +5,15 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     onAddInterface: function (mItem) {
         var me = this, type = mItem.type, newIntf;
 
+        if (type === 'VLAN') {
+            newIntf = Ext.create('Mfw.model.Interface', {
+                type: 'VLAN',
+                configType: 'BRIDGED',
+                wan: false,
+                boundInterfaceId: 0,
+            })
+        }
+
         if (type === 'OPENVPN') {
             newIntf = Ext.create('Mfw.model.Interface', {
                 type: 'OPENVPN',
