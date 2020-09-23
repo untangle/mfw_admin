@@ -83,13 +83,17 @@ Ext.define('Mfw.settings.network.Interface', {
                 // all types
                 var options = [
                     { text: 'Addressed', value: 'ADDRESSED' },
-                    { text: 'Bridged',   value: 'BRIDGED' }
                 ];
                 if (get('intf.type') === 'OPENVPN') {
-                    options = [
-                        { text: 'Addressed', value: 'ADDRESSED' }
-                    ];
+                    //Openvpn does not have bridged
+
                 }
+                else if (get('intf.type') === 'VLAN') {
+                    options.push({text: 'Bridged to Parent',   value: 'BRIDGED'})
+                } else {
+                    options.push({ text: 'Bridged',   value: 'BRIDGED' })
+                }
+
                 return options;
             },
 
