@@ -183,8 +183,13 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                     },{
                         text: 'WireGuard VPN',
                         type: 'WIREGUARD',
+                        handler: 'onAddInterface',
+                        hidden: true
+                    }, {
+                        text: 'VLAN',
+                        type: 'VLAN',
                         handler: 'onAddInterface'
-                    }]
+                }]
                 }
             });
         }
