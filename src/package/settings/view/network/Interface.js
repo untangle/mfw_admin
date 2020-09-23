@@ -75,6 +75,9 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'WIREGUARD' ||
                     get('intf.type') === 'VLAN';
             },
+            _intfAddTitle: function(get) {
+                return 'Add ' + Util.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
+            },
 
             /**
              * set possible interface config types based on its type (NIC, OPENVPN)
@@ -183,7 +186,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: 'Add {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "WireGuard" : "" } Interface',
+                    html: '{_intfAddTitle}',
                     hidden: '{!isNew}'
                 }
             }, {
