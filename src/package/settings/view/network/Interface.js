@@ -88,13 +88,16 @@ Ext.define('Mfw.settings.network.Interface', {
                     { text: 'Addressed', value: 'ADDRESSED' },
                 ];
 
-                //Openvpn does not have bridged
-                if (get('intf.type') !== 'OPENVPN') {
-                    options.push({ text: 'Bridged',   value: 'BRIDGED' })
-                }
-                else if (get('intf.type') === 'VLAN') {
-                    options.push({text: 'Bridged to Parent',   value: 'BRIDGED'})
-                }
+                switch(get('intf.type')) {
+                    //Openvpn does not have bridged, but for VLAN and Default we need to append Bridged in
+                    case 'OPENVPN':
+                        break;
+                    case 'VLAN':
+                        options.push({text: 'Bridged to Parent',   value: 'BRIDGED'});
+                        break;
+                    default:
+                        options.push({ text: 'Bridged',   value: 'BRIDGED' })
+                    }
 
                 return options;
             },
@@ -302,8 +305,6 @@ Ext.define('Mfw.settings.network.Interface', {
                         required: false,
                         autoSelect: true,
                         hidden: true,
-                        // displayTpl: '{text} [ {value} ]',
-                        // itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                         bind: {
                             value: '{intf.bridgedTo}',
                             // MFW-703, show bridged to for WiFi interfaces
@@ -801,6 +802,14 @@ Ext.define('Mfw.settings.network.Interface', {
             if (vm.get('validDhcpRange')) {
                 return;
             }
+
+            /** 
+             * VLAN interfaces will set boundinterfaceid at the same time as bridged
+             */
+            if(intf.get('type') === 'VLAN') {
+                intf.set('boundInterfaceId', intf.get('bridgedTo'));
+            }
+
 
             /**
              * if in Setup Wizard just close the editor dialog
