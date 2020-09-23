@@ -317,7 +317,7 @@ Ext.define('Mfw.settings.network.Interface', {
                         hidden: true,
                         bind: {
                             options: '{_boundOptions}',
-                            value: '{intf.openvpnBoundInterfaceId}',
+                            value: '{intf.boundInterfaceId}',
                             hidden: '{intf.type !== "OPENVPN"}',
                             required: '{intf.type === "OPENVPN"}',
                         }

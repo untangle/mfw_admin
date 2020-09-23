@@ -160,7 +160,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
         { name: 'openvpnUsername',                type: 'string',  allowNull: true },
         { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
-        { name: 'openvpnBoundInterfaceId',        type: 'string',  allowNull: true },
+        { name: 'boundInterfaceId',        type: 'string',  allowNull: true },
         // ! hasOne openvpnConfFile
 
         // wireguard
