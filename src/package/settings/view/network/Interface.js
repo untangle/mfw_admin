@@ -87,14 +87,13 @@ Ext.define('Mfw.settings.network.Interface', {
                 var options = [
                     { text: 'Addressed', value: 'ADDRESSED' },
                 ];
-                if (get('intf.type') === 'OPENVPN') {
-                    //Openvpn does not have bridged
 
+                //Openvpn does not have bridged
+                if (get('intf.type') !== 'OPENVPN') {
+                    options.push({ text: 'Bridged',   value: 'BRIDGED' })
                 }
                 else if (get('intf.type') === 'VLAN') {
                     options.push({text: 'Bridged to Parent',   value: 'BRIDGED'})
-                } else {
-                    options.push({ text: 'Bridged',   value: 'BRIDGED' })
                 }
 
                 return options;
@@ -321,23 +320,10 @@ Ext.define('Mfw.settings.network.Interface', {
                         bind: {
                             options: '{_boundOptions}',
                             value: '{intf.boundInterfaceId}',
-                            hidden: '{intf.type !== "OPENVPN"}',
-                            required: '{intf.type === "OPENVPN"}',
+                            hidden: '{intf.type !== "OPENVPN" && intf.type !== "WIREGUARD"}',
+                            required: '{intf.type === "OPENVPN" || intf.type === "WIREGUARD"}',
                         }
                     },
-                    // {
-                    //     xtype: 'selectfield',
-                    //     label: 'Bound to',
-                    //     flex: 1,
-                    //     required: true,
-                    //     hidden: true,
-                    //     bind: {
-                    //         options: '{_boundOptions}',
-                    //         value: '{intf.wireguardBoundInterfaceId}',
-                    //         hidden: '{intf.type !== "WIREGUARD"}',
-                    //         required: '{intf.type === "WIREGUARD"}',
-                    //     }
-                    // },
                     {
                         xtype: 'numberfield',
                         label: 'VLAN ID',
@@ -345,9 +331,9 @@ Ext.define('Mfw.settings.network.Interface', {
                         margin: '0 0 0 38',
                         name: 'vlanid',
                         placeholder: 'enter VLAN ID ...',
-                        required: true,
                         bind: {
                             hidden: '{intf.type !== "VLAN"}',
+                            required: '{intf.type === "VLAN"}',
                             value: '{intf.vlanid}',
                         },
                         minValue: 1,
