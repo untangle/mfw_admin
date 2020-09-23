@@ -291,46 +291,68 @@ Ext.define('Mfw.settings.network.Interface', {
                     // }
                 ]
                 }, {
-                    xtype: 'selectfield',
-                    label: 'Bridged To',
-                    placeholder: 'Select bridge ...',
-                    required: false,
-                    autoSelect: true,
-                    hidden: true,
-                    // displayTpl: '{text} [ {value} ]',
-                    // itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
-                    bind: {
-                        value: '{intf.bridgedTo}',
-                        // MFW-703, show bridged to for WiFi interfaces
-                        hidden: '{intf.configType !== "BRIDGED" || intf.type === "WWAN"}',
-                        required: '{intf.configType === "BRIDGED"}',
-                        options: '{_bridgedOptions}'
+                    xtype: 'containerfield',
+                    layout: 'hbox',
+                    items: [{
+                        xtype: 'selectfield',
+                        label: 'Bridged To',
+                        placeholder: 'Select bridge ...',
+                        required: false,
+                        autoSelect: true,
+                        hidden: true,
+                        // displayTpl: '{text} [ {value} ]',
+                        // itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                        bind: {
+                            value: '{intf.bridgedTo}',
+                            // MFW-703, show bridged to for WiFi interfaces
+                            hidden: '{intf.type !== "VLAN" && intf.configType !== "BRIDGED" || intf.type === "WWAN"}',
+                            required: '{intf.configType === "BRIDGED" || intf.type === "VLAN"}',
+                            options: '{_bridgedOptions}'
+                        }
+                    }, {
+                        xtype: 'selectfield',
+                        label: 'Bound to',
+                        flex: 1,
+                        required: true,
+                        hidden: true,
+                        bind: {
+                            options: '{_boundOptions}',
+                            value: '{intf.openvpnBoundInterfaceId}',
+                            hidden: '{intf.type !== "OPENVPN"}',
+                            required: '{intf.type === "OPENVPN"}',
+                        }
+                    },
+                    // {
+                    //     xtype: 'selectfield',
+                    //     label: 'Bound to',
+                    //     flex: 1,
+                    //     required: true,
+                    //     hidden: true,
+                    //     bind: {
+                    //         options: '{_boundOptions}',
+                    //         value: '{intf.wireguardBoundInterfaceId}',
+                    //         hidden: '{intf.type !== "WIREGUARD"}',
+                    //         required: '{intf.type === "WIREGUARD"}',
+                    //     }
+                    // },
+                    {
+                        xtype: 'numberfield',
+                        label: 'VLAN ID',
+                        flex: 1,
+                        margin: '0 0 0 38',
+                        name: 'vlanid',
+                        placeholder: 'enter VLAN ID ...',
+                        required: true,
+                        bind: {
+                            hidden: '{intf.type !== "VLAN"}',
+                            value: '{intf.vlanid}',
+                        },
+                        minValue: 1,
+                        maxValue: 4094,
+                        errorTarget: 'bottom',
                     }
-                }, {
-                    xtype: 'selectfield',
-                    label: 'Bound to',
-                    required: true,
-                    hidden: true,
-                    bind: {
-                        options: '{_boundOptions}',
-                        value: '{intf.openvpnBoundInterfaceId}',
-                        hidden: '{intf.type !== "OPENVPN"}',
-                        required: '{intf.type === "OPENVPN"}',
-                    }
-                },
-                // {
-                //     xtype: 'selectfield',
-                //     label: 'Bound to',
-                //     required: true,
-                //     hidden: true,
-                //     bind: {
-                //         options: '{_boundOptions}',
-                //         value: '{intf.wireguardBoundInterfaceId}',
-                //         hidden: '{intf.type !== "WIREGUARD"}',
-                //         required: '{intf.type === "WIREGUARD"}',
-                //     }
-                // },
-                {
+                ]
+            }, {
                     xtype: 'containerfield',
                     margin: '8 0 0 4',
                     layout: 'hbox',
@@ -343,8 +365,8 @@ Ext.define('Mfw.settings.network.Interface', {
                         disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.configType !== "ADDRESSED"}',
-                            disabled: '{intf.type === "WIREGUARD"}'
+                            hidden: '{intf.configType !== "ADDRESSED" || intf.type === "VLAN"}',
+                            disabled: '{intf.type === "WIREGUARD" || intf.type === "VLAN"}'
                         }
                     }, {
                         xtype: 'checkbox',
