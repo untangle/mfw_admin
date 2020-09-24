@@ -11,6 +11,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 configType: 'BRIDGED',
                 wan: false,
                 boundInterfaceId: 0,
+                v4ConfigType: 'STATIC'
             })
         }
 
