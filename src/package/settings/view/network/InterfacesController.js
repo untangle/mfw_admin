@@ -9,7 +9,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 configType: 'ADDRESSED',
                 wan: true,
                 natEgress: true,
-                openvpnBoundInterfaceId: 0,
+                boundInterfaceId: 0,
                 openvpnUsernamePasswordEnabled: false,
                 openvpnUsername: null,
                 openvpnPasswordBase64: null
