@@ -8,9 +8,8 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         if (type === 'VLAN') {
             newIntf = Ext.create('Mfw.model.Interface', {
                 type: 'VLAN',
-                configType: 'BRIDGED',
+                configType: 'ADDRESSED',
                 wan: false,
-                boundInterfaceId: 0,
                 v4ConfigType: 'STATIC'
             })
         }
