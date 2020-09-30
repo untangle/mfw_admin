@@ -10,7 +10,8 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 type: 'VLAN',
                 configType: 'ADDRESSED',
                 wan: false,
-                v4ConfigType: 'STATIC'
+                v4ConfigType: 'STATIC',
+                natEgress: true
             })
         }
 
