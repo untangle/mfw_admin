@@ -84,7 +84,7 @@ Ext.define('Mfw.settings.view.MainController', {
             if (p1 === 'network' && p2 === 'interfaces') {
                 if (p3 !== undefined) {
                     node = tree.getStore().findNode('href', p1 + '/' + p2 + '/' + p3);
-                    intf = Ext.getStore('interfaces').findRecord('name', p3);
+                    intf = Ext.getStore('interfaces').findRecord('interfaceId', p3);
 
                     // todo, what id intf is nul ????
 

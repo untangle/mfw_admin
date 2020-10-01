@@ -109,7 +109,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             Ext.Array.each(widget.query('dataview'), function (view) {
                 view.setItemTpl(
                     '<div class="item <tpl if="wan">wan</tpl>">' +
-                    '<p>{_icon} &nbsp; <a href="#settings/network/interfaces/{name}"><b>{name}</b></a></p>' +
+                    '<p>{_icon} &nbsp; <a href="#settings/network/interfaces/{interfaceId}"><b>{name}</b></a></p>' +
                     '<tpl if="_status"><p class="ip">{_status.ip4Addr}</p></tpl>' +
                     '<p class="rate">' +
                     '<tpl if="wan">' +

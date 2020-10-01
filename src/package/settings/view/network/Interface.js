@@ -98,7 +98,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 if (get('setupContext')) {
                     return '<strong>' + name + '</strong>';
                 }
-                return '<a href="#settings/network/interfaces/' + name + '"><strong>' + name + '</strong></a>';
+                return '<a href="#settings/network/interfaces/' + get('intf.bridgedTo') + '"><strong>' + name + '</strong></a>';
             },
 
             /**

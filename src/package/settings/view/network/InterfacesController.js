@@ -51,7 +51,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
     },
 
     onEditRecord: function (grid, info) {
-        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('name'));
+        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('interfaceId'));
     },
 
     onDeleteRecord: function (grid, info) {
