@@ -28,7 +28,6 @@ Ext.define('Mfw.settings.Util', {
                 Util.sanitize(value);
             }
         });
-        // console.log(data);
         return data;
     },
 

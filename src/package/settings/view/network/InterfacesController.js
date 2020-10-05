@@ -44,7 +44,6 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         });
 
         me.intfDialog.on('destroy', function () {
-            // me.onLoad();
             me.intfDialog = null;
         });
         me.intfDialog.show();

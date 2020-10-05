@@ -558,8 +558,7 @@ Ext.define('Mfw.settings.network.Interface', {
              * Use the current bound interface to in the validator we pass to the Name field 
              */
             nameField.setValidators( function(val) {
-                    var nameMatcher = new RegExp('^[A-za-z0-9]+$'),
-                        me = this;
+                    var nameMatcher = new RegExp('^[A-za-z0-9]+$');
         
                     // if value dos not match any
                     if (!nameMatcher.test(val)) {
@@ -570,7 +569,6 @@ Ext.define('Mfw.settings.network.Interface', {
                     var existingIntf = Ext.getStore('interfaces').findRecord('name', val, 0, false, false, true);
                     
                     if(currentIntf != null && existingIntf != null && existingIntf.get('interfaceId') != currentIntf.get('interfaceId')) {
-                        console.log(existingIntf);
                         return 'Interface Name must be unique.';
                     }
     

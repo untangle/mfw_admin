@@ -48,8 +48,6 @@ Ext.define('Mfw.settings.view.MainController', {
 
         Mfw.app.viewport.setActiveItem('settings');
 
-        // tree.getStore().findNode('href', 'network/interfaces').set('text', 'Interfaces');
-
         // root settings view
         if (p1 === undefined) {
             tree.getStore().getRoot().collapseChildren(true);

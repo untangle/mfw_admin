@@ -44,7 +44,6 @@ Ext.define('Mfw.settings.view.Firewall', {
                 if (!record.isLeaf()) {
                     return record.get('text');
                 }
-                // console.log(record.get('rule').getData().conditions());
                 return record.get('text') + ' &nbsp;<i class="x-fa fa-arrow-right fa-green"></i>&nbsp; <span style="color: #777;">' + Renderer.conditionsSentence(null, record.get('rule')) + '</span>';
             }
         }]
