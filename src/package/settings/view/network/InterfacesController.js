@@ -44,14 +44,13 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         });
 
         me.intfDialog.on('destroy', function () {
-            // me.onLoad();
             me.intfDialog = null;
         });
         me.intfDialog.show();
     },
 
     onEditRecord: function (grid, info) {
-        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('name'));
+        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('interfaceId'));
     },
 
     onDeleteRecord: function (grid, info) {

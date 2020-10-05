@@ -98,7 +98,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 if (get('setupContext')) {
                     return '<strong>' + name + '</strong>';
                 }
-                return '<a href="#settings/network/interfaces/' + name + '"><strong>' + name + '</strong></a>';
+                return '<a href="#settings/network/interfaces/' + get('intf.bridgedTo') + '"><strong>' + name + '</strong></a>';
             },
 
             /**
@@ -203,11 +203,6 @@ Ext.define('Mfw.settings.network.Interface', {
                         bind: '{intf.name}',
                         maxLength: 10,
                         errorTarget: 'bottom',
-                        validators: [{
-                            type: 'format',
-                            matcher: new RegExp('^[A-za-z0-9]+$'),
-                            message: 'must be alphanumeric, without spaces'
-                        }]
                     }, {
                         xtype: 'selectfield',
                         label: 'Config Type',
@@ -553,6 +548,33 @@ Ext.define('Mfw.settings.network.Interface', {
                     }
                 }
             });
+
+
+            var form = me.getView().down('formpanel');
+            var nameField = form.getFields('name');
+            var currentIntf = vm.get('intf');
+
+            /**
+             * Use the current bound interface to in the validator we pass to the Name field 
+             */
+            nameField.setValidators( function(val) {
+                    var nameMatcher = new RegExp('^[A-za-z0-9]+$');
+        
+                    // if value dos not match any
+                    if (!nameMatcher.test(val)) {
+                        return 'Interface Name must be alphanumeric, without spaces.';
+                    }
+
+                    //See if any interfaces in the store use this name
+                    var existingIntf = Ext.getStore('interfaces').findRecord('name', val, 0, false, false, true);
+                    
+                    if(currentIntf != null && existingIntf != null && existingIntf.get('interfaceId') != currentIntf.get('interfaceId')) {
+                        return 'Interface Name must be unique.';
+                    }
+    
+                    return true;
+                }
+            )
         },
 
         selectCard: function (btn) {
