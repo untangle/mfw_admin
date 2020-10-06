@@ -50,18 +50,10 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
             grid.table.load({
                 success: function (record) {
                     // on load set records as not dirty or phantom
-                    // console.log(record.chains());
                     record.chains().commitChanges();
                     record.chains().each(function (chain) {
                         chain.rules().commitChanges();
                     });
-
-                    // record.chains().each(function (chain) {
-                    //     chain.rules().each(function (record) {
-                    //         record.dirty = false;
-                    //         record.phantom = false;
-                    //     });
-                    // });
 
                     me.selectChain(grid.getChain());
                     // me.setChainsToolbar();

@@ -316,8 +316,6 @@ Ext.define('Mfw.settings.interface.Ipv6', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            console.log(intf.v6Aliases());
-
             me.aliasesDialog = Ext.Viewport.add({
                 xtype: 'interface-ipv6aliases',
                 width: 500,

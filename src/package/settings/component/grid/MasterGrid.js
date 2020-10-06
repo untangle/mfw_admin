@@ -156,11 +156,5 @@ Ext.define('Mfw.cmp.grid.MasterGrid', {
         deselect: 'onDeselect',
         beforesave: 'beforeSave', // custom event to prepare records
         destroy: 'onDestroy'
-        // childdoubletap: function (listview, location) {
-        //     console.log(location);
-        // },
-        // customedit: function () {
-        //     console.log('here');
-        // }
     }
 });

@@ -11,7 +11,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 configType: 'ADDRESSED',
                 wan: true,
                 natEgress: true,
-                openvpnBoundInterfaceId: 0,
+                boundInterfaceId: 0,
                 openvpnUsernamePasswordEnabled: false,
                 openvpnUsername: null,
                 openvpnPasswordBase64: null
@@ -109,14 +109,13 @@ Ext.define('Mfw.settings.network.InterfacesController', {
         });
 
         me.intfDialog.on('destroy', function () {
-            // me.onLoad();
             me.intfDialog = null;
         });
         me.intfDialog.show();
     },
 
     onEditRecord: function (grid, info) {
-        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('name'));
+        Mfw.app.redirectTo('settings/network/interfaces/' + info.record.get('interfaceId'));
     },
 
     onDeleteRecord: function (grid, info) {

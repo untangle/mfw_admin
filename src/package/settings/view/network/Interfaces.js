@@ -65,7 +65,7 @@ Ext.define('Mfw.settings.network.Interfaces', {
         cell: { encodeHtml: false },
         renderer: function (value, record) {
             // return '<b>' + record.get('name') + ' </b>';
-            return '<b><a href="#settings/network/interfaces/' + value + '">' + record.get('name') + '</a></b>';
+            return '<b><a href="#settings/network/interfaces/' + record.get('interfaceId') + '">' + record.get('name') + '</a></b>';
         }
     }, {
         dataIndex: '_status',
