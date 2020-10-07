@@ -88,6 +88,9 @@ Ext.define('Mfw.model.Interface', {
         { name: 'natEgress',  type: 'boolean', allowNull: true },
         { name: 'natIngress', type: 'boolean', allowNull: true },
 
+        //VLAN
+        { name: 'vlanid', type: 'integer', allowNull: true },
+
         // IPv4
         { name: 'v4ConfigType',    type: 'string', allowNull: true }, // ["STATIC","DHCP","PPPOE","DISABLED"]
         // IPv4 STATIC
@@ -160,7 +163,7 @@ Ext.define('Mfw.model.Interface', {
         { name: 'openvpnUsernamePasswordEnabled', type: 'boolean', allowNull: true },
         { name: 'openvpnUsername',                type: 'string',  allowNull: true },
         { name: 'openvpnPasswordBase64',          type: 'string',  allowNull: true },
-        { name: 'boundInterfaceId',        type: 'string',  allowNull: true },
+        { name: 'boundInterfaceId',        type: 'integer',  allowNull: true },
         // ! hasOne openvpnConfFile
 
         // wireguard
@@ -233,14 +236,16 @@ Ext.define('Mfw.model.Interface', {
         name: 'dhcpOptions',
         associationKey: 'dhcpOptions'
     }, {
-        model: 'Mfw.model.v4Alias',
-        name: 'vrrpV4Aliases',
-        associationKey: 'vrrpV4Aliases'
-    }, {
-        model: 'Mfw.model.wireguardPeer',
+        model: 'Mfw.model.WireguardPeer',
         name: 'wireguardPeers',
         associationKey: 'wireguardPeers'
-    }],
+    }
+    // {
+    //     model: 'Mfw.model.v4Alias',
+    //     name: 'vrrpV4Aliases',
+    //     associationKey: 'vrrpV4Aliases'
+    // }
+    ],
 
     hasOne: [{
         model: 'Mfw.model.OpenVpnConfFile',

@@ -59,7 +59,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 bind: {
                     value: '{intf.v4ConfigType}',
                     options: '{_ipv4ConfigTypes}',
-                    required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN"}'
+                    required: '{intf.configType === "ADDRESSED" && intf.type !== "OPENVPN" && intf.type !== "WWAN" && intf.type !== "WIREGUARD"}'
                 }
             }, {
                 xtype: 'container',

@@ -167,6 +167,33 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             });
         }
 
+        if (g.getEnableAddInterface()) {
+            toolbarActions.push({
+                text: 'Add Interface'.t(),
+                iconCls: 'md-icon-keyboard-arrow-down',
+                align: 'right',
+                arrow: false,
+                menuAlign: 'tr-br?',
+                stretchMenu: true,
+                menu: {
+                    items: [{
+                        type: 'OPENVPN',
+                        text: Util.getNiceInterfaceTypeName('OPENVPN'),
+                        handler: 'onAddInterface'
+                    },{
+                        type: 'WIREGUARD',
+                        text: Util.getNiceInterfaceTypeName('WIREGUARD'),
+                        handler: 'onAddInterface',
+                        hidden: true
+                    }, {
+                        type: 'VLAN',
+                        text: Util.getNiceInterfaceTypeName('VLAN'),
+                        handler: 'onAddInterface'
+                }]
+                }
+            });
+        }
+
         if (g.getEnableReload() || g.getEnableImport() || g.getEnableExport() || g.getEnableReset()) {
             toolbarMenu = {
                 xtype: 'button',

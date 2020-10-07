@@ -108,5 +108,42 @@ Ext.define('Mfw.settings.Util', {
                 }
             }]
         });
+    },
+
+    /**
+     * generic method to copy a string to clipboard
+     * @param {String} str
+     */
+    copyToClipboard: function (str) {
+        // uses a hidden textarea element
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        // this executes the actual copy
+        document.execCommand('copy');
+        // remove the textarea helper
+        document.body.removeChild(el);
+    },
+
+    /**
+     * 
+     * getNiceInterfaceTypeName will parse the type and return something better for displaying on UI elements (ie: "OpenVPN" vs "OPENVPN")
+     * 
+     * @param {string} type - the type we want to get a better display of
+     */
+    getNiceInterfaceTypeName: function(type) {
+
+        switch(type) {
+            case "OPENVPN":
+                return "OpenVPN";
+            case "WIREGUARD":
+                return "WireGuard VPN";;
+            default:
+                return type;
+        }
     }
 });

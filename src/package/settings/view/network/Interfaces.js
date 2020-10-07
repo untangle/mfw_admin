@@ -8,11 +8,13 @@ Ext.define('Mfw.settings.network.Interfaces', {
     title: 'Interfaces',
 
     config: {
+        enableAdd: false,
+        enableAddInterface: true,
         enableStatusColumn: false,
         enableSave: false,
         enableManualSort: false,
-        disableDeleteCondition: '{record.wan && record.type === "NIC"}',
-        disableCopyCondition: '{record.wan}',
+        disableDeleteCondition: '{record.type === "NIC" || record.type === "WIFI" || record.type === "WWAN"}',
+        disableCopyCondition: '{record.type === "NIC" || record.type === "WIFI" || record.type === "WWAN"}',
         editor: 'interface-sheet',
         recordModel: 'Mfw.model.Interface'
     },
