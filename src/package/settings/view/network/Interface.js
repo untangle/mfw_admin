@@ -868,6 +868,14 @@ Ext.define('Mfw.settings.network.Interface', {
 
 
             /**
+             * For VLAN, set the device to the name
+             */
+            if(intf.get('type') == 'VLAN') {
+                intf.set('device', intf.get('name'));
+            }
+
+
+            /**
              * if in Setup Wizard just close the editor dialog
              * all interfaces will be updated on Continue action
              */
