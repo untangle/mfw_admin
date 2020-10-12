@@ -73,7 +73,10 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'WIFI' ||
                     get('intf.type') === 'OPENVPN' ||
                     get('intf.type') === 'WIREGUARD' ||
-                    get('intf.type') === 'VLAN';
+                    get('intf.type') === 'VLAN' && get('intf.wan') === false;
+            },
+            _intfAddTitle: function(get) {
+                return 'Add ' + Util.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
             },
 
             /**
@@ -83,13 +86,19 @@ Ext.define('Mfw.settings.network.Interface', {
                 // all types
                 var options = [
                     { text: 'Addressed', value: 'ADDRESSED' },
-                    { text: 'Bridged',   value: 'BRIDGED' }
                 ];
-                if (get('intf.type') === 'OPENVPN') {
-                    options = [
-                        { text: 'Addressed', value: 'ADDRESSED' }
-                    ];
-                }
+
+                switch(get('intf.type')) {
+                    //Openvpn does not have bridged, but for VLAN and Default we need to append Bridged in
+                    case 'OPENVPN':
+                        break;
+                    case 'VLAN':
+                        options.push({text: 'Bridged to Parent',   value: 'BRIDGED'});
+                        break;
+                    default:
+                        options.push({ text: 'Bridged',   value: 'BRIDGED' })
+                    }
+
                 return options;
             },
 
@@ -143,6 +152,24 @@ Ext.define('Mfw.settings.network.Interface', {
                     }
                 });
                 return interfaces;
+            },
+
+            /**
+             * VLAN parent interface options
+             * 
+             * Use the interfaces store to query NIC type of interfaces to be available for bridge options
+             * 
+             * returns - a list of interface options
+             */
+            _vlanParentOptions: function() {
+                var interfaces = [];
+
+                Ext.getStore('interfaces').each(function (intf) {
+                    if (intf.get('type') === 'NIC') {
+                        interfaces.push(intf);
+                    }
+                });
+                return interfaces;
             }
         }
     },
@@ -179,7 +206,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 flex: 1,
                 hidden: true,
                 bind: {
-                    html: 'Add {intf.type === "OPENVPN" ? "OpenVPN" : "" } {intf.type === "WIREGUARD" ? "WireGuard" : "" } Interface',
+                    html: '{_intfAddTitle}',
                     hidden: '{!isNew}'
                 }
             }, {
@@ -288,40 +315,101 @@ Ext.define('Mfw.settings.network.Interface', {
                     required: false,
                     autoSelect: true,
                     hidden: true,
-                    // displayTpl: '{text} [ {value} ]',
-                    // itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
                     bind: {
-                        value: '{intf.bridgedTo}',
-                        // MFW-703, show bridged to for WiFi interfaces
-                        hidden: '{intf.configType !== "BRIDGED" || intf.type === "WWAN"}',
-                        required: '{intf.configType === "BRIDGED"}',
-                        options: '{_bridgedOptions}'
-                    }
+                        hidden: '{intf.type !== "WIREGUARD"}'
+                    },
+                    items: [{
+                        /**
+                         * the key is dummy generated in UI
+                         * it should be retreived via an API status call (see MFW-940)
+                         */
+                        xtype: 'component',
+                        flex: 1,
+                        bind: {
+                            html: '<div style="color: rgba(17, 17, 17, 0.54)">Public key</div>' +
+                                '<div style="color: #555; margin-top: 8px;">' +
+                                '{isNew ? "(Public key can be viewed after creating the interface)" : "' + btoa(Math.random().toFixed(32).substr(2)) + '"}'
+                                + '</div>',
+                        }
+                    },
+                    // copy to clipboard hidden until the public key feature will be in place
+                    // {
+                    //     xtype: 'button',
+                    //     iconCls: 'x-far fa-copy',
+                    //     tooltip: 'Copy to Clipboard'
+                    // }
+                ]
                 }, {
-                    xtype: 'selectfield',
-                    label: 'Bound to',
-                    required: true,
-                    hidden: true,
+                    xtype: 'containerfield',
+                    layout: 'hbox',
                     bind: {
-                        options: '{_boundOptions}',
-                        value: '{intf.boundInterfaceId}',
-                        hidden: '{intf.type !== "OPENVPN" || intf.configType === "DISABLED"}',
-                        required: '{intf.type === "OPENVPN"}',
-                    }
-                },
-                // {
-                //     xtype: 'selectfield',
-                //     label: 'Bound to',
-                //     required: true,
-                //     hidden: true,
-                //     bind: {
-                //         options: '{_boundOptions}',
-                //         value: '{intf.wireguardBoundInterfaceId}',
-                //         hidden: '{intf.type !== "WIREGUARD"}',
-                //         required: '{intf.type === "WIREGUARD"}',
-                //     }
-                // },
-                {
+                        hidden:'{intf.type !== "VLAN"}'
+                    },
+                    items: [{
+                        xtype: 'selectfield',
+                        label: 'Interface',
+                        name: 'vlaninterface',
+                        flex: 1,
+                        queryMode: 'local',
+                        valueField: 'interfaceId',
+                        displayField: 'name',
+                        bind: {
+                            required: '{intf.type === "VLAN"}',
+                            options: '{_vlanParentOptions}',
+                            value: '{intf.boundInterfaceId}',
+                        },
+                        listeners: {
+                            select: 'handleVlanSelect'
+                        }
+                        
+                    }, {
+                            xtype: 'numberfield',
+                            label: 'VLAN ID',
+                            flex: 1,
+                            margin: '0 0 0 38',
+                            name: 'vlanid',
+                            placeholder: 'enter VLAN ID ...',
+                            bind: {
+                                required: '{intf.type === "VLAN"}',
+                                value: '{intf.vlanid}',
+                            },
+                            minValue: 1,
+                            maxValue: 4094,
+                            errorTarget: 'bottom',
+                        }
+                    ]
+                }, {
+                    xtype: 'containerfield',
+                    layout: 'hbox',
+                    items: [{
+                        xtype: 'selectfield',
+                        label: 'Bridged To',
+                        placeholder: 'Select bridge ...',
+                        required: false,
+                        autoSelect: true,
+                        hidden: true,
+                        bind: {
+                            value: '{intf.bridgedTo}',
+                            // MFW-703, show bridged to for WiFi interfaces
+                            hidden: '{intf.configType !== "BRIDGED" || intf.type === "WWAN"}',
+                            required: '{intf.configType === "BRIDGED" || intf.type === "VLAN"}',
+                            options: '{_bridgedOptions}'
+                        }
+                    }, {
+                        xtype: 'selectfield',
+                        label: 'Bound to',
+                        flex: 1,
+                        required: true,
+                        hidden: true,
+                        bind: {
+                            options: '{_boundOptions}',
+                            value: '{intf.boundInterfaceId}',
+                            hidden: '{intf.type !== "OPENVPN" && intf.type !== "WIREGUARD"}',
+                            required: '{intf.type === "OPENVPN" || intf.type === "WIREGUARD"}',
+                        }
+                    },
+                ]
+            }, {
                     xtype: 'containerfield',
                     margin: '8 0 0 4',
                     layout: 'hbox',
@@ -334,8 +422,8 @@ Ext.define('Mfw.settings.network.Interface', {
                         disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.configType !== "ADDRESSED"}',
-                            disabled: '{intf.type === "WIREGUARD"}'
+                            hidden: '{intf.configType !== "ADDRESSED" || intf.type === "VLAN" && !intf.wan}',
+                            disabled: '{intf.type === "WIREGUARD" || intf.type === "VLAN"}'
                         }
                     }, {
                         xtype: 'checkbox',
@@ -809,6 +897,15 @@ Ext.define('Mfw.settings.network.Interface', {
                 return;
             }
 
+
+            /**
+             * For VLAN, set the device to the name
+             */
+            if(intf.get('type') == 'VLAN') {
+                intf.set('device', intf.get('name'));
+            }
+
+
             /**
              * if in Setup Wizard just close the editor dialog
              * all interfaces will be updated on Continue action
@@ -909,7 +1006,22 @@ Ext.define('Mfw.settings.network.Interface', {
             intf.dhcpOptions().rejectChanges();
             if (intf.getOpenvpnConfFile()) { intf.getOpenvpnConfFile().reject(); }
             cb();
-        }
+        },
+
+        /**
+         * handleVlanSelect is called when we select an item in the VLAN 
+         * interface selection.
+         * 
+         * For WAN interfaces, we set the current interface to a WAN type so that 
+         * certain properties are hidden automatically.
+         */
+        handleVlanSelect: function(item, record) {
+            var vm = this.getViewModel();
+
+            if(record && vm) {
+                vm.set('intf.wan', record.get('wan'));
+            }
+        },
 
     }
 });
