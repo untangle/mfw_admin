@@ -49,16 +49,8 @@ Ext.define('Mfw.Renderer', {
     },
 
     interfaceIcon: function (value, record) {
-        var icon = 'fa-signal';
-        switch (record.get('type')) {
-            case 'NIC': icon = 'fa-network-wired'; break;
-            case 'WIFI': icon = 'fa-wifi'; break;
-            case 'OPENVPN':
-            case 'WIREGUARD':
-            case 'VLAN': icon = 'fa-project-diagram'; break;
-            default:
-        }
-        return '<i class="x-fa ' + icon + '"></i>';
+
+        return CommonUtil.getInterfaceIcon(record.get('type'), 20);
     },
 
     intfStatusConnected: function (status, intf) {

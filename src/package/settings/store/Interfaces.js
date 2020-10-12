@@ -41,17 +41,12 @@ Ext.define('Mfw.store.Interfaces', {
         intfNode.removeAll();
 
         this.each(function (intf) {
-            switch (intf.get('type')) {
-                case 'NIC': intfIcon = 'fa-network-wired'; break;
-                case 'WIFI': intfIcon = 'fa-wifi'; break;
-                case 'OPENVPN':
-                case 'WIREGUARD':
-                case 'VLAN': intfIcon = 'fa-project-diagram'; break;
-                default: intfIcon = 'fa-signal';
-            }
+
+            var intfIcon = CommonUtil.getInterfaceIcon(intf.get('type'), 20);
+
 
             intfNode.insertChild(idx, {
-                text: '<i class="x-fa ' + intfIcon + '" style="font-size: 13px;"></i> &nbsp; ' + intf.get('name'),
+                text: intfIcon + '&nbsp&nbsp&nbsp' + intf.get('name'),
                 key: intf.get('interfaceId'),
                 href: 'network/interfaces/' + intf.get('interfaceId'),
                 leaf: true,

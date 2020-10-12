@@ -209,16 +209,8 @@ Ext.define('Mfw.model.Interface', {
             name: '_icon',
             type: 'string',
             persist: false,
-            calculate: function (data) {
-                var icon = 'fa-signal';
-                switch (data.type) {
-                    case 'NIC': icon = 'fa-network-wired'; break;
-                    case 'WIFI': icon = 'fa-wifi'; break;
-                    case 'OPENVPN':
-                    case 'VLAN': icon = 'fa-project-diagram'; break;
-                    default:
-                }
-                return '<i class="x-fa ' + icon + '"></i>';
+            calculate: function(data) {
+                return CommonUtil.getInterfaceIcon(data.type, 16);
             }
         }
     ],
