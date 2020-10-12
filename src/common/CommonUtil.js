@@ -79,6 +79,24 @@ Ext.define('Mfw.CommonUtil', {
 
     /**
      * 
+     * getNiceInterfaceTypeName will parse the type and return something better for displaying on UI elements (ie: "OpenVPN" vs "OPENVPN")
+     * 
+     * @param {string} type - the type we want to get a better display of
+     */
+    getNiceInterfaceTypeName: function(type) {
+
+        switch(type) {
+            case "OPENVPN":
+                return "OpenVPN";
+            case "WIREGUARD":
+                return "WireGuard VPN";;
+            default:
+                return type;
+        }
+    },
+
+    /**
+     * 
      * getInterfaceIcon will return an interface icon based on the type passed as input
      * 
      * 
