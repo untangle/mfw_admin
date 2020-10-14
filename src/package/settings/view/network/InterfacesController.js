@@ -11,7 +11,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 configType: 'ADDRESSED',
                 wan: false,
                 v4ConfigType: 'STATIC',
-                natEgress: true
+                natEgress: false
             })
         }
 
