@@ -76,7 +76,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'VLAN' && get('intf.wan') === false;
             },
             _intfAddTitle: function(get) {
-                return 'Add ' + Util.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
+                return 'Add ' + CommonUtil.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
             },
 
             /**
