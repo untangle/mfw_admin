@@ -178,15 +178,15 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                 menu: {
                     items: [{
                         type: 'OPENVPN',
-                        text: Util.getNiceInterfaceTypeName('OPENVPN'),
+                        text: CommonUtil.getNiceInterfaceTypeName('OPENVPN'),
                         handler: 'onAddInterface'
                     },{
                         type: 'WIREGUARD',
-                        text: Util.getNiceInterfaceTypeName('WIREGUARD'),
+                        text: CommonUtil.getNiceInterfaceTypeName('WIREGUARD'),
                         handler: 'onAddInterface',
                     }, {
                         type: 'VLAN',
-                        text: Util.getNiceInterfaceTypeName('VLAN'),
+                        text: CommonUtil.getNiceInterfaceTypeName('VLAN'),
                         handler: 'onAddInterface'
                 }]
                 }
