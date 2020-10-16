@@ -682,7 +682,7 @@ Ext.define('Mfw.settings.network.Interface', {
              * Use the current bound interface to in the validator we pass to the Name field 
              */
             nameField.setValidators( function(val) {
-                    var nameMatcher = new RegExp('^[A-za-z0-9]+$');
+                    var nameMatcher = new RegExp('^[a-zA-Z]+\w*');
         
                     // if value dos not match any
                     if (!nameMatcher.test(val)) {
