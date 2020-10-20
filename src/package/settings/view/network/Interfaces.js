@@ -111,8 +111,14 @@ Ext.define('Mfw.settings.network.Interfaces', {
         sortable: false,
         menuDisabled: true,
         width: 80,
-        renderer: function (value) {
-            return value ? 'WAN' : '-';
+        renderer: function (value, record) {
+            configType = record.get('configType');
+
+            if(configType === 'ADDRESSED') {
+                return value ? 'WAN' : '-';
+            } else {
+                return '-';
+            }
         }
     }, {
         text: 'Config',
