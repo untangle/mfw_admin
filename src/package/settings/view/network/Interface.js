@@ -713,7 +713,7 @@ Ext.define('Mfw.settings.network.Interface', {
              * Use the current bound interface to in the validator we pass to the Name field 
              */
             nameField.setValidators( function(val) {
-                    var nameMatcher = new RegExp('^[a-zA-Z]+\w*');
+                    var nameMatcher = new RegExp('^[a-zA-Z]+[a-zA-Z0-9]*$');
         
                     // if value dos not match any
                     if (!nameMatcher.test(val)) {
@@ -1016,10 +1016,15 @@ Ext.define('Mfw.settings.network.Interface', {
          * certain properties are hidden automatically.
          */
         handleVlanSelect: function(item, record) {
-            var vm = this.getViewModel();
+            var vm = this.getViewModel(),
+                configType = record.get('configType');
 
             if(record && vm) {
-                vm.set('intf.wan', record.get('wan'));
+                if(configType === 'ADDRESSED') {
+                    vm.set('intf.wan', record.get('wan'));
+                } else {
+                    vm.set('intf.wan', false);
+                }
             }
         },
 
