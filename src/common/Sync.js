@@ -184,6 +184,74 @@ Ext.define('Mfw.Sync', {
                     }
 
                 }]
+            }, {
+                xtype: 'container',
+                hidden: true,
+                bind: {
+                    hidden: '{!confirm}'
+                },
+                items: [{
+                    xtype: 'component',
+                    style: 'font-size: 14px;',
+                    bind: {
+                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{confirm.summary}</p>'
+                    }
+                }, {
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaults: {
+                        xtype: 'button',
+                        margin: '8 16 8 0'
+                    },
+                    items: [{
+                        reference: 'confirmStackBtn',
+                        ui: 'action',
+                        text: 'More info ...',
+                        hidden: true,
+                        publishes: ['hidden'],
+                        bind: {
+                            hidden: '{!confirm || !confirm.stack}'
+                        },
+                        handler: function (btn) {
+                            btn.hide();
+                        }
+                    },{
+                        text: 'Yes',
+                        bind: {
+                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
+                        },
+                        handler: function (btn) {
+                            //Here we need to load the previous request, and set the force property to true before sending it again
+                            var vm = btn.up('sheet').getViewModel();
+                            var requestOptions = vm.get('confirm.requestOptions');
+                            requestOptions.params = {force: true};
+                            Ext.Ajax.request(requestOptions);
+                            Sync.progress();
+                        }
+                    }, {
+                        text: 'No',
+                        bind: {
+                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
+                        },
+                        handler: function (btn) {
+                            btn.up('sheet').hide();
+                        }
+                    }]
+                }, {
+                    xtype: 'component',
+                    hidden: true,
+                    maxHeight: 300,
+                    scrollable: true,
+                    flex: 1,
+                    margin: '8 0 0 0',
+                    style: 'background: #f1f1f1;',
+                    padding: 16,
+                    bind: {
+                        hidden: '{!confirmStackBtn.hidden || !confirm.stack}',
+                        html: '<p style="font-size: 16px; font-weight: bold; margin: 0;"></p> <code>{confirm.stack}</code>'
+                    }
+
+                }]
             }],
 
             listeners: {
@@ -193,6 +261,7 @@ Ext.define('Mfw.Sync', {
                         success: false,
                         exception: false,
                         warning: false,
+                        confirm: false,
                         title: 'Unable to perform operation',
                         sync: true // boolean to identify if it's a sync update
                     });
