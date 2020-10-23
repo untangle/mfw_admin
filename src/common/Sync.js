@@ -482,6 +482,34 @@ Ext.define('Mfw.Sync', {
     },
 
     /**
+     * parseConfirmSummary will comparse the summary we received from sync-settings and display it properly, to the best of our ability
+     * 
+     * 
+     * @param {string} summary - the summary, if valid json then we can probably parse it
+     */
+    parseConfirmSummary: function(summary) {
+        try {
+            var testDecode = Ext.decode(summary);
+            var retSum = "";
+
+            if (testDecode) {
+                retSum += "By selecting yes, the following changes will be automatically made:<br/><br/>"
+                testDecode.forEach(function(decodeItem) {
+                    retSum += "The " + decodeItem.affectedType + ": '" + decodeItem.affectedValue.description + "' will be disabled because of a dependency on the invalid " + decodeItem.invalidReasonType + ": '" + decodeItem.invalidReasonValue+"'<br/>";
+                });
+            }
+
+            if(retSum) {
+                return retSum;
+            }
+        } catch(error) {
+            return summary;
+        }
+
+        return summary;
+    },
+
+    /**
      * confirm is used to display the confirmation dialog box in the same location as the Exception actionsheet
      * 
      * @param {Object} response - The full response object from the confirm request/response
@@ -497,7 +525,8 @@ Ext.define('Mfw.Sync', {
 
         if (response.responseJson) {
             match = regExp.exec(response.responseJson.output);
-            summary = Ext.isArray(match) ? match[2] : 'Unknown - Check More Info to see what happened.';
+            // parse the summary to see if its something we can make look nicer
+            summary = Sync.parseConfirmSummary(Ext.isArray(match) ? match[2] : 'Unknown - Check More Info to see what happened.');        
             stack = response.responseJson.output.replace(/\n/g, '</br>');
         }
 
