@@ -21,24 +21,12 @@ Ext.define('Mfw.Sync', {
                     success: false, // sucess response
                     exception: false, // exception data
                     warning: false, // warning data
+                    confirm: false, // confirm will retry the request with a force param
                     sync: true // is sync call
                 },
                 formulas: {
                     heading: function (get) {
-                        if (get('progress')) {
-                            return 'Saving ...';
-                        }
-                        if (get('exception')) {
-                            return get('title');
-                        }
-
-                        if (get('warning')) {
-                            return 'Saved with warnings <i class=\'x-fa fa-exclamation-triangle\'></i>';
-                        }
-
-                        if (get('success')) {
-                            return 'Saved';
-                        }
+                        return get('title');
                     },
                     headingStyle: function (get) {
                         if (get('exception')) {
@@ -213,24 +201,37 @@ Ext.define('Mfw.Sync', {
         });
     },
 
-    progress: function (opt) {
+    /**
+     * progress is called to display the progress dialog within the exception actionsheet during non synchronous ajax calls
+     * 
+     * @param {string} title - A different title for display
+     */
+    progress: function (title) {
         this.sheet.getViewModel().set({
             progress: true,
             success: false,
             exception: false,
             warning: false,
-            title: (opt && opt.title) ? opt.title :  'Unable to perform operation'
+            confirm: false,
+            title: title ||  'Saving...'
         });
         this.sheet.show();
     },
 
-    success: function () {
+    /**
+     * success is called for successful ajax calls, to display the successful sync message
+     * 
+     * @param {string} title - A different title for display
+     * 
+     */
+    success: function (title) {
         var sheet = this.sheet,
             vm = sheet.getViewModel();
 
         vm.set({
             progress: false,
-            success: true
+            success: true,
+            title: title ||  'Saved'
         });
 
         // if success but have to display a warning, keep sheet visible
