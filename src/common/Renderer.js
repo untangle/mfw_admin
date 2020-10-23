@@ -299,11 +299,8 @@ Ext.define('Mfw.Renderer', {
             type === 'CLIENT_INTERFACE_ZONE' ||
             type === 'SERVER_INTERFACE_ZONE') {
             // the multiselect combobox creates a collection object as value
-            valueRender = [];
-            Ext.Object.each(rec.get('value').split(','), function (key, val) {
-                valueRender.push((Map.interfaces[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-            });
-            valueRender = valueRender.join(' ');
+            valueRender = Map.interfaces[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+
         }
         return valueRender;
     },
@@ -353,11 +350,8 @@ Ext.define('Mfw.Renderer', {
             type === 'CLIENT_INTERFACE_ZONE' ||
             type === 'SERVER_INTERFACE_ZONE') {
             // the multiselect combobox creates a collection object as value
-            valueRender = [];
-            Ext.Object.each(rec.get('value').split(','), function (key, intfId) {
-                valueRender.push((Map.interfaces[intfId] || '???') + '<em style="color: #999; font-style: normal;">[' + intfId + ']</em>');
-            });
-            valueRender = valueRender.join(', ');
+            valueRender = Map.interfaces[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
+
         }
 
         if (type === 'SOURCE_INTERFACE_TYPE' ||
@@ -477,11 +471,8 @@ Ext.define('Mfw.Renderer', {
                 type === 'CLIENT_INTERFACE_ZONE' ||
                 type === 'SERVER_INTERFACE_ZONE') {
                 // the multiselect combobox creates a collection object as value
-                valueRender = [];
-                Ext.Array.each(cond.get('value').split(','), function (val) {
-                    valueRender.push(Map.interfaces[val] + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                });
-                valueRender = valueRender.join(' or ');
+                valueRender = Map.interfaces[cond.get('value')] + ' <em style="color: #999; font-style: normal;">[' + cond.get('value') + ']</em>';
+
             }
 
             if (type === 'SOURCE_INTERFACE_TYPE' ||
