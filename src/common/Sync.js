@@ -220,13 +220,8 @@ Ext.define('Mfw.Sync', {
                         bind: {
                             ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
                         },
-                        handler: function (btn) {
-                            //Here we need to load the previous request, and set the force property to true before sending it again
-                            var vm = btn.up('sheet').getViewModel();
-                            var requestOptions = vm.get('confirm.requestOptions');
-                            requestOptions.params = {force: true};
-                            Ext.Ajax.request(requestOptions);
-                            Sync.progress();
+                        handler: function(btn) {
+                            Sync.confirmYesHandler(btn);
                         }
                     }, {
                         text: 'No',
@@ -547,6 +542,53 @@ Ext.define('Mfw.Sync', {
         });
         if (this.sheet.isHidden()) {
             this.sheet.show();
+        }
+    },
+
+    /**
+     * confirmYesHandler will handle the "Yes" button on the confirmation action sheet.
+     * this button will resend the previous request to the calling API, but with "force:true" appended
+     * to the request param.  It will also attempt to reload any grids that may have been affected
+     * from the calling requests
+     * 
+     * 
+     * @param {button} btn | the button being referenced from this handler
+     */
+    confirmYesHandler: function(btn) {
+        //Here we need to load the previous request, and set the force property to true before sending it again
+        var vm = btn.up('sheet').getViewModel();
+        var requestOptions = vm.get('confirm.requestOptions');
+        Sync.progress();
+
+        requestOptions.params = {force: true};
+        requestOptions.success = function() {
+            Sync.success();
+        };
+        requestOptions.failure = function () {
+            console.error('Failure sending Force Confirmation from UI');
+        };
+        // Remove callbacks from the previous requestOptions
+        requestOptions.callback = null;
+
+        Ext.Ajax.request(requestOptions);
+
+        // The next two statements are pretty hacky
+        // We don't have any knowledge of the Grid that is being saved here, because the caller for the action sheet
+        // display is just being handled for any requestExceptions. So depending on where the RequestOptions 
+        // URL scope was pointing to, we need to find specific tables that Might be currently viewed, and reload them 
+        // after sync settings finishes so that they load the most recent rules into the table for display.
+        if(requestOptions.scope.url.includes('WanPolicy')) {
+            var wanPoliciesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-policies]');
+            if(Array.isArray(wanPoliciesTable) && wanPoliciesTable.length > 0) {
+                wanPoliciesTable[0].getController().onLoad();
+            }
+        }
+
+        if(requestOptions.scope.url.includes('Mfw.model.table.Chain')) {
+            var wanRulesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-rules]');
+            if(Array.isArray(wanRulesTable) && wanRulesTable.length > 0) {
+                wanRulesTable[0].getController().onLoad();
+            }
         }
     },
 
