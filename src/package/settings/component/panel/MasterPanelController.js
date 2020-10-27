@@ -38,7 +38,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
             }
 
             if (p.getEnableReset()) {
-                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } );
+                toolbarMenu.menu.items.push( { text: 'Reset to defaults'.t(), iconCls: 'x-fa fa-refresh', handler: 'onReset' } );
             }
 
             toolbarActions.push(toolbarMenu);
@@ -97,7 +97,7 @@ Ext.define('Mfw.cmp.grid.MasterPanelController', {
             api = proxy.getApi();
 
         Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            'All existing <strong>' + panel.getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
+            '<strong>' + panel.getTitle() + '</strong> will be reset to factory defaults.  All non-default settings will be removed.<br/>Do you want to continue?',
             function (answer) {
                 if (answer === 'yes') {
                     // update proxy api to support reset

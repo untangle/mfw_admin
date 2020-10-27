@@ -88,8 +88,8 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
 
         Ext.Msg.confirm(
             '<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            '<p>All existing <strong>' + grid.getTitle() +
-            '</strong> settings will be replace with System defauts.</p><p style="font-weight: bold;">Do you want to continue?</p>',
+            '<p><strong>' + grid.getTitle() +
+            '</strong> will be reset to factory defaults.  All non-default settings will be removed.</p><p style="font-weight: bold;">Do you want to continue?</p>',
             function (answer) {
                 if (answer === 'yes') {
                     // update proxy api to load defaults
@@ -522,7 +522,7 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
                     iconCls: 'md-icon-refresh',
                     handler: 'onLoad'
                 }, {
-                    html: 'Load Defaults'.t(),
+                    html: 'Reset to defaults'.t(),
                     iconCls: 'md-icon-sync',
                     handler: 'onDefaults'
                 }]
