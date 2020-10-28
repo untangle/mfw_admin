@@ -26,7 +26,6 @@ Ext.define('Mfw.settings.system.About', {
                 '<tr><td>Name: </td><td>{build.name}</td></tr>' +
                 '<tr><td>UID: </td><td>{uid}</td></tr>' +
                 '<tr><td>Build: </td><td>{build.build_id}</td></tr>' +
-                '<tr><td>JIRA: </td><td><a href="{build.bug_url}" target="_blank">{build.bug_url}</a></td></tr>' +
                 '<tr><td>Github: </td><td><a href="{build.home_url}" target="_blank">{build.home_url}</a></td></tr>' +
                 '<tr><td>Support: </td><td><a href="{build.support_url}" target="_blank">{build.support_url}</a></td></tr>' +
                 '</table>'
