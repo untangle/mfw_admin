@@ -216,7 +216,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             }
 
             if (g.getEnableReset()) {
-                toolbarMenu.menu.items.push( { text: 'Load Defaults'.t(), iconCls: 'md-icon-sync', handler: 'onReset' } );
+                toolbarMenu.menu.items.push( { text: 'Reset to defaults'.t(), iconCls: 'md-icon-sync', handler: 'onReset' } );
             }
 
             toolbarActions.push(toolbarMenu);
@@ -411,7 +411,7 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
             api = store.getProxy().getApi();
 
         Ext.Msg.confirm('<i class="x-fa fa-exclamation-triangle"></i> Warning',
-            'All existing <strong>' + this.getView().getTitle() + '</strong> settings will be replace with defauts.<br/>Do you want to continue?',
+            '<strong>' + this.getView().getTitle() + '</strong>  will be reset to factory defaults.  All non-default settings will be removed.<br/>Do you want to continue?',
             function (answer) {
                 if (answer === 'yes') {
                     // update proxy api to support reset
