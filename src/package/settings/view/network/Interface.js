@@ -14,6 +14,15 @@ Ext.define('Mfw.settings.network.Interface', {
 
     tools: [{
         xtype: 'button',
+        text: 'Import',
+        iconCls: 'md-icon-content-paste',
+        cls: 'btn-tool',
+        handler: 'onImport',
+        bind: {
+            hidden: '{intf.type !== "WIREGUARD"}'
+        }
+    }, {
+        xtype: 'button',
         text: 'Cancel',
         iconCls: 'x-fa fa-times',
         cls: 'btn-tool',
@@ -156,9 +165,9 @@ Ext.define('Mfw.settings.network.Interface', {
 
             /**
              * VLAN parent interface options
-             * 
+             *
              * Use the interfaces store to query NIC type of interfaces to be available for bridge options
-             * 
+             *
              * returns - a list of interface options
              */
             _vlanParentOptions: function() {
@@ -361,7 +370,7 @@ Ext.define('Mfw.settings.network.Interface', {
                         listeners: {
                             select: 'handleVlanSelect'
                         }
-                        
+
                     }, {
                             xtype: 'numberfield',
                             label: 'VLAN ID',
@@ -710,11 +719,11 @@ Ext.define('Mfw.settings.network.Interface', {
             var currentIntf = vm.get('intf');
 
             /**
-             * Use the current bound interface to in the validator we pass to the Name field 
+             * Use the current bound interface to in the validator we pass to the Name field
              */
             nameField.setValidators( function(val) {
                     var nameMatcher = new RegExp('^[a-zA-Z]+[a-zA-Z0-9_]*$');
-        
+
                     // if value dos not match any
                     if (!nameMatcher.test(val)) {
                         return 'Interface Name must be alphanumeric, without spaces.';
@@ -722,11 +731,11 @@ Ext.define('Mfw.settings.network.Interface', {
 
                     //See if any interfaces in the store use this name
                     var existingIntf = Ext.getStore('interfaces').findRecord('name', val, 0, false, false, true);
-                    
+
                     if(currentIntf != null && existingIntf != null && existingIntf.get('interfaceId') != currentIntf.get('interfaceId')) {
                         return 'Interface Name must be unique.';
                     }
-    
+
                     return true;
                 }
             )
@@ -817,6 +826,32 @@ Ext.define('Mfw.settings.network.Interface', {
             }
         },
 
+        onImport: function(btn) {
+            // passing this to the prompt function gives us access to the view model in the click handler for storing fields parsed from the pasted data
+            Ext.Msg.prompt('Import Wireguard Configuration', 'Paste the Wireguard configuration below and click OK to import', this.doImport, this)
+        },
+
+        doImport: function(btn, config) {
+            var vm = this.getViewModel();
+            if (btn !== 'ok') return
+
+            try {
+                info = JSON.parse(config)
+            } catch(err) {
+                Ext.Msg.alert('Import Failed', 'The data entered is invalid or incomplete');
+                return;
+            }
+
+            if ((! info.hasOwnProperty('endpointAddress')) || (! info.hasOwnProperty('publicKey'))) {
+                Ext.Msg.alert('Import Failed', 'The imported configuration does not contain the required information');
+                return;
+            }
+
+            intf = vm.get('intf')
+            peer = intf.wireguardPeers().first();
+            peer.set('host', info.endpointAddress);
+            peer.set('publicKey', info.publicKey);
+        },
 
         onCancel: function (btn) {
             var me = this,
@@ -1009,10 +1044,10 @@ Ext.define('Mfw.settings.network.Interface', {
         },
 
         /**
-         * handleVlanSelect is called when we select an item in the VLAN 
+         * handleVlanSelect is called when we select an item in the VLAN
          * interface selection.
-         * 
-         * For WAN interfaces, we set the current interface to a WAN type so that 
+         *
+         * For WAN interfaces, we set the current interface to a WAN type so that
          * certain properties are hidden automatically.
          */
         handleVlanSelect: function(item, record) {
