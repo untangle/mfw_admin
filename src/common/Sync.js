@@ -21,24 +21,12 @@ Ext.define('Mfw.Sync', {
                     success: false, // sucess response
                     exception: false, // exception data
                     warning: false, // warning data
+                    confirm: false, // confirm will retry the request with a force param
                     sync: true // is sync call
                 },
                 formulas: {
                     heading: function (get) {
-                        if (get('progress')) {
-                            return 'Saving ...';
-                        }
-                        if (get('exception')) {
-                            return get('title');
-                        }
-
-                        if (get('warning')) {
-                            return 'Saved with warnings <i class=\'x-fa fa-exclamation-triangle\'></i>';
-                        }
-
-                        if (get('success')) {
-                            return 'Saved';
-                        }
+                        return get('title');
                     },
                     headingStyle: function (get) {
                         if (get('exception')) {
@@ -196,6 +184,69 @@ Ext.define('Mfw.Sync', {
                     }
 
                 }]
+            }, {
+                xtype: 'container',
+                hidden: true,
+                bind: {
+                    hidden: '{!confirm}'
+                },
+                items: [{
+                    xtype: 'component',
+                    style: 'font-size: 14px;',
+                    bind: {
+                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{confirm.summary}</p>'
+                    }
+                }, {
+                    xtype: 'container',
+                    layout: 'hbox',
+                    defaults: {
+                        xtype: 'button',
+                        margin: '8 16 8 0'
+                    },
+                    items: [{
+                        reference: 'confirmStackBtn',
+                        ui: 'action',
+                        text: 'More info ...',
+                        hidden: true,
+                        publishes: ['hidden'],
+                        bind: {
+                            hidden: '{!confirm || !confirm.stack}'
+                        },
+                        handler: function (btn) {
+                            btn.hide();
+                        }
+                    },{
+                        text: 'Yes',
+                        bind: {
+                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
+                        },
+                        handler: function(btn) {
+                            Sync.confirmYesHandler(btn);
+                        }
+                    }, {
+                        text: 'No',
+                        bind: {
+                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
+                        },
+                        handler: function (btn) {
+                            btn.up('sheet').hide();
+                        }
+                    }]
+                }, {
+                    xtype: 'component',
+                    hidden: true,
+                    maxHeight: 300,
+                    scrollable: true,
+                    flex: 1,
+                    margin: '8 0 0 0',
+                    style: 'background: #f1f1f1;',
+                    padding: 16,
+                    bind: {
+                        hidden: '{!confirmStackBtn.hidden || !confirm.stack}',
+                        html: '<p style="font-size: 16px; font-weight: bold; margin: 0;"></p> <code>{confirm.stack}</code>'
+                    }
+
+                }]
             }],
 
             listeners: {
@@ -205,6 +256,7 @@ Ext.define('Mfw.Sync', {
                         success: false,
                         exception: false,
                         warning: false,
+                        confirm: false,
                         title: 'Unable to perform operation',
                         sync: true // boolean to identify if it's a sync update
                     });
@@ -213,24 +265,37 @@ Ext.define('Mfw.Sync', {
         });
     },
 
-    progress: function (opt) {
+    /**
+     * progress is called to display the progress dialog within the exception actionsheet during non synchronous ajax calls
+     * 
+     * @param {string} title - A different title for display
+     */
+    progress: function (title) {
         this.sheet.getViewModel().set({
             progress: true,
             success: false,
             exception: false,
             warning: false,
-            title: (opt && opt.title) ? opt.title :  'Unable to perform operation'
+            confirm: false,
+            title: title ||  'Saving...'
         });
         this.sheet.show();
     },
 
-    success: function () {
+    /**
+     * success is called for successful ajax calls, to display the successful sync message
+     * 
+     * @param {string} title - A different title for display
+     * 
+     */
+    success: function (title) {
         var sheet = this.sheet,
             vm = sheet.getViewModel();
 
         vm.set({
             progress: false,
-            success: true
+            success: true,
+            title: title ||  'Saved'
         });
 
         // if success but have to display a warning, keep sheet visible
@@ -241,9 +306,13 @@ Ext.define('Mfw.Sync', {
         }
     },
 
-    exception: function (response, title) {
-        var exception, summary, stack, isSync = false;
-
+    /**
+     * handleResponseOutput is used to route exceptions, warnings, errors, from any ajax calls for proper display when needed
+     * 
+     * @param {*} response 
+     * @param {*} title 
+     */
+    handleResponseOutput: function(response, title) {
         // do not show error if license file non existent
         if (response.status === 500 && response.request.url.includes('/api/status/license')) {
             console.warn('License not found!');
@@ -262,6 +331,37 @@ Ext.define('Mfw.Sync', {
         if (response.request.url.includes('/api/settings')) {
             isSync = true;
         }
+
+        // Handle Warnings and Confirmation errors
+        if (response.responseJson) {
+            if (response.responseJson.output) {
+                if(response.responseJson.output.includes('WARNING')) {
+                    return Sync.warning(response, title, isSync);
+                }
+                if(response.responseJson.output.includes('CONFIRM')) {
+                    return Sync.confirm(response, title, isSync);
+                }
+            }
+        }
+
+        // At this point if there wasn't a server error, just return nothing.
+        if(response.status != 200) {
+            return Sync.exception(response, title, isSync);
+        }
+
+        return;
+    },
+
+    /**
+     *  exception is used to display the exception type of dialog box in the exception actionsheet
+     * 
+     * 
+     * @param {Object} response - The full response object from the confirm request/response
+     * @param {String} title - A different title for display
+     * @param {boolean} isSync - If this request is a sync-settings type of request
+     */
+    exception: function (response, title, isSync) {
+        var exception, summary, stack;
 
         if (response.responseJson) {
             try {
@@ -323,22 +423,25 @@ Ext.define('Mfw.Sync', {
         }
     },
 
-    warning: function (response) {
-        var regExp = /Error: ([\s\S]*?)\^/gm, // ! to work it depends on how the backend sends output
+    /**
+     * warning is used to display the warning type of dialog box in the exception actionsheet
+     * 
+     * 
+     * @param {Object} response - The full response object from the confirm request/response
+     * @param {String} title - A different title for display
+     * @param {boolean} isSync - If this request is a sync-settings type of request
+     */
+    warning: function (response, title, isSync) {
+        var regExp = /^(WARNING|Error)\:([\s\S]*?)$/gm, // ! to work it depends on how the backend sends output
             match, // the match against response output
             summary,
             stack,
-            isSync = false,
             warning;
 
-        // if it's a sync API call
-        if (response.request.url.includes('/api/settings')) {
-            isSync = true;
-        }
 
         if (response.responseJson) {
             match = regExp.exec(response.responseJson.output);
-            summary = Ext.isArray(match) ? match[1] : 'Unknown';
+            summary = Ext.isArray(match) ? match[2] : 'Unknown - Check More Info to see what happened.';
             stack = response.responseJson.output.replace(/\n/g, '</br>');
         }
 
@@ -352,10 +455,127 @@ Ext.define('Mfw.Sync', {
             success: true,
             exception: false,
             warning: warning,
-            sync: isSync
+            sync: isSync,
+            title: title || 'Saved with warnings <i class=\'x-fa fa-exclamation-triangle\'></i>'
         });
         if (this.sheet.isHidden()) {
             this.sheet.show();
+        }
+    },
+
+    /**
+     * parseConfirmSummary will comparse the summary we received from sync-settings and display it properly, to the best of our ability
+     * 
+     * 
+     * @param {string} summary - the summary, if valid json then we can probably parse it
+     */
+    parseConfirmSummary: function(summary) {
+        try {
+            var testDecode = Ext.decode(summary);
+            var retSum = "";
+
+            if (testDecode) {
+                retSum += "By selecting yes, the following changes will be automatically made:<br/><br/>"
+                testDecode.forEach(function(decodeItem) {
+                    retSum += "The " + decodeItem.affectedType + ": '" + decodeItem.affectedValue.description + "' will be disabled because of a dependency on the invalid " + decodeItem.invalidReasonType + ": '" + decodeItem.invalidReasonValue+"'<br/>";
+                });
+            }
+
+            if(retSum) {
+                return retSum;
+            }
+        } catch(error) {
+            return summary;
+        }
+
+        return summary;
+    },
+
+    /**
+     * confirm is used to display the confirmation dialog box in the same location as the Exception actionsheet
+     * 
+     * @param {Object} response - The full response object from the confirm request/response
+     * @param {String} title - A different title for display
+     * @param {boolean} isSync - If this request is a sync-settings type of request
+     */
+    confirm: function(response, title, isSync) {
+        var regExp = /^(.{0,11}CONFIRM)\:([\s\S]*?)$/gm,
+        match,
+        summary,
+        stack,
+        confirm;
+
+        if (response.responseJson) {
+            match = regExp.exec(response.responseJson.output);
+            // parse the summary to see if its something we can make look nicer
+            summary = Sync.parseConfirmSummary(Ext.isArray(match) ? match[2] : 'Unknown - Check More Info to see what happened.');        
+            stack = response.responseJson.output.replace(/\n/g, '</br>');
+        }
+
+        confirm = {
+            summary: summary,
+            stack: stack,
+            requestOptions: response.request.options,
+        };
+
+        this.sheet.getViewModel().set({
+            progress: false,
+            success: false,
+            exception: false,
+            warning: false,
+            confirm: confirm,
+            sync: isSync,
+            title: title || 'Please confirm the following...'
+        });
+        if (this.sheet.isHidden()) {
+            this.sheet.show();
+        }
+    },
+
+    /**
+     * confirmYesHandler will handle the "Yes" button on the confirmation action sheet.
+     * this button will resend the previous request to the calling API, but with "force:true" appended
+     * to the request param.  It will also attempt to reload any grids that may have been affected
+     * from the calling requests
+     * 
+     * 
+     * @param {button} btn | the button being referenced from this handler
+     */
+    confirmYesHandler: function(btn) {
+        //Here we need to load the previous request, and set the force property to true before sending it again
+        var vm = btn.up('sheet').getViewModel();
+        var requestOptions = vm.get('confirm.requestOptions');
+        Sync.progress();
+
+        requestOptions.params = {force: true};
+        requestOptions.success = function() {
+            Sync.success();
+        };
+        requestOptions.failure = function () {
+            console.error('Failure sending Force Confirmation from UI');
+        };
+        // Remove callbacks from the previous requestOptions
+        requestOptions.callback = null;
+
+        Ext.Ajax.request(requestOptions);
+
+        // The next two statements are pretty hacky
+        // We don't have any knowledge of the Grid that is being saved here, because the caller for the action sheet
+        // display is just being handled for any requestExceptions. So depending on where the RequestOptions 
+        // URL scope was pointing to, we need to find specific tables that Might be currently viewed, and reload them 
+        // after sync settings finishes so that they load the most recent rules into the table for display.
+        if(requestOptions.scope.url.includes('WanPolicy')) {
+            var wanPoliciesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-policies]');
+            if(Array.isArray(wanPoliciesTable) && wanPoliciesTable.length > 0) {
+                wanPoliciesTable[0].getController().onLoad();
+            }
+        }
+
+        if(requestOptions.scope.url.includes('Mfw.model.table.Chain')) {
+            var wanRulesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-rules]');
+            if(Array.isArray(wanRulesTable) && wanRulesTable.length > 0) {
+                wanRulesTable[0].getController().onLoad();
+            }
         }
     },
 
@@ -364,7 +584,12 @@ Ext.define('Mfw.Sync', {
     },
 });
 
-// capture all AJAX exceptions
+/**
+ * Ext.Ajax.on requestexception hook allows sync to capture all exceptions from any AJAX calls and parse them appropriately for display
+ * 
+ * @param conn {Ext.data.Connection} - the connection of the request
+ * @param response {Object} - The response object of the failed request
+ */
 Ext.Ajax.on('requestexception', function (conn, response) {
     // avoid showing exception when checking if user is authenticated in login screen
     var url = response.request.url;
@@ -375,16 +600,18 @@ Ext.Ajax.on('requestexception', function (conn, response) {
          url.startsWith('/api/status/wantest') ) {
         return;
     }
-    Sync.exception(response);
+    Sync.handleResponseOutput(response);
 });
 
-// capture sync warnings
+/**
+ * Ext.Ajax.on requestcomplete hook allows sync to capture all requestcomplete backend calls, and parse them for any errors or messages
+ *  
+ *  @param conn {Ext.data.Connection} - the connection of the request
+ *  @param response {Object} - The response object from the comleted request
+ * */ 
 Ext.Ajax.on('requestcomplete', function (conn, response) {
     if (response.request.method !== 'POST') { return; }
 
-    if (response.responseJson) {
-        if (response.responseJson.output && response.responseJson.output.includes('WARNING')) {
-            Sync.warning(response);
-        }
-    }
+    Sync.handleResponseOutput(response);
+
 });
