@@ -2,7 +2,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
     extend: 'Ext.Panel',
     alias: 'widget.mfw-settings-network-dhcp',
 
-    title: 'DHCP'.t(),
+    title: 'Leases and Reservations'.t(),
 
     viewModel: {
         data: {
@@ -10,7 +10,9 @@ Ext.define('Mfw.settings.network.Dhcp', {
         }
     },
 
-    layout: 'fit',
+    layout: {
+        type: 'vbox',
+    },
 
     tools: [{
         xtype: 'button',
@@ -27,7 +29,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
     items: [{
         xtype: 'grid',
-        itemId: 'staticEntries',
+        itemId: 'reservations',
         plugins: {
             gridcellediting: {
                 triggerEvent: 'tap'
@@ -35,6 +37,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
         },
         emptyText: 'No data',
         selectable: false,
+        flex: 1,
         items: [{
             xtype: 'toolbar',
             docked: 'top',
@@ -53,12 +56,9 @@ Ext.define('Mfw.settings.network.Dhcp', {
             shadow: false,
             zIndex: 2,
             padding: '0 8 0 16',
-            bind: {
-                shadow: '{!visibleAdd}'
-            },
             items: [{
                 xtype: 'component',
-                html: 'Static Entries',
+                html: 'Reservations'.t(),
                 style: 'font-weight: 400;'
             }, '->', {
                 xtype: 'button',
@@ -108,7 +108,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 items: [{
                     xtype: 'component',
                     style: 'font-weight: 100; font-size: 14px;',
-                    html: 'Add Static Entry',
+                    html: 'Add Reservation',
                 }, '->', {
                     xtype: 'button',
                     iconCls: 'md-icon-close',
@@ -117,16 +117,16 @@ Ext.define('Mfw.settings.network.Dhcp', {
             }, {
                 xtype: 'textfield',
                 name: 'address',
-                label: 'Address',
+                label: 'IP Address',
                 margin: '0 16 0 0',
-                width: 200,
-                placeholder: 'Enter address ...',
+                width: 340,
+                placeholder: 'Enter IP address ...',
                 validators: 'ipany'
             }, {
                 xtype: 'textfield',
                 name: 'macAddress',
-                width: 200,
-                label: 'MAC'.t(),
+                width: 300,
+                label: 'MAC Address'.t(),
                 placeholder: 'Enter MAC address ...'
             }, {
                 xtype: 'textfield',
@@ -181,7 +181,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 }
             }
         }, {
-            text: 'Address'.t(),
+            text: 'IP Address'.t(),
             dataIndex: 'address',
             width: 360,
             cell: {
@@ -195,9 +195,9 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 validators: 'ipany'
             }
         }, {
-            text: 'MAC'.t(),
+            text: 'MAC Address'.t(),
             dataIndex: 'macAddress',
-            width: 220,
+            width: 320,
             cell: {
                 tools: [{ cls: 'cell-edit-icon', iconCls: 'md-icon-edit', zone: 'end' }]
             },
@@ -254,27 +254,74 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 }
             }
         }]
+    }, {
+        xtype: 'grid',
+        itemId: 'leases',
+        flex: 1,
+        store: {
+            model: 'Mfw.model.DhcpLease'
+        },
+        emptyText: 'No data',
+        items: [{
+            xtype: 'toolbar',
+            docked: 'top',
+            shadow: false,
+            zIndex: 2,
+            padding: '0 8 0 16',
+            items: [{
+                xtype: 'component',
+                html: 'Leases'.t(),
+                style: 'font-weight: 400;'
+            }, '->', {
+                xtype: 'textfield',
+                label: 'Search',
+                labelAlign: 'left',
+                iconCls: 'md-icon-add',
+            }],
+        }],
+        columns: [{
+            text: 'Expiration'.t(),
+            dataIndex: 'leaseExpiration',
+            width: 200
+        }, {
+            text: 'MAC Address'.t(),
+            dataIndex: 'macAddress',
+            width: 300
+        }, {
+            text: 'IP Address'.t(),
+            dataIndex: 'ipAddress',
+            width: 300
+        }, {
+            text: 'Host'.t(),
+            dataIndex: 'hostName',
+            flex: 1,
+        }]
     }],
 
     controller: {
         init: function (view) {
-            this.load();
+            var me = this;
+            me.reservationModel = new Mfw.model.Dhcp();
+            me.leaseModel = new Mfw.model.DhcpLease();
+            me.load();
         },
 
         load: function () {
             var me = this,
                 vm = me.getViewModel();
 
-            me.model = new Mfw.model.Dhcp();
-
             me.getView().mask({ xtype: 'loadmask' });
-            me.model.load({
+            me.reservationModel.load({
                 success: function (record) {
                     vm.set('dhcp', record);
                     record.staticDhcpEntries().commitChanges();
                 },
                 callback: function () {
-                    me.getView().unmask();
+                    me.leaseModel.load({
+                        callback: function () {
+                            me.getView().unmask();
+                        }
+                    })
                 }
             });
         },
@@ -290,18 +337,20 @@ Ext.define('Mfw.settings.network.Dhcp', {
             var me = this, form = btn.up('formpanel');
             if (!form.validate()) { return; }
 
-            me.getView().down('#staticEntries').getStore().add(form.getValues());
+            me.getView().down('#reservations').getStore().add(form.getValues());
             form.getFields('address').focus();
             form.reset(true);
+            me.toggleAddStaticEntry();
         },
 
         addStaticEntryKeyEvt: function (evt, fld) {
             var me = this, form = fld.up('formpanel');
             if (!form.validate()) { return; }
-            me.getView().down('#staticEntries').getStore().add(form.getValues());
+            me.getView().down('#reservations').getStore().add(form.getValues());
             fld.blur();
             form.getFields('address').focus();
             form.reset(true);
+            me.toggleAddStaticEntry();
         },
 
 
