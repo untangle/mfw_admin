@@ -6,7 +6,12 @@ Ext.define('Mfw.settings.network.Dhcp', {
 
     viewModel: {
         data: {
-            visibleAdd: false
+            visibleAdd: false,
+            newReservation: {
+                address: '',
+                macAddress: '',
+                description: ''
+            }
         }
     },
 
@@ -121,13 +126,15 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 margin: '0 16 0 0',
                 width: 340,
                 placeholder: 'Enter IP address ...',
-                validators: 'ipany'
+                validators: 'ipany',
+                bind: '{newReservation.address}'
             }, {
                 xtype: 'textfield',
                 name: 'macAddress',
                 width: 300,
                 label: 'MAC Address'.t(),
-                placeholder: 'Enter MAC address ...'
+                placeholder: 'Enter MAC address ...',
+                bind: '{newReservation.macAddress}'
             }, {
                 xtype: 'textfield',
                 name: 'description',
@@ -135,7 +142,13 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 margin: '0 8 0 16',
                 flex: 1,
                 required: false,
-                placeholder: 'Enter description ...'
+                placeholder: 'Enter description ...',
+                bind: '{newReservation.description}'
+            }, {
+                xtype: 'button',
+                text: 'Cancel',
+                margin: '0 0 0 16',
+                handler: 'toggleAddStaticEntry'
             }, {
                 xtype: 'button',
                 text: 'Add',
@@ -261,7 +274,9 @@ Ext.define('Mfw.settings.network.Dhcp', {
         store: {
             model: 'Mfw.model.DhcpLease'
         },
-        emptyText: 'No data',
+        selectable: false,
+        emptyText: 'No data'.t(),
+        deferEmptyText: false,
         items: [{
             xtype: 'toolbar',
             docked: 'top',
@@ -274,14 +289,18 @@ Ext.define('Mfw.settings.network.Dhcp', {
                 style: 'font-weight: 400;'
             }, '->', {
                 xtype: 'textfield',
-                label: 'Search',
-                labelAlign: 'left',
-                iconCls: 'md-icon-add',
+                placeholder: 'search',
+                clearable: true,
+                listeners: {
+                    change: 'onFilterLeases'
+                }
             }],
         }],
         columns: [{
             text: 'Expiration'.t(),
             dataIndex: 'leaseExpiration',
+            renderer: Renderer.timeStamp,
+            cell: { encodeHtml: false },
             width: 200
         }, {
             text: 'MAC Address'.t(),
@@ -289,12 +308,26 @@ Ext.define('Mfw.settings.network.Dhcp', {
             width: 300
         }, {
             text: 'IP Address'.t(),
-            dataIndex: 'ipAddress',
+            dataIndex: 'ipAddr',
             width: 300
         }, {
             text: 'Host'.t(),
             dataIndex: 'hostName',
             flex: 1,
+        }, {
+            width: 44,
+            align: 'center',
+            sortable: false,
+            hideable: false,
+            menuDisabled: true,
+            cell: {
+                tools: {
+                    add: {
+                        iconCls: 'md-icon-add-circle',
+                        handler: 'addLeaseReservation'
+                    },
+                }
+            }
         }]
     }],
 
@@ -302,7 +335,6 @@ Ext.define('Mfw.settings.network.Dhcp', {
         init: function (view) {
             var me = this;
             me.reservationModel = new Mfw.model.Dhcp();
-            me.leaseModel = new Mfw.model.DhcpLease();
             me.load();
         },
 
@@ -317,7 +349,7 @@ Ext.define('Mfw.settings.network.Dhcp', {
                     record.staticDhcpEntries().commitChanges();
                 },
                 callback: function () {
-                    me.leaseModel.load({
+                    me.getView().down('#leases').getStore().load({
                         callback: function () {
                             me.getView().unmask();
                         }
@@ -353,6 +385,29 @@ Ext.define('Mfw.settings.network.Dhcp', {
             me.toggleAddStaticEntry();
         },
 
+        onFilterLeases: function (fld, value) {
+            var store = this.getView().down('#leases').getStore()
+            if (!value) {
+                store.clearFilter();
+                return;
+            }
+            store.filterBy(function(rec) {
+                return rec.get('macAddress').toLowerCase().includes(value.toLowerCase()) ||
+                       rec.get('ipAddr').toLowerCase().includes(value.toLowerCase()) ||
+                       rec.get('hostName').toLowerCase().includes(value.toLowerCase())
+            });
+        },
+
+        addLeaseReservation(grid, info) {
+            this.getViewModel().set({
+                visibleAdd: true,
+                newReservation: {
+                    address: info.record.get('ipAddr'),
+                    macAddress: info.record.get('macAddress'),
+                    description: ''
+                }
+            });
+        },
 
         onSave: function (cb) {
             var me = this,
