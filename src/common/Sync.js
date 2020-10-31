@@ -63,7 +63,7 @@ Ext.define('Mfw.Sync', {
                 style: 'font-size: 14px; color: #555;',
                 hidden: true,
                 bind: {
-                    hidden: '{exception || warning}',
+                    hidden: '{exception || warning || confirm}',
                     html: '{message}',
                 }
             }, {
@@ -247,21 +247,7 @@ Ext.define('Mfw.Sync', {
                     }
 
                 }]
-            }],
-
-            listeners: {
-                hide: function (sheet) {
-                    sheet.getViewModel().set({
-                        progress: false,
-                        success: false,
-                        exception: false,
-                        warning: false,
-                        confirm: false,
-                        title: 'Unable to perform operation',
-                        sync: true // boolean to identify if it's a sync update
-                    });
-                }
-            }
+            }]
         });
     },
 
@@ -271,7 +257,9 @@ Ext.define('Mfw.Sync', {
      * @param {string} title - A different title for display
      */
     progress: function (title) {
-        this.sheet.getViewModel().set({
+        var sheet = this.sheet,
+            vm = sheet.getViewModel();
+        vm.set({
             progress: true,
             success: false,
             exception: false,
@@ -279,7 +267,7 @@ Ext.define('Mfw.Sync', {
             confirm: false,
             title: title ||  'Saving...'
         });
-        this.sheet.show();
+        sheet.show();
     },
 
     /**
@@ -428,6 +416,7 @@ Ext.define('Mfw.Sync', {
             success: false,
             exception: exception,
             warning: false,
+            confirm: false,
             sync: isSync,
             title: title || 'Unable to perform operation'
         });
@@ -467,6 +456,7 @@ Ext.define('Mfw.Sync', {
             progress: false,
             success: true,
             exception: false,
+            confirm: false,
             warning: warning,
             sync: isSync,
             title: title || 'Saved with warnings <i class=\'x-fa fa-exclamation-triangle\'></i>'
@@ -563,33 +553,32 @@ Ext.define('Mfw.Sync', {
         requestOptions.params = {force: true};
         requestOptions.success = function() {
             Sync.success();
+
+            // The next two statements are pretty hacky
+            // We don't have any knowledge of the Grid that is being saved here, because the caller for the action sheet
+            // display is just being handled for any requestExceptions. So depending on where the RequestOptions 
+            // URL scope was pointing to, we need to find specific tables that Might be currently viewed, and reload them 
+            // after sync settings finishes so that they load the most recent rules into the table for display.
+            if(requestOptions.scope.url.includes('WanPolicy')) {
+                var wanPoliciesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-policies]');
+                if(Array.isArray(wanPoliciesTable) && wanPoliciesTable.length > 0) {
+                    wanPoliciesTable[0].getController().onLoad();
+                }
+            }
+
+            if(requestOptions.scope.url.includes('Mfw.model.table.Chain')) {
+                var wanRulesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-rules]');
+                if(Array.isArray(wanRulesTable) && wanRulesTable.length > 0) {
+                    wanRulesTable[0].getController().onLoad();
+                }
+            }
         };
         requestOptions.failure = function () {
             console.error('Failure sending Force Confirmation from UI');
         };
         // Remove callbacks from the previous requestOptions
         requestOptions.callback = null;
-
         Ext.Ajax.request(requestOptions);
-
-        // The next two statements are pretty hacky
-        // We don't have any knowledge of the Grid that is being saved here, because the caller for the action sheet
-        // display is just being handled for any requestExceptions. So depending on where the RequestOptions 
-        // URL scope was pointing to, we need to find specific tables that Might be currently viewed, and reload them 
-        // after sync settings finishes so that they load the most recent rules into the table for display.
-        if(requestOptions.scope.url.includes('WanPolicy')) {
-            var wanPoliciesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-policies]');
-            if(Array.isArray(wanPoliciesTable) && wanPoliciesTable.length > 0) {
-                wanPoliciesTable[0].getController().onLoad();
-            }
-        }
-
-        if(requestOptions.scope.url.includes('Mfw.model.table.Chain')) {
-            var wanRulesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-rules]');
-            if(Array.isArray(wanRulesTable) && wanRulesTable.length > 0) {
-                wanRulesTable[0].getController().onLoad();
-            }
-        }
     },
 
     hide: function () {
