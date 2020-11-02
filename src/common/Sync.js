@@ -480,7 +480,7 @@ Ext.define('Mfw.Sync', {
             if (testDecode) {
                 retSum += "By selecting yes, the following changes will be automatically made:<br/><br/>"
                 testDecode.forEach(function(decodeItem) {
-                    retSum += "The " + decodeItem.affectedType + ": '" + decodeItem.affectedValue.description + "' will be disabled because of a dependency on the invalid " + decodeItem.invalidReasonType + ": '" + decodeItem.invalidReasonValue+"'<br/>";
+                    retSum += "The " + decodeItem.affectedType + ": '" + decodeItem.affectedValue.description + "' will be disabled because the dependent " + decodeItem.invalidReasonType + ": '" + decodeItem.invalidReasonValue+"' has been deleted or disabled.<br/>";
                 });
             }
 
