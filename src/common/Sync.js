@@ -194,7 +194,7 @@ Ext.define('Mfw.Sync', {
                     xtype: 'component',
                     style: 'font-size: 14px;',
                     bind: {
-                        html: '<h2 style="font-weight: 100; margin: 0;">Please review the following</h2><p>{confirm.summary}</p>'
+                        html: '<p>{confirm.summary}</p>'
                     }
                 }, {
                     xtype: 'container',
@@ -204,8 +204,23 @@ Ext.define('Mfw.Sync', {
                         margin: '8 16 8 0'
                     },
                     items: [{
+                        text: 'Confirm',
+                        bind: {
+                            ui: 'action'
+                        },
+                        handler: function(btn) {
+                            Sync.confirmHandler(btn);
+                        }
+                    }, {
+                        text: 'Cancel',
+                        bind: {
+                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
+                        },
+                        handler: function (btn) {
+                            btn.up('sheet').hide();
+                        }
+                    }, {
                         reference: 'confirmStackBtn',
-                        ui: 'action',
                         text: 'More info ...',
                         hidden: true,
                         publishes: ['hidden'],
@@ -214,22 +229,6 @@ Ext.define('Mfw.Sync', {
                         },
                         handler: function (btn) {
                             btn.hide();
-                        }
-                    },{
-                        text: 'Yes',
-                        bind: {
-                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
-                        },
-                        handler: function(btn) {
-                            Sync.confirmYesHandler(btn);
-                        }
-                    }, {
-                        text: 'No',
-                        bind: {
-                            ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
-                        },
-                        handler: function (btn) {
-                            btn.up('sheet').hide();
                         }
                     }]
                 }, {
@@ -478,7 +477,6 @@ Ext.define('Mfw.Sync', {
             var retSum = "";
 
             if (testDecode) {
-                retSum += "By selecting yes, the following changes will be automatically made:<br/><br/>"
                 testDecode.forEach(function(decodeItem) {
                     retSum += "The " + decodeItem.affectedType + ": '" + decodeItem.affectedValue.description + "' will be disabled because the dependent " + decodeItem.invalidReasonType + ": '" + decodeItem.invalidReasonValue+"' is deleted or disabled.<br/>";
                 });
@@ -536,7 +534,7 @@ Ext.define('Mfw.Sync', {
     },
 
     /**
-     * confirmYesHandler will handle the "Yes" button on the confirmation action sheet.
+     * confirmHandler will handle the "confirm" button on the confirmation action sheet.
      * this button will resend the previous request to the calling API, but with "force:true" appended
      * to the request param.  It will also attempt to reload any grids that may have been affected
      * from the calling requests
@@ -544,7 +542,7 @@ Ext.define('Mfw.Sync', {
      * 
      * @param {button} btn | the button being referenced from this handler
      */
-    confirmYesHandler: function(btn) {
+    confirmHandler: function(btn) {
         //Here we need to load the previous request, and set the force property to true before sending it again
         var vm = btn.up('sheet').getViewModel();
         var requestOptions = vm.get('confirm.requestOptions');
