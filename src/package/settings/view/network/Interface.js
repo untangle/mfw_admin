@@ -89,11 +89,8 @@ Ext.define('Mfw.settings.network.Interface', {
                 ];
 
                 switch(get('intf.type')) {
-                    //Openvpn does not have bridged, but for VLAN and Default we need to append Bridged in
+                    //Openvpn does not have bridged, but for everything else we need to append Bridged in
                     case 'OPENVPN':
-                        break;
-                    case 'VLAN':
-                        options.push({text: 'Bridged to Parent',   value: 'BRIDGED'});
                         break;
                     default:
                         options.push({ text: 'Bridged',   value: 'BRIDGED' })
