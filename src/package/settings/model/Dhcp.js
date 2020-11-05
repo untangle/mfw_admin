@@ -69,3 +69,36 @@ Ext.define('Mfw.model.Dhcp', {
         }
     }
 });
+
+
+Ext.define('Mfw.model.DhcpLease', {
+    extend: 'Ext.data.Model',
+
+    fields: [
+        {
+            name: 'leaseExpiration',
+            type: 'integer',
+            /**
+             * as leases timestamps are in seconds only
+             * convert them to timestamps with millis
+             */
+            convert: function (value) {
+                return !isNaN(value) ? value * 1000 : 0;
+            }
+        },
+        { name: 'ipAddr', type: 'string' },
+        { name: 'macAddress', type: 'string' },
+        { name: 'hostName', type: 'string' },
+        { name: 'clientId', type: 'string' },
+    ],
+
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: Util.api + '/status/dhcp',
+        },
+        reader: {
+            type: 'json'
+        },
+    }
+});
