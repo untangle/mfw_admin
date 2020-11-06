@@ -217,6 +217,21 @@ Ext.define('Mfw.Sync', {
                             ui: '{(!confirmStackBtn.hidden || !confirm.stack) ? "" : "action"}'
                         },
                         handler: function (btn) {
+                            var vm = btn.up('sheet').getViewModel();
+                            var requestOptions = vm.get('confirm.requestOptions');
+
+                            // The interfaces grid removes the grid item
+                            // and marks it as dirty before the actionsheet returns
+                            // if this happens, then we need to reload the store
+                            // on the grid before we show the editor again
+                            if(requestOptions && requestOptions?.scope?.url?.includes('Mfw.model.Interface')) {
+                                var intfGrid = Ext.ComponentQuery.query('[alias=widget.mfw-settings-network-interfaces]');
+                                // Reload the grid 
+                                if(intfGrid) {
+                                   intfGrid[0].getController().onLoad();
+                                }
+                            }
+
                             btn.up('sheet').hide();
                         }
                     }, {
@@ -544,6 +559,14 @@ Ext.define('Mfw.Sync', {
             // display is just being handled for any requestExceptions. So depending on where the RequestOptions 
             // URL scope was pointing to, we need to find specific tables that Might be currently viewed, and reload them 
             // after sync settings finishes so that they load the most recent rules into the table for display.
+            if(requestOptions.scope.url.includes('Mfw.model.Interface')) {
+                var intfGrid = Ext.ComponentQuery.query('[alias=widget.mfw-settings-network-interfaces]');
+                // Reload the grid 
+                if(intfGrid) {
+                   intfGrid[0].getController().onLoad();
+                }
+            }
+
             if(requestOptions.scope.url.includes('WanPolicy')) {
                 var wanPoliciesTable = Ext.ComponentQuery.query('[alias=widget.mfw-settings-routing-wan-policies]');
                 if(Array.isArray(wanPoliciesTable) && wanPoliciesTable.length > 0) {
