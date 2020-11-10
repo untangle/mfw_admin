@@ -273,6 +273,70 @@ Ext.define('Mfw.settings.network.Interface', {
                         }
                     }]
                 }, {
+                    // WireGuard public key
+                    xtype: 'container',
+                    margin: 8,
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    hidden: true,
+                    bind: {
+                        hidden: '{intf.type !== "WIREGUARD"}'
+                    },
+                    items: [{
+                        /**
+                         * the key is dummy generated in UI
+                         * it should be retreived via an API status call (see MFW-940)
+                         */
+                        xtype: 'component',
+                        flex: 1,
+                        bind: {
+                            html: '<div style="color: rgba(17, 17, 17, 0.54)">Public key</div>' +
+                                '<div style="color: #555; margin-top: 8px;">' +
+                                '{isNew ? "(Public key can be viewed after creating the interface)" : "' + btoa(Math.random().toFixed(32).substr(2)) + '"}'
+                                + '</div>',
+                        }
+                    },
+                    // copy to clipboard hidden until the public key feature will be in place
+                    // {
+                    //     xtype: 'button',
+                    //     iconCls: 'x-far fa-copy',
+                    //     tooltip: 'Copy to Clipboard'
+                    // }
+                ]
+                }, {
+                    xtype: 'selectfield',
+                    label: 'Bridged To',
+                    placeholder: 'Select bridge ...',
+                    required: false,
+                    autoSelect: true,
+                    hidden: true,
+                    bind: {
+                        hidden: '{intf.type !== "WIREGUARD"}'
+                    },
+                    items: [{
+                        /**
+                         * the key is dummy generated in UI
+                         * it should be retreived via an API status call (see MFW-940)
+                         */
+                        xtype: 'component',
+                        flex: 1,
+                        bind: {
+                            html: '<div style="color: rgba(17, 17, 17, 0.54)">Public key</div>' +
+                                '<div style="color: #555; margin-top: 8px;">' +
+                                '{isNew ? "(Public key can be viewed after creating the interface)" : "' + btoa(Math.random().toFixed(32).substr(2)) + '"}'
+                                + '</div>',
+                        }
+                    },
+                    // copy to clipboard hidden until the public key feature will be in place
+                    // {
+                    //     xtype: 'button',
+                    //     iconCls: 'x-far fa-copy',
+                    //     tooltip: 'Copy to Clipboard'
+                    // }
+                ]
+                }, {
                     xtype: 'containerfield',
                     layout: 'hbox',
                     bind: {
