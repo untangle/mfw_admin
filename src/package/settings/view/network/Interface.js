@@ -913,6 +913,16 @@ Ext.define('Mfw.settings.network.Interface', {
             }
 
             if (isNew) {
+
+                /**
+                 * If the new interface is a wan, add a 'new' field
+                 * which allows sync-settings to know that it should
+                 * create a new wan policy for this interface
+                 */
+                if (intf.get('wan')) {
+                    intf.set('new', true);
+                }
+
                 interfacesStore.add(intf);
             } else {
                 intf.commit();
