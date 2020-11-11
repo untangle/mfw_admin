@@ -51,8 +51,8 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             editor: {
                 xtype: 'textfield',
                 required: true,
-                clearable: false
-                // validators: 'ipv4'
+                clearable: false,
+                validators: 'ipany'
             }
         }, {
             text: 'Netmask/Prefix',
@@ -92,7 +92,7 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
         padding: '0 16 16 16',
         items: [{
             xtype: 'component',
-            html: '<h3>New IPv4 Alias</h3>'
+            html: '<h3>New Allowed IP Address</h3>'
         }, {
             xtype: 'container',
             layout: {
@@ -158,7 +158,6 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            // intf.v4Aliases().rejectChanges();
             me.getView().close();
         },
 
@@ -166,7 +165,6 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             var me = this,
                 intf = me.getViewModel().get('intf');
 
-            // intf.v4Aliases().commitChanges();
             me.getView().close();
         }
     }
