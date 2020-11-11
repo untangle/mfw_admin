@@ -372,7 +372,6 @@ Ext.define('Mfw.settings.network.Interface', {
                             },
                             minValue: 1,
                             maxValue: 4094,
-                            errorTarget: 'bottom',
                         }
                     ]
                 }, {
@@ -727,6 +726,76 @@ Ext.define('Mfw.settings.network.Interface', {
                     return true;
                 }
             )
+
+            var vlanidField = form.getFields('vlanid');
+            var vlaninterfaceField = form.getFields('vlaninterface');
+
+            /**
+             * On VLAN ID changes, validate that there are no
+             * other vlan interfaces with the same parent
+             * interface and same vlan id
+             */
+            vlanidField.setValidators( function(val) {
+                var Err = null;
+
+                Ext.getStore('interfaces').each(function (intf) {
+                    if(intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == val && intf.get('boundInterfaceId') == vlaninterfaceField.getValue()) {
+                        Err = 'A VLAN interface with the specified VLAN ID already exists on this interface';
+                        return false;
+                    }
+                });
+
+                if(Err) {
+                    return Err;
+                }
+
+                /**
+                 * If the VLAN ID field is valid, and the
+                 * parent interface field isn't, rerun the
+                 * parent interface validator so it will
+                 * mark it as valid as well
+                 */
+                if(!vlaninterfaceField.isValid()) {
+                    vlanidField.clearInvalid();
+                    vlaninterfaceField.validate();
+                }
+
+                return true;
+            })
+
+            /**
+             * On VLAN parent changes, validate that there are no
+             * other vlan interfaces with the same parent
+             * interface and same vlan id
+             */
+            vlaninterfaceField.setValidators( function(val) {
+                var Err = null;
+
+                Ext.getStore('interfaces').each(function (intf) {
+                    if(intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == vlanidField.getValue() && intf.get('boundInterfaceId') == val) {
+                        Err = 'A VLAN interface with the specified VLAN ID already exists on this interface';
+                        return false;
+                    }
+                });
+
+                if(Err) {
+                    return Err;
+                }
+
+                /**
+                 * If the VLAN parent interface field is valid,
+                 * and the VLAN ID field isn't, rerun the VLAN
+                 * ID field validator so it will mark it as valid
+                 * as well
+                 */
+                if(!vlanidField.isValid()) {
+                    vlaninterfaceField.clearInvalid();
+                    vlanidField.validate();
+                }
+
+                return true;
+            })
+
         },
 
         selectCard: function (btn) {
