@@ -708,7 +708,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 var Err = null;
 
                 Ext.getStore('interfaces').each(function (intf) {
-                    if(intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == val && intf.get('boundInterfaceId') == vlaninterfaceField.getValue()) {
+                    if(intf.get('interfaceId') != currentIntf.get('interfaceId') && intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == val && intf.get('boundInterfaceId') == vlaninterfaceField.getValue()) {
                         Err = 'A VLAN interface with the specified VLAN ID already exists on this interface';
                         return false;
                     }
@@ -741,7 +741,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 var Err = null;
 
                 Ext.getStore('interfaces').each(function (intf) {
-                    if(intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == vlanidField.getValue() && intf.get('boundInterfaceId') == val) {
+                    if(intf.get('interfaceId') != currentIntf.get('interfaceId') && intf.get('type') == 'VLAN' && intf.get('enabled') && intf.get('vlanid') == vlanidField.getValue() && intf.get('boundInterfaceId') == val) {
                         Err = 'A VLAN interface with the specified VLAN ID already exists on this interface';
                         return false;
                     }
