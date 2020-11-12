@@ -109,8 +109,8 @@ Ext.define('Mfw.settings.interface.Lte', {
                     placeholder: 'Enter APN ...',
                     bind: {
                         value: '{intf.simApn}',
-                        required: '{intf.type === "WWAN"}',
-                        disabled: '{intf.type !== "WWAN" || intf.simNetwork}',
+                        required: '{intf.type === "WWAN" && intf.simNetwork !== "AT&T"}',
+                        disabled: '{intf.type !== "WWAN" || (intf.simNetwork && intf.simNetwork !== "AT&T")}',
                         hidden: '{intf.simApn === "any"}'
                     }
                 }]
