@@ -51,8 +51,7 @@ Ext.define('Mfw.settings.interface.Ipv6Aliases', {
             editor: {
                 xtype: 'textfield',
                 required: true,
-                clearable: false,
-                validators: 'ipv6'
+                clearable: false
             }
         }, {
             text: 'Prefix Length',
@@ -113,8 +112,7 @@ Ext.define('Mfw.settings.interface.Ipv6Aliases', {
                 name: 'v6Address',
                 label: 'Address',
                 placeholder: 'enter address ...',
-                flex: 1,
-                validators: 'ipv6'
+                flex: 1
             }, {
                 xtype: 'numberfield',
                 name: 'v6Prefix',
@@ -147,6 +145,33 @@ Ext.define('Mfw.settings.interface.Ipv6Aliases', {
     }],
 
     controller: {
+        init: function () {
+            var vm = this.getViewModel(),
+                form = this.getView().down('formpanel'),
+                v6AddressField = form.getFields('v6Address'),
+                grid = this.getView().down('grid'),
+                v6AddressEditorField = grid.getColumns()[0]._editor,
+                currentIntf = vm.get('intf');
+
+            /**
+             * For v6Address, use the ipv6 validator to ensure
+             * it is a properly formated ipv6 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v6AddressValidator = Ext.bind(CommonUtil.checkV6Dups, this, [v6AddressField, currentIntf]);
+            v6AddressField.setValidators([ 'ipv6', v6AddressValidator ]);
+
+            /**
+             * For v6AddressEditor, use the ipv6 validator to ensure
+             * it is a properly formated ipv6 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v6AddressEditorValidator = Ext.bind(CommonUtil.checkV6Dups, this, [v6AddressEditorField, currentIntf]);
+            v6AddressEditorField.setValidators([ 'ipv6', v6AddressEditorValidator ]);
+        },
+
         addV6Alias: function (btn) {
             var me = this,
                 form = btn.up('formpanel'),
