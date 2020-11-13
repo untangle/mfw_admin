@@ -51,8 +51,7 @@ Ext.define('Mfw.settings.interface.Ipv4Aliases', {
             editor: {
                 xtype: 'textfield',
                 required: true,
-                clearable: false,
-                validators: 'ipv4'
+                clearable: false
             }
         }, {
             text: 'Netmask/Prefix',
@@ -110,8 +109,7 @@ Ext.define('Mfw.settings.interface.Ipv4Aliases', {
                 name: 'v4Address',
                 label: 'Address',
                 placeholder: 'enter address ...',
-                flex: 1,
-                validators: 'ipv4'
+                flex: 1
             }, {
                 xtype: 'selectfield',
                 name: 'v4Prefix',
@@ -143,6 +141,33 @@ Ext.define('Mfw.settings.interface.Ipv4Aliases', {
     }],
 
     controller: {
+        init: function () {
+            var vm = this.getViewModel(),
+                form = this.getView().down('formpanel'),
+                v4AddressField = form.getFields('v4Address'),
+                grid = this.getView().down('grid'),
+                v4AddressEditorField = grid.getColumns()[0]._editor,
+                currentIntf = vm.get('intf');
+
+            /**
+             * For v4Address, use the ipv4 validator to ensure
+             * it is a properly formated ipv4 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v4AddressValidator = Ext.bind(CommonUtil.checkV4Dups, this, [v4AddressField, currentIntf]);
+            v4AddressField.setValidators([ 'ipv4', v4AddressValidator ]);
+
+            /**
+             * For v4AddressEditor, use the ipv4 validator to ensure
+             * it is a properly formated ipv4 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v4AddressEditorValidator = Ext.bind(CommonUtil.checkV4Dups, this, [v4AddressEditorField, currentIntf]);
+            v4AddressEditorField.setValidators([ 'ipv4', v4AddressEditorValidator ]);
+        },
+
         addV4Alias: function (btn) {
             var me = this,
                 form = btn.up('formpanel'),

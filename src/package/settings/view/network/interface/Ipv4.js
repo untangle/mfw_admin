@@ -224,8 +224,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                             value: '{intf.v4StaticAddress}',
                             required: '{intf.configType === "ADDRESSED" && intf.v4ConfigType === "STATIC"}',
                             disabled: '{intf.v4ConfigType !== "STATIC"}'
-                        },
-                        validators: 'ipv4'
+                        }
                     }, {
                         xtype: 'selectfield',
                         label: 'Netmask/Prefix',
@@ -420,6 +419,19 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                     }, 3000);
                 }
             });
+
+            var form = this.getView().down('formpanel');
+            var v4StaticAddressField = form.getFields('v4StaticAddress');
+            var currentIntf = vm.get('intf');
+
+            /**
+             * For v4StaticAddress, use the ipv4 validator to ensure
+             * it is a properly formated ipv4 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v4StaticAddressValidator = Ext.bind(CommonUtil.checkV4Dups, this, [v4StaticAddressField, currentIntf]);
+            v4StaticAddressField.setValidators([ 'ipv4', v4StaticAddressValidator ]);
         },
 
         /**
