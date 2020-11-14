@@ -91,6 +91,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                     items: [{
                         xtype: 'textfield',
                         label: 'Address',
+                        name: 'v6StaticAddress',
                         placeholder: 'enter address ...',
                         flex: 1,
                         margin: '0 32 0 0',
@@ -98,8 +99,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                             value: '{intf.v6StaticAddress}',
                             required: '{intf.configType === "ADDRESSED" && intf.v6ConfigType === "STATIC"}',
                             disabled: '{intf.v6ConfigType !== "STATIC"}'
-                        },
-                        validators: 'ipv6'
+                        }
                     }, {
                         xtype: 'numberfield',
                         label: 'Prefix Length',
@@ -312,6 +312,22 @@ Ext.define('Mfw.settings.interface.Ipv6', {
         }]
     }],
     controller: {
+        init: function () {
+            var vm = this.getViewModel(),
+                form = this.getView().down('formpanel'),
+                v6StaticAddressField = form.getFields('v6StaticAddress'),
+                currentIntf = vm.get('intf');
+
+            /**
+             * For v6StaticAddress, use the ipv6 validator to ensure
+             * it is a properly formated ipv6 address, and then check
+             * to see if any other interfaces are already using the
+             * input address
+             */
+            v6StaticAddressValidator = Ext.bind(CommonUtil.checkV6Dups, this, [v6StaticAddressField, currentIntf]);
+            v6StaticAddressField.setValidators([ 'ipv6', v6StaticAddressValidator ]);
+        },
+
         showIpv6Aliases: function () {
             var me = this,
                 intf = me.getViewModel().get('intf');

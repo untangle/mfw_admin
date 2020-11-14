@@ -155,5 +155,114 @@ Ext.define('Mfw.CommonUtil', {
         }
 
         return icon;
-    }
+    },
+
+    /**
+     * Check if the field value matches the IPV4 static
+     * or alias addresses of any existing interfaces
+     *
+     * field - the address field to check
+     * currentIntf - the current interface object
+     *
+     * return - true if no duplicate, otherwise
+     *          return an error string
+     */
+    checkV4Dups: function (field, currentIntf) {
+        var Err = null,
+            val = field.getValue();
+
+        /**
+         * Check other nic/vlan/wifi interfaces with static
+         * ipv4 addresses and/or v4aliases to make sure the
+         * input value is not already in use
+         *
+         * Check the interfaceId to ensure we aren't checking
+         * against the current interface.  Also, ensure the
+         * interfaces we are checking against are currently
+         * enabled and addressed, so we don't validate against
+         * disabled interfaces or interfaces that have been
+         * switched to bridged
+         */
+        Ext.getStore('interfaces').each(function (intf) {
+            var type = intf.get('type');
+            if(intf.get('enabled') &&
+               intf.get('interfaceId') != currentIntf.get('interfaceId') &&
+               (type == 'NIC' || type == 'VLAN' || type == 'WIFI') &&
+               intf.get('configType') == 'ADDRESSED') {
+
+                if(intf.get('v4ConfigType') == 'STATIC' && intf.get('v4StaticAddress') == val) {
+                    Err = 'This address is already used by ' + intf.get('name')
+                    return false;
+                }
+
+                intf.v6Aliases().each(function (alias) {
+                    if(alias.get('v4Address') == val) {
+                        Err = 'This address is already used by ' + intf.get('name')
+                        return false;
+                    }
+                });
+            }
+        });
+
+        if(Err) {
+            return Err;
+        }
+
+        return true;
+    },
+
+    /**
+     * Check if the field value matches the IPV6 static
+     * or alias addresses of any existing interfaces
+     *
+     * field - the address field to check
+     * currentIntf - the current interface object
+     *
+     * return - true if no duplicate, otherwise
+     *          return an error string
+     */
+    checkV6Dups: function (field, currentIntf) {
+        var Err = null,
+            val = field.getValue();
+
+        /**
+         * Check other nic/vlan/wifi interfaces with static
+         * ipv6 addresses and/or v6aliases to make sure the
+         * input value is not already in use
+         *
+         * Check the interfaceId to ensure we aren't checking
+         * against the current interface.  Also, ensure the
+         * interfaces we are checking against are currently
+         * enabled and addressed, so we don't validate against
+         * disabled interfaces or interfaces that have been
+         * switched to bridged
+         */
+        Ext.getStore('interfaces').each(function (intf) {
+            var type = intf.get('type');
+            if(intf.get('enabled') &&
+               intf.get('interfaceId') != currentIntf.get('interfaceId') &&
+               (type == 'NIC' || type == 'VLAN' || type == 'WIFI') &&
+               intf.get('configType') == 'ADDRESSED') {
+
+                if(intf.get('v6ConfigType') == 'STATIC' && intf.get('v6StaticAddress') == val) {
+                    Err = 'This address is already used by ' + intf.get('name')
+                    return false;
+                }
+
+                intf.v6Aliases().each(function (alias) {
+                    if(alias.get('v6Address') == val) {
+                        Err = 'This address is already used by ' + intf.get('name')
+                        return false;
+                    }
+                });
+            }
+        });
+
+        if(Err) {
+            return Err;
+        }
+
+        return true;
+    },
+
 });
