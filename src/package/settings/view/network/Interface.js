@@ -36,7 +36,9 @@ Ext.define('Mfw.settings.network.Interface', {
             isNew: false,
             isDialog: false,
             validDhcpRange: null,
-            wifiWarning: false
+            wifiWarning: false,
+            // Most configurations are ok using any bound WAN, but not all.
+            boundOptionsAllowAny: true
         },
         formulas: {
             /**
@@ -135,20 +137,29 @@ Ext.define('Mfw.settings.network.Interface', {
             /**
              * set possible interfaces which can be bound to an openvpn
              */
-            _boundOptions: function () {
-                var interfaces = [{
-                    text: 'any WAN',
-                    value: 0
-                }];
-                Ext.getStore('interfaces').each(function (intf) {
-                    if (intf.get('type') === 'NIC' && intf.get('wan')) {
+            _boundOptions: {
+                bind: {
+                    bindTo: '{boundOptionsAllowAny}',
+                    deep: true,
+                },
+                get: function (get){
+                    var interfaces = [];
+                    if(this.get('boundOptionsAllowAny') == true){
                         interfaces.push({
-                            text: intf.get('name'),
-                            value: intf.get('interfaceId')
+                            text: 'any WAN',
+                            value: 0
                         });
                     }
-                });
-                return interfaces;
+                    Ext.getStore('interfaces').each(function (intf) {
+                        if (intf.get('type') === 'NIC' && intf.get('wan')) {
+                            interfaces.push({
+                                text: intf.get('name'),
+                                value: intf.get('interfaceId')
+                            });
+                        }
+                    });
+                    return interfaces;
+                }
             },
 
             /**
