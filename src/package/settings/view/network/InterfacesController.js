@@ -45,28 +45,17 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 // 'natEgress' enables or disables NAT
                 natEgress: true,
                 /**
-                 * from MFW-494
-                 * The IPv4 address (v4StaticAddress) for the first WireGuard interface
-                 * should be 172.16.200.1/32 and it should increment for each new WireGuard interface
-                 * (e.g. 172.16.200.2/32, 172.16.200.3/32 ...).
-                 * These addressed will later be pulled from an API endpoint (MFW-945).
-                 */
-                v4StaticAddress: '172.16.200.1',
-                v4StaticPrefix: 32,
-                /**
                  * this is dummy set for now as it is required upon interface creation
                  * should be removed later (see MFW-940)
                  */
-                wireguardPrivateKey: btoa(Math.random().toFixed(32).substr(2)),
+                wireguardPrivateKey: null,
+                wireguardPublicKey: null,
                 /**
-                 * TODO
-                 * 'wireguardAddresses' are not set in UI,
-                 * but wireguard backend requires to be set
-                 * put a dummy address, should be removed
+                 * Type of connection - client or tunnel.
                  */
-                wireguardAddresses: ['100.100.100.100'],
+                wireguardType: "CLIENT",
                 /**
-                 * the default WireGuard port (cannot be changed in UI)
+                 * the default WireGuard port.  Only matters if wireguardType is TUNNEL
                  */
                 wireguardPort: 51820
             });
@@ -74,25 +63,69 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             /**
              * WireGuard unique peer
              */
-            newIntf.wireguardPeers().add({
+            var peer = newIntf.wireguardPeers().add({
                 // peer 'host' can be an IP or hostname, user defined
                 host: '',
                 // peer port, not set in UI
-                port: null,
+                port: 51820,
                 // peer 'publicKey', user defined
                 publicKey: '',
                 // peer 'presharedKey' is not implemented and used yet
                 presharedKey: null,
-                /**
-                 * preset to allow all IPv4 addresses (now shown and not changeable)
-                 * passed as an array as backend expect it to be
-                 */
-                allowedIps: ['0.0.0.0/0'],
                 // peer 'keepalive' defaults to 60 seconds (not shown and not changeable)
                 keepalive: 60,
                 // peer 'routeAllowedIps' always true (not shown and not changeable)
                 routeAllowedIps: true
-            })
+            });
+            /**
+               * preset to allow all IPv4 addresses
+               * passed as an array as backend expect it to be
+            */
+            peer[0].allowedIps().add({
+                address: '0.0.0.0',
+                prefix: 0
+            });
+
+            /**
+             * Generate WireGuard private/public keypair.
+             */
+            Ext.Ajax.request({
+                url: Util.api + '/wireguard/keypair',
+                method: 'GET',
+                async: false,
+                success: function (response) {
+                    var keypair = JSON.parse(response.responseText);
+                    newIntf.set('wireguardPrivateKey', keypair.privateKey);
+                    newIntf.set('wireguardPublicKey', keypair.publicKey);
+                },
+                failure: function () {
+                }
+            });
+            /**
+             * Generate namespace for WireGuard interface.
+             */
+            Ext.Ajax.request({
+                url: Util.api + '/netspace/request',
+                method: 'POST',
+                params: Ext.JSON.encode({
+                    ipVersion: "4",
+                    hostID: "1",
+                    networkSize: "1"
+                }),
+                async: false,
+                success: function (response) {
+                    var netspace = JSON.parse(response.responseText);
+                    var ipAddress = netspace["network"];
+                    ipAddress = ipAddress.substring(0, ipAddress.lastIndexOf(".") + 1) + "1";
+                    var prefix = netspace["cidr"].substring(netspace["cidr"].lastIndexOf("/") + 1);
+                    newIntf.wireguardAddresses().add({
+                        'address': ipAddress,
+                        'prefix': prefix
+                    });
+                },
+                failure: function () {
+                }
+            });
         }
 
         me.intfDialog = Ext.Viewport.add({
@@ -100,7 +133,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             ownerCmp: me.getView(),
             layout: 'fit',
             width: 416,
-            height: Ext.getBody().getViewSize().height < 700 ? (Ext.getBody().getViewSize().height - 20) : 700,
+            height: Ext.getBody().getViewSize().height < 800 ? (Ext.getBody().getViewSize().height - 20) : 800,
             padding: 0,
 
             showAnimation: false,

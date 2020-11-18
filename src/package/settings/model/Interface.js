@@ -39,19 +39,43 @@ Ext.define('Mfw.model.OpenVpnConfFile', {
     ]
 });
 
+Ext.define('Mfw.model.WireguardAddresses', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'address', type: 'string' },
+        { name: 'prefix',  type: 'integer' }
+    ]
+});
+
+Ext.define('Mfw.model.WireguardPeer.AllowedIps', {
+    extend: 'Ext.data.Model',
+    idProperty: '_id',
+    identifier: 'uuid',
+    fields: [
+        { name: 'address', type: 'string' },
+        { name: 'prefix',  type: 'integer' }
+    ]
+});
+
 Ext.define('Mfw.model.WireguardPeer', {
     extend: 'Ext.data.Model',
     idProperty: '_id',
     identifier: 'uuid',
     fields: [
         { name: 'publicKey',       type: 'string' },
-        { name: 'allowedIps',      type: 'auto' },
         { name: 'host',            type: 'string' },
         { name: 'port',            type: 'integer' },
         { name: 'presharedKey',    type: 'string' },
         { name: 'keepalive',       type: 'integer' }, // seconds
         { name: 'routeAllowedIps', type: 'boolean' }
-    ]
+    ],
+    hasMany: [{
+        model: 'Mfw.model.WireguardPeer.AllowedIps',
+        name: 'allowedIps',
+        associationKey: 'allowedIps'
+    }]
 });
 
 
@@ -168,8 +192,10 @@ Ext.define('Mfw.model.Interface', {
 
         // wireguard
         { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
-        { name: 'wireguardAddresses',  type: 'auto', allowNull: true },
+        { name: 'wireguardPublicKey',  type: 'string', allowNull: true },
+        { name: 'wireguardType',       type: 'string', allowNull: false }, // ["ROAMING", "TUNNEL"]
         { name: 'wireguardPort',       type: 'integer', allowNull: true },
+        // ! hasMany wireguardAddresses
         // ! hasMany wireguardPeers
 
         // WWAN
@@ -227,6 +253,10 @@ Ext.define('Mfw.model.Interface', {
         model: 'Mfw.model.DhcpOptions',
         name: 'dhcpOptions',
         associationKey: 'dhcpOptions'
+    }, {
+        model: 'Mfw.model.WireguardAddresses',
+        name: 'wireguardAddresses',
+        associationKey: 'wireguardAddresses'
     }, {
         model: 'Mfw.model.WireguardPeer',
         name: 'wireguardPeers',
