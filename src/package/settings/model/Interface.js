@@ -213,6 +213,11 @@ Ext.define('Mfw.model.Interface', {
         { name: 'simPlmn', type: 'integer', allowNull: true },
         { name: 'simAutoconnect', type: 'boolean', allowNull: true },
 
+        // Device settings.
+        { name: 'ethSpeed', type: 'integer', allowNull: true },
+        { name: 'ethDuplex', type: 'string', allowNull: true },
+        { name: 'ethAutoneg', type: 'boolean', allowNull: true },
+        
         /**
          * object filled with interface status props
          * !!! persist flag as false avoids making record dirty !!!

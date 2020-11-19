@@ -264,5 +264,45 @@ Ext.define('Mfw.CommonUtil', {
 
         return true;
     },
+    /**
+     * Find the list of duplex options supported by
+     * an interface given selected speed.
+     *
+     * @param {array[string]} linkOptions - Array of supported speed/duplex combinations.
+     * @param {int} curSpeed - selected speed. Eg 10, 100, 1000
+     *
+     * return - Array of duplex options.
+     */
+    getDuplexOptions: function(linkOptions, curSpeed) {
+        var duplexOptions = [];
+        let linkModes = [];
+        reSpeed = /[0-9]*/;
+        reDuplex = /[FH]/;
+
+        // Build an array of options so that we show only valid duplex options for a selected speed.
+        linkOptions.forEach(function (m) {
+            speed = m.match(reSpeed)[0];
+            duplex = m.match(reDuplex)[0];
+            if (duplex === "F") {
+                obj = { speed: speed, duplex: "full" };
+            }
+            else {
+                obj = { speed: speed, duplex: "half" };
+            }
+            linkModes.push(obj);
+        });
+
+        linkModes.forEach(function (l) {
+            if (parseInt(l.speed, 10) === curSpeed) {
+                obj = {
+                    text: l['duplex'].charAt(0).toUpperCase() + l['duplex'].slice(1),
+                    value: l['duplex']
+                };
+                duplexOptions.push(obj);
+            }
+        });
+
+        return duplexOptions;
+    }
 
 });

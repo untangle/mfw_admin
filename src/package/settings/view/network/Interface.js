@@ -77,6 +77,9 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'WIREGUARD' ||
                     get('intf.type') === 'VLAN' && get('intf.wan') === false;
             },
+            _hiddenAdvanced: function (get) {
+                return get('intf.type') !== 'NIC';
+            },
             _intfAddTitle: function(get) {
                 return 'Add ' + CommonUtil.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
             },
@@ -480,7 +483,15 @@ Ext.define('Mfw.settings.network.Interface', {
             bind: {
                 ui: '{cardKey === "qos" ? "action" : ""}',
                 hidden: '{_hiddenQos}'
-            }
+            },
+        }, {
+            text: 'Advanced',
+            value: 'advanced',
+            hidden: true,
+            bind: {
+                ui: '{cardKey === "advanced" ? "action" : ""}',
+                hidden: '{_hiddenAdvanced}'
+            },
         }]
 
     }, {
@@ -540,6 +551,9 @@ Ext.define('Mfw.settings.network.Interface', {
             xtype: 'interface-qos',
             itemId: 'qos'
         }, {
+            xtype: 'interface-advanced',
+            itemId: 'advanced'
+        },{
             /**
              * Interface is bridged card
              */
