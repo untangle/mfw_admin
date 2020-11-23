@@ -951,7 +951,8 @@ Ext.define('Mfw.settings.Map', {
 
         simNetworks: [
             { text: 'T-Mobile', value: 'T-Mobile', apn: 'fast.t-mobile.com' },
-            { text: 'Verizon', value: 'Verizon', apn: 'any' }
+            { text: 'Verizon', value: 'Verizon', apn: 'any' },
+            { text: 'AT&T', value: 'AT&T', apn: 'm2m.com.attz' }
             // MFW-739 do not show other LTE networks
             // { text: 'Other', value: 'OTHER' }
         ]
