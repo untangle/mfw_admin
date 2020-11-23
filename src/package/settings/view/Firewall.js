@@ -51,7 +51,15 @@ Ext.define('Mfw.settings.view.Firewall', {
 
     controller: {
         init: function () {
-            var me = this, fw = new Mfw.model.Firewall();
+            var me = this, fw = new Mfw.model.Firewall(),
+                root = { children: [] }, store = null;
+
+            store = Ext.create('Ext.data.TreeStore', {
+                rootVisible: false,
+                root: root
+            });
+
+            me.getView().down('tree').setStore(store);
 
             fw.load({
                 success: function () {
@@ -61,7 +69,7 @@ Ext.define('Mfw.settings.view.Firewall', {
         },
 
         buildTree: function (fw) {
-            var me = this, root = { children: [] }, data = {}, rules;
+            var me = this, root = { expanded: true, children: [] }, data = {}, rules;
 
             var setChildren = function (table, chain) {
                 if (!data[table]) {
@@ -119,12 +127,7 @@ Ext.define('Mfw.settings.view.Firewall', {
                 root.children.push(value);
             });
 
-            var store = Ext.create('Ext.data.TreeStore', {
-                rootVisible: false,
-                root: root
-            });
-
-            me.getView().down('tree').setStore(store);
+            me.getView().down('tree').getStore().setRoot(root);
         }
 
     }
