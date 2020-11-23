@@ -11,6 +11,6 @@ Ext.define('Mfw.settings.firewall.Nat', {
         defaultAction: 'MASQUERADE',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','SNAT','MASQUERADE'],
         hash: 'firewall/nat',
-        conditions: Util.getFirstPacketConditions()
+        conditions: Util.getFilteredConditions('nat')
     }
 });

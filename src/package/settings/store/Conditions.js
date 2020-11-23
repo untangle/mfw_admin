@@ -12,8 +12,8 @@
  * - operators:            array of possible operators to be used for the condition ['!=','<','<=','==','>', '>=']
  * - field:                the field used to edit the condition value; by default (if not defined) it's a simple textfield
  * - extraFields:          some conditions (like LIMT_RATE) require more than a single value field so extra fields are added
- * - disableOnFirstPacket: bool to skip conditions which in some circumstances are disabled on first packet
- *                         see package/settings/Util.js -> getFirstPacketConditions()
+ * - ruleSections:         a filter to filter the condition from specific settings sections
+ *                         see package/settings/Util.js -> getFilteredConditions()
  * */
 Ext.define('Mfw.settings.Conditions', {
     alternateClassName: 'Conditions',
@@ -46,7 +46,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -81,7 +81,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Category (Matched)'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -100,7 +100,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     }, {
         type:'APPLICATION_ID_INFERRED',
         category: 'Application',
@@ -124,7 +124,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application ID (Matched)'.t(),
         description: 'Application ID description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         field: {
             xtype: 'combobox',
             placeholder: 'Select or type a value ...',
@@ -148,7 +148,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },  {
         type:'APPLICATION_CONFIDENCE_INFERRED',
         category: 'Application',
@@ -161,7 +161,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Confidence (Matched)'.t(),
         description: 'Application Confidence (Matched) description ...',
         operators: ['==', '!=', '>', '>=', '<', '<='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },  {
         type:'APPLICATION_PRODUCTIVITY_INFERRED',
         category: 'Application',
@@ -174,7 +174,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Productivity (Matched)'.t(),
         description: 'Application Productivity (Matched) description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     }, {
         type:'APPLICATION_RISK_INFERRED',
         category: 'Application',
@@ -187,7 +187,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Risk (Matched)'.t(),
         description: 'Application Risk (Matched) description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },
 
     // SOURCE
@@ -323,14 +323,14 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Destination Interface Name'.t(),
         description: 'Destination Interface Name description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     }, {
         type:'DESTINATION_INTERFACE_ZONE',
         category: 'Destination',
         text: 'Destination Interface Zone'.t(),
         description: 'Destination Interface Zone description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         field: {
             xtype: 'selectfield',
             multiSelect: false,
@@ -359,7 +359,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Destination Interface Type'.t(),
         description: 'Destination Interface Type description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         field: {
             xtype: 'selectfield',
             autoSelect: true,

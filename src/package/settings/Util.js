@@ -71,9 +71,19 @@ Ext.define('Mfw.settings.Util', {
         return Ext.Date.subtract(clientDate, Ext.Date.MINUTE, new Date().getTimezoneOffset() / 60000);
     },
 
-    // getFirstPacketConditions will retrieve all condition types that do not have disableOnFirstPacket == true
-    getFirstPacketConditions: function() {
-        return Conditions.list.filter(function(item) {return item.disableOnFirstPacket != true; }).map(function(item) {return item.type; });
+    // getFilteredConditions will retrieve all condition types for the specified ruleSection
+    // @param ruleSection - The calling grid type we want to get conditions for
+    // valid ruleSections are:
+    // - port-forward
+    // - nat
+    // - access
+    // - filter
+    // - shaping
+    // - wan-routing
+    // if the condition has a null ruleSections, we assume all sections are valid
+
+    getFilteredConditions: function(ruleSection) {
+        return Conditions.list.filter(function(item) {return item.ruleSections == null|| item.ruleSections.includes(ruleSection) }).map(function(item) {return item.type; });
     },
 
     /**

@@ -11,6 +11,6 @@ Ext.define('Mfw.settings.firewall.PortForward', {
         hash: 'firewall/port-forward',
         defaultAction: 'DNAT',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','DNAT'],
-        conditions: Util.getFirstPacketConditions()
+        conditions: Util.getFilteredConditions('port-forward')
     }
 });
