@@ -383,11 +383,19 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 // regardless of the new selection from tree or existing condition from grid ...
                 conditionDef = Conditions.map[selection.get('type')], // condition as defined in Conditions global
                 // set valuefield from condition definition or default to textfield
-                valueField = conditionDef.field || {
+                valueField = {
                     xtype: 'textfield'
                 },
                 operators = [],
                 selectedCondition;
+
+            if (conditionDef == null) {
+                return;
+            }
+
+            if(conditionDef.field != null) {
+                valueField = conditionDef.field;
+            }
 
             // deselect tree if selected
             if (!isNewCondition) {
