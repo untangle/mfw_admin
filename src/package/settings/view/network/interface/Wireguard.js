@@ -335,7 +335,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 for( var key in jsonPasteData ){
                     if (jsonPasteData.hasOwnProperty(key)){
                         switch(key){
-                            case 'host':
+                            case 'hostname':
                                 remote.push('# ' + jsonPasteData[key]);
                                 break;
                             case 'publicKey':
