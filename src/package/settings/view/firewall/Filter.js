@@ -10,6 +10,7 @@ Ext.define('Mfw.settings.firewall.Filter', {
         },
         defaultAction: 'DROP',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP'],
-        hash: 'firewall/filter'
+        hash: 'firewall/filter',
+        conditions: Util.getFilteredConditions('filter')
     }
 });
