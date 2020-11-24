@@ -97,6 +97,8 @@ Ext.define('Mfw.settings.NoSelection', {
             data: [
                 { text: 'Settings'.t(), href: 'settings/system/settings' },
                 { text: 'Upgrade'.t(), href: 'settings/system/upgrade' },
+                { text: 'Logging'.t(), href: 'system/system/logging' },
+                { text: 'License'.t(), href: 'system/system/license' },
                 { text: 'About'.t(), href: 'settings/system/about' }
             ],
             listeners: {
