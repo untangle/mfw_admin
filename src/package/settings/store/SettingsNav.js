@@ -20,7 +20,6 @@ Ext.define('Mfw.store.SettingsNav', {
                 { text: 'Interfaces'.t(), href: 'network/interfaces', expanded: false },
                 { text: 'DHCP'.t(), leaf: true, href: 'network/dhcp' },
                 { text: 'DNS'.t(), leaf: true, href: 'network/dns' },
-                { text: 'Routing Table'.t(), visible: false, leaf: true, href: 'network/routing' }
             ]
         }, {
             // Smart Routing
@@ -53,7 +52,6 @@ Ext.define('Mfw.store.SettingsNav', {
             href: 'system',
             children: [
                 { text: 'Settings'.t(), leaf: true, href: 'system/settings' },
-                // { text: 'Accounts'.t(), leaf: true, href: 'system/accounts' },
                 { text: 'Upgrade'.t(), leaf: true, href: 'system/upgrade' },
                 { text: 'Logging'.t(), leaf: true, href: 'system/logging' },
                 { text: 'License'.t(), leaf: true, href: 'system/license' },

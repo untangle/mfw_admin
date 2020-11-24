@@ -96,8 +96,9 @@ Ext.define('Mfw.settings.NoSelection', {
             itemTpl: '<span style="font-size: 16px;">{text}</span>',
             data: [
                 { text: 'Settings'.t(), href: 'settings/system/settings' },
-                { text: 'Accounts'.t(), href: 'settings/system/accounts' },
                 { text: 'Upgrade'.t(), href: 'settings/system/upgrade' },
+                { text: 'Logging'.t(), href: 'system/system/logging' },
+                { text: 'License'.t(), href: 'system/system/license' },
                 { text: 'About'.t(), href: 'settings/system/about' }
             ],
             listeners: {
