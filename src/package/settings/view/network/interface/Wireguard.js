@@ -372,7 +372,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 for( var key in jsonPasteData ){
                     if (jsonPasteData.hasOwnProperty(key)){
                         switch(key){
-                            case 'host':
+                            case 'hostname':
                                 remote.push('# ' + jsonPasteData[key]);
                                 break;
                             case 'publicKey':
@@ -508,9 +508,9 @@ Ext.define('Mfw.settings.interface.WireGuard', {
 
             var address = interface.wireguardAddresses().first();
             var jsonData = {
-                'host' : interface.get('name'),
+                'hostname' : interface.get('name'),
                 'publicKey' : interface.get('wireguardPublicKey'),
-                'networks' : address.get('address') + "/" + address.get("prefix"),
+                'peerAddress' : address.get('address')
             };
             if(interface.get('wireguardType') == 'TUNNEL'){
                 var boundInterface = Ext.getStore('interfaces').findRecord('interfaceId', interface.get('boundInterfaceId'));
@@ -529,6 +529,21 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                         jsonData['endpointPort'] = interface.get('wireguardPort');
                     }
                 }
+            }
+            // Get local networks
+            var networks = [];
+            Ext.getStore('interfaces').each( function(interface){
+                if(interface.get('wan') == false){
+                    if(interface.get('v4ConfigType') == 'STATIC'){
+                        networks.push(interface.get('v4StaticAddress') + '/' + interface.get('v4StaticPrefix'));
+                    }
+                    if(interface.get('v6ConfigType') == 'STATIC'){
+                        networks.push(interface.get('v6StaticAddress') + '/' + interface.get('v6StaticPrefix'));
+                    }
+                }
+            });
+            if(networks.length > 0){
+                jsonData['networks'] = networks.join(",");
             }
 
             el = document.createElement('textarea'),
