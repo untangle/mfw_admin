@@ -115,8 +115,8 @@ Ext.define('Mfw.setup.cmp.Lte', {
             autoComplete: false,
             bind: {
                 value: '{intf.simApn}',
-                required: '{intf.type === "WWAN" && intf.enabled}',
-                disabled: '{!intf.enabled || intf.simNetwork}',
+                required: '{intf.type === "WWAN" && intf.enabled && intf.simNetwork !== "AT&T"}',
+                disabled: '{!intf.enabled || (intf.simNetwork && intf.simNetwork !== "AT&T")}',
                 hidden: '{intf.simApn === "any"}'
             }
         },
