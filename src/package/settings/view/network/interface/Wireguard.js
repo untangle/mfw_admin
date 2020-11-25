@@ -265,40 +265,76 @@ Ext.define('Mfw.settings.interface.WireGuard', {
     controller: {
         init: function (view) {
             var vm = view.getViewModel(),
-                intf = vm.get('intf');
+                intf = vm.get('intf'),
+                type = intf.get('type');
 
-            /**
-             * because bindings cannot handle arrays
-             * set a new bind on the unique first wireguard interface peer
-             */
-            vm.set('peer', intf.wireguardPeers().first());
+            if(type == 'WIREGUARD'){
+                /**
+                 * because bindings cannot handle arrays
+                 * set a new bind on the unique first wireguard interface peer
+                 */
+                vm.set('peer', intf.wireguardPeers().first());
 
-            if(vm.get('isNew')){
-                vm.set('wireguardEditMode', 'PASTE');
-            }
+                if(vm.get('isNew')){
+                    /**
+                     * On new, set default mode to paste.
+                     */
+                    vm.set('wireguardEditMode', 'PASTE');
+                    /**
+                     * because wireguard backend requires intf 'device' to be set
+                     * just gave it the same value as the name
+                     * only when creating a new interface!
+                     */
+                    vm.bind('{intf.name}', function(name) {
+                        intf.set('device', name);
+                    });
+                }
 
-            /**
-             * because wireguard backend requires intf 'device' to be set
-             * just gave it the same value as the name
-             * only when creating a new interface!
-             */
-            if (vm.get('isNew')) {
-                vm.bind('{intf.name}', function(name) {
-                    intf.set('device', name);
+                /**
+                 * attempt not to show field errors on form initialization
+                 * as the user hasn't done any input yet
+                 * - requires fields to have a "name"
+                 * - it should be done after the initial binding occurs (which triggers change event)
+                 * - it still requires a small delay to be effective
+                 */
+                vm.bind('{intf}', function() {
+                    Ext.defer(function () { view.down('formpanel').clearErrors(); }, 50);
                 });
-            }
 
-            /**
-             * attempt not to show field errors on form initialization
-             * as the user hasn't done any input yet
-             * - requires fields to have a "name"
-             * - it should be done after the initial binding occurs (which triggers change event)
-             * - it still requires a small delay to be effective
-             */
-            vm.bind('{intf}', function() {
-                Ext.defer(function () { view.down('formpanel').clearErrors(); }, 50);
-            });
+                var wanCheckbox = view.up('mfw-settings-network-interface').down('[_itemId=wan]');
+                if(wanCheckbox){
+                    wanCheckbox.onAfter('change', this.onWanChange);
+                }
+            }
         },
+
+        // If wan, add 0.0.0.0/0 to allowedIps if not there, otherwise remove it.
+        onWanChange: function(component, newValue, oldValue){
+            var vm = component.up('mfw-settings-network-interface').getViewModel(),
+                peerAllowedIps = vm.get('intf').wireguardPeers().first().allowedIps();
+            if(newValue == true){
+                // Add 0.0.0.0/0 to allowed list if not already there.
+                var defaultNetworkFound = false;
+                peerAllowedIps.each( function(network){
+                    if(network.get("address") == '0.0.0.0' && network.get('prefix') == 0){
+                        defaultNetworkFound = true;
+                    }
+                });
+                if(defaultNetworkFound == false){
+                    peerAllowedIps.add({
+                        address: '0.0.0.0',
+                        prefix: 0
+                    });
+                }
+            }else{
+                // Remove 0.0.0.0/0
+                var index = peerAllowedIps.find('address', '0.0.0.0', 0, false, false, true);
+                if(index > -1){
+                    peerAllowedIps.removeAt(index);
+                }
+            }
+        },
+
         /**
          * Generate dialog to allow editing of allowedIP networks.
          */
@@ -322,7 +358,8 @@ Ext.define('Mfw.settings.interface.WireGuard', {
 
         // Paste from a NGFW WireGuard copy to pasteboard.
         pasteConfiguration: function(component, options){
-            var vm = component.up('mfw-settings-network-interface').getViewModel(),
+            var me = this,
+                vm = component.up('mfw-settings-network-interface').getViewModel(),
                 interface = vm.get('intf'),
                 pasteData = options.event.clipboardData.getData("text/plain"),
                 configured = false;
@@ -443,6 +480,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                         }
                                     });
                                     configured = true;
+                                    me.onWanChange(component, interface.get('wan'));
                                     break;
                                 case "#":
                                     interface.set('name', value);
