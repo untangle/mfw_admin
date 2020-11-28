@@ -180,10 +180,10 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
                         type: 'OPENVPN',
                         text: CommonUtil.getNiceInterfaceTypeName('OPENVPN'),
                         handler: 'onAddInterface'
-                    },{
-                        type: 'WIREGUARD',
-                        text: CommonUtil.getNiceInterfaceTypeName('WIREGUARD'),
-                        handler: 'onAddInterface',
+                    // },{
+                    //     type: 'WIREGUARD',
+                    //     text: CommonUtil.getNiceInterfaceTypeName('WIREGUARD'),
+                    //     handler: 'onAddInterface',
                     }, {
                         type: 'VLAN',
                         text: CommonUtil.getNiceInterfaceTypeName('VLAN'),
@@ -441,7 +441,6 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
     },
 
     onDestroy: function () {
-        console.log('destroy');
     }
 
 });
