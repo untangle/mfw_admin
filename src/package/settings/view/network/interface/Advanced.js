@@ -15,13 +15,15 @@ Ext.define('Mfw.settings.interface.Advanced', {
             _linkSpeedTypes: function (get) {
                 let speedOptions = [];
                 reSpeed = /[0-9]*/;
-                get('intf._status.ethLinkSupported').forEach(function (s) {
-                    speed = s.match(reSpeed)[0];
-                    obj = { text: speed, value: speed };
-                    if (!speedOptions.some(o => o['text'] === speed)) {
-                        speedOptions.push(obj);
-                    }
-                });
+                if(Array.isArray(get('intf._status.ethLinkSupported'))){
+                    get('intf._status.ethLinkSupported').forEach(function (s) {
+                        speed = s.match(reSpeed)[0];
+                        obj = { text: speed, value: speed };
+                        if (!speedOptions.some(o => o['text'] === speed)) {
+                            speedOptions.push(obj);
+                        }
+                    });
+                }
                 return speedOptions;
             },
             _linkDuplexTypes: function (get) {
