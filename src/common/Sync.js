@@ -316,8 +316,12 @@ Ext.define('Mfw.Sync', {
      */
     handleResponseOutput: function(response, title) {
         // do not show error if license file non existent
-        if (response.status === 500 && response.request.url.includes('/api/status/license')) {
-            console.warn('License not found!');
+        if (response.status === 500 ){
+            if(response.request.url.includes('/api/status/license')){
+                console.warn('License not found!');
+            }else if( response.request.url.includes('/api/status/command/find_account')) {
+                console.warn('Cannot find account!');
+            }
             return;
         }
 
@@ -326,8 +330,6 @@ Ext.define('Mfw.Sync', {
             CommonUtil.showReauthRequired(this);
             return;
         }
-
-
 
         // if it's a sync API call
         if (response.request.url.includes('/api/settings')) {
