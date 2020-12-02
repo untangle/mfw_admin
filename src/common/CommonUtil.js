@@ -279,6 +279,10 @@ Ext.define('Mfw.CommonUtil', {
         reSpeed = /[0-9]*/;
         reDuplex = /[FH]/;
 
+        if(!Array.isArray(linkOptions)){
+            return duplexOptions;
+        }
+
         // Build an array of options so that we show only valid duplex options for a selected speed.
         linkOptions.forEach(function (m) {
             speed = m.match(reSpeed)[0];
