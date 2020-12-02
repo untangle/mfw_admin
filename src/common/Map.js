@@ -193,6 +193,14 @@ Ext.define('Mfw.settings.Map', {
         142: "ROHC"
     },
 
+    portProtocols: {
+        6: "TCP",
+        17: "UDP",
+        33: "DCCP",
+        132: "SCTP",
+        136: "UDPLite"
+    },
+
     prefixes: {
         "": "Not set",
         0: "/0 - 0.0.0.0",
@@ -984,6 +992,7 @@ Ext.define('Mfw.settings.Map', {
 
     constructor: function() {
         this.options.protocols = this.toOptions(this.protocols);
+        this.options.portProtocols = this.toOptions(this.portProtocols);
         this.options.prefixes = this.toOptions(this.prefixes);
         this.options.ruleOps = this.toOptions(this.ruleOps);
         this.options.routeOps = this.toOptions(this.routeOps);

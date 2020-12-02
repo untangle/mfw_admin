@@ -233,7 +233,22 @@ Ext.define('Mfw.settings.Conditions', {
         field: {
             xtype: 'textfield',
             validators: 'portexpression'
-        }
+        },
+        extraFields: [ {
+                xtype: 'selectfield',
+                name: 'port_protocol',
+                label: 'Port Protocol',
+                labelAlign: 'top',
+                placeholder: 'Select port protocol(s)...',
+                autoSelect: true,
+                //multiSelect: true,
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                errorTarget: 'under',
+                options: Map.options.portProtocols   
+        }]
     }, {
         type:'SOURCE_INTERFACE_NAME',
         category: 'Source',
@@ -316,7 +331,22 @@ Ext.define('Mfw.settings.Conditions', {
         field: {
             xtype: 'textfield',
             validators: 'portexpression'
-        }
+        },
+        extraFields: [ {
+                xtype: 'selectfield',
+                name: 'port_protocol',
+                label: 'Port Protocol',
+                labelAlign: 'top',
+                placeholder: 'Select port protocol(s)...',
+                autoSelect: true,
+                //multiSelect: true,
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                errorTarget: 'under',
+                options: Map.options.portProtocols   
+        }]
     }, {
         type:'DESTINATION_INTERFACE_NAME',
         category: 'Destination',
@@ -685,7 +715,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: false,
+            multiSelect: true,
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.protocols,
