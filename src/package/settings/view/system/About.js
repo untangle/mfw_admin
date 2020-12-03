@@ -90,6 +90,9 @@ Ext.define('Mfw.settings.system.About', {
                 success: function (response) {
                     var build = Ext.decode(response.responseText);
                     for(var key in build){
+                        if(key == 'lede_device_manufacturer_url'){
+                            vm.set('build.' + key, build[key]);
+                        }
                         store.findBy(function(record){
                             if(record.get('key') == 'build.' + key){
                                 record.set('value', build[key]);
