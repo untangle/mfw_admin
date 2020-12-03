@@ -319,10 +319,11 @@ Ext.define('Mfw.Sync', {
         if (response.status === 500 ){
             if(response.request.url.includes('/api/status/license')){
                 console.warn('License not found!');
+                return;
             }else if( response.request.url.includes('/api/status/command/find_account')) {
                 console.warn('Cannot find account!');
+                return;
             }
-            return;
         }
 
         // auth fail
@@ -332,9 +333,7 @@ Ext.define('Mfw.Sync', {
         }
 
         // if it's a sync API call
-        if (response.request.url.includes('/api/settings')) {
-            isSync = true;
-        }
+        var isSync = response.request.url.includes('/api/settings') ? true : false;
 
         // Handle Warnings and Confirmation errors
         if (response.responseJson) {
