@@ -347,14 +347,35 @@ Ext.define('Mfw.Renderer', {
 
         if (type === 'DESTINATION_PORT' ||
             type === 'SOURCE_PORT') {
-                typeText = Map.portProtocols[rec.get('port_protocol')] + " " + typeText;
+                protoText = "";
+                if(Array.isArray(rec.get('port_protocol'))) {
+                    protoText = "";
+                    rec.get('port_protocol').forEach(function(proto) {
+                        protoText = protoText + " " + Map.portProtocols[proto];
+                    });
+
+                } else {
+                    protoText = rec.get('port_protocol');
+                }
+    
+                typeText = protoText + " " + typeText;
         }
 
         var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
 
         if (val) {
             if (type === 'DESTINATION_PORT' || type === 'SOURCE_PORT') {
-                str += '<br/><span style="color: #999; font-size: 10px;">'+ Map.portProtocols[rec.get('port_protocol')] +' ' + type + ' ' + op + ' ' + value + '</span>';
+                if(Array.isArray(rec.get('port_protocol'))) {
+                    protoText = "";
+                    rec.get('port_protocol').forEach(function(proto) {
+                        protoText = protoText + " " + Map.portProtocols[proto];
+                    });
+
+                } else {
+                    protoText = rec.get('port_protocol');
+                }
+                str += '<br/><span style="color: #999; font-size: 10px;">'+ protoText + ' ' + type + ' ' + op + ' ' + value + '</span>';
+                
             } else {
                 str += '<br/><span style="color: #999; font-size: 10px;">' + type + ' ' + op + ' ' + value + '</span>';
             }
@@ -479,8 +500,19 @@ Ext.define('Mfw.Renderer', {
             if (type === 'SOURCE_PORT' ||
                 type === 'DESTINATION_PORT') {
                     // Add the port_protocol name into the type renderer
-                    typeRenderer = Map.portProtocols[cond.get('port_protocol')] + " " + typeRenderer;
+                    if(Array.isArray(cond.get('port_protocol'))) {
+                        protoText = "";
+                        cond.get('port_protocol').forEach(function(proto) {
+                            protoText = protoText + " " + Map.portProtocols[proto];
+                        });
+    
+                    } else {
+                        protoText = cond.get('port_protocol');
+                    }
+
+                    typeRenderer = protoText + " " + typeRenderer;
             }
+
             strArr.push('<span style="font-weight: bold; color: #333;"> ' +
                         cat + ' ' +
                          typeRenderer.toLowerCase() + ' ' +
