@@ -518,7 +518,16 @@ Ext.define('Mfw.reports.ChartController', {
                         if (!series[key]) {
                             series[key] = { name: (name !== '<nil>') ? name : 'none', data: [] };
                         } else {
-                            series[key].data.push([d.time_trunc, val || 0]);
+                            /*
+                             * When units are ms, it doesn't make sense to convert null
+                             * values to 0.  Just leave them as null so they are rendered
+                             * as gaps in the chart data
+                             */
+                            if (record.get('units') === 'ms') {
+                                series[key].data.push([d.time_trunc, val]);
+                            } else {
+                                series[key].data.push([d.time_trunc, val || 0]);
+                            }
                         }
                     }
                 });
