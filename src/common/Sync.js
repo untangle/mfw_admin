@@ -608,7 +608,10 @@ Ext.Ajax.on('requestexception', function (conn, response) {
     if ( url === '/account/status' ||
          url === '/account/login' ||
          url === '/api/sysupgrade' ||
-         url.startsWith('/api/status/wantest') ) {
+         url === '/api/reports/create_query' ||
+         url === '/api/reports/get_data' ||
+         url === '/api/reports/close_query' ||
+         url.startsWith('/api/status/wantest')) {
         return;
     }
     Sync.handleResponseOutput(response);
