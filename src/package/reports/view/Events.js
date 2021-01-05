@@ -282,7 +282,11 @@ Ext.define('Mfw.reports.Events', {
              */
             ReportsUtil.fetchReportData(record, limit, function (data) {
                 view.unmask();
-                if (data === 'error') { return; }
+                if (data === 'error') { 
+                    if (cb) { cb(); }
+                    return; 
+                }
+
                 store.loadData(data);
 
                 if (!me.isWidget) {

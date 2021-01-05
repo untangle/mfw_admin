@@ -70,11 +70,15 @@ Ext.define('Mfw.reports.Text', {
                 var args = [];
 
                 view.unmask();
-                if (data === 'error') { return; }
-
+                if (data === 'error') { 
+                    if (cb) { cb(); }
+                    return; 
+                }
                 if (!record.getRendering() || !record.getRendering().get('textString')) {
                     console.error('Invalid report settings detected. textString rendering missing!');
                     viewModel.set('text', 'Invalid report settings!');
+                    if (cb) { cb(); }
+
                     return;
                 }
 
