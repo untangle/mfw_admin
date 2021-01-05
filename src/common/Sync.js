@@ -605,10 +605,18 @@ Ext.Ajax.on('requestexception', function (conn, response) {
     // avoid showing exception when checking if user is authenticated in login screen
     var url = response.request.url;
 
-    if ( url === '/account/status' ||
-         url === '/account/login' ||
-         url === '/api/sysupgrade' ||
-         url.startsWith('/api/status/wantest') ) {
+    // exceptionBypass prevents the popup exception that blocks the UI from occuring for these URL endpoints
+    var exceptionBypass = [
+        '/account/status',
+        '/account/login',
+        '/api/sysupgrade',
+        '/api/reports/create_query',
+        '/api/reports/get_data',
+        '/api/reports/close_query'
+    ]
+
+    if ( exceptionBypass.includes(url) ||
+         url.startsWith('/api/status/wantest')) {
         return;
     }
     Sync.handleResponseOutput(response);

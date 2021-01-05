@@ -282,7 +282,14 @@ Ext.define('Mfw.reports.Events', {
              */
             ReportsUtil.fetchReportData(record, limit, function (data) {
                 view.unmask();
-                if (data === 'error') { return; }
+
+                // If we receive an error from the fetchReportData call, we still need to call the callback before returning.
+                // This prevents this widget from blocking other widgets that need to be processed
+                if (data === 'error') { 
+                    if (cb) { cb(); }
+                    return; 
+                }
+
                 store.loadData(data);
 
                 if (!me.isWidget) {
