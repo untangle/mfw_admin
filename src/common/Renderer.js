@@ -289,12 +289,15 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            // valueRender = [];
-            // Ext.Array.each(rec.get('value').split(','), function (val) {
-            //     valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-            // });
-            // valueRender = valueRender.join(', ');
-            valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']';
+            if(Array.isArray(rec.get('value'))) {
+                valueRender = [];
+                Ext.Array.each(rec.get('value').split(','), function (val) {
+                    valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                });
+                valueRender = valueRender.join(', ');
+            } else {
+                valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']'; 
+            }
         }
 
         if (type === 'LIMIT_RATE') {
@@ -355,7 +358,7 @@ Ext.define('Mfw.Renderer', {
                     });
 
                 } else {
-                    protoText = rec.get('port_protocol');
+                    protoText = Map.portProtocols[rec.get('port_protocol')];
                 }
     
                 typeText = protoText + " " + typeText;
@@ -372,7 +375,7 @@ Ext.define('Mfw.Renderer', {
                     });
 
                 } else {
-                    protoText = rec.get('port_protocol');
+                    protoText = Map.portProtocols[rec.get('port_protocol')];
                 }
                 str += '<br/><span style="color: #999; font-size: 10px;">'+ protoText + ' ' + type + ' ' + op + ' ' + value + '</span>';
                 
@@ -419,17 +422,20 @@ Ext.define('Mfw.Renderer', {
             valueRender = cond.get('value');
 
             if (type === 'IP_PROTOCOL') {
-                // valueRender = [];
-                // Ext.Array.each(cond.get('value').split(','), function (val) {
-                //     valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                // });
-                // strArr.push('<span style="font-weight: bold; color: #333;">' +
-                //              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
-                //              valueRender.join(' or ') + '</span>');
-                strArr.push('<span style="font-weight: bold; color: #333;">' +
-                             Conditions.map[type].text.toLowerCase() + ' ' +
-                             Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
-                             Map.protocols[cond.get('value')] + '</span>');
+                if(Array.isArray(record.get('value'))) {
+                    valueRender = [];
+                    Ext.Array.each(cond.get('value').split(','), function (val) {
+                        valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                    });
+                    strArr.push('<span style="font-weight: bold; color: #333;">' +
+                                Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                                valueRender.join(' or ') + '</span>');
+                } else {
+                    strArr.push('<span style="font-weight: bold; color: #333;">' +
+                                Conditions.map[type].text.toLowerCase() + ' ' +
+                                Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                                Map.protocols[cond.get('value')] + '</span>');
+                }
                 return;
             }
 
@@ -507,7 +513,7 @@ Ext.define('Mfw.Renderer', {
                         });
     
                     } else {
-                        protoText = cond.get('port_protocol');
+                        protoText = Map.portProtocols[cond.get('port_protocol')];
                     }
 
                     typeRenderer = protoText + " " + typeRenderer;
