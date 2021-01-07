@@ -800,7 +800,36 @@ Ext.define('Mfw.settings.Conditions', {
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             errorTarget: 'under',
-            options: Map.options.groupSelectors
+            options: Map.options.groupSelectors,
+            listeners: {
+                select: function(combo, record) {
+                    // This select listener is used to Show or hide the port_protocol field
+                    if(record.get('value') == "DESTINATION_PORT" || record.get('value') == "SOURCE_PORT") {
+                        if(combo.up().down('#port_protocol')) {
+                            combo.up().down('#port_protocol').show();
+                        }                    
+                    } else {
+                        if(combo.up().down('#port_protocol')) {
+                            combo.up().down('#port_protocol').hide();
+                        }
+                    }
+                }
+            },
+        }, {
+            xtype: 'selectfield',
+            itemId: 'port_protocol',
+            name: 'port_protocol',
+            label: 'Port Protocol',
+            labelAlign: 'top',
+            placeholder: 'Select port protocol(s)...',
+            autoSelect: true,
+            editable: false,
+            required: true,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            errorTarget: 'under',
+            options: Map.options.portProtocols,
+            hidden: true
         }]
     }],
 
