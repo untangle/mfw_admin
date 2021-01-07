@@ -500,12 +500,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Reverse DNS'.t(),
         description: 'Client Reverse DNS description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'CLIENT_DNS_HINT',
         category: 'Client',
         text: 'Client DNS Hint'.t(),
         description: 'Client DNS Hint description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     },
 
@@ -597,12 +599,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Reverse DNS'.t(),
         description: 'Server Reverse DNS description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'SERVER_DNS_HINT',
         category: 'Server',
         text: 'Server DNS Hint'.t(),
         description: 'Server DNS Hint description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     },
 

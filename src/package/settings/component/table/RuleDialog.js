@@ -261,8 +261,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             items: [{
                 xtype: 'component',
                 bind: {
-                    html: '<h2 style="font-weight: 400; margin: 0;">{condition.text}</h2>' +
-                          '<span style="color: #777; font-size: 10px; font-family: monospace;">[{condition.type}]</span>'
+                    html: '<h2 style="font-weight: 400; margin: 0;">{condition.text}</h2>'
                 }
             }, {
                 xtype: 'component',

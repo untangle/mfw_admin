@@ -514,7 +514,6 @@ Ext.define('Mfw.Renderer', {
             }
 
             strArr.push('<span style="font-weight: bold; color: #333;"> ' +
-                        cat + ' ' +
                          typeRenderer.toLowerCase() + ' ' +
                          Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                          valueRender + '</span>');
