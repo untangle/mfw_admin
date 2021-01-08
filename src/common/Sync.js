@@ -613,7 +613,7 @@ Ext.Ajax.on('requestexception', function (conn, response) {
         '/api/reports/create_query',
         '/api/reports/get_data',
         '/api/reports/close_query'
-    ]
+    ];
 
     if ( exceptionBypass.includes(url) ||
          url.startsWith('/api/status/wantest')) {
