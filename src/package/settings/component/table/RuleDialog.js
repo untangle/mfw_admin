@@ -646,9 +646,19 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             var me = this,
                 tree = me.lookup('tree'),
                 store = tree.getStore(),
-                root = store.getRoot();
+                root = store.getRoot(),
+                conditions = me.getView().ownerCmp.getConditions();
 
             store.clearFilter();
+
+            // the above store.clearFilter() removes the conditions we have filtered for this ruleDialog instance
+            // we have to refilter based on the ownerCmp conditions, so that invalid conditions do not show up 
+            if (conditions) {
+                // display only possible conditions provided for this table
+                store.filterBy(function (rec) {
+                    return Ext.Array.contains(conditions, rec.get('type'));
+                });
+            }
 
             if (value) {
                 tree.setSingleExpand(false);
