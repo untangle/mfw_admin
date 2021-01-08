@@ -978,11 +978,10 @@ Ext.define('Mfw.settings.network.Interface', {
             interfacesStore.sync({
                 success: function () {
                     Sync.success();
-                    if (isNew) {
-                        // after adding and saving new interface, reload store
-                        interfacesStore.reload();
-                    } else {
-                        // otherwise redirect to interfaces (non dialog editing)
+                    interfacesStore.reload();
+                    if (!isNew) {
+                        // For edit, redirect to interfaces (non dialog editing)
+                        // interfacesStore.getStatus();
                         if (Ext.isFunction(cb)) { cb(); }
                         Mfw.app.redirectTo('settings/network/interfaces');
                     }
