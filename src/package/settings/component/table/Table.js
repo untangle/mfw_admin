@@ -167,6 +167,9 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         cell: {
             encodeHtml: false,
             tools: [{ cls: 'x-list-sortablehandle', iconCls: 'md-icon-drag-handle', zone: 'start', tooltip: 'Drag to Sort' }]
+        },
+        bind: {
+            hidden: '{!selectedChain.editable}'
         }
     }, {
         xtype: 'checkcolumn',
@@ -174,7 +177,10 @@ Ext.define('Mfw.cmp.grid.table.Table', {
         // text: 'Enabled',
         width: 44,
         menuDisabled: true,
-        resizable: false
+        resizable: false,
+        bind: {
+            hidden: '{!selectedChain.editable}'
+        }
     }, {
         text: 'Id',
         dataIndex: 'ruleId',
