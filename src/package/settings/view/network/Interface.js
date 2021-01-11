@@ -138,6 +138,54 @@ Ext.define('Mfw.settings.network.Interface', {
             },
 
             /**
+             * _v4AliasText gets the text display for the v4Alias button
+             * 
+             * @param {get} get - get property for getting from VM elements
+             */
+            _v4AliasText: function(get) {
+                var intf = get('intf'),
+                    returnText = 'IPv4 Aliases';
+
+                if (!intf || !intf.v4Aliases() || intf.v4Aliases().getCount() == 0) {
+                    return returnText + ' (none)';
+                }
+
+                return returnText + ' (' + intf.v4Aliases().getCount() + ')'.t();
+            },
+
+            /**
+             * _v6AliasText gets the text display for the v6Alias button
+             * 
+             * @param {get} get - get property for getting from VM elements
+             */
+            _v6AliasText: function(get) {
+                var intf = get('intf'),
+                    returnText = 'IPv6 Aliases';
+
+                if (!intf || !intf.v6Aliases() || intf.v6Aliases().getCount() == 0) {
+                    return returnText + ' (none)';
+                }
+
+                return returnText + ' (' + intf.v6Aliases().getCount() + ')'.t();
+            },
+
+            /**
+             * _dhcpOptionsText gets the text display for the DHCP options button
+             * 
+             * @param {*} get - get property for getting VM elements
+             */
+            _dhcpOptionsText: function(get) {
+                var intf = get('intf'),
+                returnText = 'DHCP Options';
+
+                if (!intf || !intf.dhcpOptions() || intf.dhcpOptions().getCount() == 0) {
+                    return returnText + ' (none)'.t();
+                }
+
+                return returnText + ' (' + intf.dhcpOptions().getCount() + ')'.t();
+            },
+
+            /**
              * set possible interfaces which can be bound to an openvpn
              */
             _boundOptions: {
