@@ -125,6 +125,12 @@ Ext.define('Mfw.settings.network.Interface', {
                 return interfaces;
             },
 
+            /**
+             * _bridgedTo is used for displaying the bridgedTo link relationship
+             * 
+             * 
+             * @param {get} get - the get property for getting VM items 
+             */
             _bridgedTo: function (get) {
                 var name;
                 if (!get('intf.bridgedTo')) {
