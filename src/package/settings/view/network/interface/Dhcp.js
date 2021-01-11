@@ -120,7 +120,7 @@ Ext.define('Mfw.settings.interface.Dhcp', {
                 hidden: true,
                 disabled: true,
                 bind: {
-                    text: 'DHCP Options ({intf.dhcpOptions.count || "none"})',
+                    text: '{_dhcpOptionsText}',
                     hidden: '{setupContext}',
                     disabled: '{!intf.dhcpEnabled || intf.wan}'
                 },

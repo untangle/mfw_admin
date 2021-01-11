@@ -303,7 +303,7 @@ Ext.define('Mfw.settings.interface.Ipv6', {
                 xtype: 'button',
                 hidden: true,
                 bind: {
-                    text: 'IPv6 Aliases ({intf.v6Aliases.count || "none"})',
+                    text: '{_v6AliasText}',
                     hidden: '{setupContext || intf.v6ConfigType === "DISABLED"}'
                 },
                 ui: 'action',
