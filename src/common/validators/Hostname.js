@@ -1,5 +1,5 @@
 /**
- * Validate hotname
+ * Validate hostname
  */
 Ext.define('Ext.data.validator.Hostname', {
     extend: 'Ext.data.validator.Validator',
