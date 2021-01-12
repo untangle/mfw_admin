@@ -1106,13 +1106,21 @@ Ext.define('Mfw.settings.network.Interface', {
          */
         handleVlanSelect: function(item, record) {
             var vm = this.getViewModel(),
+                wan = record.get('wan'),
+                was_wan = vm.get('intf.wan'),
                 configType = record.get('configType');
 
             if(record && vm) {
                 if(configType === 'ADDRESSED') {
-                    vm.set('intf.wan', record.get('wan'));
+                    vm.set('intf.wan', wan);
+                    if(wan && !was_wan) {
+                        vm.set('intf.natEgress', true);
+                    } else if(!wan) {
+                        vm.set('intf.natEgress', false);
+                    }
                 } else {
                     vm.set('intf.wan', false);
+                    vm.set('intf.natEgress', false);
                 }
             }
         },
