@@ -606,7 +606,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server DNS Hint'.t(),
         description: 'Server DNS Hint description ...',
-        ruleSections: ['shaping','filter'],
+        ruleSections: ['wan-routing','shaping','filter','nat'],
         operators: ['==', '!=']
     },
 
