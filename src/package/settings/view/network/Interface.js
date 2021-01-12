@@ -435,16 +435,6 @@ Ext.define('Mfw.settings.network.Interface', {
                             checked: '{intf.natEgress}',
                             hidden: '{!intf.wan}'
                         }
-                    }, {
-                        xtype: 'checkbox',
-                        boxLabel: '<b>NAT incoming traffic (including bridged peers)</b>',
-                        bodyAlign: 'start',
-                        flex: 1,
-                        hidden: true,
-                        bind: {
-                            checked: '{intf.natIngress}',
-                            hidden: '{intf.wan || intf.configType !== "ADDRESSED"}'
-                        }
                     }]
                 }]
             }]

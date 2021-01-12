@@ -110,7 +110,6 @@ Ext.define('Mfw.model.Interface', {
         { name: 'enabled',     type: 'boolean', defaultValue: true },
 
         { name: 'natEgress',  type: 'boolean', allowNull: true },
-        { name: 'natIngress', type: 'boolean', allowNull: true },
 
         //VLAN
         { name: 'vlanid', type: 'integer', allowNull: true },

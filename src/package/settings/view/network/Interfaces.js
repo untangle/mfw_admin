@@ -167,18 +167,6 @@ Ext.define('Mfw.settings.network.Interfaces', {
             return value ? '<i class="fa fa-check"></i>' : '-';
         }
     }, {
-        text: 'NAT Ingress',
-        dataIndex: 'natIngress',
-        align: 'center',
-        width: 100,
-        hidden: true,
-        cell: {
-            encodeHtml: false,
-        },
-        renderer: function (value) {
-            return value ? '<i class="fa fa-check"></i>' : '-';
-        }
-    }, {
         text: 'MAC',
         dataIndex: 'macaddr',
         width: 150,
