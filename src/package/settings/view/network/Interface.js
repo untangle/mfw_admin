@@ -981,7 +981,6 @@ Ext.define('Mfw.settings.network.Interface', {
                     interfacesStore.reload();
                     if (!isNew) {
                         // For edit, redirect to interfaces (non dialog editing)
-                        // interfacesStore.getStatus();
                         if (Ext.isFunction(cb)) { cb(); }
                         Mfw.app.redirectTo('settings/network/interfaces');
                     }
