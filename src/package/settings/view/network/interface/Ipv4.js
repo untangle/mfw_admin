@@ -400,7 +400,7 @@ Ext.define('Mfw.settings.interface.Ipv4', {
                 xtype: 'button',
                 hidden: true,
                 bind: {
-                    text: 'IPv4 Aliases ({intf.v4Aliases.count || "none"})',
+                    text: '{_v4AliasText}',
                     hidden: '{setupContext}'
                 },
                 ui: 'action',
