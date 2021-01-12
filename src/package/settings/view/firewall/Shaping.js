@@ -10,6 +10,7 @@ Ext.define('Mfw.settings.firewall.Shaping', {
         },
         defaultAction: 'SET_PRIORITY',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','DROP','SET_PRIORITY'],
-        hash: 'firewall/shaping'
+        hash: 'firewall/shaping',
+        conditions: Util.getFilteredConditions('shaping')
     }
 });

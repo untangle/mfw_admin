@@ -280,34 +280,6 @@ Ext.define('Mfw.Renderer', {
      * Condition value renderer based on type
      * @param {any} value
      */
-    conditionValue: function (val, rec) {
-        var type = rec.get('type'),
-            value = rec.get('value'),
-            valueRender = rec.get('value');
-
-        if (type === 'IP_PROTOCOL') {
-            valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']';
-        }
-
-        if (type === 'LIMIT_RATE') {
-            valueRender = '<strong>' + rec.get('value') + '</strong> <em style="color: #333; font-style: normal;">' + Map.rateUnits[rec.get('rate_unit')] +
-                          ', ' + Map.groupSelectors[rec.get('group_selector')] + '</em>';
-        }
-
-        if (type === 'SOURCE_INTERFACE_ZONE' ||
-            type === 'DESTINATION_INTERFACE_ZONE' ||
-            type === 'CLIENT_INTERFACE_ZONE' ||
-            type === 'SERVER_INTERFACE_ZONE') {
-            // the multiselect combobox creates a collection object as value
-            valueRender = Map.interfaces[value] + ' <em style="color: #999; font-style: normal;">[' + value + ']</em>';
-
-        }
-        return valueRender;
-    },
-
-    /**
-     * Condition value renderer based on type
-     */
     conditionText: function (val, rec) {
         var type = rec.get('type'),
             typeText = Conditions.map[type].text,
@@ -317,12 +289,15 @@ Ext.define('Mfw.Renderer', {
             valueRender = rec.get('value');
 
         if (type === 'IP_PROTOCOL') {
-            // valueRender = [];
-            // Ext.Array.each(rec.get('value').split(','), function (val) {
-            //     valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
-            // });
-            // valueRender = valueRender.join(', ');
-            valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']';
+            if(Array.isArray(rec.get('value'))) {
+                valueRender = [];
+                Ext.Array.each(rec.get('value').split(','), function (val) {
+                    valueRender.push((Map.protocols[val] || '???') + '<em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                });
+                valueRender = valueRender.join(', ');
+            } else {
+                valueRender = (Map.protocols[value] || ' - ') + ' <em style="color: #999; font-style: normal;">[' + value + ']'; 
+            }
         }
 
         if (type === 'LIMIT_RATE') {
@@ -373,10 +348,41 @@ Ext.define('Mfw.Renderer', {
             valueRender = 'True'
         }
 
+        if (type === 'DESTINATION_PORT' ||
+            type === 'SOURCE_PORT') {
+                protoText = "";
+                if(Array.isArray(rec.get('port_protocol'))) {
+                    protoText = "";
+                    rec.get('port_protocol').forEach(function(proto) {
+                        protoText = protoText + " " + Map.portProtocols[proto];
+                    });
+
+                } else {
+                    protoText = Map.portProtocols[rec.get('port_protocol')];
+                }
+    
+                typeText = protoText + " " + typeText;
+        }
+
         var str = '<div style="font-family: monospace;"><span style="font-weight: bold;">' + typeText + '</span> &middot;<span style="color: blue;">' + opText + '</span>&middot; ' + valueRender;
 
         if (val) {
-            str += '<br/><span style="color: #999; font-size: 10px;">' + type + ' ' + op + ' ' + value + '</span>';
+            if (type === 'DESTINATION_PORT' || type === 'SOURCE_PORT') {
+                if(Array.isArray(rec.get('port_protocol'))) {
+                    protoText = "";
+                    rec.get('port_protocol').forEach(function(proto) {
+                        protoText = protoText + " " + Map.portProtocols[proto];
+                    });
+
+                } else {
+                    protoText = Map.portProtocols[rec.get('port_protocol')];
+                }
+                str += '<br/><span style="color: #999; font-size: 10px;">'+ protoText + ' ' + type + ' ' + op + ' ' + value + '</span>';
+                
+            } else {
+                str += '<br/><span style="color: #999; font-size: 10px;">' + type + ' ' + op + ' ' + value + '</span>';
+            }
+
             if (type === 'LIMIT_RATE') {
                 str += ' <span style="color: #999; font-size: 10px;">' + rec.get('rate_unit') + ', ' + rec.get('group_selector') + '</span>';
             }
@@ -416,17 +422,20 @@ Ext.define('Mfw.Renderer', {
             valueRender = cond.get('value');
 
             if (type === 'IP_PROTOCOL') {
-                // valueRender = [];
-                // Ext.Array.each(cond.get('value').split(','), function (val) {
-                //     valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
-                // });
-                // strArr.push('<span style="font-weight: bold; color: #333;">' +
-                //              Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
-                //              valueRender.join(' or ') + '</span>');
-                strArr.push('<span style="font-weight: bold; color: #333;">' +
-                             Conditions.map[type].text.toLowerCase() + ' ' +
-                             Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
-                             Map.protocols[cond.get('value')] + '</span>');
+                if(Array.isArray(record.get('value'))) {
+                    valueRender = [];
+                    Ext.Array.each(cond.get('value').split(','), function (val) {
+                        valueRender.push((Map.protocols[val] || '???') + ' <em style="color: #999; font-style: normal;">[' + val + ']</em>');
+                    });
+                    strArr.push('<span style="font-weight: bold; color: #333;">' +
+                                Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                                valueRender.join(' or ') + '</span>');
+                } else {
+                    strArr.push('<span style="font-weight: bold; color: #333;">' +
+                                Conditions.map[type].text.toLowerCase() + ' ' +
+                                Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
+                                Map.protocols[cond.get('value')] + '</span>');
+                }
                 return;
             }
 
@@ -494,7 +503,23 @@ Ext.define('Mfw.Renderer', {
                 valueRender = 'True'
             }
 
-            strArr.push('<span style="font-weight: bold; color: #333;">' +
+            if (type === 'SOURCE_PORT' ||
+                type === 'DESTINATION_PORT') {
+                    // Add the port_protocol name into the type renderer
+                    if(Array.isArray(cond.get('port_protocol'))) {
+                        protoText = "";
+                        cond.get('port_protocol').forEach(function(proto) {
+                            protoText = protoText + " " + Map.portProtocols[proto];
+                        });
+    
+                    } else {
+                        protoText = Map.portProtocols[cond.get('port_protocol')];
+                    }
+
+                    typeRenderer = protoText + " " + typeRenderer;
+            }
+
+            strArr.push('<span style="font-weight: bold; color: #333;"> ' +
                          typeRenderer.toLowerCase() + ' ' +
                          Map.ruleOps[cond.get('op')].toLowerCase() + ' ' +
                          valueRender + '</span>');

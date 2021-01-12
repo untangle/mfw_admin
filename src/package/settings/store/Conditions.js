@@ -12,8 +12,8 @@
  * - operators:            array of possible operators to be used for the condition ['!=','<','<=','==','>', '>=']
  * - field:                the field used to edit the condition value; by default (if not defined) it's a simple textfield
  * - extraFields:          some conditions (like LIMT_RATE) require more than a single value field so extra fields are added
- * - disableOnFirstPacket: bool to skip conditions which in some circumstances are disabled on first packet
- *                         see package/settings/Util.js -> getFirstPacketConditions()
+ * - ruleSections:         a filter to filter the condition from specific settings sections
+ *                         see package/settings/Util.js -> getFilteredConditions()
  * */
 Ext.define('Mfw.settings.Conditions', {
     alternateClassName: 'Conditions',
@@ -46,7 +46,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Name (Matched)'.t(),
         description: 'Application name samples:<br/><em>"Google"</em>, <em>"Facebook"</em>, <em>"DNS"</em>, <em>"SSL"</em> ...',
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -81,7 +81,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Application',
         text: 'Application Category (Matched)'.t(),
         description: 'Application category samples:<br/><em>"Messaging"</em>, <em>"Networking"</em>, <em>"Web Services"</em> ...',
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         operators: ['==', '!='],
         field: {
             xtype: 'combobox',
@@ -100,7 +100,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Detail'.t(),
         description: 'Application Detail description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     }, {
         type:'APPLICATION_ID_INFERRED',
         category: 'Application',
@@ -124,7 +124,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application ID (Matched)'.t(),
         description: 'Application ID description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
         field: {
             xtype: 'combobox',
             placeholder: 'Select or type a value ...',
@@ -148,7 +148,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Protochain (Matched)'.t(),
         description: 'Application Protochain description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },  {
         type:'APPLICATION_CONFIDENCE_INFERRED',
         category: 'Application',
@@ -161,7 +161,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Confidence (Matched)'.t(),
         description: 'Application Confidence (Matched) description ...',
         operators: ['==', '!=', '>', '>=', '<', '<='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },  {
         type:'APPLICATION_PRODUCTIVITY_INFERRED',
         category: 'Application',
@@ -174,7 +174,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Productivity (Matched)'.t(),
         description: 'Application Productivity (Matched) description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     }, {
         type:'APPLICATION_RISK_INFERRED',
         category: 'Application',
@@ -187,7 +187,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Application Risk (Matched)'.t(),
         description: 'Application Risk (Matched) description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['port-forward', 'nat', 'access', 'filter', 'shaping'],
     },
 
     // SOURCE
@@ -196,6 +196,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Address'.t(),
         description: 'Source Address description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         field: {
             xtype: 'textfield',
             validators: 'ipv4expression'
@@ -205,6 +206,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Address IPv6'.t(),
         description: 'Source Address V6 description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -215,6 +217,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Address Type'.t(),
         description: 'Source Address Type description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -229,22 +232,40 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Port'.t(),
         description: 'Source Port description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
             validators: 'portexpression'
-        }
+        },
+        extraFields: [ {
+                xtype: 'selectfield',
+                name: 'port_protocol',
+                label: 'Port Protocol',
+                labelAlign: 'top',
+                placeholder: 'Select port protocol(s)...',
+                autoSelect: true,
+                multiSelect: true,
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                errorTarget: 'under',
+                options: Map.options.portProtocols   
+        }]
     }, {
         type:'SOURCE_INTERFACE_NAME',
         category: 'Source',
         text: 'Source Interface Name'.t(),
         description: 'Source Interface Name description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!=']
     }, {
         type:'SOURCE_INTERFACE_ZONE',
         category: 'Source',
         text: 'Source Interface Zone'.t(),
         description: 'Source Interface Zone description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -262,6 +283,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Source',
         text: 'Source Interface Type'.t(),
         description: 'Source Interface Type description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -279,6 +301,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Address'.t(),
         description: 'Destination Address description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         field: {
             xtype: 'textfield',
             validators: 'ipv4expression'
@@ -288,6 +311,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Address IPv6'.t(),
         description: 'Destination Address V6 description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -298,6 +322,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Address Type'.t(),
         description: 'Destination Address Type description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -312,25 +337,41 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destination Port'.t(),
         description: 'Destination Port description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
             validators: 'portexpression'
-        }
+        },
+        extraFields: [ {
+                xtype: 'selectfield',
+                name: 'port_protocol',
+                label: 'Port Protocol',
+                labelAlign: 'top',
+                placeholder: 'Select port protocol(s)...',
+                autoSelect: true,
+                multiSelect: true,
+                editable: false,
+                required: true,
+                displayTpl: '{text} [ {value} ]',
+                itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+                errorTarget: 'under',
+                options: Map.options.portProtocols   
+        }]
     }, {
         type:'DESTINATION_INTERFACE_NAME',
         category: 'Destination',
         text: 'Destination Interface Name'.t(),
         description: 'Destination Interface Name description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
     }, {
         type:'DESTINATION_INTERFACE_ZONE',
         category: 'Destination',
         text: 'Destination Interface Zone'.t(),
         description: 'Destination Interface Zone description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         field: {
             xtype: 'selectfield',
             multiSelect: false,
@@ -348,6 +389,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Destination',
         text: 'Destined Local'.t(),
         description: 'Destined Local description ...',
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         operators: ['==', '!='],
         field: {
             xtype: 'displayfield',
@@ -359,7 +401,7 @@ Ext.define('Mfw.settings.Conditions', {
         text: 'Destination Interface Type'.t(),
         description: 'Destination Interface Type description ...',
         operators: ['==', '!='],
-        disableOnFirstPacket: true,
+        ruleSections: ['wan-routing','port-forward', 'nat', 'access'],
         field: {
             xtype: 'selectfield',
             autoSelect: true,
@@ -376,6 +418,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Address'.t(),
         description: 'Client Address description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -386,6 +429,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Address IPv6'.t(),
         description: 'Client Address V6 description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -396,6 +440,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Port'.t(),
         description: 'Client Port description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -407,6 +452,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Hostname'.t(),
         description: 'Client Hostname description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'CLIENT_USERNAME',
@@ -414,12 +460,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Username'.t(),
         description: 'Client Username description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'CLIENT_INTERFACE_ZONE',
         category: 'Client',
         text: 'Client Interface Zone'.t(),
         description: 'Client Interface Zone description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -437,6 +485,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Interface Type'.t(),
         description: 'Client Interface Type description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -451,12 +500,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Client',
         text: 'Client Reverse DNS'.t(),
         description: 'Client Reverse DNS description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'CLIENT_DNS_HINT',
         category: 'Client',
         text: 'Client DNS Hint'.t(),
         description: 'Client DNS Hint description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     },
 
@@ -466,6 +517,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Address'.t(),
         description: 'Server Address description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -476,6 +528,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Address IPv6'.t(),
         description: 'Server Address V6 description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -486,6 +539,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Port'.t(),
         description: 'Server Port description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'textfield',
@@ -497,6 +551,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Hostname'.t(),
         description: 'Server Hostname description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'SERVER_USERNAME',
@@ -504,12 +559,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Username'.t(),
         description: 'Server Username description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'SERVER_INTERFACE_ZONE',
         category: 'Server',
         text: 'Server Interface Zone'.t(),
         description: 'Server Interface Zone description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -527,6 +584,7 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Interface Type'.t(),
         description: 'Server Interface Type description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
@@ -541,12 +599,14 @@ Ext.define('Mfw.settings.Conditions', {
         category: 'Server',
         text: 'Server Reverse DNS'.t(),
         description: 'Server Reverse DNS description ...',
+        ruleSections: ['shaping','filter'],
         operators: ['==', '!=']
     }, {
         type:'SERVER_DNS_HINT',
         category: 'Server',
         text: 'Server DNS Hint'.t(),
         description: 'Server DNS Hint description ...',
+        ruleSections: ['wan-routing','shaping','filter','nat'],
         operators: ['==', '!=']
     },
 
@@ -685,7 +745,7 @@ Ext.define('Mfw.settings.Conditions', {
         operators: ['==', '!='],
         field: {
             xtype: 'selectfield',
-            multiSelect: false,
+            multiSelect: true,
             editable: false,
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             options: Map.options.protocols,
@@ -744,7 +804,36 @@ Ext.define('Mfw.settings.Conditions', {
             displayTpl: '{text} [ {value} ]',
             itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
             errorTarget: 'under',
-            options: Map.options.groupSelectors
+            options: Map.options.groupSelectors,
+            listeners: {
+                select: function(combo, record) {
+                    // This select listener is used to Show or hide the port_protocol field
+                    if(record.get('value') == "DESTINATION_PORT" || record.get('value') == "SOURCE_PORT") {
+                        if(combo.up().down('#port_protocol')) {
+                            combo.up().down('#port_protocol').show();
+                        }                    
+                    } else {
+                        if(combo.up().down('#port_protocol')) {
+                            combo.up().down('#port_protocol').hide();
+                        }
+                    }
+                }
+            },
+        }, {
+            xtype: 'selectfield',
+            itemId: 'port_protocol',
+            name: 'port_protocol',
+            label: 'Port Protocol',
+            labelAlign: 'top',
+            placeholder: 'Select port protocol(s)...',
+            autoSelect: true,
+            editable: false,
+            required: true,
+            displayTpl: '{text} [ {value} ]',
+            itemTpl: '{text} <span style="color: #999">[ {value} ]</span>',
+            errorTarget: 'under',
+            options: Map.options.portProtocols,
+            hidden: true
         }]
     }],
 

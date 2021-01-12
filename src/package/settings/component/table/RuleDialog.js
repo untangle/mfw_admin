@@ -261,8 +261,7 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             items: [{
                 xtype: 'component',
                 bind: {
-                    html: '<h2 style="font-weight: 400; margin: 0;">{condition.text}</h2>' +
-                          '<span style="color: #777; font-size: 10px; font-family: monospace;">[{condition.type}]</span>'
+                    html: '<h2 style="font-weight: 400; margin: 0;">{condition.text}</h2>'
                 }
             }, {
                 xtype: 'component',
@@ -383,11 +382,19 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
                 // regardless of the new selection from tree or existing condition from grid ...
                 conditionDef = Conditions.map[selection.get('type')], // condition as defined in Conditions global
                 // set valuefield from condition definition or default to textfield
-                valueField = conditionDef.field || {
+                valueField = {
                     xtype: 'textfield'
                 },
                 operators = [],
                 selectedCondition;
+
+            if (conditionDef == null) {
+                return;
+            }
+
+            if(conditionDef.field != null) {
+                valueField = conditionDef.field;
+            }
 
             // deselect tree if selected
             if (!isNewCondition) {
@@ -639,9 +646,19 @@ Ext.define('Mfw.cmp.grid.table.RuleDialog', {
             var me = this,
                 tree = me.lookup('tree'),
                 store = tree.getStore(),
-                root = store.getRoot();
+                root = store.getRoot(),
+                conditions = me.getView().ownerCmp.getConditions();
 
             store.clearFilter();
+
+            // the above store.clearFilter() removes the conditions we have filtered for this ruleDialog instance
+            // we have to refilter based on the ownerCmp conditions, so that invalid conditions do not show up 
+            if (conditions) {
+                // display only possible conditions provided for this table
+                store.filterBy(function (rec) {
+                    return Ext.Array.contains(conditions, rec.get('type'));
+                });
+            }
 
             if (value) {
                 tree.setSingleExpand(false);

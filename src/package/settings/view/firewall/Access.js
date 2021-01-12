@@ -10,6 +10,7 @@ Ext.define('Mfw.settings.firewall.Access', {
         },
         defaultAction: 'ACCEPT',
         actions: ['JUMP','GOTO','ACCEPT','RETURN','REJECT','DROP'],
-        hash: 'firewall/access'
+        hash: 'firewall/access',
+        conditions: Util.getFilteredConditions('access')
     }
 });
