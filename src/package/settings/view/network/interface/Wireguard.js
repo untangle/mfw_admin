@@ -280,14 +280,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                      * On new, set default mode to paste.
                      */
                     vm.set('wireguardEditMode', 'PASTE');
-                    /**
-                     * because wireguard backend requires intf 'device' to be set
-                     * just gave it the same value as the name
-                     * only when creating a new interface!
-                     */
-                    vm.bind('{intf.name}', function(name) {
-                        intf.set('device', name);
-                    });
                 }
 
                 /**
