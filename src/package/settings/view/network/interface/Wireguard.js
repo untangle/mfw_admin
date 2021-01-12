@@ -483,8 +483,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                     me.onWanChange(component, interface.get('wan'));
                                     break;
                                 case "#":
-                                    interface.set('name', value);
-                                    configured = true;
+                                    // Ignore host
                                     break;
                                 default:
                                     console.log("Unknown peer key:" + key);
