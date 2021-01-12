@@ -223,7 +223,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                         items: [{
                             xtype: 'textfield',
                             name: 'host',
-                            label: 'Endpoint IP address',
+                            label: 'Endpoint address',
                             placeholder: 'enter address ...',
                             clearable: false,
                             autoComplete: false,
@@ -234,7 +234,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                 required: '{intf.type === "WIREGUARD"}',
                                 disabled: '{intf.type !== "WIREGUARD"}'
                             },
-                            validators: 'ipany'
+                            validators: 'hostname'
                         }, {
                             xtype: 'textfield',
                             label: 'Endpoint Listen Port',
