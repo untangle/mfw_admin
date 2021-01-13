@@ -386,7 +386,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 pasteData = remote.join("\n");
             }catch(e){}
 
-            // Process as a WireGuard configuration file format from the 
+            // Process as a WireGuard configuration file format from the
             // perspective that is intended for us (NGFW "Remote Client")
             var group = null;
             pasteData.split("\n").forEach( function(line){
@@ -508,18 +508,34 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 if(boundInterface == null){
                     Ext.toast('Could not find bound interface!', 3000);
                     return;
-                }else{
-                    var address = '';
-                    if(boundInterface.get('v4ConfigType')){
-                        address = boundInterface.get('v4StaticAddress');
-                    }else if(boundInterface.get('v6ConfigType')){
+                }
+                var address = '';
+
+                if(boundInterface.get('v4ConfigType') === 'STATIC'){
+                    // for static configuration grab the configured static address
+                    address = boundInterface.get('v4StaticAddress');
+                }
+                else if((boundInterface.get('v4ConfigType') === 'DHCP') || (boundInterface.get('v4ConfigType') === 'PPPOE')){
+                    // for DHCP and PPPoE grab the first address from the array in the _status info
+                    address = boundInterface.get('_status').ip4Addr[0].split('/')[0]
+                }
+
+                if(address == ''){
+                    if(boundInterface.get('v6ConfigType') === 'STATIC'){
+                        // for static configuration grab the configured static address
                         address = boundInterface.get('v6StaticAddress');
                     }
-                    if(address != ''){
-                        jsonData['endpointAddress'] = address;
-                        jsonData['endpointPort'] = interface.get('wireguardPort');
+                    else if((boundInterface.get('v46onfigType') === 'DHCP') || (boundInterface.get('v6ConfigType') === 'PPPOE')){
+                        // for DHCP and PPPoE grab the first address from the array in the _status info
+                        address = boundInterface.get('_status').ip6Addr[0].split('/')[0]
                     }
                 }
+
+                if(address != ''){
+                    jsonData['endpointAddress'] = address;
+                    jsonData['endpointPort'] = interface.get('wireguardPort');
+                }
+
             }
             // Get local networks
             var networks = [];
