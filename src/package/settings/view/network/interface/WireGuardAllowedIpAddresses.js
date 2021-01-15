@@ -9,8 +9,6 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
 
     padding: 0,
 
-    // renderTo: 'document.body',
-
     items: [{
         xtype: 'toolbar',
         style: 'font-weight: 100; font-size: 20px;',
@@ -47,7 +45,9 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             renderer: function (value) {
                 return value || '<em>click to edit ...</em>';
             },
-            editable: true,
+            bind: {
+                editable: '{intf.wireguardEditMode != "PASTE"}'
+            },
             editor: {
                 xtype: 'textfield',
                 required: true,
@@ -65,7 +65,9 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             renderer: function (value) {
                 return Map.prefixes[value];
             },
-            editable: true,
+            bind: {
+                editable: '{intf.wireguardEditMode != "PASTE"}'
+            },
             editor: {
                 xtype: 'selectfield',
                 clearable: false,
@@ -75,6 +77,9 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
             width: 44,
             resizable: false,
             menuDisabled: true,
+            bind: {
+                hidden: '{intf.wireguardEditMode == "PASTE"}'
+            },
             cell: {
                 tools: [{
                     type: 'delete',
@@ -92,7 +97,16 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
         padding: '0 16 16 16',
         items: [{
             xtype: 'component',
-            html: '<h3>New Allowed IP Address</h3>'
+            html: '<h3>New Allowed IP Address</h3>',
+            bind: {
+                hidden: '{intf.wireguardEditMode == "PASTE"}'
+            }
+        }, {
+            xtype: 'component',
+            html: '<i>Import addresses are read-only</i>',
+            bind: {
+                hidden: '{intf.wireguardEditMode != "PASTE"}'
+            }
         }, {
             xtype: 'container',
             layout: {
@@ -104,6 +118,9 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
                 required: true,
                 clearable: false,
                 autoComplete: false
+            },
+            bind: {
+                hidden: '{intf.wireguardEditMode == "PASTE"}'
             },
             items: [{
                 xtype: 'textfield',
@@ -125,7 +142,7 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
                 xtype: 'button',
                 text: 'Add',
                 ui: 'action',
-                handler: 'addAllowedIpAddress'
+                handler: 'addAllowedIpAddress',
             }]
         }]
     }, {
@@ -138,7 +155,10 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
         }, {
             text: 'Close',
             ui: 'action',
-            handler: 'onClose'
+            handler: 'onClose',
+            bind: {
+                hidden: '{intf.wireguardEditMode == "PASTE"}'
+            }
         }]
     }],
 
