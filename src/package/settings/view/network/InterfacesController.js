@@ -51,6 +51,10 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 wireguardPrivateKey: null,
                 wireguardPublicKey: null,
                 /**
+                * Type of edit mode - default to paste
+                */
+                wireguardEditMode: "PASTE",
+                /**
                  * Type of connection - client or tunnel.
                  */
                 wireguardType: "CLIENT",
