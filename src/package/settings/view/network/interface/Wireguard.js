@@ -11,19 +11,8 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             activeCard: 'wg-conf',
             // the first peer of wg interface, populated on init
             peer: null,
-            wireguardEditMode: 'MANUAL',
-        },
-        formulas: {
-            // WireGuard has an array of interface addresses.
-            // For the purpose of most of our implementaton, we only care about populating the first address.
-            wireguardPrimaryAddress: {
-                get: function (get){
-                    return this.get('intf').wireguardAddresses().first() ? this.get('intf').wireguardAddresses().first().get('address') : '';
-                },
-                set: function(value){
-                    this.get('intf').wireguardAddresses().first().set('address', value);
-                }
-            }
+            localPublicKey: null,
+            localInterfaceIpAddress: null
         }
     },
 
@@ -38,7 +27,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
         },
         items: [{
             xtype: 'component',
-            padding: '16 0',
             style: 'font-weight: 100; font-size: 20px;',
             html: 'WireGuard VPN Configuration'
         },{
@@ -50,7 +38,8 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             },
             items:[{
                 xtype: 'selectfield',
-                label: 'Configuration Mode',
+                label: 'Configuration mode',
+                itemId: 'wireguardConfigurationMode',
                 required: true,
                 autoSelect: true,
                 hidden: true,
@@ -60,41 +49,44 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     { text: 'Manual', value: 'MANUAL' }
                 ],
                 bind: {
-                    value: '{wireguardEditMode}',
+                    value: '{intf.wireguardEditMode}',
                     hidden: '{intf.type !== "WIREGUARD"}',
                     required: '{intf.type === "WIREGUARD"}',
                     disabled: '{intf.type !== "WIREGUARD"}'
-                },
+                }
             },{
+                // !!!! MOVE THIS TO LOCAL FIELDSET
                 xtype: 'button',
                 iconCls: 'x-far fa-copy',
                 tooltip: 'Copy configuration to clipboard for remote connection',
                 hidden: true,
                 bind: {
-                    hidden: '{wireguardEditMode != "MANUAL" || intf.type !== "WIREGUARD"}',
+                    hidden: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode != "MANUAL"}',
                 },
                 handler: 'copyConfiguration'
             }]
         }, {
             xtype: 'textfield',
-            // label: 'Paste configuration from clipboard',
-            margin: '0 0 32 0',
             placeholder: 'paste WireGuard configuration from clipboard here ...',
             clearable: false,
             autoComplete: false,
             labelAlign: 'top',
             flex: 1,
             bind: {
-                hidden: '{wireguardEditMode != "PASTE" && intf.type == "WIREGUARD"}',
+                hidden: '{intf.wireguardEditMode != "PASTE" && intf.type == "WIREGUARD"}',
             },
             listeners: {
                 paste: 'pasteConfiguration'
             }
         }, {
-            xtype: 'container',
+            xtype: 'component',
+            html: 'Imported settings are read-only',
+            disabled: true,
             bind: {
-                hidden: '{wireguardEditMode != "MANUAL" && intf.type == "WIREGUARD"}',
-            },
+                hidden: '{intf.wireguardEditMode != "PASTE"}'
+            }
+        }, {
+            xtype: 'container',
             items:[{
                 xtype: 'fieldset',
                 title: 'Local',
@@ -125,7 +117,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     layout: 'hbox',
                     margin: '0 0 0 -8',
                     defaults: {
-                        // flex: 1,
                         required: false,
                         clearable: false
                     },
@@ -144,22 +135,21 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                             value: '{intf.wireguardType}',
                             hidden: '{intf.type !== "WIREGUARD"}',
                             required: '{intf.type === "WIREGUARD"}',
-                            disabled: '{intf.type !== "WIREGUARD"}'
+                            disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                         },
                         listeners:{
                             select: 'wireguardTypeSelect'
                         }
                     },{
                         xtype: 'textfield',
-                        label: 'Listen Port',
-                        // margin: '0 0 0 -8',
+                        label: 'Listen port',
                         clearable: false,
                         hidden: true,
                         bind: {
                             value: '{intf.wireguardPort}',
                             required: '{intf.type === "WIREGUARD"}',
                             hidden: '{intf.wireguardType !== "TUNNEL"}',
-                            disabled: '{intf.type !== "WIREGUARD"}'
+                            disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                         },
                         validators: 'port'
                     }]
@@ -174,9 +164,9 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     labelAlign: 'top',
                     flex: 1,
                     bind: {
-                        value: '{wireguardPrimaryAddress}',
+                        value: '{intf.wireguardAddresses.first.address}',
                         required: '{intf.type === "WIREGUARD"}',
-                        disabled: '{intf.type !== "WIREGUARD"}'
+                        disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                     },
                     validators: 'ipany'
                 }]
@@ -197,7 +187,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     bind: {
                         value: '{peer.publicKey}',
                         required: '{intf.type === "WIREGUARD"}',
-                        disabled: '{intf.type !== "WIREGUARD"}'
+                        disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                     },
                     validators: [function (val) {
                         if (val.length !== 44 || val.indexOf(' ') >= 0) {
@@ -208,7 +198,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 },{
                     xtype: 'container',
                     layout: 'vbox',
-                    // margin: '0 0 32 0',
                     margin: '0 0 0 -8',
                     hidden: true,
                     bind: { hidden: '{intf.type !== "WIREGUARD"}' },
@@ -232,18 +221,18 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                             bind: {
                                 value: '{peer.host}',
                                 required: '{intf.type === "WIREGUARD"}',
-                                disabled: '{intf.type !== "WIREGUARD"}'
+                                disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                             },
                             validators: 'hostname'
                         }, {
                             xtype: 'textfield',
-                            label: 'Endpoint Listen Port',
+                            label: 'Endpoint listen port',
                             margin: '0 0 0 16',
                             clearable: false,
                             bind: {
                                 value: '{peer.port}',
                                 required: '{intf.type === "WIREGUARD"}',
-                                disabled: '{intf.type !== "WIREGUARD"}'
+                                disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                             },
                             validators: 'port'
                         }]
@@ -275,13 +264,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                  */
                 vm.set('peer', intf.wireguardPeers().first());
 
-                if(vm.get('isNew')){
-                    /**
-                     * On new, set default mode to paste.
-                     */
-                    vm.set('wireguardEditMode', 'PASTE');
-                }
-
                 /**
                  * attempt not to show field errors on form initialization
                  * as the user hasn't done any input yet
@@ -296,6 +278,14 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 var wanCheckbox = view.up('mfw-settings-network-interface').down('[_itemId=wan]');
                 if(wanCheckbox){
                     wanCheckbox.onAfter('change', this.onWanChange);
+                }
+
+                var confgurationMode = view.down('[_itemId=wireguardConfigurationMode]');
+                if(confgurationMode){
+                    confgurationMode.onAfter('change', this.onConfigurationModeChange);
+                    if(vm.get('isNew')){
+                        this.onConfigurationModeChange(confgurationMode, 'PASTE');
+                    }
                 }
             }
         },
@@ -323,6 +313,32 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 var index = peerAllowedIps.find('address', '0.0.0.0', 0, false, false, true);
                 if(index > -1){
                     peerAllowedIps.removeAt(index);
+                }
+            }
+        },
+
+        onConfigurationModeChange: function(component, newValue, oldValue){
+            var vm = component.up('mfw-settings-network-interface').getViewModel(),
+                vmWg = component.up('interface-wireguard').getViewModel(),
+                intf = vm.get('intf');
+
+            if(vm.get('isNew')){
+                if(vmWg.get('localPublicKey') == null){
+                    vmWg.set('localPublicKey', intf.get('wireguardPublicKey'));
+                }
+                if(vmWg.get('localInterfaceIpAddress') == null){
+                    vmWg.set('localInterfaceIpAddress', intf.wireguardAddresses().first().get('address'));
+                }
+                if(newValue == 'PASTE'){
+                    intf.set('wireguardPublicKey', '');
+                    intf.wireguardAddresses().first().set('address', '');
+                }else{
+                    if(intf.get('wireguardPublicKey') == ''){
+                        intf.set('wireguardPublicKey', vmWg.get('localPublicKey'));
+                    }
+                    if(intf.wireguardAddresses().first().get('address') == ''){
+                        intf.wireguardAddresses().first().set('address', vmWg.get('localInterfaceIpAddress'));
+                    }
                 }
             }
         },
@@ -486,7 +502,12 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             });
 
             if(configured){
-                component.up('interface-wireguard').getViewModel().set('wireguardEditMode', 'MANUAL');
+                var clearTask = new Ext.util.DelayedTask( Ext.bind(function(){
+                    if( component ){
+                        component.clearValue();
+                    }
+                }, me ));
+                clearTask.delay(50);
             }else{
                 Ext.toast('No valid WireGuard settings found!', 3000);
             }
