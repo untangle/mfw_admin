@@ -137,7 +137,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
             ownerCmp: me.getView(),
             layout: 'fit',
             width: 416,
-            height: Ext.getBody().getViewSize().height < 800 ? (Ext.getBody().getViewSize().height - 20) : 800,
+            height: Ext.getBody().getViewSize().height < 816 ? (Ext.getBody().getViewSize().height - 20) : 816,
             padding: 0,
 
             showAnimation: false,

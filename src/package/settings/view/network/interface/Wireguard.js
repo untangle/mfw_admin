@@ -54,16 +54,6 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     required: '{intf.type === "WIREGUARD"}',
                     disabled: '{intf.type !== "WIREGUARD"}'
                 }
-            },{
-                // !!!! MOVE THIS TO LOCAL FIELDSET
-                xtype: 'button',
-                iconCls: 'x-far fa-copy',
-                tooltip: 'Copy configuration to clipboard for remote connection',
-                hidden: true,
-                bind: {
-                    hidden: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode != "MANUAL"}',
-                },
-                handler: 'copyConfiguration'
             }]
         }, {
             xtype: 'textfield',
@@ -89,9 +79,31 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             xtype: 'container',
             items:[{
                 xtype: 'fieldset',
-                title: 'Local',
                 margin: '0 0 32 0',
                 items:[{
+                    xtype: 'container',
+                    margin: '0 0 0 -8',
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    items: [{
+                        xtype: 'component',
+                        flex: 1,
+                        html: '<div class="x-title x-form-fieldset-title">Local</div>',
+                        margin: '0 0 16 0',
+                    },{
+                        xtype: 'button',
+                        iconCls: 'x-far fa-copy',
+                        margin: '-4 0 4 0',
+                        tooltip: 'Copy configuration to clipboard for remote connection',
+                        hidden: true,
+                        bind: {
+                            hidden: '{intf.type !== "WIREGUARD" || intf.wireguardType != "TUNNEL"}',
+                        },
+                        handler: 'copyConfiguration'
+                    }]
+                },{
                     xtype: 'container',
                     margin: '0 0 0 -8',
                     layout: {
