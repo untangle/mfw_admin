@@ -334,23 +334,21 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 vmWg = component.up('interface-wireguard').getViewModel(),
                 intf = vm.get('intf');
 
-            if(vm.get('isNew')){
-                if(vmWg.get('localPublicKey') == null){
-                    vmWg.set('localPublicKey', intf.get('wireguardPublicKey'));
+            if(vmWg.get('localPublicKey') == null){
+                vmWg.set('localPublicKey', intf.get('wireguardPublicKey'));
+            }
+            if(vmWg.get('localInterfaceIpAddress') == null){
+                vmWg.set('localInterfaceIpAddress', intf.wireguardAddresses().first().get('address'));
+            }
+            if(newValue == 'PASTE'){
+                intf.set('wireguardPublicKey', '');
+                intf.wireguardAddresses().first().set('address', '');
+            }else{
+                if(intf.get('wireguardPublicKey') == ''){
+                    intf.set('wireguardPublicKey', vmWg.get('localPublicKey'));
                 }
-                if(vmWg.get('localInterfaceIpAddress') == null){
-                    vmWg.set('localInterfaceIpAddress', intf.wireguardAddresses().first().get('address'));
-                }
-                if(newValue == 'PASTE'){
-                    intf.set('wireguardPublicKey', '');
-                    intf.wireguardAddresses().first().set('address', '');
-                }else{
-                    if(intf.get('wireguardPublicKey') == ''){
-                        intf.set('wireguardPublicKey', vmWg.get('localPublicKey'));
-                    }
-                    if(intf.wireguardAddresses().first().get('address') == ''){
-                        intf.wireguardAddresses().first().set('address', vmWg.get('localInterfaceIpAddress'));
-                    }
+                if(intf.wireguardAddresses().first().get('address') == ''){
+                    intf.wireguardAddresses().first().set('address', vmWg.get('localInterfaceIpAddress'));
                 }
             }
         },
