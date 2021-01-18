@@ -193,6 +193,7 @@ Ext.define('Mfw.model.Interface', {
         // wireguard
         { name: 'wireguardPrivateKey', type: 'string', allowNull: true },
         { name: 'wireguardPublicKey',  type: 'string', allowNull: true },
+        { name: 'wireguardEditMode',   type: 'string', allowNull: false }, // ["PASTE", "MANUAL"]
         { name: 'wireguardType',       type: 'string', allowNull: false }, // ["ROAMING", "TUNNEL"]
         { name: 'wireguardPort',       type: 'integer', allowNull: true },
         // ! hasMany wireguardAddresses
