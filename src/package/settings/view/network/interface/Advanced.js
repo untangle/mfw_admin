@@ -72,7 +72,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         flex: 1,
                         bind: {
                             html: 'Current settings: <strong>{intf._status.ethSpeed}</strong> Mbps, <strong>{intf._status.ethDuplex}</strong>' +
-                                ' duplex, auto Negotiation: <strong>{intf._status.ethAutoneg}</strong>',
+                                ' duplex, auto negotiation: <strong>{intf._status.ethAutoneg}</strong>',
                         }
                     },
                     {
@@ -126,6 +126,9 @@ Ext.define('Mfw.settings.interface.Advanced', {
     controller: {
         setDuplexOptions: function() {
             var vm = this.getViewModel();
+            vm.set('intf.ethAutoneg', vm.get('intf._status.ethAutoneg'));
+            vm.set('intf.ethDuplex', vm.get('intf._status.ethDuplex'));
+            vm.set('intf.ethSpeed', vm.get('intf._status.ethSpeed'));
             var options = vm.get('intf._status.ethLinkSupported');
             var speed = vm.get('intf.ethSpeed');
             let duplexOptions = CommonUtil.getDuplexOptions(options, speed);
