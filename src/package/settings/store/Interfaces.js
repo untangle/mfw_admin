@@ -21,6 +21,19 @@ Ext.define('Mfw.store.Interfaces', {
             });
             Map.interfaces = interfacesMap;
             Map.options.interfaces = Map.toOptions(interfacesMap);
+
+            //Refresh network widgets
+            //when the interfaces store changes, we want to query and active network-layout widgets
+            //and have them reload their backing data, because the network layout widget is not directly
+            //bound to the interfaces store, we have this special case. pass false to setInterfaces, because
+            //we do not want the widget to be added back to the widgets pipe
+            var netWidgets = Ext.ComponentQuery.query('widget.widget-network-layout');
+
+            if(netWidgets && netWidgets.length > 0) {
+                netWidgets.forEach(function(netWidget) {
+                    netWidget.getController().setInterfaces(false);
+                });
+            }
         },
 
         load: function () {
