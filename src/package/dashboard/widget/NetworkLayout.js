@@ -143,12 +143,17 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             if (!Ext.getStore('interfaces').isLoaded()) {
                 me.reload();
             } else {
-                me.setInterfaces();
+                me.setInterfaces(true);
             }
 
         },
 
-        setInterfaces: function () {
+        /**
+         * setInterfaces uses the interfaces store and sets the WANS and NONWANS stores within the network widget appropriately
+         * 
+         * @param {bool} addToWidgetPipe - whether or not we need to add this widget to the pipeline processor
+         */
+        setInterfaces: function (addToWidgetPipe) {
             var me = this,
                 wans = [],
                 nonwans = [],
@@ -166,7 +171,10 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
             });
             widget.down('#wans').setStore(wans);
             widget.down('#nonwans').setStore(nonwans);
-            WidgetsPipe.addFirst(widget);
+
+            if(addToWidgetPipe) {
+                WidgetsPipe.addFirst(widget);
+            }
         },
 
         /**
@@ -181,9 +189,7 @@ Ext.define('Mfw.dashboard.widget.NetworkLayout', {
         // on reload set the widget wans/nonwans based on interfaces
         reload: function () {
             var me = this;
-            Ext.getStore('interfaces').load(function () {
-                me.setInterfaces();
-            });
+            me.setInterfaces(true);
         }
     }
 });
