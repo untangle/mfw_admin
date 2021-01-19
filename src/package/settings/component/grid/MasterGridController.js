@@ -254,13 +254,20 @@ Ext.define('Mfw.cmp.grid.MasterGridController', {
      * of the records is modified or not
      */
     beforeSave: function () {
+        var removeRecords = [];
+
+        // MFW-1272: instead of record.drop, we need to call store.remove(records, true)
+        // this prevents calling the destroy on each record, because we don't need to actually
+        // call a delete API after they are removed from the store
         this.getView().getStore().each(function (record) {
             if (record.get('_deleteSchedule')) {
-                record.drop();
+                removeRecords.push(record);
             }
             record.dirty = true; // to push all non-dropped records
             record.phantom = false; // to push new records
         });
+
+      this.getView().getStore().remove(removeRecords, true);
     },
 
     onSave: function () {
