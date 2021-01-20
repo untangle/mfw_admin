@@ -48,7 +48,7 @@ Ext.define('Mfw.settings.network.Interface', {
                 return get('intf.type') === 'WWAN' ||
                     get('intf.type') === 'OPENVPN' ||
                     get('intf.type') === 'WIREGUARD' ||
-                    (get('intf.configType') === 'BRIDGED' && get('intf._status.ethSpeed') === -1) ||
+                    (get('intf.configType') === 'BRIDGED' && get('intf.ethSpeed') === -1) ||
                     (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED' );
             },
             _hiddenIpv4: function (get) {

@@ -124,13 +124,22 @@ Ext.define('Mfw.settings.interface.Advanced', {
                 Ext.getCmp('ethDuplex').setValue(duplexOptions[0].value);
             }
         },
+        /**
+         * 
+         * Called when auto negotiation checkbox changes.
+         * 
+         * @param {bool} newValue New value of checkbox.
+         * 
+         */
         updateSpeedDuplex: function(_, newValue) {
             var vm = this.getViewModel();
             var intf = vm.get('intf')
             if (!newValue) {
+                // Preset speed and duplex to the current value when disabling autoNeg.
                 vm.set('intf.ethDuplex', vm.get('intf._status.ethDuplex'));
                 vm.set('intf.ethSpeed', vm.get('intf._status.ethSpeed'));
             } else {
+                // Un-set the values when turning on AutoNeg, otherwise modified check kicks in.
                 if (typeof intf.modified  !== 'undefined') {
                    Object.keys(intf.modified).forEach(key => 
                         vm.set('intf.'+key, intf.modified[key])
