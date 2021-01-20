@@ -85,17 +85,8 @@ Ext.define('Mfw.settings.interface.Advanced', {
                             checked: '{intf.ethAutoneg}'
                         },
                         listeners: {
-                            change: function (_, newvalue) {
-                                if (newvalue) {
-                                    Ext.getCmp('ethSpeed').disable();
-                                    Ext.getCmp('ethDuplex').disable();
-                                }
-                                else {
-                                    Ext.getCmp('ethSpeed').enable();
-                                    Ext.getCmp('ethDuplex').enable();
-                                }
+                            change: 'updateSpeedDuplex'
                             }
-                        }
                     },
                     {
                         label: 'Link Speed',
@@ -103,7 +94,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         id: 'ethSpeed',
                         bind: {
                             value: '{intf.ethSpeed}',
-                            disabled: '{intf.ethAutoneg}',
+                            hidden: '{intf.ethAutoneg}',
                             options: '{_linkSpeedTypes}'
                         },
                         listeners : {
@@ -116,7 +107,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         id: 'ethDuplex',
                         bind: {
                             value: '{intf.ethDuplex}',
-                            disabled: '{intf.ethAutoneg}',
+                            hidden: '{intf.ethAutoneg}',
                             options: '{_linkDuplexTypes}'
                         },
                     }]
@@ -126,14 +117,25 @@ Ext.define('Mfw.settings.interface.Advanced', {
     controller: {
         setDuplexOptions: function() {
             var vm = this.getViewModel();
-            vm.set('intf.ethAutoneg', vm.get('intf._status.ethAutoneg'));
-            vm.set('intf.ethDuplex', vm.get('intf._status.ethDuplex'));
-            vm.set('intf.ethSpeed', vm.get('intf._status.ethSpeed'));
             var options = vm.get('intf._status.ethLinkSupported');
             var speed = vm.get('intf.ethSpeed');
             let duplexOptions = CommonUtil.getDuplexOptions(options, speed);
             if (duplexOptions.length == 1) {
                 Ext.getCmp('ethDuplex').setValue(duplexOptions[0].value);
+            }
+        },
+        updateSpeedDuplex: function(_, newValue) {
+            var vm = this.getViewModel();
+            var intf = vm.get('intf')
+            if (!newValue) {
+                vm.set('intf.ethDuplex', vm.get('intf._status.ethDuplex'));
+                vm.set('intf.ethSpeed', vm.get('intf._status.ethSpeed'));
+            } else {
+                if (typeof intf.modified  !== 'undefined') {
+                   Object.keys(intf.modified).forEach(key => 
+                        vm.set('intf.'+key, intf.modified[key])
+                   )
+                }
             }
         }
     }

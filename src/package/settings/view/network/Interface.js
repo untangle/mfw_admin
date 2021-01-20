@@ -48,8 +48,8 @@ Ext.define('Mfw.settings.network.Interface', {
                 return get('intf.type') === 'WWAN' ||
                     get('intf.type') === 'OPENVPN' ||
                     get('intf.type') === 'WIREGUARD' ||
-                    get('intf.configType') === 'BRIDGED' ||
-                    (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED');
+                    (get('intf.configType') === 'BRIDGED' && get('intf._status.ethSpeed') === -1) ||
+                    (get('intf.type') === 'WIFI' && get('intf.configType') !== 'ADDRESSED' );
             },
             _hiddenIpv4: function (get) {
                 return get('intf.configType') !== 'ADDRESSED' ||
@@ -78,7 +78,7 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'VLAN' && get('intf.wan') === false;
             },
             _hiddenAdvanced: function (get) {
-                return get('intf.type') !== 'NIC';
+                return (get('intf.type') !== 'NIC' && get('intf._status.configType') !== 'BRIDGED') || get('intf._status.ethSpeed') === -1;
             },
             _intfAddTitle: function(get) {
                 return 'Add ' + CommonUtil.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
