@@ -422,7 +422,7 @@ Ext.define('Mfw.settings.network.Interface', {
                         disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.configType !== "ADDRESSED" || intf.type === "VLAN" && !intf.wan}',
+                            hidden: '{intf.type === "WIREGUARD" || intf.configType !== "ADDRESSED" || intf.type === "VLAN" && !intf.wan}',
                             disabled: '{intf.type === "VLAN"}'
                         }
                     }, {
