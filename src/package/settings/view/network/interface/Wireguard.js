@@ -12,7 +12,8 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             // the first peer of wg interface, populated on init
             peer: null,
             localPublicKey: null,
-            localInterfaceIpAddress: null
+            localInterfaceIpAddress: null,
+            pasteConfigured: true
         }
     },
 
@@ -64,6 +65,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             flex: 1,
             bind: {
                 hidden: '{intf.wireguardEditMode != "PASTE" && intf.type == "WIREGUARD"}',
+                required: '{intf.wireguardEditMode === "PASTE" && intf.type == "WIREGUARD" && !pasteConfigured}'
             },
             listeners: {
                 paste: 'pasteConfiguration'
@@ -343,6 +345,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             if(newValue == 'PASTE'){
                 intf.set('wireguardPublicKey', '');
                 intf.wireguardAddresses().first().set('address', '');
+                vmWg.set('pasteConfigured', false);
             }else{
                 if(intf.get('wireguardPublicKey') == ''){
                     intf.set('wireguardPublicKey', vmWg.get('localPublicKey'));
@@ -350,6 +353,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 if(intf.wireguardAddresses().first().get('address') == ''){
                     intf.wireguardAddresses().first().set('address', vmWg.get('localInterfaceIpAddress'));
                 }
+                vmWg.set('pasteConfigured', true);
             }
         },
 
@@ -515,6 +519,10 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 var clearTask = new Ext.util.DelayedTask( Ext.bind(function(){
                     if( component ){
                         component.clearValue();
+
+                        //Also set pasteConfigured to True, so that the paste field is validated
+                        var cmpVm = me.getViewModel();
+                        cmpVm.set('pasteConfigured', true)
                     }
                 }, me ));
                 clearTask.delay(50);
