@@ -78,7 +78,8 @@ Ext.define('Mfw.settings.network.Interface', {
                     get('intf.type') === 'VLAN' && get('intf.wan') === false;
             },
             _hiddenAdvanced: function (get) {
-                return (get('intf.type') !== 'NIC' && get('intf._status.configType') !== 'BRIDGED') || get('intf._status.ethSpeed') === -1;
+                return (get('intf.type') !== 'NIC' && get('intf._status.configType') !== 'BRIDGED') ||
+                    get('intf._status.ethSpeed') === -1;
             },
             _intfAddTitle: function(get) {
                 return 'Add ' + CommonUtil.getNiceInterfaceTypeName(get('intf.type')) +' Interface';
