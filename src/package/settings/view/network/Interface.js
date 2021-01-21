@@ -422,8 +422,8 @@ Ext.define('Mfw.settings.network.Interface', {
                         disabled: false,
                         bind: {
                             checked: '{intf.wan}',
-                            hidden: '{intf.type === "WIREGUARD" || intf.configType !== "ADDRESSED" || intf.type === "VLAN" && !intf.wan}',
-                            disabled: '{intf.type === "VLAN"}'
+                            hidden: '{intf.configType !== "ADDRESSED" || intf.type === "VLAN" && !intf.wan}',
+                            disabled: '{intf.type === "WIREGUARD" || intf.type === "VLAN"}'
                         }
                     }, {
                         xtype: 'checkbox',
