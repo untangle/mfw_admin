@@ -307,6 +307,45 @@ Ext.define('Mfw.CommonUtil', {
         });
 
         return duplexOptions;
+    },
+    /**
+     * From the specified IP address and CIDR bit, return the network.
+     * For example, 192.168.1.1/24 returns 192.168.1.0
+     * @param {*} ip
+     * @param {*} cidr
+     */
+    getNetworkWithCIDR: function(ip, cidr) {
+        var mask = CommonUtil.getNetmask(cidr);
+        return CommonUtil.getNetworkWithMask(ip, mask);
+    },
+
+    /**
+     * From the specified IP address and netmask, return the network.
+     * For example, 192.168.1.1/255.255.255.0 returns 192.168.1.0
+     * @param {*} ip
+     * @param {*} netmask
+     */
+    getNetworkWithMask: function(ip, netmask){
+        var dots = netmask.split('.');
+        var netmaskInteger = ((((((+dots[0])*256)+(+dots[1]))*256)+(+dots[2]))*256)+(+dots[3]);
+        dots = ip.split('.');
+        var ipInteger = ((((((+dots[0])*256)+(+dots[1]))*256)+(+dots[2]))*256)+(+dots[3]) & netmaskInteger;
+        return ( (ipInteger>>>24) +'.' + (ipInteger>>16 & 255) +'.' + (ipInteger>>8 & 255) +'.' + (ipInteger & 255) );
+    },
+
+    /**
+     * From a given CIDR bitcount, get the appropriate netmask
+     * 
+     * @param {*} bitCount - the CIDR bitcount (ie: 32)
+     */
+    getNetmask(bitCount) {
+        var mask=[];
+        for(i=0;i<4;i++) {
+          var n = Math.min(bitCount, 8);
+          mask.push(256 - Math.pow(2, 8-n));
+          bitCount -= n;
+        }
+        return mask.join('.'); 
     }
 
 });
