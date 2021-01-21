@@ -491,9 +491,12 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                         cidr = cidr.replace(/(\r\n|\n|\r)/gm,"");
                                         if(cidr != ""){
                                             cidr = cidr.split("/");
+                                            var prefix = cidr.length == 2 ? parseInt(cidr[1], 10) : 32;
+                                            var netAddr = CommonUtil.getNetworkWithCIDR(cidr[0], prefix);
+
                                             allowedIps.add({
-                                                address: cidr[0],
-                                                prefix: cidr.length == 2 ? parseInt(cidr[1], 10) : 32
+                                                address: netAddr,
+                                                prefix: prefix
                                             });
                                         }
                                     });
