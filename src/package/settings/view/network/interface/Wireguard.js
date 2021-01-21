@@ -545,6 +545,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 }
                 var address = '';
 
+                // we start by trying to get the IPv4 endpoint address
                 if(boundInterface.get('v4ConfigType') === 'STATIC'){
                     // for static configuration grab the configured static address
                     address = boundInterface.get('v4StaticAddress');
@@ -554,12 +555,13 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     address = boundInterface.get('_status').ip4Addr[0].split('/')[0]
                 }
 
+                // if we didn't find an IPv4 address try to find an IPv6 address
                 if(address == ''){
                     if(boundInterface.get('v6ConfigType') === 'STATIC'){
                         // for static configuration grab the configured static address
                         address = boundInterface.get('v6StaticAddress');
                     }
-                    else if((boundInterface.get('v46onfigType') === 'DHCP') || (boundInterface.get('v6ConfigType') === 'PPPOE')){
+                    else if((boundInterface.get('v6ConfigType') === 'DHCP') || (boundInterface.get('v6ConfigType') === 'PPPOE')){
                         // for DHCP and PPPoE grab the first address from the array in the _status info
                         address = boundInterface.get('_status').ip6Addr[0].split('/')[0]
                     }
