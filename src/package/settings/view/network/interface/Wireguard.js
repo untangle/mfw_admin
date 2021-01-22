@@ -586,10 +586,12 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             Ext.getStore('interfaces').each( function(interface){
                 if(interface.get('wan') == false){
                     if(interface.get('v4ConfigType') == 'STATIC'){
-                        networks.push(interface.get('v4StaticAddress') + '/' + interface.get('v4StaticPrefix'));
+                        var netAddr = CommonUtil.getNetworkWithCIDR(interface.get('v4StaticAddress'), interface.get('v4StaticPrefix'));
+                        networks.push(netAddr + '/' + interface.get('v4StaticPrefix'));
                     }
                     if(interface.get('v6ConfigType') == 'STATIC'){
-                        networks.push(interface.get('v6StaticAddress') + '/' + interface.get('v6StaticPrefix'));
+                        var netAddr = CommonUtil.getNetworkWithCIDR(interface.get('v6StaticAddress'), interface.get('v6StaticPrefix'));
+                        networks.push(netAddr + '/' + interface.get('v6StaticPrefix'));
                     }
                 }
             });
