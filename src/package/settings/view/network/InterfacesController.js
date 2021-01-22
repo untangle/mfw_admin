@@ -114,7 +114,7 @@ Ext.define('Mfw.settings.network.InterfacesController', {
                 params: Ext.JSON.encode({
                     ipVersion: "4",
                     hostID: "1",
-                    networkSize: "1"
+                    networkSize: "24"
                 }),
                 async: false,
                 success: function (response) {
