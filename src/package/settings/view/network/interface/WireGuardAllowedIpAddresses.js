@@ -170,7 +170,12 @@ Ext.define('Mfw.settings.interface.WireGuardalowedIpAddresses', {
 
             if (!form.validate()) { return; }
 
-            peer.allowedIps().add(form.getValues());
+            var netAddr = CommonUtil.getNetworkWithCIDR(form.getValues().address, form.getValues().prefix);
+            
+            peer.allowedIps().add({
+                address: netAddr,
+                prefix: form.getValues().prefix
+            });
             form.reset(true);
         },
 

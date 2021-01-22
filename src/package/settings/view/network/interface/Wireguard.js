@@ -12,7 +12,8 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             // the first peer of wg interface, populated on init
             peer: null,
             localPublicKey: null,
-            localInterfaceIpAddress: null
+            localInterfaceIpAddress: null,
+            pasteConfigured: true
         }
     },
 
@@ -64,6 +65,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             flex: 1,
             bind: {
                 hidden: '{intf.wireguardEditMode != "PASTE" && intf.type == "WIREGUARD"}',
+                required: '{intf.wireguardEditMode === "PASTE" && intf.type == "WIREGUARD" && !pasteConfigured}'
             },
             listeners: {
                 paste: 'pasteConfiguration'
@@ -343,6 +345,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             if(newValue == 'PASTE'){
                 intf.set('wireguardPublicKey', '');
                 intf.wireguardAddresses().first().set('address', '');
+                vmWg.set('pasteConfigured', false);
             }else{
                 if(intf.get('wireguardPublicKey') == ''){
                     intf.set('wireguardPublicKey', vmWg.get('localPublicKey'));
@@ -350,6 +353,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 if(intf.wireguardAddresses().first().get('address') == ''){
                     intf.wireguardAddresses().first().set('address', vmWg.get('localInterfaceIpAddress'));
                 }
+                vmWg.set('pasteConfigured', true);
             }
         },
 
@@ -491,9 +495,12 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                         cidr = cidr.replace(/(\r\n|\n|\r)/gm,"");
                                         if(cidr != ""){
                                             cidr = cidr.split("/");
+                                            var prefix = cidr.length == 2 ? parseInt(cidr[1], 10) : 32;
+                                            var netAddr = CommonUtil.getNetworkWithCIDR(cidr[0], prefix);
+
                                             allowedIps.add({
-                                                address: cidr[0],
-                                                prefix: cidr.length == 2 ? parseInt(cidr[1], 10) : 32
+                                                address: netAddr,
+                                                prefix: prefix
                                             });
                                         }
                                     });
@@ -515,6 +522,10 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 var clearTask = new Ext.util.DelayedTask( Ext.bind(function(){
                     if( component ){
                         component.clearValue();
+
+                        //Also set pasteConfigured to True, so that the paste field is validated
+                        var cmpVm = me.getViewModel();
+                        cmpVm.set('pasteConfigured', true)
                     }
                 }, me ));
                 clearTask.delay(50);
@@ -542,6 +553,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                 }
                 var address = '';
 
+                // we start by trying to get the IPv4 endpoint address
                 if(boundInterface.get('v4ConfigType') === 'STATIC'){
                     // for static configuration grab the configured static address
                     address = boundInterface.get('v4StaticAddress');
@@ -551,12 +563,13 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     address = boundInterface.get('_status').ip4Addr[0].split('/')[0]
                 }
 
+                // if we didn't find an IPv4 address try to find an IPv6 address
                 if(address == ''){
                     if(boundInterface.get('v6ConfigType') === 'STATIC'){
                         // for static configuration grab the configured static address
                         address = boundInterface.get('v6StaticAddress');
                     }
-                    else if((boundInterface.get('v46onfigType') === 'DHCP') || (boundInterface.get('v6ConfigType') === 'PPPOE')){
+                    else if((boundInterface.get('v6ConfigType') === 'DHCP') || (boundInterface.get('v6ConfigType') === 'PPPOE')){
                         // for DHCP and PPPoE grab the first address from the array in the _status info
                         address = boundInterface.get('_status').ip6Addr[0].split('/')[0]
                     }
