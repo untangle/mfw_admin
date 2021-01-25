@@ -171,6 +171,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     xtype: 'textfield',
                     label: 'Interface IP address',
                     itemId: 'localInterfaceId',
+                    name: 'localInterfaceId',
                     margin: '0 0 0 -8',
                     placeholder: 'enter IP address ...',
                     clearable: false,
@@ -182,7 +183,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                         required: '{intf.type === "WIREGUARD"}',
                         disabled: '{intf.type !== "WIREGUARD" || intf.wireguardEditMode == "PASTE"}'
                     },
-                    validators: 'ipany'
+                    validators: 'ipv4'
                 }]
             }, {
                 xtype: 'fieldset',
@@ -302,6 +303,38 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                     }
                 }
             }
+
+            var form = this.getView().down('formpanel');
+            var field = form.getFields('localInterfaceId');
+            field.setValidators([ 'ipv4', this.addressChecker ]);
+        },
+
+        addressChecker: function(value){
+            var result = "";
+
+            Ext.Ajax.request({
+                url: Util.api + '/netspace/check',
+                method: 'POST',
+                params: Ext.JSON.encode({
+                    cidr: value + "/32"
+                }),
+                async: false,
+                success: function (response) {
+                    detail = JSON.parse(response.responseText)
+                    if ("error" in detail) {
+                        result = detail.error;
+                    }
+                },
+                failure: function () {
+                    result = "Address conflict detection failure";
+                }
+            });
+
+            if (result.length == 0) {
+                return true;
+            }
+
+            return result;
         },
 
         // If wan, add 0.0.0.0/0 to allowedIps if not there, otherwise remove it.
