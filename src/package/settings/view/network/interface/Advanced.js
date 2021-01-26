@@ -72,7 +72,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         flex: 1,
                         bind: {
                             html: 'Current settings: <strong>{intf._status.ethSpeed}</strong> Mbps, <strong>{intf._status.ethDuplex}</strong>' +
-                                ' duplex, auto Negotiation: <strong>{intf._status.ethAutoneg}</strong>',
+                                ' duplex, auto negotiation: <strong>{intf._status.ethAutoneg}</strong>',
                         }
                     },
                     {
@@ -85,17 +85,8 @@ Ext.define('Mfw.settings.interface.Advanced', {
                             checked: '{intf.ethAutoneg}'
                         },
                         listeners: {
-                            change: function (_, newvalue) {
-                                if (newvalue) {
-                                    Ext.getCmp('ethSpeed').disable();
-                                    Ext.getCmp('ethDuplex').disable();
-                                }
-                                else {
-                                    Ext.getCmp('ethSpeed').enable();
-                                    Ext.getCmp('ethDuplex').enable();
-                                }
+                            change: 'updateSpeedDuplex'
                             }
-                        }
                     },
                     {
                         label: 'Link Speed',
@@ -103,7 +94,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         id: 'ethSpeed',
                         bind: {
                             value: '{intf.ethSpeed}',
-                            disabled: '{intf.ethAutoneg}',
+                            hidden: '{intf.ethAutoneg}',
                             options: '{_linkSpeedTypes}'
                         },
                         listeners : {
@@ -116,7 +107,7 @@ Ext.define('Mfw.settings.interface.Advanced', {
                         id: 'ethDuplex',
                         bind: {
                             value: '{intf.ethDuplex}',
-                            disabled: '{intf.ethAutoneg}',
+                            hidden: '{intf.ethAutoneg}',
                             options: '{_linkDuplexTypes}'
                         },
                     }]
@@ -131,6 +122,29 @@ Ext.define('Mfw.settings.interface.Advanced', {
             let duplexOptions = CommonUtil.getDuplexOptions(options, speed);
             if (duplexOptions.length == 1) {
                 Ext.getCmp('ethDuplex').setValue(duplexOptions[0].value);
+            }
+        },
+        /**
+         * 
+         * Called when auto negotiation checkbox changes.
+         * 
+         * @param {bool} newValue New value of checkbox.
+         * 
+         */
+        updateSpeedDuplex: function(_, newValue) {
+            var vm = this.getViewModel();
+            var intf = vm.get('intf')
+            if (!newValue) {
+                // Preset speed and duplex to the current value when disabling autoNeg.
+                vm.set('intf.ethDuplex', vm.get('intf._status.ethDuplex'));
+                vm.set('intf.ethSpeed', vm.get('intf._status.ethSpeed'));
+            } else {
+                // Un-set the values when turning on AutoNeg, otherwise modified check kicks in.
+                if (typeof intf.modified  !== 'undefined') {
+                   Object.keys(intf.modified).forEach(key => 
+                        vm.set('intf.'+key, intf.modified[key])
+                   )
+                }
             }
         }
     }
