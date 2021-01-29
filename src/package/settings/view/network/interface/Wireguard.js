@@ -2,6 +2,7 @@
  * WireGuard interface options
  * shown only if interface type is WIREGUARD
  */
+
 Ext.define('Mfw.settings.interface.WireGuard', {
     extend: 'Ext.Panel',
     alias: 'widget.interface-wireguard',
@@ -452,6 +453,7 @@ Ext.define('Mfw.settings.interface.WireGuard', {
             // Process as a WireGuard configuration file format from the
             // perspective that is intended for us (NGFW "Remote Client")
             var group = null;
+            var addressChecker = this.addressChecker;
             pasteData.split("\n").forEach( function(line){
                 line = line.replace(/(\r\n|\n|\r)/gm,"");
                 if(line.toLowerCase() == "[interface]"){
@@ -497,8 +499,13 @@ Ext.define('Mfw.settings.interface.WireGuard', {
                                     }
                                     break;
                                 case "address":
-                                    interface.wireguardAddresses().first().set('address', value);
-                                    configured = true;
+                                    result = addressChecker(value);
+                                    if (typeof(result) === "string"){
+                                        Ext.toast('Interface IP address - ' + result, 3000);
+                                    }else{
+                                        interface.wireguardAddresses().first().set('address', value);
+                                        configured = true;
+                                    }
                                     break;
                                 case "listenport":
                                     interface.set("wireguardType", "TUNNEL");
