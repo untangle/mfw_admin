@@ -353,8 +353,12 @@ Ext.define('Mfw.Renderer', {
                 protoText = "";
                 if(Array.isArray(rec.get('port_protocol'))) {
                     protoText = "";
-                    rec.get('port_protocol').forEach(function(proto) {
-                        protoText = protoText + " " + Map.portProtocols[proto];
+                    rec.get('port_protocol').forEach(function(proto, idx) {
+                        var separator = " or ";
+                        if(idx == 0) {
+                            separator = " ";
+                        }
+                        protoText = protoText + separator + Map.portProtocols[proto];
                     });
 
                 } else {
@@ -370,8 +374,12 @@ Ext.define('Mfw.Renderer', {
             if (type === 'DESTINATION_PORT' || type === 'SOURCE_PORT') {
                 if(Array.isArray(rec.get('port_protocol'))) {
                     protoText = "";
-                    rec.get('port_protocol').forEach(function(proto) {
-                        protoText = protoText + " " + Map.portProtocols[proto];
+                    rec.get('port_protocol').forEach(function(proto, idx) {
+                        var separator = " or ";
+                        if(idx == 0) {
+                            separator = " ";
+                        }
+                        protoText = protoText + separator + Map.portProtocols[proto];
                     });
 
                 } else {
@@ -508,8 +516,12 @@ Ext.define('Mfw.Renderer', {
                     // Add the port_protocol name into the type renderer
                     if(Array.isArray(cond.get('port_protocol'))) {
                         protoText = "";
-                        cond.get('port_protocol').forEach(function(proto) {
-                            protoText = protoText + " " + Map.portProtocols[proto];
+                        cond.get('port_protocol').forEach(function(proto, idx) {
+                            var separator = " or ";
+                            if(idx == 0) {
+                                separator = " ";
+                            }
+                            protoText = protoText + separator + Map.portProtocols[proto];
                         });
     
                     } else {
