@@ -250,6 +250,25 @@ Ext.define('Mfw.dashboard.Manager', {
             if (widgetsCmp.length > 0) {
                 widgetsContainer.add(widgetsCmp);
             }
+
+            // Add notification widget as first
+            notificationWidget = new Mfw.model.Widget({
+                "interval": 0,
+                "isReport": false,
+                "name": "Notifications"
+            });
+            var widgetCmpConfig = {
+                xtype: 'widget-' + notificationWidget.get('_identifier'),
+                itemId: 'widget_' + notificationWidget.get('_identifier'),
+                viewModel: {
+                    data: {
+                        widget: notificationWidget
+                    }
+                }
+            };
+            var widgetCmp = widgetsContainer.down('#widget_' + notificationWidget.get('_identifier'));
+            Ext.Array.insert(widgetsCmp, 0, [widgetCmpConfig]);
+            widgetsContainer.insert(0, widgetCmpConfig);
         },
 
         updateWidgetsMenu: function () {
