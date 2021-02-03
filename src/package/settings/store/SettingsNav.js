@@ -41,6 +41,7 @@ Ext.define('Mfw.store.SettingsNav', {
                 { text: 'NAT'.t(), leaf: true, href: 'firewall/nat' },
                 { text: 'Shaping'.t(), leaf: true, href: 'firewall/shaping' },
                 { text: 'Port Forward'.t(), leaf: true, href: 'firewall/port-forward' },
+                { text: 'Threat Prevention'.t(), leaf: true, href: 'firewall/threat-prevention' },
                 // not implemented
                 // { text: 'Captive Portal'.t(), leaf: true, href: 'firewall/captive-portal' },
                 // { text: 'Web Filter'.t(), leaf: true, href: 'firewall/web-filter' }
