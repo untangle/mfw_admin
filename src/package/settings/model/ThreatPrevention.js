@@ -17,7 +17,7 @@ Ext.define('Mfw.model.ThreatPrevention', {
 
     fields: [
         { name: 'enabled', type: 'boolean' },
-        { name: 'sensitivity', type: 'integer' },
+        { name: 'sensitivity', type: 'string' },
     ],
 
     hasMany: [{

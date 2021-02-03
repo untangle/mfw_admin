@@ -49,11 +49,8 @@ Ext.define('Mfw.settings.firewall.ThreatPrevention', {
             required: true,
             margin: '0 10',
             options: [
-                { text: 'Trustworthy', value: 0 },
-                { text: 'Low Risk', value: 1 },
-                { text: 'Moderate Risk', value: 2 },
-                { text: 'Suspicious', value: 3 },
-                { text: 'High Risk', value: 4 }
+                { text: 'Normal', value: 'normal' },
+                { text: 'Aggressive', value: 'aggressive' },
             ],
             bind: {
                 value: '{tp.sensitivity}',
