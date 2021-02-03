@@ -17,8 +17,9 @@ Ext.define('Mfw.settings.firewall.ThreatPrevention', {
     tools: [{
         xtype: 'button',
         cls: 'btn-tool',
-        iconCls: 'md-icon-refresh',
-        handler: 'load'
+        iconCls: 'md-icon-search',
+        text: 'Threat Lookup',
+        handler: 'onThreatLookup'
     }, {
         xtype: 'button',
         cls: 'btn-tool',
@@ -83,6 +84,11 @@ Ext.define('Mfw.settings.firewall.ThreatPrevention', {
                 html: 'Pass List',
                 style: 'font-weight: 400;'
             }, '->', {
+                xtype: 'button',
+                cls: 'btn-tool',
+                iconCls: 'md-icon-refresh',
+                handler: 'load'
+            }, {
                 xtype: 'button',
                 iconCls: 'md-icon-add',
                 text: 'Add',
@@ -328,5 +334,85 @@ Ext.define('Mfw.settings.firewall.ThreatPrevention', {
                 }
             });
         },
+
+
+        // threat lookup
+        onThreatLookup: function () {
+            var me = this;
+
+            me.dialog = Ext.Viewport.add({
+                xtype: 'dialog',
+                ownerCmp: me.getView(),
+                layout: 'fit',
+                width: 600,
+                height: 400,
+                padding: 0,
+                // title: 'AAA',
+
+                showAnimation: false,
+                hideAnimation: false,
+
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+
+                items: [{
+                    xtype: 'panel',
+                    title: 'Threat Lookup',
+
+                    tools: [{
+                        xtype: 'button',
+                        cls: 'btn-tool',
+                        iconCls: 'md-icon-close',
+                        handler: 'onDialogClose'
+                    }],
+
+                    bodyPadding: 10,
+                    layout: {
+                        type: 'hbox',
+                        align: 'bottom'
+                    },
+                    items: [{
+                        xtype: 'textfield',
+                        label: 'Enter IP Address or URL',
+                        // labelAlign: 'top',
+                        flex: 1
+                    }, {
+                        xtype: 'button',
+                        ui: 'action',
+                        text: 'Search',
+                    }]
+                }, {
+                    xtype: 'container',
+                    padding: 10,
+                    html: 'Threat Results'
+                    // Trustworthy (57 occurrences) - These are clean IPs that have not been tied to a security risk. There is a very low predictive risk that your infrastructure and endpoints will be exposed to attack.
+                    // Low Risk - These are benign IPs and rarely exhibit characteristics that expose your infrastructure and endpoints to security risks. There is a low predictive risk of attack.
+                }, {
+                    xtype: 'toolbar',
+                    docked: 'bottom',
+                    items: [
+                        '->', {
+                        xtype: 'button',
+                        text: 'Close',
+                        handler: 'onDialogClose'
+                    }]
+                }]
+            });
+
+            me.dialog.on('destroy', function () {
+                me.dialog = null;
+            });
+            me.dialog.show();
+        },
+
+        onThreatLookupSearch: function () {
+            this.dialog.close();
+        },
+
+        onDialogClose: function () {
+            this.dialog.close();
+        }
     },
 });
