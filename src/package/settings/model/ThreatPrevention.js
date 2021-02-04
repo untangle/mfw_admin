@@ -29,8 +29,8 @@ Ext.define('Mfw.model.ThreatPrevention', {
     proxy: {
         type: 'ajax',
         api: {
-            read: Util.api + '/settings/tp',
-            update: Util.api + '/settings/tp'
+            read: Util.api + '/settings/threatprevention',
+            update: Util.api + '/settings/threatprevention'
         },
         reader: {
             type: 'json'

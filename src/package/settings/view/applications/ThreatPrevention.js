@@ -42,7 +42,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             xtype: 'togglefield',
             boxLabel: 'Enable Threat Prevention',
             margin: '0 10',
-            bind: '{tp.enabled}'
+            bind: '{threatprevention.enabled}'
         }, {
             xtype: 'selectfield',
             userCls: 'x-custom-field',
@@ -54,8 +54,8 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
                 { text: 'Aggressive', value: 'aggressive' },
             ],
             bind: {
-                value: '{tp.sensitivity}',
-                disabled: '{!tp.enabled}'
+                value: '{threatprevention.sensitivity}',
+                disabled: '{!threatprevention.enabled}'
             }
         }]
     }, {
@@ -172,7 +172,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             }
         }],
 
-        bind: '{tp.passList}',
+        bind: '{threatprevention.passList}',
         itemConfig: {
             viewModel: true
         },
@@ -276,7 +276,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             me.getView().mask({ xtype: 'loadmask' });
             me.model.load({
                 success: function (record) {
-                    vm.set('tp', record);
+                    vm.set('threatprevention', record);
                     record.passList().commitChanges();
                 },
                 callback: function () {
@@ -312,9 +312,9 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
 
         onSave: function (cb) {
             var me = this,
-                tp = me.getViewModel().get('tp');
+                threatprevention = me.getViewModel().get('threatprevention');
 
-            tp.passList().each(function (record) {
+            threatprevention.passList().each(function (record) {
                 if (record.get('_deleteSchedule')) {
                     record.drop();
                 }
@@ -327,7 +327,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             });
 
             Sync.progress();
-            tp.save({
+            threatprevention.save({
                 success: function () {
                     if (Ext.isFunction(cb)) { cb(); } else { me.load(); }
                     Sync.success();
