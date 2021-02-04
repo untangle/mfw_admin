@@ -1,6 +1,6 @@
-Ext.define('Mfw.settings.firewall.ThreatPrevention', {
+Ext.define('Mfw.settings.applications.ThreatPrevention', {
     extend: 'Ext.Panel',
-    alias: 'widget.mfw-settings-firewall-threat-prevention',
+    alias: 'widget.mfw-settings-applications-threat-prevention',
 
     title: 'Threat Prevention'.t(),
     layout: {

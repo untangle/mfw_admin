@@ -89,6 +89,24 @@ Ext.define('Mfw.settings.NoSelection', {
         items: [{
             xtype: 'component',
             style: 'margin: 0 0 24px 12px;',
+            html: '<h1 style="font-weight: 100;">Applications</h1>'
+        }, {
+            xtype: 'list',
+            cls: 'pointer-list',
+            itemTpl: '<span style="font-size: 16px;">{text}</span>',
+            data: [
+                { text: 'Threat Prevention'.t(), href: 'settings/applications/threat-prevention' },
+            ],
+            listeners: {
+                childtap: function (el, location) {
+                    Mfw.app.redirectTo(location.record.get('href'));
+                }
+            }
+        }]
+    }, {
+        items: [{
+            xtype: 'component',
+            style: 'margin: 0 0 24px 12px;',
             html: '<h1 style="font-weight: 100;">System</h1>'
         }, {
             xtype: 'list',
