@@ -78,6 +78,12 @@ Ext.define('Mfw.settings.view.MainController', {
                 }
             }
 
+            if (p1 === 'firewall' && p2 === 'port-forward' && p3 === 'add') {
+                subView = {
+                    xtype: 'mfw-settings-firewall-port-forward-add',
+                };
+            }
+
             // if interfaces
             if (p1 === 'network' && p2 === 'interfaces') {
                 if (p3 !== undefined) {

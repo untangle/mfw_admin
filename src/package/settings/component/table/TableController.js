@@ -333,10 +333,17 @@ Ext.define('Mfw.cmp.grid.table.TableController', {
      */
     onNewRule: function () {
         var me = this;
-        Ext.Viewport.add({
-            xtype: 'rule-dialog',
-            ownerCmp: me.getView()
-        }).show();
+        // use custom rule editor for Port Forward
+        console.log(me.selectedChain.get('name'))
+        if (me.selectedChain.get('name') === 'port-forward-rules') {
+            me.redirectTo('#settings/firewall/port-forward/add')
+        } else {
+            Ext.Viewport.add({
+                xtype: 'rule-dialog',
+                ownerCmp: me.getView()
+            }).show();
+        }
+
     },
 
     onDeleteRecord: function (grid, info) {

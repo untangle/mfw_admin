@@ -195,6 +195,12 @@ i { font-style: normal; }
 .events-tree .x-listitem { background-color: transparent; }
 .events-tree .event-key { color: #333; font-weight: 400; }
 
+.conditions-tree .x-gridcell { padding-left: 0; }
+.conditions-tree .x-treecell .x-icon-el { display: none; }
+.conditions-tree .x-gridcell-body-el { padding: 5px 0; }
+.conditions-tree .x-listitem { background-color: transparent; }
+.conditions-tree .event-key { color: #333; font-weight: 400; }
+
 .wrapper { position: relative; background: #FFF; }
 
 .wrapper, .wrapper * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }

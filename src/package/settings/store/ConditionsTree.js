@@ -42,6 +42,7 @@ Ext.define('Mfw.store.ConditionsTree', {
             }
             root.children.push({
                 text: '<strong>' + key + '</strong>',
+                iconCls: '',
                 children: value
             });
         });

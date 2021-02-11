@@ -723,7 +723,25 @@ i {
     }
 }
 
-
+.conditions-tree {
+    .x-gridcell {
+        padding-left: 0;
+    }
+    .x-treecell .x-icon-el {
+        display: none;
+    }
+    .x-gridcell-body-el {
+        // font-size: 11px;
+        padding: 5px 0;
+    }
+    .x-listitem {
+        background-color: transparent;
+    }
+    .event-key {
+        color: #333;
+        font-weight: 400;
+    }
+}
 
 
 
