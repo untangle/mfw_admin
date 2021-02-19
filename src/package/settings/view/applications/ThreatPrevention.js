@@ -29,6 +29,11 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
     }],
 
     items: [{
+        xtype: 'component',
+        padding: 20,
+        style: 'font-size: 14px',
+        html: 'Threat Prevention is an IP address and URL reputation service. <br />If enabled, Threat Prevention blocks hosts that may be associated with Spam, Mobile Threats, Tor Proxy, Keyloggers, Malware, Spyware, Windows Exploits, Web Attacks, Botnets, Scanners, Denial of Service, Reputation, Phishing, or Compromised Proxy.'
+    }, {
         xtype: 'formpanel',
         layout: 'vbox',
         width: 500,
@@ -57,6 +62,23 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
                 value: '{threatprevention.sensitivity}',
                 disabled: '{!threatprevention.enabled}'
             }
+        }, {
+            xtype: 'fieldcontainer',
+            padding: 10,
+            layout: {
+                type: 'hbox',
+                align: 'stretch',
+            },
+            items: [{
+                xtype: 'checkbox',
+                label: 'Custom URL redirect',
+                labelAlign: 'right',
+                labelWidth: 150,
+            }, {
+                xtype: 'textfield',
+                flex: 1,
+                placeholder: 'enter url...'
+            }]
         }]
     }, {
         xtype: 'grid',
@@ -277,6 +299,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             me.model.load({
                 success: function (record) {
                     vm.set('threatprevention', record);
+                    console.log(record)
                     record.passList().commitChanges();
                 },
                 callback: function () {
@@ -375,6 +398,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
                     },
                     items: [{
                         xtype: 'textfield',
+                        itemId: 'lookup_field',
                         label: 'Enter IP Address or URL',
                         // labelAlign: 'top',
                         flex: 1
@@ -382,6 +406,7 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
                         xtype: 'button',
                         ui: 'action',
                         text: 'Search',
+                        handler: 'onThreatLookupSearch'
                     }]
                 }, {
                     xtype: 'container',
@@ -408,7 +433,19 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
         },
 
         onThreatLookupSearch: function () {
-            this.dialog.close();
+            var me = this
+                lookupValue = me.dialog.down('#lookup_field').getValue()
+            Ext.Ajax.request({
+                url: '/api/threatprevention/lookup/' + lookupValue,
+                success: function (response) {
+                    var resp = Ext.decode(response.responseText)
+                    // TODO - parse and display the response
+                    console.log(response)
+                },
+                failure: function () {
+                    console.warn('Unable to perform lookup!');
+                }
+            });
         },
 
         onDialogClose: function () {
