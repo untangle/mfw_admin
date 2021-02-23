@@ -55,8 +55,11 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
             required: true,
             margin: '0 10',
             options: [
-                { text: 'Normal', value: 'normal' },
-                { text: 'Aggressive', value: 'aggressive' },
+                { text: 'Trustworth', value: '80' },
+                { text: 'Low Risk', value: '60' },
+                { text: 'Moderate Risk', value: '40' },
+                { text: 'Suspicious', value: '20' },
+                { text: 'High Risk', value: '0' },
             ],
             bind: {
                 value: '{threatprevention.sensitivity}',
@@ -405,13 +408,14 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
                     }, {
                         xtype: 'button',
                         ui: 'action',
-                        text: 'Search',
+                        text: 'Lookup',
                         handler: 'onThreatLookupSearch'
                     }]
                 }, {
                     xtype: 'container',
                     padding: 10,
-                    html: 'Threat Results'
+                    itemID: 'status_field',
+                    html: ''
                     // Trustworthy (57 occurrences) - These are clean IPs that have not been tied to a security risk. There is a very low predictive risk that your infrastructure and endpoints will be exposed to attack.
                     // Low Risk - These are benign IPs and rarely exhibit characteristics that expose your infrastructure and endpoints to security risks. There is a low predictive risk of attack.
                 }, {
@@ -434,13 +438,22 @@ Ext.define('Mfw.settings.applications.ThreatPrevention', {
 
         onThreatLookupSearch: function () {
             var me = this
-                lookupValue = me.dialog.down('#lookup_field').getValue()
+            lookupValue = me.dialog.down('#lookup_field').getValue()
             Ext.Ajax.request({
                 url: '/api/threatprevention/lookup/' + lookupValue,
                 success: function (response) {
                     var resp = Ext.decode(response.responseText)
-                    // TODO - parse and display the response
-                    console.log(response)
+                    console.log(resp[0])
+                    var reputation = parseInt(resp[0].reputation)
+
+                    var result = "High Risk"
+                    if (reputation > 20 ) result = "Suspicious"
+                    if (reputation > 40 ) result = "Moderate Risk"
+                    if (reputation > 60 ) result = "Low Risk"
+                    if (reputation > 40 ) result = "Trustworthy"
+
+                    console.log(reputation, result)
+                    // TODO - display response
                 },
                 failure: function () {
                     console.warn('Unable to perform lookup!');
